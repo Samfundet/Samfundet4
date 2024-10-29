@@ -74,8 +74,14 @@ export function RecruitmentGangOverviewPage() {
         urlParams: { recruitmentId: recruitmentId, gangId: gang.id },
       });
 
-      return { cells: [{ content: <Link url={pageUrl}>{dbT(gang, 'name')}</Link> }, gang.recruitment_positions] };
+      return {
+        cells: [
+          { content: <Link url={pageUrl}>{dbT(gang, 'name')}</Link>, value: dbT(gang, 'name') },
+          gang.recruitment_positions,
+        ],
+      };
     });
+
     const tableSeparatePositionColumns = [
       { content: t(KEY.common_gang), sortable: true },
       { content: t(KEY.common_url), sortable: true },
@@ -90,8 +96,11 @@ export function RecruitmentGangOverviewPage() {
 
       return {
         cells: [
-          { content: <Link url={pageUrl}>{dbT(separate_position, 'name')}</Link> },
-          { content: <Link url={separate_position.url}>{separate_position.url}</Link> },
+          {
+            content: <Link url={pageUrl}>{dbT(separate_position, 'name')}</Link>,
+            value: dbT(separate_position, 'name'),
+          },
+          { content: <Link url={separate_position.url}>{separate_position.url}</Link>, value: separate_position.url },
           {
             content: (
               <CrudButtons
