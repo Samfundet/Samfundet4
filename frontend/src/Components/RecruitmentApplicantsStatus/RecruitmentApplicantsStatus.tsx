@@ -141,20 +141,16 @@ export function RecruitmentApplicantsStatus({
           value: application.interview?.interview_time,
           style: applicationStatusStyle,
           content: application.interview?.interview_time ? (
-            <TimeDisplay
-              className={styles.location_and_time_text}
-              timestamp={application.interview.interview_time}
-              displayType="nice-date-time"
-            />
+            <TimeDisplay timestamp={application.interview.interview_time} displayType="nice-date-time" />
           ) : (
-            <Text className={styles.location_and_time_text}>{t(KEY.common_not_set)}</Text>
+            <Text>{t(KEY.common_not_set)}</Text>
           ),
         },
         {
           value: application.interview?.interview_location,
           style: applicationStatusStyle,
           content: (
-            <Text className={styles.location_and_time_text}>
+            <Text>
               {application.interview?.interview_location
                 ? application.interview?.interview_location
                 : t(KEY.common_not_set)}
