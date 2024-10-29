@@ -43,7 +43,6 @@
   border: none;
   border-bottom: 3px solid transparent;
 
-  /* stylelint-disable-next-line max-nesting-depth */
   @include theme-dark {
     color: white;
   }
@@ -54,7 +53,6 @@
     color: $blue;
     box-shadow: inset 0 0 1px 1.5px rgba(0, 0, 0, 0.15);
 
-    /* stylelint-disable-next-line max-nesting-depth */
     @include theme-dark {
       border-bottom: 3px solid $white;
       background-color: $grey-2;

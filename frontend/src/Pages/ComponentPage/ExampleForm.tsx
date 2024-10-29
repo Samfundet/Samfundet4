@@ -5,6 +5,7 @@ import { z } from 'zod';
 import {
   Button,
   Checkbox,
+  DatePicker,
   Dropdown,
   Form,
   FormControl,
@@ -13,6 +14,7 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  NumberInput,
 } from '~/Components';
 import { PASSWORD, USERNAME } from '~/schema/user';
 
@@ -21,7 +23,14 @@ const schema = z.object({
   password: PASSWORD,
   organization: z.string().nullish().optional(),
   duration: z.number().min(15).max(60),
+  date: z.date(),
   confirm: z.boolean().refine((v) => v, 'Påkrevd'),
+  image_file: z
+    .instanceof(File)
+    .refine((file) => file.size < 1024 * 1024 * 2, {
+      message: "File can't be larger than 2 MB",
+    })
+    .nullable(),
 });
 
 export function ExampleForm() {
@@ -36,11 +45,13 @@ export function ExampleForm() {
       organization: 'uka',
       duration: 15,
       confirm: false,
+      image_file: null,
     },
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
     setSubmitting(true);
+    console.debug(values);
     setSerialized(JSON.stringify(values));
     setTimeout(() => setSubmitting(false), 600);
   }
@@ -61,7 +72,7 @@ export function ExampleForm() {
             <FormItem>
               <FormLabel>Brukernavn</FormLabel>
               <FormControl>
-                <Input disabled={submitting} autoComplete="off" {...field} />
+                <Input type="text" disabled={submitting} autoComplete="off" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -100,7 +111,20 @@ export function ExampleForm() {
             <FormItem>
               <FormLabel>Varighet</FormLabel>
               <FormControl>
-                <Input type="number" disabled={submitting} {...field} />
+                <NumberInput disabled={submitting} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Dato</FormLabel>
+              <FormControl>
+                <DatePicker disabled={submitting} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -119,6 +143,25 @@ export function ExampleForm() {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="image_file"
+          render={({ field: { value, onChange, ...fieldProps } }) => (
+            <FormItem>
+              <FormControl>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => onChange(event.target.files?.[0])}
+                  {...fieldProps}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button type="submit" disabled={submitting}>
           Lagre
         </Button>

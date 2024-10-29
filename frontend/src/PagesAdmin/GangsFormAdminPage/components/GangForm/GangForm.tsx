@@ -104,7 +104,7 @@ export function GangForm({ gang, onSuccess, onError }: Props) {
               <FormItem className={styles.form_item}>
                 <FormLabel>{lowerCapitalize(`${t(KEY.common_norwegian)} ${t(KEY.common_name)}`)}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input type="text" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -117,7 +117,7 @@ export function GangForm({ gang, onSuccess, onError }: Props) {
               <FormItem className={styles.form_item}>
                 <FormLabel>{lowerCapitalize(`${t(KEY.common_english)} ${t(KEY.common_name)}`)}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input type="text" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -132,7 +132,7 @@ export function GangForm({ gang, onSuccess, onError }: Props) {
               <FormItem className={styles.form_item}>
                 <FormLabel>{lowerCapitalize(t(KEY.admin_gangsadminpage_abbreviation))}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input type="text" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -145,7 +145,7 @@ export function GangForm({ gang, onSuccess, onError }: Props) {
               <FormItem className={styles.form_item}>
                 <FormLabel>{lowerCapitalize(t(KEY.admin_gangsadminpage_webpage))}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input type="text" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
