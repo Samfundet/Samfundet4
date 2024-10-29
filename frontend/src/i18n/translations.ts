@@ -462,6 +462,16 @@ export const nb = prepareTranslations({
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
+
+  // Errors
+  [KEY.error_generic]: 'Uventet feil',
+  [KEY.error_generic_description]: 'En uventet feil oppsto, vennligst prøv igjen',
+  [KEY.error_not_found]: 'Ikke funnet',
+  [KEY.error_not_found_description]: 'Ressursen du forsøkte å hente ble ikke funnet',
+  [KEY.error_forbidden]: 'Ingen adgang',
+  [KEY.error_forbidden_description]: 'Du har ikke adgang til å se denne ressursen',
+  [KEY.error_server_error]: 'Serverfeil',
+  [KEY.error_server_error_description]: 'En serverfeil har opptstått',
 });
 
 export const en = prepareTranslations({
@@ -928,4 +938,13 @@ export const en = prepareTranslations({
   [KEY.inputfile_no_file_selected]: 'No file selected',
   [KEY.notfoundpage_title]: 'Page not found',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',
+
+  [KEY.error_generic]: 'Unexpected error',
+  [KEY.error_generic_description]: 'An unexpected error has occurred',
+  [KEY.error_not_found]: 'Not found',
+  [KEY.error_not_found_description]: 'The resource you requested was not found',
+  [KEY.error_forbidden]: 'Forbidden',
+  [KEY.error_forbidden_description]: 'You do not have permission to view this resource',
+  [KEY.error_server_error]: 'Server error',
+  [KEY.error_server_error_description]: 'A server error has occurred',
 });
