@@ -25,7 +25,7 @@ export function RecruitmentProgression() {
   const { t } = useTranslation();
   const { recruitmentId } = useParams();
   const [progression, setProgression] = useState<number>(-1);
-  const [processedApplication, setProcessesApplications] = useState<number>(-1);
+  const [processedApplication, setProcessedApplications] = useState<number>(-1);
   const [totalApplications, setTotalApplications] = useState<number>(-1);
   const [rejectionCount, setRejectionCount] = useState<number>(-1);
   const [admittedCount, setAdmittedCount] = useState<number>(-1);
@@ -65,7 +65,7 @@ export function RecruitmentProgression() {
 
 
     setTotalApplications(totalApps);
-    setProcessesApplications(totalProcessed);
+    setProcessedApplications(totalProcessed);
     setAdmittedCount(totalAdmitted);
     setRejectionCount(totalRejected);
 

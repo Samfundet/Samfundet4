@@ -563,6 +563,17 @@ export type RecruitmentStatsDto = {
   campus_stats: RecruitmentCampusStatDto[];
 };
 
+export type RecruitmentProgressionStatsDto = {
+  // Does processed data exist?
+  id: number
+  total_applications: number;
+  total_processed_applications: number;
+  total_admitted_applications: number;
+  total_rejected_applications: number;
+  gang_stats: GangStatsDto[];
+  rejection_email_count: number;
+}
+
 export type InterviewRoomDto = {
   id: number;
   name: string;
@@ -572,6 +583,14 @@ export type InterviewRoomDto = {
   recruitment: string;
   gang?: number;
 };
+
+export type GangStatsDto = {
+  // Unsure about this dto
+  id: number;
+  gang_name: string;
+  total_accepted: number;
+  total_rejected: number;
+}
 
 // ############################################################
 //                       Purchase Feedback
