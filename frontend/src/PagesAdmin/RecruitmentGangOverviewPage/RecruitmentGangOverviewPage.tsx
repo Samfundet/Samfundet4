@@ -62,7 +62,6 @@ export function RecruitmentGangOverviewPage() {
     </>
   );
 
-  // TODO: Fix rerender
   const tabs: Tab<ReactElement>[] = useMemo(() => {
     const tableGangColumns = [
       { content: t(KEY.common_gang), sortable: true },
@@ -75,7 +74,7 @@ export function RecruitmentGangOverviewPage() {
         urlParams: { recruitmentId: recruitmentId, gangId: gang.id },
       });
 
-      return [{ content: <Link url={pageUrl}>{dbT(gang, 'name')}</Link> }, gang.recruitment_positions];
+      return { cells: [{ content: <Link url={pageUrl}>{dbT(gang, 'name')}</Link> }, gang.recruitment_positions] };
     });
     const tableSeparatePositionColumns = [
       { content: t(KEY.common_gang), sortable: true },
@@ -89,23 +88,26 @@ export function RecruitmentGangOverviewPage() {
         urlParams: { recruitmentId: recruitmentId, separatePositionId: separate_position.id },
       });
 
-      return [
-        { content: <Link url={pageUrl}>{dbT(separate_position, 'name')}</Link> },
-        { content: <Link url={separate_position.url}>{separate_position.url}</Link> },
-        {
-          content: (
-            <CrudButtons
-              onDelete={() => {
-                deleteSeparatePositionHandler(separate_position);
-              }}
-              onEdit={() => {
-                navigate({ url: pageUrl });
-              }}
-            />
-          ),
-        },
-      ];
+      return {
+        cells: [
+          { content: <Link url={pageUrl}>{dbT(separate_position, 'name')}</Link> },
+          { content: <Link url={separate_position.url}>{separate_position.url}</Link> },
+          {
+            content: (
+              <CrudButtons
+                onDelete={() => {
+                  deleteSeparatePositionHandler(separate_position);
+                }}
+                onEdit={() => {
+                  navigate({ url: pageUrl });
+                }}
+              />
+            ),
+          },
+        ],
+      };
     });
+
     return [
       { key: 1, label: t(KEY.common_gangs), value: <Table columns={tableGangColumns} data={tableGangData} /> },
       {
@@ -113,7 +115,7 @@ export function RecruitmentGangOverviewPage() {
         label: t(KEY.recruitment_gangs_with_separate_positions),
         value: <Table columns={tableSeparatePositionColumns} data={tableSeparatePositionData ?? []} />,
       },
-      { key: 3, label: t(KEY.recruitment_interview_group), value: <RecruitmentInterviewGroupsList /> },
+      { key: 3, label: t(KEY.recruitment_interview_groups), value: <RecruitmentInterviewGroupsList /> },
     ];
   }, [gangs, recruitment, t, recruitmentId, navigate, deleteSeparatePositionHandler]);
 

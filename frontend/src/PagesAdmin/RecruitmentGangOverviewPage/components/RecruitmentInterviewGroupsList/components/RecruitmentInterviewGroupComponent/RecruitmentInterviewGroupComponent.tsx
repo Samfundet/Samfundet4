@@ -8,16 +8,19 @@ type RecruitmentInterviewGroupComponentProps = {
 };
 
 export function RecruitmentInterviewGroupComponent({ interviewGroup }: RecruitmentInterviewGroupComponentProps) {
+  const interviewGroupHeader = dbT(interviewGroup, 'name') ?? 'N/A';
   return (
     <ExpandableHeader
       showByDefault={true}
       key={interviewGroup.id}
-      label={dbT(interviewGroup, 'name') ?? 'N/A'}
+      label={interviewGroupHeader}
       className={styles.dropDownHeader}
     >
       <Table
         className={styles.table}
-        data={interviewGroup.positions.map((position) => [dbT(position, 'name'), dbT(position.gang, 'name')])}
+        data={interviewGroup.positions.map((position) => {
+          return { cells: [dbT(position, 'name'), dbT(position.gang, 'name')] };
+        })}
       />
     </ExpandableHeader>
   );

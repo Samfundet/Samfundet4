@@ -12,7 +12,6 @@ export function RecruitmentInterviewGroupsList() {
   const { recruitmentId } = useParams();
   const [interviewGroups, setInterviewGroups] = useState<RecruitmentSharedInterviewGroupDto[]>();
   const { t } = useTranslation();
-  // TODO: add dynamic data and might need backend features (in ISSUE #1110)
 
   useEffect(() => {
     if (recruitmentId) {
