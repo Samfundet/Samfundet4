@@ -61,7 +61,7 @@ export function ExampleForm() {
             <FormItem>
               <FormLabel>Brukernavn</FormLabel>
               <FormControl>
-                <Input disabled={submitting} autoComplete="off" {...field} />
+                <Input type="text" disabled={submitting} autoComplete="off" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
