@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getRecruitmentSharedInterviewGroup } from '~/api';
-import type { RecruitmentSharedInterviewGroupDto } from '~/dto';
+import type { RecruitmentSharedInterviewGroupDto, RecruitmentSharedInterviewGroupPostDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { RecruitmentInterviewGroupForm } from './RecruitmentInterviewGroupForm';
-import { dbT } from '~/utils';
 
 export function RecruitmentInterviewGroupFormAdminPage() {
   const { t } = useTranslation();
@@ -29,7 +29,7 @@ export function RecruitmentInterviewGroupFormAdminPage() {
           navigate(
             reverse({
               pattern: ROUTES.frontend.admin_recruitment_gang_overview,
-              urlParams: { recruitmentId},
+              urlParams: { recruitmentId },
             }),
             { replace: true },
           );
@@ -37,11 +37,11 @@ export function RecruitmentInterviewGroupFormAdminPage() {
     }
   }, [sharedInterviewGroupId, recruitmentId, navigate, t]);
 
-  const initialData: Partial<RecruitmentSharedInterviewGroupDto> = {
+  const initialData: Partial<RecruitmentSharedInterviewGroupPostDto> = {
     name_nb: sharedInterview?.name_nb || '',
     name_en: sharedInterview?.name_en || '',
     recruitment: recruitmentId,
-    positions: sharedInterview?.positions || []
+    positions: sharedInterview?.positions?.map((pos) => pos.id) || [],
   };
 
   const title = sharedInterviewGroupId

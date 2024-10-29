@@ -33,6 +33,7 @@ import type {
   RecruitmentPositionPutDto,
   RecruitmentSeparatePositionDto,
   RecruitmentSharedInterviewGroupDto,
+  RecruitmentSharedInterviewGroupPostDto,
   RecruitmentStatsDto,
   RecruitmentUnprocessedApplicationsDto,
   RecruitmentUserDto,
@@ -811,7 +812,7 @@ export async function getRecruitmentSharedInterviewGroups(
 }
 
 export async function getRecruitmentSharedInterviewGroup(
-  sharedInterviewGroupId: string
+  sharedInterviewGroupId: string,
 ): Promise<AxiosResponse<RecruitmentSharedInterviewGroupDto>> {
   const url =
     BACKEND_DOMAIN +
@@ -826,7 +827,7 @@ export async function getRecruitmentSharedInterviewGroup(
 
 export async function putRecruitmentSharedInterviewGroup(
   sharedInterviewGroupId: string,
-  sharedInterviewGroup: Partial<RecruitmentSharedInterviewGroupDto>,
+  sharedInterviewGroup: Partial<RecruitmentSharedInterviewGroupPostDto>,
 ): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
@@ -840,13 +841,14 @@ export async function putRecruitmentSharedInterviewGroup(
 }
 
 export async function postRecruitmentSharedInterviewGroup(
-  sharedInterviewGroup: Partial<RecruitmentSharedInterviewGroupDto>,
+  sharedInterviewGroup: Partial<RecruitmentSharedInterviewGroupPostDto>,
 ): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_sharedinterviewgroups_list,
     });
+  console.log(sharedInterviewGroup);
   return await axios.post<RecruitmentApplicationDto>(url, sharedInterviewGroup, { withCredentials: true });
 }
 

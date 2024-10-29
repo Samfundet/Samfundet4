@@ -1,5 +1,9 @@
-import { ExpandableHeader, Table } from '~/Components';
+import { useTranslation } from 'react-i18next';
+import { Button, ExpandableHeader, Table } from '~/Components';
 import type { RecruitmentSharedInterviewGroupDto, RecruitmentStatsDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentInterviewGroupComponent.module.scss';
 
@@ -9,6 +13,8 @@ type RecruitmentInterviewGroupComponentProps = {
 
 export function RecruitmentInterviewGroupComponent({ interviewGroup }: RecruitmentInterviewGroupComponentProps) {
   const interviewGroupHeader = dbT(interviewGroup, 'name') ?? 'N/A';
+  const { t } = useTranslation();
+
   return (
     <ExpandableHeader
       showByDefault={true}
@@ -22,6 +28,19 @@ export function RecruitmentInterviewGroupComponent({ interviewGroup }: Recruitme
           return { cells: [dbT(position, 'name'), dbT(position.gang, 'name')] };
         })}
       />
+      <div className={styles.footer}>
+        <Button
+          display="basic"
+          theme="blue"
+          rounded={true}
+          link={reverse({
+            pattern: ROUTES.frontend.admin_recruitment_sharedinterviewgroup_edit,
+            urlParams: { recruitmentId: interviewGroup.recruitment, sharedInterviewGroupId: interviewGroup.id },
+          })}
+        >
+          {t(KEY.common_edit)}
+        </Button>
+      </div>
     </ExpandableHeader>
   );
 }

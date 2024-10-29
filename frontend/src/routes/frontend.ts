@@ -79,8 +79,10 @@ export const ROUTES_FRONTEND = {
   admin_recruitment_open_to_other_positions: '/control-panel/recruitment/:recruitmentId/users-open-to-other-positions/',
   admin_recruitment_overview: '/control-panel/recruitment/:recruitmentId/recruitment-overview/',
   admin_recruitment_gang_overview: '/control-panel/recruitment/:recruitmentId/gang-overview/',
-  admin_recruitment_sharedinterviewgroup_create: '/control-panel/recruitment/:recruitmentId/sharedinterviewgroup/create/',
-  admin_recruitment_sharedinterviewgroup_edit: '/control-panel/recruitment/:recruitmentId/sharedinterviewgroup/edit/:sharedInterviewGroupId/',
+  admin_recruitment_sharedinterviewgroup_create:
+    '/control-panel/recruitment/:recruitmentId/sharedinterviewgroup/create/',
+  admin_recruitment_sharedinterviewgroup_edit:
+    '/control-panel/recruitment/:recruitmentId/sharedinterviewgroup/edit/:sharedInterviewGroupId/',
   admin_recruitment_gang_overview_rejection_email:
     '/control-panel/recruitment/:recruitmentId/gang-overview/rejection-email/',
   admin_recruitment_gang_position_overview: '/control-panel/recruitment/:recruitmentId/gang/:gangId',

@@ -860,8 +860,6 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
 
 
 class RecruitmentPositionSharedInterviewGroupSerializer(serializers.ModelSerializer):
-    positions = RecruitmentPositionForApplicantSerializer(many=True, read_only=True)
-
     class Meta:
         model = RecruitmentPositionSharedInterviewGroup
         fields = [
@@ -871,6 +869,11 @@ class RecruitmentPositionSharedInterviewGroupSerializer(serializers.ModelSeriali
             'name_en',
             'name_nb',
         ]
+
+    def to_representation(self, instance: RecruitmentPositionSharedInterviewGroup) -> dict:
+        data = super().to_representation(instance)
+        data['positions'] = RecruitmentPositionForApplicantSerializer(instance.positions, many=True).data
+        return data
 
 
 class RecruitmentApplicationForApplicantSerializer(CustomBaseSerializer):

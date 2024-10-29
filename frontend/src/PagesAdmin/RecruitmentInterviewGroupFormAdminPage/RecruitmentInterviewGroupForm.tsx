@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useMemo } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -17,7 +17,14 @@ import {
   Input,
   Textarea,
 } from '~/Components';
-import { getRecruitmentPositions, postRecruitmentSharedInterviewGroup, putRecruitmentPosition, putRecruitmentSharedInterviewGroup } from '~/api';
+import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import { MultiSelect } from '~/Components/MultiSelect';
+import {
+  getRecruitmentPositions,
+  postRecruitmentSharedInterviewGroup,
+  putRecruitmentPosition,
+  putRecruitmentSharedInterviewGroup,
+} from '~/api';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -39,21 +46,41 @@ interface FormProps {
   recruitmentId?: string;
 }
 
-export function RecruitmentInterviewGroupForm({ initialData, recruitmentId, sharedInterviewGroupId}: FormProps) {
+export function RecruitmentInterviewGroupForm({ initialData, recruitmentId, sharedInterviewGroupId }: FormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: initialData,
   });
 
+  const [positionOptions, setPositionOptions] = useState<DropDownOption<number>[]>([]);
+
   const submitText = sharedInterviewGroupId ? t(KEY.common_save) : t(KEY.common_create);
+
+  useEffect(() => {
+    if (recruitmentId) {
+      getRecruitmentPositions(recruitmentId).then((response) => {
+        setPositionOptions(
+          response.data
+            .filter(
+              (position) =>
+                !position.shared_interview_group ||
+                (sharedInterviewGroupId && Number.parseInt(sharedInterviewGroupId) === position.shared_interview_group),
+            )
+            .map((position) => {
+              return { value: position.id, label: `${position.name_nb} ${position.gang.name_nb}` };
+            }),
+        );
+      });
+    }
+  }, [recruitmentId, sharedInterviewGroupId]);
 
   const onSubmit = (data: SchemaType) => {
     const updatedSharedInterviewGroup = {
       ...data,
       recruitment: recruitmentId ?? '',
-      postitions: [],
     };
 
     const action = sharedInterviewGroupId
@@ -106,6 +133,19 @@ export function RecruitmentInterviewGroupForm({ initialData, recruitmentId, shar
                   <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_english)}`}</FormLabel>
                   <FormControl>
                     <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="positions"
+              render={({ field }) => (
+                <FormItem className={styles.item}>
+                  <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_english)}`}</FormLabel>
+                  <FormControl>
+                    <MultiSelect {...field} options={positionOptions} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
