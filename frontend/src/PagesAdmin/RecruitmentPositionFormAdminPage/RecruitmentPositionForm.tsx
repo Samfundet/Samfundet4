@@ -275,7 +275,7 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
             control={form.control}
             render={({ field }) => (
               <FormItem className={styles.item}>
-                <FormLabel>Interviewers</FormLabel>
+                <FormLabel>{t(KEY.recruitment_interviewers)}</FormLabel>
                 <FormControl>
                   <MultiSelect
                     options={interviewerOptions}
