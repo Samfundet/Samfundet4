@@ -8,15 +8,29 @@ import { toPercentage } from '~/utils';
 import styles from './RecruitmentProgression.module.scss';
 import { useCustomNavigate } from '~/hooks';
 import { ROUTES } from '~/routes';
+import { getRecruitmentStats } from '~/api';
+import { reverse } from '~/named-urls';
+import { useParams } from 'react-router-dom';
+import { RecruitmentStatsDto } from '~/dto';
+
+interface RecruitmentProgessionProps {
+  team: string,
+  applications: number,
+  processed: number,
+  admitted: number,
+  rejected: number,
+}
 
 export function RecruitmentProgression() {
   const { t } = useTranslation();
+  const { recruitmentId } = useParams();
   const [progression, setProgression] = useState<number>(-1);
   const [processedApplication, setProcessesApplications] = useState<number>(-1);
   const [totalApplications, setTotalApplications] = useState<number>(-1);
   const [rejectionCount, setRejectionCount] = useState<number>(-1);
   const [admittedCount, setAdmittedCount] = useState<number>(-1);
   const [rejectionEmailCount, setRejectionEmailCount] = useState<number>(-1);
+  const [progressionData, setProgressionData] = useState<RecruitmentProgessionProps>();
   const navigate = useCustomNavigate();
   const [tableRows, setTableRowsState] = useState<TableRow[]>([]);
   const ONE_HUNDRED_PERCENT = 1;
@@ -29,6 +43,9 @@ export function RecruitmentProgression() {
   const mock_rejection_email_count = 0; // number of rejection emails sent.
 
   useEffect(() => {
+    if (!recruitmentId) {
+      return;
+    }
     if (!mock_fetched_data || mock_rejection_email_count) {
       //TODO: add dynamic data and might need backend features (in ISSUE #1110)
       return;
@@ -38,6 +55,12 @@ export function RecruitmentProgression() {
     const totalProcessed = mock_fetched_data.reduce((sum, current) => sum + current.processed, 0);
     const totalAdmitted = mock_fetched_data.reduce((sum, current) => sum + current.admitted, 0);
     const totalRejected = mock_fetched_data.reduce((sum, current) => sum + current.rejected, 0);
+
+    // Find every gang
+    // for each gang get /api/recruitment-for-recruiter 
+    getRecruitmentStats(recruitmentId);
+
+
 
     setTotalApplications(totalApps);
     setProcessesApplications(totalProcessed);
@@ -111,7 +134,7 @@ export function RecruitmentProgression() {
             {rejectionEmailCount} {t(KEY.recruitment_applicants)} {t(KEY.common_have)} {t(KEY.common_received)}{' '}
             {t(KEY.recruitment_rejection_email)}
           </Text>
-          {progression > ONE_HUNDRED_PERCENT ? (
+          {progression < ONE_HUNDRED_PERCENT ? (
             <Text size={'m'} as={'strong'}>
               {t(KEY.common_create)} {t(KEY.recruitment_rejection_email)}: {t(KEY.common_it)} {t(KEY.common_is)}{' '}
               {t(KEY.common_possible)} {t(KEY.common_when)} {t(KEY.common_all)} {t(KEY.recruitment_applications)}{' '}
@@ -121,8 +144,12 @@ export function RecruitmentProgression() {
             <Button
               theme={'green'}
               onClick={() => {
-                alert('Skal navigere til siden hvor man lager avslagsepost');
-                  navigate({ url: ROUTES.frontend.admin_recruitment_gang_overview_rejection_email })
+                navigate({
+                  url: reverse({
+                    pattern: ROUTES.frontend.admin_recruitment_gang_overview_rejection_email,
+                    urlParams: { recruitmentId: recruitmentId },
+                  }),
+                });
               }}
             >
               {`${t(KEY.common_create)} ${t(KEY.recruitment_rejection_email)}`}
