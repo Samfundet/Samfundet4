@@ -92,21 +92,23 @@ export function RecruitmentGangAllApplicantsAdminPage() {
       },
     });
 
-    return [
-      {
-        content: (
-          <Link url={applicationURL}>
-            {application.user.first_name} {application.user.last_name}
-          </Link>
-        ),
-      },
-      application.user?.phone_number,
-      application.user.email,
-      { content: <Link url={applicationURL}>{dbT(application.recruitment_position, 'name')}</Link> },
-      application.interview?.interview_time,
-      application.interview?.interview_location,
-      application.recruiter_status,
-    ];
+    return {
+      cells: [
+        {
+          content: (
+            <Link url={applicationURL}>
+              {application.user.first_name} {application.user.last_name}
+            </Link>
+          ),
+        },
+        application.user?.phone_number,
+        application.user.email,
+        { content: <Link url={applicationURL}>{dbT(application.recruitment_position, 'name')}</Link> },
+        application.interview?.interview_time,
+        application.interview?.interview_location,
+        application.recruiter_status,
+      ],
+    };
   });
 
   const downloadCSV = () => {

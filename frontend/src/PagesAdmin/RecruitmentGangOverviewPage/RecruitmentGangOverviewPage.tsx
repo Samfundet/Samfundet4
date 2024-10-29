@@ -77,7 +77,6 @@ export function RecruitmentGangOverviewPage() {
 
       return [{ content: <Link url={pageUrl}>{dbT(gang, 'name')}</Link> }, gang.recruitment_positions];
     });
-
     const tableSeparatePositionColumns = [
       { content: t(KEY.common_gang), sortable: true },
       { content: t(KEY.common_url), sortable: true },
@@ -117,6 +116,7 @@ export function RecruitmentGangOverviewPage() {
       { key: 3, label: t(KEY.recruitment_interview_group), value: <RecruitmentInterviewGroupsList /> },
     ];
   }, [gangs, recruitment, t, recruitmentId, navigate, deleteSeparatePositionHandler]);
+
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={loading}>
