@@ -64,6 +64,7 @@ from .models.recruitment import (
     RecruitmentApplication,
     RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
+    RecruitmentPositionSharedInterviewGroup,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
@@ -855,6 +856,20 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
             'default_application_letter_en',
             'gang',
             'recruitment',
+        ]
+
+
+class RecruitmentPositionSharedInterviewGroupSerializer(serializers.ModelSerializer):
+    positions = RecruitmentPositionForApplicantSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = RecruitmentPositionSharedInterviewGroup
+        fields = [
+            'id',
+            'recruitment',
+            'positions',
+            'name_en',
+            'name_nb',
         ]
 
 

@@ -1,0 +1,18 @@
+@import "src/constants";
+
+@import "src/mixins";
+
+.dropDownHeader {
+  background-color: $red_samf;
+  color: white;
+  font-size: 17px;
+  font-weight: 400;
+  @include theme-dark{
+    background-color: #590000;
+  }
+}
+
+.table {
+  width: 100%;
+  flex: 1;
+}
