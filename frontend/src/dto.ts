@@ -312,8 +312,8 @@ export type GangDto = {
   abbreviation: string;
   webpage?: string;
   logo?: string;
-  gang_type?: number;
-  info_page?: string;
+  gang_type?: number | null;
+  info_page?: string | null;
 };
 
 export type RecruitmentGangDto = GangDto & {

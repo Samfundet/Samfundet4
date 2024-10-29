@@ -18,8 +18,8 @@ const schema = z.object({
   name_en: NAME.min(1),
   abbreviation: ABBREVIATION.optional().or(z.literal('')),
   website: WEBSITE_URL.or(z.literal('')),
-  info_page: GANG_INFO_PAGE.optional(),
-  gang_type: GANG_TYPE.optional(),
+  info_page: GANG_INFO_PAGE.nullish().or(z.literal('')),
+  gang_type: GANG_TYPE.nullish(),
 });
 
 type Props = {
@@ -68,6 +68,7 @@ export function GangForm({ gang, onSuccess, onError }: Props) {
       abbreviation: gang?.abbreviation ?? '',
       website: gang?.webpage ?? '',
       info_page: gang?.info_page,
+      gang_type: gang?.gang_type,
     },
   });
 
@@ -162,11 +163,7 @@ export function GangForm({ gang, onSuccess, onError }: Props) {
                   {loadingInfoPages ? (
                     <>{t(KEY.common_loading)}...</>
                   ) : (
-                    <Dropdown
-                      defaultValue={infoPageOptions?.find((o) => o.value === gang?.info_page)}
-                      options={infoPageOptions}
-                      {...field}
-                    />
+                    <Dropdown options={infoPageOptions} nullOption={true} {...field} />
                   )}
                 </FormControl>
                 <FormMessage />
@@ -183,11 +180,7 @@ export function GangForm({ gang, onSuccess, onError }: Props) {
                   {loadingGangTypes ? (
                     <>{t(KEY.common_loading)}...</>
                   ) : (
-                    <Dropdown
-                      defaultValue={gangTypeOptions?.find((o) => o.value === gang?.gang_type)}
-                      options={gangTypeOptions}
-                      {...field}
-                    />
+                    <Dropdown options={gangTypeOptions} {...field} />
                   )}
                 </FormControl>
                 <FormMessage />

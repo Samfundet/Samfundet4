@@ -16,7 +16,7 @@ import {
   Input,
   NumberInput,
 } from '~/Components';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
 import type { OrganizationDto, RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
@@ -34,7 +34,7 @@ export function RecruitmentFormAdminPage() {
   const data = useRouteLoaderData('recruitment') as RecruitmentLoader | undefined;
 
   const { recruitmentId } = useParams();
-  const [organizationOptions, setOrganizationOptions] = useState<DropDownOption<number>[]>([]);
+  const [organizationOptions, setOrganizationOptions] = useState<DropdownOption<number>[]>([]);
 
   useEffect(() => {
     getOrganizations().then((data) => {

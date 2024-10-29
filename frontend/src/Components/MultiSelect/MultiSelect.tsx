@@ -6,7 +6,7 @@ import { Input } from '~/Components';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { Button } from '../Button';
-import type { DropDownOption } from '../Dropdown/Dropdown';
+import type { DropdownOption } from '../Dropdown/Dropdown';
 import styles from './MultiSelect.module.scss';
 import { SelectBox } from './SelectBox';
 import { exists, searchFilter } from './utils';
@@ -14,8 +14,8 @@ import { exists, searchFilter } from './utils';
 type MultiSelectProps<T> = {
   optionsLabel?: string;
   selectedLabel?: string;
-  selected?: DropDownOption<T>[];
-  options?: DropDownOption<T>[];
+  selected?: DropdownOption<T>[];
+  options?: DropdownOption<T>[];
   onChange?: (values: T[]) => void;
   className?: string;
 };
@@ -36,7 +36,7 @@ export function MultiSelect<T>({
   const isDesktop = useDesktop();
 
   const [search, setSearch] = useState('');
-  const [selected, setSelected] = useState<DropDownOption<T>[]>(initialValues);
+  const [selected, setSelected] = useState<DropdownOption<T>[]>(initialValues);
 
   const filteredOptions = useMemo(
     () => options.filter((item) => searchFilter(item, search)).filter((item) => !exists(item, selected)),
@@ -49,11 +49,11 @@ export function MultiSelect<T>({
     onChange?.(selected.map((item) => item.value));
   }, [selected, onChange]);
 
-  function selectItem(item: DropDownOption<T>) {
+  function selectItem(item: DropdownOption<T>) {
     setSelected((selected) => [...selected, item]);
   }
 
-  function unselectItem(item: DropDownOption<T>) {
+  function unselectItem(item: DropdownOption<T>) {
     setSelected((selected) => selected.filter((_item) => _item !== item));
   }
 

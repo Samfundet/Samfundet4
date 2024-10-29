@@ -1,12 +1,12 @@
 import { Button } from '~/Components';
 import type { ButtonTheme } from '~/Components/Button';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import styles from './SelectBox.module.scss';
 
 type Props<T> = {
-  items: DropDownOption<T>[];
+  items: DropdownOption<T>[];
   label?: string;
-  onItemClick?: (item: DropDownOption<T>) => void;
+  onItemClick?: (item: DropdownOption<T>) => void;
   itemButtonTheme?: ButtonTheme;
 };
 
