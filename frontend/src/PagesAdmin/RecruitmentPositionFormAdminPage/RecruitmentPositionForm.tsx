@@ -116,7 +116,7 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
                 <FormItem className={styles.item}>
                   <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_norwegian)}`}</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -129,7 +129,7 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
                 <FormItem className={styles.item}>
                   <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_english)}`}</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -245,7 +245,7 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
               <FormItem className={styles.item}>
                 <FormLabel>{t(KEY.common_tags)}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input type="text" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
