@@ -12,7 +12,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <input
         type={type}
-        className={classNames(styles.input_field, type === 'number' && styles.number_input, className)}
+        className={classNames(styles.input, className)}
         onChange={(event) => (type === 'number' ? onChange?.(+event.target.value) : onChange?.(event.target.value))}
         ref={ref}
         value={value === null ? '' : value}
