@@ -1,10 +1,10 @@
 import { useRouteLoaderData } from 'react-router-dom';
 import type { RecruitmentLoader } from '~/router/loaders';
 import { OrgNameType } from '~/types';
+import { IsNumber } from '~/utils';
 import { IsfitOutlet } from '../IsfitOutlet/IsfitOutlet';
 import { SamfOutlet } from '../SamfOutlet/SamfOutlet';
 import { UkaOutlet } from '../UkaOutlet';
-import { IsNumber } from '~/utils';
 
 export function DynamicOrgOutlet() {
   const data = useRouteLoaderData('publicRecruitment') as RecruitmentLoader | undefined;
