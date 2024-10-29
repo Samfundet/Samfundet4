@@ -287,8 +287,6 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
                     }}
                     optionsLabel="Available Interviewers"
                     selectedLabel="Selected Interviewers"
-                    selectAllBtnTxt="Select All"
-                    unselectAllBtnTxt="Unselect All"
                   />
                 </FormControl>
                 <FormMessage />
