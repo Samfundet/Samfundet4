@@ -81,6 +81,8 @@ export { ToggleSwitch } from './ToggleSwitch';
 export { ToolTip } from './ToolTip';
 export { UserFeedback } from './UserFeedback';
 export { Video } from './Video';
+export { UkaOutlet } from './UkaOutlet';
+export {IsfitOutlet} from './IsfitOutlet';
 
 // Props
 export type { CheckboxProps } from './Checkbox';

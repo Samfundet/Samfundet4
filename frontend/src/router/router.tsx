@@ -74,8 +74,8 @@ import { ROUTES } from '~/routes';
 
 import { t } from 'i18next';
 import { App } from '~/App';
+import { DynamicOrgOutlet } from '~/Components/DynamicOrgOutlet/DynamicOrgOutlet';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
-import { RoleDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import {
@@ -118,16 +118,20 @@ export const router = createBrowserRouter(
         <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
         <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
         <Route path={ROUTES.frontend.contributors} element={<ContributorsPage />} />
-        <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
+        <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
+        <Route path={ROUTES.frontend.contact} element={<div />} />
+        <Route path={ROUTES.frontend.luka} element={<div />} />
+      </Route>
+      {/* Recruitment */}
+      <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
+      {/* Specific recruitment */}
+      <Route element={<DynamicOrgOutlet />} id="publicRecruitment" loader={recruitmentLoader}>
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentApplicationFormPage />} />
         <Route
           path={ROUTES.frontend.recruitment_application_overview}
           element={<RecruitmentApplicationsOverviewPage />}
         />
         <Route path={ROUTES.frontend.organization_recruitment} element={<OrganizationRecruitmentPage />} />
-        <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
-        <Route path={ROUTES.frontend.contact} element={<div />} />
-        <Route path={ROUTES.frontend.luka} element={<div />} />
       </Route>
       {/*
             ADMIN ROUTES
