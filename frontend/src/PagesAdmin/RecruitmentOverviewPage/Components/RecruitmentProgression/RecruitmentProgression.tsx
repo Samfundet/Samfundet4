@@ -30,7 +30,6 @@ export function RecruitmentProgression() {
   const [rejectionCount, setRejectionCount] = useState<number>(-1);
   const [admittedCount, setAdmittedCount] = useState<number>(-1);
   const [rejectionEmailCount, setRejectionEmailCount] = useState<number>(-1);
-  const [progressionData, setProgressionData] = useState<RecruitmentProgessionProps>();
   const navigate = useCustomNavigate();
   const [tableRows, setTableRowsState] = useState<TableRow[]>([]);
   const ONE_HUNDRED_PERCENT = 1;
@@ -56,9 +55,12 @@ export function RecruitmentProgression() {
     const totalAdmitted = mock_fetched_data.reduce((sum, current) => sum + current.admitted, 0);
     const totalRejected = mock_fetched_data.reduce((sum, current) => sum + current.rejected, 0);
 
-    // Find every gang
-    // for each gang get /api/recruitment-for-recruiter 
-    getRecruitmentStats(recruitmentId);
+    getRecruitmentStats(recruitmentId).then(
+      recruitmentStats => {
+        setTotalApplications(recruitmentStats.total_applications);
+        // Where to retrieve number of processed, admitted, rejected?
+      }
+    );
 
 
 
