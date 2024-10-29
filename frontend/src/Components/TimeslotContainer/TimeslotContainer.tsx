@@ -159,6 +159,7 @@ export function TimeslotContainer({
               disabled={disabled || false}
               onMouseDown={(event) => {
                 if (event.button !== 0) {
+                  // Ignore if not primary mouse button
                   return;
                 }
                 toggleTimeslot(selectedDate, timeslot);
