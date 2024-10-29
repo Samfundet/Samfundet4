@@ -97,6 +97,15 @@ export const FormLabel = React.forwardRef<
 });
 FormLabel.displayName = 'FormLabel';
 
+export const FormDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
+  ({ className, ...props }, ref) => {
+    const { formDescriptionId } = useFormField();
+
+    return <p ref={ref} id={formDescriptionId} className={classNames(styles.description, className)} {...props} />;
+  },
+);
+FormDescription.displayName = 'FormDescription';
+
 export const FormControl = React.forwardRef<React.ElementRef<typeof Slot>, React.ComponentPropsWithoutRef<typeof Slot>>(
   ({ ...props }, ref) => {
     const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
