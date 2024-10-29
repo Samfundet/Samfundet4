@@ -57,13 +57,13 @@ export function RecruitmentApplicantsStatus({
   const navigate = useCustomNavigate();
 
   const tableColumns = [
-    { content: t(KEY.recruitment_applicant), sortable: true, hideSortButton: true },
-    { content: t(KEY.recruitment_priority), sortable: true, hideSortButton: true },
+    { content: t(KEY.recruitment_applicant), sortable: true, hideSortButton: false },
+    { content: t(KEY.recruitment_priority), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_interview_set), sortable: false, hideSortButton: true },
-    { content: t(KEY.recruitment_interview_time), sortable: true, hideSortButton: true },
-    { content: t(KEY.recruitment_interview_location), sortable: true, hideSortButton: true },
-    { content: t(KEY.recruitment_recruiter_priority), sortable: true, hideSortButton: true },
-    { content: t(KEY.recruitment_recruiter_status), sortable: true, hideSortButton: true },
+    { content: t(KEY.recruitment_interview_time), sortable: true, hideSortButton: false },
+    { content: t(KEY.recruitment_interview_location), sortable: true, hideSortButton: false },
+    { content: t(KEY.recruitment_recruiter_priority), sortable: true, hideSortButton: false },
+    { content: t(KEY.recruitment_recruiter_status), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_interview_notes), sortable: false, hideSortButton: true },
   ];
 
@@ -131,7 +131,7 @@ export function RecruitmentApplicantsStatus({
           content: (
             <SetInterviewManuallyModal
               recruitmentId={Number(recruitmentId) || 0}
-              isButtonRounded={true}
+              isButtonRounded={false}
               application={application}
               onSetInterview={onInterviewChange}
             />
@@ -141,16 +141,20 @@ export function RecruitmentApplicantsStatus({
           value: application.interview?.interview_time,
           style: applicationStatusStyle,
           content: application.interview?.interview_time ? (
-            <TimeDisplay timestamp={application.interview.interview_time} displayType="nice-date-time" />
+            <TimeDisplay
+              className={styles.location_and_time_text}
+              timestamp={application.interview.interview_time}
+              displayType="nice-date-time"
+            />
           ) : (
-            <Text>{t(KEY.common_not_set)}</Text>
+            <Text className={styles.location_and_time_text}>{t(KEY.common_not_set)}</Text>
           ),
         },
         {
           value: application.interview?.interview_location,
           style: applicationStatusStyle,
           content: (
-            <Text>
+            <Text className={styles.location_and_time_text}>
               {application.interview?.interview_location
                 ? application.interview?.interview_location
                 : t(KEY.common_not_set)}
@@ -186,25 +190,27 @@ export function RecruitmentApplicantsStatus({
         {
           style: applicationStatusStyle,
           content: (
-            <CrudButtons
-              onView={
-                application.interview?.interview_time != null
-                  ? () => {
-                      navigate({
-                        url: reverse({
-                          pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes,
-                          urlParams: {
-                            recruitmentId: recruitmentId,
-                            gangId: gangId,
-                            positionId: positionId,
-                            interviewId: application.interview?.id,
-                          },
-                        }),
-                      });
-                    }
-                  : undefined
-              }
-            />
+            <div className={styles.crud}>
+              <CrudButtons
+                onView={
+                  application.interview?.interview_time != null
+                    ? () => {
+                        navigate({
+                          url: reverse({
+                            pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes,
+                            urlParams: {
+                              recruitmentId: recruitmentId,
+                              gangId: gangId,
+                              positionId: positionId,
+                              interviewId: application.interview?.id,
+                            },
+                          }),
+                        });
+                      }
+                    : undefined
+                }
+              />
+            </div>
           ),
         },
       ],

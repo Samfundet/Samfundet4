@@ -23,25 +23,26 @@
 .interviewField {
   display: flex;
   justify-content: center;
-  background-color: $pending;
+  background-color: $white;
 }
 
 .header {
-  font-size: 0.7em;
-  background-color: $grey-3;
-  color: $black;
+  font-size: 1.0em;
+  background-color: $red-samf;
+  padding: 0.5em 0.8em;
+  color: $white;
   &:hover {
-    background-color: $grey-2;
-    color: $black;
+    background-color: $red_samf_hover;
+    color: $white;
   }
 }
 
 .rows {
-  padding: 0.1em 0.2em;
+  padding: 0.2em 0.8em;
 }
 
 .pending {
-  background-color: $pending;
+  background-color: $white;
 }
 
 .top_reserve {
@@ -82,6 +83,15 @@
 }
 
 .tableRow {
-  border-color: $grey-3;
+  border-color: $grey-35;
   border-width: 0.01em;
+}
+
+.crud {
+  display: flex;
+  justify-content: center;
+}
+
+.location_and_time_text{
+  font-size: 0.9rem !important;
 }
