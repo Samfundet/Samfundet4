@@ -1,19 +1,14 @@
-import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { Button, RecruitmentApplicantsStatus } from '~/Components';
-import { Text } from '~/Components/Text/Text';
-import { getRecruitmentApplicationsForRecruitmentPosition, updateRecruitmentApplicationStateForPosition } from '~/api';
-import type { RecruitmentApplicationStateDto } from '~/dto';
+import { Button } from '~/Components';
+import { getRecruitmentApplicationsForRecruitmentPosition } from '~/api';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import styles from './RecruitmentPositionOverviewPage.module.scss';
-import { ProcessedApplicants } from './components';
 
 const queryKeys = {
   applications: (positionId: string, filterType: string) => ['applications', positionId, filterType] as const,
@@ -27,35 +22,44 @@ export function RecruitmentPositionOverviewPage() {
 
   // Store the query keys separately so we can use them for invalidation
   const filterTypes = ['unprocessed', 'withdrawn', 'hardtoget', 'rejected', 'accepted'] as const;
-  const allQueryKeys = filterTypes.map((filterType) => queryKeys.applications(positionId!, filterType));
+  useEffect(() => {
+    if (!positionId) return;
+    getRecruitmentApplicationsForRecruitmentPosition(positionId, 'unprocessed').then((response) => {
+      console.log(response);
+    });
+    getRecruitmentApplicationsForRecruitmentPosition(positionId, 'accepted').then((response) => {
+      console.log('ACCEPTED', response);
+    });
+  }, [positionId]);
+  // const allQueryKeys = filterTypes.map((filterType) => queryKeys.applications(positionId!, filterType));
 
-  const results = useQueries({
-    queries: filterTypes.map((filterType) => ({
-      queryKey: queryKeys.applications(positionId!, filterType),
-      queryFn: () => getRecruitmentApplicationsForRecruitmentPosition(positionId!, filterType),
-      enabled: !!positionId,
-    })),
-  });
+  // const results = useQueries({
+  //   queries: filterTypes.map((filterType) => ({
+  //     queryKey: queryKeys.applications(positionId!, filterType),
+  //     queryFn: () => getRecruitmentApplicationsForRecruitmentPosition(positionId!, filterType),
+  //     enabled: !!positionId,
+  //   })),
+  // });
 
-  const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: RecruitmentApplicationStateDto }) =>
-      updateRecruitmentApplicationStateForPosition(id, data),
-    onSuccess: async () => {
-      // Use the stored query keys for invalidation
-      for (const queryKey of allQueryKeys) {
-        await queryClient.invalidateQueries({ queryKey });
-      }
-    },
-    onError: () => {
-      toast.error(t(KEY.common_something_went_wrong));
-    },
-  });
+  // const updateMutation = useMutation({
+  //   mutationFn: ({ id, data }: { id: string; data: RecruitmentApplicationStateDto }) =>
+  //     updateRecruitmentApplicationStateForPosition(id, data),
+  //   onSuccess: async () => {
+  //     // Use the stored query keys for invalidation
+  //     for (const queryKey of allQueryKeys) {
+  //       await queryClient.invalidateQueries({ queryKey });
+  //     }
+  //   },
+  //   onError: () => {
+  //     toast.error(t(KEY.common_something_went_wrong));
+  //   },
+  // });
 
-  const onInterviewChange = async () => {
-    for (const queryKey of allQueryKeys) {
-      await queryClient.invalidateQueries({ queryKey });
-    }
-  };
+  // const onInterviewChange = async () => {
+  //   for (const queryKey of allQueryKeys) {
+  //     await queryClient.invalidateQueries({ queryKey });
+  //   }
+  //};
 
   const title = t(KEY.recruitment_administrate_applications);
   useTitle(title);
@@ -79,8 +83,8 @@ export function RecruitmentPositionOverviewPage() {
   );
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={isLoading}>
-      <Text size="l" as="strong" className={styles.subHeader}>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header}>
+      {/* <Text size="l" as="strong" className={styles.subHeader}>
         {lowerCapitalize(t(KEY.recruitment_applications))} ({unprocessed.data?.data.length ?? 0})
       </Text>
       <RecruitmentApplicantsStatus
@@ -108,8 +112,8 @@ export function RecruitmentPositionOverviewPage() {
             {t(KEY.recruitment_accepted_applications_empty_text)}
           </Text>
         )}
-      </div>
-
+      </div> */}
+      <div>test</div>
       {/* Similar pattern for rejected, hardtoget, and withdrawn sections */}
       {/* ... other sections follow the same pattern ... */}
     </AdminPageLayout>
