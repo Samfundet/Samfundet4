@@ -37,6 +37,7 @@ export { InputField } from './InputField';
 export { InputFile } from './InputFile';
 export { InputTime } from './InputTime';
 export { InterviewFormModal } from './InterviewForm';
+export { IsfitOutlet } from './IsfitOutlet';
 export { Link } from './Link';
 export { List } from './List';
 export { Logo } from './Logo';
@@ -81,6 +82,7 @@ export { TimeDuration } from './TimeDuration';
 export { TimeslotContainer } from './TimeslotContainer';
 export { ToggleSwitch } from './ToggleSwitch';
 export { ToolTip } from './ToolTip';
+export { UkaOutlet } from './UkaOutlet';
 export { UserFeedback } from './UserFeedback';
 export { Video } from './Video';
 
