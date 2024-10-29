@@ -810,6 +810,46 @@ export async function getRecruitmentSharedInterviewGroups(
   return await axios.get(url, { withCredentials: true });
 }
 
+export async function getRecruitmentSharedInterviewGroup(
+  sharedInterviewGroupId: string
+): Promise<AxiosResponse<RecruitmentSharedInterviewGroupDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_sharedinterviewgroups_detail,
+      urlParams: {
+        pk: sharedInterviewGroupId,
+      },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function putRecruitmentSharedInterviewGroup(
+  sharedInterviewGroupId: string,
+  sharedInterviewGroup: Partial<RecruitmentSharedInterviewGroupDto>,
+): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_sharedinterviewgroups_detail,
+      urlParams: {
+        pk: sharedInterviewGroupId,
+      },
+    });
+  return await axios.put<RecruitmentApplicationDto>(url, sharedInterviewGroup, { withCredentials: true });
+}
+
+export async function postRecruitmentSharedInterviewGroup(
+  sharedInterviewGroup: Partial<RecruitmentSharedInterviewGroupDto>,
+): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_sharedinterviewgroups_list,
+    });
+  return await axios.post<RecruitmentApplicationDto>(url, sharedInterviewGroup, { withCredentials: true });
+}
+
 export async function downloadCSVGangRecruitment(recruitmentId: string, gangId: string): Promise<void> {
   const url =
     BACKEND_DOMAIN +

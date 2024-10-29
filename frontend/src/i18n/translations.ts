@@ -261,7 +261,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_no_interviews]: 'Ingen intervjuer',
   [KEY.recruitment_interview_set]: 'Sett intervju',
   [KEY.recruitment_interview_groups]: 'Intervjugrupper',
-  [KEY.recruitment_interview_group]: 'Intervjugrupper',
+  [KEY.recruitment_interview_group]: 'Intervjugruppe',
   [KEY.recruitment_interview_time]: 'Intervjutid',
   [KEY.recruitment_interview_location]: 'Intervjusted',
   [KEY.recruitment_no_positions]: 'Ingen verv',

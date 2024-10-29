@@ -41,6 +41,7 @@ router.register('role', views.RoleView, 'role')
 
 ########## Recruitment ##########
 router.register('recruitment', views.RecruitmentView, 'recruitment')
+router.register('recruitmentSharedInterviewGroup', views.RecruitmentSharedInterviewGroupView, 'recruitment_sharedinterviewgroups')
 router.register('recruitment-for-recruiter', views.RecruitmentForRecruiterView, 'recruitment_for_recruiter')
 router.register('recruitment-stats', views.RecruitmentStatisticsView, 'recruitment_stats')
 router.register('recruitment-separateposition', views.RecruitmentSeparatePositionView, 'recruitment_separateposition')
@@ -90,7 +91,7 @@ urlpatterns = [
     ),
     path(
         'recruitment-shared-interview-groups/<int:recruitment_id>/',
-        views.RecruitmentInterviewGroupView.as_view(),
+        views.RecruitmentInterviewGroupRecruitmentView.as_view(),
         name='recruitment_shared_interviews',
     ),
     path('recruitment-positions-gang-for-gangs/', views.RecruitmentPositionsPerGangForGangView.as_view(), name='recruitment_positions_gang_for_gangs'),

@@ -55,6 +55,7 @@ import {
   RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
+  RecruitmentInterviewGroupFormAdminPage,
   RecruitmentSeparatePositionFormAdminPage,
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
@@ -472,6 +473,14 @@ export const router = createBrowserRouter(
               }}
             />
             <Route
+                path={ROUTES.frontend.admin_recruitment_sharedinterviewgroup_create}
+                element={<PermissionRoute required={[]} element={<RecruitmentInterviewGroupFormAdminPage />} />}
+            />
+            <Route
+                path={ROUTES.frontend.admin_recruitment_sharedinterviewgroup_edit}
+                element={<PermissionRoute required={[]} element={<RecruitmentInterviewGroupFormAdminPage />} />}
+            />
+            <Route
               path={ROUTES.frontend.admin_recruitment_room_overview}
               element={<RoomAdminPage />}
               handle={{
@@ -539,7 +548,7 @@ export const router = createBrowserRouter(
                     </Link>
                   ),
                 }}
-              />
+            />
               {/* Position */}
               <Route
                 element={<Outlet />}

@@ -632,6 +632,11 @@ class RecruitmentForRecruiterView(ModelViewSet):
     serializer_class = RecruitmentForRecruiterSerializer
     queryset = Recruitment.objects.all()
 
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentSharedInterviewGroupView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = RecruitmentPositionSharedInterviewGroupSerializer
+    queryset = RecruitmentPositionSharedInterviewGroup.objects.all()
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentStatisticsView(ModelViewSet):
@@ -1111,7 +1116,7 @@ class ActiveRecruitmentsView(ListAPIView):
         return Recruitment.objects.filter(visible_from__lte=timezone.now(), actual_application_deadline__gte=timezone.now())
 
 
-class RecruitmentInterviewGroupView(APIView):
+class RecruitmentInterviewGroupRecruitmentView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(
@@ -1123,7 +1128,6 @@ class RecruitmentInterviewGroupView(APIView):
         interview_groups = RecruitmentPositionSharedInterviewGroup.objects.filter(recruitment=recruitment)
 
         return Response(data=RecruitmentPositionSharedInterviewGroupSerializer(interview_groups, many=True).data, status=status.HTTP_200_OK)
-
 
 class DownloadRecruitmentApplicationGangCSV(APIView):
     permission_classes = [IsAuthenticated]

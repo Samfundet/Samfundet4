@@ -431,7 +431,7 @@ export type RecruitmentSharedInterviewGroupDto = {
   recruitment?: string;
   name_nb: string;
   name_en: string;
-  positions: RecruitmentPositionDto[];
+  positions: RecruitmentPositionDto[] | number[];
 };
 
 export type UserPriorityDto = {
