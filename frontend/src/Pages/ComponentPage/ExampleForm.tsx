@@ -5,6 +5,7 @@ import { z } from 'zod';
 import {
   Button,
   Checkbox,
+  DatePicker,
   Dropdown,
   Form,
   FormControl,
@@ -21,6 +22,7 @@ const schema = z.object({
   password: PASSWORD,
   organization: z.string().nullish().optional(),
   duration: z.number().min(15).max(60),
+  date: z.date(),
   confirm: z.boolean().refine((v) => v, 'Påkrevd'),
 });
 
@@ -61,7 +63,7 @@ export function ExampleForm() {
             <FormItem>
               <FormLabel>Brukernavn</FormLabel>
               <FormControl>
-                <Input disabled={submitting} autoComplete="off" {...field} />
+                <Input type="text" disabled={submitting} autoComplete="off" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -101,6 +103,19 @@ export function ExampleForm() {
               <FormLabel>Varighet</FormLabel>
               <FormControl>
                 <Input type="number" disabled={submitting} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Dato</FormLabel>
+              <FormControl>
+                <DatePicker disabled={submitting} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
