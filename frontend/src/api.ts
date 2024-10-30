@@ -33,6 +33,7 @@ import type {
   RecruitmentPositionPostDto,
   RecruitmentPositionPutDto,
   RecruitmentSeparatePositionDto,
+  RecruitmentSharedInterviewGroupDto,
   RecruitmentStatsDto,
   RecruitmentUnprocessedApplicationsDto,
   RecruitmentUserDto,
@@ -654,7 +655,7 @@ export async function getRecruitmentPosition(positionId: string): Promise<AxiosR
   return response;
 }
 
-export async function postRecruitmentPosition(recruitmentPosition: RecruitmentPositionPutDto): Promise<AxiosResponse> {
+export async function postRecruitmentPosition(recruitmentPosition: RecruitmentPositionPostDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_position_list;
   const response = await axios.post(url, recruitmentPosition, { withCredentials: true });
 
@@ -663,7 +664,7 @@ export async function postRecruitmentPosition(recruitmentPosition: RecruitmentPo
 
 export async function putRecruitmentPosition(
   positionId: string,
-  recruitment: Partial<RecruitmentPositionPostDto>,
+  recruitment: Partial<RecruitmentPositionPutDto>,
 ): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
@@ -813,6 +814,20 @@ export async function getRecruitmentApplicationsForGang(
       queryParams: {
         gang: gangId,
         recruitment: recruitmentId,
+      },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function getRecruitmentSharedInterviewGroups(
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentSharedInterviewGroupDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_shared_interviews,
+      urlParams: {
+        recruitmentId: recruitmentId,
       },
     });
   return await axios.get(url, { withCredentials: true });

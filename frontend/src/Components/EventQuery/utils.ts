@@ -15,13 +15,11 @@ function toRepresentation(event: EventDto): string {
   `;
 }
 
-export function eventQuery(events: EventDto[], search: string, venue?: VenueDto): EventDto[] {
-  const searchMatch = queryDtoCustom(search, events, toRepresentation);
+export function eventQuery(events: EventDto[], search: string, venue?: VenueDto | null): EventDto[] {
+  let searchMatch = queryDtoCustom(search, events, toRepresentation);
   // Filter by venue
-  if (venue !== undefined) {
-    return searchMatch.filter((event) => {
-      return event.location.toLowerCase().includes(venue.name);
-    });
+  if (venue) {
+    searchMatch = searchMatch.filter((event) => event.location.toLowerCase().includes(venue.name.toLowerCase()));
   }
   return searchMatch;
 }
