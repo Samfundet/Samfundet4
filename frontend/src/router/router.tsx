@@ -191,6 +191,11 @@ export const router = createBrowserRouter(
               element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RolesAdminPage />} />}
             />
             <Route
+              path={ROUTES.frontend.admin_roles_create}
+              handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
+              element={<PermissionRoute required={[PERM.SAMFUNDET_ADD_ROLE]} element={<RoleFormAdminPage />} />}
+            />
+            <Route
               id="role"
               element={<Outlet />}
               loader={roleLoader}

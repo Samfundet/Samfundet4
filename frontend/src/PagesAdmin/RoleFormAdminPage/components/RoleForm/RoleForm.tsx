@@ -17,7 +17,7 @@ import {
   FormMessage,
   Input,
 } from '~/Components';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { MultiSelect } from '~/Components/MultiSelect';
 import { createRole, editRole, getPermissions } from '~/api';
 import type { RoleDto } from '~/dto';
@@ -67,7 +67,7 @@ export function RoleForm({ role }: Props) {
 
   const isPending = edit.isPending || create.isPending;
 
-  const permissionOptions = useMemo<DropDownOption<number>[]>(() => {
+  const permissionOptions = useMemo<DropdownOption<number>[]>(() => {
     if (!allPermissions) {
       return [];
     }
@@ -77,7 +77,7 @@ export function RoleForm({ role }: Props) {
     }));
   }, [allPermissions]);
 
-  const selectedPermissions = useMemo<DropDownOption<number>[]>(() => {
+  const selectedPermissions = useMemo<DropdownOption<number>[]>(() => {
     if (!allPermissions || !role) {
       return [];
     }
@@ -113,7 +113,7 @@ export function RoleForm({ role }: Props) {
     section: t(KEY.common_section),
   };
 
-  const contentTypeOptions: DropDownOption<ContentTypeSchemaType>[] = ROLE_CONTENT_TYPE.options.map((ct) => ({
+  const contentTypeOptions: DropdownOption<ContentTypeSchemaType>[] = ROLE_CONTENT_TYPE.options.map((ct) => ({
     value: ct,
     label: contentTypeLabels[ct],
   }));
