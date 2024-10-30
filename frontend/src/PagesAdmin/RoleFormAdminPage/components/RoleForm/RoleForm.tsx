@@ -156,7 +156,7 @@ export function RoleForm({ role }: Props) {
                 ) : isError ? (
                   <Alert message={t(KEY.role_edit_could_not_load_permissions)} type="error" />
                 ) : (
-                  <MultiSelect<number> options={permissionOptions} selected={selectedPermissions} {...field} />
+                  <MultiSelect options={permissionOptions} selected={selectedPermissions} {...field} />
                 )}
               </FormControl>
               <FormMessage />
