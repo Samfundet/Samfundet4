@@ -29,6 +29,7 @@ export { RecruitmentUsersWithoutInterviewGangPage } from './RecruitmentUsersWith
 export { RecruitmentUsersWithoutThreeInterviewCriteriaPage } from './RecruitmentUsersWithoutThreeInterviewCriteriaPage';
 export { RolesAdminPage } from './RolesAdminPage';
 export { RoleAdminPage } from './RoleAdminPage';
+export { RoleFormAdminPage } from './RoleFormAdminPage';
 export { CreateInterviewRoomPage, RoomAdminPage } from './RoomAdminPage';
 export { SaksdokumentAdminPage } from './SaksdokumentAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';

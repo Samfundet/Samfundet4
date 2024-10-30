@@ -73,6 +73,7 @@ export function RecruitmentGangAdminPage() {
       cells: [
         {
           content: <Link url={pageUrl}>{dbT(recruitmentPosition, 'name')}</Link>,
+          value: dbT(recruitmentPosition, 'name'),
         },
         {
           value: recruitmentPosition.is_funksjonaer_position,
@@ -97,7 +98,7 @@ export function RecruitmentGangAdminPage() {
                   reverse({
                     pattern: ROUTES.frontend.recruitment_application,
                     urlParams: {
-                      positionID: recruitmentPosition.id,
+                      positionId: recruitmentPosition.id,
                     },
                   }),
                 );
