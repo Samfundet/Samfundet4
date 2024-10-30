@@ -62,6 +62,7 @@ export const KEY = {
   common_yes: 'common_yes',
   common_no: 'common_no',
   common_to: 'common_to',
+  common_any: 'common_any',
   common_all: 'common_all',
   common_price: 'common_price',
   common_food: 'common_food',
@@ -84,6 +85,7 @@ export const KEY = {
   common_card: 'common_card',
   common_tags: 'common_tags',
   common_gang: 'common_gang',
+  common_section: 'common_section',
   common_next: 'common_next',
   common_open: 'common_open',
   common_send: 'common_send',
@@ -123,7 +125,7 @@ export const KEY = {
   common_email_subject: 'common_email_subject',
   common_total: 'common_total',
   common_roles: 'common_roles',
-  common_roles_view: 'common_roles_view',
+  common_role: 'common_role',
   common_guests: 'common_guests',
   common_occasion: 'common_occasion',
   common_phonenumber: 'common_phonenumber',
@@ -216,6 +218,8 @@ export const KEY = {
   //        Others        //
   // ==================== //
 
+  role_content_type: 'role_content_type',
+
   // LoginPage:
   loginpage_register: 'loginpage_register',
   loginpage_internal_login: 'loginpage_internal_login',
@@ -227,6 +231,8 @@ export const KEY = {
   contributors_page_title: 'contributors_page_title',
   contributors_page_text: 'contributors_page_text',
   contributors_page_past_developers: 'contributors_page_past_developers',
+
+  role_edit_could_not_load_permissions: 'role_edit_could_not_load_permissions',
 
   // GroupsPage:
   groupspage_gangs_text: 'groupspage_gangs_text',

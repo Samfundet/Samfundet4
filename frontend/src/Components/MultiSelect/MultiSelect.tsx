@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '~/Components';
 import { useDesktop } from '~/hooks';
@@ -24,14 +24,10 @@ type MultiSelectProps<T> = {
  * `options`: All possible options that can be selected.
  * `selected`: Selected values if state is managed outside this component.
  */
-export function MultiSelect<T>({
-  optionsLabel,
-  selectedLabel,
-  className,
-  selected: initialValues = [],
-  options = [],
-  onChange,
-}: MultiSelectProps<T>) {
+function MultiSelectInner<T>(
+  { optionsLabel, selectedLabel, className, selected: initialValues = [], options = [], onChange }: MultiSelectProps<T>,
+  ref: React.Ref<HTMLDivElement>,
+) {
   const { t } = useTranslation();
   const isDesktop = useDesktop();
 
@@ -66,7 +62,7 @@ export function MultiSelect<T>({
   }
 
   return (
-    <div className={classNames(styles.container, className)}>
+    <div className={classNames(styles.container, className)} ref={ref}>
       <Input
         type="text"
         onChange={(e) => setSearch(e.target.value)}
@@ -94,3 +90,8 @@ export function MultiSelect<T>({
     </div>
   );
 }
+
+export const MultiSelect = React.forwardRef(MultiSelectInner) as <T>(
+  props: MultiSelectProps<T> & { ref?: React.Ref<HTMLDivElement> },
+) => ReturnType<typeof MultiSelectInner>;
+(MultiSelect as React.ForwardRefExoticComponent<unknown>).displayName = 'MultiSelect';
