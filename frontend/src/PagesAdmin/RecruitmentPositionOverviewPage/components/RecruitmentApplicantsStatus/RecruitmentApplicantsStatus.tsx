@@ -1,17 +1,16 @@
 import { useTranslation } from 'react-i18next';
-import { InputField, TimeDisplay } from '~/Components';
+import { TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
-import { putRecruitmentApplicationForGang } from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { Link } from '../Link';
-import { SetInterviewManuallyModal } from '../SetInterviewManually';
+import { Link } from '../../../../Components/Link';
+import { SetInterviewManuallyModal } from '../../../../Components/SetInterviewManually';
 import styles from './RecruitmentApplicantsStatus.module.scss';
 
 type RecruitmentApplicantsStatusProps = {

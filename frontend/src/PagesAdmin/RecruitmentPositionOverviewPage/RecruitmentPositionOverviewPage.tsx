@@ -1,65 +1,76 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button } from '~/Components';
+import { Button, RecruitmentApplicantsStatus, Text } from '~/Components';
 import { getRecruitmentApplicationsForRecruitmentPosition } from '~/api';
+import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-
-const queryKeys = {
-  applications: (positionId: string, filterType: string) => ['applications', positionId, filterType] as const,
-};
+import styles from './RecruitmentPositionOverviewPage.module.scss';
+import { ProcessedApplicants } from './components';
+// const queryKeys = {
+//   applications: (positionId: string, filterType: string) => ['applications', positionId, filterType] as const,
+// };
 
 export function RecruitmentPositionOverviewPage() {
   const navigate = useNavigate();
   const { recruitmentId, gangId, positionId } = useParams();
-  const queryClient = useQueryClient();
   const { t } = useTranslation();
 
-  // Store the query keys separately so we can use them for invalidation
-  const filterTypes = ['unprocessed', 'withdrawn', 'hardtoget', 'rejected', 'accepted'] as const;
-  useEffect(() => {
+  const [applications, setApplications] = useState<{
+    unprocessed: RecruitmentApplicationDto[];
+    withdrawn: RecruitmentApplicationDto[];
+    hardtoget: RecruitmentApplicationDto[];
+    rejected: RecruitmentApplicationDto[];
+    accepted: RecruitmentApplicationDto[];
+  }>({
+    unprocessed: [],
+    withdrawn: [],
+    hardtoget: [],
+    rejected: [],
+    accepted: [],
+  });
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const loadApplications = async () => {
     if (!positionId) return;
-    getRecruitmentApplicationsForRecruitmentPosition(positionId, 'unprocessed').then((response) => {
-      console.log(response);
-    });
-    getRecruitmentApplicationsForRecruitmentPosition(positionId, 'accepted').then((response) => {
-      console.log('ACCEPTED', response);
-    });
+
+    try {
+      const [unprocessed, accepted, withdrawn, hardtoget, rejected] = await Promise.all([
+        getRecruitmentApplicationsForRecruitmentPosition(positionId, 'unprocessed'),
+        getRecruitmentApplicationsForRecruitmentPosition(positionId, 'accepted'),
+        getRecruitmentApplicationsForRecruitmentPosition(positionId, 'withdrawn'),
+        getRecruitmentApplicationsForRecruitmentPosition(positionId, 'hardtoget'),
+        getRecruitmentApplicationsForRecruitmentPosition(positionId, 'rejected'),
+      ]);
+
+      setApplications({
+        unprocessed: unprocessed || [],
+        accepted: accepted || [],
+        withdrawn: withdrawn || [],
+        hardtoget: hardtoget || [],
+        rejected: rejected || [],
+      });
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error loading applications:', error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadApplications();
   }, [positionId]);
-  // const allQueryKeys = filterTypes.map((filterType) => queryKeys.applications(positionId!, filterType));
 
-  // const results = useQueries({
-  //   queries: filterTypes.map((filterType) => ({
-  //     queryKey: queryKeys.applications(positionId!, filterType),
-  //     queryFn: () => getRecruitmentApplicationsForRecruitmentPosition(positionId!, filterType),
-  //     enabled: !!positionId,
-  //   })),
-  // });
-
-  // const updateMutation = useMutation({
-  //   mutationFn: ({ id, data }: { id: string; data: RecruitmentApplicationStateDto }) =>
-  //     updateRecruitmentApplicationStateForPosition(id, data),
-  //   onSuccess: async () => {
-  //     // Use the stored query keys for invalidation
-  //     for (const queryKey of allQueryKeys) {
-  //       await queryClient.invalidateQueries({ queryKey });
-  //     }
-  //   },
-  //   onError: () => {
-  //     toast.error(t(KEY.common_something_went_wrong));
-  //   },
-  // });
-
-  // const onInterviewChange = async () => {
-  //   for (const queryKey of allQueryKeys) {
-  //     await queryClient.invalidateQueries({ queryKey });
-  //   }
-  //};
+  const updateApplicationState = async (id: string, data: RecruitmentApplicationStateDto) => {
+    // TODO: Implement the update function
+    // For now, just reload the data after update
+    await loadApplications();
+  };
 
   const title = t(KEY.recruitment_administrate_applications);
   useTitle(title);
@@ -83,27 +94,28 @@ export function RecruitmentPositionOverviewPage() {
   );
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header}>
-      {/* <Text size="l" as="strong" className={styles.subHeader}>
-        {lowerCapitalize(t(KEY.recruitment_applications))} ({unprocessed.data?.data.length ?? 0})
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={isLoading}>
+      <Text size="l" as="strong" className={styles.subHeader}>
+        {lowerCapitalize(t(KEY.recruitment_applications))} ({applications.unprocessed.length})
       </Text>
+
       <RecruitmentApplicantsStatus
-        applicants={results[0].data ?? []}
+        applicants={applications.unprocessed}
         recruitmentId={recruitmentId}
         gangId={gangId}
         positionId={positionId}
         updateStateFunction={updateApplicationState}
-        onInterviewChange={onInterviewChange}
+        onInterviewChange={loadApplications}
       />
 
       <div className={styles.sub_container}>
         <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_accepted_applications)} ({accepted.data?.data.length ?? 0})
+          {t(KEY.recruitment_accepted_applications)} ({applications.accepted.length})
         </Text>
         <Text className={styles.subText}>{t(KEY.recruitment_accepted_applications_help_text)}</Text>
-        {(accepted.data?.data.length ?? 0) > 0 ? (
+        {applications.accepted.length > 0 ? (
           <ProcessedApplicants
-            data={accepted.data?.data ?? []}
+            data={applications.accepted}
             type="accepted"
             revertStateFunction={updateApplicationState}
           />
@@ -112,10 +124,56 @@ export function RecruitmentPositionOverviewPage() {
             {t(KEY.recruitment_accepted_applications_empty_text)}
           </Text>
         )}
-      </div> */}
-      <div>test</div>
-      {/* Similar pattern for rejected, hardtoget, and withdrawn sections */}
-      {/* ... other sections follow the same pattern ... */}
+      </div>
+
+      <div className={styles.sub_container}>
+        <Text size="l" as="strong" className={styles.subHeader}>
+          {t(KEY.recruitment_rejected_applications)} ({applications.rejected.length})
+        </Text>
+        <Text className={styles.subText}>{t(KEY.recruitment_rejected_applications_help_text)}</Text>
+        {applications.rejected.length > 0 ? (
+          <ProcessedApplicants
+            data={applications.rejected}
+            type="rejected"
+            revertStateFunction={updateApplicationState}
+          />
+        ) : (
+          <Text as="i" className={styles.subText}>
+            {t(KEY.recruitment_rejected_applications_empty_text)}
+          </Text>
+        )}
+      </div>
+
+      <div className={styles.sub_container}>
+        <Text size="l" as="strong" className={styles.subHeader}>
+          {t(KEY.recruitment_hardtoget_applications)} ({applications.hardtoget.length})
+        </Text>
+        <Text className={styles.subText}>{t(KEY.recruitment_hardtoget_applications_help_text)}</Text>
+        {applications.hardtoget.length > 0 ? (
+          <ProcessedApplicants
+            data={applications.hardtoget}
+            type="hardtoget"
+            revertStateFunction={updateApplicationState}
+          />
+        ) : (
+          <Text as="i" className={styles.subText}>
+            {t(KEY.recruitment_hardtoget_applications_empty_text)}
+          </Text>
+        )}
+      </div>
+
+      <div className={styles.sub_container}>
+        <Text size="l" as="strong" className={styles.subHeader}>
+          {t(KEY.recruitment_withdrawn_applications)} ({applications.withdrawn.length})
+        </Text>
+        {applications.withdrawn.length > 0 ? (
+          <ProcessedApplicants data={applications.withdrawn} type="withdrawn" />
+        ) : (
+          <Text as="i" className={styles.subText}>
+            {t(KEY.recruitment_withdrawn_applications_empty_text)}
+          </Text>
+        )}
+      </div>
     </AdminPageLayout>
   );
 }

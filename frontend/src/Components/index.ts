@@ -1,3 +1,4 @@
+export { RecruitmentApplicantsStatus } from '../PagesAdmin/RecruitmentPositionOverviewPage/components/RecruitmentApplicantsStatus';
 export { AccessDenied } from './AccessDenied';
 export { AdminBox } from './AdminBox';
 export { Alert } from './Alert';
@@ -55,7 +56,6 @@ export { ProgressBar } from './ProgressBar';
 export { ProtectedRoute } from './ProtectedRoute';
 export { PulseEffect } from './PulseEffect';
 export { RadioButton } from './RadioButton';
-export { RecruitmentApplicantsStatus } from './RecruitmentApplicantsStatus';
 export { RecruitmentWithoutInterviewTable } from './RecruitmentWithoutInterviewTable';
 export { RootErrorBoundary } from './RootErrorBoundary';
 export { SamfOutlet } from './SamfOutlet';
