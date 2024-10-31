@@ -1,5 +1,6 @@
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { TimeDisplay } from '~/Components';
+import { SamfundetLogoSpinner, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
@@ -20,6 +21,7 @@ type RecruitmentApplicantsStatusProps = {
   positionId: number | string | undefined;
   updateStateFunction: (id: string, data: RecruitmentApplicationStateDto) => void;
   onInterviewChange: () => void;
+  updatingId: string | null;
 };
 
 // TODO add backend to fetch these ISSUE #1575
@@ -46,6 +48,7 @@ const editChoices = {
 };
 
 export function RecruitmentApplicantsStatus({
+  updatingId,
   applicants,
   recruitmentId,
   gangId,
@@ -98,6 +101,7 @@ export function RecruitmentApplicantsStatus({
 
   const data = applicants.map((application) => {
     const applicationStatusStyle = getStatusStyle(application?.applicant_state);
+    const isUpdating = updatingId === application.id;
     return {
       cells: [
         {
@@ -161,26 +165,34 @@ export function RecruitmentApplicantsStatus({
           value: application.recruiter_priority,
           style: applicationStatusStyle,
           content: (
-            <Dropdown
-              value={application.recruiter_priority}
-              disableIcon={true}
-              classNameSelect={styles.dropdown}
-              options={priorityOptions}
-              onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_priority, value)}
-            />
+            <Fragment>
+              {isUpdating && <SamfundetLogoSpinner className={styles.loadingApplState} />}
+              <Dropdown
+                disabled={isUpdating}
+                value={application.recruiter_priority}
+                disableIcon={true}
+                classNameSelect={styles.dropdown}
+                options={priorityOptions}
+                onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_priority, value)}
+              />
+            </Fragment>
           ),
         },
         {
           value: application.recruiter_status,
           style: applicationStatusStyle,
           content: (
-            <Dropdown
-              value={application.recruiter_status}
-              disableIcon={true}
-              classNameSelect={styles.dropdown}
-              options={statusOptions}
-              onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_status, value)}
-            />
+            <Fragment>
+              {isUpdating && <SamfundetLogoSpinner className={styles.loadingApplState} />}
+              <Dropdown
+                disabled={isUpdating}
+                value={application.recruiter_status}
+                disableIcon={true}
+                classNameSelect={styles.dropdown}
+                options={statusOptions}
+                onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_status, value)}
+              />
+            </Fragment>
           ),
         },
         {

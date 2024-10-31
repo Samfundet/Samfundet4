@@ -1,4 +1,5 @@
 import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -32,6 +33,7 @@ export function RecruitmentPositionOverviewPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const navigate = useCustomNavigate();
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   if (!positionId || !recruitmentId || !gangId) {
     toast.error(t(KEY.common_something_went_wrong));
@@ -107,7 +109,15 @@ export function RecruitmentPositionOverviewPage() {
   });
 
   const updateApplicationState = (id: string, data: RecruitmentApplicationStateDto) => {
-    updateMutation.mutate({ id, data });
+    setUpdatingId(id);
+    updateMutation.mutate(
+      { id, data },
+      {
+        onSettled: () => {
+          setUpdatingId(null);
+        },
+      },
+    );
   };
 
   const title = t(KEY.recruitment_administrate_applications);
@@ -165,6 +175,7 @@ export function RecruitmentPositionOverviewPage() {
       </Text>
 
       <RecruitmentApplicantsStatus
+        updatingId={updatingId}
         applicants={applications.unprocessed || []}
         recruitmentId={recruitmentId}
         gangId={gangId}
