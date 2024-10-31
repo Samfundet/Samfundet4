@@ -1,9 +1,14 @@
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, RecruitmentApplicantsStatus, Text } from '~/Components';
-import { getRecruitmentApplicationsForRecruitmentPosition, updateRecruitmentApplicationStateForPosition } from '~/api';
+import {
+  getRecruitmentApplicationsForRecruitmentPosition,
+  getRecruitmentPosition,
+  updateRecruitmentApplicationStateForPosition,
+} from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -27,12 +32,19 @@ export function RecruitmentPositionOverviewPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const navigate = useCustomNavigate();
+  const [positionName, setPositionName] = useState<string>();
 
   if (!positionId || !recruitmentId || !gangId) {
     toast.error(t(KEY.common_something_went_wrong));
     navigate({ url: -1 });
     return null;
   }
+
+  useEffect(() => {
+    getRecruitmentPosition(positionId).then((response) => {
+      setPositionName(response.data.name_nb);
+    });
+  }, [positionId]);
 
   const queries = useQueries({
     queries: APPLICATION_CATEGORY.map((type) => ({
@@ -113,6 +125,7 @@ export function RecruitmentPositionOverviewPage() {
 
   const title = t(KEY.recruitment_administrate_applications);
   useTitle(title);
+  const headerTitle = `${t(KEY.recruitment_administrate_applications)} for  ${positionName ? positionName : 'N/A'}`;
 
   const backendUrl = reverse({
     pattern: ROUTES.backend.admin__samfundet_recruitmentposition_change,
@@ -160,7 +173,7 @@ export function RecruitmentPositionOverviewPage() {
   ];
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={isLoading}>
+    <AdminPageLayout title={headerTitle} backendUrl={backendUrl} header={header} loading={isLoading}>
       <Text size="l" as="strong" className={styles.subHeader}>
         {lowerCapitalize(t(KEY.recruitment_applications))} ({applications.unprocessed?.length || 0})
       </Text>
