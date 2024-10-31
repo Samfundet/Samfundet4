@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getSaksdokument, postSaksdokument, putSaksdokument } from '~/api';
@@ -56,13 +56,13 @@ export function SaksdokumentFormAdminPage() {
   };
 
   // TODO get categories from API (this will not work).
-  const categoryOptions: DropDownOption<string>[] = [
+  const categoryOptions: DropdownOption<string>[] = [
     { value: 'FS_REFERAT', label: 'FS_REFERAT' },
     { value: 'ARSBERETNINGER', label: 'ARSBERETNINGER' },
     { value: 'STYRET', label: 'STYRET' },
     { value: 'RADET', label: 'RADET' },
   ];
-  const defaultCategoryOption: DropDownOption<string> | undefined =
+  const defaultCategoryOption: DropdownOption<string> | undefined =
     saksdok !== undefined
       ? {
           value: saksdok.category,

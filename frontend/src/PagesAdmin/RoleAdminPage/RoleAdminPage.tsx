@@ -5,7 +5,7 @@ import { KEY } from '~/i18n/constants';
 
 export function RoleAdminPage() {
   const { t } = useTranslation();
-  const title = t(KEY.common_roles_view);
+  const title = t(KEY.common_role);
   useTitle(title);
 
   return (
