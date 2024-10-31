@@ -185,7 +185,7 @@ export function RecruitmentPositionOverviewPage() {
   return (
     <AdminPageLayout title={headerTitle} header={header} loading={isLoading}>
       <Text size="l" as="strong" className={styles.subHeader}>
-        {lowerCapitalize(t(KEY.recruitment_applications))} ({applications.unprocessed?.length || 0})
+        {lowerCapitalize(t(KEY.recruitment_unprocessed_applicants))} ({applications.unprocessed?.length || 0})
       </Text>
 
       <RecruitmentApplicantsStatus
