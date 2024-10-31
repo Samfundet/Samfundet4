@@ -1,3 +1,9 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
 
 .sub_container {
   margin-top: 1.5em;

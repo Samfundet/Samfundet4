@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, RecruitmentApplicantsStatus, Text } from '~/Components';
-import { getRecruitmentApplicationsForRecruitmentPosition } from '~/api';
+import { getRecruitmentApplicationsForRecruitmentPosition, updateRecruitmentApplicationStateForPosition } from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -12,9 +12,6 @@ import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
 import { ProcessedApplicants } from './components';
-// const queryKeys = {
-//   applications: (positionId: string, filterType: string) => ['applications', positionId, filterType] as const,
-// };
 
 export function RecruitmentPositionOverviewPage() {
   const navigate = useNavigate();
@@ -34,6 +31,7 @@ export function RecruitmentPositionOverviewPage() {
     rejected: [],
     accepted: [],
   });
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const loadApplications = async () => {
@@ -66,10 +64,13 @@ export function RecruitmentPositionOverviewPage() {
     loadApplications();
   }, [positionId]);
 
-  const updateApplicationState = async (id: string, data: RecruitmentApplicationStateDto) => {
-    // TODO: Implement the update function
-    // For now, just reload the data after update
-    await loadApplications();
+  const updateApplicationState = (id: string, data: RecruitmentApplicationStateDto) => {
+    if (!recruitmentId) return;
+    updateRecruitmentApplicationStateForPosition(id, data).then((response) => {
+      //setApplications(response.data);
+      console.log('UPDATED RECRUITMENT APPLICATION STATE', response);
+      loadApplications();
+    });
   };
 
   const title = t(KEY.recruitment_administrate_applications);
@@ -107,72 +108,73 @@ export function RecruitmentPositionOverviewPage() {
         updateStateFunction={updateApplicationState}
         onInterviewChange={loadApplications}
       />
-
-      <div className={styles.sub_container}>
-        <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_accepted_applications)} ({applications.accepted.length})
-        </Text>
-        <Text className={styles.subText}>{t(KEY.recruitment_accepted_applications_help_text)}</Text>
-        {applications.accepted.length > 0 ? (
-          <ProcessedApplicants
-            data={applications.accepted}
-            type="accepted"
-            revertStateFunction={updateApplicationState}
-          />
-        ) : (
-          <Text as="i" className={styles.subText}>
-            {t(KEY.recruitment_accepted_applications_empty_text)}
+      <div className={styles.container}>
+        <div className={styles.sub_container}>
+          <Text size="l" as="strong" className={styles.subHeader}>
+            {t(KEY.recruitment_accepted_applications)} ({applications.accepted.length})
           </Text>
-        )}
-      </div>
+          <Text className={styles.subText}>{t(KEY.recruitment_accepted_applications_help_text)}</Text>
+          {applications.accepted.length > 0 ? (
+            <ProcessedApplicants
+              data={applications.accepted}
+              type="accepted"
+              revertStateFunction={updateApplicationState}
+            />
+          ) : (
+            <Text as="i" className={styles.subText}>
+              {t(KEY.recruitment_accepted_applications_empty_text)}
+            </Text>
+          )}
+        </div>
 
-      <div className={styles.sub_container}>
-        <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_rejected_applications)} ({applications.rejected.length})
-        </Text>
-        <Text className={styles.subText}>{t(KEY.recruitment_rejected_applications_help_text)}</Text>
-        {applications.rejected.length > 0 ? (
-          <ProcessedApplicants
-            data={applications.rejected}
-            type="rejected"
-            revertStateFunction={updateApplicationState}
-          />
-        ) : (
-          <Text as="i" className={styles.subText}>
-            {t(KEY.recruitment_rejected_applications_empty_text)}
+        <div className={styles.sub_container}>
+          <Text size="l" as="strong" className={styles.subHeader}>
+            {t(KEY.recruitment_rejected_applications)} ({applications.rejected.length})
           </Text>
-        )}
-      </div>
+          <Text className={styles.subText}>{t(KEY.recruitment_rejected_applications_help_text)}</Text>
+          {applications.rejected.length > 0 ? (
+            <ProcessedApplicants
+              data={applications.rejected}
+              type="rejected"
+              revertStateFunction={updateApplicationState}
+            />
+          ) : (
+            <Text as="i" className={styles.subText}>
+              {t(KEY.recruitment_rejected_applications_empty_text)}
+            </Text>
+          )}
+        </div>
 
-      <div className={styles.sub_container}>
-        <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_hardtoget_applications)} ({applications.hardtoget.length})
-        </Text>
-        <Text className={styles.subText}>{t(KEY.recruitment_hardtoget_applications_help_text)}</Text>
-        {applications.hardtoget.length > 0 ? (
-          <ProcessedApplicants
-            data={applications.hardtoget}
-            type="hardtoget"
-            revertStateFunction={updateApplicationState}
-          />
-        ) : (
-          <Text as="i" className={styles.subText}>
-            {t(KEY.recruitment_hardtoget_applications_empty_text)}
+        <div className={styles.sub_container}>
+          <Text size="l" as="strong" className={styles.subHeader}>
+            {t(KEY.recruitment_hardtoget_applications)} ({applications.hardtoget.length})
           </Text>
-        )}
-      </div>
+          <Text className={styles.subText}>{t(KEY.recruitment_hardtoget_applications_help_text)}</Text>
+          {applications.hardtoget.length > 0 ? (
+            <ProcessedApplicants
+              data={applications.hardtoget}
+              type="hardtoget"
+              revertStateFunction={updateApplicationState}
+            />
+          ) : (
+            <Text as="i" className={styles.subText}>
+              {t(KEY.recruitment_hardtoget_applications_empty_text)}
+            </Text>
+          )}
+        </div>
 
-      <div className={styles.sub_container}>
-        <Text size="l" as="strong" className={styles.subHeader}>
-          {t(KEY.recruitment_withdrawn_applications)} ({applications.withdrawn.length})
-        </Text>
-        {applications.withdrawn.length > 0 ? (
-          <ProcessedApplicants data={applications.withdrawn} type="withdrawn" />
-        ) : (
-          <Text as="i" className={styles.subText}>
-            {t(KEY.recruitment_withdrawn_applications_empty_text)}
+        <div className={styles.sub_container}>
+          <Text size="l" as="strong" className={styles.subHeader}>
+            {t(KEY.recruitment_withdrawn_applications)} ({applications.withdrawn.length})
           </Text>
-        )}
+          {applications.withdrawn.length > 0 ? (
+            <ProcessedApplicants data={applications.withdrawn} type="withdrawn" />
+          ) : (
+            <Text as="i" className={styles.subText}>
+              {t(KEY.recruitment_withdrawn_applications_empty_text)}
+            </Text>
+          )}
+        </div>
       </div>
     </AdminPageLayout>
   );
