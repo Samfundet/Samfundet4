@@ -1,4 +1,3 @@
-export { RecruitmentApplicantsStatus } from '../PagesAdmin/RecruitmentPositionOverviewPage/components/RecruitmentApplicantsStatus';
 export { AccessDenied } from './AccessDenied';
 export { AdminBox } from './AdminBox';
 export { Alert } from './Alert';
@@ -63,6 +62,7 @@ export { SamfundetLogo } from './SamfundetLogo';
 export { SamfundetLogoSpinner } from './SamfundetLogoSpinner';
 export { useScrollToTop } from './ScrollToTop';
 export { Select } from './Select';
+export { SetInterviewManuallyModal } from './SetInterviewManually';
 export { Skeleton } from './Skeleton';
 export { SpinningBorder } from './SpinningBorder';
 export { SplashHeaderBox } from './SplashHeaderBox';
@@ -89,7 +89,7 @@ export { Video } from './Video';
 
 // Props
 export type { CheckboxProps } from './Checkbox';
-export type { DropdownProps } from './Dropdown';
+export type { DropdownOption, DropdownProps } from './Dropdown';
 export type { ImagePickerProps } from './ImagePicker/ImagePicker';
 export type { InputFieldProps } from './InputField';
 export type { InputFileProps } from './InputFile';

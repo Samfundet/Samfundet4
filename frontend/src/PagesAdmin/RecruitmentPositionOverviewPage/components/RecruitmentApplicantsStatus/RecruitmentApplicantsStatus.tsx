@@ -1,17 +1,21 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SamfundetLogoSpinner, TimeDisplay } from '~/Components';
-import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
-import { Table } from '~/Components/Table';
-import { Text } from '~/Components/Text/Text';
+import {
+  CrudButtons,
+  Dropdown,
+  type DropdownOption,
+  Link,
+  SamfundetLogoSpinner,
+  SetInterviewManuallyModal,
+  Table,
+  Text,
+  TimeDisplay,
+} from '~/Components';
 import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { Link } from '../../../../Components/Link';
-import { SetInterviewManuallyModal } from '../../../../Components/SetInterviewManually';
 import styles from './RecruitmentApplicantsStatus.module.scss';
 
 type RecruitmentApplicantsStatusProps = {
@@ -166,7 +170,7 @@ export function RecruitmentApplicantsStatus({
           style: applicationStatusStyle,
           content: (
             <Fragment>
-              {isUpdating && <SamfundetLogoSpinner className={styles.loadingApplState} />}
+              {isUpdating && <SamfundetLogoSpinner className={styles.loadingApplicationStatus} />}
               <Dropdown
                 disabled={isUpdating}
                 value={application.recruiter_priority}
@@ -183,7 +187,7 @@ export function RecruitmentApplicantsStatus({
           style: applicationStatusStyle,
           content: (
             <Fragment>
-              {isUpdating && <SamfundetLogoSpinner className={styles.loadingApplState} />}
+              {isUpdating && <SamfundetLogoSpinner className={styles.loadingApplicationStatus} />}
               <Dropdown
                 disabled={isUpdating}
                 value={application.recruiter_status}

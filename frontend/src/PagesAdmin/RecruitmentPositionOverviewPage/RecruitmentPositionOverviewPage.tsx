@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, RecruitmentApplicantsStatus, Text } from '~/Components';
+import { Button, Text } from '~/Components';
 import {
   getRecruitmentApplicationsForRecruitmentPosition,
   getRecruitmentPosition,
@@ -17,7 +17,7 @@ import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
-import { ProcessedApplicants } from './components';
+import { ProcessedApplicants, RecruitmentApplicantsStatus } from './components';
 
 // Define the possible states an application can be in within the recruitment process
 // Applications flow through these states as they are processed by recruiters
@@ -204,27 +204,25 @@ export function RecruitmentPositionOverviewPage() {
         }}
       />
 
-      <div className={styles.container}>
-        {applicationSections.map(({ type, title, helpText, emptyText }) => (
-          <div key={type} className={styles.sub_container}>
-            <Text size="l" as="strong" className={styles.subHeader}>
-              {t(title)} ({applications[type]?.length || 0})
+      {applicationSections.map(({ type, title, helpText, emptyText }) => (
+        <div key={type} className={styles.sub_container}>
+          <Text size="l" as="strong" className={styles.subHeader}>
+            {t(title)} ({applications[type]?.length || 0})
+          </Text>
+          {helpText && <Text className={styles.subText}>{t(helpText)}</Text>}
+          {applications[type]?.length > 0 ? (
+            <ProcessedApplicants
+              data={applications[type]}
+              type={type}
+              revertStateFunction={type !== 'withdrawn' ? updateApplicationState : undefined}
+            />
+          ) : (
+            <Text as="i" className={styles.subText}>
+              {t(emptyText)}
             </Text>
-            {helpText && <Text className={styles.subText}>{t(helpText)}</Text>}
-            {applications[type]?.length > 0 ? (
-              <ProcessedApplicants
-                data={applications[type]}
-                type={type}
-                revertStateFunction={type !== 'withdrawn' ? updateApplicationState : undefined}
-              />
-            ) : (
-              <Text as="i" className={styles.subText}>
-                {t(emptyText)}
-              </Text>
-            )}
-          </div>
-        ))}
-      </div>
+          )}
+        </div>
+      ))}
     </AdminPageLayout>
   );
 }
