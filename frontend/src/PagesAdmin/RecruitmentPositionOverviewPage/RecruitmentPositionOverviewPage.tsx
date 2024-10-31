@@ -1,5 +1,4 @@
-import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -14,7 +13,7 @@ import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { lowerCapitalize } from '~/utils';
+import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
 import { ProcessedApplicants } from './components';
@@ -25,6 +24,7 @@ type ApplicationCategory = (typeof APPLICATION_CATEGORY)[number];
 
 const queryKeys = {
   applications: (positionId: string, type: ApplicationCategory) => ['applications', positionId, type] as const,
+  position: (positionId: string) => ['position', positionId] as const,
 };
 
 export function RecruitmentPositionOverviewPage() {
@@ -32,7 +32,6 @@ export function RecruitmentPositionOverviewPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const navigate = useCustomNavigate();
-  const [positionName, setPositionName] = useState<string>();
 
   if (!positionId || !recruitmentId || !gangId) {
     toast.error(t(KEY.common_something_went_wrong));
@@ -40,13 +39,14 @@ export function RecruitmentPositionOverviewPage() {
     return null;
   }
 
-  useEffect(() => {
-    getRecruitmentPosition(positionId).then((response) => {
-      setPositionName(response.data.name_nb);
-    });
-  }, [positionId]);
+  // Query for position details
+  const positionQuery = useQuery({
+    queryKey: queryKeys.position(positionId),
+    queryFn: () => getRecruitmentPosition(positionId),
+  });
 
-  const queries = useQueries({
+  // Queries for applications
+  const applicationQueries = useQueries({
     queries: APPLICATION_CATEGORY.map((type) => ({
       queryKey: queryKeys.applications(positionId, type),
       queryFn: () => getRecruitmentApplicationsForRecruitmentPosition(positionId, type),
@@ -54,22 +54,20 @@ export function RecruitmentPositionOverviewPage() {
     })),
   });
 
-  const isLoading = queries.some((query) => query.isLoading);
+  const isLoading = applicationQueries.some((query) => query.isLoading) || positionQuery.isLoading;
+
   const applications = Object.fromEntries(
-    queries.map((query, index) => [APPLICATION_CATEGORY[index], query.data || []]),
+    applicationQueries.map((query, index) => [APPLICATION_CATEGORY[index], query.data || []]),
   ) as Record<ApplicationCategory, RecruitmentApplicationDto[]>;
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: RecruitmentApplicationStateDto }) =>
       updateRecruitmentApplicationStateForPosition(id, data),
     onMutate: async ({ id, data }) => {
-      // Cancel any outgoing refetches so they don't overwrite our optimistic update
       await queryClient.cancelQueries();
 
-      // Create a type-safe container for previous data
       const previousData: Partial<Record<ApplicationCategory, RecruitmentApplicationDto[]>> = {};
 
-      // Safely store previous data, handling undefined cases
       for (const type of APPLICATION_CATEGORY) {
         const queryData = queryClient.getQueryData<RecruitmentApplicationDto[]>(
           queryKeys.applications(positionId, type),
@@ -79,7 +77,6 @@ export function RecruitmentPositionOverviewPage() {
         }
       }
 
-      // Perform optimistic updates
       for (const type of APPLICATION_CATEGORY) {
         queryClient.setQueryData<RecruitmentApplicationDto[]>(queryKeys.applications(positionId, type), (old) => {
           if (!old) return [];
@@ -90,7 +87,6 @@ export function RecruitmentPositionOverviewPage() {
       return { previousData };
     },
     onError: (_, __, context) => {
-      // Safely restore previous data
       if (context?.previousData) {
         for (const type of APPLICATION_CATEGORY) {
           const previousTypeData = context.previousData[type];
@@ -102,7 +98,6 @@ export function RecruitmentPositionOverviewPage() {
       toast.error(t(KEY.common_something_went_wrong));
     },
     onSuccess: () => {
-      // Invalidate and refetch all application queries
       for (const type of APPLICATION_CATEGORY) {
         queryClient.invalidateQueries({
           queryKey: queryKeys.applications(positionId, type),
@@ -115,18 +110,9 @@ export function RecruitmentPositionOverviewPage() {
     updateMutation.mutate({ id, data });
   };
 
-  const invalidateAllQueries = () => {
-    for (const type of APPLICATION_CATEGORY) {
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.applications(positionId, type),
-      });
-    }
-  };
-
   const title = t(KEY.recruitment_administrate_applications);
   useTitle(title);
-  const headerTitle = `${t(KEY.recruitment_administrate_applications)} for  ${positionName ? positionName : 'N/A'}`;
-
+  const headerTitle = `${t(KEY.recruitment_administrate_applications)} for  ${positionQuery.data ? dbT(positionQuery.data?.data, 'name') : 'N/A'}`;
   const backendUrl = reverse({
     pattern: ROUTES.backend.admin__samfundet_recruitmentposition_change,
     urlParams: { objectId: positionId },
