@@ -19,9 +19,9 @@ export const ROUTES_FRONTEND = {
   contributors: '/contributors',
   // Recruitment:
   recruitment: '/recruitment/',
-  recruitment_application: '/recruitment/position/:positionID/',
-  recruitment_application_overview: '/recruitment/:recruitmentID/my-applications/',
-  organization_recruitment: '/recruitment/:recruitmentID/',
+  recruitment_application: '/recruitment/position/:positionId/',
+  recruitment_application_overview: '/recruitment/:recruitmentId/my-applications/',
+  organization_recruitment: '/recruitment/:recruitmentId/',
   contact: '/contact',
   // Purchase callback:
   purchase_callback: '/purchase-callback/:eventId',
@@ -44,6 +44,8 @@ export const ROUTES_FRONTEND = {
   // Roles
   admin_roles: '/control-panel/roles/',
   admin_roles_view: '/control-panel/roles/:roleId/',
+  admin_roles_edit: '/control-panel/roles/:roleId/edit/',
+  admin_roles_create: '/control-panel/roles/create/',
   // Gangs:
   admin_gangs: '/control-panel/gangs/',
   admin_gangs_create: '/control-panel/gangs/create/',
@@ -76,6 +78,7 @@ export const ROUTES_FRONTEND = {
   admin_recruitment_users_three_interview_criteria:
     '/control-panel/recruitment/:recruitmentId/users-without-three-interviews/',
   admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-applications/',
+  admin_recruitment_open_to_other_positions: '/control-panel/recruitment/:recruitmentId/users-open-to-other-positions/',
   admin_recruitment_overview: '/control-panel/recruitment/:recruitmentId/recruitment-overview/',
   admin_recruitment_gang_overview: '/control-panel/recruitment/:recruitmentId/gang-overview/',
   admin_recruitment_gang_overview_rejection_email:

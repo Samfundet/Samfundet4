@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { H3 } from '~/Components';
-import { AppletCard } from '~/PagesAdmin/RecruitmentGangOverviewPage/components';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { lowerCapitalize } from '~/utils';
+import { AppletCard } from '../AppletCard/AppletCard';
 import styles from './AppletContainer.module.scss';
 
 type AppletCategory = {
@@ -106,6 +106,15 @@ export function AppletContainer({ recruitmentId }: Props) {
             description={t(KEY.recruitment_three_interviews_criteria_button)}
             url={reverse({
               pattern: ROUTES.frontend.admin_recruitment_users_three_interview_criteria,
+              urlParams: { recruitmentId: recruitmentId },
+            })}
+          />
+
+          <AppletCard
+            title={t(KEY.recruitment_applet_open_to_other_positions)}
+            description={t(KEY.recruitment_applicants_open_to_other_positions)}
+            url={reverse({
+              pattern: ROUTES.frontend.admin_recruitment_open_to_other_positions,
               urlParams: { recruitmentId: recruitmentId },
             })}
           />

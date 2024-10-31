@@ -7,7 +7,7 @@ import { PersonalRow } from '~/Pages/RecruitmentPage';
 import { getOrganization, getRecruitment } from '~/api';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
 import type { RecruitmentDto } from '~/dto';
-import { useDesktop } from '~/hooks';
+import { useDesktop, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { OrgNameType, type OrgNameTypeValue } from '~/types';
 import { dbT, getObjectFieldOrNumber } from '~/utils';
@@ -23,10 +23,11 @@ export function OrganizationRecruitmentPage() {
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
   const [loading, setLoading] = useState<boolean>(true);
+  useTitle(dbT(recruitment, 'name') ?? '');
 
   useEffect(() => {
-    if (recruitmentID) {
-      getRecruitment(recruitmentID)
+    if (recruitmentId) {
+      getRecruitment(recruitmentId)
         .then((response) => {
           setRecruitment(response.data);
         })
@@ -34,7 +35,7 @@ export function OrganizationRecruitmentPage() {
           console.error(error);
         });
     }
-  }, [recruitmentID]);
+  }, [recruitmentId]);
 
   useEffect(() => {
     if (recruitment) {
@@ -95,11 +96,11 @@ export function OrganizationRecruitmentPage() {
             </Text>
           </div>
           <div className={styles.personalRow}>
-            {recruitmentID && (
+            {recruitmentId && (
               <>
-                <OccupiedFormModal recruitmentId={+recruitmentID} />
+                <OccupiedFormModal recruitmentId={+recruitmentId} />
                 <PersonalRow
-                  recruitmentID={recruitmentID}
+                  recruitmentId={recruitmentId}
                   organizationName={organizationName}
                   showRecruitmentBtn={false}
                 />
@@ -112,8 +113,8 @@ export function OrganizationRecruitmentPage() {
               <Text>Placeholder for tag-autocomplete search </Text>
               {/*^^^ issue #1275 */}
             </div>
-            {recruitmentID &&
-              (viewAllPositions ? <GangTypeContainer recruitmentID={recruitmentID} /> : <RecruitmentTabs />)}
+            {recruitmentId &&
+              (viewAllPositions ? <GangTypeContainer recruitmentId={recruitmentId} /> : <RecruitmentTabs />)}
             {recruitment?.separate_positions && recruitment.separate_positions.length > 0 && (
               <GangSeparatePositions recruitmentSeparatePositions={recruitment.separate_positions} />
             )}

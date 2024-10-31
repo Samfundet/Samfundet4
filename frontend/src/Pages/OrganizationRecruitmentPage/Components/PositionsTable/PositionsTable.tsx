@@ -21,15 +21,15 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
   const [positions, setPositions] = useState<RecruitmentPositionDto[]>([]);
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const recruitmentID = useParams();
+  const recruitmentId = useParams();
   const { organizationTheme } = useOrganizationContext();
 
   useEffect(() => {
-    if (!currentSelectedGang || !recruitmentID.recruitmentID) {
+    if (!currentSelectedGang || !recruitmentId.recruitmentId) {
       return;
     }
     setLoading(true);
-    getRecruitmentPositionsGangForApplicant(recruitmentID.recruitmentID, currentSelectedGang.id)
+    getRecruitmentPositionsGangForApplicant(recruitmentId.recruitmentId, currentSelectedGang.id)
       .then((response) => {
         setPositions(response.data);
         setLoading(false);
@@ -38,7 +38,7 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
         console.error('Error fetching data:', error);
         setLoading(false);
       });
-  }, [currentSelectedGang, recruitmentID, setLoading]);
+  }, [currentSelectedGang, recruitmentId, setLoading]);
 
   const tableColumns = [
     { content: t(KEY.common_name), sortable: true },
@@ -48,37 +48,39 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
   const tableData = positions.map((item) => {
     const positionPageURL = reverse({
       pattern: ROUTES.frontend.recruitment_application,
-      urlParams: { positionID: item.id, gangID: item.id },
+      urlParams: { positionId: item.id, gangId: item.id },
     });
-    return [
-      {
-        content: (
-          <Button
-            theme={organizationTheme?.buttonTheme}
-            className={styles.positionButton}
-            disabled={loading}
-            onClick={() => {
-              navigate(positionPageURL);
-            }}
-          >
-            {dbT(item, 'name') ?? 'N/A'}
-          </Button>
-        ),
-      },
-      {
-        content: (
-          <Text as="p" size="m">
-            {' '}
-            {dbT(item, 'short_description') ?? 'N/A'}
-          </Text>
-        ),
-      },
-      {
-        content: (
-          <Text>{item.is_funksjonaer_position ? t(KEY.recruitment_funksjonaer) : t(KEY.recruitment_gangmember)}</Text>
-        ),
-      },
-    ];
+    return {
+      cells: [
+        {
+          content: (
+            <Button
+              theme={organizationTheme?.buttonTheme}
+              className={styles.positionButton}
+              disabled={loading}
+              onClick={() => {
+                navigate(positionPageURL);
+              }}
+            >
+              {dbT(item, 'name') ?? 'N/A'}
+            </Button>
+          ),
+        },
+        {
+          content: (
+            <Text as="p" size="m">
+              {' '}
+              {dbT(item, 'short_description') ?? 'N/A'}
+            </Text>
+          ),
+        },
+        {
+          content: (
+            <Text>{item.is_funksjonaer_position ? t(KEY.recruitment_funksjonaer) : t(KEY.recruitment_gangmember)}</Text>
+          ),
+        },
+      ],
+    };
   });
   return (
     <div className={styles.recruitmentTableContainer}>

@@ -18,6 +18,7 @@ export { RecruitmentFormAdminPage } from './RecruitmentFormAdminPage';
 export { RecruitmentGangAdminPage } from './RecruitmentGangAdminPage';
 export { RecruitmentGangAllApplicantsAdminPage } from './RecruitmentGangAllApplicantsAdminPage';
 export { RecruitmentGangOverviewPage } from './RecruitmentGangOverviewPage';
+export { RecruitmentOpenToOtherPositionsPage } from './RecruitmentOpenToOtherPositionsPage';
 export { RecruitmentOverviewPage } from './RecruitmentOverviewPage';
 export { RecruitmentPositionFormAdminPage } from './RecruitmentPositionFormAdminPage';
 export { RecruitmentPositionOverviewPage } from './RecruitmentPositionOverviewPage';
@@ -28,6 +29,7 @@ export { RecruitmentUsersWithoutInterviewGangPage } from './RecruitmentUsersWith
 export { RecruitmentUsersWithoutThreeInterviewCriteriaPage } from './RecruitmentUsersWithoutThreeInterviewCriteriaPage';
 export { RolesAdminPage } from './RolesAdminPage';
 export { RoleAdminPage } from './RoleAdminPage';
+export { RoleFormAdminPage } from './RoleFormAdminPage';
 export { CreateInterviewRoomPage, RoomAdminPage } from './RoomAdminPage';
 export { SaksdokumentAdminPage } from './SaksdokumentAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';

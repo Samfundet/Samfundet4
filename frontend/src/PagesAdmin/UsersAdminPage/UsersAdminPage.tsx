@@ -6,6 +6,7 @@ import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getUsers } from '~/api';
 import type { UserDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { getFullName } from '~/utils';
 import { ImpersonateButton } from './components';
@@ -15,6 +16,8 @@ export function UsersAdminPage() {
 
   const [users, setUsers] = useState<UserDto[]>();
   const [loading, setLoading] = useState(true);
+  const title = t(KEY.common_users);
+  useTitle(title);
 
   useEffect(() => {
     setLoading(true);
@@ -39,36 +42,38 @@ export function UsersAdminPage() {
   const data = useMemo(() => {
     if (!users) return [];
     return users.map((u) => {
-      return [
-        {
-          content: u.username,
-          value: u.username,
-        },
-        {
-          content: getFullName(u),
-          value: getFullName(u),
-        },
-        {
-          content: u.email,
-          value: u.email,
-        },
-        {
-          content: u.is_active ? t(KEY.common_yes) : '',
-          value: u.is_active,
-        },
-        {
-          content: u.last_login ? formatDate(new Date(u.last_login)) : '',
-          value: u.last_login || undefined,
-        },
-        {
-          content: <ImpersonateButton userId={u.id} />,
-        },
-      ];
+      return {
+        cells: [
+          {
+            content: u.username,
+            value: u.username,
+          },
+          {
+            content: getFullName(u),
+            value: getFullName(u),
+          },
+          {
+            content: u.email,
+            value: u.email,
+          },
+          {
+            content: u.is_active ? t(KEY.common_yes) : '',
+            value: u.is_active,
+          },
+          {
+            content: u.last_login ? formatDate(new Date(u.last_login)) : '',
+            value: u.last_login || undefined,
+          },
+          {
+            content: <ImpersonateButton userId={u.id} />,
+          },
+        ],
+      };
     });
   }, [t, users]);
 
   return (
-    <AdminPageLayout title={t(KEY.common_users)} loading={loading}>
+    <AdminPageLayout title={title} loading={loading}>
       <Table data={data} columns={columns} />
     </AdminPageLayout>
   );

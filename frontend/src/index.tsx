@@ -2,15 +2,30 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { AuthContextProvider } from '~/context/AuthContext';
 import '~/global.scss';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { t } from 'i18next';
 import { RouterProvider } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { OrganizationContextProvider } from '~/context/OrgContextProvider';
+import { KEY } from '~/i18n/constants';
 import { reportWebVitals } from '~/reportWebVitals';
 import { router } from '~/router/router';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error, query) => {
+      console.error(error);
+      toast.error((query.meta?.errorMsg as string) ?? t(KEY.common_something_went_wrong));
+    },
+  }),
+  defaultOptions: {
+    queries: {
+      retry: 2, // default is 3
+    },
+  },
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(

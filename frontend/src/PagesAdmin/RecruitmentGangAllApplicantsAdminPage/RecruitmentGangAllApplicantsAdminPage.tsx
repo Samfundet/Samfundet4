@@ -7,7 +7,7 @@ import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
 import { downloadCSVGangRecruitment, getGang, getRecruitment, getRecruitmentApplicationsForGang } from '~/api';
 import type { GangDto, RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -92,21 +92,23 @@ export function RecruitmentGangAllApplicantsAdminPage() {
       },
     });
 
-    return [
-      {
-        content: (
-          <Link url={applicationURL}>
-            {application.user.first_name} {application.user.last_name}
-          </Link>
-        ),
-      },
-      application.user?.phone_number,
-      application.user.email,
-      { content: <Link url={applicationURL}>{dbT(application.recruitment_position, 'name')}</Link> },
-      application.interview?.interview_time,
-      application.interview?.interview_location,
-      application.recruiter_status,
-    ];
+    return {
+      cells: [
+        {
+          content: (
+            <Link url={applicationURL}>
+              {application.user.first_name} {application.user.last_name}
+            </Link>
+          ),
+        },
+        application.user?.phone_number,
+        application.user.email,
+        { content: <Link url={applicationURL}>{dbT(application.recruitment_position, 'name')}</Link> },
+        application.interview?.interview_time,
+        application.interview?.interview_location,
+        application.recruiter_status,
+      ],
+    };
   });
 
   const downloadCSV = () => {
@@ -116,6 +118,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
   };
 
   const title = t(KEY.recruitment_all_applications);
+  useTitle(title);
   const header = (
     <div className={styles.header}>
       <Text as="strong" size="m" className={styles.headerBold}>

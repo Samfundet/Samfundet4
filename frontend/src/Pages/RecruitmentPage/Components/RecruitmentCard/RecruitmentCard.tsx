@@ -118,7 +118,7 @@ export function RecruitmentCard({
         )}
       </div>
       <div className={styles.personalRow}>
-        <PersonalRow recruitmentID={recruitment_id} organizationName={organizationName} />
+        <PersonalRow recruitmentId={recruitment_id} organizationName={organizationName} />
       </div>
     </div>
   );
