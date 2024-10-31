@@ -16,7 +16,7 @@ import styles from './OrganizationRecruitmentPage.module.scss';
 
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
-  const { recruitmentID } = useParams<{ recruitmentID: string }>();
+  const { recruitmentId } = useParams<{ recruitmentId: string }>();
   const [viewAllPositions, setViewAllPositions] = useState<boolean>(true);
   const { t } = useTranslation();
   const { changeOrgTheme, organizationTheme } = useOrganizationContext();
