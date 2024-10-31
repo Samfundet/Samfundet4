@@ -17,18 +17,6 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentFormAdminPage.module.scss';
 import { type recruitmentFormType, recruitmentSchema } from './recruitmentSchema';
 
-export type RecruitmentFormType = {
-  name_nb: string;
-  name_en: string;
-  visible_from: string;
-  shown_application_deadline: string;
-  actual_application_deadline: string;
-  reprioritization_deadline_for_applicant: string;
-  reprioritization_deadline_for_groups: string;
-  organization: number;
-  promo_media: string;
-};
-
 export function RecruitmentFormAdminPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
