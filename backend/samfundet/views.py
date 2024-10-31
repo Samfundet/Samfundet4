@@ -1070,11 +1070,21 @@ class RecruitmentApplicationForPositionUpdateStateView(APIView):
 
 
 class RecruitmentApplicationForRecruitmentPositionView(ModelViewSet):
+    # TODO: refactor this in ISSUE #1575
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationForGangSerializer
     queryset = RecruitmentApplication.objects.all()
 
-    def retrieve(self, request: Request, pk: int, *args: Any, **kwargs: Any) -> Response:  # noqa: C901
+    # Define filter mappings as a class attribute
+    FILTER_MAPPINGS = {
+        'unprocessed': {'withdrawn': False, 'recruiter_status': RecruitmentStatusChoices.NOT_SET},
+        'withdrawn': {'withdrawn': True},
+        'hardtoget': {'withdrawn': False, 'recruiter_status': RecruitmentStatusChoices.CALLED_AND_REJECTED},
+        'accepted': {'withdrawn': False, 'recruiter_status': RecruitmentStatusChoices.CALLED_AND_ACCEPTED},
+        'rejected': {'withdrawn': False, 'recruiter_status': RecruitmentStatusChoices.REJECTION},
+    }
+
+    def retrieve(self, request: Request, pk: int) -> Response:
         """
         Retrieve filtered applications for a specific recruitment position.
         If no filter_type is provided, returns all applications.
@@ -1086,20 +1096,11 @@ class RecruitmentApplicationForRecruitmentPositionView(ModelViewSet):
         applications = self.get_queryset().filter(recruitment_position=position)
 
         filter_type = request.query_params.get('filter_type')
-
         if filter_type:
-            if filter_type == 'unprocessed':
-                applications = applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.NOT_SET)
-            elif filter_type == 'withdrawn':
-                applications = applications.filter(withdrawn=True)
-            elif filter_type == 'hardtoget':
-                applications = applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_REJECTED)
-            elif filter_type == 'accepted':
-                applications = applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED)
-            elif filter_type == 'rejected':
-                applications = applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.REJECTION)
-            else:
+            filter_params = self.FILTER_MAPPINGS.get(filter_type)
+            if not filter_params:
                 return Response({'error': 'Invalid filter_type parameter'}, status=status.HTTP_400_BAD_REQUEST)
+            applications = applications.filter(**filter_params)
 
         serializer = self.get_serializer(applications, many=True)
         return Response(data=serializer.data)
