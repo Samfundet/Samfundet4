@@ -22,7 +22,7 @@ type RecruitmentApplicantsStatusProps = {
   onInterviewChange: () => void;
 };
 
-// TODO add backend to fetch these
+// TODO add backend to fetch these ISSUE #1575
 const priorityOptions: DropdownOption<number>[] = [
   { label: 'Not Set', value: 0 },
   { label: 'Reserve', value: 1 },
@@ -30,6 +30,7 @@ const priorityOptions: DropdownOption<number>[] = [
   { label: 'Not Wanted', value: 3 },
 ];
 
+// TODO add backend to fetch these ISSUE #1575
 const statusOptions: DropdownOption<number>[] = [
   { label: 'Nothing', value: 0 },
   { label: 'Called and accepted', value: 1 },

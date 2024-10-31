@@ -14,6 +14,7 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
 import { ProcessedApplicants } from './components';
 
+// TODO add backend to fetch these. ISSUE #1575
 const APPLICATION_CATEGORY = ['unprocessed', 'withdrawn', 'hardtoget', 'rejected', 'accepted'] as const;
 type ApplicationCategory = (typeof APPLICATION_CATEGORY)[number];
 
