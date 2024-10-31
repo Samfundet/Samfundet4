@@ -65,7 +65,7 @@ export const recruitmentSchema = z
     (data) => {
       const promoMedia = data.promo_media;
       const regex = /(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))/;
-      return promoMedia.match(regex) || promoMedia.length === 11;
+      return promoMedia.match(regex) || promoMedia.length === 11 || promoMedia === '';
     },
     {
       message: 'Fucky whucky youtube link',

@@ -740,14 +740,14 @@ class RecruitmentSeparatePositionSerializer(CustomBaseSerializer):
 
 class RecruitmentSerializer(CustomBaseSerializer):
     separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
-    promo_media = serializers.CharField(max_length=100)
+    promo_media = serializers.CharField(max_length=100, allow_blank=True, allow_null=True)
 
     class Meta:
         model = Recruitment
         fields = '__all__'
 
     def validate_promo_media(self, value: str | None) -> str | None:
-        if value is None:
+        if value is None or value == '':
             return None
         match = re.search(r'(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))', value)
         if match:
