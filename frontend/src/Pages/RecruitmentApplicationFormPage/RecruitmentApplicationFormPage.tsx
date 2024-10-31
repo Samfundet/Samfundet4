@@ -53,6 +53,7 @@ export function RecruitmentApplicationFormPage() {
       getRecruitmentPositionForApplicant(positionId as string)
         .then((res) => {
           setRecruitmentPosition(res.data);
+          setRecruitmentId(parseInt(res.data.recruitment));
         })
         .catch((error) => {
           if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
@@ -63,8 +64,6 @@ export function RecruitmentApplicationFormPage() {
         }),
       getRecruitmentApplicationForPosition(positionId as string).then((res) => {
         setRecruitmentApplication(res.data);
-        setRecruitmentId(res.data.recruitment); //Problem del 2: henter recruitmentId fra recruitmentApplication (problem når recruitmentApplication ikke eksisterer)
-        console.log(res.data);
       }),
     ]).then(() => {
       setLoading(false);
