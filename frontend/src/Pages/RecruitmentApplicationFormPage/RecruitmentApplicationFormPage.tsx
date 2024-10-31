@@ -53,7 +53,7 @@ export function RecruitmentApplicationFormPage() {
       getRecruitmentPositionForApplicant(positionId as string)
         .then((res) => {
           setRecruitmentPosition(res.data);
-          setRecruitmentId(parseInt(res.data.recruitment));
+          setRecruitmentId(Number.parseInt(res.data.recruitment));
         })
         .catch((error) => {
           if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
