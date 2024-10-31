@@ -366,3 +366,7 @@ export function immutableSet(list: unknown[], oldValue: unknown, newValue: unkno
   });
 }
 */
+
+export function IsNumber(value: unknown): value is number {
+  return typeof value === 'number';
+}

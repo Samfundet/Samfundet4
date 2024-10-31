@@ -2,6 +2,10 @@
 
 @import 'src/mixins';
 
+.italic {
+  font-style: italic;
+}
+
 // label som wrapper
 .select_wrapper {
   display: flex;

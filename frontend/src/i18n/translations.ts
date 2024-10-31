@@ -40,6 +40,7 @@ export const nb = prepareTranslations({
   // Date related
   [KEY.common_today]: 'I dag',
   [KEY.common_tomorrow]: 'I morgen',
+  [KEY.pick_a_date]: 'Velg en dato',
 
   // Other common
   [KEY.common_url]: 'URL',
@@ -50,6 +51,7 @@ export const nb = prepareTranslations({
   [KEY.common_all]: 'Alle',
   [KEY.common_price]: 'Pris',
   [KEY.common_food]: 'Mat',
+  [KEY.common_any]: 'Hvilken som helst',
   [KEY.common_preferences]: 'Preferanser',
   [KEY.common_buy]: 'Kjøp',
   [KEY.common_not]: 'Ikke',
@@ -66,8 +68,9 @@ export const nb = prepareTranslations({
   [KEY.common_next]: 'Neste',
   [KEY.common_save]: 'Lagre',
   [KEY.common_gang]: 'Gjeng',
-  [KEY.common_table]: 'Bord',
   [KEY.common_gangs]: 'Gjenger',
+  [KEY.common_section]: 'Seksjon',
+  [KEY.common_table]: 'Bord',
   [KEY.common_gang_type]: 'Gjengtype',
   [KEY.common_edit]: 'Rediger',
   [KEY.common_sheet]: 'Tabell',
@@ -81,7 +84,7 @@ export const nb = prepareTranslations({
   [KEY.common_login]: 'Logg inn',
   [KEY.common_users]: 'Brukere',
   [KEY.common_roles]: 'Roller',
-  [KEY.common_roles_view]: 'Rolle',
+  [KEY.common_role]: 'Rolle',
   [KEY.common_active]: 'Aktiv',
   [KEY.common_event]: 'Arrangement',
   [KEY.common_repeat]: 'Repeter',
@@ -199,6 +202,7 @@ export const nb = prepareTranslations({
   // ==================== //
   //        Others        //
   // ==================== //
+  [KEY.role_content_type]: 'Hierarkinivå',
   [KEY.admin_impersonate]: 'Stjel identitet',
   [KEY.admin_stop_impersonate]: 'Stopp identitetstyveri',
 
@@ -258,8 +262,12 @@ export const nb = prepareTranslations({
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
   [KEY.recruitment_will_be_anonymized]: 'All info relatert til dine søknader vil bli slettet 3 uker etter opptaket',
   [KEY.recruitment_interviews]: 'Intervjuer',
+  [KEY.recruitment_interviewer]: 'Intervjuer',
+  [KEY.recruitment_interviewers]: 'Intervjuere',
   [KEY.recruitment_no_interviews]: 'Ingen intervjuer',
   [KEY.recruitment_interview_set]: 'Sett intervju',
+  [KEY.recruitment_interview_groups]: 'Intervjugrupper',
+  [KEY.recruitment_interview_group]: 'Intervjugrupper',
   [KEY.recruitment_interview_time]: 'Intervjutid',
   [KEY.recruitment_interview_location]: 'Intervjusted',
   [KEY.recruitment_no_positions]: 'Ingen verv',
@@ -415,6 +423,8 @@ export const nb = prepareTranslations({
   [KEY.command_menu_shortcut_control_panel]: 'Kontrollpanel',
   [KEY.command_menu_shortcut_about_samfundet]: 'Om Samfundet',
 
+  [KEY.role_edit_could_not_load_permissions]: 'Klarte ikke laste inn tilganger',
+
   // Sulten / Lyche
   [KEY.sulten_what_is_lyche]: 'Hva er Lyche?',
   [KEY.sulten_page_see_menu]: 'Se meny',
@@ -464,6 +474,16 @@ export const nb = prepareTranslations({
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
+
+  // Errors
+  [KEY.error_generic]: 'Uventet feil',
+  [KEY.error_generic_description]: 'En uventet feil oppsto, vennligst prøv igjen',
+  [KEY.error_not_found]: 'Ikke funnet',
+  [KEY.error_not_found_description]: 'Ressursen du forsøkte å hente ble ikke funnet',
+  [KEY.error_forbidden]: 'Ingen adgang',
+  [KEY.error_forbidden_description]: 'Du har ikke adgang til å se denne ressursen',
+  [KEY.error_server_error]: 'Serverfeil',
+  [KEY.error_server_error_description]: 'En serverfeil har opptstått',
 });
 
 export const en = prepareTranslations({
@@ -505,6 +525,7 @@ export const en = prepareTranslations({
   // Date related
   [KEY.common_today]: 'Today',
   [KEY.common_tomorrow]: 'Tomorrow',
+  [KEY.pick_a_date]: 'Pick a date',
 
   // No category:
   [KEY.common_url]: 'URL',
@@ -515,6 +536,7 @@ export const en = prepareTranslations({
   [KEY.common_all]: 'All',
   [KEY.common_price]: 'Price',
   [KEY.common_food]: 'Food',
+  [KEY.common_any]: 'Any',
   [KEY.common_preferences]: 'Preferences',
   [KEY.common_buy]: 'Buy',
   [KEY.common_not]: 'Not',
@@ -538,6 +560,7 @@ export const en = prepareTranslations({
   [KEY.common_gang]: 'Gang',
   [KEY.common_gangs]: 'Gangs',
   [KEY.common_gang_type]: 'Gang type',
+  [KEY.common_section]: 'Section',
   [KEY.common_max]: 'Max',
   [KEY.common_image]: 'Image',
   [KEY.common_venue]: 'Venue',
@@ -546,7 +569,7 @@ export const en = prepareTranslations({
   [KEY.common_login]: 'Log in',
   [KEY.common_users]: 'Users',
   [KEY.common_roles]: 'Roles',
-  [KEY.common_roles_view]: 'Role',
+  [KEY.common_role]: 'Role',
   [KEY.common_active]: 'Active',
   [KEY.common_cancel]: 'Cancel',
   [KEY.common_venues]: 'Venues',
@@ -664,6 +687,7 @@ export const en = prepareTranslations({
   // ==================== //
   //        Others        //
   // ==================== //
+  [KEY.role_content_type]: 'Hierarchical level',
   [KEY.admin_impersonate]: 'Impersonate',
   [KEY.admin_stop_impersonate]: 'Stop impersonation',
 
@@ -723,8 +747,12 @@ export const en = prepareTranslations({
   [KEY.recruitment_will_be_anonymized]:
     'All info related to the applications will be anonymized three weeks after the recruitment is over',
   [KEY.recruitment_interviews]: 'Interviews',
+  [KEY.recruitment_interviewer]: 'Interviewer',
+  [KEY.recruitment_interviewers]: 'Interviewers',
   [KEY.recruitment_no_interviews]: 'No interviews',
   [KEY.recruitment_interview_set]: 'Set Interview',
+  [KEY.recruitment_interview_groups]: 'Interview groups',
+  [KEY.recruitment_interview_group]: 'Interview group',
   [KEY.recruitment_interview_time]: 'Interview Time',
   [KEY.recruitment_interview_location]: 'Interview Location',
   [KEY.recruitment_interview_notes]: 'Interview notes',
@@ -884,6 +912,8 @@ export const en = prepareTranslations({
   [KEY.command_menu_shortcut_control_panel]: 'Control panel',
   [KEY.command_menu_shortcut_about_samfundet]: 'About Samfundet',
 
+  [KEY.role_edit_could_not_load_permissions]: 'Could not load permissions',
+
   // Sulten / Lyche:
   [KEY.sulten_dishes]: 'Dishes',
   [KEY.sulten_lyche_goal]: 'Lyches goal',
@@ -932,4 +962,13 @@ export const en = prepareTranslations({
   [KEY.inputfile_no_file_selected]: 'No file selected',
   [KEY.notfoundpage_title]: 'Page not found',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',
+
+  [KEY.error_generic]: 'Unexpected error',
+  [KEY.error_generic_description]: 'An unexpected error has occurred',
+  [KEY.error_not_found]: 'Not found',
+  [KEY.error_not_found_description]: 'The resource you requested was not found',
+  [KEY.error_forbidden]: 'Forbidden',
+  [KEY.error_forbidden_description]: 'You do not have permission to view this resource',
+  [KEY.error_server_error]: 'Server error',
+  [KEY.error_server_error_description]: 'A server error has occurred',
 });
