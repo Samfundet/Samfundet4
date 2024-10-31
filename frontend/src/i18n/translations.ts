@@ -333,6 +333,10 @@ export const nb = prepareTranslations({
   [KEY.recruitment_rejected_applications]: 'Søkere som får automatisk avslag',
   [KEY.recruitment_hardtoget_applications]: 'Søkere som har takket nei til stillingen',
   [KEY.recruitment_accepted_applications]: 'Søkere vi har tatt opp',
+  [KEY.recruitment_application_status_accepted]: 'Ringt og takket ja',
+  [KEY.recruitment_application_status_called_rejected]: 'Ringt og takket nei',
+  [KEY.recruitment_application_status_automatic_rejection]: 'Automatisk avslag',
+  [KEY.recruitment_application_no_status]: 'Ingen status',
   [KEY.recruitment_rejected_applications_help_text]:
     'Disse vil få en automatisk epost om avslag dersom de ikke får tilbud om et annet verv.',
   [KEY.recruitment_hardtoget_applications_help_text]:
@@ -814,6 +818,10 @@ export const en = prepareTranslations({
   [KEY.recruitment_rejected_applications]: 'Automatically rejected applicants',
   [KEY.recruitment_hardtoget_applications]: 'Applicants who declined the position',
   [KEY.recruitment_accepted_applications]: 'Applicants we have contacted and accepted',
+  [KEY.recruitment_application_status_accepted]: 'Called and accepted',
+  [KEY.recruitment_application_status_called_rejected]: 'Called and rejected',
+  [KEY.recruitment_application_status_automatic_rejection]: 'Automatic rejection',
+  [KEY.recruitment_application_no_status]: 'No status',
   [KEY.recruitment_rejected_applications_help_text]:
     'These will get an automatic rejection email if they are not accepted for a different position',
   [KEY.recruitment_hardtoget_applications_help_text]:

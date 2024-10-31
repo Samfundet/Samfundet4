@@ -84,6 +84,19 @@ export function RecruitmentGangAllApplicantsAdminPage() {
     { content: t(KEY.recruitment_recruiter_status), sortable: true },
   ];
 
+  const getStatusOption = (id: number | undefined): string => {
+    switch (id) {
+      case 1:
+        return t(KEY.recruitment_application_status_accepted);
+      case 2:
+        return t(KEY.recruitment_application_status_called_rejected);
+      case 3:
+        return t(KEY.recruitment_application_status_automatic_rejection);
+      default:
+        return t(KEY.recruitment_application_no_status);
+    }
+  };
+
   const data = applications.map((application) => {
     const applicationURL = reverse({
       pattern: ROUTES.frontend.admin_recruitment_applicant,
@@ -106,7 +119,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
         { content: <Link url={applicationURL}>{dbT(application.recruitment_position, 'name')}</Link> },
         application.interview?.interview_time,
         application.interview?.interview_location,
-        application.recruiter_status,
+        getStatusOption(application.recruiter_status),
       ],
     };
   });
