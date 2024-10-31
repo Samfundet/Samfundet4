@@ -751,6 +751,8 @@ class RecruitmentSerializer(CustomBaseSerializer):
         match = re.search(r'(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))', value)
         if match:
             return match.group(3)
+        if len(value) == 11:
+            return value
         raise ValidationError('Invalid youtube url')
 
     def to_representation(self, instance: Recruitment) -> dict:

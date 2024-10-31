@@ -15,6 +15,7 @@ export const recruitmentSchema = z
     reprioritization_deadline_for_groups: LOCAL_DATETIME,
     organization: z.number().min(1, { message: 'Organization is required' }),
     max_applications: z.number().nullable(),
+    promo_media: z.string(),
   })
   .refine(
     (data) => {
@@ -58,6 +59,17 @@ export const recruitmentSchema = z
     {
       message: i18next.t(KEY.error_recruitment_form_4),
       path: ['reprioritization_deadline_for_groups'],
+    },
+  )
+  .refine(
+    (data) => {
+      const promoMedia = data.promo_media;
+      const regex = /(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))/;
+      return promoMedia.match(regex) || promoMedia.length === 11;
+    },
+    {
+      message: 'Fucky whucky youtube link',
+      path: ['promo_media'],
     },
   );
 
