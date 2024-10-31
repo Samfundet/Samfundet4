@@ -53,7 +53,7 @@ export function RecruitmentAdminPage() {
       cells: [
         {
           content: <Link url={pageUrl}>{dbT(element, 'name')}</Link>,
-          value: ROUTES.frontend.recruitment,
+          value: element.id,
         },
         {
           content: getObjectFieldOrNumber<string>(element?.organization, 'name'),
