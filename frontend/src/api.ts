@@ -37,6 +37,7 @@ import type {
   RecruitmentUserDto,
   RegistrationDto,
   RoleDto,
+  RoleUsersDto,
   SaksdokumentDto,
   TextItemDto,
   UserDto,
@@ -543,6 +544,13 @@ export async function getRecruitmentPositions(recruitmentId: string): Promise<Ax
   const response = await axios.get(url, { withCredentials: true });
 
   return response;
+}
+
+export async function getRoleUsers(id: number): Promise<RoleUsersDto[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__role_users, urlParams: { pk: id } });
+  const response = await axios.get<RoleUsersDto[]>(url, { withCredentials: true });
+
+  return response.data;
 }
 
 export async function getRecruitmentPositionsGangForApplicant(

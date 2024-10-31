@@ -382,19 +382,30 @@ export type RoleDto = {
   permissions: string[];
 };
 
-export type UserGangRoleDto = {
+export type UserRole = {
   id: number;
-  obj: GangDto;
+  user: UserDto;
+  created_at: Date;
+  obj: OrganizationDto | GangDto | GangSectionDto;
 };
 
-export type UserGangSectionRoleDto = {
-  id: number;
-  obj: GangSectionDto;
+export type UserGangRoleDto = Omit<UserRole, 'obj'> & {
+  gang: GangDto;
 };
 
-export type UserOrganizationRoleDto = {
-  id: number;
-  obj: OrganizationDto;
+export type UserGangSectionRoleDto = Omit<UserRole, 'obj'> & {
+  section: GangSectionDto;
+};
+
+export type UserOrganizationRoleDto = Omit<UserRole, 'obj'> & {
+  organization: OrganizationDto;
+};
+
+export type RoleUsersDto = {
+  user: UserDto;
+  org_role?: UserOrganizationRoleDto;
+  gang_role?: UserGangRoleDto;
+  section_role?: UserGangSectionRoleDto;
 };
 
 // ############################################################
