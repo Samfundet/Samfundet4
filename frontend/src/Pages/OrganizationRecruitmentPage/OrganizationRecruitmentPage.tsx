@@ -16,7 +16,6 @@ import styles from './OrganizationRecruitmentPage.module.scss';
 
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
-  const embededId = '-nYQb8_TvQ4'; // TODO: Make this dynamic DO IN ISSUE #1121 for backend. #1274 for frontend
   const { recruitmentId } = useParams<{ recruitmentId: string }>();
   const [viewAllPositions, setViewAllPositions] = useState<boolean>(true);
   const { t } = useTranslation();
@@ -77,9 +76,9 @@ export function OrganizationRecruitmentPage() {
               {dbT(recruitment, 'name')}
             </Text>
           </div>
-          {embededId ? (
+          {recruitment?.promo_media ? (
             <>
-              <Video embedId={embededId} className={styles.video} />
+              <Video embedId={recruitment.promo_media} className={styles.video} />
             </>
           ) : (
             <></>
