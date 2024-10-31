@@ -8,7 +8,7 @@ import { getRoleUsers } from '~/api';
 import type { UserGangSectionRoleDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import type { RoleLoader } from '~/router/loaders';
-import { dbT, getFullName } from '~/utils';
+import { dbT, formatDateYMD, getFullName } from '~/utils';
 
 export function RoleAdminPage() {
   const { t } = useTranslation();
@@ -40,7 +40,7 @@ export function RoleAdminPage() {
             { content: fullName, value: fullName },
             { content: ru.org_role.organization.name, value: ru.org_role.organization.name },
             { content: '', value: '' },
-            { content: ru.org_role.created_at },
+            { content: formatDateYMD(ru.org_role.created_at) },
           ],
         };
       }
@@ -50,7 +50,7 @@ export function RoleAdminPage() {
             { content: fullName, value: fullName },
             { content: dbT(ru.gang_role.gang, 'name'), value: dbT(ru.gang_role.gang, 'name') },
             { content: '', value: '' },
-            { content: ru.gang_role.created_at },
+            { content: formatDateYMD(ru.gang_role.created_at) },
           ],
         };
       }
@@ -61,7 +61,7 @@ export function RoleAdminPage() {
           { content: fullName, value: fullName },
           { content: dbT(sectionRole.section, 'name'), value: dbT(sectionRole.section, 'name') },
           { content: '', value: '' },
-          { content: sectionRole.created_at },
+          { content: formatDateYMD(sectionRole.created_at) },
         ],
       };
     });
