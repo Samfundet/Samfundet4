@@ -1,11 +1,14 @@
-import { useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { CrudButtons, Link } from '~/Components';
+import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
-import type { RoleDto } from '~/dto';
+import { getRoles } from '~/api';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
 import { lowerCapitalize } from '~/utils';
 
 export function RolesAdminPage() {
@@ -13,19 +16,10 @@ export function RolesAdminPage() {
 
   const navigate = useNavigate();
 
-  const [roles, setRoles] = useState<RoleDto[]>([
-    {
-      id: 1,
-      name: 'Opptaksansvarlig',
-      permissions: ['samfundet.test_permission', 'samfundet.user_create'],
-    },
-    {
-      id: 2,
-      name: 'Intervjuer',
-      permissions: [],
-    },
-  ]);
-  const [loading, setLoading] = useState(false);
+  const { data: roles, isLoading } = useQuery({
+    queryKey: ['roles'],
+    queryFn: getRoles,
+  });
 
   const columns = [
     { content: t(KEY.common_name), sortable: true },
@@ -53,15 +47,32 @@ export function RolesAdminPage() {
             value: 0,
           },
           {
-            content: <CrudButtons onEdit={() => navigate('#')} />,
+            content: (
+              <CrudButtons
+                onEdit={() =>
+                  navigate(
+                    reverse({
+                      pattern: ROUTES.frontend.admin_roles_edit,
+                      urlParams: { roleId: r.id },
+                    }),
+                  )
+                }
+              />
+            ),
           },
         ],
       };
     });
   }, [roles]);
 
+  const header = (
+    <Button theme="success" link={ROUTES.frontend.admin_roles_create} rounded>
+      {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_role)}`)}
+    </Button>
+  );
+
   return (
-    <AdminPageLayout title={t(KEY.common_roles)} loading={loading}>
+    <AdminPageLayout title={t(KEY.common_roles)} loading={isLoading} header={header}>
       <Table data={data} columns={columns} />
     </AdminPageLayout>
   );
