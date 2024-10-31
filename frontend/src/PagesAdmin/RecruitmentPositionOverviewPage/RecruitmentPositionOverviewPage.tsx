@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button, RecruitmentApplicantsStatus, Text } from '~/Components';
 import { getRecruitmentApplicationsForRecruitmentPosition, updateRecruitmentApplicationStateForPosition } from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
-import { useTitle } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -13,64 +14,100 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
 import { ProcessedApplicants } from './components';
 
+const APPLICATION_CATEGORY = ['unprocessed', 'withdrawn', 'hardtoget', 'rejected', 'accepted'] as const;
+type ApplicationCategory = (typeof APPLICATION_CATEGORY)[number];
+
+const queryKeys = {
+  applications: (positionId: string, type: ApplicationCategory) => ['applications', positionId, type] as const,
+};
+
 export function RecruitmentPositionOverviewPage() {
-  const navigate = useNavigate();
   const { recruitmentId, gangId, positionId } = useParams();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const navigate = useCustomNavigate();
 
-  const [applications, setApplications] = useState<{
-    unprocessed: RecruitmentApplicationDto[];
-    withdrawn: RecruitmentApplicationDto[];
-    hardtoget: RecruitmentApplicationDto[];
-    rejected: RecruitmentApplicationDto[];
-    accepted: RecruitmentApplicationDto[];
-  }>({
-    unprocessed: [],
-    withdrawn: [],
-    hardtoget: [],
-    rejected: [],
-    accepted: [],
+  if (!positionId || !recruitmentId || !gangId) {
+    toast.error(t(KEY.common_something_went_wrong));
+    navigate({ url: -1 });
+    return null;
+  }
+
+  const queries = useQueries({
+    queries: APPLICATION_CATEGORY.map((type) => ({
+      queryKey: queryKeys.applications(positionId, type),
+      queryFn: () => getRecruitmentApplicationsForRecruitmentPosition(positionId, type),
+      enabled: !!positionId,
+    })),
   });
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const isLoading = queries.some((query) => query.isLoading);
+  const applications = Object.fromEntries(
+    queries.map((query, index) => [APPLICATION_CATEGORY[index], query.data || []]),
+  ) as Record<ApplicationCategory, RecruitmentApplicationDto[]>;
 
-  const loadApplications = async () => {
-    if (!positionId) return;
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: RecruitmentApplicationStateDto }) =>
+      updateRecruitmentApplicationStateForPosition(id, data),
+    onMutate: async ({ id, data }) => {
+      // Cancel any outgoing refetches so they don't overwrite our optimistic update
+      await queryClient.cancelQueries();
 
-    try {
-      const [unprocessed, accepted, withdrawn, hardtoget, rejected] = await Promise.all([
-        getRecruitmentApplicationsForRecruitmentPosition(positionId, 'unprocessed'),
-        getRecruitmentApplicationsForRecruitmentPosition(positionId, 'accepted'),
-        getRecruitmentApplicationsForRecruitmentPosition(positionId, 'withdrawn'),
-        getRecruitmentApplicationsForRecruitmentPosition(positionId, 'hardtoget'),
-        getRecruitmentApplicationsForRecruitmentPosition(positionId, 'rejected'),
-      ]);
+      // Create a type-safe container for previous data
+      const previousData: Partial<Record<ApplicationCategory, RecruitmentApplicationDto[]>> = {};
 
-      setApplications({
-        unprocessed: unprocessed || [],
-        accepted: accepted || [],
-        withdrawn: withdrawn || [],
-        hardtoget: hardtoget || [],
-        rejected: rejected || [],
-      });
-      setIsLoading(false);
-    } catch (error) {
-      console.error('Error loading applications:', error);
-      setIsLoading(false);
-    }
-  };
+      // Safely store previous data, handling undefined cases
+      for (const type of APPLICATION_CATEGORY) {
+        const queryData = queryClient.getQueryData<RecruitmentApplicationDto[]>(
+          queryKeys.applications(positionId, type),
+        );
+        if (queryData) {
+          previousData[type] = queryData;
+        }
+      }
 
-  useEffect(() => {
-    loadApplications();
-  }, [positionId]);
+      // Perform optimistic updates
+      for (const type of APPLICATION_CATEGORY) {
+        queryClient.setQueryData<RecruitmentApplicationDto[]>(queryKeys.applications(positionId, type), (old) => {
+          if (!old) return [];
+          return old.map((app) => (app.id === id ? { ...app, ...data } : app));
+        });
+      }
+
+      return { previousData };
+    },
+    onError: (_, __, context) => {
+      // Safely restore previous data
+      if (context?.previousData) {
+        for (const type of APPLICATION_CATEGORY) {
+          const previousTypeData = context.previousData[type];
+          if (previousTypeData) {
+            queryClient.setQueryData(queryKeys.applications(positionId, type), previousTypeData);
+          }
+        }
+      }
+      toast.error(t(KEY.common_something_went_wrong));
+    },
+    onSuccess: () => {
+      // Invalidate and refetch all application queries
+      for (const type of APPLICATION_CATEGORY) {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.applications(positionId, type),
+        });
+      }
+    },
+  });
 
   const updateApplicationState = (id: string, data: RecruitmentApplicationStateDto) => {
-    if (!recruitmentId) return;
-    updateRecruitmentApplicationStateForPosition(id, data).then((response) => {
-      //setApplications(response.data);
-      console.log('UPDATED RECRUITMENT APPLICATION STATE', response);
-      loadApplications();
-    });
+    updateMutation.mutate({ id, data });
+  };
+
+  const invalidateAllQueries = () => {
+    for (const type of APPLICATION_CATEGORY) {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.applications(positionId, type),
+      });
+    }
   };
 
   const title = t(KEY.recruitment_administrate_applications);
@@ -94,87 +131,74 @@ export function RecruitmentPositionOverviewPage() {
     </Button>
   );
 
+  const applicationSections = [
+    {
+      type: 'accepted' as const,
+      title: KEY.recruitment_accepted_applications,
+      helpText: KEY.recruitment_accepted_applications_help_text,
+      emptyText: KEY.recruitment_accepted_applications_empty_text,
+    },
+    {
+      type: 'rejected' as const,
+      title: KEY.recruitment_rejected_applications,
+      helpText: KEY.recruitment_rejected_applications_help_text,
+      emptyText: KEY.recruitment_rejected_applications_empty_text,
+    },
+    {
+      type: 'hardtoget' as const,
+      title: KEY.recruitment_hardtoget_applications,
+      helpText: KEY.recruitment_hardtoget_applications_help_text,
+      emptyText: KEY.recruitment_hardtoget_applications_empty_text,
+    },
+    {
+      type: 'withdrawn' as const,
+      title: KEY.recruitment_withdrawn_applications,
+      helpText: '',
+      emptyText: KEY.recruitment_withdrawn_applications_empty_text,
+    },
+  ];
+
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={isLoading}>
       <Text size="l" as="strong" className={styles.subHeader}>
-        {lowerCapitalize(t(KEY.recruitment_applications))} ({applications.unprocessed.length})
+        {lowerCapitalize(t(KEY.recruitment_applications))} ({applications.unprocessed?.length || 0})
       </Text>
 
       <RecruitmentApplicantsStatus
-        applicants={applications.unprocessed}
+        applicants={applications.unprocessed || []}
         recruitmentId={recruitmentId}
         gangId={gangId}
         positionId={positionId}
         updateStateFunction={updateApplicationState}
-        onInterviewChange={loadApplications}
+        onInterviewChange={() => {
+          for (const type of APPLICATION_CATEGORY) {
+            queryClient.invalidateQueries({
+              queryKey: queryKeys.applications(positionId, type),
+            });
+          }
+        }}
       />
+
       <div className={styles.container}>
-        <div className={styles.sub_container}>
-          <Text size="l" as="strong" className={styles.subHeader}>
-            {t(KEY.recruitment_accepted_applications)} ({applications.accepted.length})
-          </Text>
-          <Text className={styles.subText}>{t(KEY.recruitment_accepted_applications_help_text)}</Text>
-          {applications.accepted.length > 0 ? (
-            <ProcessedApplicants
-              data={applications.accepted}
-              type="accepted"
-              revertStateFunction={updateApplicationState}
-            />
-          ) : (
-            <Text as="i" className={styles.subText}>
-              {t(KEY.recruitment_accepted_applications_empty_text)}
+        {applicationSections.map(({ type, title, helpText, emptyText }) => (
+          <div key={type} className={styles.sub_container}>
+            <Text size="l" as="strong" className={styles.subHeader}>
+              {t(title)} ({applications[type]?.length || 0})
             </Text>
-          )}
-        </div>
-
-        <div className={styles.sub_container}>
-          <Text size="l" as="strong" className={styles.subHeader}>
-            {t(KEY.recruitment_rejected_applications)} ({applications.rejected.length})
-          </Text>
-          <Text className={styles.subText}>{t(KEY.recruitment_rejected_applications_help_text)}</Text>
-          {applications.rejected.length > 0 ? (
-            <ProcessedApplicants
-              data={applications.rejected}
-              type="rejected"
-              revertStateFunction={updateApplicationState}
-            />
-          ) : (
-            <Text as="i" className={styles.subText}>
-              {t(KEY.recruitment_rejected_applications_empty_text)}
-            </Text>
-          )}
-        </div>
-
-        <div className={styles.sub_container}>
-          <Text size="l" as="strong" className={styles.subHeader}>
-            {t(KEY.recruitment_hardtoget_applications)} ({applications.hardtoget.length})
-          </Text>
-          <Text className={styles.subText}>{t(KEY.recruitment_hardtoget_applications_help_text)}</Text>
-          {applications.hardtoget.length > 0 ? (
-            <ProcessedApplicants
-              data={applications.hardtoget}
-              type="hardtoget"
-              revertStateFunction={updateApplicationState}
-            />
-          ) : (
-            <Text as="i" className={styles.subText}>
-              {t(KEY.recruitment_hardtoget_applications_empty_text)}
-            </Text>
-          )}
-        </div>
-
-        <div className={styles.sub_container}>
-          <Text size="l" as="strong" className={styles.subHeader}>
-            {t(KEY.recruitment_withdrawn_applications)} ({applications.withdrawn.length})
-          </Text>
-          {applications.withdrawn.length > 0 ? (
-            <ProcessedApplicants data={applications.withdrawn} type="withdrawn" />
-          ) : (
-            <Text as="i" className={styles.subText}>
-              {t(KEY.recruitment_withdrawn_applications_empty_text)}
-            </Text>
-          )}
-        </div>
+            {helpText && <Text className={styles.subText}>{t(helpText)}</Text>}
+            {applications[type]?.length > 0 ? (
+              <ProcessedApplicants
+                data={applications[type]}
+                type={type}
+                revertStateFunction={type !== 'withdrawn' ? updateApplicationState : undefined}
+              />
+            ) : (
+              <Text as="i" className={styles.subText}>
+                {t(emptyText)}
+              </Text>
+            )}
+          </div>
+        ))}
       </div>
     </AdminPageLayout>
   );
