@@ -19,10 +19,14 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentPositionOverviewPage.module.scss';
 import { ProcessedApplicants } from './components';
 
+// Define the possible states an application can be in within the recruitment process
+// Applications flow through these states as they are processed by recruiters
 // TODO add backend to fetch these. ISSUE #1575
 const APPLICATION_CATEGORY = ['unprocessed', 'withdrawn', 'hardtoget', 'rejected', 'accepted'] as const;
 type ApplicationCategory = (typeof APPLICATION_CATEGORY)[number];
 
+// Define query keys for React Query cache management
+// These keys are used to organize and invalidate cached data efficiently
 const queryKeys = {
   applications: (positionId: string, type: ApplicationCategory) => ['applications', positionId, type] as const,
   position: (positionId: string) => ['position', positionId] as const,
@@ -33,21 +37,25 @@ export function RecruitmentPositionOverviewPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const navigate = useCustomNavigate();
+
+  // Track which application is currently being updated to show loading state
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
+  // Validate required URL parameters
   if (!positionId || !recruitmentId || !gangId) {
     toast.error(t(KEY.common_something_went_wrong));
     navigate({ url: -1 });
     return null;
   }
 
-  // Query for position details
+  // Fetch details about the recruitment position
   const positionQuery = useQuery({
     queryKey: queryKeys.position(positionId),
     queryFn: () => getRecruitmentPosition(positionId),
   });
 
-  // Queries for applications
+  // Fetch all applications for each possible application state in parallel
+  // This allows us to show all categories of applications simultaneously
   const applicationQueries = useQueries({
     queries: APPLICATION_CATEGORY.map((type) => ({
       queryKey: queryKeys.applications(positionId, type),
@@ -58,18 +66,24 @@ export function RecruitmentPositionOverviewPage() {
 
   const isLoading = applicationQueries.some((query) => query.isLoading) || positionQuery.isLoading;
 
+  // Organize application data by category for easier access
   const applications = Object.fromEntries(
     applicationQueries.map((query, index) => [APPLICATION_CATEGORY[index], query.data || []]),
   ) as Record<ApplicationCategory, RecruitmentApplicationDto[]>;
 
+  // Handle updating application states with optimistic updates
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: RecruitmentApplicationStateDto }) =>
       updateRecruitmentApplicationStateForPosition(id, data),
+    // Optimistically update the UI before the server responds
     onMutate: async ({ id, data }) => {
+      // Cancel any outgoing refetches to avoid overwriting our optimistic update
       await queryClient.cancelQueries();
 
+      // Store the current state to roll back if the mutation fails
       const previousData: Partial<Record<ApplicationCategory, RecruitmentApplicationDto[]>> = {};
 
+      // Save current state for all application categories
       for (const type of APPLICATION_CATEGORY) {
         const queryData = queryClient.getQueryData<RecruitmentApplicationDto[]>(
           queryKeys.applications(positionId, type),
@@ -78,16 +92,17 @@ export function RecruitmentPositionOverviewPage() {
           previousData[type] = queryData;
         }
       }
-
+      // Optimistically update all relevant queries
       for (const type of APPLICATION_CATEGORY) {
         queryClient.setQueryData<RecruitmentApplicationDto[]>(queryKeys.applications(positionId, type), (old) => {
           if (!old) return [];
-          return old.map((app) => (app.id === id ? { ...app, ...data } : app));
+          return old.map((application) => (application.id === id ? { ...application, ...data } : application));
         });
       }
 
       return { previousData };
     },
+    // If mutation fails, roll back to the previous state
     onError: (_, __, context) => {
       if (context?.previousData) {
         for (const type of APPLICATION_CATEGORY) {
@@ -99,6 +114,7 @@ export function RecruitmentPositionOverviewPage() {
       }
       toast.error(t(KEY.common_something_went_wrong));
     },
+    // On successful mutation, invalidate and refetch all application queries
     onSuccess: () => {
       for (const type of APPLICATION_CATEGORY) {
         queryClient.invalidateQueries({
@@ -108,6 +124,7 @@ export function RecruitmentPositionOverviewPage() {
     },
   });
 
+  // Wrapper function to update application state with loading indicator
   const updateApplicationState = (id: string, data: RecruitmentApplicationStateDto) => {
     setUpdatingId(id);
     updateMutation.mutate(
@@ -120,27 +137,7 @@ export function RecruitmentPositionOverviewPage() {
     );
   };
 
-  const title = t(KEY.recruitment_administrate_applications);
-  useTitle(title);
-  const headerTitle = `${t(KEY.recruitment_administrate_applications)} for  ${positionQuery.data ? dbT(positionQuery.data?.data, 'name') : 'N/A'}`;
-  const backendUrl = reverse({
-    pattern: ROUTES.backend.admin__samfundet_recruitmentposition_change,
-    urlParams: { objectId: positionId },
-  });
-
-  const header = (
-    <Button
-      theme="success"
-      rounded={true}
-      link={reverse({
-        pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
-        urlParams: { gangId, recruitmentId },
-      })}
-    >
-      {t(KEY.common_go_back)}
-    </Button>
-  );
-
+  // Define sections for different application categories with their respective texts
   const applicationSections = [
     {
       type: 'accepted' as const,
@@ -168,8 +165,25 @@ export function RecruitmentPositionOverviewPage() {
     },
   ];
 
+  const title = t(KEY.recruitment_administrate_applications);
+  useTitle(title);
+  const headerTitle = `${t(KEY.recruitment_administrate_applications)} for  ${positionQuery.data ? dbT(positionQuery.data?.data, 'name') : 'N/A'}`;
+
+  const header = (
+    <Button
+      theme="success"
+      rounded={true}
+      link={reverse({
+        pattern: ROUTES.frontend.admin_recruitment_gang_position_overview,
+        urlParams: { gangId, recruitmentId },
+      })}
+    >
+      {t(KEY.common_go_back)}
+    </Button>
+  );
+
   return (
-    <AdminPageLayout title={headerTitle} backendUrl={backendUrl} header={header} loading={isLoading}>
+    <AdminPageLayout title={headerTitle} header={header} loading={isLoading}>
       <Text size="l" as="strong" className={styles.subHeader}>
         {lowerCapitalize(t(KEY.recruitment_applications))} ({applications.unprocessed?.length || 0})
       </Text>
