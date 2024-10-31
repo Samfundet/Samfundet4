@@ -18,7 +18,7 @@ from django.contrib.auth.models import Group, Permission
 from root.constants import PHONE_NUMBER_REGEX
 from root.utils.mixins import CustomBaseSerializer
 
-from .models.role import Role
+from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
 from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
@@ -39,6 +39,7 @@ from .models.general import (
     KeyValue,
     MenuItem,
     TextItem,
+    GangSection,
     Reservation,
     ClosedPeriod,
     FoodCategory,
@@ -424,6 +425,12 @@ class GangSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+class GangSectionSerializer(CustomBaseSerializer):
+    class Meta:
+        model = GangSection
+        fields = '__all__'
+
+
 class RecruitmentGangSerializer(CustomBaseSerializer):
     recruitment_positions = serializers.SerializerMethodField(method_name='get_positions_count', read_only=True)
 
@@ -495,6 +502,54 @@ class RoleSerializer(CustomBaseSerializer):
     class Meta:
         model = Role
         fields = '__all__'
+
+
+class UserOrgRoleSerializer(CustomBaseSerializer):
+    user = UserSerializer()
+    org_role = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserOrgRole
+        fields = ('user', 'org_role')
+
+    def get_org_role(self, obj: UserOrgRole) -> dict:
+        return {
+            'created_at': obj.created_at,
+            'created_by': UserSerializer(obj.created_by).data,
+            'organization': OrganizationSerializer(obj.obj).data,
+        }
+
+
+class UserGangRoleSerializer(CustomBaseSerializer):
+    user = UserSerializer()
+    gang_role = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserGangRole
+        fields = ('user', 'gang_role')
+
+    def get_gang_role(self, obj: UserGangRole) -> dict:
+        return {
+            'created_at': obj.created_at,
+            'created_by': UserSerializer(obj.created_by).data,
+            'gang': GangSerializer(obj.obj).data,
+        }
+
+
+class UserGangSectionRoleSerializer(CustomBaseSerializer):
+    user = UserSerializer()
+    section_role = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserGangSectionRole
+        fields = ('user', 'section_role')
+
+    def get_section_role(self, obj: UserGangSectionRole) -> dict:
+        return {
+            'created_at': obj.created_at,
+            'created_by': UserSerializer(obj.created_by).data,
+            'section': GangSectionSerializer(obj.obj).data,
+        }
 
 
 class SaksdokumentSerializer(CustomBaseSerializer):
