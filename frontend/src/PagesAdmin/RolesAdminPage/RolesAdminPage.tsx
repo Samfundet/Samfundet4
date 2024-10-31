@@ -8,6 +8,7 @@ import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getRoles } from '~/api';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import { roleKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { lowerCapitalize } from '~/utils';
 
@@ -17,7 +18,7 @@ export function RolesAdminPage() {
   const navigate = useNavigate();
 
   const { data: roles, isLoading } = useQuery({
-    queryKey: ['roles'],
+    queryKey: roleKeys.all,
     queryFn: getRoles,
   });
 
