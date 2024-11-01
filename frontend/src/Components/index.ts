@@ -49,6 +49,7 @@ export { NumberInput } from './NumberInput';
 export { OccupiedForm, OccupiedFormModal } from './OccupiedForm';
 export { OpeningHours } from './OpeningHours';
 export { Page } from './Page';
+export { DrfPagination } from './Pagination';
 export { PermissionRoute } from './PermissionRoute';
 export { PhoneNumberField } from './PhoneNumberField';
 export { ProgressBar } from './ProgressBar';
@@ -86,7 +87,6 @@ export { ToolTip } from './ToolTip';
 export { UkaOutlet } from './UkaOutlet';
 export { UserFeedback } from './UserFeedback';
 export { Video } from './Video';
-
 // Props
 export type { CheckboxProps } from './Checkbox';
 export type { DropdownProps } from './Dropdown';
