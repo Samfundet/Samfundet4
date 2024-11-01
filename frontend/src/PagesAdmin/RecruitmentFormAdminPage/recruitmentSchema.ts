@@ -64,11 +64,11 @@ export const recruitmentSchema = z
   .refine(
     (data) => {
       const promoMedia = data.promo_media;
-      const regex = /(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))/;
+      const regex = /^(https?:\/\/)?(www\.)?(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))/;
       return promoMedia.match(regex) || promoMedia.length === 11 || promoMedia === '';
     },
     {
-      message: i18next.t(KEY.promo_video_invalid),
+      message: i18next.t(KEY.promo_media_invalid),
       path: ['promo_media'],
     },
   );
