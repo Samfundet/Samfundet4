@@ -75,19 +75,6 @@ Basic.parameters = {
   },
 };
 
-// Primary theme
-export const PrimaryTheme = Template.bind({});
-PrimaryTheme.args = {
-  ...Basic.args,
-};
-PrimaryTheme.parameters = {
-  docs: {
-    description: {
-      story: 'Pagination with primary theme for numbers and secondary theme for navigation',
-    },
-  },
-};
-
 // Many pages example
 export const ManyPages = Template.bind({});
 ManyPages.args = {
