@@ -13,9 +13,15 @@ import {
   H3,
   Input,
   MiniCalendar,
+  NumberInput,
 } from '~/Components';
 import type { RecruitmentInterviewAvailabilityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import {
+  AVAILABILITY_TIMESLOT_INTERVAL,
+  AVAILABILITY_TIMESLOT_INTERVAL_MAX,
+  AVAILABILITY_TIMESLOT_INTERVAL_MIN,
+} from '~/schema/recruitment';
 import styles from './RecruitmentInterviewAvailabilityForm.module.scss';
 
 type Props = {
@@ -27,7 +33,7 @@ const schema = z.object({
   end_date: z.string(),
   start_time: z.string(),
   end_time: z.string(),
-  timeslot_interval: z.number(),
+  timeslot_interval: AVAILABILITY_TIMESLOT_INTERVAL,
 });
 
 type SchemaType = z.infer<typeof schema>;
@@ -118,7 +124,11 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
                 <FormItem>
                   <FormLabel>{t(KEY.common_interval)}</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <NumberInput
+                      min={AVAILABILITY_TIMESLOT_INTERVAL_MIN}
+                      max={AVAILABILITY_TIMESLOT_INTERVAL_MAX}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
