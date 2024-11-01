@@ -1,0 +1,14 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.container {
+  width: $primary-content-width-wide;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 2rem 0.75rem;
+
+  @include for-desktop-up {
+    padding: 6rem 4rem;
+  }
+}

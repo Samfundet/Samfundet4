@@ -45,6 +45,8 @@ export const ROUTES_FRONTEND = {
   // Roles
   admin_roles: '/control-panel/roles/',
   admin_roles_view: '/control-panel/roles/:roleId/',
+  admin_roles_edit: '/control-panel/roles/:roleId/edit/',
+  admin_roles_create: '/control-panel/roles/create/',
   // Gangs:
   admin_gangs: '/control-panel/gangs/',
   admin_gangs_create: '/control-panel/gangs/create/',
