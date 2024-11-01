@@ -24,7 +24,7 @@ whatnot, we use React Query to be responsible for actually calling this function
 
 To get started, in our component/page, call the `useQuery` hook like so, providing a query key and the query function:
 
-```tsx
+```ts
 const { data, isLoading, isError } = useQuery({
     queryKey: ['informationpages'],
     queryFn: getInformationPages,
@@ -36,6 +36,61 @@ all the data fetched by the `useQuery` hook. You can think of it as a simple Key
 data fetched by the `getInformationPages` function is stored by the Query Client using the query key. The query key
 therefore needs to be unique for the data we're fetching.
 
+## Query key factory
+
+Since it's extremely important that the query keys are unique, we employ a "query key factory" to generate them for us.
+The factories are all defined in one place ([queryKeys.ts](../../../frontend/src/queryKeys.ts)), which should eliminate
+the possibility of key collisions. Here are some examples of how to use the factories:
+
+```ts
+// Get all information pages
+const { data } = useQuery({
+    queryKey: infoPageKeys.all,
+    queryFn: getInformationPages,
+});
+```
+
+```ts
+// Get specific user
+const { data } = useQuery({
+    queryKey: userKeys.detail(userId),
+    queryFn: () => getUser(userId),
+});
+```
+
+```ts
+// Get information pages with filter
+const { data } = useQuery({
+    queryKey: infoPageKeys.list([search, page]),
+    queryFn: () => getInformationPages(search, page),
+});
+```
+
+## Invalidating data
+
+Sometimes we need to invalidate data which has been fetched. An example case is when we create and save a new object, an
+information page for instance, we want to clear our "information pages" cache, so that when we request all information
+pages again, the data returned includes the new object.
+
+Doing this is quite simple with the query key factory, and we are able to invalidate on multiple levels of granularity:
+
+```ts
+// Invalidate absolutely all information page data
+queryClient.invalidateQueries({
+    queryKey: infoPageKeys.all
+});
+
+// Invalidate all information page lists
+queryClient.invalidateQueries({
+    queryKey: infoPageKeys.lists()
+});
+
+// Invalidate a specific information page's data
+queryClient.invalidateQueries({
+    queryKey: infoPageKeys.detail(id)
+});
+```
+
 ## Error handling
 
 We have a very simple error handler defined in the *Query Client*. If the query function returns an error (for instance,
@@ -43,9 +98,9 @@ HTTP 500), we will log it as an error to the console, and display a toast with a
 by default generic (i.e. "Something went wrong!"), but it can be overwritten by the useQuery-caller if desired. We do
 this using the `meta` and `errorMsg` options in the useQuery hook.
 
-```tsx
+```ts
 const { data, isLoading, isError } = useQuery({
-    queryKey: ['informationpages'],
+    queryKey: infoPageKeys.all,
     queryFn: getInformationPages,
     meta: {
         errorMsg: "We couldn't find the pages!"
@@ -56,9 +111,9 @@ const { data, isLoading, isError } = useQuery({
 In the example above, if `getInformationPages` raises an error, we'll get a toast with "We couldn't find the pages!".
 Note that you can (and should) use translations here as well:
 
-```tsx
+```ts
 const { data, isLoading, isError } = useQuery({
-    queryKey: ['informationpages'],
+    queryKey: infoPageKeys.all,
     queryFn: getInformationPages,
     meta: {
         errorMsg: t(KEY.something_something)
@@ -71,3 +126,5 @@ const { data, isLoading, isError } = useQuery({
 React Query doesn't only have to be used for API calls, we also use it for other async tasks.
 
 Please check out the [RQ docs Quick Start](https://tanstack.com/query/latest/docs/framework/react/quick-start).
+
+Also check out TkDodo's (RQ maintainer) [blog posts](https://tkdodo.eu/blog/practical-react-query)
