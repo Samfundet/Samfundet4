@@ -2,34 +2,4 @@
   display: flex;
   justify-content: center;
   width: 100%;
-
-  nav {
-    display: flex;
-    align-items: center;
-  }
-
-  ul {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  li {
-    display: flex;
-    align-items: center;
-  }
-
-  // Style for ellipsis to match button height
-  span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 2rem;
-    letter-spacing: 2px;
-    user-select: none;
-  }
 }
