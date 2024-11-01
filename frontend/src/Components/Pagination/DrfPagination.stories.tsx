@@ -6,25 +6,6 @@ export default {
   title: 'Components/DRFPagination',
   component: DrfPagination,
   argTypes: {
-    buttonTheme: {
-      options: ['basic', 'primary', 'secondary', 'text', 'pure'],
-      control: { type: 'select' },
-      description: 'Theme for the page number buttons',
-    },
-    navButtonTheme: {
-      options: ['basic', 'primary', 'secondary', 'text', 'pure'],
-      control: { type: 'select' },
-      description: 'Theme for the Previous/Next buttons',
-    },
-    buttonDisplay: {
-      options: ['basic', 'small', 'large'],
-      control: { type: 'select' },
-      description: 'Size/display variant of the buttons',
-    },
-    rounded: {
-      control: 'boolean',
-      description: 'Whether to use rounded corners on buttons',
-    },
     currentPage: {
       control: 'number',
       description: 'Current active page',
@@ -36,6 +17,14 @@ export default {
     pageSize: {
       control: 'number',
       description: 'Number of items per page',
+    },
+    className: {
+      control: 'text',
+      description: 'Custom class for the pagination container',
+    },
+    itemClassName: {
+      control: 'text',
+      description: 'Custom class for individual pagination items',
     },
   },
   parameters: {
@@ -64,8 +53,6 @@ Basic.args = {
   navButtonTheme: 'samf',
   buttonDisplay: 'basic',
   rounded: false,
-  className: 'flex justify-center gap-2',
-  itemClassName: 'mx-1',
 };
 Basic.parameters = {
   docs: {
