@@ -6,6 +6,7 @@ import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getRoles } from '~/api';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -13,8 +14,9 @@ import { lowerCapitalize } from '~/utils';
 
 export function RolesAdminPage() {
   const { t } = useTranslation();
-
   const navigate = useNavigate();
+  const title = t(KEY.common_roles);
+  useTitle(title);
 
   const { data: roles, isLoading } = useQuery({
     queryKey: ['roles'],
@@ -72,7 +74,7 @@ export function RolesAdminPage() {
   );
 
   return (
-    <AdminPageLayout title={t(KEY.common_roles)} loading={isLoading} header={header}>
+    <AdminPageLayout title={title} loading={isLoading} header={header}>
       <Table data={data} columns={columns} />
     </AdminPageLayout>
   );

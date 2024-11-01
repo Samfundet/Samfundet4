@@ -7,7 +7,7 @@ import { PersonalRow } from '~/Pages/RecruitmentPage';
 import { getOrganization, getRecruitment } from '~/api';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
 import type { RecruitmentDto } from '~/dto';
-import { useDesktop } from '~/hooks';
+import { useDesktop, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { OrgNameType, type OrgNameTypeValue } from '~/types';
 import { dbT, getObjectFieldOrNumber } from '~/utils';
@@ -16,7 +16,6 @@ import styles from './OrganizationRecruitmentPage.module.scss';
 
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
-  const embededId = '-nYQb8_TvQ4'; // TODO: Make this dynamic DO IN ISSUE #1121 for backend. #1274 for frontend
   const { recruitmentId } = useParams<{ recruitmentId: string }>();
   const [viewAllPositions, setViewAllPositions] = useState<boolean>(true);
   const { t } = useTranslation();
@@ -24,6 +23,7 @@ export function OrganizationRecruitmentPage() {
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
   const [loading, setLoading] = useState<boolean>(true);
+  useTitle(dbT(recruitment, 'name') ?? '');
 
   useEffect(() => {
     if (recruitmentId) {
@@ -76,9 +76,9 @@ export function OrganizationRecruitmentPage() {
               {dbT(recruitment, 'name')}
             </Text>
           </div>
-          {embededId ? (
+          {recruitment?.promo_media ? (
             <>
-              <Video embedId={embededId} className={styles.video} />
+              <Video embedId={recruitment.promo_media} className={styles.video} />
             </>
           ) : (
             <></>
