@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import {
   Button,
+  DatePicker,
   Form,
   FormControl,
   FormField,
@@ -29,8 +30,8 @@ type Props = {
 };
 
 const schema = z.object({
-  start_date: z.string(),
-  end_date: z.string(),
+  start_date: z.date(),
+  end_date: z.date(),
   start_time: z.string(),
   end_time: z.string(),
   timeslot_interval: AVAILABILITY_TIMESLOT_INTERVAL,
@@ -69,7 +70,7 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
                   <FormItem>
                     <FormLabel>{t(KEY.start_date)}</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <DatePicker {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -82,7 +83,7 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
                   <FormItem>
                     <FormLabel>{t(KEY.end_date)}</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <DatePicker {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
