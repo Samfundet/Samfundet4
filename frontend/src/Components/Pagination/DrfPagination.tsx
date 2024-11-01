@@ -75,6 +75,7 @@ export const DrfPagination: React.FC<DRFPaginationProps> = ({
           </PaginationItem>
 
           {generatePagination().map((page, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
             <PaginationItem key={index} className={itemClassName}>
               {page === 'ellipsis' ? (
                 <PaginationEllipsis />
