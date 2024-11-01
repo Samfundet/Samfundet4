@@ -68,7 +68,7 @@ export const recruitmentSchema = z
       return promoMedia.match(regex) || promoMedia.length === 11 || promoMedia === '';
     },
     {
-      message: 'Fucky whucky youtube link',
+      message: i18next.t(KEY.promo_video_invalid),
       path: ['promo_media'],
     },
   );

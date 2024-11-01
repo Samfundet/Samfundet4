@@ -471,6 +471,7 @@ export const KEY = {
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',
   saksdokumentpage_publication_date: 'saksdokumentpage_publication_date',
   eventsadminpage_successful_delete_toast: 'eventsadminpage_successful_delete_toast',
+  promo_video_invalid: 'promo_video_invalid',
 
   error_generic: 'error_generic',
   error_generic_description: 'error_generic_description',
