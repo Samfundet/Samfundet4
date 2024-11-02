@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { RecruitmentWithoutInterviewTable } from '~/Components';
 import { Text } from '~/Components/Text/Text';
-import { getApplicantsWithoutInterviews, getGang, getRecruitment } from '~/api';
-import type { GangDto, RecruitmentDto, RecruitmentUserDto } from '~/dto';
+import { getApplicantsWithoutInterviews, getGang, getRecruitment, getRecruitmentGangStats } from '~/api';
+import type { GangDto, RecruitmentDto, RecruitmentGangStatDto, RecruitmentUserDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -18,7 +18,9 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
   const { recruitmentId, gangId } = useParams();
   const [users, setUsers] = useState<RecruitmentUserDto[]>([]);
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
+  const [withoutInterviewCount, setWithoutInterviewCount] = useState<number>();
   const [gang, setGang] = useState<GangDto>();
+  const [recruitmentGangStat, setRecruitmentGangStat] = useState<RecruitmentGangStatDto>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
@@ -29,6 +31,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
       getApplicantsWithoutInterviews(recruitmentId, gangId)
         .then((response) => {
           setUsers(response.data);
+          setWithoutInterviewCount(response.data.length);
           setShowSpinner(false);
         })
         .catch((error) => {
@@ -62,15 +65,25 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
           setRecruitment(resp.data);
         })
         .catch((data) => {
-          // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            toast.error(t(KEY.common_something_went_wrong));
+            console.error(data);
             navigate({ url: ROUTES.frontend.not_found, replace: true });
           }
-          toast.error(t(KEY.common_something_went_wrong));
-          console.error(data);
         });
     }
   }, [recruitmentId]);
+
+  useEffect(() => {
+    if (!recruitmentId || !gangId) return;
+    getRecruitmentGangStats(recruitmentId, gangId)
+      .then((response) => {
+        setRecruitmentGangStat(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [recruitmentId, gangId]);
 
   const title = t(KEY.recruitment_applicants_without_interview);
   useTitle(title);
@@ -88,6 +101,11 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
   );
   return (
     <AdminPageLayout title={title} backendUrl={ROUTES.backend.samfundet__user} header={header} loading={showSpinner}>
+      {recruitmentGangStat && (
+        <Text size="l">
+          {`${withoutInterviewCount}  ${t(KEY.common_out_of)} ${t(KEY.common_total).toLowerCase()} ${recruitmentGangStat.total_applicants} ${t(KEY.recruitment_applicants_without_interview).toLowerCase()}`}
+        </Text>
+      )}
       <RecruitmentWithoutInterviewTable applicants={users} />
     </AdminPageLayout>
   );

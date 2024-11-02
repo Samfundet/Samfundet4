@@ -124,6 +124,7 @@ export const KEY = {
   common_email: 'common_email',
   common_email_subject: 'common_email_subject',
   common_total: 'common_total',
+  common_out_of: 'common_out_of',
   common_roles: 'common_roles',
   common_role: 'common_role',
   common_guests: 'common_guests',
