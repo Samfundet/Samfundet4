@@ -38,6 +38,8 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 
+from samfundet.pagination import CustomPageNumberPagination
+
 from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .models.role import Role
@@ -470,7 +472,12 @@ class UserView(APIView):
 class AllUsersView(ListAPIView):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = UserSerializer
-    queryset = User.objects.all()
+    pagination_class = CustomPageNumberPagination
+
+    def get_queryset(self) -> QuerySet[User]:
+        queryset = User.objects.all()
+
+        return queryset.order_by('username')
 
 
 class ImpersonateView(APIView):
