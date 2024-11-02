@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { DrfPagination } from '~/Components';
+import { DrfPagination, SamfundetLogoSpinner } from '~/Components';
 import { formatDate } from '~/Components/OccupiedForm/utils';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
@@ -10,15 +10,16 @@ import type { UserDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { getFullName } from '~/utils';
+import styles from './UserAdminPage.module.scss';
 import { ImpersonateButton } from './components';
-
 export function UsersAdminPage() {
   const { t } = useTranslation();
-
   const [users, setUsers] = useState<UserDto[]>();
   const [loading, setLoading] = useState(true);
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 25; // from pagination.py
+
   const title = t(KEY.common_users);
   useTitle(title);
 
@@ -79,17 +80,19 @@ export function UsersAdminPage() {
   }, [t, users]);
 
   return (
-    <AdminPageLayout title={title} loading={loading}>
-      {users && (
+    <AdminPageLayout title={title}>
+      <div className={styles.container}>
         <DrfPagination
           currentPage={currentPage}
           totalItems={totalItems}
-          pageSize={10} // or whatever your backend page size is
+          pageSize={PAGE_SIZE}
           onPageChange={setCurrentPage}
+          buttonTheme="samf"
+          navButtonTheme="samf"
+          buttonDisplay="pill"
         />
-      )}
-      <Table data={data} columns={columns} />
-      {/* Add pagination if needed */}
+        {loading ? <SamfundetLogoSpinner position="center" /> : <Table data={data} columns={columns} />}
+      </div>
     </AdminPageLayout>
   );
 }
