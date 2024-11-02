@@ -856,18 +856,13 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
                 if existing_application.withdrawn:
                     existing_application.withdrawn = False
                 existing_application.save()
-                status_code = status.HTTP_200_OK
-            else:
-                # Create new application
-                serializer.save()
-                status_code = status.HTTP_201_CREATED
 
-            # Return all active applications
-            active_applications = RecruitmentApplication.objects.filter(
-                recruitment=recruitment_position.recruitment, user=request.user, withdrawn=False
-            ).order_by('applicant_priority')
-
-            return Response(self.get_serializer(active_applications, many=True).data, status=status_code)
+                # Get updated application for response
+                updated_application = RecruitmentApplication.objects.get(pk=existing_application.pk)
+                return Response(self.get_serializer(updated_application).data, status=status.HTTP_200_OK)
+            # Create new application
+            application = serializer.save()
+            return Response(self.get_serializer(application).data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
