@@ -202,3 +202,9 @@ export interface CursorPaginatedResponse<T> {
   previous: string | null; // URL or cursor for previous page
   results: T[]; // Current page results
 }
+
+export interface UsePaginatedQueryOptions<T> {
+  queryKey: string[];
+  queryFn: (page: number) => Promise<PageNumberPagination<T>>;
+  pageSize?: number;
+}

@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Button, CrudButtons, DrfPagination, Link } from '~/Components';
 import { getFormattedDate } from '~/Components/ExpandableList/utils';
 import { Table } from '~/Components/Table';
 import { getAllRecruitments } from '~/api';
 import { PAGE_SIZE } from '~/constants';
-import type { RecruitmentDto } from '~/dto';
-import { useTitle } from '~/hooks';
+import { usePaginatedQuery, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -17,10 +14,6 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 export function RecruitmentAdminPage() {
   const navigate = useNavigate();
-  const [recruitments, setRecruitments] = useState<RecruitmentDto[]>([]);
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalItems, setTotalItems] = useState<number>(0);
   const { t } = useTranslation();
 
   const title = t(KEY.recruitment_administrate);
@@ -28,19 +21,17 @@ export function RecruitmentAdminPage() {
 
   // Stuff to do on first render.
   //TODO add permissions on render
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
-  useEffect(() => {
-    getAllRecruitments()
-      .then((response) => {
-        setRecruitments(response.results);
-        setTotalItems(response.count);
-      })
-      .catch((error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
-      })
-      .finally(() => setShowSpinner(false));
-  }, []);
+  const {
+    data: recruitments,
+    totalItems,
+    currentPage,
+    setCurrentPage,
+    isLoading,
+  } = usePaginatedQuery({
+    queryKey: ['admin-recruitments'],
+    queryFn: getAllRecruitments,
+    pageSize: PAGE_SIZE,
+  });
 
   const tableColumns = [
     { content: t(KEY.common_name), sortable: true },
@@ -112,7 +103,7 @@ export function RecruitmentAdminPage() {
   );
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={isLoading}>
       {totalItems > PAGE_SIZE && (
         <DrfPagination
           currentPage={currentPage}
