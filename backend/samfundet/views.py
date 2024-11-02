@@ -133,6 +133,7 @@ from .models.recruitment import (
     Recruitment,
     InterviewRoom,
     OccupiedTimeslot,
+    RecruitmentGangStat,
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
@@ -1342,3 +1343,21 @@ class PurchaseFeedbackView(CreateAPIView):
                 form=purchase_model,
             )
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+class GangApplicationCountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, recruitment_id: int, gang_id: int) -> Response:
+        # Get total applications from RecruitmentGangStat
+        gang_stat = get_object_or_404(RecruitmentGangStat, gang_id=gang_id, recruitment_stats__recruitment_id=recruitment_id)
+
+        return Response(
+            {
+                'total_applications': gang_stat.application_count,
+                'total_applicants': gang_stat.applicant_count,
+                'average_priority': gang_stat.average_priority,
+                'total_accepted': gang_stat.total_accepted,
+                'total_rejected': gang_stat.total_rejected,
+            }
+        )
