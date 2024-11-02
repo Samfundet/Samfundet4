@@ -19,6 +19,7 @@ class CustomLimitOffsetPagination(LimitOffsetPagination):
     # URLs will look like: /api/items/?limit=10&offset=20
 
 
+# TODO:
 # # 3. Cursor Pagination (good for infinite scroll)
 # class CustomCursorPagination(CursorPagination):
 #     page_size = 10
