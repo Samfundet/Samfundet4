@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { DrfPagination, SamfundetLogoSpinner } from '~/Components';
 import { formatDate } from '~/Components/OccupiedForm/utils';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
@@ -9,26 +10,32 @@ import type { UserDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { getFullName } from '~/utils';
+import styles from './UserAdminPage.module.scss';
 import { ImpersonateButton } from './components';
-
 export function UsersAdminPage() {
   const { t } = useTranslation();
-
   const [users, setUsers] = useState<UserDto[]>();
   const [loading, setLoading] = useState(true);
+  const [totalItems, setTotalItems] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 25; // from pagination.py
+
   const title = t(KEY.common_users);
   useTitle(title);
 
   useEffect(() => {
     setLoading(true);
-    getUsers()
-      .then(setUsers)
+    getUsers(currentPage)
+      .then((response) => {
+        setUsers(response.results);
+        setTotalItems(response.count);
+      })
       .catch((err) => {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(err);
       })
       .finally(() => setLoading(false));
-  }, [t]);
+  }, [t, currentPage]);
 
   const columns = [
     { content: t(KEY.common_username), sortable: true },
@@ -73,8 +80,19 @@ export function UsersAdminPage() {
   }, [t, users]);
 
   return (
-    <AdminPageLayout title={title} loading={loading}>
-      <Table data={data} columns={columns} />
+    <AdminPageLayout title={title}>
+      <div className={styles.container}>
+        <DrfPagination
+          currentPage={currentPage}
+          totalItems={totalItems}
+          pageSize={PAGE_SIZE}
+          onPageChange={setCurrentPage}
+          buttonTheme="samf"
+          navButtonTheme="samf"
+          buttonDisplay="pill"
+        />
+        {loading ? <SamfundetLogoSpinner position="center" /> : <Table data={data} columns={columns} />}
+      </div>
     </AdminPageLayout>
   );
 }

@@ -1,0 +1,1 @@
+export { DrfPagination } from './DrfPagination';

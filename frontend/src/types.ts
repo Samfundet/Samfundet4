@@ -187,3 +187,18 @@ export const RecruitmentPriorityChoicesMapping: { [key: number]: string } = {
   2: RecruitmentPriorityChoices.WANTED,
   3: RecruitmentPriorityChoices.NOT_WANTED,
 };
+
+/* For DRF pagination, see pagination.py */
+export interface PageNumberPagination<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+}
+
+/* For DRF pagination, see pagination.py */
+export interface CursorPaginatedResponse<T> {
+  next: string | null; // URL or cursor for next page
+  previous: string | null; // URL or cursor for previous page
+  results: T[]; // Current page results
+}
