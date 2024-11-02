@@ -11,3 +11,40 @@
     transform: scale(0.5);
   }
 }
+
+.positionName {
+  display: inline-block;
+}
+
+.positionLinkWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.priorityChangeIndicator {
+  position: absolute;
+  top: -8px;
+  right: -24px;
+  font-size: 24px;
+  opacity: 0; // Start with opacity 0
+  animation: fadeInOut 2s ease; // 2s matches your timeout duration
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}

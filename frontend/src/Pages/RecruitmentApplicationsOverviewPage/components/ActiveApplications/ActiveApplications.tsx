@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, Link, Table } from '~/Components';
 import {
@@ -13,19 +13,33 @@ import type { RecruitmentApplicationDto, UserPriorityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { COLORS } from '~/types';
 import { dbT, niceDateTime } from '~/utils';
 import type { ApplicantApplicationManagementQK } from '../../RecruitmentApplicationsOverviewPage';
 import styles from './ActiveApplications.module.scss';
+type PriorityChange = {
+  id: string;
+  direction: 'up' | 'down';
+};
 
 type ActiveApplicationsProps = {
   recruitmentId?: string;
   queryKey: ApplicantApplicationManagementQK;
 };
+
 export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicationsProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-
   const queryClient = useQueryClient();
+  const [recentChanges, setRecentChanges] = useState<PriorityChange[]>([]);
+  // Clear the recent change after 2 seconds
+  useEffect(() => {
+    if (recentChanges.length > 0) {
+      const timer = setTimeout(() => {
+        setRecentChanges([]);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [recentChanges]);
 
   // Query for fetching applications
   const { data: applications = [] } = useQuery({
@@ -34,15 +48,31 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
     enabled: !!recruitmentId,
   });
 
-  // Mutation for changing priority
+  // Mutation for changing priority, also deals with displaying priority direction
   const priorityMutation = useMutation({
-    mutationFn: ({ id, direction }: { id: string; direction: 'up' | 'down' }) => {
+    mutationFn: ({ id, direction }: PriorityChange) => {
       const data: UserPriorityDto = { direction: direction === 'up' ? 1 : -1 };
       return putRecruitmentPriorityForUser(id, data);
     },
-    onSuccess: (response) => {
-      // Update the applications in the cache with the new data
+    onSuccess: (response, variables) => {
+      const oldData = queryClient.getQueryData<RecruitmentApplicationDto[]>(['applications', recruitmentId]);
       queryClient.setQueryData(['applications', recruitmentId], response.data);
+
+      if (oldData) {
+        const clickedApp = oldData.find((app) => app.id === variables.id);
+        const swappedApp = response.data.find(
+          (newApp) =>
+            clickedApp && newApp.applicant_priority === clickedApp.applicant_priority && newApp.id !== clickedApp.id,
+        );
+
+        if (clickedApp && swappedApp) {
+          const changes: PriorityChange[] = [
+            { id: clickedApp.id, direction: variables.direction },
+            { id: swappedApp.id, direction: variables.direction === 'up' ? 'down' : 'up' },
+          ];
+          setRecentChanges(changes);
+        }
+      }
     },
     onError: () => {
       toast.error(t(KEY.common_something_went_wrong));
@@ -74,15 +104,15 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
     return (
       <>
         <Icon
-          icon="bxs:up-arrow"
+          icon="material-symbols:keyboard-arrow-up-rounded"
           className={styles.arrows}
-          width={'1.5rem'}
+          width={'2rem'}
           onClick={() => handleChangePriority(id, 'up')}
         />
         <Icon
-          icon="bxs:down-arrow"
+          icon="material-symbols:keyboard-arrow-down-rounded"
           className={styles.arrows}
-          width={'1.5rem'}
+          width={'2rem'}
           onClick={() => handleChangePriority(id, 'down')}
         />
       </>
@@ -90,19 +120,37 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
   };
 
   const applicationLink = (application: RecruitmentApplicationDto) => {
+    const change = recentChanges.find((change) => change.id === application.id);
+
     return (
-      <Link
-        url={reverse({
-          pattern: ROUTES.frontend.recruitment_application,
-          urlParams: {
-            positionID: application.recruitment_position.id,
-            gangID: application.recruitment_position.gang.id,
-          },
-        })}
-        className={styles.position_name}
-      >
-        {dbT(application.recruitment_position, 'name')}
-      </Link>
+      <div className={styles.positionLinkWrapper}>
+        {change &&
+          (change.direction === 'up' ? (
+            <Icon
+              className={styles.priorityChangeIndicator}
+              icon={'material-symbols:arrow-drop-up-rounded'}
+              color={COLORS.green_light}
+            />
+          ) : (
+            <Icon
+              className={styles.priorityChangeIndicator}
+              icon={'material-symbols:arrow-drop-down-rounded'}
+              color={COLORS.red_light}
+            />
+          ))}
+        <Link
+          url={reverse({
+            pattern: ROUTES.frontend.recruitment_application,
+            urlParams: {
+              positionID: application.recruitment_position.id,
+              gangID: application.recruitment_position.gang.id,
+            },
+          })}
+          className={styles.positionName}
+        >
+          {dbT(application.recruitment_position, 'name')}
+        </Link>
+      </div>
     );
   };
 
