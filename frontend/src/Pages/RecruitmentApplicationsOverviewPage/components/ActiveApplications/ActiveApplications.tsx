@@ -173,7 +173,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
   const tableColumns = [
     // Only include priority column if there are multiple applications
     ...(applications.length > 1 ? [{ sortable: false, content: t(KEY.recruitment_change_priority) }] : []),
-    { sortable: false, content: t(KEY.recruitment_position) },
+    { sortable: false, content: t(KEY.recruitment_application_for_position) },
     // Only include priority display if there are multiple applications
     ...(applications.length > 1 ? [{ sortable: false, content: t(KEY.recruitment_your_priority) }] : []),
     { sortable: false, content: t(KEY.recruitment_interview_time) },

@@ -302,6 +302,7 @@ export const KEY = {
   recruitment_unprocessed_applicants: 'recruitment_unprocessed_applicants',
   recruitment_administrate_reservations: 'recruitment_administrate_reservations',
   recruitment_my_applications: 'recruitment_my_applications',
+  recruitment_application_for_position: 'recruitment_application_for_position',
   recruitment_all_applications: 'recruitment_all_applications',
   recruitment_not_applied: 'recruitment_not_applied',
   recruitment_will_be_anonymized: 'recruitment_will_be_anonymized',
