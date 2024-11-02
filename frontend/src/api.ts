@@ -49,6 +49,7 @@ import type {
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { BACKEND_DOMAIN } from './constants';
+import type { PaginatedResponse } from './types';
 
 export async function getCsrfToken(): Promise<string> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__csrf;
@@ -105,9 +106,9 @@ export async function impersonateUser(userId: number): Promise<boolean> {
   return response.status === 200;
 }
 
-export async function getUsers(): Promise<UserDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users;
-  const response = await axios.get<UserDto[]>(url, { withCredentials: true });
+export async function getUsers(page = 1): Promise<PaginatedResponse<UserDto>> {
+  const url = `${BACKEND_DOMAIN + ROUTES.backend.samfundet__users}?page=${page}`;
+  const response = await axios.get<PaginatedResponse<UserDto>>(url, { withCredentials: true });
   return response.data;
 }
 

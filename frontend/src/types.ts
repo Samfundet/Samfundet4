@@ -187,3 +187,10 @@ export const RecruitmentPriorityChoicesMapping: { [key: number]: string } = {
   2: RecruitmentPriorityChoices.WANTED,
   3: RecruitmentPriorityChoices.NOT_WANTED,
 };
+
+export interface PaginatedResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+}
