@@ -113,7 +113,7 @@ export function RecruitmentAdminPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
-      {totalItems > 25 && (
+      {totalItems > PAGE_SIZE && (
         <DrfPagination
           currentPage={currentPage}
           totalItems={totalItems}
