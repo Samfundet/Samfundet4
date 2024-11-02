@@ -88,7 +88,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
   );
   return (
     <AdminPageLayout title={title} backendUrl={ROUTES.backend.samfundet__user} header={header} loading={showSpinner}>
-      <RecruitmentWithoutInterviewTable applicants={users} />
+      <RecruitmentWithoutInterviewTable applicants={users} showProcessedColumn={false} />
     </AdminPageLayout>
   );
 }

@@ -12,20 +12,27 @@ import { WithoutInterviewModal } from './components';
 
 type RecruitmentWithoutInterviewTableProps = {
   applicants: RecruitmentUserDto[];
+  showProcessedColumn?: boolean;
 };
 
-export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWithoutInterviewTableProps) {
+export function RecruitmentWithoutInterviewTable({
+  applicants,
+  showProcessedColumn = true,
+}: RecruitmentWithoutInterviewTableProps) {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const tableColumns = [
+  const baseColumns = [
     { content: t(KEY.common_name), sortable: true },
     { content: t(KEY.common_email), sortable: true },
     { content: t(KEY.common_phonenumber), sortable: true },
     { content: t(KEY.recruitment_applicant_top_position), sortable: true },
     { content: t(KEY.recruitment_number_of_applications), sortable: true },
-    { content: t(KEY.common_processed), sortable: true },
   ];
+
+  const tableColumns = showProcessedColumn
+    ? [...baseColumns, { content: t(KEY.common_processed), sortable: true }]
+    : baseColumns;
 
   function filterUsers(): RecruitmentUserDto[] {
     if (searchQuery === '') return applicants;
@@ -51,7 +58,7 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
   }
 
   function userToTableRow(user: RecruitmentUserDto) {
-    return [
+    const baseRow = [
       {
         value: `${user.first_name} ${user.last_name}`,
         content: <Link url={ROUTES.frontend.recruitment_application}>{`${user.first_name} ${user.last_name}`}</Link>,
@@ -60,16 +67,24 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
       user.phone_number,
       dbT(user.top_application.recruitment_position, 'name'),
       user.applications ? user.applications.length : 0,
-      {
-        value: user.applications_without_interview ? user.applications_without_interview.length : 0,
-        content: (
-          <WithoutInterviewModal
-            applications_without_interview={user.applications_without_interview}
-            applications={user.applications}
-          />
-        ),
-      },
     ];
+
+    if (showProcessedColumn) {
+      return [
+        ...baseRow,
+        {
+          value: user.applications_without_interview ? user.applications_without_interview.length : 0,
+          content: (
+            <WithoutInterviewModal
+              applications_without_interview={user.applications_without_interview}
+              applications={user.applications}
+            />
+          ),
+        },
+      ];
+    }
+
+    return baseRow;
   }
 
   return (
