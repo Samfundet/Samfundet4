@@ -188,7 +188,7 @@ export const RecruitmentPriorityChoicesMapping: { [key: number]: string } = {
   3: RecruitmentPriorityChoices.NOT_WANTED,
 };
 
-export interface PaginatedResponse<T> {
+export interface PageNumberPagination<T> {
   count: number;
   next: string | null;
   previous: string | null;
