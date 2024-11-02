@@ -836,6 +836,134 @@ class TestRecruitmentApplicationStatus:
         assert fixture_recruitment.recruitment_progress() == 1
 
 
+@pytest.mark.django_db
+def test_withdrawn_application_priority_handling(
+    fixture_recruitment_application: RecruitmentApplication,
+    fixture_recruitment_application2: RecruitmentApplication,
+    fixture_recruitment_position2: RecruitmentPosition,
+):
+    """Test that priorities are properly managed when applications are withdrawn"""
+    # Initial state - two applications with priorities 1 and 2
+    assert fixture_recruitment_application.applicant_priority == 1
+    assert fixture_recruitment_application2.applicant_priority == 2
+
+    # When withdrawing application 1, application 2 should become priority 1
+    fixture_recruitment_application.withdrawn = True
+    fixture_recruitment_application.save()
+
+    fixture_recruitment_application.refresh_from_db()
+    fixture_recruitment_application2.refresh_from_db()
+
+    assert fixture_recruitment_application.applicant_priority is None
+    assert fixture_recruitment_application2.applicant_priority == 1
+
+    # New application should get priority 2
+    new_application = RecruitmentApplication.objects.create(
+        application_text='Test application text 3',
+        recruitment_position=fixture_recruitment_position2,
+        recruitment=fixture_recruitment_position2.recruitment,
+        user=fixture_recruitment_application.user,
+    )
+
+    assert new_application.applicant_priority == 2
+
+
+@pytest.mark.django_db
+def test_reapplying_after_withdrawal_priority(
+    fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
+):
+    """Test that reapplying after withdrawal gets correct priority"""
+    # Initial state
+    assert fixture_recruitment_application.applicant_priority == 1
+    assert fixture_recruitment_application2.applicant_priority == 2
+
+    # Withdraw first application
+    fixture_recruitment_application.withdrawn = True
+    fixture_recruitment_application.save()
+
+    fixture_recruitment_application2.refresh_from_db()
+    assert fixture_recruitment_application2.applicant_priority == 1
+
+    # Reapply - should get priority 2
+    fixture_recruitment_application.withdrawn = False
+    fixture_recruitment_application.save()
+
+    fixture_recruitment_application.refresh_from_db()
+    fixture_recruitment_application2.refresh_from_db()
+
+    assert fixture_recruitment_application2.applicant_priority == 1
+    assert fixture_recruitment_application.applicant_priority == 2
+
+
+@pytest.mark.django_db
+def test_priority_constraints_with_withdrawn_applications(
+    fixture_recruitment_application: RecruitmentApplication,
+    fixture_recruitment_application2: RecruitmentApplication,
+    fixture_recruitment_position2: RecruitmentPosition,
+):
+    """Test that priorities stay within bounds of active applications only"""
+    # Initial state
+    assert fixture_recruitment_application.applicant_priority == 1
+    assert fixture_recruitment_application2.applicant_priority == 2
+
+    # Withdraw application 2
+    fixture_recruitment_application2.withdrawn = True
+    fixture_recruitment_application2.save()
+
+    fixture_recruitment_application.refresh_from_db()
+    assert fixture_recruitment_application.applicant_priority == 1
+
+    # Try to set priority higher than number of active applications
+    with pytest.raises(ValidationError):
+        fixture_recruitment_application.applicant_priority = 2
+        fixture_recruitment_application.save()
+
+
+@pytest.mark.django_db
+def test_multiple_withdrawals_and_priorities(
+    fixture_recruitment: Recruitment, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment_position2: RecruitmentPosition, fixture_user: User
+):
+    """Test complex scenario with multiple withdrawals and reapplications"""
+    # Create three applications
+    apps = []
+    for i in range(3):
+        app = RecruitmentApplication.objects.create(
+            application_text=f'Test application {i}',
+            recruitment_position=fixture_recruitment_position if i < 2 else fixture_recruitment_position2,
+            recruitment=fixture_recruitment,
+            user=fixture_user,
+        )
+        apps.append(app)
+
+    # Verify initial priorities
+    for i, app in enumerate(apps, 1):
+        assert app.applicant_priority == i
+
+    # Withdraw middle application
+    apps[1].withdrawn = True
+    apps[1].save()
+
+    # Refresh and verify priorities adjusted
+    for app in apps:
+        app.refresh_from_db()
+
+    assert apps[0].applicant_priority == 1
+    assert apps[1].applicant_priority is None
+    assert apps[2].applicant_priority == 2
+
+    # Withdraw first application
+    apps[0].withdrawn = True
+    apps[0].save()
+
+    # Refresh and verify
+    for app in apps:
+        app.refresh_from_db()
+
+    assert apps[0].applicant_priority is None
+    assert apps[1].applicant_priority is None
+    assert apps[2].applicant_priority == 1
+
+
 def test_position_must_have_single_owner(fixture_recruitment_position: RecruitmentPosition, fixture_gang: Gang, fixture_gang_section: GangSection):
     fixture_recruitment_position.gang = fixture_gang
     fixture_recruitment_position.section = fixture_gang_section

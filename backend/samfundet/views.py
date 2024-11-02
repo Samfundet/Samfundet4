@@ -838,19 +838,8 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
     serializer_class = RecruitmentApplicationForApplicantSerializer
     queryset = RecruitmentApplication.objects.all()
 
-    def _rebase_priorities(self, recruitment: Recruitment, user: User) -> list[RecruitmentApplication]:
-        """Helper method to rebase priorities for a user's active applications"""
-        active_applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=user, withdrawn=False).order_by('applicant_priority')
-
-        # Rebase priorities to ensure they're sequential starting from 1
-        for index, application in enumerate(active_applications, start=1):
-            if application.applicant_priority != index:
-                application.applicant_priority = index
-                application.save()
-
-        return active_applications
-
     def update(self, request: Request, pk: int) -> Response:
+        """Handle application creation and updates"""
         data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
         recruitment_position = get_object_or_404(RecruitmentPosition, pk=pk)
         data['recruitment_position'] = recruitment_position.pk
@@ -862,38 +851,28 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
             existing_application = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
 
             if existing_application:
+                # Update existing application
+                existing_application.application_text = serializer.validated_data['application_text']
                 if existing_application.withdrawn:
-                    # This is a re-application after withdrawal
-                    highest_priority = RecruitmentApplication.objects.filter(
-                        recruitment=recruitment_position.recruitment, user=request.user, withdrawn=False
-                    ).count()
-
                     existing_application.withdrawn = False
-                    existing_application.application_text = serializer.validated_data['application_text']
-                    existing_application.applicant_priority = highest_priority + 1
-                    existing_application.save()
-                else:
-                    # Normal update of existing application
-                    existing_application.application_text = serializer.validated_data['application_text']
-                    existing_application.save()
+                existing_application.save()
+                status_code = status.HTTP_200_OK
+            else:
+                # Create new application
+                serializer.save()
+                status_code = status.HTTP_201_CREATED
 
-                # Rebase priorities and return all active applications
-                active_applications = self._rebase_priorities(recruitment_position.recruitment, request.user)
-                return Response(self.get_serializer(active_applications, many=True).data, status=status.HTTP_200_OK)
+            # Return all active applications
+            active_applications = RecruitmentApplication.objects.filter(
+                recruitment=recruitment_position.recruitment, user=request.user, withdrawn=False
+            ).order_by('applicant_priority')
 
-            # New application - assign next priority number
-            new_priority = RecruitmentApplication.objects.filter(recruitment=recruitment_position.recruitment, user=request.user, withdrawn=False).count() + 1
-
-            application = serializer.save(applicant_priority=new_priority)
-
-            # Rebase priorities and return all active applications
-            active_applications = self._rebase_priorities(recruitment_position.recruitment, request.user)
-            return Response(self.get_serializer(active_applications, many=True).data, status=status.HTTP_201_CREATED)
+            return Response(self.get_serializer(active_applications, many=True).data, status=status_code)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request: Request) -> Response:
-        """Returns a list of all the applications for a user for a specified recruitment"""
+        """List all applications for a user in a recruitment"""
         recruitment_id = request.query_params.get('recruitment')
         user_id = request.query_params.get('user_id')
 
@@ -902,25 +881,19 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
 
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
 
-        if user_id:
-            # TODO: Add permissions
-            applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user_id=user_id, withdrawn=False).order_by('applicant_priority')
-        else:
-            applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user, withdrawn=False).order_by('applicant_priority')
-
-        # Rebase priorities before returning
-        applications = self._rebase_priorities(recruitment, request.user if not user_id else user_id)
+        # Filter active applications
+        applications = RecruitmentApplication.objects.filter(
+            recruitment=recruitment, user_id=user_id if user_id else request.user.id, withdrawn=False
+        ).order_by('applicant_priority')
 
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request: Request, pk: int) -> Response:
-        application = get_object_or_404(RecruitmentApplication, user=request.user, recruitment_position=pk, withdrawn=False)
-
+        """Get a specific application"""
         user_id = request.query_params.get('user_id')
-        if user_id:
-            # TODO: Add permissions
-            application = RecruitmentApplication.objects.filter(recruitment_position=pk, user_id=user_id, withdrawn=False).first()
+
+        application = get_object_or_404(RecruitmentApplication, recruitment_position=pk, user_id=user_id if user_id else request.user.id, withdrawn=False)
 
         serializer = self.get_serializer(application)
         return Response(serializer.data)
