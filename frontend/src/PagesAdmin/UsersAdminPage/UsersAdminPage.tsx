@@ -6,6 +6,7 @@ import { formatDate } from '~/Components/OccupiedForm/utils';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getUsers } from '~/api';
+import { PAGE_SIZE } from '~/constants';
 import type { UserDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -18,7 +19,6 @@ export function UsersAdminPage() {
   const [loading, setLoading] = useState(true);
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const PAGE_SIZE = 25; // from pagination.py
 
   const title = t(KEY.common_users);
   useTitle(title);
