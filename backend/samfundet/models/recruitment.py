@@ -272,27 +272,31 @@ class Interview(CustomBaseModel):
 
 
 class RecruitmentApplication(CustomBaseModel):
-    """Represents an application to a recruitment position by a user."""
-
-    # TODO: DEAL WITH THIS IMPORTANT BLUNDER where the applicant is added to AUTOMATIC_REJECTION if they withdraw
     """
-    Priority Reset:
+    Represents an application submitted by a user for a specific recruitment position.
 
-    When an applicant withdraws an application, the save method clears their priority by setting applicant_priority to None.
-    It also sets recruiter_priority to NOT_WANTED and recruiter_status to AUTOMATIC_REJECTION.
-    The _reorder_remaining_priorities method then reorders the priorities of the remaining active applications.
+    This model handles all aspects of a recruitment application including:
+    - Application content and priority management
+    - Interview assignments
+    - Status tracking for both recruiters and applicants
+    - Priority reordering when applications are withdrawn
+
+    The model ensures that application priorities remain sequential and handles shared
+    interviews between certain recruitment positions (e.g., UKA and KSG positions).
     """
 
-    # Unique Identifier, so that total recruitment application count cant be infered from id
+    # Unique Identifier to prevent inferring total application count from sequential IDs
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
-    # Application details
+    # Core application fields
     application_text = models.TextField(help_text='Motivation text submitted by the applicant')
     applicant_priority = models.PositiveIntegerField(
         null=True, blank=True, help_text='Applicant priority of the position(recruitment_position) to which this application related.'
     )
+    withdrawn = models.BooleanField(default=False, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
-    # Relationships
+    # Foreign key relationships
     recruitment = models.ForeignKey(
         Recruitment, on_delete=models.CASCADE, related_name='applications', help_text='Recruitment to which this application is related.'
     )
@@ -302,14 +306,17 @@ class RecruitmentApplication(CustomBaseModel):
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='applications', help_text='User who submitted this application.')
-    # Foreign key because UKA and KSG have shared interviews (multiple applications share the same interview)
+    # Multiple applications can share the same interview (e.g., for UKA and KSG positions)
     interview = models.ForeignKey(
         Interview, on_delete=models.SET_NULL, null=True, blank=True, related_name='applications', help_text='Interview associated with this application.'
     )
 
-    # Recruitment statuses and flags. IMPORTANT that recruiter_priority is not communicated to applicant
+    # Recruitment statuses and flags.
+    # IMPORTANT that recruiter_priority is not communicated to applicant
     recruiter_priority = models.IntegerField(
-        choices=RecruitmentPriorityChoices.choices, default=RecruitmentPriorityChoices.NOT_SET, help_text="Recruiter's priority for this application."
+        choices=RecruitmentPriorityChoices.choices,
+        default=RecruitmentPriorityChoices.NOT_SET,
+        help_text="Recruiter's priority for this application - should not be visible to applicant",
     )
     recruiter_status = models.IntegerField(
         choices=RecruitmentStatusChoices.choices, default=RecruitmentStatusChoices.NOT_SET, help_text='Current status of this application.'
@@ -317,27 +324,54 @@ class RecruitmentApplication(CustomBaseModel):
     applicant_state = models.IntegerField(
         choices=RecruitmentApplicantStates.choices, default=RecruitmentApplicantStates.NOT_SET, help_text="Recruiter's view of the applicant's status."
     )
-    withdrawn = models.BooleanField(default=False, blank=True, null=True)
 
-    # Timestamp
-    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-
-    # Constants
+    # Error message constants
     REAPPLY_TOO_MANY_APPLICATIONS_ERROR = 'Cannot reapply; too many active applications.'
     TOO_MANY_APPLICATIONS_ERROR = 'Exceeds max allowed applications for recruitment.'
 
     def __init__(self, *args: tuple, **kwargs: dict):
+        """
+        Initializes the RecruitmentApplication instance and tracks the original withdrawn state
+        for detecting status changes during save operations.
+        """
         super().__init__(*args, **kwargs)
+        # Track original withdrawn state to detect changes
         self._original_withdrawn = self.withdrawn if self.pk else False
 
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        """
+        Returns the organization associated with this application's recruitment.
+
+        Args:
+            return_id: If True, returns the organization ID instead of the object
+
+        Returns:
+            Organization or int: The organization object or its ID
+        """
         return self.recruitment.resolve_org(return_id=return_id)
 
     def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        """
+        Returns the gang associated with this application's recruitment position.
+
+        Args:
+            return_id: If True, returns the gang ID instead of the object
+
+        Returns:
+            Gang or int: The gang object or its ID
+        """
         return self.recruitment_position.resolve_gang(return_id=return_id)
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
-        """Handles status updates, priorities, and interview assignment."""
+        """
+        Handles the complete save process for an application, including:
+        - Ensuring recruitment assignment
+        - Processing withdrawal status changes
+        - Managing shared interviews
+        - Reordering priorities after withdrawals
+
+        All operations are performed within a transaction to maintain data integrity.
+        """
         with transaction.atomic():
             self._ensure_recruitment_assignment()
             self._handle_withdrawal()
@@ -347,26 +381,48 @@ class RecruitmentApplication(CustomBaseModel):
                 self._reorder_remaining_priorities()
 
     def _ensure_recruitment_assignment(self) -> None:
+        """Ensures the application is linked to the correct recruitment if not already set."""
         if not self.recruitment:
             self.recruitment = self.recruitment_position.recruitment
 
     def _handle_withdrawal(self) -> None:
+        """
+        Manages the application state during withdrawal or new application:
+        - Clears priorities for withdrawn applications
+        - Assigns new priority for new applications
+        """
         if self.withdrawn:
             self._clear_priorities()
         elif not self.applicant_priority:
             self.applicant_priority = self._calculate_new_priority()
 
     def _clear_priorities(self) -> None:
+        """
+        Clears all priority-related fields when an application is withdrawn and
+        sets appropriate rejection statuses.
+        IMPORTANT: Rejection email logic ensures that applications
+         with withdrawn = true does not enter the automatic rejection email pool
+        """
         self.applicant_priority = None
         self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
         self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
 
     def _calculate_new_priority(self) -> int:
-        """Calculates the priority for a new active application."""
+        """
+        Calculates the appropriate priority for a new active application based on
+        existing active applications.
+
+        Returns:
+            int: The new priority number
+        """
         active_app_count = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
         return active_app_count + 1
 
     def _assign_interview_if_shared(self) -> None:
+        """
+        Attempts to assign a shared interview if the position is part of a shared
+        interview group and the applicant already has an interview scheduled.
+        """
         if not self.interview and self.recruitment_position.shared_interview_group:
             shared_interview = (
                 RecruitmentApplication.objects.filter(user=self.user, recruitment_position__in=self.recruitment_position.shared_interview_group.positions.all())
@@ -377,10 +433,19 @@ class RecruitmentApplication(CustomBaseModel):
                 self.interview = shared_interview.interview
 
     def _is_withdrawal(self) -> bool:
+        """
+        Determines if this save operation represents a new withdrawal.
+
+        Returns:
+            bool: True if this is a new withdrawal, False otherwise
+        """
         return self.pk and self.withdrawn and not self._original_withdrawn
 
     def _reorder_remaining_priorities(self) -> None:
-        """Reorders priorities among active applications after a withdrawal."""
+        """
+        Reorders priorities for remaining active applications after a withdrawal
+        to maintain sequential ordering without gaps.
+        """
         active_applications = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).order_by(
             'applicant_priority'
         )
@@ -391,7 +456,13 @@ class RecruitmentApplication(CustomBaseModel):
                 application.save(update_fields=['applicant_priority'])
 
     def update_priority(self, direction: int) -> None:
-        """Updates the priority of the application based on the direction."""
+        """
+        Updates the priority of the application by moving it up or down in the priority list.
+
+        Args:
+            direction: Positive number moves priority up, negative moves it down.
+                     The absolute value determines how many positions to move.
+        """
         with transaction.atomic():
             applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user, withdrawn=False).order_by(
                 f"{'' if direction < 0 else '-'}applicant_priority"
@@ -399,6 +470,13 @@ class RecruitmentApplication(CustomBaseModel):
             self._reorder_priorities_by_direction(applications_for_user, abs(direction))
 
     def _reorder_priorities_by_direction(self, applications: list[RecruitmentApplication], steps: int) -> None:
+        """
+        Helper method that handles the actual priority reordering logic.
+
+        Args:
+            applications: List of applications to reorder
+            steps: Number of positions to move the application
+        """
         for i, app in enumerate(applications):
             if app.id == self.id:
                 swap_index = max(0, min(len(applications) - 1, i + steps))
@@ -406,6 +484,14 @@ class RecruitmentApplication(CustomBaseModel):
                 break
 
     def _swap_priorities(self, applications: list[RecruitmentApplication], i: int, swap_index: int) -> None:
+        """
+        Performs the priority swap operation between two applications.
+
+        Args:
+            applications: List of applications being reordered
+            i: Index of the current application
+            swap_index: Index of the application to swap with
+        """
         new_priority = applications[swap_index].applicant_priority
         for j in range(swap_index, i, -1):
             applications[j].applicant_priority = applications[j - 1].applicant_priority
@@ -414,7 +500,14 @@ class RecruitmentApplication(CustomBaseModel):
         applications[i].save(update_fields=['applicant_priority'])  # type: ignore
 
     def update_applicant_state(self) -> None:
-        """Updates the applicant state based on recruiter priorities."""
+        """
+        Updates the applicant's state based on recruiter priorities and the relative
+        priority of their applications. This affects how the application appears to
+        recruiters in the system.
+
+        The state is calculated using a matrix-like approach where the row is determined
+        by the relative priority position and the column by the recruiter's priority.
+        """
         # Fetch all applications for this user and recruitment session
         applications = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment).order_by('applicant_priority')
 
@@ -424,14 +517,14 @@ class RecruitmentApplication(CustomBaseModel):
 
         with transaction.atomic():
             for application in applications:
-                # Determine priority modifier
+                # Calculate priority modifier based on position relative to top applications
                 has_priority = 0
                 if top_reserved and application.applicant_priority > top_reserved.applicant_priority:
                     has_priority = 1
                 if top_wanted and application.applicant_priority > top_wanted.applicant_priority:
                     has_priority = 2
 
-                # Calculate applicant state based on recruiter priority and priority modifier
+                # Calculate state using matrix indexing formula
                 application.applicant_state = application.recruiter_priority + 3 * has_priority
 
                 # Override for applications marked as NOT_WANTED
@@ -441,7 +534,14 @@ class RecruitmentApplication(CustomBaseModel):
                 application.save(update_fields=['applicant_state'])
 
     def clean(self, *args: tuple, **kwargs: dict) -> None:
-        """Validates application constraints before saving."""
+        """
+        Validates the application before saving, checking:
+        - Priority constraints for active applications
+        - Maximum application limits
+
+        Raises:
+            ValidationError: If any validation constraints are violated
+        """
         super().clean()
         errors: dict[str, list[str]] = defaultdict(list)
 
@@ -454,11 +554,23 @@ class RecruitmentApplication(CustomBaseModel):
             raise ValidationError(errors)
 
     def _validate_priority(self, errors: dict[str, list[str]]) -> None:
+        """
+        Validates that the application's priority is within allowed bounds.
+
+        Args:
+            errors: Dictionary to collect validation errors
+        """
         active_count = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).exclude(pk=self.pk).count()
         if self.applicant_priority > active_count + 1:
             errors['applicant_priority'].append(f'Priority cannot exceed active applications ({active_count + 1}).')
 
     def _validate_application_limits(self, errors: dict[str, list[str]]) -> None:
+        """
+        Validates that the application doesn't exceed maximum application limits.
+
+        Args:
+            errors: Dictionary to collect validation errors
+        """
         user_applications_count = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
         current_application = RecruitmentApplication.objects.filter(pk=self.pk).first()
 
@@ -471,11 +583,23 @@ class RecruitmentApplication(CustomBaseModel):
                 errors['recruitment'].append(self.REAPPLY_TOO_MANY_APPLICATIONS_ERROR)
 
     def get_total_interviews(self) -> int:
-        """Returns the count of interviews for active applications."""
+        """
+        Returns the total number of interviews scheduled for the user's active
+        applications in this recruitment.
+
+        Returns:
+            int: Number of scheduled interviews
+        """
         return RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).exclude(interview=None).count()
 
     def get_total_applications(self) -> int:
-        """Returns the count of active applications for a recruitment session."""
+        """
+        Returns the total number of active applications for the user in this
+        recruitment.
+
+        Returns:
+            int: Number of active applications
+        """
         return RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
 
 
