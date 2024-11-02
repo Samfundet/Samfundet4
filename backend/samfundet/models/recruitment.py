@@ -505,32 +505,49 @@ class RecruitmentApplication(CustomBaseModel):
         priority of their applications. This affects how the application appears to
         recruiters in the system.
 
-        The state is calculated using a matrix-like approach where the row is determined
-        by the relative priority position and the column by the recruiter's priority.
+        The state is calculated using a matrix-like approach where:
+        - The row (0-2) is determined by the application's priority relative to top wanted/reserved apps
+        - The column (0-2) is determined by the recruiter's priority (NOT_SET, RESERVE, WANTED)
+        - The final state is calculated as: column + (3 * row)
         """
-        # Fetch all applications for this user and recruitment session
+        # Fetch all applications for this user and recruitment session, ordered by their priority (1 is highest)
         applications = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment).order_by('applicant_priority')
 
-        # Identify the top applications for WANTED and RESERVE
+        # Find the highest priority (lowest number) applications marked as WANTED and RESERVE
+        # These serve as thresholds for determining if other applications should be deprioritized
         top_wanted = applications.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED).order_by('applicant_priority').first()
         top_reserved = applications.filter(recruiter_priority=RecruitmentPriorityChoices.RESERVE).order_by('applicant_priority').first()
 
         with transaction.atomic():
             for application in applications:
-                # Calculate priority modifier based on position relative to top applications
+                # has_priority acts as the row number (0-2) in our state matrix:
+                # 0 = application is above or at the same level as all top applications
+                # 1 = application is below a RESERVE application
+                # 2 = application is below a WANTED application
                 has_priority = 0
+
+                # If there's a top reserved application and this application has lower priority
+                # (higher number) than it, mark it as below RESERVE (row 1)
                 if top_reserved and application.applicant_priority > top_reserved.applicant_priority:
                     has_priority = 1
+
+                # If there's a top wanted application and this application has lower priority
+                # (higher number) than it, mark it as below WANTED (row 2)
                 if top_wanted and application.applicant_priority > top_wanted.applicant_priority:
                     has_priority = 2
 
-                # Calculate state using matrix indexing formula
+                # Calculate the final state using matrix indexing:
+                # - recruiter_priority (0,1,2) determines the column
+                # - has_priority (0,1,2) determines the row
+                # - multiply row by 3 (matrix width) and add column to get final state
                 application.applicant_state = application.recruiter_priority + 3 * has_priority
 
-                # Override for applications marked as NOT_WANTED
+                # Special case: If recruiter marked as NOT_WANTED, override the calculated
+                # state to always show as NOT_WANTED regardless of priority
                 if application.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED:
                     application.applicant_state = RecruitmentApplicantStates.NOT_WANTED
 
+                # Save only the state field for efficiency
                 application.save(update_fields=['applicant_state'])
 
     def clean(self, *args: tuple, **kwargs: dict) -> None:
