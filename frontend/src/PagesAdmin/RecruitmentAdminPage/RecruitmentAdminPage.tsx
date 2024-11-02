@@ -124,7 +124,6 @@ export function RecruitmentAdminPage() {
           buttonDisplay="pill"
         />
       )}
-
       <Table columns={tableColumns} data={data} />
     </AdminPageLayout>
   );
