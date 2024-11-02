@@ -27,8 +27,8 @@ export function RecruitmentAdminPage() {
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getAllRecruitments()
-      .then((data) => {
-        setRecruitments(data.data);
+      .then((response) => {
+        setRecruitments(response.results);
       })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
