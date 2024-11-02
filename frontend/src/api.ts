@@ -142,6 +142,7 @@ export async function putUserPreference(id: string | number, data: Partial<UserP
   return response.data;
 }
 
+//TODO
 export async function getVenues(): Promise<VenueDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__venues_list;
   const response = await axios.get<VenueDto[]>(url, { withCredentials: true });
@@ -162,6 +163,7 @@ export async function putVenue(slug: string | number, venue: Partial<VenueDto>):
   return response.data;
 }
 
+//TODO <PageNumberPagination<InformationPageDto>>
 export async function getPermissions(): Promise<PermissionDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__permissions_list;
   const response = await axios.get<PermissionDto[]>(url, { withCredentials: true });
@@ -169,9 +171,9 @@ export async function getPermissions(): Promise<PermissionDto[]> {
   return response.data;
 }
 
-export async function getInformationPages(): Promise<InformationPageDto[]> {
+export async function getInformationPages(): Promise<PageNumberPagination<InformationPageDto>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__information_list;
-  const response = await axios.get<InformationPageDto[]>(url, { withCredentials: true });
+  const response = await axios.get<PageNumberPagination<InformationPageDto>>(url, { withCredentials: true });
 
   return response.data;
 }
@@ -384,10 +386,10 @@ export async function getOrganization(id: number | undefined): Promise<Organizat
 
   return response.data;
 }
-
-export async function getGangList(): Promise<GangTypeDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__gangsorganized_list;
-  const response = await axios.get<GangTypeDto[]>(url, { withCredentials: true });
+// TODO <PageNumberPagination<GangTypeDto>>
+export async function getGangList(page = 1): Promise<PageNumberPagination<GangTypeDto>> {
+  const url = `${BACKEND_DOMAIN + ROUTES.backend.samfundet__gangsorganized_list}?page=${page}`;
+  const response = await axios.get<PageNumberPagination<GangTypeDto>>(url, { withCredentials: true });
 
   return response.data;
 }

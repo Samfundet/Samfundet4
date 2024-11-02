@@ -1,10 +1,11 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { Button, Link } from '~/Components';
+import { Button, DrfPagination, Link } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { deleteInformationPage, getInformationPages } from '~/api';
-import { useCustomNavigate, useTitle } from '~/hooks';
+import { PAGE_SIZE } from '~/constants';
+import { useCustomNavigate, usePaginatedQuery, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -17,9 +18,21 @@ export function InformationAdminPage() {
   useTitle(t(KEY.admin_information_manage_title));
 
   // TODO: add permissions on render
-  const { data, isLoading } = useQuery({
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ['informationpages'],
+  //   queryFn: getInformationPages,
+  // });
+
+  const {
+    data: informationPages,
+    totalItems,
+    currentPage,
+    setCurrentPage,
+    isLoading,
+  } = usePaginatedQuery({
     queryKey: ['informationpages'],
     queryFn: getInformationPages,
+    pageSize: PAGE_SIZE,
   });
 
   const deletePageMutation = useMutation({
@@ -37,7 +50,7 @@ export function InformationAdminPage() {
     '', // Buttons
   ];
 
-  const tableData = data?.map((element) => {
+  const tableData = informationPages?.map((element) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.information_page_detail,
       urlParams: { slugField: element.slug_field },
@@ -85,6 +98,17 @@ export function InformationAdminPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={isLoading}>
+      {totalItems > PAGE_SIZE && (
+        <DrfPagination
+          currentPage={currentPage}
+          totalItems={totalItems}
+          pageSize={PAGE_SIZE}
+          onPageChange={setCurrentPage}
+          buttonTheme="samf"
+          navButtonTheme="samf"
+          buttonDisplay="pill"
+        />
+      )}
       <Table columns={tableColumns} data={tableData || []} />
     </AdminPageLayout>
   );
