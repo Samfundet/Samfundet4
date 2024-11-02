@@ -1,11 +1,20 @@
+import { useQuery } from '@tanstack/react-query';
 import { type MutableRefObject, type RefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getTextItem, putUserPreference } from '~/api';
-import type { Key, SetState } from '~/types';
+import type { Key, PageNumberPagination, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
 import type { LinkTarget } from './Components/Link/Link';
-import { BACKEND_DOMAIN, THEME, THEME_KEY, type ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
+import {
+  BACKEND_DOMAIN,
+  PAGE_SIZE,
+  THEME,
+  THEME_KEY,
+  type ThemeValue,
+  desktopBpLower,
+  mobileBpUpper,
+} from './constants';
 import type { TextItemValue } from './constants/TextItems';
 import { useAuthContext } from './context/AuthContext';
 import { useGlobalContext } from './context/GlobalContextProvider';
@@ -502,4 +511,29 @@ export function useParentElementWidth(childRef: RefObject<HTMLElement>) {
   }, [childRef]);
 
   return parentWidth;
+}
+
+interface UsePaginatedQueryOptions<T> {
+  queryKey: string[];
+  queryFn: (page: number) => Promise<PageNumberPagination<T>>;
+  pageSize?: number;
+}
+
+export function usePaginatedQuery<T>({ queryKey, queryFn, pageSize = PAGE_SIZE }: UsePaginatedQueryOptions<T>) {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: [...queryKey, currentPage],
+    queryFn: () => queryFn(currentPage),
+  });
+
+  return {
+    data: data?.results ?? [],
+    totalItems: data?.count ?? 0,
+    currentPage,
+    setCurrentPage,
+    isLoading,
+    error,
+    pageSize,
+  };
 }
