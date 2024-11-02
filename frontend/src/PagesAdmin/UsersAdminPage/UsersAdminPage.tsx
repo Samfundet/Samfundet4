@@ -11,7 +11,6 @@ import type { UserDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { getFullName } from '~/utils';
-import styles from './UserAdminPage.module.scss';
 import { ImpersonateButton } from './components';
 export function UsersAdminPage() {
   const { t } = useTranslation();
@@ -81,7 +80,7 @@ export function UsersAdminPage() {
 
   return (
     <AdminPageLayout title={title}>
-      <div className={styles.container}>
+      {totalItems > PAGE_SIZE && (
         <DrfPagination
           currentPage={currentPage}
           totalItems={totalItems}
@@ -91,8 +90,9 @@ export function UsersAdminPage() {
           navButtonTheme="samf"
           buttonDisplay="pill"
         />
-        {loading ? <SamfundetLogoSpinner position="center" /> : <Table data={data} columns={columns} />}
-      </div>
+      )}
+
+      {loading ? <SamfundetLogoSpinner position="center" /> : <Table data={data} columns={columns} />}
     </AdminPageLayout>
   );
 }
