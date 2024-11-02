@@ -262,6 +262,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_all_applications]: 'Alle søknader',
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
   [KEY.recruitment_will_be_anonymized]: 'All info relatert til dine søknader vil bli slettet 3 uker etter opptaket',
+  [KEY.recruitment_interview]: 'intervju',
   [KEY.recruitment_interviews]: 'Intervjuer',
   [KEY.recruitment_interviewer]: 'Intervjuer',
   [KEY.recruitment_interviewers]: 'Intervjuere',
@@ -748,6 +749,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_not_applied]: 'You have not applied to any positions yet',
   [KEY.recruitment_will_be_anonymized]:
     'All info related to the applications will be anonymized three weeks after the recruitment is over',
+  [KEY.recruitment_interview]: 'interview',
   [KEY.recruitment_interviews]: 'Interviews',
   [KEY.recruitment_interviewer]: 'Interviewer',
   [KEY.recruitment_interviewers]: 'Interviewers',

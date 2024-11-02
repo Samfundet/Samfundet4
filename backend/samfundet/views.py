@@ -1348,7 +1348,7 @@ class PurchaseFeedbackView(CreateAPIView):
 class GangApplicationCountView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, recruitment_id: int, gang_id: int) -> Response:
+    def get(self, request: Request, recruitment_id: int, gang_id: int) -> Response:
         # Get total applications from RecruitmentGangStat
         gang_stat = get_object_or_404(RecruitmentGangStat, gang_id=gang_id, recruitment_stats__recruitment_id=recruitment_id)
 

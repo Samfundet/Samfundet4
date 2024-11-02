@@ -103,7 +103,14 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
     <AdminPageLayout title={title} backendUrl={ROUTES.backend.samfundet__user} header={header} loading={showSpinner}>
       {recruitmentGangStat && (
         <Text size="l">
-          {`${withoutInterviewCount}  ${t(KEY.common_out_of)} ${t(KEY.common_total).toLowerCase()} ${recruitmentGangStat.total_applicants} ${t(KEY.recruitment_applicants_without_interview).toLowerCase()}`}
+          {[
+            withoutInterviewCount,
+            t(KEY.common_out_of),
+            `${t(KEY.common_total).toLowerCase()} ${recruitmentGangStat.total_applicants}`,
+            t(KEY.recruitment_applications),
+            t(KEY.common_have),
+            t(KEY.recruitment_interview),
+          ].join(' ')}
         </Text>
       )}
       <RecruitmentWithoutInterviewTable applicants={users} />

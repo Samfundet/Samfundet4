@@ -170,6 +170,7 @@ export const KEY = {
   common_something_went_wrong: 'common_something_went_wrong',
   common_click_here: 'common_click_here',
   common_have: 'common_have',
+  recruitment_interview: 'recruitment_interview',
   common_been: 'common_been',
   common_processed: 'common_processed',
   common_rejected: 'common_rejected',
