@@ -269,7 +269,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_no_active]: 'Ingen aktive opptak',
   [KEY.recruitment_interview_notes]: 'Intervju notater',
   [KEY.recruitment_priority]: 'Søkers prioritet',
-  [KEY.recruitment_your_priority]: 'Søknads prioritet',
+  [KEY.recruitment_your_priority]: 'Søknads prioritering',
   [KEY.recruitment_change_priority]: 'Endre prioritet',
   [KEY.recruitment_recruiter_priority]: 'Prioritet',
   [KEY.recruitment_recruiter_status]: 'Status',
