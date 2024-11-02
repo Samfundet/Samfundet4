@@ -102,20 +102,22 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
 
   const upDownArrow = (id: string) => {
     return (
-      <>
-        <Icon
-          icon="material-symbols:keyboard-arrow-up-rounded"
-          className={styles.arrows}
-          width={'2rem'}
-          onClick={() => handleChangePriority(id, 'up')}
-        />
-        <Icon
-          icon="material-symbols:keyboard-arrow-down-rounded"
-          className={styles.arrows}
-          width={'2rem'}
-          onClick={() => handleChangePriority(id, 'down')}
-        />
-      </>
+      <div className={styles.priorityControllBtnWrapper}>
+        <Button display="pill" theme="outlined" onClick={() => handleChangePriority(id, 'up')}>
+          <Icon
+            icon="material-symbols:keyboard-arrow-up-rounded"
+            className={styles.priorityControllArrow}
+            width={'1.5rem'}
+          />
+        </Button>
+        <Button display="pill" theme="outlined" onClick={() => handleChangePriority(id, 'down')}>
+          <Icon
+            icon="material-symbols:keyboard-arrow-down-rounded"
+            className={styles.priorityControllArrow}
+            width={'1.5rem'}
+          />
+        </Button>
+      </div>
     );
   };
 
