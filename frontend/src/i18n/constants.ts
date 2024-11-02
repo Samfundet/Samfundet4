@@ -188,6 +188,8 @@ export const KEY = {
   common_administrate: 'common_administrate',
   common_administration: 'common_administration',
   common_unprocessed: 'common_unprocessed',
+  common_list_view: 'common_list_view',
+  common_tab_view: 'common_tab_view',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',

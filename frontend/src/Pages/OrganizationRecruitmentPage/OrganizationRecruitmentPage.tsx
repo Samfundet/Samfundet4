@@ -113,10 +113,10 @@ export function OrganizationRecruitmentPage() {
                   onClick={() => setViewMode('list')}
                   className={positionsViewMode === 'list' ? styles.activeButton : ''}
                 >
-                  List view
+                  {t(KEY.common_list_view)}
                 </Button>
                 <Button theme={positionsViewMode === 'tab' ? 'basic' : 'samf'} onClick={() => setViewMode('tab')}>
-                  Tab view
+                  {t(KEY.common_tab_view)}
                 </Button>
               </div>
             </div>

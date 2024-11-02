@@ -173,6 +173,8 @@ export const nb = prepareTranslations({
   [KEY.common_personal]: 'Personlig',
   [KEY.common_administrate]: 'Administrer',
   [KEY.common_administration]: 'Administrasjon',
+  [KEY.common_list_view]: 'Liste visning',
+  [KEY.common_tab_view]: 'Fane visning',
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
   [KEY.common_press]: 'presse',
@@ -655,6 +657,8 @@ export const en = prepareTranslations({
   [KEY.common_filter]: 'Filter',
   [KEY.common_room]: 'Room',
   [KEY.common_unprocessed]: 'Unprocessed',
+  [KEY.common_list_view]: 'List view',
+  [KEY.common_tab_view]: 'Tab view',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
