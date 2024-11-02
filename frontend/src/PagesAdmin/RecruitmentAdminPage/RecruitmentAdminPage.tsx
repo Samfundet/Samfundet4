@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, CrudButtons, Link } from '~/Components';
+import { Button, CrudButtons, DrfPagination, Link } from '~/Components';
 import { getFormattedDate } from '~/Components/ExpandableList/utils';
 import { Table } from '~/Components/Table';
 import { getAllRecruitments } from '~/api';
+import { PAGE_SIZE } from '~/constants';
 import type { RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -18,7 +19,10 @@ export function RecruitmentAdminPage() {
   const navigate = useNavigate();
   const [recruitments, setRecruitments] = useState<RecruitmentDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalItems, setTotalItems] = useState<number>(0);
   const { t } = useTranslation();
+
   const title = t(KEY.recruitment_administrate);
   useTitle(title);
 
@@ -29,6 +33,7 @@ export function RecruitmentAdminPage() {
     getAllRecruitments()
       .then((response) => {
         setRecruitments(response.results);
+        setTotalItems(response.count);
       })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
@@ -108,6 +113,18 @@ export function RecruitmentAdminPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+      {totalItems > 25 && (
+        <DrfPagination
+          currentPage={currentPage}
+          totalItems={totalItems}
+          pageSize={PAGE_SIZE}
+          onPageChange={setCurrentPage}
+          buttonTheme="samf"
+          navButtonTheme="samf"
+          buttonDisplay="pill"
+        />
+      )}
+
       <Table columns={tableColumns} data={data} />
     </AdminPageLayout>
   );

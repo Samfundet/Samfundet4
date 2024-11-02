@@ -529,13 +529,6 @@ export function getKeyValues(): Promise<AxiosResponse<KeyValueDto[]>> {
 //                       Recruitment
 // ############################################################
 
-// export async function getAllRecruitments(): Promise<AxiosResponse<RecruitmentDto[]>> {
-//   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_list;
-//   const response = await axios.get(url, { withCredentials: true });
-
-//   return response;
-// }
-
 export async function getAllRecruitments(page = 1): Promise<PageNumberPagination<RecruitmentDto>> {
   const url = `${BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_list}?page=${page}`;
   const response = await axios.get<PageNumberPagination<RecruitmentDto>>(url, { withCredentials: true });
