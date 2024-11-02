@@ -472,6 +472,9 @@ export const nb = prepareTranslations({
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
 
+  [KEY.promo_media_description]: 'Lenke eller ID til en YouTube-video',
+  [KEY.promo_media_invalid]: 'Må være en gyldig lenke til en YouTube-video',
+
   // Errors
   [KEY.error_generic]: 'Uventet feil',
   [KEY.error_generic_description]: 'En uventet feil oppsto, vennligst prøv igjen',
@@ -888,6 +891,10 @@ export const en = prepareTranslations({
   [KEY.admin_information_confirm_cancel]: 'Are you sure you want to exit without saving?',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'It is not possible to change the uploaded file.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
+
+  [KEY.promo_media_description]: 'Link or ID of a YouTube video',
+  [KEY.promo_media_invalid]: 'Must be a valid link to a YouTube video',
+
   [KEY.recruitment_three_interviews_criteria_header]:
     'Applicants with less than 3 interviews, but have applied to more than 3 positions',
   [KEY.recruitment_three_interviews_criteria_button]: 'Applicants with less than 3 interviews',
