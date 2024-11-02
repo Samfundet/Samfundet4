@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { DrfPagination } from '~/Components';
 import { formatDate } from '~/Components/OccupiedForm/utils';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
@@ -16,19 +17,24 @@ export function UsersAdminPage() {
 
   const [users, setUsers] = useState<UserDto[]>();
   const [loading, setLoading] = useState(true);
+  const [totalItems, setTotalItems] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const title = t(KEY.common_users);
   useTitle(title);
 
   useEffect(() => {
     setLoading(true);
-    getUsers()
-      .then(setUsers)
+    getUsers(currentPage)
+      .then((response) => {
+        setUsers(response.results);
+        setTotalItems(response.count);
+      })
       .catch((err) => {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(err);
       })
       .finally(() => setLoading(false));
-  }, [t]);
+  }, [t, currentPage]);
 
   const columns = [
     { content: t(KEY.common_username), sortable: true },
@@ -74,7 +80,16 @@ export function UsersAdminPage() {
 
   return (
     <AdminPageLayout title={title} loading={loading}>
+      {users && (
+        <DrfPagination
+          currentPage={currentPage}
+          totalItems={totalItems}
+          pageSize={10} // or whatever your backend page size is
+          onPageChange={setCurrentPage}
+        />
+      )}
       <Table data={data} columns={columns} />
+      {/* Add pagination if needed */}
     </AdminPageLayout>
   );
 }
