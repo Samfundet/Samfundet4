@@ -480,6 +480,19 @@ class AllUsersView(ListAPIView):
         return queryset.order_by('username')
 
 
+# class AllUsersView(ListAPIView):
+#     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+#     serializer_class = UserSerializer
+#     pagination_class = UserCursorPagination
+
+#     ordering = '-date_joined'
+
+#     def get_ordering(self, request, queryset, view):
+#         # Allow custom ordering while maintaining stability
+#         ordering = request.query_params.get('ordering', '-date_joined')
+#         return (ordering, 'id')  # Always include id as secondary sort
+
+
 class ImpersonateView(APIView):
     permission_classes = [IsAuthenticated]  # TODO: Permission check.
 
