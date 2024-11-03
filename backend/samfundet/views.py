@@ -899,13 +899,24 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
 class RecruitmentApplicationWithdrawApplicantView(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get(self, request: Request, pk: int) -> Response:
+        # Get applications for specific recruitment process
+        applications = RecruitmentApplication.objects.filter(
+            recruitment_position__recruitment_id=pk,
+            user=request.user,
+            withdrawn=True,  # Only get non-withdrawn applications
+        )
+        serializer = RecruitmentApplicationForApplicantSerializer(applications, many=True)
+        return Response(serializer.data)
+
     def put(self, request: Request, pk: int) -> Response:
         # Checks if user has applied for position
         application = get_object_or_404(RecruitmentApplication, recruitment_position=pk, user=request.user)
-        # Withdraw if applied
+        # Application confirmed by get_object_or_404, contiues with withdrawing application
         application.withdrawn = True
         application.save()
         serializer = RecruitmentApplicationForApplicantSerializer(application)
+
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -921,33 +932,44 @@ class RecruitmentApplicationWithdrawRecruiterView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+# TODO SIMPLIFY THIS
 class RecruitmentApplicationApplicantPriorityView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentUpdateUserPrioritySerializer
 
-    def put(
-        self,
-        request: Request,
-        pk: int,
-    ) -> Response:
+    def put(self, request: Request, pk: int) -> Response:
         direction = RecruitmentUpdateUserPrioritySerializer(data=request.data)
         if direction.is_valid():
             direction = direction.validated_data['direction']
         else:
             return Response(direction.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # Dont think we need any extra perms in this view, admin should not be able to change priority
+        # Get the current application and verify it exists and isn't withdrawn
         application = get_object_or_404(
             RecruitmentApplication,
             id=pk,
             user=request.user,
+            withdrawn=False,
         )
+
+        # Update the priority
         application.update_priority(direction)
+
+        # Get all non-withdrawn applications for this recruitment and user
+        active_applications = RecruitmentApplication.objects.filter(
+            recruitment=application.recruitment,
+            user=request.user,
+            withdrawn=False,  # Explicitly exclude withdrawn applications
+        ).order_by('applicant_priority')
+
+        # Rebase priorities to ensure they're sequential starting from 1
+        for index, application in enumerate(active_applications, start=1):
+            if application.applicant_priority != index:
+                application.applicant_priority = index
+                application.save()
+
         serializer = RecruitmentApplicationForApplicantSerializer(
-            RecruitmentApplication.objects.filter(
-                recruitment=application.recruitment,
-                user=request.user,
-            ).order_by('applicant_priority'),
+            active_applications,
             many=True,
         )
         return Response(serializer.data)
