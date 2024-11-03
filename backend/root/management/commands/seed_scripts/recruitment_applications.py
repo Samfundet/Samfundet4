@@ -60,7 +60,7 @@ def get_priority_for_user(user, recruitment):
     return existing_count + 1
 
 
-def seed():
+def seed():  # noqa: C901
     """
     Seeds recruitment applications with realistic data while respecting application
     constraints and deadlines.
