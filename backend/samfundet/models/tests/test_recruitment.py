@@ -1056,23 +1056,90 @@ class TestRecruitmentApplicationDeadlines:
             with pytest.raises(ValidationError):
                 fixture_recruitment_application2.update_recruiter_priority(2)  # 2 is WANTED
 
-    def test_deadline_ordering_validation(self, fixture_recruitment: Recruitment):
-        """Test that deadlines must be in correct chronological order"""
+    def test_applicant_update_application_priority_before_deadline(
+        self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
+    ):
+        """Test that applicant can update their application priorities before the deadline"""
+        # Set up valid timeline
         now = timezone.now()
-        fixture_recruitment.visible_from = now
-        fixture_recruitment.shown_application_deadline = now + timezone.timedelta(hours=12)
-        fixture_recruitment.actual_application_deadline = now + timezone.timedelta(days=1)
-        fixture_recruitment.reprioritization_deadline_for_applicant = now + timezone.timedelta(days=2)
-        fixture_recruitment.reprioritization_deadline_for_groups = now + timezone.timedelta(days=3)
-        fixture_recruitment.save()
+        recruitment = fixture_recruitment_application.recruitment
+        recruitment.visible_from = now
+        recruitment.shown_application_deadline = now + timezone.timedelta(hours=12)
+        recruitment.actual_application_deadline = now + timezone.timedelta(days=1)
+        recruitment.reprioritization_deadline_for_applicant = now + timezone.timedelta(days=2)
+        recruitment.reprioritization_deadline_for_groups = now + timezone.timedelta(days=3)
+        recruitment.save()
 
-        # Try invalid order - applicant deadline after groups deadline
-        fixture_recruitment.reprioritization_deadline_for_applicant = now + timezone.timedelta(days=4)
-        fixture_recruitment.reprioritization_deadline_for_groups = now + timezone.timedelta(days=3)
+        # Initially app1 should be priority 1, app2 priority 2
+        assert fixture_recruitment_application.applicant_priority == 1
+        assert fixture_recruitment_application2.applicant_priority == 2
 
-        with pytest.raises(ValidationError) as exc:
-            fixture_recruitment.clean()
+        # Should be able to swap priorities before deadline
+        fixture_recruitment_application.update_priority(1)  # Move app1 up
 
-        error_dict = dict(exc.value)
-        assert fixture_recruitment.REPRIORITIZATION_GROUP_BEFORE_APPLICANT in error_dict['reprioritization_deadline_for_groups']
-        assert fixture_recruitment.REPRIORITIZATION_APPLICANT_AFTER_GROUP in error_dict['reprioritization_deadline_for_applicant']
+        fixture_recruitment_application.refresh_from_db()
+        fixture_recruitment_application2.refresh_from_db()
+
+        assert fixture_recruitment_application.applicant_priority == 1
+        assert fixture_recruitment_application2.applicant_priority == 2
+
+    def test_applicant_update_application_priority_after_deadline(
+        self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
+    ):
+        """Test that applicant cannot update their application priorities after the applicant reprioritization deadline"""
+        # Set up valid timeline
+        now = timezone.now()
+        recruitment = fixture_recruitment_application.recruitment
+        recruitment.visible_from = now
+        recruitment.shown_application_deadline = now + timezone.timedelta(hours=12)
+        recruitment.actual_application_deadline = now + timezone.timedelta(days=1)
+        recruitment.reprioritization_deadline_for_applicant = now + timezone.timedelta(days=2)
+        recruitment.reprioritization_deadline_for_groups = now + timezone.timedelta(days=3)
+        recruitment.save()
+
+        initial_priority_1 = fixture_recruitment_application.applicant_priority
+        initial_priority_2 = fixture_recruitment_application2.applicant_priority
+
+        # Mock being past applicant reprioritization deadline but before group deadline
+        with patch('django.utils.timezone.now') as mock_now:
+            mock_now.return_value = now + timezone.timedelta(days=2, hours=1)
+
+            # Should fail to update priorities
+            with pytest.raises(ValidationError) as exc:
+                fixture_recruitment_application.update_priority(1)
+
+            assert 'Cannot reprioritize applications after the reprioritization deadline' in str(exc.value)
+
+        # Verify priorities unchanged
+        fixture_recruitment_application.refresh_from_db()
+        fixture_recruitment_application2.refresh_from_db()
+        assert fixture_recruitment_application.applicant_priority == initial_priority_1
+        assert fixture_recruitment_application2.applicant_priority == initial_priority_2
+
+    def test_applicant_priority_remains_sequential(
+        self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
+    ):
+        """Test that application priorities remain sequential (1,2,3...) when updated"""
+        # Set up valid timeline
+        now = timezone.now()
+        recruitment = fixture_recruitment_application.recruitment
+        recruitment.visible_from = now
+        recruitment.shown_application_deadline = now + timezone.timedelta(hours=12)
+        recruitment.actual_application_deadline = now + timezone.timedelta(days=1)
+        recruitment.reprioritization_deadline_for_applicant = now + timezone.timedelta(days=2)
+        recruitment.reprioritization_deadline_for_groups = now + timezone.timedelta(days=3)
+        recruitment.save()
+
+        # Initial state should be sequential
+        assert fixture_recruitment_application.applicant_priority == 1
+        assert fixture_recruitment_application2.applicant_priority == 2
+
+        # Update priority and verify it maintains sequence
+        fixture_recruitment_application2.update_priority(1)  # Move app2 up (positive means higher priority)
+
+        fixture_recruitment_application.refresh_from_db()
+        fixture_recruitment_application2.refresh_from_db()
+
+        # Should have swapped but maintained sequence
+        assert fixture_recruitment_application2.applicant_priority == 1
+        assert fixture_recruitment_application.applicant_priority == 2
