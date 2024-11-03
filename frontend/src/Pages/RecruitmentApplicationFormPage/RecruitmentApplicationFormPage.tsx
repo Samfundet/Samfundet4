@@ -36,9 +36,9 @@ export function RecruitmentApplicationFormPage() {
 
   const [recruitmentPosition, setRecruitmentPosition] = useState<RecruitmentPositionDto>();
   const [recruitmentPositionsForGang, setRecruitmentPositionsForGang] = useState<RecruitmentPositionDto[]>();
+  const [similarPositions, setSimilarPositions] = useState<PositionsByTagResponse>();
 
   const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
-  const [similarPositions, setSimilarPositions] = useState<PositionsByTagResponse>();
   const [loading, setLoading] = useState(true);
 
   const { positionId } = useParams();
@@ -68,6 +68,7 @@ export function RecruitmentApplicationFormPage() {
   }, [positionId, standardNavigate, t]);
 
   useEffect(() => {
+    if (!recruitmentPosition?.recruitment || !recruitmentPosition?.gang.id) return;
     getRecruitmentPositionsGangForApplicant(
       recruitmentPosition?.recruitment as string,
       recruitmentPosition?.gang.id,
