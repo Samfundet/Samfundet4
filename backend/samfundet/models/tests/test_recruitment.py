@@ -1143,3 +1143,191 @@ class TestRecruitmentApplicationDeadlines:
         # Should have swapped but maintained sequence
         assert fixture_recruitment_application2.applicant_priority == 1
         assert fixture_recruitment_application.applicant_priority == 2
+
+
+@pytest.fixture
+def test_user():
+    """Fixture for creating test user with unique email"""
+    return User.objects.create(
+        username='testuser',
+        email='testuser@test.com',  # Add required email
+    )
+
+
+@pytest.fixture
+def test_recruitment_position(recruitment):
+    """Fixture for creating test position with all required fields"""
+    gang = Gang.objects.create(name_nb='TestGang', organization=recruitment.organization)
+    return RecruitmentPosition.objects.create(
+        name_nb='Test Position',
+        name_en='Test Position',
+        recruitment=recruitment,
+        gang=gang,
+        short_description_nb='Short description',
+        long_description_nb='Long description',
+        is_funksjonaer_position=False,
+        default_application_letter_nb='Default application letter',
+        tags='test',
+    )
+
+
+@pytest.mark.django_db
+def test_deadline_validation_constraints(test_user):
+    """Test application validation against recruitment timeline deadlines"""
+    now = timezone.now()
+    org = Organization.objects.create(name='TestOrg')
+
+    recruitment = Recruitment.objects.create(
+        name_nb='Test',
+        name_en='Test',
+        organization=org,
+        visible_from=now + timezone.timedelta(days=1),
+        shown_application_deadline=now + timezone.timedelta(days=2),
+        actual_application_deadline=now + timezone.timedelta(days=3),
+        reprioritization_deadline_for_applicant=now + timezone.timedelta(days=4),
+        reprioritization_deadline_for_groups=now + timezone.timedelta(days=5),
+    )
+
+    position = RecruitmentPosition.objects.create(
+        name_nb='Test Position',
+        name_en='Test Position',
+        recruitment=recruitment,
+        gang=Gang.objects.create(name_nb='TestGang', organization=org),
+        short_description_nb='Short description',
+        long_description_nb='Long description',
+        is_funksjonaer_position=False,
+        default_application_letter_nb='Default application letter',
+        tags='test',
+    )
+
+    # Test submitting before visible_from
+    with pytest.raises(ValidationError) as exc:
+        RecruitmentApplication.objects.create(application_text='Test', recruitment_position=position, recruitment=recruitment, user=test_user)
+    assert 'Recruitment period has not started yet' in str(exc.value)
+
+    # Test submitting after deadline
+    with patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = now + timezone.timedelta(days=4)
+        with pytest.raises(ValidationError) as exc:
+            RecruitmentApplication.objects.create(application_text='Test', recruitment_position=position, recruitment=recruitment, user=test_user)
+        assert 'Application deadline has passed' in str(exc.value)
+
+
+@pytest.mark.django_db
+def test_priority_validation():
+    """Test validation of application priority assignments"""
+    # Setup basic test data
+    org = Organization.objects.create(name='TestOrg')
+    recruitment = Recruitment.objects.create(
+        name_nb='Test',
+        name_en='Test',
+        organization=org,
+        visible_from=timezone.now(),
+        shown_application_deadline=timezone.now() + timezone.timedelta(days=2),
+        actual_application_deadline=timezone.now() + timezone.timedelta(days=3),
+        reprioritization_deadline_for_applicant=timezone.now() + timezone.timedelta(days=4),
+        reprioritization_deadline_for_groups=timezone.now() + timezone.timedelta(days=5),
+    )
+
+    position = RecruitmentPosition.objects.create(
+        name_nb='Test Position',
+        name_en='Test Position',
+        recruitment=recruitment,
+        gang=Gang.objects.create(name_nb='TestGang', organization=org),
+        short_description_nb='Short description',
+        long_description_nb='Long description',
+        is_funksjonaer_position=False,
+        default_application_letter_nb='Default application letter',
+        tags='test',
+    )
+
+    user = User.objects.create(
+        username='testuser2',
+        email='testuser2@test.com',
+    )
+
+    # Test setting priority higher than allowed
+    application = RecruitmentApplication.objects.create(application_text='Test', recruitment_position=position, recruitment=recruitment, user=user)
+
+    with pytest.raises(ValidationError) as exc:
+        application.applicant_priority = 5
+        application.save()
+    assert 'Priority cannot exceed active applications' in str(exc.value)
+
+
+@pytest.mark.django_db
+def test_reorder_priorities_edge_cases():
+    """Test edge cases in priority (recruiter admin priority of application) reordering logic"""
+    now = timezone.now()
+    org = Organization.objects.create(name='TestOrg')
+    recruitment = Recruitment.objects.create(
+        name_nb='Test',
+        name_en='Test',
+        organization=org,
+        visible_from=now,
+        shown_application_deadline=now + timezone.timedelta(days=2),
+        actual_application_deadline=now + timezone.timedelta(days=3),
+        reprioritization_deadline_for_applicant=now + timezone.timedelta(days=4),
+        reprioritization_deadline_for_groups=now + timezone.timedelta(days=5),
+    )
+    gang = Gang.objects.create(name_nb='TestGang', organization=org)
+    user = User.objects.create(username='testuser3', email='testuser3@test.com')
+
+    # Create 3 positions
+    positions = [
+        RecruitmentPosition.objects.create(
+            name_nb=f'Position {i}',
+            name_en=f'Position {i}',
+            recruitment=recruitment,
+            gang=gang,
+            short_description_nb=f'Short description {i}',
+            long_description_nb=f'Long description {i}',
+            is_funksjonaer_position=False,
+            default_application_letter_nb=f'Default letter {i}',
+            tags=f'test{i}',
+        )
+        for i in range(3)
+    ]
+
+    # Create 3 applications - they will be assigned priorities 1,2,3 automatically
+    applications = [
+        RecruitmentApplication.objects.create(application_text=f'Test {i}', recruitment_position=positions[i], recruitment=recruitment, user=user)
+        for i in range(3)
+    ]
+
+    # Verify initial priorities are 1,2,3
+    applications = list(RecruitmentApplication.objects.filter(recruitment=recruitment, user=user).order_by('applicant_priority'))
+
+    for i, app in enumerate(applications, start=1):
+        assert app.applicant_priority == i
+
+    # Test trying to move priority 3 to priority 1 (up by 2)
+    applications[2].update_priority(2)  # Positive means move up in priority (lower number)
+
+    # Refresh all applications from DB
+    applications = list(RecruitmentApplication.objects.filter(recruitment=recruitment, user=user).order_by('applicant_priority'))
+
+    # After moving priority 3 up by 2, it should be priority 1, others should shift down
+    assert applications[0].applicant_priority == 1  # The one we moved up
+    assert applications[1].applicant_priority == 2  # Shifted down
+    assert applications[2].applicant_priority == 3  # Shifted down
+
+    # Test moving priority 1 up when already at top
+    applications[0].update_priority(1)
+
+    applications = list(RecruitmentApplication.objects.filter(recruitment=recruitment, user=user).order_by('applicant_priority'))
+
+    # Should maintain same order since already at top
+    assert applications[0].applicant_priority == 1
+    assert applications[1].applicant_priority == 2
+    assert applications[2].applicant_priority == 3
+
+    # Test moving priority 3 to priority 1 by large number (should cap at priority 1)
+    applications[2].update_priority(100)
+
+    applications = list(RecruitmentApplication.objects.filter(recruitment=recruitment, user=user).order_by('applicant_priority'))
+
+    # Should result in same order as moving up by 2
+    assert applications[0].applicant_priority == 1
+    assert applications[1].applicant_priority == 2
+    assert applications[2].applicant_priority == 3
