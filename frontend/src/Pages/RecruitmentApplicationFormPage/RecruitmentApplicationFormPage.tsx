@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -7,6 +7,7 @@ import { Text } from '~/Components/Text/Text';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
+  getPositionsByTag,
   getRecruitmentApplicationForPosition,
   getRecruitmentPositionForApplicant,
   getRecruitmentPositionsGangForApplicant,
@@ -14,7 +15,7 @@ import {
   withdrawRecruitmentApplicationApplicant,
 } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
-import type { RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
+import type { PositionsByTagResponse, RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -37,7 +38,7 @@ export function RecruitmentApplicationFormPage() {
   const [recruitmentPositionsForGang, setRecruitmentPositionsForGang] = useState<RecruitmentPositionDto[]>();
 
   const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
-
+  const [similarPositions, setSimilarPositions] = useState<PositionsByTagResponse>();
   const [loading, setLoading] = useState(true);
 
   const { positionId } = useParams();
@@ -71,8 +72,21 @@ export function RecruitmentApplicationFormPage() {
       recruitmentPosition?.recruitment as string,
       recruitmentPosition?.gang.id,
     ).then((res) => {
-      setRecruitmentPositionsForGang(res.data);
+      // Filter out the current position from the gang positions
+      const filteredPositions = res.data.filter((position) => position.id !== recruitmentPosition?.id);
+      setRecruitmentPositionsForGang(filteredPositions);
     });
+  }, [recruitmentPosition]);
+
+  useEffect(() => {
+    if (!recruitmentPosition) return;
+    getPositionsByTag(recruitmentPosition.recruitment, recruitmentPosition.tags, recruitmentPosition.id)
+      .then((positions) => {
+        setSimilarPositions(positions);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, [recruitmentPosition]);
 
   function withdrawApplication() {
@@ -160,31 +174,53 @@ export function RecruitmentApplicationFormPage() {
             <h2 className={styles.sub_header}>{t(KEY.recruitment_applyfor)}</h2>
             <p className={styles.text}>{t(KEY.recruitment_applyforhelp)}</p>
           </div>
+          {recruitmentPositionsForGang && recruitmentPositionsForGang.length > 0 && (
+            <div className={styles.other_positions}>
+              <h2 className={styles.sub_header}>
+                {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
+              </h2>
+              {recruitmentPositionsForGang.map((pos) => (
+                <Button
+                  key={pos.id}
+                  display="pill"
+                  theme="outlined"
+                  onClick={() => {
+                    navigate({
+                      url: reverse({
+                        pattern: ROUTES.frontend.recruitment_application,
+                        urlParams: { positionId: pos.id, gangId: pos.gang.id },
+                      }),
+                    });
+                  }}
+                >
+                  {dbT(pos, 'name')}
+                </Button>
+              ))}
+            </div>
+          )}
           <div className={styles.other_positions}>
-            <h2 className={styles.sub_header}>
-              {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
-            </h2>
-            {recruitmentPositionsForGang?.map((pos) => {
-              if (pos.id === recruitmentPosition?.id) {
-                return (
+            {similarPositions?.positions && (
+              <Fragment>
+                <h2 className={styles.sub_header}>{t(KEY.recruitment_similar_positions)}</h2>
+                {similarPositions.positions.map((similarPosition) => (
                   <Button
-                    key={pos.id}
+                    key={similarPosition.id}
                     display="pill"
                     theme="outlined"
                     onClick={() => {
                       navigate({
                         url: reverse({
                           pattern: ROUTES.frontend.recruitment_application,
-                          urlParams: { positionId: pos.id, gangId: pos.gang.id },
+                          urlParams: { positionId: similarPosition.id, gangId: similarPosition.gang.id },
                         }),
                       });
                     }}
                   >
-                    {dbT(pos, 'name')}
+                    {dbT(similarPosition, 'name')}
                   </Button>
-                );
-              }
-            })}
+                ))}
+              </Fragment>
+            )}
           </div>
         </div>
         {recruitmentApplication && (
