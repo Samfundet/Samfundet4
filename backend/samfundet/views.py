@@ -1385,7 +1385,7 @@ class PositionByTagsView(ListAPIView):
 
         return queryset
 
-    def list(self, request: Request, *args, **kwargs) -> Response:
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         if not request.query_params.get('tags'):
             return Response({'message': 'No tags provided in query parameters'}, status=status.HTTP_400_BAD_REQUEST)
 
