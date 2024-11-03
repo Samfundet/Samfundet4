@@ -606,6 +606,7 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_availability: '/recruitment/:id/availability/',
   samfundet__feedback: '/feedback/',
   samfundet__purchase_feedback: '/purchase-feedback/',
+  samfundet__recruitment_positions_by_tags: '/recruitment/:id/positions-by-tags/',
   static__path: '/static/:path',
   media__path: '/media/:path',
 } as const;
