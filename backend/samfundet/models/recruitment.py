@@ -463,6 +463,8 @@ class RecruitmentApplication(CustomBaseModel):
             direction: Positive number moves priority up, negative moves it down.
                      The absolute value determines how many positions to move.
         """
+        if timezone.now() > self.recruitment.reprioritization_deadline_for_applicant:
+            raise ValidationError('Cannot reprioritize applications after the reprioritization deadline')
         with transaction.atomic():
             applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user, withdrawn=False).order_by(
                 f"{'' if direction < 0 else '-'}applicant_priority"
