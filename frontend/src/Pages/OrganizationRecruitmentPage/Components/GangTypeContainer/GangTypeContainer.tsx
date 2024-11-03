@@ -31,7 +31,12 @@ export function GangTypeContainer({ recruitmentId = '-1' }: GangTypeContainerPro
   ) : (
     <>
       {recruitingGangTypes?.map((gangType) => (
-        <GangPositionDropdown key={gangType.id} type={gangType} recruitmentPositions={recruitmentPositions} />
+        <GangPositionDropdown
+          key={gangType.id}
+          type={gangType}
+          recruitmentPositions={recruitmentPositions}
+          recruitmentId={recruitmentId}
+        />
       ))}
     </>
   );
