@@ -7,7 +7,7 @@ import styles from './GangPositionDropdown.module.scss';
 
 type GangItemProps = {
   type: GangTypeDto;
-  recruitmentId: number | string;
+  recruitmentId?: string;
   recruitmentPositions?: RecruitmentPositionDto[];
 };
 

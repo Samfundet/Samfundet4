@@ -113,8 +113,7 @@ export function OrganizationRecruitmentPage() {
               <Text>Placeholder for tag-autocomplete search </Text>
               {/*^^^ issue #1275 */}
             </div>
-            {recruitmentId &&
-              (viewAllPositions ? <GangTypeContainer recruitmentId={recruitmentId} /> : <RecruitmentTabs />)}
+            {recruitmentId && (viewAllPositions ? <GangTypeContainer /> : <RecruitmentTabs />)}
             {recruitment?.separate_positions && recruitment.separate_positions.length > 0 && (
               <GangSeparatePositions recruitmentSeparatePositions={recruitment.separate_positions} />
             )}
