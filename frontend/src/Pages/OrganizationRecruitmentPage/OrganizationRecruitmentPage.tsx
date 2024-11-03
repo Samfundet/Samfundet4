@@ -7,7 +7,7 @@ import { PersonalRow } from '~/Pages/RecruitmentPage';
 import { getOrganization, getRecruitment } from '~/api';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
 import type { RecruitmentDto } from '~/dto';
-import { useDesktop } from '~/hooks';
+import { useDesktop, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { OrgNameType, type OrgNameTypeValue } from '~/types';
 import { dbT, getObjectFieldOrNumber } from '~/utils';
@@ -16,18 +16,18 @@ import styles from './OrganizationRecruitmentPage.module.scss';
 
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
-  const embededId = '-nYQb8_TvQ4'; // TODO: Make this dynamic DO IN ISSUE #1121 for backend. #1274 for frontend
-  const { recruitmentID } = useParams<{ recruitmentID: string }>();
+  const { recruitmentId } = useParams<{ recruitmentId: string }>();
   const [viewAllPositions, setViewAllPositions] = useState<boolean>(true);
   const { t } = useTranslation();
   const { changeOrgTheme, organizationTheme } = useOrganizationContext();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
   const [loading, setLoading] = useState<boolean>(true);
+  useTitle(dbT(recruitment, 'name') ?? '');
 
   useEffect(() => {
-    if (recruitmentID) {
-      getRecruitment(recruitmentID)
+    if (recruitmentId) {
+      getRecruitment(recruitmentId)
         .then((response) => {
           setRecruitment(response.data);
         })
@@ -35,7 +35,7 @@ export function OrganizationRecruitmentPage() {
           console.error(error);
         });
     }
-  }, [recruitmentID]);
+  }, [recruitmentId]);
 
   useEffect(() => {
     if (recruitment) {
@@ -76,9 +76,9 @@ export function OrganizationRecruitmentPage() {
               {dbT(recruitment, 'name')}
             </Text>
           </div>
-          {embededId ? (
+          {recruitment?.promo_media ? (
             <>
-              <Video embedId={embededId} className={styles.video} />
+              <Video embedId={recruitment.promo_media} className={styles.video} />
             </>
           ) : (
             <></>
@@ -96,11 +96,11 @@ export function OrganizationRecruitmentPage() {
             </Text>
           </div>
           <div className={styles.personalRow}>
-            {recruitmentID && (
+            {recruitmentId && (
               <>
-                <OccupiedFormModal recruitmentId={+recruitmentID} />
+                <OccupiedFormModal recruitmentId={+recruitmentId} />
                 <PersonalRow
-                  recruitmentID={recruitmentID}
+                  recruitmentId={recruitmentId}
                   organizationName={organizationName}
                   showRecruitmentBtn={false}
                 />
@@ -113,8 +113,8 @@ export function OrganizationRecruitmentPage() {
               <Text>Placeholder for tag-autocomplete search </Text>
               {/*^^^ issue #1275 */}
             </div>
-            {recruitmentID &&
-              (viewAllPositions ? <GangTypeContainer recruitmentID={recruitmentID} /> : <RecruitmentTabs />)}
+            {recruitmentId &&
+              (viewAllPositions ? <GangTypeContainer recruitmentId={recruitmentId} /> : <RecruitmentTabs />)}
             {recruitment?.separate_positions && recruitment.separate_positions.length > 0 && (
               <GangSeparatePositions recruitmentSeparatePositions={recruitment.separate_positions} />
             )}

@@ -4,8 +4,20 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Dropdown, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import {
+  Button,
+  Dropdown,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  NumberInput,
+} from '~/Components';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
+import { FormDescription } from '~/Components/Forms/Form';
 import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
 import type { OrganizationDto, RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
@@ -23,7 +35,7 @@ export function RecruitmentFormAdminPage() {
   const data = useRouteLoaderData('recruitment') as RecruitmentLoader | undefined;
 
   const { recruitmentId } = useParams();
-  const [organizationOptions, setOrganizationOptions] = useState<DropDownOption<number>[]>([]);
+  const [organizationOptions, setOrganizationOptions] = useState<DropdownOption<number>[]>([]);
 
   useEffect(() => {
     getOrganizations().then((data) => {
@@ -47,6 +59,7 @@ export function RecruitmentFormAdminPage() {
       utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_groups, false) || '',
     organization: getObjectFieldOrNumber<number>(data?.recruitment?.organization, 'id') || 1,
     max_applications: data?.recruitment?.max_applications,
+    promo_media: data?.recruitment?.promo_media || '',
   };
 
   const form = useForm<recruitmentFormType>({
@@ -97,7 +110,7 @@ export function RecruitmentFormAdminPage() {
                   <FormItem className={styles.item}>
                     <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_norwegian)}`}</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input type="text" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -110,7 +123,7 @@ export function RecruitmentFormAdminPage() {
                   <FormItem className={styles.item}>
                     <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_english)}`}</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input type="text" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -196,7 +209,7 @@ export function RecruitmentFormAdminPage() {
                   <FormItem className={styles.item}>
                     <FormLabel>{t(KEY.max_applications)}</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <NumberInput allowDecimal={false} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -214,6 +227,22 @@ export function RecruitmentFormAdminPage() {
                         onChange={(value) => field.onChange(value)}
                         value={field.value}
                       />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className={styles.row}>
+              <FormField
+                control={form.control}
+                name="promo_media"
+                render={({ field }) => (
+                  <FormItem className={styles.item}>
+                    <FormLabel>{t(KEY.recruitment_promo_media)}</FormLabel>
+                    <FormDescription>{t(KEY.promo_media_description)}</FormDescription>
+                    <FormControl>
+                      <Input type="text" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

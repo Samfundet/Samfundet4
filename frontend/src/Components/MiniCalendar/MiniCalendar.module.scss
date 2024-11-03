@@ -5,7 +5,7 @@
 .container {
   padding: 10px;
   border-radius: 10px;
-  width: 300px;
+  width: 260px;
 }
 
 .label {
@@ -21,16 +21,17 @@
   text-align: center;
   justify-items: center;
   align-items: center;
+  gap: 0.5rem 0;
 }
 
 .days_header {
   font-weight: 500;
   font-size: 0.9rem;
   text-transform: capitalize;
-  border-bottom: 1px solid $grey-3;
   padding: 0.25rem 0;
   user-select: none;
   color: $grey-2;
+  margin-bottom: 0.25rem;
 
   @include theme-dark {
     color: $grey-2;
@@ -41,21 +42,27 @@
   background: none;
   border: none;
   font-family: inherit;
-  font-size: inherit;
+  font-size: 0.875rem;
   height: 2rem;
   width: 2rem;
-  border-radius: 1.5rem;
+  border-radius: 0.25rem;
   color: $grey-0;
   cursor: pointer;
   position: relative;
 
-  @include theme-dark {
-    color: $grey-4;
+  &:not(.disabled_day, .selected_day):hover {
+    background: $grey-4;
+    color: $grey-0;
   }
 
-  &:not(.disabled_day):hover {
-    background: $red-samf;
-    color: $white;
+  @include theme-dark {
+    color: $grey-4;
+
+    /* stylelint-disable-next-line max-nesting-depth */
+    &:not(.disabled_day, .selected_day):hover {
+      background: $grey-0;
+      color: $grey-4;
+    }
   }
 }
 
@@ -115,6 +122,6 @@
   color: $grey-3;
 
   @include theme-dark {
-    color: $grey-2;
+    color: $grey-1;
   }
 }

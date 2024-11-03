@@ -14,7 +14,7 @@ export type ApplicantApplicationManagementQK = {
 };
 
 export function RecruitmentApplicationsOverviewPage() {
-  const { recruitmentID } = useParams();
+  const { recruitmentId } = useParams();
   const { t } = useTranslation();
 
   const QUERY_KEYS: ApplicantApplicationManagementQK = {
@@ -32,10 +32,10 @@ export function RecruitmentApplicationsOverviewPage() {
           <h1 className={styles.header}>{t(KEY.recruitment_my_applications)}</h1>
           <div className={styles.empty_div} />
         </div>
-        <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentID ?? '')} />
+        <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentId ?? '')} />
         <p>{t(KEY.recruitment_will_be_anonymized)}</p>
-        <ActiveApplications recruitmentId={recruitmentID} queryKey={QUERY_KEYS} />
-        <WithdrawnApplications recruitmentId={recruitmentID} queryKey={QUERY_KEYS} />
+        <ActiveApplications recruitmentId={recruitmentId} queryKey={QUERY_KEYS} />
+        <WithdrawnApplications recruitmentId={recruitmentId} queryKey={QUERY_KEYS} />
       </div>
     </Page>
   );

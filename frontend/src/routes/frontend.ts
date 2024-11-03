@@ -19,9 +19,9 @@ export const ROUTES_FRONTEND = {
   contributors: '/contributors',
   // Recruitment:
   recruitment: '/recruitment/',
-  recruitment_application: '/recruitment/position/:positionID/',
-  recruitment_application_overview: '/recruitment/:recruitmentID/my-applications/',
-  organization_recruitment: '/recruitment/:recruitmentID/',
+  recruitment_application: '/recruitment/position/:positionId/',
+  recruitment_application_overview: '/recruitment/:recruitmentId/my-applications/',
+  organization_recruitment: '/recruitment/:recruitmentId/',
   contact: '/contact',
   // Purchase callback:
   purchase_callback: '/purchase-callback/:eventId',
@@ -44,6 +44,8 @@ export const ROUTES_FRONTEND = {
   // Roles
   admin_roles: '/control-panel/roles/',
   admin_roles_view: '/control-panel/roles/:roleId/',
+  admin_roles_edit: '/control-panel/roles/:roleId/edit/',
+  admin_roles_create: '/control-panel/roles/create/',
   // Gangs:
   admin_gangs: '/control-panel/gangs/',
   admin_gangs_create: '/control-panel/gangs/create/',
