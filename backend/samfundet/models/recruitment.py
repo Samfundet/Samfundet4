@@ -161,7 +161,6 @@ class RecruitmentPosition(CustomBaseModel):
         help_text='Shared interviewgroup for position',
     )
 
-    # TODO: Implement tag functionality
     tags = models.CharField(max_length=100, help_text='Tags for the position')
 
     # TODO: Implement interviewer functionality
