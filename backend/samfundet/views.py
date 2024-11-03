@@ -5,6 +5,7 @@ import csv
 import hmac
 import hashlib
 from typing import Any
+from xml.dom import ValidationErr
 
 from guardian.shortcuts import get_objects_for_user
 
@@ -929,6 +930,7 @@ class RecruitmentApplicationWithdrawRecruiterView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+# TODO SIMPLIFY THIS
 class RecruitmentApplicationApplicantPriorityView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentUpdateUserPrioritySerializer
@@ -1044,23 +1046,26 @@ class RecruitmentApplicationForGangUpdateStateView(APIView):
 
     def put(self, request: Request, pk: int) -> Response:
         application = get_object_or_404(RecruitmentApplication, pk=pk)
-
         # TODO add check if user has permission to update for GANG
         update_serializer = self.serializer_class(data=request.data)
         if update_serializer.is_valid():
-            # Should return update list of applications on correct
-            if 'recruiter_priority' in update_serializer.data:
-                application.recruiter_priority = update_serializer.data['recruiter_priority']
-            if 'recruiter_status' in update_serializer.data:
-                application.recruiter_status = update_serializer.data['recruiter_status']
-            application.save()
-            applications = RecruitmentApplication.objects.filter(
-                recruitment_position__gang=application.recruitment_position.gang,
-                recruitment=application.recruitment,
-            )
-            application.update_applicant_state()
-            serializer = RecruitmentApplicationForGangSerializer(applications, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            try:
+                # Should return update list of applications on correct
+                if 'recruiter_priority' in update_serializer.data:
+                    application.update_recruiter_priority(update_serializer.data['recruiter_priority'])
+                if 'recruiter_status' in update_serializer.data:
+                    application.recruiter_status = update_serializer.data['recruiter_status']
+                    application.save()
+
+                applications = RecruitmentApplication.objects.filter(
+                    recruitment_position__gang=application.recruitment_position.gang,
+                    recruitment=application.recruitment,
+                )
+                serializer = RecruitmentApplicationForGangSerializer(applications, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except ValidationErr as e:
+                return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

@@ -501,6 +501,27 @@ class RecruitmentApplication(CustomBaseModel):
         applications[i].applicant_priority = new_priority
         applications[i].save(update_fields=['applicant_priority'])  # type: ignore
 
+    def update_recruiter_priority(self, new_priority: int) -> None:
+        """
+        Updates the recruiter's priority for this application.
+        Validates that the group reprioritization deadline hasn't passed.
+
+        Args:
+            new_priority: New priority value from RecruitmentPriorityChoices
+
+        Raises:
+            ValidationError: If deadline has passed
+        """
+
+        # Validate not past group reprioritization deadline
+        if timezone.now() > self.recruitment.reprioritization_deadline_for_groups:
+            raise ValidationError('Cannot change recruiter priority after the group reprioritization deadline')
+
+        # Update priority and trigger state recalculation
+        self.recruiter_priority = new_priority
+        self.save()
+        self.update_applicant_state()
+
     def update_applicant_state(self) -> None:
         """
         Updates the applicant's state based on recruiter priorities and the relative
