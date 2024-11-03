@@ -40,7 +40,7 @@ export function RecruitmentApplicationFormPage() {
 
   const [loading, setLoading] = useState(true);
 
-  const { positionId } = useParams();
+  const { positionId, recruitmentId } = useParams();
 
   useTitle(recruitmentPosition ? (dbT(recruitmentPosition, 'name') as string) : '');
 
@@ -175,7 +175,7 @@ export function RecruitmentApplicationFormPage() {
                       navigate({
                         url: reverse({
                           pattern: ROUTES.frontend.recruitment_application,
-                          urlParams: { positionId: pos.id, gangId: pos.gang.id },
+                          urlParams: { positionId: pos.id, recruitmentId: recruitmentId },
                         }),
                       });
                     }}

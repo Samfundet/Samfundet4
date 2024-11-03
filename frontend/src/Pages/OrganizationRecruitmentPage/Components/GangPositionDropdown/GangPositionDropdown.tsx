@@ -31,7 +31,7 @@ export function GangPositionDropdown({ type, recruitmentPositions, recruitmentId
                 <Link
                   url={reverse({
                     pattern: ROUTES.frontend.recruitment_application,
-                    urlParams: { positionId: pos.id, gangId: gang.id, recruitmentId: recruitmentId },
+                    urlParams: { positionId: pos.id, recruitmentId: recruitmentId },
                   })}
                   className={styles.position_name}
                 >
@@ -40,7 +40,7 @@ export function GangPositionDropdown({ type, recruitmentPositions, recruitmentId
                 <Link
                   url={reverse({
                     pattern: ROUTES.frontend.recruitment_application,
-                    urlParams: { positionId: pos.id, gangId: gang.id, recruitmentId: recruitmentId },
+                    urlParams: { positionId: pos.id, recruitmentId: recruitmentId },
                   })}
                   className={styles.position_short_desc}
                 >
