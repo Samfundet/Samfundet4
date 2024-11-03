@@ -1257,7 +1257,7 @@ def test_priority_validation():
 
 @pytest.mark.django_db
 def test_reorder_priorities_edge_cases():
-    """Test edge cases in priority (recruiter admin priority of application) reordering logic"""
+    """Test edge cases in priority reordering logic"""
     now = timezone.now()
     org = Organization.objects.create(name='TestOrg')
     recruitment = Recruitment.objects.create(

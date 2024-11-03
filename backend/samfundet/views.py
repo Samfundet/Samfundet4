@@ -905,7 +905,7 @@ class RecruitmentApplicationWithdrawApplicantView(APIView):
         applications = RecruitmentApplication.objects.filter(
             recruitment_position__recruitment_id=pk,
             user=request.user,
-            withdrawn=True,  # Only get non-withdrawn applications
+            withdrawn=True,
         )
         serializer = RecruitmentApplicationForApplicantSerializer(applications, many=True)
         return Response(serializer.data)
@@ -933,19 +933,22 @@ class RecruitmentApplicationWithdrawRecruiterView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# TODO SIMPLIFY THIS
 class RecruitmentApplicationApplicantPriorityView(APIView):
+    """
+    View for handling applicant priority updates for recruitment applications.
+    Leverages the RecruitmentApplication model's built-in priority management.
+    """
+
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentUpdateUserPrioritySerializer
 
     def put(self, request: Request, pk: int) -> Response:
-        direction = RecruitmentUpdateUserPrioritySerializer(data=request.data)
-        if direction.is_valid():
-            direction = direction.validated_data['direction']
-        else:
-            return Response(direction.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Validate the direction from the request
+        direction_serializer = self.serializer_class(data=request.data)
+        if not direction_serializer.is_valid():
+            return Response(direction_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # Get the current application and verify it exists and isn't withdrawn
+        # Get and verify the application exists and belongs to the user
         application = get_object_or_404(
             RecruitmentApplication,
             id=pk,
@@ -953,27 +956,20 @@ class RecruitmentApplicationApplicantPriorityView(APIView):
             withdrawn=False,
         )
 
-        # Update the priority
-        application.update_priority(direction)
+        try:
+            # Update priority using the model's method which handles all reordering
+            application.update_priority(direction_serializer.validated_data['direction'])
 
-        # Get all non-withdrawn applications for this recruitment and user
-        active_applications = RecruitmentApplication.objects.filter(
-            recruitment=application.recruitment,
-            user=request.user,
-            withdrawn=False,  # Explicitly exclude withdrawn applications
-        ).order_by('applicant_priority')
+            # Fetch the updated list of active applications
+            active_applications = RecruitmentApplication.objects.filter(recruitment=application.recruitment, user=request.user, withdrawn=False).order_by(
+                'applicant_priority'
+            )
 
-        # Rebase priorities to ensure they're sequential starting from 1
-        for index, application in enumerate(active_applications, start=1):
-            if application.applicant_priority != index:
-                application.applicant_priority = index
-                application.save()
+            # Serialize and return the updated applications
+            return Response(RecruitmentApplicationForApplicantSerializer(active_applications, many=True).data)
 
-        serializer = RecruitmentApplicationForApplicantSerializer(
-            active_applications,
-            many=True,
-        )
-        return Response(serializer.data)
+        except ValidationErr as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RecruitmentApplicationSetInterviewView(APIView):
