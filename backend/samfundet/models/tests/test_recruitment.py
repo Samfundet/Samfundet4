@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from unittest.mock import patch
+
 import pytest
 
 from django.utils import timezone
@@ -981,3 +983,96 @@ def test_position_must_have_single_owner(fixture_recruitment_position: Recruitme
     fixture_recruitment_position.gang = None
     fixture_recruitment_position.section = fixture_gang_section
     fixture_recruitment_position.save()
+
+
+@pytest.mark.django_db
+class TestRecruitmentApplicationDeadlines:
+    def test_recruiter_priority_update_before_deadline(self, fixture_recruitment_application: RecruitmentApplication):
+        """Test that recruiter can update priority before the deadline"""
+        now = timezone.now()
+        fixture_recruitment_application.recruitment.visible_from = now
+        fixture_recruitment_application.recruitment.shown_application_deadline = now + timezone.timedelta(hours=12)
+        fixture_recruitment_application.recruitment.actual_application_deadline = now + timezone.timedelta(days=1)
+        fixture_recruitment_application.recruitment.reprioritization_deadline_for_applicant = now + timezone.timedelta(days=2)
+        fixture_recruitment_application.recruitment.reprioritization_deadline_for_groups = now + timezone.timedelta(days=3)
+        fixture_recruitment_application.recruitment.save()
+
+        # Use the integer value instead of the choice class
+        fixture_recruitment_application.update_recruiter_priority(2)  # 2 is WANTED
+
+        fixture_recruitment_application.refresh_from_db()
+        assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.WANTED
+
+    def test_recruiter_priority_update_after_deadline(self, fixture_recruitment_application: RecruitmentApplication):
+        """Test that recruiter cannot update priority after the deadline"""
+        now = timezone.now()
+        fixture_recruitment_application.recruitment.visible_from = now
+        fixture_recruitment_application.recruitment.shown_application_deadline = now + timezone.timedelta(hours=12)
+        fixture_recruitment_application.recruitment.actual_application_deadline = now + timezone.timedelta(days=1)
+        fixture_recruitment_application.recruitment.reprioritization_deadline_for_applicant = now + timezone.timedelta(days=2)
+        fixture_recruitment_application.recruitment.reprioritization_deadline_for_groups = now + timezone.timedelta(days=3)
+        fixture_recruitment_application.recruitment.save()
+
+        original_priority = fixture_recruitment_application.recruiter_priority
+
+        with patch('django.utils.timezone.now') as mock_now:
+            mock_now.return_value = now + timezone.timedelta(days=3, hours=1)  # Past group deadline
+
+            # Use integer value here too
+            with pytest.raises(ValidationError) as exc:
+                fixture_recruitment_application.update_recruiter_priority(2)  # 2 is WANTED
+
+            assert 'Cannot change recruiter priority after the group reprioritization deadline' in str(exc.value)
+
+        fixture_recruitment_application.refresh_from_db()
+        assert fixture_recruitment_application.recruiter_priority == original_priority
+
+    def test_deadline_validation_with_multiple_applications(
+        self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
+    ):
+        """Test deadline validation with multiple applications"""
+        now = timezone.now()
+        recruitment = fixture_recruitment_application.recruitment
+        recruitment.visible_from = now
+        recruitment.shown_application_deadline = now + timezone.timedelta(hours=12)
+        recruitment.actual_application_deadline = now + timezone.timedelta(days=1)
+        recruitment.reprioritization_deadline_for_applicant = now + timezone.timedelta(days=2)
+        recruitment.reprioritization_deadline_for_groups = now + timezone.timedelta(days=3)
+        recruitment.save()
+
+        with patch('django.utils.timezone.now') as mock_now:
+            mock_now.return_value = now + timezone.timedelta(days=3, hours=1)
+
+            with pytest.raises(ValidationError):
+                fixture_recruitment_application.update_priority(1)  # RESERVE
+
+            with pytest.raises(ValidationError):
+                fixture_recruitment_application2.update_priority(1)  # RESERVE
+
+            with pytest.raises(ValidationError):
+                # Use integer value here too
+                fixture_recruitment_application.update_recruiter_priority(2)  # 2 is WANTED
+
+            with pytest.raises(ValidationError):
+                fixture_recruitment_application2.update_recruiter_priority(2)  # 2 is WANTED
+
+    def test_deadline_ordering_validation(self, fixture_recruitment: Recruitment):
+        """Test that deadlines must be in correct chronological order"""
+        now = timezone.now()
+        fixture_recruitment.visible_from = now
+        fixture_recruitment.shown_application_deadline = now + timezone.timedelta(hours=12)
+        fixture_recruitment.actual_application_deadline = now + timezone.timedelta(days=1)
+        fixture_recruitment.reprioritization_deadline_for_applicant = now + timezone.timedelta(days=2)
+        fixture_recruitment.reprioritization_deadline_for_groups = now + timezone.timedelta(days=3)
+        fixture_recruitment.save()
+
+        # Try invalid order - applicant deadline after groups deadline
+        fixture_recruitment.reprioritization_deadline_for_applicant = now + timezone.timedelta(days=4)
+        fixture_recruitment.reprioritization_deadline_for_groups = now + timezone.timedelta(days=3)
+
+        with pytest.raises(ValidationError) as exc:
+            fixture_recruitment.clean()
+
+        error_dict = dict(exc.value)
+        assert fixture_recruitment.REPRIORITIZATION_GROUP_BEFORE_APPLICANT in error_dict['reprioritization_deadline_for_groups']
+        assert fixture_recruitment.REPRIORITIZATION_APPLICANT_AFTER_GROUP in error_dict['reprioritization_deadline_for_applicant']
