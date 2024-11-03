@@ -555,6 +555,7 @@ class RecruitmentApplication(CustomBaseModel):
         Validates the application before saving, checking:
         - Priority constraints for active applications
         - Maximum application limits
+        - Application deadline constraints
 
         Raises:
             ValidationError: If any validation constraints are violated
@@ -562,10 +563,14 @@ class RecruitmentApplication(CustomBaseModel):
         super().clean()
         errors: dict[str, list[str]] = defaultdict(list)
 
+        # Don't validate withdrawn applications except for deadline
         if not self.withdrawn and self.applicant_priority:
             self._validate_priority(errors)
         if self.recruitment.max_applications:
             self._validate_application_limits(errors)
+
+        # Always validate deadline constraints
+        self._validate_deadline_constraints(errors)
 
         if errors:
             raise ValidationError(errors)
@@ -598,6 +603,23 @@ class RecruitmentApplication(CustomBaseModel):
             elif current_application.withdrawn and not self.withdrawn:
                 # Attempting to reapply a withdrawn application when at limit
                 errors['recruitment'].append(self.REAPPLY_TOO_MANY_APPLICATIONS_ERROR)
+
+    def _validate_deadline_constraints(self, errors: dict[str, list[str]]) -> None:
+        """
+        Validates that the application is being submitted within the allowed time window.
+
+        Args:
+            errors: Dictionary to collect validation errors
+        """
+        now = timezone.now()
+
+        # Check if recruitment period has started
+        if now < self.recruitment.visible_from:
+            errors['recruitment'].append('Recruitment period has not started yet')
+
+        # Check if deadline has passed
+        if now > self.recruitment.actual_application_deadline:
+            errors['recruitment'].append('Application deadline has passed')
 
     def get_total_interviews(self) -> int:
         """
