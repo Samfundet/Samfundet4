@@ -280,6 +280,7 @@ export const KEY = {
   recruitment_interviewer: 'recruitment_interviewer',
   recruitment_interviewers: 'recruitment_interviewers',
   recruitment_interviews: 'recruitment_interviews',
+  recruitment_interview_planned: 'recruitment_interview_planned',
   recruitment_no_interviews: 'recruitment_no_interviews',
   recruitment_interview_set: 'recruitment_interview_set',
   recruitment_interview_groups: 'recruitment_interview_groups',
