@@ -6,10 +6,13 @@ import { WithoutInterviewList } from './WithoutInterviewList';
 
 type WithoutInterviewModalProps = {
   applications: RecruitmentApplicationDto[];
-  applications_without_interview: RecruitmentApplicationDto[];
+  applicationsWithoutInterview: RecruitmentApplicationDto[];
 };
 
-export function WithoutInterviewModal({ applications, applications_without_interview }: WithoutInterviewModalProps) {
+export function WithoutInterviewModal({
+  applications,
+  applicationsWithoutInterview: applications_without_interview,
+}: WithoutInterviewModalProps) {
   const [withoutInterviewModal, setWithoutInterviewModal] = useState(false);
 
   return (

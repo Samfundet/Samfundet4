@@ -28,9 +28,11 @@ export function WithoutInterviewList({ applications }: WithoutInterviewListProps
           content: (
             <Link
               url={reverse({
-                pattern: ROUTES.frontend.admin_recruitment_applicant,
+                pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
                 urlParams: {
-                  applicationID: application.id,
+                  recruitmentId: application.recruitment,
+                  gangId: application.recruitment_position.gang.id,
+                  positionId: application.recruitment_position.id,
                 },
               })}
             >

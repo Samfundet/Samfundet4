@@ -64,7 +64,7 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
         value: user.applications_without_interview ? user.applications_without_interview.length : 0,
         content: (
           <WithoutInterviewModal
-            applications_without_interview={user.applications_without_interview}
+            applicationsWithoutInterview={user.applications_without_interview}
             applications={user.applications}
           />
         ),
