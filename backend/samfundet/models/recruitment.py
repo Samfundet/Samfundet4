@@ -578,7 +578,6 @@ class RecruitmentApplication(CustomBaseModel):
         # Don't validate withdrawn applications except for deadline
         if not self.withdrawn and self.applicant_priority:
             self._validate_priority(errors)
-            self._validate_no_duplicate_position(errors)
         if self.recruitment.max_applications:
             self._validate_application_limits(errors)
 
@@ -587,18 +586,6 @@ class RecruitmentApplication(CustomBaseModel):
 
         if errors:
             raise ValidationError(errors)
-
-    def _validate_no_duplicate_position(self, errors: dict[str, list[str]]) -> None:
-        """
-        Validates that the user hasn't already applied to this position,
-        while allowing updates to existing applications
-        """
-        existing = (
-            RecruitmentApplication.objects.filter(user=self.user, recruitment_position=self.recruitment_position, withdrawn=False).exclude(pk=self.pk).exists()
-        )
-
-        if existing:
-            errors['recruitment_position'].append('You have already applied for this position')
 
     def _validate_priority(self, errors: dict[str, list[str]]) -> None:
         """
