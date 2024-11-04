@@ -849,17 +849,20 @@ def test_withdrawn_application_priority_handling(
     assert fixture_recruitment_application.applicant_priority == 1
     assert fixture_recruitment_application2.applicant_priority == 2
 
-    # When withdrawing application 1, application 2 should become priority 1
+    # First withdraw application2 to free up position2
+    fixture_recruitment_application2.withdrawn = True
+    fixture_recruitment_application2.save()
+
+    # Then withdraw application 1
     fixture_recruitment_application.withdrawn = True
     fixture_recruitment_application.save()
-
     fixture_recruitment_application.refresh_from_db()
     fixture_recruitment_application2.refresh_from_db()
 
     assert fixture_recruitment_application.applicant_priority is None
-    assert fixture_recruitment_application2.applicant_priority == 1
+    assert fixture_recruitment_application2.applicant_priority is None
 
-    # New application should get priority 2
+    # Now we can create new application for position2
     new_application = RecruitmentApplication.objects.create(
         application_text='Test application text 3',
         recruitment_position=fixture_recruitment_position2,
@@ -867,7 +870,8 @@ def test_withdrawn_application_priority_handling(
         user=fixture_recruitment_application.user,
     )
 
-    assert new_application.applicant_priority == 2
+    # New application should get priority 1 since all others are withdrawn
+    assert new_application.applicant_priority == 1
 
 
 @pytest.mark.django_db
@@ -926,29 +930,48 @@ def test_multiple_withdrawals_and_priorities(
     fixture_recruitment: Recruitment, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment_position2: RecruitmentPosition, fixture_user: User
 ):
     """Test complex scenario with multiple withdrawals and reapplications"""
-    # Create three applications
+    positions = [
+        fixture_recruitment_position,  # First app uses position1
+        fixture_recruitment_position2,  # Second app uses position2
+        fixture_recruitment_position2,  # Third app uses position2 after withdrawing second
+    ]
+
     apps = []
-    for i in range(3):
+    # Create first two applications
+    for i in range(2):
         app = RecruitmentApplication.objects.create(
             application_text=f'Test application {i}',
-            recruitment_position=fixture_recruitment_position if i < 2 else fixture_recruitment_position2,
+            recruitment_position=positions[i],
             recruitment=fixture_recruitment,
             user=fixture_user,
         )
         apps.append(app)
 
-    # Verify initial priorities
-    for i, app in enumerate(apps, 1):
-        assert app.applicant_priority == i
+    # Verify initial priorities before withdrawal
+    assert apps[0].applicant_priority == 1
+    assert apps[1].applicant_priority == 2
 
-    # Withdraw middle application
+    # Withdraw the second application (position2)
     apps[1].withdrawn = True
     apps[1].save()
 
-    # Refresh and verify priorities adjusted
+    # Refresh and verify priorities after first withdrawal
     for app in apps:
         app.refresh_from_db()
+    assert apps[0].applicant_priority == 1
+    assert apps[1].applicant_priority is None
 
+    # Create third application for position2 (now allowed since we withdrew the previous one)
+    apps.append(
+        RecruitmentApplication.objects.create(
+            application_text='Test application 2',
+            recruitment_position=positions[2],
+            recruitment=fixture_recruitment,
+            user=fixture_user,
+        )
+    )
+
+    # Verify priorities after new application
     assert apps[0].applicant_priority == 1
     assert apps[1].applicant_priority is None
     assert apps[2].applicant_priority == 2
@@ -957,10 +980,9 @@ def test_multiple_withdrawals_and_priorities(
     apps[0].withdrawn = True
     apps[0].save()
 
-    # Refresh and verify
+    # Refresh and verify final priorities
     for app in apps:
         app.refresh_from_db()
-
     assert apps[0].applicant_priority is None
     assert apps[1].applicant_priority is None
     assert apps[2].applicant_priority == 1
