@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { InputField, TimeDisplay } from '~/Components';
+import { TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
-import { putRecruitmentApplicationForGang } from '~/api';
+import { getRecruitmentApplicationStateChoices, putRecruitmentApplicationForGang } from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -13,6 +13,7 @@ import { ROUTES } from '~/routes';
 import { Link } from '../Link';
 import { SetInterviewManuallyModal } from '../SetInterviewManually';
 import styles from './RecruitmentApplicantsStatus.module.scss';
+import { useEffect, useState } from 'react';
 
 type RecruitmentApplicantsStatusProps = {
   applicants: RecruitmentApplicationDto[];
@@ -22,21 +23,6 @@ type RecruitmentApplicantsStatusProps = {
   updateStateFunction: (id: string, data: RecruitmentApplicationStateDto) => void;
   onInterviewChange: () => void;
 };
-
-// TODO add backend to fetch these
-const priorityOptions: DropdownOption<number>[] = [
-  { label: 'Not Set', value: 0 },
-  { label: 'Reserve', value: 1 },
-  { label: 'Wanted', value: 2 },
-  { label: 'Not Wanted', value: 3 },
-];
-
-const statusOptions: DropdownOption<number>[] = [
-  { label: 'Nothing', value: 0 },
-  { label: 'Called and accepted', value: 1 },
-  { label: 'Called and rejected', value: 2 },
-  { label: 'Automatic rejection', value: 3 },
-];
 
 const editChoices = {
   update_time: 'update_time',
@@ -55,6 +41,23 @@ export function RecruitmentApplicantsStatus({
 }: RecruitmentApplicantsStatusProps) {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
+
+ 
+  const [priorityOptions, setPriorityOptions] =  useState<DropdownOption<number>[]>([])
+  const [statusOptions, setStatusOptions] =  useState<DropdownOption<number>[]>([])
+  
+  useEffect(() => {
+    //recruiter_priority: [number, string][];
+    //recruiter_status: [number, string][];
+    getRecruitmentApplicationStateChoices().then((response) => {
+      setPriorityOptions(response.data.recruiter_priority.map(priority => {return {label: priority[1], value: priority[0]}} ))
+      setStatusOptions(response.data.recruiter_status.map(status => {return {label: status[1], value: status[0]}} ))
+
+    })
+
+  },
+    
+    [])
 
   const tableColumns = [
     { content: t(KEY.recruitment_applicant), sortable: true, hideSortButton: false },
