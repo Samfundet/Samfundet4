@@ -107,8 +107,12 @@ export function RecruitmentGangAllApplicantsAdminPage() {
         { content: <Link url={applicationURL}>{dbT(application.recruitment_position, 'name')}</Link> },
         application.interview?.interview_time,
         application.interview?.interview_location,
-        RecruitmentPriorityChoicesMapping[application.recruiter_priority as number],
-        RecruitmentStatusChoicesMapping[application.recruiter_status as number],
+        application.recruiter_priority !== undefined
+          ? RecruitmentPriorityChoicesMapping[application.recruiter_priority]
+          : 'N/A',
+        application.recruiter_status !== undefined
+          ? RecruitmentStatusChoicesMapping[application.recruiter_status]
+          : 'N/A',
       ],
     };
   });
