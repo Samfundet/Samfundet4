@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
@@ -13,7 +14,6 @@ import { ROUTES } from '~/routes';
 import { Link } from '../Link';
 import { SetInterviewManuallyModal } from '../SetInterviewManually';
 import styles from './RecruitmentApplicantsStatus.module.scss';
-import { useEffect, useState } from 'react';
 
 type RecruitmentApplicantsStatusProps = {
   applicants: RecruitmentApplicationDto[];
@@ -42,22 +42,25 @@ export function RecruitmentApplicantsStatus({
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
 
- 
-  const [priorityOptions, setPriorityOptions] =  useState<DropdownOption<number>[]>([])
-  const [statusOptions, setStatusOptions] =  useState<DropdownOption<number>[]>([])
-  
+  const [priorityOptions, setPriorityOptions] = useState<DropdownOption<number>[]>([]);
+  const [statusOptions, setStatusOptions] = useState<DropdownOption<number>[]>([]);
+
   useEffect(() => {
     //recruiter_priority: [number, string][];
     //recruiter_status: [number, string][];
     getRecruitmentApplicationStateChoices().then((response) => {
-      setPriorityOptions(response.data.recruiter_priority.map(priority => {return {label: priority[1], value: priority[0]}} ))
-      setStatusOptions(response.data.recruiter_status.map(status => {return {label: status[1], value: status[0]}} ))
-
-    })
-
-  },
-    
-    [])
+      setPriorityOptions(
+        response.data.recruiter_priority.map((priority) => {
+          return { label: priority[1], value: priority[0] };
+        }),
+      );
+      setStatusOptions(
+        response.data.recruiter_status.map((status) => {
+          return { label: status[1], value: status[0] };
+        }),
+      );
+    });
+  }, []);
 
   const tableColumns = [
     { content: t(KEY.recruitment_applicant), sortable: true, hideSortButton: false },
