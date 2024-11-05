@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Table } from '~/Components/Table';
 import type { RecruitmentUserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { InputField } from '../InputField';
@@ -54,7 +55,19 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
     return [
       {
         value: `${user.first_name} ${user.last_name}`,
-        content: <Link url={ROUTES.frontend.recruitment_application}>{`${user.first_name} ${user.last_name}`}</Link>,
+        content: (
+          <Link
+            url={reverse({
+              pattern: ROUTES.frontend.admin_recruitment_applicant,
+              urlParams: {
+                applicationID: user.top_application.id,
+              },
+            })}
+            className={styles.text}
+          >
+            {user.first_name} {user.last_name}
+          </Link>
+        ),
       },
       user.email,
       user.phone_number,
