@@ -65,7 +65,7 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
             })}
             className={styles.text}
           >
-            {`${user.first_name} ${user.last_name}`}
+            {user.first_name} {user.last_name}
           </Link>
         ),
       },
