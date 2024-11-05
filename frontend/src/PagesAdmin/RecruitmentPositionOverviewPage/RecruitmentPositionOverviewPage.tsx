@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, RecruitmentApplicantsStatus } from '~/Components';
 import { Text } from '~/Components/Text/Text';
-import { getRecruitmentApplicationsForGang, updateRecruitmentApplicationStateForPosition } from '~/api';
+import { getRecruitmentApplicationsForGang, getRecruitmentPositionOrganizedApplications, updateRecruitmentApplicationStateForPosition } from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
@@ -33,46 +33,22 @@ export function RecruitmentPositionOverviewPage() {
     if (!recruitmentId || !gangId || !positionId) {
       return;
     }
-    getRecruitmentApplicationsForGang(gangId, recruitmentId)
-      .then((data) => {
+    getRecruitmentPositionOrganizedApplications(positionId)
+      .then((response) => {
         setRecruitmentApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status === 0 &&
-              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-          ),
+          response.data.unprocessed
         );
         setWithdrawnApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-          ),
+          response.data.withdrawn
         );
         setHardtogetApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status === 2 &&
-              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-          ),
+          response.data.hardtoget
         );
         setRejectedApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status === 3 &&
-              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-          ),
+          response.data.rejected
         );
         setAcceptedApplicants(
-          data.data.filter(
-            (recruitmentApplicant) =>
-              !recruitmentApplicant.withdrawn &&
-              recruitmentApplicant.recruiter_status === 1 &&
-              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-          ),
+          response.data.accepted
         );
         setShowSpinner(false);
       })
@@ -91,45 +67,21 @@ export function RecruitmentPositionOverviewPage() {
   const updateApplicationState = (id: string, data: RecruitmentApplicationStateDto) => {
     positionId &&
       updateRecruitmentApplicationStateForPosition(id, data)
-        .then((data) => {
+        .then((response) => {
           setRecruitmentApplicants(
-            data.data.filter(
-              (recruitmentApplicant) =>
-                !recruitmentApplicant.withdrawn &&
-                recruitmentApplicant.recruiter_status === 0 &&
-                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-            ),
+            response.data.unprocessed
           );
           setWithdrawnApplicants(
-            data.data.filter(
-              (recruitmentApplicant) =>
-                recruitmentApplicant.withdrawn &&
-                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-            ),
+            response.data.withdrawn
           );
           setHardtogetApplicants(
-            data.data.filter(
-              (recruitmentApplicant) =>
-                !recruitmentApplicant.withdrawn &&
-                recruitmentApplicant.recruiter_status === 2 &&
-                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-            ),
+            response.data.hardtoget
           );
           setRejectedApplicants(
-            data.data.filter(
-              (recruitmentApplicant) =>
-                !recruitmentApplicant.withdrawn &&
-                recruitmentApplicant.recruiter_status === 3 &&
-                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-            ),
+            response.data.rejected
           );
           setAcceptedApplicants(
-            data.data.filter(
-              (recruitmentApplicant) =>
-                !recruitmentApplicant.withdrawn &&
-                recruitmentApplicant.recruiter_status === 1 &&
-                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
-            ),
+            response.data.accepted
           );
           setShowSpinner(false);
         })
