@@ -828,7 +828,7 @@ export async function getRecruitmentPositionOrganizedApplications(
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_position_organized_applications,
       urlParams: {
-        pk: positionId
+        pk: positionId,
       },
     });
   return await axios.get(url, { withCredentials: true });

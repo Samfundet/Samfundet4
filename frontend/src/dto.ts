@@ -502,7 +502,7 @@ export type RecruitmentPositionOrganizedApplicationsDto = {
   rejected: RecruitmentApplicationDto[];
   accepted: RecruitmentApplicationDto[];
   hardtoget: RecruitmentApplicationDto[];
-}
+};
 
 export type RecruitmentApplicationDto = {
   id: string;

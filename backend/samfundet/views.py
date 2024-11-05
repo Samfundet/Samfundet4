@@ -1053,6 +1053,7 @@ class RecruitmentPositionOrganizedApplicationsView(APIView):
         serializer = self.serializer_class(position)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 class RecruitmentApplicationForPositionUpdateStateView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationUpdateForGangSerializer

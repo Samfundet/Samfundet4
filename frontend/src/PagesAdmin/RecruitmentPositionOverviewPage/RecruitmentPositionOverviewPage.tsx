@@ -4,7 +4,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, RecruitmentApplicantsStatus } from '~/Components';
 import { Text } from '~/Components/Text/Text';
-import { getRecruitmentApplicationsForGang, getRecruitmentPositionOrganizedApplications, updateRecruitmentApplicationStateForPosition } from '~/api';
+import {
+  getRecruitmentApplicationsForGang,
+  getRecruitmentPositionOrganizedApplications,
+  updateRecruitmentApplicationStateForPosition,
+} from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
@@ -35,21 +39,11 @@ export function RecruitmentPositionOverviewPage() {
     }
     getRecruitmentPositionOrganizedApplications(positionId)
       .then((response) => {
-        setRecruitmentApplicants(
-          response.data.unprocessed
-        );
-        setWithdrawnApplicants(
-          response.data.withdrawn
-        );
-        setHardtogetApplicants(
-          response.data.hardtoget
-        );
-        setRejectedApplicants(
-          response.data.rejected
-        );
-        setAcceptedApplicants(
-          response.data.accepted
-        );
+        setRecruitmentApplicants(response.data.unprocessed);
+        setWithdrawnApplicants(response.data.withdrawn);
+        setHardtogetApplicants(response.data.hardtoget);
+        setRejectedApplicants(response.data.rejected);
+        setAcceptedApplicants(response.data.accepted);
         setShowSpinner(false);
       })
       .catch((data) => {
@@ -68,21 +62,11 @@ export function RecruitmentPositionOverviewPage() {
     positionId &&
       updateRecruitmentApplicationStateForPosition(id, data)
         .then((response) => {
-          setRecruitmentApplicants(
-            response.data.unprocessed
-          );
-          setWithdrawnApplicants(
-            response.data.withdrawn
-          );
-          setHardtogetApplicants(
-            response.data.hardtoget
-          );
-          setRejectedApplicants(
-            response.data.rejected
-          );
-          setAcceptedApplicants(
-            response.data.accepted
-          );
+          setRecruitmentApplicants(response.data.unprocessed);
+          setWithdrawnApplicants(response.data.withdrawn);
+          setHardtogetApplicants(response.data.hardtoget);
+          setRejectedApplicants(response.data.rejected);
+          setAcceptedApplicants(response.data.accepted);
           setShowSpinner(false);
         })
         .catch((data) => {

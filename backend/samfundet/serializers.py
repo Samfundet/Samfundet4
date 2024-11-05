@@ -1094,6 +1094,7 @@ class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
     def get_application_count(self, application: RecruitmentApplication) -> int:
         return application.user.applications.filter(recruitment=application.recruitment).count()
 
+
 class RecruitmentPositionOrganizedApplications(CustomBaseSerializer):
     applicationSerializer = RecruitmentApplicationForGangSerializer
     unprocessed = serializers.SerializerMethodField(method_name='get_unprocessed', read_only=True)
@@ -1113,18 +1114,21 @@ class RecruitmentPositionOrganizedApplications(CustomBaseSerializer):
     def get_withdrawn(self, instance: RecruitmentPosition):
         withdrawn = instance.applications.filter(withdrawn=True)
         return self.applicationSerializer(withdrawn, many=True).data
-    
+
     def get_rejected(self, instance: RecruitmentPosition):
-        rejected = instance.applications.filter(withdrawn=False, recruiter_status__in=[RecruitmentStatusChoices.AUTOMATIC_REJECTION, RecruitmentStatusChoices.REJECTION])
+        rejected = instance.applications.filter(
+            withdrawn=False, recruiter_status__in=[RecruitmentStatusChoices.AUTOMATIC_REJECTION, RecruitmentStatusChoices.REJECTION]
+        )
         return self.applicationSerializer(rejected, many=True).data
 
     def get_accepted(self, instance: RecruitmentPosition):
         accepted = instance.applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED)
         return self.applicationSerializer(accepted, many=True).data
-    
+
     def get_hardtoget(self, instance: RecruitmentPosition):
         hardtoget = instance.applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_REJECTED)
         return self.applicationSerializer(hardtoget, many=True).data
+
 
 class RecruitmentApplicationUpdateForGangSerializer(serializers.Serializer):
     recruiter_priority = serializers.ChoiceField(choices=RecruitmentPriorityChoices.choices, required=False)
