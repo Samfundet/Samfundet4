@@ -1,12 +1,12 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '~/Components';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { Button } from '../Button';
-import type { DropDownOption } from '../Dropdown/Dropdown';
+import type { DropdownOption } from '../Dropdown/Dropdown';
 import styles from './MultiSelect.module.scss';
 import { SelectBox } from './SelectBox';
 import { exists, searchFilter } from './utils';
@@ -14,8 +14,8 @@ import { exists, searchFilter } from './utils';
 type MultiSelectProps<T> = {
   optionsLabel?: string;
   selectedLabel?: string;
-  selected?: DropDownOption<T>[];
-  options?: DropDownOption<T>[];
+  selected?: DropdownOption<T>[];
+  options?: DropdownOption<T>[];
   onChange?: (values: T[]) => void;
   className?: string;
 };
@@ -24,19 +24,15 @@ type MultiSelectProps<T> = {
  * `options`: All possible options that can be selected.
  * `selected`: Selected values if state is managed outside this component.
  */
-export function MultiSelect<T>({
-  optionsLabel,
-  selectedLabel,
-  className,
-  selected: initialValues = [],
-  options = [],
-  onChange,
-}: MultiSelectProps<T>) {
+function MultiSelectInner<T>(
+  { optionsLabel, selectedLabel, className, selected: initialValues = [], options = [], onChange }: MultiSelectProps<T>,
+  ref: React.Ref<HTMLDivElement>,
+) {
   const { t } = useTranslation();
   const isDesktop = useDesktop();
 
   const [search, setSearch] = useState('');
-  const [selected, setSelected] = useState<DropDownOption<T>[]>(initialValues);
+  const [selected, setSelected] = useState<DropdownOption<T>[]>(initialValues);
 
   const filteredOptions = useMemo(
     () => options.filter((item) => searchFilter(item, search)).filter((item) => !exists(item, selected)),
@@ -49,11 +45,11 @@ export function MultiSelect<T>({
     onChange?.(selected.map((item) => item.value));
   }, [selected, onChange]);
 
-  function selectItem(item: DropDownOption<T>) {
+  function selectItem(item: DropdownOption<T>) {
     setSelected((selected) => [...selected, item]);
   }
 
-  function unselectItem(item: DropDownOption<T>) {
+  function unselectItem(item: DropdownOption<T>) {
     setSelected((selected) => selected.filter((_item) => _item !== item));
   }
 
@@ -66,10 +62,10 @@ export function MultiSelect<T>({
   }
 
   return (
-    <div className={classNames(styles.container, className)}>
+    <div className={classNames(styles.container, className)} ref={ref}>
       <Input
         type="text"
-        onChange={(e) => setSearch(e as string)}
+        onChange={(e) => setSearch(e.target.value)}
         value={search}
         placeholder={`${t(KEY.common_search)}...`}
         className={styles.search_input}
@@ -94,3 +90,8 @@ export function MultiSelect<T>({
     </div>
   );
 }
+
+export const MultiSelect = React.forwardRef(MultiSelectInner) as <T>(
+  props: MultiSelectProps<T> & { ref?: React.Ref<HTMLDivElement> },
+) => ReturnType<typeof MultiSelectInner>;
+(MultiSelect as React.ForwardRefExoticComponent<unknown>).displayName = 'MultiSelect';

@@ -6,7 +6,7 @@ import { RecruitmentWithoutInterviewTable } from '~/Components';
 import { Text } from '~/Components/Text/Text';
 import { getApplicantsWithoutThreeInterviewCriteria, getRecruitment } from '~/api';
 import type { RecruitmentDto, RecruitmentUserDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -21,6 +21,7 @@ export function RecruitmentUsersWithoutThreeInterviewCriteriaPage() {
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
+  useTitle(t(KEY.recruitment_three_interviews_criteria_button));
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {

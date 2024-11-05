@@ -1,0 +1,1 @@
+export { IsfitOutlet } from './IsfitOutlet';

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, ImageCard } from '~/Components';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
@@ -61,11 +61,11 @@ export function EventCreatorAdminPage() {
   const { id } = useParams();
 
   // TODO these are temporary and must be fetched from API when implemented.
-  const eventCategoryOptions: DropDownOption<string>[] = [
+  const eventCategoryOptions: DropdownOption<string>[] = [
     { value: 'concert', label: 'Konsert' },
     { value: 'debate', label: 'Debatt' },
   ];
-  const ageLimitOptions: DropDownOption<EventAgeRestrictionValue>[] = [
+  const ageLimitOptions: DropdownOption<EventAgeRestrictionValue>[] = [
     { value: 'none', label: 'Ingen' },
     { value: 'eighteen', label: '18 år' },
     { value: 'twenty', label: '20 år' },
