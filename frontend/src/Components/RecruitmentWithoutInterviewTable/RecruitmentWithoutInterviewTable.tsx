@@ -25,7 +25,7 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
     { content: t(KEY.common_phonenumber), sortable: true },
     { content: t(KEY.recruitment_applicant_top_position), sortable: true },
     { content: t(KEY.recruitment_number_of_applications), sortable: true },
-    { content: t(KEY.common_processed), sortable: true },
+    { content: t(KEY.recruitment_interview_planned), sortable: true },
   ];
 
   function filterUsers(): RecruitmentUserDto[] {
@@ -77,7 +77,8 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
         value: user.applications_without_interview ? user.applications_without_interview.length : 0,
         content: (
           <WithoutInterviewModal
-            applications_without_interview={user.applications_without_interview}
+            user={user}
+            applicationsWithoutInterview={user.applications_without_interview}
             applications={user.applications}
           />
         ),
