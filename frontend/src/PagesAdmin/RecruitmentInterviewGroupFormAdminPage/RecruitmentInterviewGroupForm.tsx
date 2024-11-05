@@ -17,7 +17,7 @@ import {
   Input,
   Textarea,
 } from '~/Components';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { MultiSelect } from '~/Components/MultiSelect';
 import {
   getRecruitmentPositions,
@@ -55,7 +55,7 @@ export function RecruitmentInterviewGroupForm({ initialData, recruitmentId, shar
     defaultValues: initialData,
   });
 
-  const [positionOptions, setPositionOptions] = useState<DropDownOption<number>[]>([]);
+  const [positionOptions, setPositionOptions] = useState<DropdownOption<number>[]>([]);
 
   const submitText = sharedInterviewGroupId ? t(KEY.common_save) : t(KEY.common_create);
 
