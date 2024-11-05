@@ -41,7 +41,7 @@ router.register('role', views.RoleView, 'role')
 
 ########## Recruitment ##########
 router.register('recruitment', views.RecruitmentView, 'recruitment')
-router.register('recruitmentSharedInterviewGroup', views.RecruitmentSharedInterviewGroupView, 'recruitment_sharedinterviewgroups')
+router.register('recruitment-sharedinterviewgroup', views.RecruitmentSharedInterviewGroupView, 'recruitment_sharedinterviewgroups')
 router.register('recruitment-for-recruiter', views.RecruitmentForRecruiterView, 'recruitment_for_recruiter')
 router.register('recruitment-stats', views.RecruitmentStatisticsView, 'recruitment_stats')
 router.register('recruitment-separateposition', views.RecruitmentSeparatePositionView, 'recruitment_separateposition')
