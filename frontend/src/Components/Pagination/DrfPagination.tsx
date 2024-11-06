@@ -27,7 +27,7 @@ const showStartEllipsis = (current: number, boundaryCount: number, siblingCount:
 const showEndEllipsis = (current: number, total: number, boundaryCount: number, siblingCount: number): boolean =>
   boundaryCount > 0 && siblingCount > 0 && current < total - boundaryCount - siblingCount;
 
-export const DrfPagination: React.FC<DRFPaginationProps> = ({
+export function DrfPagination({
   currentPage,
   totalItems,
   pageSize,
@@ -36,7 +36,7 @@ export const DrfPagination: React.FC<DRFPaginationProps> = ({
   boundaryCount = 1,
   className,
   itemClassName,
-}) => {
+}: DRFPaginationProps) {
   const totalPages = Math.ceil(totalItems / pageSize);
 
   const paginationItems = useMemo(() => {
@@ -111,4 +111,4 @@ export const DrfPagination: React.FC<DRFPaginationProps> = ({
       </Pagination>
     </div>
   );
-};
+}
