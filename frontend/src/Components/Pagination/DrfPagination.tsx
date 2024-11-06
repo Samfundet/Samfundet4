@@ -66,7 +66,7 @@ export const DrfPagination: React.FC<DRFPaginationProps> = ({
         <PaginationContent>
           <PaginationItem className={itemClassName}>
             <PaginationControl
-              controllText={<Icon icon={'mdi:chevron-left'} />}
+              controlSymbol={<Icon icon={'mdi:chevron-left'} />}
               onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
               disabled={currentPage === 1}
               theme={navButtonTheme}
@@ -83,7 +83,7 @@ export const DrfPagination: React.FC<DRFPaginationProps> = ({
               ) : (
                 <PaginationControl
                   isActive={page === currentPage}
-                  controllText={String(page)}
+                  controlSymbol={String(page)}
                   onClick={() => onPageChange(page)}
                   theme={buttonTheme}
                   display={buttonDisplay}
@@ -95,7 +95,7 @@ export const DrfPagination: React.FC<DRFPaginationProps> = ({
 
           <PaginationItem className={itemClassName}>
             <PaginationControl
-              controllText={<Icon icon={'mdi:chevron-right'} />}
+              controlSymbol={<Icon icon={'mdi:chevron-right'} />}
               onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
               theme={navButtonTheme}

@@ -7,7 +7,7 @@ import styles from './PaginationControll.module.scss';
 type PaginationControllProps = {
   isActive?: boolean;
   className?: string;
-  controllText: string | ReactNode;
+  controlSymbol: string | ReactNode;
   theme?: ButtonTheme;
   display?: ButtonDisplay;
   type?: ButtonType;
@@ -23,7 +23,7 @@ type PaginationControllProps = {
 export function PaginationControl({
   isActive,
   className,
-  controllText,
+  controlSymbol,
   theme = 'basic',
   display = 'basic',
   rounded = false,
@@ -41,7 +41,7 @@ export function PaginationControl({
       className={classNames(styles.control, className)}
       {...props}
     >
-      {controllText}
+      {controlSymbol}
     </Button>
   );
 }
