@@ -1,10 +1,13 @@
+import classNames from 'classnames';
+import type { ReactNode } from 'react';
 import { Button, type ButtonDisplay, type ButtonTheme } from '~/Components/Button';
 import type { ButtonType } from '~/types';
+import styles from './PaginationControll.module.scss';
 
 type PaginationControllProps = {
   isActive?: boolean;
   className?: string;
-  controllText: string;
+  controllText: string | ReactNode;
   theme?: ButtonTheme;
   display?: ButtonDisplay;
   type?: ButtonType;
@@ -35,7 +38,7 @@ export function PaginationControll({
       rounded={rounded}
       onClick={onClick}
       disabled={disabled}
-      className={className}
+      className={classNames(styles.control, className)}
       {...props}
     >
       {controllText}
