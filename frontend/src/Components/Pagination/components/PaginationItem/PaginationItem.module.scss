@@ -1,5 +1,8 @@
 .item {
-  flex: 1;
   display: flex;
-  min-width: 0; // Allows items to shrink below their content size if needed
+  justify-content: center;
+  min-width: 3rem;
+  max-width: 4rem;
+  flex-basis: 3rem;
+  flex-shrink: 1;
 }
