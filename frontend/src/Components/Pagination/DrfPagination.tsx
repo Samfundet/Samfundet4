@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import type { ButtonDisplay, ButtonTheme } from '../Button';
 import styles from './DrfPagination.module.scss';
-import { Pagination, PaginationContent, PaginationControll, PaginationEllipsis, PaginationItem } from './components';
+import { Pagination, PaginationContent, PaginationControl, PaginationEllipsis, PaginationItem } from './components';
 interface DRFPaginationProps {
   currentPage: number;
   totalItems: number;
@@ -65,7 +65,7 @@ export const DrfPagination: React.FC<DRFPaginationProps> = ({
       <Pagination className={className}>
         <PaginationContent>
           <PaginationItem className={itemClassName}>
-            <PaginationControll
+            <PaginationControl
               controllText={<Icon icon={'mdi:chevron-left'} />}
               onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
               disabled={currentPage === 1}
@@ -81,7 +81,7 @@ export const DrfPagination: React.FC<DRFPaginationProps> = ({
               {page === 'ellipsis' ? (
                 <PaginationEllipsis />
               ) : (
-                <PaginationControll
+                <PaginationControl
                   isActive={page === currentPage}
                   controllText={String(page)}
                   onClick={() => onPageChange(page)}
@@ -94,7 +94,7 @@ export const DrfPagination: React.FC<DRFPaginationProps> = ({
           ))}
 
           <PaginationItem className={itemClassName}>
-            <PaginationControll
+            <PaginationControl
               controllText={<Icon icon={'mdi:chevron-right'} />}
               onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
               disabled={currentPage === totalPages}

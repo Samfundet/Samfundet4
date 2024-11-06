@@ -20,7 +20,7 @@ type PaginationControllProps = {
   title?: string;
 };
 
-export function PaginationControll({
+export function PaginationControl({
   isActive,
   className,
   controllText,
