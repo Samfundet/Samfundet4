@@ -262,6 +262,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
   [KEY.recruitment_will_be_anonymized]: 'All info relatert til dine søknader vil bli slettet 3 uker etter opptaket',
   [KEY.recruitment_interviews]: 'Intervjuer',
+  [KEY.recruitment_interview_planned]: 'Intervjuer planlagt',
   [KEY.recruitment_interviewer]: 'Intervjuer',
   [KEY.recruitment_interviewers]: 'Intervjuere',
   [KEY.recruitment_no_interviews]: 'Ingen intervjuer',
@@ -471,6 +472,9 @@ export const nb = prepareTranslations({
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
+
+  [KEY.promo_media_description]: 'Lenke eller ID til en YouTube-video',
+  [KEY.promo_media_invalid]: 'Må være en gyldig lenke til en YouTube-video',
 
   // Errors
   [KEY.error_generic]: 'Uventet feil',
@@ -744,6 +748,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_will_be_anonymized]:
     'All info related to the applications will be anonymized three weeks after the recruitment is over',
   [KEY.recruitment_interviews]: 'Interviews',
+  [KEY.recruitment_interview_planned]: 'Interviews planned',
   [KEY.recruitment_interviewer]: 'Interviewer',
   [KEY.recruitment_interviewers]: 'Interviewers',
   [KEY.recruitment_no_interviews]: 'No interviews',
@@ -888,6 +893,10 @@ export const en = prepareTranslations({
   [KEY.admin_information_confirm_cancel]: 'Are you sure you want to exit without saving?',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'It is not possible to change the uploaded file.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
+
+  [KEY.promo_media_description]: 'Link or ID of a YouTube video',
+  [KEY.promo_media_invalid]: 'Must be a valid link to a YouTube video',
+
   [KEY.recruitment_three_interviews_criteria_header]:
     'Applicants with less than 3 interviews, but have applied to more than 3 positions',
   [KEY.recruitment_three_interviews_criteria_button]: 'Applicants with less than 3 interviews',
