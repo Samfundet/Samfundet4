@@ -49,10 +49,6 @@ Basic.args = {
   currentPage: 1,
   totalItems: 100,
   pageSize: 10,
-  buttonTheme: 'samf',
-  navButtonTheme: 'samf',
-  buttonDisplay: 'basic',
-  rounded: false,
 };
 Basic.parameters = {
   docs: {
