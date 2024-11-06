@@ -49,7 +49,7 @@ export { NumberInput } from './NumberInput';
 export { OccupiedForm, OccupiedFormModal } from './OccupiedForm';
 export { OpeningHours } from './OpeningHours';
 export { Page } from './Page';
-export { DrfPagination } from './Pagination';
+export { PagedPagination } from './Pagination';
 export { PermissionRoute } from './PermissionRoute';
 export { PhoneNumberField } from './PhoneNumberField';
 export { ProgressBar } from './ProgressBar';
