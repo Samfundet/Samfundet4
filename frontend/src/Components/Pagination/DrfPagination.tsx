@@ -10,15 +10,30 @@ interface DRFPaginationProps {
   totalItems: number;
   pageSize: number;
   onPageChange: (page: number) => void;
+  siblingCount?: number; // New prop to control sibling pages
+  boundaryCount?: number; // New prop to control boundary pages
   className?: string;
   itemClassName?: string;
 }
+
+// Helper function to generate sequential page numbers
+const generateSequentialPages = (start: number, end: number): number[] => {
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+};
+
+// Helper function to determine if ellipsis is needed
+const showStartEllipsis = (current: number, boundaryCount: number, siblingCount: number): boolean =>
+  boundaryCount > 0 && siblingCount > 0 && current > boundaryCount + 1;
+const showEndEllipsis = (current: number, total: number, boundaryCount: number, siblingCount: number): boolean =>
+  boundaryCount > 0 && siblingCount > 0 && current < total - boundaryCount;
 
 export const DrfPagination: React.FC<DRFPaginationProps> = ({
   currentPage,
   totalItems,
   pageSize,
   onPageChange,
+  siblingCount = 1,
+  boundaryCount = 1,
   className,
   itemClassName,
 }) => {
@@ -26,29 +41,38 @@ export const DrfPagination: React.FC<DRFPaginationProps> = ({
 
   const paginationItems = useMemo(() => {
     const pages: PaginationItemType = [];
+    const startPages = generateSequentialPages(1, Math.min(boundaryCount, totalPages));
+    const endPages = generateSequentialPages(Math.max(totalPages - boundaryCount + 1, boundaryCount + 1), totalPages);
 
-    if (totalPages <= 7) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      pages.push(1);
-      if (currentPage > 3) {
-        pages.push('ellipsis');
-      }
-      const start = Math.max(2, currentPage - 1);
-      const end = Math.min(totalPages - 1, currentPage + 1);
-      for (let i = start; i <= end; i++) {
-        pages.push(i);
-      }
-      if (currentPage < totalPages - 2) {
-        pages.push('ellipsis');
-      }
-      pages.push(totalPages);
+    // Early return for simple pagination case
+    if (totalPages <= 7 + siblingCount * 2 + boundaryCount * 2) {
+      return generateSequentialPages(1, totalPages);
     }
 
+    // Add boundary pages at the start
+    pages.push(...startPages);
+
+    // Conditionally add start ellipsis
+    if (showStartEllipsis(currentPage, boundaryCount, siblingCount)) {
+      pages.push('ellipsis');
+    }
+
+    // Add sibling pages around the current page
+    const startSibling = Math.max(boundaryCount + 1, currentPage - siblingCount);
+    const endSibling = Math.min(totalPages - boundaryCount, currentPage + siblingCount);
+    pages.push(...generateSequentialPages(startSibling, endSibling));
+
+    // Conditionally add end ellipsis
+    if (showEndEllipsis(currentPage, totalPages, boundaryCount, siblingCount)) {
+      pages.push('ellipsis');
+    }
+
+    // Add boundary pages at the end
+    pages.push(...endPages);
+
     return pages;
-  }, [currentPage, totalPages]);
+  }, [currentPage, totalPages, siblingCount, boundaryCount]);
+
   return (
     <div className={styles.container}>
       <Pagination className={className}>
