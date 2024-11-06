@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { Button } from '~/Components/Button';
 import styles from './PaginationControl.module.scss';
 
-type PaginationControllProps = {
+type PaginationControlProps = {
   isActive?: boolean;
   className?: string;
   controlSymbol: string | ReactNode;
@@ -18,7 +18,7 @@ export function PaginationControl({
   disabled,
   onClick,
   ...props
-}: PaginationControllProps) {
+}: PaginationControlProps) {
   return (
     <Button
       theme={isActive ? 'basic' : 'samf'}
