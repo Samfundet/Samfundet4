@@ -1,41 +1,29 @@
 import classNames from 'classnames';
 import type { ReactNode } from 'react';
-import { Button, type ButtonDisplay, type ButtonTheme } from '~/Components/Button';
-import type { ButtonType } from '~/types';
-import styles from './PaginationControll.module.scss';
+import { Button } from '~/Components/Button';
+import styles from './PaginationControl.module.scss';
 
 type PaginationControllProps = {
   isActive?: boolean;
   className?: string;
   controlSymbol: string | ReactNode;
-  theme?: ButtonTheme;
-  display?: ButtonDisplay;
-  type?: ButtonType;
-  rounded?: boolean;
-  link?: string;
   disabled?: boolean;
-  tabIndex?: number;
-  preventDefault?: boolean;
   onClick?: () => void;
-  title?: string;
 };
 
 export function PaginationControl({
   isActive,
   className,
   controlSymbol,
-  theme = 'basic',
-  display = 'basic',
-  rounded = false,
   disabled,
   onClick,
   ...props
 }: PaginationControllProps) {
   return (
     <Button
-      theme={isActive ? 'basic' : theme}
-      display={display}
-      rounded={rounded}
+      theme={isActive ? 'basic' : 'samf'}
+      display={'basic'}
+      rounded={false}
       onClick={onClick}
       disabled={disabled}
       className={classNames(styles.control, className)}
