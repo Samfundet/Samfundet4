@@ -1,6 +1,6 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useState } from 'react';
-import { PagedPagination } from './DrfPagination';
+import { PagedPagination } from './PagedPagination';
 
 export default {
   title: 'Components/DRFPagination',

@@ -6,7 +6,7 @@ import styles from './PaginationButton.module.scss';
 type PaginationButtonProps = {
   isActive?: boolean;
   className?: string;
-  controlSymbol: string | ReactNode;
+  buttonSymbol: string | ReactNode;
   disabled?: boolean;
   onClick?: () => void;
 };
@@ -14,7 +14,7 @@ type PaginationButtonProps = {
 export function PaginationButton({
   isActive,
   className,
-  controlSymbol,
+  buttonSymbol,
   disabled,
   onClick,
   ...props
@@ -29,7 +29,7 @@ export function PaginationButton({
       className={classNames(styles.control, className)}
       {...props}
     >
-      {controlSymbol}
+      {buttonSymbol}
     </Button>
   );
 }

@@ -1,11 +1,11 @@
 import { Icon } from '@iconify/react';
 import { useMemo } from 'react';
-import styles from './DrfPagination.module.scss';
+import styles from './PagedPagination.module.scss';
 import { Pagination, PaginationContent, PaginationControl, PaginationEllipsis, PaginationItem } from './components';
 
-type PaginationItemType = (number | 'ellipsis')[];
+type PagedPaginationPaginationItemType = (number | 'ellipsis')[];
 
-interface DRFPaginationProps {
+interface PagedPaginationnProps {
   currentPage: number;
   totalItems: number;
   pageSize: number;
@@ -36,11 +36,11 @@ export function PagedPagination({
   boundaryCount = 1,
   className,
   itemClassName,
-}: DRFPaginationProps) {
+}: PagedPaginationnProps) {
   const totalPages = Math.ceil(totalItems / pageSize);
 
   const paginationItems = useMemo(() => {
-    const pages: PaginationItemType = [];
+    const pages: PagedPaginationPaginationItemType = [];
     const startPages = generateSequentialPages(1, Math.min(boundaryCount, totalPages));
     const endPages = generateSequentialPages(Math.max(totalPages - boundaryCount + 1, boundaryCount + 1), totalPages);
 
