@@ -1,7 +1,8 @@
 import { Icon } from '@iconify/react';
+import classNames from 'classnames';
 import { useMemo } from 'react';
 import styles from './PagedPagination.module.scss';
-import { Pagination, PaginationContent, PaginationControl, PaginationEllipsis, PaginationItem } from './components';
+import { Pagination, PaginationButton, PaginationContent, PaginationEllipsis, PaginationItem } from './components';
 
 type PagedPaginationPaginationItemType = (number | 'ellipsis')[];
 
@@ -12,7 +13,7 @@ interface PagedPaginationnProps {
   onPageChange: (page: number) => void;
   siblingCount?: number; // Controls the number of sibling pages around the current page
   boundaryCount?: number; // Controls the number of boundary pages on each end
-  className?: string;
+  paginationClassName?: string;
   itemClassName?: string;
 }
 
@@ -34,7 +35,7 @@ export function PagedPagination({
   onPageChange,
   siblingCount = 1,
   boundaryCount = 1,
-  className,
+  paginationClassName,
   itemClassName,
 }: PagedPaginationnProps) {
   const totalPages = Math.ceil(totalItems / pageSize);
@@ -75,11 +76,11 @@ export function PagedPagination({
 
   return (
     <div className={styles.container}>
-      <Pagination className={className}>
+      <Pagination className={classNames(paginationClassName)}>
         <PaginationContent>
-          <PaginationItem className={itemClassName}>
-            <PaginationControl
-              controlSymbol={<Icon icon={'mdi:chevron-left'} />}
+          <PaginationItem className={classNames(itemClassName)}>
+            <PaginationButton
+              buttonSymbol={<Icon icon={'mdi:chevron-left'} />}
               onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
               disabled={currentPage === 1}
             />
@@ -87,22 +88,22 @@ export function PagedPagination({
 
           {paginationItems.map((page, index) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-            <PaginationItem key={index} className={itemClassName}>
+            <PaginationItem key={index} className={classNames(itemClassName)}>
               {page === 'ellipsis' ? (
                 <PaginationEllipsis />
               ) : (
-                <PaginationControl
+                <PaginationButton
                   isActive={page === currentPage}
-                  controlSymbol={String(page)}
+                  buttonSymbol={String(page)}
                   onClick={() => onPageChange(page)}
                 />
               )}
             </PaginationItem>
           ))}
 
-          <PaginationItem className={itemClassName}>
-            <PaginationControl
-              controlSymbol={<Icon icon={'mdi:chevron-right'} />}
+          <PaginationItem className={classNames(itemClassName)}>
+            <PaginationButton
+              buttonSymbol={<Icon icon={'mdi:chevron-right'} />}
               onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
             />
