@@ -21,15 +21,15 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
   const [positions, setPositions] = useState<RecruitmentPositionDto[]>([]);
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const recruitmentId = useParams();
+  const { recruitmentId } = useParams();
   const { organizationTheme } = useOrganizationContext();
 
   useEffect(() => {
-    if (!currentSelectedGang || !recruitmentId.recruitmentId) {
+    if (!currentSelectedGang || !recruitmentId) {
       return;
     }
     setLoading(true);
-    getRecruitmentPositionsGangForApplicant(recruitmentId.recruitmentId, currentSelectedGang.id)
+    getRecruitmentPositionsGangForApplicant(recruitmentId, currentSelectedGang.id)
       .then((response) => {
         setPositions(response.data);
         setLoading(false);
@@ -48,7 +48,7 @@ export function PositionsTable({ currentSelectedGang, setLoading, loading }: Pos
   const tableData = positions.map((item) => {
     const positionPageURL = reverse({
       pattern: ROUTES.frontend.recruitment_application,
-      urlParams: { positionId: item.id, gangId: item.id },
+      urlParams: { positionId: item.id, recruitmentId: recruitmentId },
     });
     return {
       cells: [
