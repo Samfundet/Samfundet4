@@ -27,7 +27,7 @@ const showStartEllipsis = (current: number, boundaryCount: number, siblingCount:
 const showEndEllipsis = (current: number, total: number, boundaryCount: number, siblingCount: number): boolean =>
   boundaryCount > 0 && siblingCount > 0 && current < total - boundaryCount - siblingCount;
 
-export function DrfPagination({
+export function PagedPagination({
   currentPage,
   totalItems,
   pageSize,

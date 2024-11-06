@@ -1,1 +1,1 @@
-export { DrfPagination } from './DrfPagination';
+export { PagedPagination as DrfPagination } from './DrfPagination';

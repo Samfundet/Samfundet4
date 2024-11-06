@@ -1,10 +1,10 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useState } from 'react';
-import { DrfPagination } from './DrfPagination';
+import { PagedPagination } from './DrfPagination';
 
 export default {
   title: 'Components/DRFPagination',
-  component: DrfPagination,
+  component: PagedPagination,
   argTypes: {
     currentPage: {
       control: 'number',
@@ -44,15 +44,15 @@ export default {
       },
     },
   },
-} as ComponentMeta<typeof DrfPagination>;
+} as ComponentMeta<typeof PagedPagination>;
 
 // Template with state management
-const Template: ComponentStory<typeof DrfPagination> = (args) => {
+const Template: ComponentStory<typeof PagedPagination> = (args) => {
   const [currentPage, setCurrentPage] = useState(args.currentPage);
 
   return (
     <div>
-      <DrfPagination {...args} currentPage={currentPage} onPageChange={setCurrentPage} />
+      <PagedPagination {...args} currentPage={currentPage} onPageChange={setCurrentPage} />
       <p>Current page: {currentPage}</p>
     </div>
   );
