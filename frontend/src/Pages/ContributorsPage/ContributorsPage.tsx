@@ -6,19 +6,14 @@ import robines from '~/assets/contributors/robines.jpg';
 import snorre98 from '~/assets/contributors/snorre98.jpg';
 import sygard from '~/assets/contributors/sygard.jpg';
 import { KEY } from '~/i18n/constants';
+import { ContributorItem } from './ContributorItem';
 import styles from './ContributorsPage.module.scss';
-import { type Contributor, ContributorItem } from './components';
+import type { Contributor } from './types';
 
 // biome-ignore format: array should not be formatted
 const CONTRIBUTORS: Contributor[] = [
   // H17
-  {
-    name: 'Kevin Kristiansen',
-    github: 'KevinKristiansen',
-    from: 'H17',
-    to: 'V20',
-    websjef: { from: 'V18', to: 'H18' },
-  },
+  { name: 'Kevin Kristiansen', github: 'KevinKristiansen', from: 'H17', to: 'V20', websjef: { from: 'V18', to: 'H18' } },
   // H19
   { name: 'Emil Telstad', github: 'emilte', from: 'H19' },
   { name: 'Sigve Røkenes', github: 'evgiz', from: 'H19', to: 'H23', websjef: { from: 'H20', to: 'V21' } },
@@ -39,15 +34,9 @@ const CONTRIBUTORS: Contributor[] = [
   { name: 'Eirik Hoem', github: 'eiriksho', from: 'H22', to: 'V23' },
   { name: 'Simen Seeberg-Rommetveit', github: 'simensee', from: 'H22' },
   // V23
-  {
-    name: 'Robin Espinosa Jelle',
-    github: 'robines',
-    from: 'V23',
-    picture: robines,
-    websjef: { from: 'H23', to: 'V24' },
-  },
+  { name: 'Robin Espinosa Jelle', github: 'robines', from: 'V23', picture: robines, websjef: { from: 'H23', to: 'V24' } },
   { name: 'Johanne Grønlien Gjedrem', github: 'johannegg', from: 'V23' },
-  { name: 'Tinius Presterud', github: 'tiniuspre', from: 'V23' },
+  { name: 'Tinius Presterud', github: 'tiniuspre', from: 'V23', to: 'V24' },
   // H23
   { name: 'Amalie Johansen Vik', github: 'amaliejvik', from: 'H23', picture: amaliejvik },
   { name: 'Marion Lystad', github: 'marionlys', from: 'H23' },

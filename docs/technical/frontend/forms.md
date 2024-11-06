@@ -1,4 +1,4 @@
-[👈 back](/docs/technical/README.md)
+[**&larr; Back: Documentation Overview**](../../README.md)
 
 # Forms
 
@@ -39,7 +39,7 @@ To get started, create a new file, for example `YourForm.tsx`. This file will co
 itself. Define a schema using zod. Remember to reuse fields when possible as mentioned in the section above (we won't do
 this here for example's sake).
 
-```typescript jsx
+```ts
 import { z } from 'zod';
 
 const schema = z.object({
@@ -51,16 +51,16 @@ Create your form component, and use the `useForm` hook to create the form.
 
 Create the form component, and use the `useForm` hook with your schema,.
 
-```typescript jsx
+```jsx
 export function YourForm() {
     // 1. Define the form
-    const form = useForm<z.infer<typeof schema>>({
+    const form = useForm < z.infer < typeof schema >> ({
         resolver: zodResolver(schema),
         defaultValues: {
             username: '',
         },
     });
-    
+
     // 2. Define the submit handler
     function onSubmit(values: z.infer<typeof schema>) {
         // These values are type-safe and validated
@@ -71,7 +71,7 @@ export function YourForm() {
 
 Now use the `Form` wrapper components to build our form.
 
-```typescript jsx
+```jsx
 export function YourForm() {
     // ...
 
@@ -84,6 +84,7 @@ export function YourForm() {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Username</FormLabel>
+                            <FormDescription>Pick wisely, this cannot be changed later!</FormDescription>
                             <FormControl>
                                 <Input placeholder="Username" {...field} />
                             </FormControl>
@@ -96,6 +97,143 @@ export function YourForm() {
     );
 }
 ```
+
+## Files
+
+Defining a schema type for files is a bit more complicated. Below is an example which defines a schema with an
+optional `avatar` file field.
+
+```jsx
+const schema = z.object({
+    image_file: z
+        .instanceof(File)
+        .refine((file) => file.size < 1024 * 1024 * 2, {
+            message: "File can't be larger than 2 MB"
+        })
+        .nullable(),
+});
+```
+
+And in the form below. Please note that this input must
+be [uncontrolled](https://react.dev/learn/sharing-state-between-components#controlled-and-uncontrolled-components), so
+we do not set `value` on it. We must also extract relevant information from the `onChange` event. In the example below,
+we only want a single file, so we return the first item in the `FileList`.
+
+```jsx
+<FormField
+    control={form.control}
+    name="image_file"
+    render={({ field: { value, onChange, ...fieldProps } }) => (
+        <FormItem>
+            <FormControl>
+                <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(event) => onChange(event.target.files?.[0])}
+                    {...fieldProps}
+                />
+            </FormControl>
+            <FormMessage />
+        </FormItem>
+    )}
+/>
+```
+
+## Numbers
+
+All HTML input values are strings. If we require a number type from an input, we must therefore convert it, as well as
+deal with all non-numeric input. This can quickly become cumbersome using just the Input component. Luckily we have the
+NumberInput component which does all this for us.
+
+```jsx
+<FormField
+    control={form.control}
+    name="duration"
+    render={({ field }) => (
+        <FormItem>
+            <FormLabel>Duration</FormLabel>
+            <FormControl>
+                <NumberInput disabled={submitting} {...field} />
+            </FormControl>
+            <FormMessage />
+        </FormItem>
+    )}
+/>
+```
+
+## Dropdown
+
+Dropdowns can be used
+either [controlled or uncontrolled](https://react.dev/learn/sharing-state-between-components#controlled-and-uncontrolled-components).
+If you provide `value` to Dropdown, it'll be controlled. If you don't, it will be uncontrolled.
+
+```ts
+const options: DropdownOption<string>[] = [
+    { label: 'Samfundet', value: 'samfundet' },
+    { label: 'UKA', value: 'uka' },
+    { label: 'ISFiT', value: 'isfit' },
+];
+```
+
+Controlled:
+
+```jsx
+<FormField
+    control={form.control}
+    name="organization"
+    render={({ field }) => (
+        <FormItem>
+            <FormLabel>Organization</FormLabel>
+            <FormDescription>Which organization does this object belong to?</FormDescription>
+            <FormControl>
+                <Dropdown options={options} {...field} />
+            </FormControl>
+        </FormItem>
+    )}
+>
+</FormField>
+```
+
+Uncontrolled:
+
+```jsx
+<FormField
+    control={form.control}
+    name="organization"
+    // Note how we extract `value` here, to avoid applying it to Dropdown
+    render={({ field: { value, ...fieldProps } }) => (
+        <FormItem>
+            <FormLabel>Organization</FormLabel>
+            <FormDescription>Which organization does this object belong to?</FormDescription>
+            <FormControl>
+                <Dropdown options={options} {...fieldProps} />
+            </FormControl>
+        </FormItem>
+    )}
+>
+</FormField>
+```
+
+You can also add a "null option". This is a blank option which is added to the top of the dropdown list. This is useful
+if you need the Dropdown to be optional. The label of the null option can be customized, and it can also be disabled in
+order to force users to select another option. If the null option is selected, an italic font style is applied to the
+dropdown, to further indicate that a special option is selected. Examples of some possibilities below:
+
+```jsx
+// Add a simple blank null option
+<Dropdown options={options} nullOption={true} />
+```
+
+```jsx
+// Null option with custom label
+<Dropdown options={options} nullOption={{ label: 'All organizations' }} />
+```
+
+```jsx
+// Disabled null option with custom label
+<Dropdown options={options} nullOption={{ label: 'Pick an organization', disabled: true }} />
+```
+
 
 ## Example
 
