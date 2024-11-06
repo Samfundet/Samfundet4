@@ -1,5 +1,5 @@
-export { Pagination } from './Pagination/Pagination';
-export { PaginationContent } from './PaginationContent/PaginationContent';
-export { PaginationControl } from './PaginationControl/PaginationControl';
-export { PaginationEllipsis } from './PaginationEllipsis/PaginationEllipsis';
-export { PaginationItem } from './PaginationItem/PaginationItem';
+export { Pagination } from './Pagination';
+export { PaginationContent } from './PaginationContent';
+export { PaginationControl } from './PaginationControl';
+export { PaginationEllipsis } from './PaginationEllipsis';
+export { PaginationItem } from './PaginationItem';
