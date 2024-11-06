@@ -88,6 +88,7 @@ export { UkaOutlet } from './UkaOutlet';
 export { UserFeedback } from './UserFeedback';
 export { Video } from './Video';
 // Props
+export type { ButtonProps } from './Button';
 export type { CheckboxProps } from './Checkbox';
 export type { DropdownProps } from './Dropdown';
 export type { ImagePickerProps } from './ImagePicker/ImagePicker';

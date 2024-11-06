@@ -1,14 +1,12 @@
 import classNames from 'classnames';
 import type { ReactNode } from 'react';
+import type { ButtonProps } from '~/Components';
 import { Button } from '~/Components/Button';
 import styles from './PaginationButton.module.scss';
 
-type PaginationButtonProps = {
+type PaginationButtonProps = Omit<ButtonProps, 'theme' | 'display'> & {
   isActive?: boolean;
-  className?: string;
   buttonSymbol: string | ReactNode;
-  disabled?: boolean;
-  onClick?: () => void;
 };
 
 export function PaginationButton({
