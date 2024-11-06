@@ -10,8 +10,8 @@ interface DRFPaginationProps {
   totalItems: number;
   pageSize: number;
   onPageChange: (page: number) => void;
-  siblingCount?: number; // New prop to control sibling pages
-  boundaryCount?: number; // New prop to control boundary pages
+  siblingCount?: number; // Controls the number of sibling pages around the current page
+  boundaryCount?: number; // Controls the number of boundary pages on each end
   className?: string;
   itemClassName?: string;
 }
@@ -21,11 +21,11 @@ const generateSequentialPages = (start: number, end: number): number[] => {
   return Array.from({ length: end - start + 1 }, (_, i) => start + i);
 };
 
-// Helper function to determine if ellipsis is needed
+// Adjusted ellipsis helper functions
 const showStartEllipsis = (current: number, boundaryCount: number, siblingCount: number): boolean =>
-  boundaryCount > 0 && siblingCount > 0 && current > boundaryCount + 1;
+  boundaryCount > 0 && siblingCount > 0 && current > boundaryCount + siblingCount + 1;
 const showEndEllipsis = (current: number, total: number, boundaryCount: number, siblingCount: number): boolean =>
-  boundaryCount > 0 && siblingCount > 0 && current < total - boundaryCount;
+  boundaryCount > 0 && siblingCount > 0 && current < total - boundaryCount - siblingCount;
 
 export const DrfPagination: React.FC<DRFPaginationProps> = ({
   currentPage,
