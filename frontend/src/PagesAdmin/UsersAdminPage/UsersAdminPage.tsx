@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { DrfPagination, SamfundetLogoSpinner } from '~/Components';
+import { PagedPagination, SamfundetLogoSpinner } from '~/Components';
 import { formatDate } from '~/Components/OccupiedForm/utils';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
@@ -20,6 +20,8 @@ export function UsersAdminPage() {
     data: users,
     totalItems,
     currentPage,
+    totalPages,
+    pageSize,
     setCurrentPage,
     isLoading,
   } = usePaginatedQuery<UserDto>({
@@ -69,15 +71,12 @@ export function UsersAdminPage() {
 
   return (
     <AdminPageLayout title={title}>
-      {totalItems > PAGE_SIZE && (
-        <DrfPagination
+      {totalPages > 1 && (
+        <PagedPagination
           currentPage={currentPage}
           totalItems={totalItems}
-          pageSize={PAGE_SIZE}
+          pageSize={pageSize}
           onPageChange={setCurrentPage}
-          buttonTheme="samf"
-          navButtonTheme="samf"
-          buttonDisplay="pill"
         />
       )}
 

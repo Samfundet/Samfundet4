@@ -3,7 +3,7 @@ import { type MutableRefObject, type RefObject, useEffect, useRef, useState } fr
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getTextItem, putUserPreference } from '~/api';
-import type { Key, PageNumberPagination, SetState } from '~/types';
+import type { BasePagination, Key, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
 import type { LinkTarget } from './Components/Link/Link';
 import {
@@ -515,11 +515,22 @@ export function useParentElementWidth(childRef: RefObject<HTMLElement>) {
 
 interface UsePaginatedQueryOptions<T> {
   queryKey: string[];
-  queryFn: (page: number) => Promise<PageNumberPagination<T>>;
+  queryFn: (page: number) => Promise<BasePagination<T>>;
   pageSize?: number;
 }
 
-export function usePaginatedQuery<T>({ queryKey, queryFn, pageSize = PAGE_SIZE }: UsePaginatedQueryOptions<T>) {
+interface UsePaginatedQueryResult<T> {
+  data: T[];
+  totalItems: number;
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+  setCurrentPage: (page: number) => void;
+  isLoading: boolean;
+  error: Error | null;
+}
+
+export function usePaginatedQuery<T>({ queryKey, queryFn }: UsePaginatedQueryOptions<T>): UsePaginatedQueryResult<T> {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, error } = useQuery({
@@ -530,10 +541,11 @@ export function usePaginatedQuery<T>({ queryKey, queryFn, pageSize = PAGE_SIZE }
   return {
     data: data?.results ?? [],
     totalItems: data?.count ?? 0,
-    currentPage,
+    currentPage: data?.current_page ?? currentPage,
+    totalPages: data?.total_pages ?? 1,
+    pageSize: data?.page_size ?? PAGE_SIZE,
     setCurrentPage,
     isLoading,
     error,
-    pageSize,
   };
 }
