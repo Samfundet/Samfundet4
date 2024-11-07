@@ -4,7 +4,6 @@ import { formatDate } from '~/Components/OccupiedForm/utils';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getUsers } from '~/api';
-import { PAGE_SIZE } from '~/constants';
 import type { UserDto } from '~/dto';
 import { usePaginatedQuery, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -27,7 +26,6 @@ export function UsersAdminPage() {
   } = usePaginatedQuery<UserDto>({
     queryKey: ['admin-users'],
     queryFn: getUsers,
-    pageSize: PAGE_SIZE,
   });
 
   const columns = [
