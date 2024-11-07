@@ -15,6 +15,7 @@ import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentGangAllApplicantsAdminPage.module.scss';
+import { RecruitmentStatusChoicesMapping } from '~/types';
 
 export function RecruitmentGangAllApplicantsAdminPage() {
   const { recruitmentId, gangId } = useParams();
@@ -84,19 +85,6 @@ export function RecruitmentGangAllApplicantsAdminPage() {
     { content: t(KEY.recruitment_recruiter_status), sortable: true },
   ];
 
-  const getStatusOption = (id: number | undefined): string => {
-    switch (id) {
-      case 1:
-        return t(KEY.recruitment_application_status_accepted);
-      case 2:
-        return t(KEY.recruitment_application_status_called_rejected);
-      case 3:
-        return t(KEY.recruitment_application_status_automatic_rejection);
-      default:
-        return t(KEY.recruitment_application_no_status);
-    }
-  };
-
   const data = applications.map((application) => {
     const applicationURL = reverse({
       pattern: ROUTES.frontend.admin_recruitment_applicant,
@@ -119,7 +107,9 @@ export function RecruitmentGangAllApplicantsAdminPage() {
         { content: <Link url={applicationURL}>{dbT(application.recruitment_position, 'name')}</Link> },
         application.interview?.interview_time,
         application.interview?.interview_location,
-        getStatusOption(application.recruiter_status),
+        application.recruiter_status !== undefined
+          ? RecruitmentStatusChoicesMapping[application.recruiter_status]
+          : 'N/A',
       ],
     };
   });

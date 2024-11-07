@@ -6,6 +6,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import styles from './ProcessedApplicants.module.scss';
+import { RecruitmentStatusChoicesMapping } from '~/types';
 
 type ProcessedType = 'rejected' | 'withdrawn' | 'accepted' | 'hardtoget';
 
@@ -26,19 +27,6 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
     { content: t(KEY.recruitment_recruiter_status), sortable: true },
     revertStateFunction && { content: '', sortable: false },
   ];
-
-  const getStatusOption = (id: number | undefined): string => {
-    switch (id) {
-      case 1:
-        return t(KEY.recruitment_application_status_accepted);
-      case 2:
-        return t(KEY.recruitment_application_status_called_rejected);
-      case 3:
-        return t(KEY.recruitment_application_status_automatic_rejection);
-      default:
-        return t(KEY.recruitment_application_no_status);
-    }
-  };
 
   const rows = data.map((application) => {
     const applicantName = `${application.user.first_name} ${application.user.last_name}`;
@@ -65,7 +53,10 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
         { content: application.interview?.interview_time, value: application.interview?.interview_time },
         { content: application.interview?.interview_location, value: application.interview?.interview_location },
         {
-          content: getStatusOption(application.recruiter_status),
+          content:
+            application.recruiter_status !== undefined
+              ? RecruitmentStatusChoicesMapping[application.recruiter_status]
+              : 'N/A',
           value: application.recruiter_status,
         },
         revertStateFunction && {
