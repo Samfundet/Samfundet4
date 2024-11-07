@@ -102,6 +102,7 @@ export function RecruitmentApplicationFormPage() {
   function handleOnSubmit(data: FormProps) {
     setFormData(data);
     setOpenOccupiedForm(true);
+    //hei
   }
 
   function submitData(data: FormProps) {
