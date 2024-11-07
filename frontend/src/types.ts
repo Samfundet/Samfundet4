@@ -189,7 +189,7 @@ export const RecruitmentPriorityChoicesMapping: { [key: number]: string } = {
 };
 
 /* For DRF pagination, see pagination.py */
-export interface BasePagination<T> {
+export interface PageNumberPaginationType<T> {
   page_size: number;
   count: number;
   next: string | null;

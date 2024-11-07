@@ -3,7 +3,7 @@ import { type MutableRefObject, type RefObject, useEffect, useRef, useState } fr
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getTextItem, putUserPreference } from '~/api';
-import type { BasePagination, Key, SetState } from '~/types';
+import type { Key, PageNumberPaginationType, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
 import type { LinkTarget } from './Components/Link/Link';
 import {
@@ -515,7 +515,7 @@ export function useParentElementWidth(childRef: RefObject<HTMLElement>) {
 
 interface UsePaginatedQueryOptions<T> {
   queryKey: string[];
-  queryFn: (page: number) => Promise<BasePagination<T>>;
+  queryFn: (page: number) => Promise<PageNumberPaginationType<T>>;
   pageSize?: number;
 }
 
