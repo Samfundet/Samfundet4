@@ -7,11 +7,12 @@ import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
 import { downloadCSVGangRecruitment, getGang, getRecruitment, getRecruitmentApplicationsForGang } from '~/api';
 import type { GangDto, RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
-import { useCustomNavigate } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { RecruitmentPriorityChoicesMapping, RecruitmentStatusChoicesMapping } from '~/types';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentGangAllApplicantsAdminPage.module.scss';
@@ -64,7 +65,6 @@ export function RecruitmentGangAllApplicantsAdminPage() {
           setRecruitment(resp.data);
         })
         .catch((data) => {
-          // TODO add error pop up message?
           if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
             navigate({ url: ROUTES.frontend.admin_recruitment });
           }
@@ -81,6 +81,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
     { content: t(KEY.recruitment_position), sortable: true },
     { content: t(KEY.recruitment_interview_time), sortable: true },
     { content: t(KEY.recruitment_interview_location), sortable: true },
+    { content: t(KEY.recruitment_recruiter_priority), sortable: true },
     { content: t(KEY.recruitment_recruiter_status), sortable: true },
   ];
 
@@ -106,7 +107,12 @@ export function RecruitmentGangAllApplicantsAdminPage() {
         { content: <Link url={applicationURL}>{dbT(application.recruitment_position, 'name')}</Link> },
         application.interview?.interview_time,
         application.interview?.interview_location,
-        application.recruiter_status,
+        application.recruiter_priority !== undefined
+          ? RecruitmentPriorityChoicesMapping[application.recruiter_priority]
+          : 'N/A',
+        application.recruiter_status !== undefined
+          ? RecruitmentStatusChoicesMapping[application.recruiter_status]
+          : 'N/A',
       ],
     };
   });
@@ -118,6 +124,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
   };
 
   const title = t(KEY.recruitment_all_applications);
+  useTitle(title);
   const header = (
     <div className={styles.header}>
       <Text as="strong" size="m" className={styles.headerBold}>

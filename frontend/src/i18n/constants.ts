@@ -62,6 +62,7 @@ export const KEY = {
   common_yes: 'common_yes',
   common_no: 'common_no',
   common_to: 'common_to',
+  common_any: 'common_any',
   common_all: 'common_all',
   common_price: 'common_price',
   common_food: 'common_food',
@@ -84,6 +85,7 @@ export const KEY = {
   common_card: 'common_card',
   common_tags: 'common_tags',
   common_gang: 'common_gang',
+  common_section: 'common_section',
   common_next: 'common_next',
   common_open: 'common_open',
   common_send: 'common_send',
@@ -123,7 +125,7 @@ export const KEY = {
   common_email_subject: 'common_email_subject',
   common_total: 'common_total',
   common_roles: 'common_roles',
-  common_roles_view: 'common_roles_view',
+  common_role: 'common_role',
   common_guests: 'common_guests',
   common_occasion: 'common_occasion',
   common_phonenumber: 'common_phonenumber',
@@ -216,6 +218,8 @@ export const KEY = {
   //        Others        //
   // ==================== //
 
+  role_content_type: 'role_content_type',
+
   // LoginPage:
   loginpage_register: 'loginpage_register',
   loginpage_internal_login: 'loginpage_internal_login',
@@ -227,6 +231,8 @@ export const KEY = {
   contributors_page_title: 'contributors_page_title',
   contributors_page_text: 'contributors_page_text',
   contributors_page_past_developers: 'contributors_page_past_developers',
+
+  role_edit_could_not_load_permissions: 'role_edit_could_not_load_permissions',
 
   // GroupsPage:
   groupspage_gangs_text: 'groupspage_gangs_text',
@@ -274,6 +280,7 @@ export const KEY = {
   recruitment_interviewer: 'recruitment_interviewer',
   recruitment_interviewers: 'recruitment_interviewers',
   recruitment_interviews: 'recruitment_interviews',
+  recruitment_interview_planned: 'recruitment_interview_planned',
   recruitment_no_interviews: 'recruitment_no_interviews',
   recruitment_interview_set: 'recruitment_interview_set',
   recruitment_interview_groups: 'recruitment_interview_groups',
@@ -315,6 +322,7 @@ export const KEY = {
   recrutment_default_application_letter: 'recrutment_default_application_letter',
   reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
   max_applications: 'max_applications',
+  recruitment_promo_media: 'recruitment_promo_media',
   recruitment_norwegian_applicants_only: 'recruitment_norwegian_applicants_only',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
@@ -464,6 +472,8 @@ export const KEY = {
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',
   saksdokumentpage_publication_date: 'saksdokumentpage_publication_date',
   eventsadminpage_successful_delete_toast: 'eventsadminpage_successful_delete_toast',
+  promo_media_description: 'promo_media_description',
+  promo_media_invalid: 'promo_media_invalid',
 
   error_generic: 'error_generic',
   error_generic_description: 'error_generic_description',

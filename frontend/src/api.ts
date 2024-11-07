@@ -20,6 +20,7 @@ import type {
   MenuItemDto,
   OccupiedTimeslotDto,
   OrganizationDto,
+  PermissionDto,
   PurchaseFeedbackDto,
   RecruitmentApplicationDto,
   RecruitmentApplicationRecruiterDto,
@@ -157,6 +158,13 @@ export async function getVenue(id: string | number): Promise<VenueDto> {
 export async function putVenue(slug: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { slug: slug } });
   const response = await axios.put<VenueDto>(url, venue, { withCredentials: true });
+  return response.data;
+}
+
+export async function getPermissions(): Promise<PermissionDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__permissions_list;
+  const response = await axios.get<PermissionDto[]>(url, { withCredentials: true });
+
   return response.data;
 }
 
@@ -390,6 +398,33 @@ export async function getGang(id: string | number): Promise<GangDto> {
   return response.data;
 }
 
+export async function createRole(data: Partial<RoleDto>): Promise<RoleDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__role_list });
+  const response = await axios.post<RoleDto>(url, data, { withCredentials: true });
+  return response.data;
+}
+
+export async function editRole(data: RoleDto): Promise<RoleDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__role_detail, urlParams: { pk: data.id } });
+  const response = await axios.put<RoleDto>(url, data, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getRoles(): Promise<RoleDto[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__role_list });
+  const response = await axios.get<RoleDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getRole(id: number): Promise<RoleDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__role_detail, urlParams: { pk: id } });
+  const response = await axios.get<RoleDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
 export async function getRecruitmentGangs(recruitmentId: string | number): Promise<RecruitmentGangDto[]> {
   const url =
     BACKEND_DOMAIN +
@@ -506,18 +541,6 @@ export async function getRecruitment(id: string): Promise<AxiosResponse<Recruitm
   const response = await axios.get(url, { withCredentials: true });
 
   return response;
-}
-
-// Issue #1520 TODO: Setup backend later. Using test data now.
-export async function getRole(id: string): Promise<RoleDto> {
-  //const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__api_, urlParams: ( pk: id ) }):
-  //const response = await axios.get(url, { withCredentials: true });
-  const role = {
-    id: 1,
-    name: 'Opptaksansvarlig',
-    permissions: ['samfundet.test_permission', 'samfundet.user_create'],
-  };
-  return role;
 }
 
 export async function postRecruitment(recruitmentData: RecruitmentDto): Promise<AxiosResponse> {

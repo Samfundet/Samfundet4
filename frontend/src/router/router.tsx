@@ -60,6 +60,7 @@ import {
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
   RoleAdminPage,
+  RoleFormAdminPage,
   RolesAdminPage,
   RoomAdminPage,
   SaksdokumentAdminPage,
@@ -190,13 +191,32 @@ export const router = createBrowserRouter(
               element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RolesAdminPage />} />}
             />
             <Route
-              path={ROUTES.frontend.admin_roles_view}
-              element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RoleAdminPage />} />}
+              path={ROUTES.frontend.admin_roles_create}
+              handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
+              element={<PermissionRoute required={[PERM.SAMFUNDET_ADD_ROLE]} element={<RoleFormAdminPage />} />}
+            />
+            <Route
+              id="role"
+              element={<Outlet />}
               loader={roleLoader}
               handle={{
-                crumb: ({ pathname }: UIMatch, { role }: RoleLoader) => <Link url={pathname}>{role?.name}</Link>,
+                crumb: (_: UIMatch, { role }: RoleLoader) => (
+                  <Link url={reverse({ pattern: ROUTES.frontend.admin_roles_view, urlParams: { roleId: role?.id } })}>
+                    {role?.name}
+                  </Link>
+                ),
               }}
-            />
+            >
+              <Route
+                path={ROUTES.frontend.admin_roles_view}
+                element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RoleAdminPage />} />}
+              />
+              <Route
+                path={ROUTES.frontend.admin_roles_edit}
+                element={<PermissionRoute required={[PERM.SAMFUNDET_CHANGE_ROLE]} element={<RoleFormAdminPage />} />}
+                handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link> }}
+              />
+            </Route>
           </Route>
           {/* Events */}
           <Route

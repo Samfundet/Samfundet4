@@ -379,7 +379,8 @@ export type KeyValueDto = {
 export type RoleDto = {
   id: number;
   name: string;
-  permissions: string[];
+  permissions: number[];
+  content_type?: string | null;
 };
 
 export type UserGangRoleDto = {
@@ -414,6 +415,7 @@ export type RecruitmentDto = {
   organization: number | OrganizationDto;
   separate_positions?: RecruitmentSeparatePositionDto[];
   recruitment_progress?: number;
+  promo_media?: string;
 };
 
 export type RecruitmentSeparatePositionDto = {
@@ -503,7 +505,7 @@ export type RecruitmentApplicationDto = {
   recruitment: number;
   user: UserDto;
   applicant_priority: number;
-  recruiter_priority?: number | string;
+  recruiter_priority?: number;
   recruiter_status?: number;
   applicant_state?: number;
   created_at: string;

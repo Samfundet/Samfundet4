@@ -51,6 +51,7 @@ export const nb = prepareTranslations({
   [KEY.common_all]: 'Alle',
   [KEY.common_price]: 'Pris',
   [KEY.common_food]: 'Mat',
+  [KEY.common_any]: 'Hvilken som helst',
   [KEY.common_preferences]: 'Preferanser',
   [KEY.common_buy]: 'Kjøp',
   [KEY.common_not]: 'Ikke',
@@ -67,8 +68,9 @@ export const nb = prepareTranslations({
   [KEY.common_next]: 'Neste',
   [KEY.common_save]: 'Lagre',
   [KEY.common_gang]: 'Gjeng',
-  [KEY.common_table]: 'Bord',
   [KEY.common_gangs]: 'Gjenger',
+  [KEY.common_section]: 'Seksjon',
+  [KEY.common_table]: 'Bord',
   [KEY.common_gang_type]: 'Gjengtype',
   [KEY.common_edit]: 'Rediger',
   [KEY.common_sheet]: 'Tabell',
@@ -82,7 +84,7 @@ export const nb = prepareTranslations({
   [KEY.common_login]: 'Logg inn',
   [KEY.common_users]: 'Brukere',
   [KEY.common_roles]: 'Roller',
-  [KEY.common_roles_view]: 'Rolle',
+  [KEY.common_role]: 'Rolle',
   [KEY.common_active]: 'Aktiv',
   [KEY.common_event]: 'Arrangement',
   [KEY.common_repeat]: 'Repeter',
@@ -200,6 +202,7 @@ export const nb = prepareTranslations({
   // ==================== //
   //        Others        //
   // ==================== //
+  [KEY.role_content_type]: 'Hierarkinivå',
   [KEY.admin_impersonate]: 'Stjel identitet',
   [KEY.admin_stop_impersonate]: 'Stopp identitetstyveri',
 
@@ -259,6 +262,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
   [KEY.recruitment_will_be_anonymized]: 'All info relatert til dine søknader vil bli slettet 3 uker etter opptaket',
   [KEY.recruitment_interviews]: 'Intervjuer',
+  [KEY.recruitment_interview_planned]: 'Intervjuer planlagt',
   [KEY.recruitment_interviewer]: 'Intervjuer',
   [KEY.recruitment_interviewers]: 'Intervjuere',
   [KEY.recruitment_no_interviews]: 'Ingen intervjuer',
@@ -304,6 +308,7 @@ export const nb = prepareTranslations({
   [KEY.recrutment_default_application_letter]: 'Standard søknadstekst',
   [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
   [KEY.max_applications]: 'Maks søknader per bruker',
+  [KEY.recruitment_promo_media]: 'Promo video',
   [KEY.recruitment_norwegian_applicants_only]: 'Kun norsktalende søkere',
   [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
@@ -420,6 +425,8 @@ export const nb = prepareTranslations({
   [KEY.command_menu_shortcut_control_panel]: 'Kontrollpanel',
   [KEY.command_menu_shortcut_about_samfundet]: 'Om Samfundet',
 
+  [KEY.role_edit_could_not_load_permissions]: 'Klarte ikke laste inn tilganger',
+
   // Sulten / Lyche
   [KEY.sulten_what_is_lyche]: 'Hva er Lyche?',
   [KEY.sulten_page_see_menu]: 'Se meny',
@@ -465,6 +472,9 @@ export const nb = prepareTranslations({
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
+
+  [KEY.promo_media_description]: 'Lenke eller ID til en YouTube-video',
+  [KEY.promo_media_invalid]: 'Må være en gyldig lenke til en YouTube-video',
 
   // Errors
   [KEY.error_generic]: 'Uventet feil',
@@ -527,6 +537,7 @@ export const en = prepareTranslations({
   [KEY.common_all]: 'All',
   [KEY.common_price]: 'Price',
   [KEY.common_food]: 'Food',
+  [KEY.common_any]: 'Any',
   [KEY.common_preferences]: 'Preferences',
   [KEY.common_buy]: 'Buy',
   [KEY.common_not]: 'Not',
@@ -550,6 +561,7 @@ export const en = prepareTranslations({
   [KEY.common_gang]: 'Gang',
   [KEY.common_gangs]: 'Gangs',
   [KEY.common_gang_type]: 'Gang type',
+  [KEY.common_section]: 'Section',
   [KEY.common_max]: 'Max',
   [KEY.common_image]: 'Image',
   [KEY.common_venue]: 'Venue',
@@ -558,7 +570,7 @@ export const en = prepareTranslations({
   [KEY.common_login]: 'Log in',
   [KEY.common_users]: 'Users',
   [KEY.common_roles]: 'Roles',
-  [KEY.common_roles_view]: 'Role',
+  [KEY.common_role]: 'Role',
   [KEY.common_active]: 'Active',
   [KEY.common_cancel]: 'Cancel',
   [KEY.common_venues]: 'Venues',
@@ -676,6 +688,7 @@ export const en = prepareTranslations({
   // ==================== //
   //        Others        //
   // ==================== //
+  [KEY.role_content_type]: 'Hierarchical level',
   [KEY.admin_impersonate]: 'Impersonate',
   [KEY.admin_stop_impersonate]: 'Stop impersonation',
 
@@ -735,6 +748,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_will_be_anonymized]:
     'All info related to the applications will be anonymized three weeks after the recruitment is over',
   [KEY.recruitment_interviews]: 'Interviews',
+  [KEY.recruitment_interview_planned]: 'Interviews planned',
   [KEY.recruitment_interviewer]: 'Interviewer',
   [KEY.recruitment_interviewers]: 'Interviewers',
   [KEY.recruitment_no_interviews]: 'No interviews',
@@ -779,6 +793,7 @@ export const en = prepareTranslations({
   [KEY.recrutment_default_application_letter]: 'Default application letter',
   [KEY.reprioritization_deadline_for_groups]: 'Group reprioritization deadline',
   [KEY.max_applications]: 'Max applications per user',
+  [KEY.recruitment_promo_media]: 'Promo video',
   [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
   [KEY.recruitment_show_unprocessed_applicants]: 'Show unprocessed applicants',
   [KEY.recruitment_show_all_applicants]: 'Show all applicants',
@@ -878,6 +893,10 @@ export const en = prepareTranslations({
   [KEY.admin_information_confirm_cancel]: 'Are you sure you want to exit without saving?',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'It is not possible to change the uploaded file.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
+
+  [KEY.promo_media_description]: 'Link or ID of a YouTube video',
+  [KEY.promo_media_invalid]: 'Must be a valid link to a YouTube video',
+
   [KEY.recruitment_three_interviews_criteria_header]:
     'Applicants with less than 3 interviews, but have applied to more than 3 positions',
   [KEY.recruitment_three_interviews_criteria_button]: 'Applicants with less than 3 interviews',
@@ -899,6 +918,8 @@ export const en = prepareTranslations({
   [KEY.command_menu_shortcut_opening_hours]: 'Opening hours',
   [KEY.command_menu_shortcut_control_panel]: 'Control panel',
   [KEY.command_menu_shortcut_about_samfundet]: 'About Samfundet',
+
+  [KEY.role_edit_could_not_load_permissions]: 'Could not load permissions',
 
   // Sulten / Lyche:
   [KEY.sulten_dishes]: 'Dishes',
