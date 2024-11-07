@@ -19,7 +19,6 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
   const { recruitmentId, gangId } = useParams();
   const [users, setUsers] = useState<RecruitmentUserDto[]>([]);
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
-  //const [gangStats, setGangStats] = useState<RecruitmentGangStatDto>();
   const [withoutInterviewCount, setWithoutInterviewCount] = useState<number>();
   const [gang, setGang] = useState<GangDto>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
