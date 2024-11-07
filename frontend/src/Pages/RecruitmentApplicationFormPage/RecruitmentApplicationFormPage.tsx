@@ -40,7 +40,7 @@ export function RecruitmentApplicationFormPage() {
   const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
   const [openOccupiedForm, setOpenOccupiedForm] = useState(false);
   const [formData, setFormData] = useState<FormProps>();
-  const [recruitmentId, setRecruitmentId] = useState(0); //Problem del 1: settes til 0 når recruitmentapplication ikke allerede eksisterer
+  const [recruitmentId, setRecruitmentId] = useState(0);
 
   const [loading, setLoading] = useState(true);
 
