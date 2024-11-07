@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -5,7 +6,7 @@ import { toast } from 'react-toastify';
 import { RecruitmentWithoutInterviewTable } from '~/Components';
 import { Text } from '~/Components/Text/Text';
 import { getApplicantsWithoutInterviews, getGang, getRecruitment, getRecruitmentGangStats } from '~/api';
-import type { GangDto, RecruitmentDto, RecruitmentGangStatDto, RecruitmentUserDto } from '~/dto';
+import type { GangDto, RecruitmentDto, RecruitmentUserDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -18,9 +19,9 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
   const { recruitmentId, gangId } = useParams();
   const [users, setUsers] = useState<RecruitmentUserDto[]>([]);
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
+  //const [gangStats, setGangStats] = useState<RecruitmentGangStatDto>();
   const [withoutInterviewCount, setWithoutInterviewCount] = useState<number>();
   const [gang, setGang] = useState<GangDto>();
-  const [recruitmentGangStat, setRecruitmentGangStat] = useState<RecruitmentGangStatDto>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
@@ -74,16 +75,11 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
     }
   }, [recruitmentId]);
 
-  useEffect(() => {
-    if (!recruitmentId || !gangId) return;
-    getRecruitmentGangStats(recruitmentId, gangId)
-      .then((response) => {
-        setRecruitmentGangStat(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [recruitmentId, gangId]);
+  const { data: gangStats } = useQuery({
+    queryKey: ['recruitmentGangStats', recruitmentId, gangId],
+    queryFn: () => getRecruitmentGangStats(recruitmentId as string, gangId as string),
+    enabled: Boolean(typeof recruitmentId === 'string' && typeof gangId === 'string'),
+  });
 
   const title = t(KEY.recruitment_applicants_without_interview);
   useTitle(title);
@@ -101,12 +97,13 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
   );
   return (
     <AdminPageLayout title={title} backendUrl={ROUTES.backend.samfundet__user} header={header} loading={showSpinner}>
-      {recruitmentGangStat && (
+      {gangStats && (
         <Text size="l">
           {[
             withoutInterviewCount,
             t(KEY.common_out_of),
-            `${t(KEY.common_total).toLowerCase()} ${recruitmentGangStat.total_applicants}`,
+            t(KEY.common_total).toLowerCase(),
+            gangStats.data.total_applicants,
             t(KEY.recruitment_applications),
             t(KEY.common_have),
             t(KEY.recruitment_interview),
