@@ -31,9 +31,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel, onConfirm, header, s
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
-    console.log('RecruitmendID:', recruitmentId);
     if (!recruitmentId) {
-      console.log('her');
       return;
     }
     setLoading(true);
@@ -47,7 +45,6 @@ export function OccupiedForm({ recruitmentId = 1, onCancel, onConfirm, header, s
         setMinDate(new Date(response.data.start_date));
         setMaxDate(new Date(response.data.end_date));
         setTimeslots(response.data.timeslots);
-        console.log('Response:', response.data);
       }),
       getOccupiedTimeslots(recruitmentId).then((res) => {
         setOccupiedTimeslots(res.data.dates);
