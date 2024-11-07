@@ -539,6 +539,7 @@ export const ROUTES_BACKEND = {
   samfundet__merch_detail: '/api/merch/:pk/',
   samfundet__role_list: '/api/role/',
   samfundet__role_detail: '/api/role/:pk/',
+  samfundet__role_users: '/api/role/:pk/users/',
   samfundet__recruitment_list: '/api/recruitment/',
   samfundet__recruitment_detail: '/api/recruitment/:pk/',
   samfundet__recruitment_gangs: '/api/recruitment/:pk/gangs/',

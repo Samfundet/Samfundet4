@@ -93,6 +93,7 @@ export function RecruitmentRecruiterDashboardPage() {
                   pattern: ROUTES.frontend.recruitment_application,
                   urlParams: {
                     positionId: application.recruitment_position.id,
+                    recruitmentId: recruitmentId,
                   },
                 })}
               >

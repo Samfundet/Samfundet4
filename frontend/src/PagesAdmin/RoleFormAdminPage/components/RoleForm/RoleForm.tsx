@@ -22,6 +22,7 @@ import { MultiSelect } from '~/Components/MultiSelect';
 import { createRole, editRole, getPermissions } from '~/api';
 import type { RoleDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { permissionKeys } from '~/queryKeys';
 import { ROLE_CONTENT_TYPE, ROLE_NAME } from '~/schema/role';
 import styles from './RoleForm.module.scss';
 
@@ -47,7 +48,7 @@ export function RoleForm({ role }: Props) {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['permissions'],
+    queryKey: permissionKeys.all,
     queryFn: getPermissions,
   });
 
