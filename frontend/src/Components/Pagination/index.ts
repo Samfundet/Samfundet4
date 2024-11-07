@@ -1,0 +1,1 @@
+export { PagedPagination } from './PagedPagination';
