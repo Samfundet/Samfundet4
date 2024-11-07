@@ -49,6 +49,7 @@ import type {
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { BACKEND_DOMAIN } from './constants';
+import type { PageNumberPaginationType } from './types';
 
 export async function getCsrfToken(): Promise<string> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__csrf;
@@ -108,6 +109,12 @@ export async function impersonateUser(userId: number): Promise<boolean> {
 export async function getUsers(): Promise<UserDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users;
   const response = await axios.get<UserDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function getPaginatedUsers(page = 1): Promise<PageNumberPaginationType<UserDto>> {
+  const url = `${BACKEND_DOMAIN + ROUTES.backend.samfundet__users}?page=${page}`;
+  const response = await axios.get<PageNumberPaginationType<UserDto>>(url, { withCredentials: true });
   return response.data;
 }
 

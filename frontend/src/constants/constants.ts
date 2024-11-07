@@ -84,3 +84,6 @@ export const USERNAME_LENGTH_MIN = 2;
 export const USERNAME_LENGTH_MAX = 32;
 export const PASSWORD_LENGTH_MIN = 8;
 export const PASSWORD_LENGTH_MAX = 2048;
+
+// see pagination.py CustomPageNumberPagination
+export const PAGE_SIZE = 25;
