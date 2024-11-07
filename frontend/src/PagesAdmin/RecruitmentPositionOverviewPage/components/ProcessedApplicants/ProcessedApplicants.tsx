@@ -5,8 +5,8 @@ import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import styles from './ProcessedApplicants.module.scss';
 import { RecruitmentStatusChoicesMapping } from '~/types';
+import styles from './ProcessedApplicants.module.scss';
 
 type ProcessedType = 'rejected' | 'withdrawn' | 'accepted' | 'hardtoget';
 

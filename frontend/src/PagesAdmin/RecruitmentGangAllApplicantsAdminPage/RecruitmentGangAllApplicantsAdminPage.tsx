@@ -16,7 +16,6 @@ import { RecruitmentPriorityChoicesMapping, RecruitmentStatusChoicesMapping } fr
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentGangAllApplicantsAdminPage.module.scss';
-import { RecruitmentStatusChoicesMapping } from '~/types';
 
 export function RecruitmentGangAllApplicantsAdminPage() {
   const { recruitmentId, gangId } = useParams();
