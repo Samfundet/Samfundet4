@@ -44,7 +44,7 @@ export function RecruitmentApplicationFormPage() {
 
   const [loading, setLoading] = useState(true);
 
-  const { positionId, recruitmentId } = useParams();
+  const { positionId } = useParams();
 
   useTitle(recruitmentPosition ? (dbT(recruitmentPosition, 'name') as string) : '');
 
@@ -102,7 +102,6 @@ export function RecruitmentApplicationFormPage() {
   function handleOnSubmit(data: FormProps) {
     setFormData(data);
     setOpenOccupiedForm(true);
-    //hei
   }
 
   function submitData(data: FormProps) {
