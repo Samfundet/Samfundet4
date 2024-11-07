@@ -6,15 +6,31 @@ import { Text } from '~/Components/Text/Text';
 import { KEY } from '~/i18n/constants';
 import { toPercentage } from '~/utils';
 import styles from './RecruitmentProgression.module.scss';
+import { useCustomNavigate } from '~/hooks';
+import { ROUTES } from '~/routes';
+import { getRecruitmentStats } from '~/api';
+import { reverse } from '~/named-urls';
+import { useParams } from 'react-router-dom';
+import { RecruitmentStatsDto } from '~/dto';
+
+interface RecruitmentProgessionProps {
+  team: string,
+  applications: number,
+  processed: number,
+  admitted: number,
+  rejected: number,
+}
 
 export function RecruitmentProgression() {
   const { t } = useTranslation();
+  const { recruitmentId } = useParams();
   const [progression, setProgression] = useState<number>(-1);
-  const [processedApplication, setProcessesApplications] = useState<number>(-1);
+  const [processedApplication, setProcessedApplications] = useState<number>(-1);
   const [totalApplications, setTotalApplications] = useState<number>(-1);
   const [rejectionCount, setRejectionCount] = useState<number>(-1);
   const [admittedCount, setAdmittedCount] = useState<number>(-1);
   const [rejectionEmailCount, setRejectionEmailCount] = useState<number>(-1);
+  const navigate = useCustomNavigate();
   const [tableRows, setTableRowsState] = useState<TableRow[]>([]);
   const ONE_HUNDRED_PERCENT = 1;
 
@@ -26,6 +42,9 @@ export function RecruitmentProgression() {
   const mock_rejection_email_count = 0; // number of rejection emails sent.
 
   useEffect(() => {
+    if (!recruitmentId) {
+      return;
+    }
     if (!mock_fetched_data || mock_rejection_email_count) {
       //TODO: add dynamic data and might need backend features (in ISSUE #1110)
       return;
@@ -36,8 +55,17 @@ export function RecruitmentProgression() {
     const totalAdmitted = mock_fetched_data.reduce((sum, current) => sum + current.admitted, 0);
     const totalRejected = mock_fetched_data.reduce((sum, current) => sum + current.rejected, 0);
 
+    getRecruitmentStats(recruitmentId).then(
+      recruitmentStats => {
+        setTotalApplications(recruitmentStats.total_applications);
+        // Where to retrieve number of processed, admitted, rejected?
+      }
+    );
+
+
+
     setTotalApplications(totalApps);
-    setProcessesApplications(totalProcessed);
+    setProcessedApplications(totalProcessed);
     setAdmittedCount(totalAdmitted);
     setRejectionCount(totalRejected);
 
@@ -118,11 +146,15 @@ export function RecruitmentProgression() {
             <Button
               theme={'green'}
               onClick={() => {
-                alert('Skal navigere til siden hvor man lager avslagsepost');
+                navigate({
+                  url: reverse({
+                    pattern: ROUTES.frontend.admin_recruitment_gang_overview_rejection_email,
+                    urlParams: { recruitmentId: recruitmentId },
+                  }),
+                });
               }}
             >
               {`${t(KEY.common_create)} ${t(KEY.recruitment_rejection_email)}`}
-              {/*TODO: IN ISSUE #1110, navigate to "create e-mail page"*/}
             </Button>
           )}
         </div>
