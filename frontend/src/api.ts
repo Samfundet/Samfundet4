@@ -106,7 +106,13 @@ export async function impersonateUser(userId: number): Promise<boolean> {
   return response.status === 200;
 }
 
-export async function getUsers(page = 1): Promise<PageNumberPaginationType<UserDto>> {
+export async function getUsers(): Promise<UserDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users;
+  const response = await axios.get<UserDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function getPaginatedUsers(page = 1): Promise<PageNumberPaginationType<UserDto>> {
   const url = `${BACKEND_DOMAIN + ROUTES.backend.samfundet__users}?page=${page}`;
   const response = await axios.get<PageNumberPaginationType<UserDto>>(url, { withCredentials: true });
   return response.data;
