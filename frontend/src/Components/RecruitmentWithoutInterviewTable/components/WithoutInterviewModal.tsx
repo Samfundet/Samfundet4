@@ -1,21 +1,26 @@
 import { useState } from 'react';
 import { Button, IconButton, Modal } from '~/Components';
-import type { RecruitmentApplicationDto } from '~/dto';
+import type { RecruitmentApplicationDto, RecruitmentUserDto } from '~/dto';
 import styles from './WithoutInterview.module.scss';
 import { WithoutInterviewList } from './WithoutInterviewList';
 
 type WithoutInterviewModalProps = {
+  user: RecruitmentUserDto;
   applications: RecruitmentApplicationDto[];
-  applications_without_interview: RecruitmentApplicationDto[];
+  applicationsWithoutInterview: RecruitmentApplicationDto[];
 };
 
-export function WithoutInterviewModal({ applications, applications_without_interview }: WithoutInterviewModalProps) {
+export function WithoutInterviewModal({
+  applications,
+  applicationsWithoutInterview,
+  user,
+}: WithoutInterviewModalProps) {
   const [withoutInterviewModal, setWithoutInterviewModal] = useState(false);
 
   return (
     <>
-      <Button theme="text" onClick={() => setWithoutInterviewModal(true)}>
-        {applications.length - applications_without_interview.length} / {applications.length}
+      <Button theme="outlined" display="pill" onClick={() => setWithoutInterviewModal(true)}>
+        {applications.length - applicationsWithoutInterview.length} / {applications.length}
       </Button>
       <Modal isOpen={withoutInterviewModal}>
         <IconButton
@@ -24,7 +29,12 @@ export function WithoutInterviewModal({ applications, applications_without_inter
           icon="mdi:close"
           onClick={() => setWithoutInterviewModal(false)}
         />
-        <WithoutInterviewList applications={applications_without_interview} />
+
+        <WithoutInterviewList
+          applicationsWithoutInterview={applicationsWithoutInterview}
+          user={user}
+          applications={applications}
+        />
       </Modal>
     </>
   );
