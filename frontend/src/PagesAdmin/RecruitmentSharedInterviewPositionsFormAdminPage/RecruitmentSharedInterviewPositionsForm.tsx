@@ -46,7 +46,11 @@ interface FormProps {
   recruitmentId?: string;
 }
 
-export function RecruitmentSharedInterviewPositionsForm({ initialData, recruitmentId, sharedInterviewGroupId }: FormProps) {
+export function RecruitmentSharedInterviewPositionsForm({
+  initialData,
+  recruitmentId,
+  sharedInterviewGroupId,
+}: FormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -58,7 +62,6 @@ export function RecruitmentSharedInterviewPositionsForm({ initialData, recruitme
   const [positionOptions, setPositionOptions] = useState<DropdownOption<number>[]>([]);
 
   const submitText = sharedInterviewGroupId ? t(KEY.common_save) : t(KEY.common_create);
-
 
   useEffect(() => {
     if (recruitmentId) {
@@ -146,7 +149,7 @@ export function RecruitmentSharedInterviewPositionsForm({ initialData, recruitme
               name="positions"
               render={({ field }) => (
                 <FormItem className={styles.item}>
-                  <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_english)}`}</FormLabel>
+                  <FormLabel>{t(KEY.recruitment_positions)}</FormLabel>
                   <FormControl>
                     <MultiSelect {...field} options={positionOptions} />
                   </FormControl>

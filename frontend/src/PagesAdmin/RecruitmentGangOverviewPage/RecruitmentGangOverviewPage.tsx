@@ -128,7 +128,7 @@ export function RecruitmentGangOverviewPage() {
       },
       {
         key: 3,
-        label: t(KEY.recruitment_interview_groups),
+        label: t(KEY.recruitment_interview_group_create_header),
         value: (
           <>
             <Button

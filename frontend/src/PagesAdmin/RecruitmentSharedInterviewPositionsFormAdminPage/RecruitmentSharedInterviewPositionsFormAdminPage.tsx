@@ -45,8 +45,8 @@ export function RecruitmentSharedInterviewPositionsFormAdminPage() {
   };
 
   const title = sharedInterviewGroupId
-    ? `${t(KEY.common_edit)} ${dbT(sharedInterview, 'name')}`
-    : `${t(KEY.common_create)} ${t(KEY.recruitment_interview_group)}`;
+    ? t(KEY.recruitment_interview_group_edit_header)
+    : t(KEY.recruitment_interview_group_create_header);
 
   useTitle(title);
 

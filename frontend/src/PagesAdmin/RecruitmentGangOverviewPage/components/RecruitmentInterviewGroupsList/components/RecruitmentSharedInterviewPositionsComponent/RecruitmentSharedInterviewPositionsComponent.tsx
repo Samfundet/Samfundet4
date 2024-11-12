@@ -11,7 +11,9 @@ type RecruitmentSharedInterviewPositionsComponentProps = {
   interviewGroup: RecruitmentSharedInterviewPositionsDto;
 };
 
-export function RecruitmentSharedInterviewPositionsComponent({ interviewGroup }: RecruitmentSharedInterviewPositionsComponentProps) {
+export function RecruitmentSharedInterviewPositionsComponent({
+  interviewGroup,
+}: RecruitmentSharedInterviewPositionsComponentProps) {
   const interviewGroupHeader = dbT(interviewGroup, 'name') ?? 'N/A';
   const { t } = useTranslation();
 

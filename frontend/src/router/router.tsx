@@ -51,12 +51,12 @@ import {
   RecruitmentGangAdminPage,
   RecruitmentGangAllApplicantsAdminPage,
   RecruitmentGangOverviewPage,
-  RecruitmentSharedInterviewPositionsFormAdminPage,
   RecruitmentOpenToOtherPositionsPage,
   RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
   RecruitmentSeparatePositionFormAdminPage,
+  RecruitmentSharedInterviewPositionsFormAdminPage,
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
@@ -378,10 +378,24 @@ export const router = createBrowserRouter(
             />
             <Route
               path={ROUTES.frontend.admin_recruitment_sharedinterviewgroup_create}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => (
+                  <Link url={pathname}>
+                    {t(KEY.common_create)} {t(KEY.recruitment_interview_group)}
+                  </Link>
+                ),
+              }}
               element={<PermissionRoute required={[]} element={<RecruitmentSharedInterviewPositionsFormAdminPage />} />}
             />
             <Route
               path={ROUTES.frontend.admin_recruitment_sharedinterviewgroup_edit}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => (
+                  <Link url={pathname}>
+                    {t(KEY.common_edit)} {t(KEY.recruitment_interview_group)}
+                  </Link>
+                ),
+              }}
               element={<PermissionRoute required={[]} element={<RecruitmentSharedInterviewPositionsFormAdminPage />} />}
             />
             <Route
