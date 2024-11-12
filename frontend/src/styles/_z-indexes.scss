@@ -16,4 +16,9 @@
 //
 
 $base-z-index: 0;
-$navbar-z-index: $base-z-index + 1;
+$tooltip-z-index: $base-z-index + 1;
+$feedback-z-index: $tooltip-z-index + 1;
+$navbar-z-index: $feedback-z-index + 1;
+$modal-z-index: $navbar-z-index + 1;
+// For instance snowflakes, confetti, sprut, etc.
+$decoration-overlay-z-index: $modal-z-index + 1;
