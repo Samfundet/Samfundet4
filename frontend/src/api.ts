@@ -33,8 +33,8 @@ import type {
   RecruitmentPositionPostDto,
   RecruitmentPositionPutDto,
   RecruitmentSeparatePositionDto,
-  RecruitmentSharedInterviewGroupDto,
-  RecruitmentSharedInterviewGroupPostDto,
+  RecruitmentSharedInterviewPositionsDto,
+  RecruitmentSharedInterviewPositionsPostDto,
   RecruitmentStatsDto,
   RecruitmentUnprocessedApplicationsDto,
   RecruitmentUserDto,
@@ -820,9 +820,9 @@ export async function getRecruitmentApplicationsForGang(
   return await axios.get(url, { withCredentials: true });
 }
 
-export async function getRecruitmentSharedInterviewGroups(
+export async function getRecruitmentSharedInterviewPositionss(
   recruitmentId: string,
-): Promise<AxiosResponse<RecruitmentSharedInterviewGroupDto[]>> {
+): Promise<AxiosResponse<RecruitmentSharedInterviewPositionsDto[]>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -834,9 +834,9 @@ export async function getRecruitmentSharedInterviewGroups(
   return await axios.get(url, { withCredentials: true });
 }
 
-export async function getRecruitmentSharedInterviewGroup(
+export async function getRecruitmentSharedInterviewPositions(
   sharedInterviewGroupId: string,
-): Promise<AxiosResponse<RecruitmentSharedInterviewGroupDto>> {
+): Promise<AxiosResponse<RecruitmentSharedInterviewPositionsDto>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -848,9 +848,9 @@ export async function getRecruitmentSharedInterviewGroup(
   return await axios.get(url, { withCredentials: true });
 }
 
-export async function putRecruitmentSharedInterviewGroup(
+export async function putRecruitmentSharedInterviewPositions(
   sharedInterviewGroupId: string,
-  sharedInterviewGroup: Partial<RecruitmentSharedInterviewGroupPostDto>,
+  sharedInterviewGroup: Partial<RecruitmentSharedInterviewPositionsPostDto>,
 ): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
@@ -863,8 +863,8 @@ export async function putRecruitmentSharedInterviewGroup(
   return await axios.put<RecruitmentApplicationDto>(url, sharedInterviewGroup, { withCredentials: true });
 }
 
-export async function postRecruitmentSharedInterviewGroup(
-  sharedInterviewGroup: Partial<RecruitmentSharedInterviewGroupPostDto>,
+export async function postRecruitmentSharedInterviewPositions(
+  sharedInterviewGroup: Partial<RecruitmentSharedInterviewPositionsPostDto>,
 ): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +

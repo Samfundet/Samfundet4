@@ -11,7 +11,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { AppletContainer, RecruitmentInterviewGroupsList } from './components';
+import { AppletContainer, RecruitmentSharedInterviewPositionsList } from './components';
 
 import styles from './RecruitmentGangOverviewPage.module.scss';
 
@@ -131,7 +131,6 @@ export function RecruitmentGangOverviewPage() {
         label: t(KEY.recruitment_interview_groups),
         value: (
           <>
-            <RecruitmentInterviewGroupsList />
             <Button
               className={styles.button}
               theme="success"
@@ -143,6 +142,7 @@ export function RecruitmentGangOverviewPage() {
             >
               {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_interview_group)}`)}
             </Button>{' '}
+            <RecruitmentSharedInterviewPositionsList />
           </>
         ),
       },

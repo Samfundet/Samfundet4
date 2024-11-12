@@ -1,1 +1,0 @@
-export { RecruitmentInterviewGroupFormAdminPage } from './RecruitmentInterviewGroupFormAdminPage';

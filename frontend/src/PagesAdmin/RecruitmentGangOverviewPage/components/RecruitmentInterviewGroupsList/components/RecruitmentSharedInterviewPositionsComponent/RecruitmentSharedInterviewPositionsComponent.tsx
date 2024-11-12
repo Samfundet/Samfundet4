@@ -1,17 +1,17 @@
 import { useTranslation } from 'react-i18next';
 import { Button, ExpandableHeader, Table } from '~/Components';
-import type { RecruitmentSharedInterviewGroupDto, RecruitmentStatsDto } from '~/dto';
+import type { RecruitmentSharedInterviewPositionsDto, RecruitmentStatsDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
-import styles from './RecruitmentInterviewGroupComponent.module.scss';
+import styles from './RecruitmentSharedInterviewPositionsComponent.module.scss';
 
-type RecruitmentInterviewGroupComponentProps = {
-  interviewGroup: RecruitmentSharedInterviewGroupDto;
+type RecruitmentSharedInterviewPositionsComponentProps = {
+  interviewGroup: RecruitmentSharedInterviewPositionsDto;
 };
 
-export function RecruitmentInterviewGroupComponent({ interviewGroup }: RecruitmentInterviewGroupComponentProps) {
+export function RecruitmentSharedInterviewPositionsComponent({ interviewGroup }: RecruitmentSharedInterviewPositionsComponentProps) {
   const interviewGroupHeader = dbT(interviewGroup, 'name') ?? 'N/A';
   const { t } = useTranslation();
 

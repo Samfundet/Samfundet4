@@ -2,25 +2,25 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getRecruitmentSharedInterviewGroup } from '~/api';
-import type { RecruitmentSharedInterviewGroupDto, RecruitmentSharedInterviewGroupPostDto } from '~/dto';
+import { getRecruitmentSharedInterviewPositions } from '~/api';
+import type { RecruitmentSharedInterviewPositionsDto, RecruitmentSharedInterviewPositionsPostDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { RecruitmentInterviewGroupForm } from './RecruitmentInterviewGroupForm';
+import { RecruitmentSharedInterviewPositionsForm } from './RecruitmentSharedInterviewPositionsForm';
 
-export function RecruitmentInterviewGroupFormAdminPage() {
+export function RecruitmentSharedInterviewPositionsFormAdminPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { recruitmentId, sharedInterviewGroupId } = useParams();
-  const [sharedInterview, setSharedInterview] = useState<Partial<RecruitmentSharedInterviewGroupDto>>();
+  const [sharedInterview, setSharedInterview] = useState<Partial<RecruitmentSharedInterviewPositionsDto>>();
 
   useEffect(() => {
     if (sharedInterviewGroupId && recruitmentId) {
-      getRecruitmentSharedInterviewGroup(sharedInterviewGroupId)
+      getRecruitmentSharedInterviewPositions(sharedInterviewGroupId)
         .then((data) => {
           setSharedInterview(data.data);
         })
@@ -37,7 +37,7 @@ export function RecruitmentInterviewGroupFormAdminPage() {
     }
   }, [sharedInterviewGroupId, recruitmentId, navigate, t]);
 
-  const initialData: Partial<RecruitmentSharedInterviewGroupPostDto> = {
+  const initialData: Partial<RecruitmentSharedInterviewPositionsPostDto> = {
     name_nb: sharedInterview?.name_nb || '',
     name_en: sharedInterview?.name_en || '',
     recruitment: recruitmentId,
@@ -52,7 +52,7 @@ export function RecruitmentInterviewGroupFormAdminPage() {
 
   return (
     <AdminPageLayout title={title} header={true}>
-      <RecruitmentInterviewGroupForm
+      <RecruitmentSharedInterviewPositionsForm
         initialData={initialData}
         sharedInterviewGroupId={sharedInterviewGroupId}
         recruitmentId={recruitmentId}

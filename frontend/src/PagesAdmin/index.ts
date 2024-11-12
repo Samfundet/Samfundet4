@@ -20,7 +20,7 @@ export { RecruitmentGangAllApplicantsAdminPage } from './RecruitmentGangAllAppli
 export { RecruitmentGangOverviewPage } from './RecruitmentGangOverviewPage';
 export { RecruitmentOpenToOtherPositionsPage } from './RecruitmentOpenToOtherPositionsPage';
 export { RecruitmentOverviewPage } from './RecruitmentOverviewPage';
-export { RecruitmentInterviewGroupFormAdminPage } from './RecruitmentInterviewGroupFormAdminPage';
+export { RecruitmentSharedInterviewPositionsFormAdminPage } from './RecruitmentSharedInterviewPositionsFormAdminPage';
 export { RecruitmentPositionFormAdminPage } from './RecruitmentPositionFormAdminPage';
 export { RecruitmentPositionOverviewPage } from './RecruitmentPositionOverviewPage';
 export { RecruitmentRecruiterDashboardPage } from './RecruitmentRecruiterDashboardPage';

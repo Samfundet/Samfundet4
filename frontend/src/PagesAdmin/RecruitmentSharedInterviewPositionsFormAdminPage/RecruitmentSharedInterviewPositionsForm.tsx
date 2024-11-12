@@ -21,15 +21,15 @@ import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { MultiSelect } from '~/Components/MultiSelect';
 import {
   getRecruitmentPositions,
-  postRecruitmentSharedInterviewGroup,
+  postRecruitmentSharedInterviewPositions,
   putRecruitmentPosition,
-  putRecruitmentSharedInterviewGroup,
+  putRecruitmentSharedInterviewPositions,
 } from '~/api';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { NON_EMPTY_STRING } from '~/schema/strings';
-import styles from './RecruitmentInterviewGroupFormAdminPage.module.scss';
+import styles from './RecruitmentSharedInterviewPositionsFormAdminPage.module.scss';
 
 const schema = z.object({
   name_nb: NON_EMPTY_STRING,
@@ -46,7 +46,7 @@ interface FormProps {
   recruitmentId?: string;
 }
 
-export function RecruitmentInterviewGroupForm({ initialData, recruitmentId, sharedInterviewGroupId }: FormProps) {
+export function RecruitmentSharedInterviewPositionsForm({ initialData, recruitmentId, sharedInterviewGroupId }: FormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -59,9 +59,6 @@ export function RecruitmentInterviewGroupForm({ initialData, recruitmentId, shar
 
   const submitText = sharedInterviewGroupId ? t(KEY.common_save) : t(KEY.common_create);
 
-  useEffect(() => {
-    console.log(initialData);
-  }, [initialData]);
 
   useEffect(() => {
     if (recruitmentId) {
@@ -88,8 +85,8 @@ export function RecruitmentInterviewGroupForm({ initialData, recruitmentId, shar
     };
 
     const action = sharedInterviewGroupId
-      ? putRecruitmentSharedInterviewGroup(sharedInterviewGroupId, updatedSharedInterviewGroup)
-      : postRecruitmentSharedInterviewGroup(updatedSharedInterviewGroup);
+      ? putRecruitmentSharedInterviewPositions(sharedInterviewGroupId, updatedSharedInterviewGroup)
+      : postRecruitmentSharedInterviewPositions(updatedSharedInterviewGroup);
 
     action
       .then(() => {
