@@ -46,8 +46,6 @@ export function RecruitmentApplicantsStatus({
   const [statusOptions, setStatusOptions] = useState<DropdownOption<number>[]>([]);
 
   useEffect(() => {
-    //recruiter_priority: [number, string][];
-    //recruiter_status: [number, string][];
     getRecruitmentApplicationStateChoices().then((response) => {
       setPriorityOptions(
         response.data.recruiter_priority.map((priority) => {
