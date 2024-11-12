@@ -1096,7 +1096,7 @@ class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
 
 
 class RecruitmentPositionOrganizedApplications(CustomBaseSerializer):
-    applicationSerializer = RecruitmentApplicationForGangSerializer
+    ApplicationSerializer = RecruitmentApplicationForGangSerializer
     unprocessed = serializers.SerializerMethodField(method_name='get_unprocessed', read_only=True)
     withdrawn = serializers.SerializerMethodField(method_name='get_withdrawn', read_only=True)
     accepted = serializers.SerializerMethodField(method_name='get_accepted', read_only=True)
@@ -1107,27 +1107,27 @@ class RecruitmentPositionOrganizedApplications(CustomBaseSerializer):
         model = RecruitmentPosition
         fields = ['unprocessed', 'withdrawn', 'accepted', 'rejected', 'hardtoget']
 
-    def get_unprocessed(self, instance: RecruitmentPosition):
+    def get_unprocessed(self, instance: RecruitmentPosition):  # noqa: ANN201
         unprocessed = instance.applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.NOT_SET)
-        return self.applicationSerializer(unprocessed, many=True).data
+        return self.ApplicationSerializer(unprocessed, many=True).data
 
-    def get_withdrawn(self, instance: RecruitmentPosition):
+    def get_withdrawn(self, instance: RecruitmentPosition):  # noqa: ANN201
         withdrawn = instance.applications.filter(withdrawn=True)
-        return self.applicationSerializer(withdrawn, many=True).data
+        return self.ApplicationSerializer(withdrawn, many=True).data
 
-    def get_rejected(self, instance: RecruitmentPosition):
+    def get_rejected(self, instance: RecruitmentPosition):  # noqa: ANN201
         rejected = instance.applications.filter(
             withdrawn=False, recruiter_status__in=[RecruitmentStatusChoices.AUTOMATIC_REJECTION, RecruitmentStatusChoices.REJECTION]
         )
-        return self.applicationSerializer(rejected, many=True).data
+        return self.ApplicationSerializer(rejected, many=True).data
 
-    def get_accepted(self, instance: RecruitmentPosition):
+    def get_accepted(self, instance: RecruitmentPosition):  # noqa: ANN201
         accepted = instance.applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED)
-        return self.applicationSerializer(accepted, many=True).data
+        return self.ApplicationSerializer(accepted, many=True).data
 
-    def get_hardtoget(self, instance: RecruitmentPosition):
+    def get_hardtoget(self, instance: RecruitmentPosition):  # noqa: ANN201
         hardtoget = instance.applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_REJECTED)
-        return self.applicationSerializer(hardtoget, many=True).data
+        return self.ApplicationSerializer(hardtoget, many=True).data
 
 
 class RecruitmentApplicationUpdateForGangSerializer(serializers.Serializer):

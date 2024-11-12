@@ -42,7 +42,6 @@ from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_
 from .homepage import homepage
 from .models.role import Role
 from .serializers import (
-    RecruitmentPositionOrganizedApplications,
     TagSerializer,
     GangSerializer,
     MenuSerializer,
@@ -88,6 +87,7 @@ from .serializers import (
     RecruitmentSeparatePositionSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
+    RecruitmentPositionOrganizedApplications,
     RecruitmentPositionForApplicantSerializer,
     RecruitmentInterviewAvailabilitySerializer,
     RecruitmentApplicationForApplicantSerializer,
