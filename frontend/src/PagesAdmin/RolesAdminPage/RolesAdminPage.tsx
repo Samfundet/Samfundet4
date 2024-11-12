@@ -9,6 +9,7 @@ import { getRoles } from '~/api';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import { roleKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { lowerCapitalize } from '~/utils';
 
@@ -19,7 +20,7 @@ export function RolesAdminPage() {
   useTitle(title);
 
   const { data: roles, isLoading } = useQuery({
-    queryKey: ['roles'],
+    queryKey: roleKeys.all,
     queryFn: getRoles,
   });
 

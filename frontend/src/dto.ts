@@ -511,7 +511,7 @@ export type RecruitmentApplicationDto = {
   recruitment: number;
   user: UserDto;
   applicant_priority: number;
-  recruiter_priority?: number | string;
+  recruiter_priority?: number;
   recruiter_status?: number;
   applicant_state?: number;
   created_at: string;
