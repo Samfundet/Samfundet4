@@ -109,13 +109,13 @@ export function OrganizationRecruitmentPage() {
             <div className={styles.optionsContainer}>
               <div className={styles.viewModeControll}>
                 <Button
-                  theme={positionsViewMode === 'list' ? 'basic' : 'samf'}
+                  theme={positionsViewMode === 'list' ? 'outlined' : 'basic'}
                   onClick={() => setViewMode('list')}
                   className={positionsViewMode === 'list' ? styles.activeButton : ''}
                 >
                   {t(KEY.common_list_view)}
                 </Button>
-                <Button theme={positionsViewMode === 'tab' ? 'basic' : 'samf'} onClick={() => setViewMode('tab')}>
+                <Button theme={positionsViewMode === 'tab' ? 'outlined' : 'basic'} onClick={() => setViewMode('tab')}>
                   {t(KEY.common_tab_view)}
                 </Button>
               </div>
