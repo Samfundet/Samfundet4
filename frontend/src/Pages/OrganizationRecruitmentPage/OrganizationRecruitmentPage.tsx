@@ -122,12 +122,7 @@ export function OrganizationRecruitmentPage() {
                 </Button>
               </div>
             </div>
-            {recruitmentId &&
-              (positionsViewMode === 'list' ? (
-                <GangTypeContainer recruitmentId={recruitmentId} />
-              ) : (
-                <RecruitmentTabs />
-              ))}
+            {recruitmentId && (positionsViewMode === 'list' ? <GangTypeContainer /> : <RecruitmentTabs />)}
             {recruitment?.separate_positions && recruitment.separate_positions.length > 0 && (
               <GangSeparatePositions recruitmentSeparatePositions={recruitment.separate_positions} />
             )}
