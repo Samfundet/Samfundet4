@@ -41,7 +41,7 @@ export function RecruitmentInterviewNotesForm ({initialData }: RecruitmentInterv
             name="notes"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{`${t(KEY.common_long_description)} ${t(KEY.common_english)}`}</FormLabel>
+                <FormLabel>{t(KEY.recruitment_interview_notes)}</FormLabel>
                 <FormControl>
                 <Textarea {...field} 
                 onBlur={(newNotes) => {
