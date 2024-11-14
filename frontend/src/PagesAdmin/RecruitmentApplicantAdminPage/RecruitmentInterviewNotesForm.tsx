@@ -28,6 +28,7 @@ export function RecruitmentInterviewNotesForm ({initialData }: RecruitmentInterv
   });
 
   function handleUpdateNotes(value: string) {
+    // TODO: Update notes using a put request
     console.log(value);
   }
 

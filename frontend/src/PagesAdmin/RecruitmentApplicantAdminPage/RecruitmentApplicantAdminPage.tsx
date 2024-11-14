@@ -13,6 +13,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
+import { AdminPage } from '../AdminPageLayout';
 import styles from './RecruitmentApplicantAdminPage.module.scss';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { RecruitmentInterviewNotesForm } from './RecruitmentInterviewNotesForm';
@@ -40,23 +41,14 @@ export function RecruitmentApplicantAdminPage() {
   const otherRecruitmentApplication = data?.data.other_applications;
   const interviewNotes = recruitmentApplication?.interview?.notes;
 
-    const adminWithdraw = useMutation({
+  const adminWithdraw = useMutation({
     mutationFn: (id: string) => {
       return withdrawRecruitmentApplicationRecruiter(id);
     },
     onSuccess: () => {
-      // TODO: make better response
       toast.success(t(KEY.common_update_successful));
     }
   });
-
-
-  function handleUpdateNotes(value: string) {
-    const updatedNotes = value;
-    if (recruitmentApplication?.id) {
-      // TODO update notes
-    }
-  }
 
   if (isLoading) {
     return (
@@ -71,12 +63,9 @@ export function RecruitmentApplicantAdminPage() {
   }; 
 
   return (
-    <Page>
+    <AdminPage title={`${applicant?.first_name} ${applicant?.last_name}`}>
       <div className={classNames(styles.infoContainer)}>
         <BackButton />
-        <Text size="l" as="strong" className={styles.textBottom}>
-          {applicant?.first_name} {applicant?.last_name}
-        </Text>
         <Table
           data={[
             {
@@ -185,6 +174,6 @@ export function RecruitmentApplicantAdminPage() {
           </Button>
         )}
       </div>
-    </Page>
+    </AdminPage>
   );
 }

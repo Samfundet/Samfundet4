@@ -24,3 +24,8 @@
   justify-content: center;
   margin-top: 20%;
 }
+
+.item {
+  flex-grow: 1;
+  max-width: 50%;
+}

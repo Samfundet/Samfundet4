@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { KEY } from '~/i18n/constants';
 import {
   type FormType,
@@ -72,8 +72,8 @@ export type SamfFormFieldProps<U extends T[keyof T], T extends FormType> = {
   hidden?: boolean;
   validator?: (state: T) => SamfError;
   // Dropdown
-  options?: DropDownOption<unknown>[];
-  defaultOption?: DropDownOption<unknown>;
+  options?: DropdownOption<unknown>[];
+  defaultOption?: DropdownOption<unknown>;
   onChange?: (value: U) => void;
   props?: FieldProps;
 };

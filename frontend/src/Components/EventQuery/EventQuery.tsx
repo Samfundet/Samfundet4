@@ -5,8 +5,9 @@ import { getEventGroups, getVenues } from '~/api';
 import type { EventDto, EventGroupDto, VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import type { SetState } from '~/types';
+import { lowerCapitalize } from '~/utils';
 import { Dropdown } from '../Dropdown';
-import type { DropDownOption } from '../Dropdown/Dropdown';
+import type { DropdownOption } from '../Dropdown/Dropdown';
 import styles from './EventQuery.module.scss';
 import { eventQuery } from './utils';
 
@@ -24,8 +25,8 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
 
   // Search
   const [search, setSearch] = useState<string>('');
-  const [selectedVenue, setSelectedVenue] = useState<VenueDto>();
-  const [selectedEventGroup, setSelectedEventGroup] = useState<EventGroupDto>();
+  const [selectedVenue, setSelectedVenue] = useState<VenueDto | null>();
+  const [selectedEventGroup, setSelectedEventGroup] = useState<EventGroupDto | null>();
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -37,18 +38,18 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
       .catch(console.error);
   }, [allEvents]);
 
+  const venueOptions: DropdownOption<number | null>[] = venues.map((venue) => {
+    return { label: venue.name ?? '', value: venue.id } as DropdownOption<number>;
+  });
+
+  const eventGroupOptions: DropdownOption<number | null>[] = eventGroups.map((group) => {
+    return { label: group.name ?? '', value: group.id };
+  });
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setEvents(eventQuery(allEvents, search, selectedVenue));
   }, [search, selectedVenue, selectedEventGroup]);
-
-  const venueOptions: DropDownOption<VenueDto>[] = venues.map((venue) => {
-    return { label: venue.name ?? '', value: venue };
-  });
-
-  const eventGroupOptions: DropDownOption<EventGroupDto>[] = eventGroups.map((group) => {
-    return { label: group.name ?? '', value: group };
-  });
 
   return (
     <div className={styles.queryBar}>
@@ -58,17 +59,18 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
         labelClassName={styles.searchBar}
         icon="ic:baseline-search"
       />
-      <Dropdown<VenueDto | undefined>
+      <Dropdown
         options={venueOptions}
-        onChange={(venue) => setSelectedVenue(venue)}
+        onChange={(val) => setSelectedVenue(venues.find((v) => v.id === val))}
         className={styles.element}
-        defaultValue={{ label: `${t(KEY.common_choose)} ${t(KEY.common_venue)}`, value: undefined }}
+        nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_venue)}`) }}
       />
-      <Dropdown<EventGroupDto | undefined>
+
+      <Dropdown
         options={eventGroupOptions}
-        onChange={(group) => setSelectedEventGroup(group)}
+        onChange={(val) => setSelectedEventGroup(eventGroups.find((eg) => eg.id === val))}
         className={styles.element}
-        defaultValue={{ label: `${t(KEY.common_choose)} ${t(KEY.event_type)}`, value: undefined }}
+        nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.event_type)}`) }}
       />
     </div>
   );

@@ -31,6 +31,7 @@ class Recruitment(CustomBaseModel):
     organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
 
     max_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Max applications per applicant')
+    promo_media = models.CharField(max_length=11, help_text='Youtube video id', null=True, default=None, blank=True)
 
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
         if return_id:
@@ -115,8 +116,11 @@ class RecruitmentPositionSharedInterviewGroup(CustomBaseModel):
         blank=True,
     )
 
+    name_nb = models.CharField(max_length=100, null=False, blank=False, help_text='Name of the recruitmentgroup (NB)')
+    name_en = models.CharField(max_length=100, null=False, blank=False, help_text='Name of the recruitmentgroup (EN)')
+
     def __str__(self) -> str:
-        return f'{self.recruitment} Interviewgroup {self.id}'
+        return f'{self.recruitment} Interviewgroup {self.name_nb} {", ".join(list(self.positions.values_list("name_nb", flat=True)))}'
 
 
 class RecruitmentPosition(CustomBaseModel):
@@ -261,6 +265,7 @@ class Interview(CustomBaseModel):
         help_text='Room where the interview is held',
         related_name='interviews',
     )
+
     interviewers = models.ManyToManyField(to='samfundet.User', help_text='Interviewers for this interview', blank=True, related_name='interviews')
     notes = models.TextField(help_text='Notes for the interview', null=True, blank=True)
 
@@ -272,6 +277,7 @@ class Interview(CustomBaseModel):
 
 
 class RecruitmentApplication(CustomBaseModel):
+    # UUID so that applicants cannot see recruitment info with their own id number
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     application_text = models.TextField(help_text='Application text')
     recruitment_position = models.ForeignKey(
@@ -283,6 +289,7 @@ class RecruitmentApplication(CustomBaseModel):
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
+    # Foreign Key because UKA and KSG have shared interviews (multiple applications share the same interview)
     interview = models.ForeignKey(
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the application', related_name='applications'
     )
