@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLoaderData } from 'react-router-dom';
+import { useRouteLoaderData } from 'react-router-dom';
 import { H1, Table } from '~/Components';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getRoleUsers } from '~/api';
@@ -13,7 +13,7 @@ import { dbT, formatDateYMD, getFullName } from '~/utils';
 
 export function RoleAdminPage() {
   const { t } = useTranslation();
-  const { role } = useLoaderData() as RoleLoader;
+  const { role } = useRouteLoaderData('role') as RoleLoader;
 
   const title = `${t(KEY.common_role)}: ${role?.name}`;
 
@@ -43,7 +43,7 @@ export function RoleAdminPage() {
             { content: fullName, value: fullName },
             { content: ru.org_role.organization.name, value: ru.org_role.organization.name },
             { content: '', value: '' },
-            { content: formatDateYMD(ru.org_role.created_at) },
+            { content: formatDateYMD(new Date(ru.org_role.created_at)) },
           ],
         };
       }
@@ -53,7 +53,7 @@ export function RoleAdminPage() {
             { content: fullName, value: fullName },
             { content: dbT(ru.gang_role.gang, 'name'), value: dbT(ru.gang_role.gang, 'name') },
             { content: '', value: '' },
-            { content: formatDateYMD(ru.gang_role.created_at) },
+            { content: formatDateYMD(new Date(ru.gang_role.created_at)) },
           ],
         };
       }
