@@ -6,6 +6,7 @@ import { H1, Table } from '~/Components';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getRoleUsers } from '~/api';
 import type { UserGangSectionRoleDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import type { RoleLoader } from '~/router/loaders';
 import { dbT, formatDateYMD, getFullName } from '~/utils';
@@ -15,6 +16,8 @@ export function RoleAdminPage() {
   const { role } = useLoaderData() as RoleLoader;
 
   const title = `${t(KEY.common_role)}: ${role?.name}`;
+
+  useTitle(title);
 
   const { data, isLoading } = useQuery({
     queryKey: ['roleusers', role?.id],

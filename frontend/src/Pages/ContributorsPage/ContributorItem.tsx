@@ -7,18 +7,7 @@ import darkAvatar from '~/assets/contributors/default_dark.svg';
 import { THEME } from '~/constants';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { KEY } from '~/i18n/constants';
-
-export type Contributor = {
-  name: string;
-  from: string;
-  to?: string;
-  github?: string;
-  picture?: string;
-  websjef?: {
-    from: string;
-    to: string;
-  };
-};
+import type { Contributor } from './types';
 
 type Props = {
   contributor: Contributor;

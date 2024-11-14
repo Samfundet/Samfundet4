@@ -99,6 +99,7 @@ export function RecruitmentGangAdminPage() {
                     pattern: ROUTES.frontend.recruitment_application,
                     urlParams: {
                       positionId: recruitmentPosition.id,
+                      recruitmentId: recruitmentId,
                     },
                   }),
                 );
