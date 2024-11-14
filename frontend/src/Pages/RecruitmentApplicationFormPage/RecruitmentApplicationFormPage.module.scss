@@ -16,7 +16,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 4em
+  padding: 4em;
 }
 
 .row {
@@ -70,4 +70,10 @@
 
 .withdrawn_cext {
   color: $red-samf;
+}
+
+.form_header {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
