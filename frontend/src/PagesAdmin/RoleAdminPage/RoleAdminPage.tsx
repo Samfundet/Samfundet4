@@ -64,7 +64,7 @@ export function RoleAdminPage() {
           { content: fullName, value: fullName },
           { content: dbT(sectionRole.section, 'name'), value: dbT(sectionRole.section, 'name') },
           { content: '', value: '' },
-          { content: formatDateYMD(sectionRole.created_at) },
+          { content: formatDateYMD(new Date(sectionRole.created_at)) },
         ],
       };
     });
