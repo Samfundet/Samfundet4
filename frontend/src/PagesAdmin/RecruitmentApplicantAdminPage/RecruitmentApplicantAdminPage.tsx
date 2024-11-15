@@ -20,10 +20,10 @@ import { RecruitmentInterviewNotesForm } from './RecruitmentInterviewNotesForm';
 export function RecruitmentApplicantAdminPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { applicationId } = useParams();
+  const { applicationID } = useParams();
   const { data, isLoading, error } = useQuery({
-    queryKey: ['recruitmentapplicationpage', applicationId],
-    queryFn: () => getRecruitmentApplicationsForRecruiter(applicationId as string),
+    queryKey: ['recruitmentapplicationpage', applicationID],
+    queryFn: () => getRecruitmentApplicationsForRecruiter(applicationID as string),
   });
 
   if (error) {
@@ -83,6 +83,24 @@ export function RecruitmentApplicantAdminPage() {
           {t(KEY.recruitment_application)}: {dbT(recruitmentApplication?.recruitment_position, 'name')}
         </Text>
         <Text>{recruitmentApplication?.application_text}</Text>
+      </div>
+      <div className={styles.withdrawContainer}>
+        {recruitmentApplication?.withdrawn ? (
+          <Text as="i" size="l" className={styles.withdrawnText}>
+            {t(KEY.recruitment_withdrawn)}
+          </Text>
+        ) : (
+          <Button
+            theme="samf"
+            onClick={() => {
+              if (recruitmentApplication?.id) {
+                adminWithdraw.mutate(recruitmentApplication.id);
+              }
+            }}
+          >
+            {t(KEY.recruitment_withdraw_application)}
+          </Button>
+        )}
       </div>
       <div className={classNames(styles.infoContainer)}>
         <RecruitmentInterviewNotesForm initialData={initialData} />
@@ -156,24 +174,6 @@ export function RecruitmentApplicantAdminPage() {
               : []
           }
         />
-      </div>
-      <div className={styles.withdrawContainer}>
-        {recruitmentApplication?.withdrawn ? (
-          <Text as="i" size="l" className={styles.withdrawnText}>
-            {t(KEY.recruitment_withdrawn)}
-          </Text>
-        ) : (
-          <Button
-            theme="samf"
-            onClick={() => {
-              if (recruitmentApplication?.id) {
-                adminWithdraw.mutate(recruitmentApplication.id);
-              }
-            }}
-          >
-            {t(KEY.recruitment_withdraw_application)}
-          </Button>
-        )}
       </div>
     </AdminPage>
   );
