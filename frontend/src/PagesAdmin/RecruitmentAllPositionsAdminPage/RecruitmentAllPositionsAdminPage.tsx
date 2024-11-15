@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import { type ReactNode, useEffect, useState } from 'react';
-import { Button, Modal, Table } from '~/Components';
+import { Button, Dropdown, Modal, Table } from '~/Components';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { MultiSelect } from '~/Components/MultiSelect';
 import type { TableRow } from '~/Components/Table';
 import { getAllRecruitmentApplications } from '~/api';
@@ -16,7 +17,7 @@ interface AllApplicationsData {
   sections: string[];
   priorities: string[];
   interviewerPriorities: string[];
-  statuses: string[];
+  statuses: ReactNode[];
 }
 
 function calculatePositionSimilarity(app1: AllApplicationsData, app2: AllApplicationsData): number {
@@ -49,7 +50,12 @@ function sortByPositionSimilarity(applications: AllApplicationsData[]): AllAppli
 
   return result;
 }
-
+const statusOptions: DropdownOption<number>[] = [
+  { label: 'Nothing', value: 0 },
+  { label: 'Called and accepted', value: 1 },
+  { label: 'Called and rejected', value: 2 },
+  { label: 'Automatic rejection', value: 3 },
+];
 export function RecruitmentAllPositionsAdminPage() {
   // http://localhost:3000/control-panel/recruitment/:recruitmentId/all-positions/
   const [recruitmentApplications, setRecruitmentApplications] = useState<AllApplicationsData[]>([]);
@@ -71,11 +77,18 @@ export function RecruitmentAllPositionsAdminPage() {
                   //   application={acc}
                   //   onSetInterview={onInterviewChange}
                   // />¨
-                  <Button theme={'samf'} onClick={() => console.log('click')}>
-                    Sett intervju
+                  <Button
+                    theme={'samf'}
+                    onClick={() =>
+                      alert(
+                        'ADD ABILITY TO SET INTERVIEWS IN BULK FOR MULTIPLE POSITIONS WITH SetInterviewManuallyModal',
+                      )
+                    }
+                  >
+                    **PLACEHOLDER** SETT INTERVJU FOR ALLE SØKNADER
                   </Button>
                 ),
-                datetime: 'TBD',
+                datetime: 'Ikke satt',
                 positions: [],
                 gangs: [],
                 sections: [],
@@ -89,7 +102,7 @@ export function RecruitmentAllPositionsAdminPage() {
             acc[userId].sections.push('N/A');
             acc[userId].priorities.push(`${app.applicant_priority}`);
             acc[userId].interviewerPriorities.push(app.recruiter_priority ? `${app.recruiter_priority}` : 'Not set');
-            acc[userId].statuses.push(app.recruiter_status ? app.recruiter_status.toString() : '[STATUS INPUT]');
+            acc[userId].statuses.push(<Dropdown value={-1} options={statusOptions} />);
 
             return acc;
           },
@@ -195,19 +208,30 @@ export function RecruitmentAllPositionsAdminPage() {
     alert('IMPLEMENT FILTER APPLICANTS ON SIMILAR POSITIONS');
   };
 
+  const handleSetInterviewsForAllApplicants = () => {
+    alert('IMPLEMENT ABILITY TO AUTOMATICALLY SET INTERVIEWS FOR ALL APPLICANTS');
+  };
+
   return (
     <AdminPageLayout title="All Positions">
       <div className={styles.filerControlContainer}>
         <Button theme="outlined" onClick={handleFilterSimilar}>
-          Sort by similar positions -- PLACEHOLDER
+          **PLACEHOLDER**Sort by similar positions
         </Button>
         <Button theme="outlined" onClick={() => setOpen(true)}>
-          Filter by sections -- PLACEHOLDER
+          **PLACEHOLDER**Filter by sections
         </Button>
         <Button theme="outlined" onClick={() => setOpen(true)}>
-          Filter by gangs -- PLACEHOLDER
+          **PLACEHOLDER**Filter by gangs
         </Button>
-        <Button theme="samf">Set interviews for all applicants</Button>
+        <Button
+          theme="samf"
+          onClick={() => {
+            handleSetInterviewsForAllApplicants;
+          }}
+        >
+          **PLACEHOLDER** Set interviews for all applicants
+        </Button>
       </div>
       <Table className={styles.parentTable} columns={columns} data={tableData} defaultSortColumn={-1} />
       <Modal isOpen={open}>
