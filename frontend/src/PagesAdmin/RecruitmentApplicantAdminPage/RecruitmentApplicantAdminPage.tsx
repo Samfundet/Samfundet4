@@ -35,7 +35,7 @@ export function RecruitmentApplicantAdminPage() {
 
   const recruitmentApplication = data?.data.application;
   const applicant = data?.data.user;
-  const otherRecruitmentApplication = data?.data.other_applications;
+  const otherRecruitmentApplications = data?.data.other_applications;
   const interviewNotes = recruitmentApplication?.interview?.notes;
 
   const adminWithdraw = useMutation({
