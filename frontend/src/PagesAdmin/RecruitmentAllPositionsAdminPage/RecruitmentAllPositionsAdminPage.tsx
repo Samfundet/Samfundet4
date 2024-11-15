@@ -1,31 +1,31 @@
-import { useEffect, useState } from 'react';
-import { Table } from '~/Components';
+import { type ReactNode, useEffect, useState } from 'react';
+import { Button, Table } from '~/Components';
 import type { TableRow } from '~/Components/Table';
 import { getAllRecruitmentApplications } from '~/api';
 import type { RecruitmentApplicationDto } from '~/dto';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentAllPositionsAdminPage.module.scss';
-interface Application {
+interface AllApplicationsData {
   applicant: string;
-  interviewButton: string;
+  setInterviewButton: ReactNode;
   datetime: string;
   positions: string[];
-  teams: string[];
+  gangs: string[];
   sections: string[];
   priorities: string[];
   interviewerPriorities: string[];
   statuses: string[];
 }
 
-function calculatePositionSimilarity(app1: Application, app2: Application): number {
+function calculatePositionSimilarity(app1: AllApplicationsData, app2: AllApplicationsData): number {
   const commonPositions = app1.positions.filter((pos) => app2.positions.includes(pos));
   return commonPositions.length;
 }
 
-function sortByPositionSimilarity(applications: Application[]): Application[] {
+function sortByPositionSimilarity(applications: AllApplicationsData[]): AllApplicationsData[] {
   if (!applications.length) return [];
 
-  const result: Application[] = [applications[0]];
+  const result: AllApplicationsData[] = [applications[0]];
   const remaining = applications.slice(1);
 
   while (remaining.length > 0) {
@@ -49,7 +49,11 @@ function sortByPositionSimilarity(applications: Application[]): Application[] {
 }
 
 export function RecruitmentAllPositionsAdminPage() {
-  const [recruitmentApplications, setRecruitmentApplications] = useState<Application[]>([]);
+  // http://localhost:3000/control-panel/recruitment/:recruitmentId/all-positions/
+  const [recruitmentApplications, setRecruitmentApplications] = useState<AllApplicationsData[]>([]);
+  function onInterviewChange(): void {
+    throw new Error('Function not implemented.');
+  }
 
   useEffect(() => {
     getAllRecruitmentApplications('37')
@@ -61,10 +65,20 @@ export function RecruitmentAllPositionsAdminPage() {
             if (!acc[userId]) {
               acc[userId] = {
                 applicant: `${app.user.first_name} ${app.user.last_name}`.trim() || app.user.email,
-                interviewButton: '[KNAPP]',
+                setInterviewButton: (
+                  // <SetInterviewManuallyModal
+                  //   recruitmentId={Number(app.recruitment) || 0}
+                  //   isButtonRounded={false}
+                  //   application={acc}
+                  //   onSetInterview={onInterviewChange}
+                  // />¨
+                  <Button theme={'samf'} onClick={() => console.log('click')}>
+                    Sett intervju
+                  </Button>
+                ),
                 datetime: 'TBD',
                 positions: [],
-                teams: [],
+                gangs: [],
                 sections: [],
                 priorities: [],
                 interviewerPriorities: [],
@@ -72,15 +86,15 @@ export function RecruitmentAllPositionsAdminPage() {
               };
             }
             acc[userId].positions.push(app.recruitment_position.name_nb);
-            acc[userId].teams.push(app.recruitment_position.gang?.toString() || 'N/A');
+            acc[userId].gangs.push(app.recruitment_position.gang?.toString() || 'N/A');
             acc[userId].sections.push('N/A');
-            acc[userId].priorities.push(`${app.applicant_priority}/5`);
-            acc[userId].interviewerPriorities.push(app.recruiter_priority ? `${app.recruiter_priority}/5` : 'Not set');
+            acc[userId].priorities.push(`${app.applicant_priority}`);
+            acc[userId].interviewerPriorities.push(app.recruiter_priority ? `${app.recruiter_priority}` : 'Not set');
             acc[userId].statuses.push(app.recruiter_status ? app.recruiter_status.toString() : '[STATUS INPUT]');
 
             return acc;
           },
-          {} as Record<number, Application>,
+          {} as Record<number, AllApplicationsData>,
         );
 
         setRecruitmentApplications(Object.values(userApplications));
@@ -107,7 +121,7 @@ export function RecruitmentAllPositionsAdminPage() {
   const tableData: TableRow[] = sortedApplications.map((app) => ({
     cells: [
       { value: app.applicant, content: app.applicant },
-      { value: app.interviewButton, content: app.interviewButton },
+      { value: app.setInterviewButton, content: app.setInterviewButton },
       { value: app.datetime, content: app.datetime },
       {
         content: (
@@ -123,7 +137,7 @@ export function RecruitmentAllPositionsAdminPage() {
       {
         content: (
           <table className={styles.childTable}>
-            {app.teams.map((team, i) => (
+            {app.gangs.map((team, i) => (
               <tr key={i} className={styles.childTableRow}>
                 <td className={styles.childTableData}>{team}</td>
               </tr>
