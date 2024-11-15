@@ -51,9 +51,6 @@ function sortByPositionSimilarity(applications: AllApplicationsData[]): AllAppli
 export function RecruitmentAllPositionsAdminPage() {
   // http://localhost:3000/control-panel/recruitment/:recruitmentId/all-positions/
   const [recruitmentApplications, setRecruitmentApplications] = useState<AllApplicationsData[]>([]);
-  function onInterviewChange(): void {
-    throw new Error('Function not implemented.');
-  }
 
   useEffect(() => {
     getAllRecruitmentApplications('37')
@@ -194,6 +191,11 @@ export function RecruitmentAllPositionsAdminPage() {
 
   return (
     <AdminPageLayout title="All Positions">
+      <div className={styles.filerControlContainer}>
+        <Button theme="outlined">Sort by similar positions -- PLACEHOLDER</Button>
+        <Button theme="outlined">Filter by sections -- PLACEHOLDER</Button>
+        <Button theme="outlined">Filter by gangs -- PLACEHOLDER</Button>
+      </div>
       <Table className={styles.parentTable} columns={columns} data={tableData} defaultSortColumn={-1} />
     </AdminPageLayout>
   );
