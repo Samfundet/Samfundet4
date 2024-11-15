@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table } from '~/Components';
 import type { TableRow } from '~/Components/Table';
+import { getAllRecruitmentApplications } from '~/api';
+import type { RecruitmentApplicationDto } from '~/dto';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 
 interface Application {
@@ -21,6 +23,8 @@ function calculatePositionSimilarity(app1: Application, app2: Application): numb
 }
 
 function sortByPositionSimilarity(applications: Application[]): Application[] {
+  if (!applications.length) return [];
+
   const result: Application[] = [applications[0]];
   const remaining = applications.slice(1);
 
@@ -45,41 +49,46 @@ function sortByPositionSimilarity(applications: Application[]): Application[] {
 }
 
 export function RecruitmentAllPositionsAdminPage() {
-  const [applications] = useState<Application[]>([
-    {
-      applicant: 'Søker 1',
-      interviewButton: '[KNAPP]',
-      datetime: '15.11.2024',
-      positions: ['STILLING 1', 'STILLING 2', 'STILLING 3'],
-      teams: ['SPP', 'STINT', 'SoME'],
-      sections: ['Admin', 'PR', 'PR'],
-      priorities: ['2/3', '1/3', '3/3'],
-      interviewerPriorities: ['Vil ha', 'Vil ikke ha', 'Reserve'],
-      statuses: ['[STATUS INPUT]', '[STATUS INPUT]', '[STATUS INPUT]'],
-    },
-    {
-      applicant: 'Søker 2',
-      interviewButton: '[KNAPP]',
-      datetime: '16.11.2024',
-      positions: ['STILLING 4', 'STILLING 1', 'STILLING 5'],
-      teams: ['STINT', 'SPP', 'ITK'],
-      sections: ['PR', 'Admin', 'Tech'],
-      priorities: ['1/3', '2/3', '3/3'],
-      interviewerPriorities: ['Reserve', 'Vil ha', 'Vil ikke ha'],
-      statuses: ['[STATUS INPUT]', '[STATUS INPUT]', '[STATUS INPUT]'],
-    },
-    {
-      applicant: 'Søker 3',
-      interviewButton: '[KNAPP]',
-      datetime: '15.11.2024',
-      positions: ['STILLING 1', 'STILLING 2', 'STILLING 3'],
-      teams: ['SoME', 'ITK', 'SPP'],
-      sections: ['PR', 'Tech', 'Admin'],
-      priorities: ['3/3', '1/3', '2/3'],
-      interviewerPriorities: ['Vil ikke ha', 'Vil ha', 'Reserve'],
-      statuses: ['[STATUS INPUT]', '[STATUS INPUT]', '[STATUS INPUT]'],
-    },
-  ]);
+  const [recruitmentApplications, setRecruitmentApplications] = useState<Application[]>([]);
+
+  useEffect(() => {
+    getAllRecruitmentApplications('37')
+      .then((response: RecruitmentApplicationDto[]) => {
+        // Group applications by user
+        const userApplications = response.reduce(
+          (acc, app) => {
+            const userId = app.user.id;
+            if (!acc[userId]) {
+              acc[userId] = {
+                applicant: `${app.user.first_name} ${app.user.last_name}`.trim() || app.user.email,
+                interviewButton: '[KNAPP]',
+                datetime: 'TBD',
+                positions: [],
+                teams: [],
+                sections: [],
+                priorities: [],
+                interviewerPriorities: [],
+                statuses: [],
+              };
+            }
+            acc[userId].positions.push(app.recruitment_position.name_nb);
+            acc[userId].teams.push(app.recruitment_position.gang?.toString() || 'N/A');
+            acc[userId].sections.push('N/A');
+            acc[userId].priorities.push(`${app.applicant_priority}/5`);
+            acc[userId].interviewerPriorities.push(app.recruiter_priority ? `${app.recruiter_priority}/5` : 'Not set');
+            acc[userId].statuses.push(app.recruiter_status ? app.recruiter_status.toString() : '[STATUS INPUT]');
+
+            return acc;
+          },
+          {} as Record<number, Application>,
+        );
+
+        setRecruitmentApplications(Object.values(userApplications));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const columns = [
     { content: 'Søker', sortable: false },
@@ -93,7 +102,7 @@ export function RecruitmentAllPositionsAdminPage() {
     { content: 'Sett status', sortable: false },
   ];
 
-  const sortedApplications = sortByPositionSimilarity(applications);
+  const sortedApplications = sortByPositionSimilarity(recruitmentApplications);
 
   const tableData: TableRow[] = sortedApplications.map((app) => ({
     cells: [

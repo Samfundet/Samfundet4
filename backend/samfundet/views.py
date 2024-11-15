@@ -96,6 +96,7 @@ from .serializers import (
     RecruitmentApplicationForApplicantSerializer,
     RecruitmentApplicationForRecruiterSerializer,
     RecruitmentApplicationUpdateForGangSerializer,
+    RecruitmentApplicationsPerRecruitmentSerializer,
     RecruitmentShowUnprocessedApplicationsSerializer,
     RecruitmentPositionSharedInterviewGroupSerializer,
 )
@@ -697,6 +698,20 @@ class RecruitmentApplicationView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentApplicationForGangSerializer
     queryset = RecruitmentApplication.objects.all()
+
+
+class RecruitmentApplicationsPerRecruitmentView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentApplicationsPerRecruitmentSerializer
+
+    def get_queryset(self) -> QuerySet[RecruitmentApplication]:
+        """Get all applications for a specific recruitment."""
+        recruitment_id = self.request.query_params.get('recruitment')
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        return RecruitmentApplication.objects.filter(
+            recruitment=recruitment,  # Using the recruitment object directly
+        ).select_related('user', 'recruitment_position')
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')

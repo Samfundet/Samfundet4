@@ -1120,6 +1120,34 @@ class RecruitmentShowUnprocessedApplicationsSerializer(serializers.ModelSerializ
         return instance.recruitment_position.name_nb
 
 
+class RecruitmentApplicationsPerRecruitmentSerializer(serializers.ModelSerializer):
+    user = RecruitmentBasicUserSerializer(read_only=True)
+    recruitment_position = RecruitmentRecruitmentPositionSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentApplication
+        fields = [
+            'id',
+            'recruitment',
+            'user',
+            'applicant_priority',
+            'recruitment_position',
+            'recruiter_status',
+            'recruiter_priority',
+        ]
+        read_only_fields = [
+            'id',
+            'recruitment',
+            'user',
+            'applicant_priority',
+            'recruitment_position',
+            'recruiter_priority',
+        ]
+
+    def get_recruitment_position(self, instance: RecruitmentApplication) -> str:
+        return instance.recruitment_position.name_nb
+
+
 class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
     user = ApplicantInfoSerializer(read_only=True)
     interview = InterviewSerializer(read_only=False)

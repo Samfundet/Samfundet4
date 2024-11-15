@@ -608,6 +608,7 @@ export const ROUTES_BACKEND = {
   samfundet__feedback: '/feedback/',
   samfundet__purchase_feedback: '/purchase-feedback/',
   samfundet__gang_application_stats: '/recruitment/:recruitmentId/gang/:gangId/stats/',
+  samfundet__recruitment_all_applications: '/recruitment/all-applications/',
   static__path: '/static/:path',
   media__path: '/media/:path',
 } as const;
