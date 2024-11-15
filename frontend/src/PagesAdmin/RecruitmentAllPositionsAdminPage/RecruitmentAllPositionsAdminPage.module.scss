@@ -1,0 +1,28 @@
+.parentTable {
+  td {
+    padding: 0.5em 0.15em; // Vertical padding only, no horizontal padding
+  }
+  tr {
+    border: 1px solid black;
+  }
+  .childTable {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    border-collapse: collapse;
+  }
+
+  .childTableRow {
+    width: 100%;
+    display: flex;
+    border: none;
+  }
+
+  .childTableData {
+    display: flex;
+    width: 100%;
+    padding: 0.25em 0.5em;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.219);
+  }
+}

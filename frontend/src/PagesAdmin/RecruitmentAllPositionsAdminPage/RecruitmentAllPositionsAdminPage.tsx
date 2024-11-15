@@ -4,7 +4,7 @@ import type { TableRow } from '~/Components/Table';
 import { getAllRecruitmentApplications } from '~/api';
 import type { RecruitmentApplicationDto } from '~/dto';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-
+import styles from './RecruitmentAllPositionsAdminPage.module.scss';
 interface Application {
   applicant: string;
   interviewButton: string;
@@ -111,10 +111,10 @@ export function RecruitmentAllPositionsAdminPage() {
       { value: app.datetime, content: app.datetime },
       {
         content: (
-          <table>
+          <table className={styles.childTable}>
             {app.positions.map((pos, i) => (
-              <tr key={i}>
-                <td>{pos}</td>
+              <tr key={i} className={styles.childTableRow}>
+                <td className={styles.childTableData}>{pos}</td>
               </tr>
             ))}
           </table>
@@ -122,10 +122,10 @@ export function RecruitmentAllPositionsAdminPage() {
       },
       {
         content: (
-          <table>
+          <table className={styles.childTable}>
             {app.teams.map((team, i) => (
-              <tr key={i}>
-                <td>{team}</td>
+              <tr key={i} className={styles.childTableRow}>
+                <td className={styles.childTableData}>{team}</td>
               </tr>
             ))}
           </table>
@@ -133,10 +133,10 @@ export function RecruitmentAllPositionsAdminPage() {
       },
       {
         content: (
-          <table>
+          <table className={styles.childTable}>
             {app.sections.map((section, i) => (
-              <tr key={i}>
-                <td>{section}</td>
+              <tr key={i} className={styles.childTableRow}>
+                <td className={styles.childTableData}>{section}</td>
               </tr>
             ))}
           </table>
@@ -144,10 +144,10 @@ export function RecruitmentAllPositionsAdminPage() {
       },
       {
         content: (
-          <table>
+          <table className={styles.childTable}>
             {app.priorities.map((priority, i) => (
-              <tr key={i}>
-                <td>{priority}</td>
+              <tr key={i} className={styles.childTableRow}>
+                <td className={styles.childTableData}>{priority}</td>
               </tr>
             ))}
           </table>
@@ -155,10 +155,10 @@ export function RecruitmentAllPositionsAdminPage() {
       },
       {
         content: (
-          <table>
+          <table className={styles.childTable}>
             {app.interviewerPriorities.map((priority, i) => (
-              <tr key={i}>
-                <td>{priority}</td>
+              <tr key={i} className={styles.childTableRow}>
+                <td className={styles.childTableData}>{priority}</td>
               </tr>
             ))}
           </table>
@@ -166,10 +166,10 @@ export function RecruitmentAllPositionsAdminPage() {
       },
       {
         content: (
-          <table>
+          <table className={styles.childTable}>
             {app.statuses.map((status, i) => (
-              <tr key={i}>
-                <td>{status}</td>
+              <tr key={i} className={styles.childTableRow}>
+                <td className={styles.childTableData}>{status}</td>
               </tr>
             ))}
           </table>
@@ -180,7 +180,7 @@ export function RecruitmentAllPositionsAdminPage() {
 
   return (
     <AdminPageLayout title="All Positions">
-      <Table columns={columns} data={tableData} defaultSortColumn={-1} />
+      <Table className={styles.parentTable} columns={columns} data={tableData} defaultSortColumn={-1} />
     </AdminPageLayout>
   );
 }
