@@ -1,5 +1,7 @@
+import { Icon } from '@iconify/react';
 import { type ReactNode, useEffect, useState } from 'react';
-import { Button, Table } from '~/Components';
+import { Button, Modal, Table } from '~/Components';
+import { MultiSelect } from '~/Components/MultiSelect';
 import type { TableRow } from '~/Components/Table';
 import { getAllRecruitmentApplications } from '~/api';
 import type { RecruitmentApplicationDto } from '~/dto';
@@ -51,7 +53,7 @@ function sortByPositionSimilarity(applications: AllApplicationsData[]): AllAppli
 export function RecruitmentAllPositionsAdminPage() {
   // http://localhost:3000/control-panel/recruitment/:recruitmentId/all-positions/
   const [recruitmentApplications, setRecruitmentApplications] = useState<AllApplicationsData[]>([]);
-
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     getAllRecruitmentApplications('37')
       .then((response: RecruitmentApplicationDto[]) => {
@@ -189,14 +191,32 @@ export function RecruitmentAllPositionsAdminPage() {
     ],
   }));
 
+  const handleFilterSimilar = () => {
+    alert('IMPLEMENT FILTER APPLICANTS ON SIMILAR POSITIONS');
+  };
+
   return (
     <AdminPageLayout title="All Positions">
       <div className={styles.filerControlContainer}>
-        <Button theme="outlined">Sort by similar positions -- PLACEHOLDER</Button>
-        <Button theme="outlined">Filter by sections -- PLACEHOLDER</Button>
-        <Button theme="outlined">Filter by gangs -- PLACEHOLDER</Button>
+        <Button theme="outlined" onClick={handleFilterSimilar}>
+          Sort by similar positions -- PLACEHOLDER
+        </Button>
+        <Button theme="outlined" onClick={() => setOpen(true)}>
+          Filter by sections -- PLACEHOLDER
+        </Button>
+        <Button theme="outlined" onClick={() => setOpen(true)}>
+          Filter by gangs -- PLACEHOLDER
+        </Button>
+        <Button theme="samf">Set interviews for all applicants</Button>
       </div>
       <Table className={styles.parentTable} columns={columns} data={tableData} defaultSortColumn={-1} />
+      <Modal isOpen={open}>
+        {/* conditionaly fetch sections or gangs, by which button was pressed? */}
+        <button type="button" className={styles.close_btn} title="Close" onClick={() => setOpen(false)}>
+          <Icon icon="octicon:x-24" width={24} />
+        </button>
+        <MultiSelect />
+      </Modal>
     </AdminPageLayout>
   );
 }
