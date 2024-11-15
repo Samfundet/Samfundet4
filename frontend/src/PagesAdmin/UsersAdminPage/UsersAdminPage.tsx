@@ -3,7 +3,7 @@ import { PagedPagination, SamfundetLogoSpinner } from '~/Components';
 import { formatDate } from '~/Components/OccupiedForm/utils';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
-import { getPaginatedUsers } from '~/api';
+import { getUsers } from '~/api';
 import type { UserDto } from '~/dto';
 import { usePaginatedQuery, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -15,6 +15,8 @@ export function UsersAdminPage() {
   const title = t(KEY.common_users);
   useTitle(title);
 
+  const INITIAL_PAGE = 1;
+
   const {
     data: users,
     totalItems,
@@ -25,7 +27,7 @@ export function UsersAdminPage() {
     isLoading,
   } = usePaginatedQuery<UserDto>({
     queryKey: ['admin-users'],
-    queryFn: getPaginatedUsers,
+    queryFn: (page: number) => getUsers(INITIAL_PAGE),
   });
 
   const columns = [
