@@ -20,7 +20,7 @@ import { RecruitmentInterviewNotesForm } from './RecruitmentInterviewNotesForm';
 export function RecruitmentApplicantAdminPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { applicationID } = useParams();
+  const { applicationId } = useParams();
   const { data, isLoading, error } = useQuery({
     queryKey: ['recruitmentapplicationpage', applicationID],
     queryFn: () => getRecruitmentApplicationsForRecruiter(applicationID as string),
