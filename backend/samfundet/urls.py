@@ -115,6 +115,11 @@ urlpatterns = [
         views.RecruitmentApplicationForRecruitersView.as_view(),
         name='recruitment_applications_recruiter',
     ),
+    path(
+        'recruitment-application-interview-notes/<int:interview_id>/',
+        views.RecruitmentApplicationInterviewNotesView.as_view(),
+        name='recruitment_application_interview_notes',
+    ),
     path('recruitment-withdraw-application/<int:pk>/', views.RecruitmentApplicationWithdrawApplicantView.as_view(), name='recruitment_withdraw_application'),
     path('recruitment-user-priority-update/<slug:pk>/', views.RecruitmentApplicationApplicantPriorityView.as_view(), name='recruitment_user_priority_update'),
     path(
