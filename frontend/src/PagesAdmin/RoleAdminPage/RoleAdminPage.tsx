@@ -1,14 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRouteLoaderData } from 'react-router-dom';
-import { H1, Table } from '~/Components';
+import { H1, Link, Table } from '~/Components';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getRoleUsers } from '~/api';
 import type { UserGangSectionRoleDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import type { RoleLoader } from '~/router/loaders';
+import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { dbT, formatDateYMD, getFullName } from '~/utils';
 
 export function RoleAdminPage() {
@@ -29,21 +31,35 @@ export function RoleAdminPage() {
     },
   });
 
-  const usersColumns = [`${t(KEY.common_name)}`, `${t(KEY.common_role)}`, 'Org/Gang/Section', 'Hatt rollen siden'];
+  const usersColumns = [
+    `${t(KEY.common_name)}`,
+    `${t(KEY.common_role)}`,
+    'Org/Gang/Section',
+    'Hatt rollen siden',
+    'Gitt av',
+  ];
 
   const usersData = useMemo(() => {
     if (!data) {
       return [];
     }
     return data.map((ru) => {
-      const fullName = getFullName(ru.user);
+      const fullName = getFullName(ru.user) || ru.user.username;
       if (ru.org_role) {
         return {
           cells: [
             { content: fullName, value: fullName },
-            { content: ru.org_role.organization.name, value: ru.org_role.organization.name },
             { content: '', value: '' },
+            {
+              content: (
+                <>
+                  {t(KEY.recruitment_organization)}: ${ru.org_role.organization.name}
+                </>
+              ),
+              value: ru.org_role.organization.name,
+            },
             { content: formatDateYMD(new Date(ru.org_role.created_at)) },
+            { content: ru.org_role.created_by ? getFullName(ru.org_role.created_by) : '' },
           ],
         };
       }
@@ -51,9 +67,22 @@ export function RoleAdminPage() {
         return {
           cells: [
             { content: fullName, value: fullName },
-            { content: dbT(ru.gang_role.gang, 'name'), value: dbT(ru.gang_role.gang, 'name') },
             { content: '', value: '' },
+            {
+              content: (
+                <Link
+                  url={reverse({
+                    pattern: ROUTES_FRONTEND.admin_gangs_edit,
+                    urlParams: { gangId: ru.gang_role.gang.id },
+                  })}
+                >
+                  {t(KEY.common_gang)}: {dbT(ru.gang_role.gang, 'name')}
+                </Link>
+              ),
+              value: dbT(ru.gang_role.gang, 'name'),
+            },
             { content: formatDateYMD(new Date(ru.gang_role.created_at)) },
+            { content: ru.gang_role.created_by ? getFullName(ru.gang_role.created_by) : '' },
           ],
         };
       }
@@ -62,13 +91,21 @@ export function RoleAdminPage() {
       return {
         cells: [
           { content: fullName, value: fullName },
-          { content: dbT(sectionRole.section, 'name'), value: dbT(sectionRole.section, 'name') },
           { content: '', value: '' },
+          {
+            content: (
+              <>
+                {t(KEY.common_section)}: {dbT(sectionRole.section, 'name')}
+              </>
+            ),
+            value: dbT(sectionRole.section, 'name'),
+          },
           { content: formatDateYMD(new Date(sectionRole.created_at)) },
+          { content: sectionRole.created_by ? getFullName(sectionRole.created_by) : '' },
         ],
       };
     });
-  }, [data]);
+  }, [data, t]);
 
   return (
     <AdminPageLayout title={title}>

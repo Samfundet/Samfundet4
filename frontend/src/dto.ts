@@ -388,6 +388,7 @@ export type UserRole = {
   user: UserDto;
   created_at: Date;
   obj: OrganizationDto | GangDto | GangSectionDto;
+  created_by?: UserDto;
 };
 
 export type UserGangRoleDto = Omit<UserRole, 'obj'> & {
