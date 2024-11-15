@@ -102,7 +102,7 @@ export function RecruitmentApplicantAdminPage() {
           ]}
           data={
             otherRecruitmentApplications
-              ? otherRecruitmentApplication.map((element) => {
+              ? otherRecruitmentApplications.map((element) => {
                   return {
                     cells: [
                       {
