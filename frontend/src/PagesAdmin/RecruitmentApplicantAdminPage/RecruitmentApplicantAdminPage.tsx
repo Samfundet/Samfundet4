@@ -22,7 +22,7 @@ export function RecruitmentApplicantAdminPage() {
   const navigate = useNavigate();
   const { applicationId } = useParams();
   const { data, isLoading, error } = useQuery({
-    queryKey: ['recruitmentapplicationpage', applicationID],
+    queryKey: ['recruitmentapplicationpage', applicationId],
     queryFn: () => getRecruitmentApplicationsForRecruiter(applicationID as string),
   });
 
