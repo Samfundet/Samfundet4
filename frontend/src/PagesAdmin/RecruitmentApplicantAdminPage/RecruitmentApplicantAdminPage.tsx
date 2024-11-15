@@ -101,7 +101,7 @@ export function RecruitmentApplicantAdminPage() {
             t(KEY.recruitment_interview_time),
           ]}
           data={
-            otherRecruitmentApplication
+            otherRecruitmentApplications
               ? otherRecruitmentApplication.map((element) => {
                   return {
                     cells: [
