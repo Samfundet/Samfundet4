@@ -46,6 +46,7 @@ import {
   InterviewNotesPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
+  RecruitmentAllPositionsAdminPage,
   RecruitmentApplicantAdminPage,
   RecruitmentFormAdminPage,
   RecruitmentGangAdminPage,
@@ -375,13 +376,26 @@ export const router = createBrowserRouter(
                 <PermissionRoute required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} element={<RecruitmentOverviewPage />} />
               }
             />
-            <Route
+            {/* <Route
               path={ROUTES.frontend.admin_recruitment_create}
               element={
                 <PermissionRoute required={[PERM.SAMFUNDET_ADD_RECRUITMENT]} element={<RecruitmentFormAdminPage />} />
               }
               handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
+            /> */}
+            <Route
+              path={ROUTES.frontend.admin_recruitment_all_positions}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                  element={<RecruitmentAllPositionsAdminPage />}
+                />
+              }
+              handle={{
+                crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_administrate)}</Link>,
+              }}
             />
+
             <Route
               path={ROUTES.frontend.admin_recruitment_gang_all_applications}
               element={<RecruitmentGangAllApplicantsAdminPage />}
@@ -539,6 +553,18 @@ export const router = createBrowserRouter(
                   crumb: ({ pathname }: UIMatch) => (
                     <Link url={pathname}>{t(KEY.recruitment_applicants_open_to_other_positions)}</Link>
                   ),
+                }}
+              />
+              <Route
+                path="all-positions/:recruitmentId"
+                element={
+                  <PermissionRoute
+                    required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                    element={<RecruitmentAllPositionsAdminPage />}
+                  />
+                }
+                handle={{
+                  crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_administrate)}</Link>,
                 }}
               />
               <Route
