@@ -257,6 +257,10 @@ export function formatDateYMD(d: Date): string {
   return format(d, 'yyyy.LL.dd');
 }
 
+export function formatDateYMDWithTime(d: Date): string {
+  return format(d, 'yyyy.LL.dd HH:mm');
+}
+
 /**
  * Generic query function for DTOs. Returns elements from array matching query.
  * @param query String query to search with
