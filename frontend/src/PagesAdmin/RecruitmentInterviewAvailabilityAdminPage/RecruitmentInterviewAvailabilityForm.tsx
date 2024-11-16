@@ -158,7 +158,7 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
           <div>
             <H3>{t(KEY.common_preview)}</H3>
 
-            <MiniCalendar minDate={fromDate} maxDate={toDate} baseDate={fromDate} displayLabel={true} />
+            <MiniCalendar minDate={fromDate} maxDate={toDate} baseDate={fromDate || new Date()} displayLabel={true} />
           </div>
         </div>
         <div className={styles.action_row}>
