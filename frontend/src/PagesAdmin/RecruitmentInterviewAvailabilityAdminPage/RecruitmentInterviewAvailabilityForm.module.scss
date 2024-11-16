@@ -18,6 +18,12 @@
   }
 }
 
+.short_row {
+  @include for-large-desktop-up {
+    width: 50%;
+  }
+}
+
 .row {
   @include for-large-desktop-up {
     display: grid;

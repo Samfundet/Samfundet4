@@ -1,4 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import classNames from 'classnames';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -41,13 +43,16 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>;
 
 export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
+  const [fromDate, setFromDate] = useState<Date | undefined>(new Date());
+  const [toDate, setToDate] = useState<Date | undefined>(new Date());
+
   const { t } = useTranslation();
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      start_date: data?.start_date,
-      end_date: data?.end_date,
+      start_date: data?.start_date ? new Date(data.start_date) : undefined,
+      end_date: data?.end_date ? new Date(data.end_date) : undefined,
       start_time: data?.start_time,
       end_time: data?.end_time,
       timeslot_interval: data?.timeslot_interval || 30,
@@ -67,11 +72,17 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
               <FormField
                 control={form.control}
                 name="start_date"
-                render={({ field }) => (
+                render={({ field: { onChange, ...fieldProps } }) => (
                   <FormItem>
                     <FormLabel>{t(KEY.start_date)}</FormLabel>
                     <FormControl>
-                      <DatePicker {...field} />
+                      <DatePicker
+                        onChange={(d) => {
+                          setFromDate(d || undefined);
+                          onChange(d);
+                        }}
+                        {...fieldProps}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -80,18 +91,24 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
               <FormField
                 control={form.control}
                 name="end_date"
-                render={({ field }) => (
+                render={({ field: { onChange, ...fieldProps } }) => (
                   <FormItem>
                     <FormLabel>{t(KEY.end_date)}</FormLabel>
                     <FormControl>
-                      <DatePicker {...field} />
+                      <DatePicker
+                        onChange={(d) => {
+                          setToDate(d || undefined);
+                          onChange(d);
+                        }}
+                        {...fieldProps}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <div className={styles.row}>
+            <div className={classNames(styles.row, styles.short_row)}>
               <FormField
                 control={form.control}
                 name="start_time"
@@ -141,7 +158,7 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
           <div>
             <H3>{t(KEY.common_preview)}</H3>
 
-            <MiniCalendar minDate={new Date()} maxDate={new Date()} baseDate={new Date()} displayLabel={true} />
+            <MiniCalendar minDate={fromDate} maxDate={toDate} baseDate={fromDate} displayLabel={true} />
           </div>
         </div>
         <div className={styles.action_row}>
