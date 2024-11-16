@@ -454,6 +454,7 @@ export const KEY = {
   occupied_show: 'occupied_show',
   interview_availability: 'interview_availability',
   interview_availability_description: 'interview_availability_description',
+  interview_availability_interval_description: 'interview_availability_interval_description',
 
   // Feedback
   feedback_type: 'feedback_type',

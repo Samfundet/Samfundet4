@@ -16,6 +16,7 @@ import {
   MiniCalendar,
   NumberInput,
 } from '~/Components';
+import { FormDescription } from '~/Components/Forms/Form';
 import type { RecruitmentInterviewAvailabilityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import {
@@ -124,6 +125,7 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t(KEY.common_interval)}</FormLabel>
+                  <FormDescription>{t(KEY.interview_availability_interval_description)}</FormDescription>
                   <FormControl>
                     <NumberInput
                       min={AVAILABILITY_TIMESLOT_INTERVAL_MIN}

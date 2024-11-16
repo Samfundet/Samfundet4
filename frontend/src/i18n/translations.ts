@@ -453,7 +453,9 @@ export const nb = prepareTranslations({
   [KEY.occupied_show]: 'Sett din tilgjengelighet',
   [KEY.interview_availability]: 'Intervju-tilgjengelighet',
   [KEY.interview_availability_description]:
-    'Intervju-tilgjengelighet bestemmer når intervju kan holdes, og når brukere kan markere utilgjengelighet. Et intervall på 30 minutter vil gi tidsluker på 08:00, 08:30, 09:00, osv.',
+    'Intervju-tilgjengelighet bestemmer når intervju kan holdes, og når brukere kan markere utilgjengelighet. ',
+  [KEY.interview_availability_interval_description]:
+    'Et intervall på 30 minutter vil gi tidsluker på 08:00, 08:30, 09:00, osv.',
 
   // Feedback
   [KEY.feedback_type]: 'Type tilbakemelding',
@@ -958,7 +960,9 @@ export const en = prepareTranslations({
   [KEY.occupied_show]: 'Set your availability',
   [KEY.interview_availability]: 'Interview availability',
   [KEY.interview_availability_description]:
-    'Intervju availability decides when interviews can be held, and when users can mark unavailability. An interval of 30 minutes will give timeslots of 08:00, 08:30, 09:00, etc.',
+    'Intervju availability decides when interviews can be held, and when users can mark unavailability.',
+  [KEY.interview_availability_interval_description]:
+    'An interval of 30 minutes will give timeslots of 08:00, 08:30, 09:00, etc.',
 
   // Feedback
   [KEY.feedback_type]: 'Feedback type',
