@@ -568,9 +568,8 @@ export type RecruitmentCampusStatDto = {
 };
 
 export type RecruitmentGangStatDto = {
-  gang: string;
-  application_count: number;
-  applicant_count: number;
+  total_applications: number;
+  total_applicants: number;
   average_priority: number;
   total_accepted: number;
   total_rejected: number;

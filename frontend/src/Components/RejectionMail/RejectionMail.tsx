@@ -2,7 +2,7 @@ import { t } from 'i18next';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { postRejectionMail } from '~/api';
+//import { postRejectionMail } from '~/api';
 import { KEY } from '~/i18n/constants';
 import { Button } from '../Button';
 import { InputField } from '../InputField';
@@ -15,7 +15,7 @@ export function RejectionMail() {
 
   function handleSubmit() {
     if (recruitmentId) {
-      postRejectionMail(recruitmentId, { subject, text });
+      //postRejectionMail(recruitmentId, { subject, text });
       toast.success(t(KEY.common_save_successful));
     } else {
       toast.error(t(KEY.common_something_went_wrong));
