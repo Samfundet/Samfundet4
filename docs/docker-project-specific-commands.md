@@ -1,6 +1,9 @@
-# Useful project spesific Docker actions
-### For frontend actions
-All commands has to be run inside a shell in a container.
+[**&larr; Back: Documentation Overview**](../README.md#documentation-overview)
+
+# Useful project specific Docker actions
+
+## Frontend
+All commands have to be run inside a shell in a container.
 ```bash
 docker compose exec frontend bash
 #Command to open the frontend container in a shell
@@ -9,10 +12,10 @@ docker compose exec frontend bash
 ```bash
 exit
 ```
-🐳Eslint check
+🐳Biome check
 ```bash
-yarn run eslint:check
-#runs eslint, like in GitHub Actions pipeline, but in Docker
+yarn biome:check
+#runs Biome, like in GitHub Actions pipeline, but in Docker
 ```
 🐳Stylelint check
 ```bash
@@ -25,9 +28,11 @@ yarn run tsc:check
 #runs TypeScript Compiler check, like in GitHub Actions pipeline, but in Docker
 ```
 
-## For backend actions:
+---
 
-All commands has to be run inside a shell in a container.
+## Backend
+
+All commands have to be run inside a shell in a container.
 ```bash
 docker compose exec backend bash
 #Command to open container in a shell

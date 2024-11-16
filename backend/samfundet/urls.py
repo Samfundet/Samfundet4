@@ -15,16 +15,19 @@ router.register('gangs', views.GangView, 'gangs')
 router.register('gangsorganized', views.GangTypeView, 'gangsorganized')
 router.register('user-preference', views.UserPreferenceView, 'user_preference')
 router.register('profile', views.ProfileView, 'profile')
+router.register('permissions', views.PermissionView, 'permissions')
 router.register('textitem', views.TextItemView, 'text_item')
 router.register('interview-rooms', views.InterviewRoomView, 'interview_rooms')
 router.register('infobox', views.InfoboxView, 'infobox')
 router.register('key-value', views.KeyValueView, 'key_value')
 router.register('organizations', views.OrganizationView, 'organizations')
+router.register('role', views.RoleView, 'role')
 
 ########## Recruitment ##########
 router.register('recruitment', views.RecruitmentView, 'recruitment')
 router.register('recruitment-for-recruiter', views.RecruitmentForRecruiterView, 'recruitment_for_recruiter')
 router.register('recruitment-stats', views.RecruitmentStatisticsView, 'recruitment_stats')
+router.register('recruitment-separateposition', views.RecruitmentSeparatePositionView, 'recruitment_separateposition')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
 router.register('recruitment-position-for-applicant', views.RecruitmentPositionForApplicantView, 'recruitment_position_for_applicant')
 router.register('recruitment-applications-for-applicant', views.RecruitmentApplicationForApplicantView, 'recruitment_applications_for_applicant')
@@ -63,6 +66,11 @@ urlpatterns = [
         views.RecruitmentPositionsPerGangForApplicantView.as_view(),
         name='recruitment_positions_gang_for_applicants',
     ),
+    path(
+        'recruitment-shared-interview-groups/<int:recruitment_id>/',
+        views.RecruitmentInterviewGroupView.as_view(),
+        name='recruitment_shared_interviews',
+    ),
     path('recruitment-positions-gang-for-gangs/', views.RecruitmentPositionsPerGangForGangView.as_view(), name='recruitment_positions_gang_for_gangs'),
     path('recruitment-set-interview/<slug:pk>/', views.RecruitmentApplicationSetInterviewView.as_view(), name='recruitment_set_interview'),
     path(
@@ -93,6 +101,7 @@ urlpatterns = [
         name='recruitment_withdraw_application_recruiter',
     ),
     path('active-recruitment-positions/', views.ActiveRecruitmentPositionsView.as_view(), name='active_recruitment_positions'),
+    path('rejected-applicants/', views.SendRejectionMailView.as_view(), name='rejected_applicants/'),
     path('recruitment-applicants-without-interviews/<int:pk>/', views.ApplicantsWithoutInterviewsView.as_view(), name='applicants_without_interviews'),
     path(
         'recruitment-applicants-without-three-interview-criteria/<int:pk>/',
@@ -112,4 +121,5 @@ urlpatterns = [
     path('occupiedtimeslot/', views.OccupiedTimeslotView.as_view(), name='occupied_timeslots'),
     path('recruitment-interview-availability/', views.RecruitmentInterviewAvailabilityView.as_view(), name='recruitment_interview_availability'),
     path('recruitment/<int:id>/availability/', views.RecruitmentAvailabilityView.as_view(), name='recruitment_availability'),
+    path('recruitment/<int:recruitment_id>/gang/<int:gang_id>/stats/', views.GangApplicationCountView.as_view(), name='gang-application-stats'),
 ]

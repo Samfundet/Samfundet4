@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import itertools
 from typing import TYPE_CHECKING
 from collections import defaultdict
@@ -18,6 +19,7 @@ from django.contrib.auth.models import Group, Permission
 from root.constants import PHONE_NUMBER_REGEX
 from root.utils.mixins import CustomBaseSerializer
 
+from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
 from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
@@ -38,6 +40,7 @@ from .models.general import (
     KeyValue,
     MenuItem,
     TextItem,
+    GangSection,
     Reservation,
     ClosedPeriod,
     FoodCategory,
@@ -63,6 +66,7 @@ from .models.recruitment import (
     RecruitmentApplication,
     RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
+    RecruitmentPositionSharedInterviewGroup,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
@@ -344,6 +348,12 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = '__all__'
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
@@ -417,6 +427,12 @@ class GangSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+class GangSectionSerializer(CustomBaseSerializer):
+    class Meta:
+        model = GangSection
+        fields = '__all__'
+
+
 class RecruitmentGangSerializer(CustomBaseSerializer):
     recruitment_positions = serializers.SerializerMethodField(method_name='get_positions_count', read_only=True)
 
@@ -482,6 +498,60 @@ class MenuSerializer(CustomBaseSerializer):
     class Meta:
         model = Menu
         fields = '__all__'
+
+
+class RoleSerializer(CustomBaseSerializer):
+    class Meta:
+        model = Role
+        fields = '__all__'
+
+
+class UserOrgRoleSerializer(CustomBaseSerializer):
+    user = UserSerializer()
+    org_role = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserOrgRole
+        fields = ('user', 'org_role')
+
+    def get_org_role(self, obj: UserOrgRole) -> dict:
+        return {
+            'created_at': obj.created_at,
+            'created_by': UserSerializer(obj.created_by).data,
+            'organization': OrganizationSerializer(obj.obj).data,
+        }
+
+
+class UserGangRoleSerializer(CustomBaseSerializer):
+    user = UserSerializer()
+    gang_role = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserGangRole
+        fields = ('user', 'gang_role')
+
+    def get_gang_role(self, obj: UserGangRole) -> dict:
+        return {
+            'created_at': obj.created_at,
+            'created_by': UserSerializer(obj.created_by).data,
+            'gang': GangSerializer(obj.obj).data,
+        }
+
+
+class UserGangSectionRoleSerializer(CustomBaseSerializer):
+    user = UserSerializer()
+    section_role = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserGangSectionRole
+        fields = ('user', 'section_role')
+
+    def get_section_role(self, obj: UserGangSectionRole) -> dict:
+        return {
+            'created_at': obj.created_at,
+            'created_by': UserSerializer(obj.created_by).data,
+            'section': GangSectionSerializer(obj.obj).data,
+        }
 
 
 class SaksdokumentSerializer(CustomBaseSerializer):
@@ -604,6 +674,7 @@ class RecruitmentDateStatSerializer(serializers.ModelSerializer):
 
 class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
     campus = serializers.SerializerMethodField(method_name='campus_name', read_only=True)
+    applicant_percentage = serializers.SerializerMethodField(method_name='get_applicant_percentage', read_only=True)
 
     class Meta:
         model = RecruitmentCampusStat
@@ -611,6 +682,9 @@ class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
 
     def campus_name(self, stat: RecruitmentCampusStat) -> str:
         return stat.campus.name_nb if stat.campus else None
+
+    def get_applicant_percentage(self, stat: RecruitmentCampusStat) -> float:
+        return stat.normalized_applicant_percentage()
 
 
 class RecruitmentGangStatSerializer(serializers.ModelSerializer):
@@ -709,6 +783,8 @@ class RecruitmentSeparatePositionSerializer(CustomBaseSerializer):
     class Meta:
         model = RecruitmentSeparatePosition
         fields = [
+            'id',
+            'recruitment',
             'name_nb',
             'name_en',
             'description_nb',
@@ -719,10 +795,21 @@ class RecruitmentSeparatePositionSerializer(CustomBaseSerializer):
 
 class RecruitmentSerializer(CustomBaseSerializer):
     separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
+    promo_media = serializers.CharField(max_length=100, allow_blank=True, allow_null=True)
 
     class Meta:
         model = Recruitment
         fields = '__all__'
+
+    def validate_promo_media(self, value: str | None) -> str | None:
+        if value is None or value == '':
+            return None
+        match = re.search(r'(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))', value)
+        if match:
+            return match.group(3)
+        if len(value) == 11:
+            return value
+        raise ValidationError('Invalid youtube url')
 
     def to_representation(self, instance: Recruitment) -> dict:
         data = super().to_representation(instance)
@@ -731,7 +818,7 @@ class RecruitmentSerializer(CustomBaseSerializer):
 
 
 class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
-    seperate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
+    separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
     recruitment_progress = serializers.SerializerMethodField(method_name='get_recruitment_progress', read_only=True)
     statistics = RecruitmentStatisticsSerializer(read_only=True)
 
@@ -750,6 +837,7 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
 
     gang = GangSerializer(read_only=True)
     interviewers = InterviewerSerializer(many=True, read_only=True)
+    interviewer_ids = serializers.ListField(child=serializers.IntegerField(), write_only=True, required=False)
 
     class Meta:
         model = RecruitmentPosition
@@ -759,28 +847,43 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
         self,
         *,
         recruitment_position: RecruitmentPosition,
-        interviewer_objects: list[dict],
+        interviewer_ids: list[int],
     ) -> None:
-        try:
-            interviewers = []
-            if interviewer_objects:
-                interviewer_ids = [interviewer.get('id') for interviewer in interviewer_objects]
-                if interviewer_ids:
-                    interviewers = User.objects.filter(id__in=interviewer_ids)
-            recruitment_position.interviewers.set(interviewers)
-        except (TypeError, KeyError):
-            raise ValidationError('Invalid data for interviewers.') from None
+        if interviewer_ids:
+            try:
+                interviewers = User.objects.filter(id__in=interviewer_ids)
+                found_ids = set(interviewers.values_list('id', flat=True))
+                invalid_ids = set(interviewer_ids) - found_ids
+
+                if invalid_ids:
+                    raise ValidationError(f'Invalid interviewer IDs: {invalid_ids}')
+
+                recruitment_position.interviewers.set(interviewers)
+            except (TypeError, ValueError):
+                raise ValidationError('Invalid interviewer IDs format.') from None
+        else:
+            recruitment_position.interviewers.clear()
+
+    def validate(self, data: dict) -> dict:
+        gang_id = self.initial_data.get('gang', {}).get('id')
+        if gang_id:
+            try:
+                data['gang'] = Gang.objects.get(id=gang_id)
+            except Gang.DoesNotExist:
+                raise serializers.ValidationError('Invalid gang id') from None
+
+        self.interviewer_ids = data.pop('interviewer_ids', [])
+
+        return super().validate(data)
 
     def create(self, validated_data: dict) -> RecruitmentPosition:
         recruitment_position = super().create(validated_data)
-        interviewer_objects = self.initial_data.get('interviewers', [])
-        self._update_interviewers(recruitment_position=recruitment_position, interviewer_objects=interviewer_objects)
+        self._update_interviewers(recruitment_position=recruitment_position, interviewer_ids=self.interviewer_ids)
         return recruitment_position
 
     def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
         updated_instance = super().update(instance, validated_data)
-        interviewer_objects = self.initial_data.get('interviewers', [])
-        self._update_interviewers(recruitment_position=updated_instance, interviewer_objects=interviewer_objects)
+        self._update_interviewers(recruitment_position=updated_instance, interviewer_ids=self.interviewer_ids)
         return updated_instance
 
     def get_total_applicants(self, recruitment_position: RecruitmentPosition) -> int:
@@ -827,6 +930,20 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
             'default_application_letter_en',
             'gang',
             'recruitment',
+        ]
+
+
+class RecruitmentPositionSharedInterviewGroupSerializer(serializers.ModelSerializer):
+    positions = RecruitmentPositionForApplicantSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = RecruitmentPositionSharedInterviewGroup
+        fields = [
+            'id',
+            'recruitment',
+            'positions',
+            'name_en',
+            'name_nb',
         ]
 
 
@@ -971,7 +1088,7 @@ class RecruitmentBasicUserSerializer(serializers.ModelSerializer):
 class RecruitmentRecruitmentPositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecruitmentPosition
-        fields = ['id', 'name_nb', 'name_en']
+        fields = ['id', 'name_nb', 'name_en', 'gang']
 
 
 class RecruitmentShowUnprocessedApplicationsSerializer(serializers.ModelSerializer):

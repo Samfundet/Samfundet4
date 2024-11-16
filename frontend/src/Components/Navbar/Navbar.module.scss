@@ -1,7 +1,6 @@
 /* stylelint-disable function-comma-space-after */
 /* stylelint-disable selector-max-compound-selectors */
 /* stylelint-disable selector-max-class */
-/* stylelint-disable max-nesting-depth */
 /* TODO: fix later */
 
 @import 'src/mixins';
@@ -248,24 +247,6 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   @include for-tablet-down {
     display: none;
   }
-}
-
-/* Pick language */
-.language_flag {
-  width: 28px;
-  height: 20px;
-  cursor: pointer;
-  border-radius: 3px;
-  box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.1);
-  transition: 0.1s;
-  &:hover {
-    transform: scale(1.1);
-  }
-}
-
-.language_flag_button {
-  background-color: transparent;
-  border-color: transparent;
 }
 
 /* Container for profile */

@@ -157,7 +157,7 @@ class Command(BaseCommand):
 
                     # Parse url to frontend route.
                     parsed_url = parse_url(url.url)
-                    parsed_name = parse_name(url.name or parsed_url)  # 'feide:new_tjeneste' -> 'feide__new_tjeneste'
+                    parsed_name = parse_name(url.name or parsed_url)  # 'samfundet:new_tjeneste' -> 'samfundet__new_tjeneste'
 
                     # Write to file.
                     frontend_file.write(NEWLINE + f"  {parsed_name}: '{parsed_url}',")

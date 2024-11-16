@@ -21,12 +21,22 @@ type MiniCalendarProps = {
   displayLabel?: boolean;
   /** List of dates to mark with a dot */
   markers?: CalendarMarker[];
+  /** Selected date can be defined on beforehand */
+  initialSelectedDate?: Date | null;
 };
 
-export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabel, markers }: MiniCalendarProps) {
+export function MiniCalendar({
+  baseDate,
+  minDate,
+  maxDate,
+  onChange,
+  displayLabel,
+  markers,
+  initialSelectedDate,
+}: MiniCalendarProps) {
   const [displayDate, setDisplayDate] = useState<Date>(baseDate);
   const [days, setDays] = useState<Date[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(initialSelectedDate || null);
   const { t } = useTranslation();
 
   function getMarker(d: Date | null) {
@@ -119,8 +129,10 @@ export function MiniCalendar({ baseDate, minDate, maxDate, onChange, displayLabe
                 [styles.selected_day]: isSelected,
               })}
               onClick={() => {
-                onChange?.(d);
-                setSelectedDate(d);
+                // If we click the currently selected date, deselect it
+                const newDate = isSelected ? null : d;
+                onChange?.(newDate);
+                setSelectedDate(newDate);
               }}
               disabled={!valid}
             >

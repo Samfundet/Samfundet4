@@ -5,7 +5,7 @@ import styles from './Button.module.scss';
 import type { ButtonDisplay, ButtonTheme } from './types';
 import { displayToStyleMap, themeToStyleMap } from './utils';
 
-type ButtonProps = {
+export type ButtonProps = {
   name?: string;
   theme?: ButtonTheme;
   display?: ButtonDisplay;
@@ -18,6 +18,7 @@ type ButtonProps = {
   children?: Children;
   preventDefault?: boolean;
   onClick?: () => void;
+  title?: string;
 };
 
 export function Button({

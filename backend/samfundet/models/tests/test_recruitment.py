@@ -5,7 +5,7 @@ import pytest
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from samfundet.models.general import Gang, User, Campus
+from samfundet.models.general import Gang, User, Campus, GangSection
 from samfundet.models.recruitment import (
     Interview,
     Recruitment,
@@ -248,7 +248,7 @@ class TestRecruitmentInterview:
         assert fixture_recruitment_position2.shared_interview_group is None
 
         # setup interview group
-        shared_group = RecruitmentPositionSharedInterviewGroup.objects.create(recruitment=fixture_recruitment)
+        shared_group = RecruitmentPositionSharedInterviewGroup.objects.create(recruitment=fixture_recruitment, name_en='name', name_nb='navn')
         fixture_recruitment_position.shared_interview_group = shared_group
         fixture_recruitment_position2.shared_interview_group = shared_group
         fixture_recruitment_position.save()
@@ -288,7 +288,7 @@ class TestRecruitmentInterview:
         assert fixture_recruitment_application2.recruitment_position == fixture_recruitment_position2
 
         # setup interview group
-        shared_group = RecruitmentPositionSharedInterviewGroup.objects.create(recruitment=fixture_recruitment)
+        shared_group = RecruitmentPositionSharedInterviewGroup.objects.create(recruitment=fixture_recruitment, name_en='name', name_nb='navn')
         fixture_recruitment_position.shared_interview_group = shared_group
         fixture_recruitment_position2.shared_interview_group = shared_group
         fixture_recruitment_position.save()
@@ -834,3 +834,22 @@ class TestRecruitmentApplicationStatus:
         new_application.recruiter_status = RecruitmentStatusChoices.CALLED_AND_ACCEPTED
         new_application.save()
         assert fixture_recruitment.recruitment_progress() == 1
+
+
+def test_position_must_have_single_owner(fixture_recruitment_position: RecruitmentPosition, fixture_gang: Gang, fixture_gang_section: GangSection):
+    fixture_recruitment_position.gang = fixture_gang
+    fixture_recruitment_position.section = fixture_gang_section
+    with pytest.raises(ValidationError):
+        fixture_recruitment_position.save()
+
+    fixture_recruitment_position.gang = None
+    fixture_recruitment_position.section = None
+    with pytest.raises(ValidationError):
+        fixture_recruitment_position.save()
+
+    fixture_recruitment_position.gang = fixture_gang
+    fixture_recruitment_position.save()
+
+    fixture_recruitment_position.gang = None
+    fixture_recruitment_position.section = fixture_gang_section
+    fixture_recruitment_position.save()

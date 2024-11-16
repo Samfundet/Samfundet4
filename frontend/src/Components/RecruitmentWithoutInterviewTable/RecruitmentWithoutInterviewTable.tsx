@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Table } from '~/Components/Table';
 import type { RecruitmentUserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import { InputField } from '../InputField';
@@ -24,7 +25,7 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
     { content: t(KEY.common_phonenumber), sortable: true },
     { content: t(KEY.recruitment_applicant_top_position), sortable: true },
     { content: t(KEY.recruitment_number_of_applications), sortable: true },
-    { content: t(KEY.common_processed), sortable: true },
+    { content: t(KEY.recruitment_interview_planned), sortable: true },
   ];
 
   function filterUsers(): RecruitmentUserDto[] {
@@ -54,7 +55,19 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
     return [
       {
         value: `${user.first_name} ${user.last_name}`,
-        content: <Link url={ROUTES.frontend.recruitment_application}>{`${user.first_name} ${user.last_name}`}</Link>,
+        content: (
+          <Link
+            url={reverse({
+              pattern: ROUTES.frontend.admin_recruitment_applicant,
+              urlParams: {
+                applicationID: user.top_application.id,
+              },
+            })}
+            className={styles.text}
+          >
+            {user.first_name} {user.last_name}
+          </Link>
+        ),
       },
       user.email,
       user.phone_number,
@@ -64,7 +77,8 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
         value: user.applications_without_interview ? user.applications_without_interview.length : 0,
         content: (
           <WithoutInterviewModal
-            applications_without_interview={user.applications_without_interview}
+            user={user}
+            applicationsWithoutInterview={user.applications_without_interview}
             applications={user.applications}
           />
         ),
@@ -76,7 +90,7 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
     <div>
       <InputField icon="mdi:search" onChange={setSearchQuery} placeholder={t(KEY.common_search)} />
       <div className={styles.table_container}>
-        <Table columns={tableColumns} data={filterUsers().map((user) => userToTableRow(user))} />
+        <Table columns={tableColumns} data={filterUsers().map((user) => ({ cells: userToTableRow(user) }))} />
       </div>
     </div>
   );
