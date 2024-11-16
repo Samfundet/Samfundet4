@@ -422,6 +422,9 @@ export const KEY = {
   admin_saksdokumenter_cannot_reupload: 'admin_saksdokumenter_cannot_reupload',
   admin_impersonate: 'admin_impersonate',
   admin_stop_impersonate: 'admin_stop_impersonate',
+  admin_role_page_orggangsection: 'admin_role_page_orggangsection',
+  admin_role_page_role_since: 'admin_role_page_role_since',
+  admin_role_page_given_by: 'admin_role_page_given_by',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
