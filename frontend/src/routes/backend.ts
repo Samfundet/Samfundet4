@@ -539,6 +539,7 @@ export const ROUTES_BACKEND = {
   samfundet__merch_detail: '/api/merch/:pk/',
   samfundet__role_list: '/api/role/',
   samfundet__role_detail: '/api/role/:pk/',
+  samfundet__role_users: '/api/role/:pk/users/',
   samfundet__recruitment_list: '/api/recruitment/',
   samfundet__recruitment_detail: '/api/recruitment/:pk/',
   samfundet__recruitment_gangs: '/api/recruitment/:pk/gangs/',
@@ -606,6 +607,7 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_availability: '/recruitment/:id/availability/',
   samfundet__feedback: '/feedback/',
   samfundet__purchase_feedback: '/purchase-feedback/',
+  samfundet__gang_application_stats: '/recruitment/:recruitmentId/gang/:gangId/stats/',
   static__path: '/static/:path',
   media__path: '/media/:path',
 } as const;

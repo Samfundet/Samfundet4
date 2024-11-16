@@ -7,6 +7,7 @@ import { deleteInformationPage, getInformationPages } from '~/api';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import { infoPageKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -18,7 +19,7 @@ export function InformationAdminPage() {
 
   // TODO: add permissions on render
   const { data, isLoading } = useQuery({
-    queryKey: ['informationpages'],
+    queryKey: infoPageKeys.all,
     queryFn: getInformationPages,
   });
 

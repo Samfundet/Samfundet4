@@ -152,6 +152,7 @@ export const nb = prepareTranslations({
   [KEY.common_something_went_wrong]: 'Noe gikk galt',
   [KEY.common_click_here]: 'klikk her',
   [KEY.common_total]: 'Totalt',
+  [KEY.common_out_of]: 'av',
   [KEY.common_count]: 'Antall',
   [KEY.common_guests]: 'Gjester',
   [KEY.common_occasion]: 'Annledning',
@@ -263,7 +264,9 @@ export const nb = prepareTranslations({
   [KEY.recruitment_all_applications]: 'Alle søknader',
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
   [KEY.recruitment_will_be_anonymized]: 'All info relatert til dine søknader vil bli slettet 3 uker etter opptaket',
+  [KEY.recruitment_interview]: 'intervju',
   [KEY.recruitment_interviews]: 'Intervjuer',
+  [KEY.recruitment_interview_planned]: 'Intervjuer planlagt',
   [KEY.recruitment_interviewer]: 'Intervjuer',
   [KEY.recruitment_interviewers]: 'Intervjuere',
   [KEY.recruitment_no_interviews]: 'Ingen intervjuer',
@@ -480,6 +483,9 @@ export const nb = prepareTranslations({
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
 
+  [KEY.promo_media_description]: 'Lenke eller ID til en YouTube-video',
+  [KEY.promo_media_invalid]: 'Må være en gyldig lenke til en YouTube-video',
+
   // Errors
   [KEY.error_generic]: 'Uventet feil',
   [KEY.error_generic_description]: 'En uventet feil oppsto, vennligst prøv igjen',
@@ -643,6 +649,7 @@ export const en = prepareTranslations({
   [KEY.common_click_here]: 'click here',
   [KEY.common_total]: 'In total',
   [KEY.common_count]: 'Number of',
+  [KEY.common_out_of]: 'out of',
   [KEY.common_guests]: 'Guests',
   [KEY.common_occasion]: 'Occasion',
   [KEY.common_have]: 'have',
@@ -753,7 +760,9 @@ export const en = prepareTranslations({
   [KEY.recruitment_not_applied]: 'You have not applied to any positions yet',
   [KEY.recruitment_will_be_anonymized]:
     'All info related to the applications will be anonymized three weeks after the recruitment is over',
+  [KEY.recruitment_interview]: 'interview',
   [KEY.recruitment_interviews]: 'Interviews',
+  [KEY.recruitment_interview_planned]: 'Interviews planned',
   [KEY.recruitment_interviewer]: 'Interviewer',
   [KEY.recruitment_interviewers]: 'Interviewers',
   [KEY.recruitment_no_interviews]: 'No interviews',
@@ -899,6 +908,10 @@ export const en = prepareTranslations({
   [KEY.admin_information_confirm_cancel]: 'Are you sure you want to exit without saving?',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'It is not possible to change the uploaded file.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
+
+  [KEY.promo_media_description]: 'Link or ID of a YouTube video',
+  [KEY.promo_media_invalid]: 'Must be a valid link to a YouTube video',
+
   [KEY.recruitment_three_interviews_criteria_header]:
     'Applicants with less than 3 interviews, but have applied to more than 3 positions',
   [KEY.recruitment_three_interviews_criteria_button]: 'Applicants with less than 3 interviews',
