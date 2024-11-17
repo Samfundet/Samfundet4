@@ -31,3 +31,11 @@
     gap: 1rem;
   }
 }
+
+.preview {
+  @include for-large-desktop-up {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 1rem;
+  }
+}

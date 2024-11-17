@@ -456,6 +456,7 @@ export const nb = prepareTranslations({
     'Intervju-tilgjengelighet bestemmer når intervju kan holdes, og når brukere kan markere utilgjengelighet. ',
   [KEY.interview_availability_interval_description]:
     'Et intervall på 30 minutter vil gi tidsluker på 08:00, 08:30, 09:00, osv.',
+  [KEY.interview_availability_error_end_date_before_start_date]: 'Sluttdato må være etter startdato',
 
   // Feedback
   [KEY.feedback_type]: 'Type tilbakemelding',
@@ -963,6 +964,7 @@ export const en = prepareTranslations({
     'Intervju availability decides when interviews can be held, and when users can mark unavailability.',
   [KEY.interview_availability_interval_description]:
     'An interval of 30 minutes will give timeslots of 08:00, 08:30, 09:00, etc.',
+  [KEY.interview_availability_error_end_date_before_start_date]: 'End date must be after start date',
 
   // Feedback
   [KEY.feedback_type]: 'Feedback type',

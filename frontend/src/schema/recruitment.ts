@@ -7,3 +7,5 @@ export const AVAILABILITY_TIMESLOT_INTERVAL = z
   .number()
   .min(AVAILABILITY_TIMESLOT_INTERVAL_MIN)
   .max(AVAILABILITY_TIMESLOT_INTERVAL_MAX);
+
+export const AVAILABILITY_TIMESLOT_TIME = z.string().regex(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/);
