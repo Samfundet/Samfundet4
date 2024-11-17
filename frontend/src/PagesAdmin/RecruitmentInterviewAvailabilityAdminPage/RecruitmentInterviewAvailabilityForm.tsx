@@ -107,91 +107,87 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className={styles.container}>
-          <div>
-            <div className={styles.row}>
-              <FormField
-                control={form.control}
-                name="start_date"
-                render={({ field: { onChange, ...fieldProps } }) => (
-                  <FormItem>
-                    <FormLabel>{t(KEY.start_date)}</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        onChange={(d) => {
-                          setFromDate(d || undefined);
-                          onChange(d);
-                        }}
-                        {...fieldProps}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="end_date"
-                render={({ field: { onChange, ...fieldProps } }) => (
-                  <FormItem>
-                    <FormLabel>{t(KEY.end_date)}</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        onChange={(d) => {
-                          setToDate(d || undefined);
-                          onChange(d);
-                        }}
-                        {...fieldProps}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className={classNames(styles.row, styles.short_row)}>
-              <FormField
-                control={form.control}
-                name="start_time"
-                render={({ field: { onChange, ...fieldProps } }) => (
-                  <FormItem>
-                    <FormLabel>{t(KEY.start_time)}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        placeholder="HH:MM"
-                        onChange={(e) => {
-                          onChange(e);
-                          updateTimeslotPreview();
-                        }}
-                        {...fieldProps}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="end_time"
-                render={({ field: { onChange, ...fieldProps } }) => (
-                  <FormItem>
-                    <FormLabel>{t(KEY.end_time)}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        placeholder="HH:MM"
-                        onChange={(e) => {
-                          onChange(e);
-                          updateTimeslotPreview();
-                        }}
-                        {...fieldProps}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+          <div className={styles.form_grid}>
+            <FormField
+              control={form.control}
+              name="start_date"
+              render={({ field: { onChange, ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.start_date)}</FormLabel>
+                  <FormControl>
+                    <DatePicker
+                      onChange={(d) => {
+                        setFromDate(d || undefined);
+                        onChange(d);
+                      }}
+                      {...fieldProps}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="end_date"
+              render={({ field: { onChange, ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.end_date)}</FormLabel>
+                  <FormControl>
+                    <DatePicker
+                      onChange={(d) => {
+                        setToDate(d || undefined);
+                        onChange(d);
+                      }}
+                      {...fieldProps}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="start_time"
+              render={({ field: { onChange, ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.start_time)}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="HH:MM"
+                      onChange={(e) => {
+                        onChange(e);
+                        updateTimeslotPreview();
+                      }}
+                      {...fieldProps}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="end_time"
+              render={({ field: { onChange, ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.end_time)}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="HH:MM"
+                      onChange={(e) => {
+                        onChange(e);
+                        updateTimeslotPreview();
+                      }}
+                      {...fieldProps}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="timeslot_interval"
@@ -203,6 +199,7 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
                     <NumberInput
                       min={AVAILABILITY_TIMESLOT_INTERVAL_MIN}
                       max={AVAILABILITY_TIMESLOT_INTERVAL_MAX}
+                      className={styles.interval_input}
                       onChange={(e) => {
                         onChange(e);
                         updateTimeslotPreview();

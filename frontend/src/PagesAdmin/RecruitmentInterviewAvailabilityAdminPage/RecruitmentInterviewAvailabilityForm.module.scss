@@ -2,6 +2,8 @@
 
 @import 'src/mixins';
 
+$form-col-width: 260px;
+
 .action_row {
   display: flex;
   justify-content: flex-end;
@@ -18,24 +20,28 @@
   }
 }
 
-.short_row {
-  @include for-large-desktop-up {
-    width: 50%;
-  }
-}
-
-.row {
-  @include for-large-desktop-up {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-}
-
 .preview {
   @include for-large-desktop-up {
     display: grid;
     grid-template-columns: auto auto;
     gap: 1rem;
+  }
+}
+
+.form_grid {
+  @include for-large-desktop-up {
+    display: grid;
+    grid-template-columns: repeat(2, $form-col-width);
+    gap: 0 1rem;
+
+    > *:last-child {
+      grid-column: span 2;
+    }
+  }
+}
+
+.interval_input {
+  @include for-large-desktop-up {
+    width: $form-col-width;
   }
 }
