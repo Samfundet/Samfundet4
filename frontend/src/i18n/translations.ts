@@ -397,7 +397,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_separate_recruitment]: 'Separat opptak',
 
   // Recruitment applets
-  [KEY.recruitment_applet_dashboard_description]: 'Gå til ditt personlige dashbord',
+  [KEY.recruitment_applet_dashboard_description]: 'Ditt personlige dashbord',
   [KEY.recruitment_applet_edit_description]: 'Rediger opptaket',
   [KEY.recruitment_applet_open_to_other_positions]: 'Åpen for mer',
   [KEY.recruitment_applet_overview_description]: 'Se hvor langt opptaket har kommet',
@@ -861,7 +861,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_separate_recruitment]: 'Seperate recruitment',
 
   // Recruitment applets
-  [KEY.recruitment_applet_dashboard_description]: 'Go to your personal dashboard',
+  [KEY.recruitment_applet_dashboard_description]: 'Your personal dashboard',
   [KEY.recruitment_applet_edit_description]: 'Edit recruitment',
   [KEY.recruitment_applet_open_to_other_positions]: 'Open for more',
   [KEY.recruitment_applet_overview_description]: 'See how far the recruitment has come',

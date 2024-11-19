@@ -19,15 +19,15 @@
 
 .card {
   padding: 1rem;
-  border-radius: 3px;
-  border: 1px solid $grey-4;
+  border-radius: 5px;
+  border: 1px solid $grey-36;
   display: block;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-  max-width: 16rem;
+  width: 16rem;
 
   &:hover {
     text-decoration: none;
-    border-color: $grey-35;
+    border-color: $grey-32;
   }
 
   @include for-mobile-down {
@@ -53,19 +53,10 @@
   }
 }
 
-.wrapper {
-  @include for-mobile-down {
-    width: 100%;
-  }
-}
-
 .disabled {
   cursor: not-allowed;
-
-  .card {
-    opacity: 0.5;
-    pointer-events: none;
-  }
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .title {
@@ -80,10 +71,14 @@
 .description {
   color: $grey-2;
   font-size: 0.875rem;
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
 }
 
 .content {
   position: relative;
   padding-right: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
