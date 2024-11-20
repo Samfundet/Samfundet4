@@ -112,6 +112,7 @@ export const nb = prepareTranslations({
   [KEY.common_phonenumber]: 'Telefonnummer',
   [KEY.common_register]: 'Registrer',
   [KEY.common_password]: 'passord',
+  [KEY.common_current]: 'Nåværende',
   [KEY.common_about_us]: 'Om oss',
   [KEY.common_previous]: 'Forrige',
   [KEY.common_required]: 'Påkrevd',
@@ -204,6 +205,8 @@ export const nb = prepareTranslations({
   //        Others        //
   // ==================== //
   [KEY.role_content_type]: 'Hierarkinivå',
+  [KEY.change_password]: 'Bytt passord',
+  [KEY.new_password]: 'Nytt passord',
   [KEY.admin_impersonate]: 'Stjel identitet',
   [KEY.admin_stop_impersonate]: 'Stopp identitetstyveri',
 
@@ -599,6 +602,7 @@ export const en = prepareTranslations({
   [KEY.common_phonenumber]: 'Phone number',
   [KEY.common_lastname]: 'Last name',
   [KEY.common_password]: 'password',
+  [KEY.common_current]: 'Current',
   [KEY.common_select_all]: 'Select all',
   [KEY.common_unselect_all]: 'Unselect all',
   [KEY.common_overview]: 'Overview',
@@ -692,6 +696,8 @@ export const en = prepareTranslations({
   //        Others        //
   // ==================== //
   [KEY.role_content_type]: 'Hierarchical level',
+  [KEY.change_password]: 'Change password',
+  [KEY.new_password]: 'New password',
   [KEY.admin_impersonate]: 'Impersonate',
   [KEY.admin_stop_impersonate]: 'Stop impersonation',
 
