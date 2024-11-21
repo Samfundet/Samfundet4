@@ -15,6 +15,7 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.password_validation import validate_password
 
 from root.constants import PHONE_NUMBER_REGEX
 from root.utils.mixins import CustomBaseSerializer
@@ -235,6 +236,22 @@ class ClosedPeriodSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+class ChangePasswordSerializer(serializers.Serializer):
+    current_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_current_password(self, value: str) -> str:
+        user = self.context["request"].user
+        if not user.check_password(value):
+            raise serializers.ValidationError('Incorrect current password')
+        return value
+
+    def validate_new_password(self, value: str) -> str:
+        user = self.context["request"].user
+        validate_password(value, user)
+        return value
+
+
 class LoginSerializer(serializers.Serializer):
     """
     This serializer defines two fields for authentication:
@@ -330,7 +347,8 @@ class RegisterSerializer(serializers.Serializer):
         if username and password:
             # Try to authenticate the user using Django auth framework.
             user = User.objects.create_user(
-                first_name=firstname, last_name=lastname, username=username, email=email, phone_number=phone_number, password=password
+                first_name=firstname, last_name=lastname, username=username, email=email, phone_number=phone_number,
+                password=password
             )
             user = authenticate(request=self.context.get('request'), username=username, password=password)
         else:
@@ -715,7 +733,8 @@ class RecruitmentUpdateUserPrioritySerializer(serializers.Serializer):
 
 class UserForRecruitmentSerializer(serializers.ModelSerializer):
     applications = serializers.SerializerMethodField(method_name='get_applications', read_only=True)
-    applications_without_interview = serializers.SerializerMethodField(method_name='get_applications_without_interviews_for_recruitment', read_only=True)
+    applications_without_interview = serializers.SerializerMethodField(
+        method_name='get_applications_without_interviews_for_recruitment', read_only=True)
     top_application = serializers.SerializerMethodField(method_name='get_top_application', read_only=True)
     campus = CampusSerializer()
 
@@ -898,7 +917,8 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
 
     def get_accepted_applicants(self, recruitment_position: RecruitmentPosition) -> int:
         return RecruitmentApplication.objects.filter(
-            recruitment_position=recruitment_position, withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED
+            recruitment_position=recruitment_position, withdrawn=False,
+            recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED
         ).count()
 
 
@@ -1136,7 +1156,8 @@ class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
         interview_data = validated_data.pop('interview', {})
 
         interview_instance = instance.interview
-        interview_instance.interview_location = interview_data.get('interview_location', interview_instance.interview_location)
+        interview_instance.interview_location = interview_data.get('interview_location',
+                                                                   interview_instance.interview_location)
         interview_instance.interview_time = interview_data.get('interview_time', interview_instance.interview_time)
         interviewers_data = validated_data.pop('interviewers', [])
         interview_instance.interviewers.set(interviewers_data)
@@ -1199,7 +1220,8 @@ class PurchaseFeedbackSerializer(serializers.ModelSerializer):
         purchase_feedback = PurchaseFeedbackModel.objects.create(event=event, **validated_data)
 
         for alternative, selected in alternatives_data.items():
-            PurchaseFeedbackAlternative.objects.create(form=purchase_feedback, alternative=alternative, selected=selected)
+            PurchaseFeedbackAlternative.objects.create(form=purchase_feedback, alternative=alternative,
+                                                       selected=selected)
 
         for question, answer in responses_data.items():
             PurchaseFeedbackQuestion.objects.create(form=purchase_feedback, question=question, answer=answer)
