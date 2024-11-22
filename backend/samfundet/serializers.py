@@ -241,13 +241,13 @@ class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(required=True)
 
     def validate_current_password(self, value: str) -> str:
-        user = self.context["request"].user
+        user = self.context['request'].user
         if not user.check_password(value):
             raise serializers.ValidationError('Incorrect current password')
         return value
 
     def validate_new_password(self, value: str) -> str:
-        user = self.context["request"].user
+        user = self.context['request'].user
         validate_password(value, user)
         return value
 
