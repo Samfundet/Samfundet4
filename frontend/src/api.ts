@@ -847,15 +847,24 @@ export async function downloadCSVGangRecruitment(recruitmentId: string, gangId: 
 }
 
 export async function getRecruitmentApplicationsForRecruitmentPosition(
-  recruitmentPositionId: string,
-): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
+  positionId: string,
+  filterType?: string,
+): Promise<RecruitmentApplicationDto[]> {
   const url =
     BACKEND_DOMAIN +
     reverse({
-      pattern: ROUTES.backend.samfundet__recruitment_applications_for_gang_detail,
-      urlParams: { pk: recruitmentPositionId },
+      pattern: ROUTES.backend.samfundet__recruitment_applications_for_position_detail,
+      urlParams: { pk: positionId },
     });
-  return await axios.get(url, { withCredentials: true });
+
+  const params = filterType ? { filter_type: filterType } : {};
+
+  const response = await axios.get<RecruitmentApplicationDto[]>(url, {
+    withCredentials: true,
+    params: params,
+  });
+
+  return response.data;
 }
 
 export async function putRecruitmentApplicationForGang(

@@ -1,17 +1,21 @@
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { InputField, TimeDisplay } from '~/Components';
-import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
-import { Table } from '~/Components/Table';
-import { Text } from '~/Components/Text/Text';
-import { putRecruitmentApplicationForGang } from '~/api';
+import {
+  CrudButtons,
+  Dropdown,
+  type DropdownOption,
+  Link,
+  SamfundetLogoSpinner,
+  SetInterviewManuallyModal,
+  Table,
+  Text,
+  TimeDisplay,
+} from '~/Components';
 import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { Link } from '../Link';
-import { SetInterviewManuallyModal } from '../SetInterviewManually';
 import styles from './RecruitmentApplicantsStatus.module.scss';
 
 type RecruitmentApplicantsStatusProps = {
@@ -21,9 +25,10 @@ type RecruitmentApplicantsStatusProps = {
   positionId: number | string | undefined;
   updateStateFunction: (id: string, data: RecruitmentApplicationStateDto) => void;
   onInterviewChange: () => void;
+  updatingId: string | null;
 };
 
-// TODO add backend to fetch these
+// TODO add backend to fetch these ISSUE #1575
 const priorityOptions: DropdownOption<number>[] = [
   { label: 'Not Set', value: 0 },
   { label: 'Reserve', value: 1 },
@@ -31,6 +36,7 @@ const priorityOptions: DropdownOption<number>[] = [
   { label: 'Not Wanted', value: 3 },
 ];
 
+// TODO add backend to fetch these ISSUE #1575
 const statusOptions: DropdownOption<number>[] = [
   { label: 'Nothing', value: 0 },
   { label: 'Called and accepted', value: 1 },
@@ -46,6 +52,7 @@ const editChoices = {
 };
 
 export function RecruitmentApplicantsStatus({
+  updatingId,
   applicants,
   recruitmentId,
   gangId,
@@ -98,6 +105,7 @@ export function RecruitmentApplicantsStatus({
 
   const data = applicants.map((application) => {
     const applicationStatusStyle = getStatusStyle(application?.applicant_state);
+    const isUpdating = updatingId === application.id;
     return {
       cells: [
         {
@@ -161,26 +169,34 @@ export function RecruitmentApplicantsStatus({
           value: application.recruiter_priority,
           style: applicationStatusStyle,
           content: (
-            <Dropdown
-              value={application.recruiter_priority}
-              disableIcon={true}
-              classNameSelect={styles.dropdown}
-              options={priorityOptions}
-              onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_priority, value)}
-            />
+            <Fragment>
+              {isUpdating && <SamfundetLogoSpinner className={styles.loadingApplicationStatus} />}
+              <Dropdown
+                disabled={isUpdating}
+                value={application.recruiter_priority}
+                disableIcon={true}
+                classNameSelect={styles.dropdown}
+                options={priorityOptions}
+                onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_priority, value)}
+              />
+            </Fragment>
           ),
         },
         {
           value: application.recruiter_status,
           style: applicationStatusStyle,
           content: (
-            <Dropdown
-              value={application.recruiter_status}
-              disableIcon={true}
-              classNameSelect={styles.dropdown}
-              options={statusOptions}
-              onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_status, value)}
-            />
+            <Fragment>
+              {isUpdating && <SamfundetLogoSpinner className={styles.loadingApplicationStatus} />}
+              <Dropdown
+                disabled={isUpdating}
+                value={application.recruiter_status}
+                disableIcon={true}
+                classNameSelect={styles.dropdown}
+                options={statusOptions}
+                onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_status, value)}
+              />
+            </Fragment>
           ),
         },
         {
