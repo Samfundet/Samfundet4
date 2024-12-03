@@ -4,6 +4,7 @@ export const roleKeys = {
   list: (filters: unknown[]) => [...roleKeys.lists(), { filters }] as const,
   details: () => [...roleKeys.all, 'detail'] as const,
   detail: (id: number) => [...roleKeys.details(), id] as const,
+  users: (id: number) => [...roleKeys.detail(id), 'users'] as const,
 };
 
 export const infoPageKeys = {
