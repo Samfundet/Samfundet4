@@ -1353,7 +1353,7 @@ class PositionByTagsView(ListAPIView):
     Optionally accepts position_id parameter to exclude current position
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionForApplicantSerializer
 
     def get_queryset(self) -> QuerySet:
