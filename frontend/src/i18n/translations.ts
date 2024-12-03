@@ -174,6 +174,8 @@ export const nb = prepareTranslations({
   [KEY.common_personal]: 'Personlig',
   [KEY.common_administrate]: 'Administrer',
   [KEY.common_administration]: 'Administrasjon',
+  [KEY.common_list_view]: 'Liste visning',
+  [KEY.common_tab_view]: 'Fane visning',
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
   [KEY.common_press]: 'presse',
@@ -400,7 +402,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_separate_recruitment]: 'Separat opptak',
 
   // Recruitment applets
-  [KEY.recruitment_applet_dashboard_description]: 'Gå til ditt personlige dashbord',
+  [KEY.recruitment_applet_dashboard_description]: 'Ditt personlige dashbord',
   [KEY.recruitment_applet_edit_description]: 'Rediger opptaket',
   [KEY.recruitment_applet_open_to_other_positions]: 'Åpen for mer',
   [KEY.recruitment_applet_overview_description]: 'Se hvor langt opptaket har kommet',
@@ -662,6 +664,8 @@ export const en = prepareTranslations({
   [KEY.common_filter]: 'Filter',
   [KEY.common_room]: 'Room',
   [KEY.common_unprocessed]: 'Unprocessed',
+  [KEY.common_list_view]: 'List view',
+  [KEY.common_tab_view]: 'Tab view',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -867,7 +871,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_separate_recruitment]: 'Seperate recruitment',
 
   // Recruitment applets
-  [KEY.recruitment_applet_dashboard_description]: 'Go to your personal dashboard',
+  [KEY.recruitment_applet_dashboard_description]: 'Your personal dashboard',
   [KEY.recruitment_applet_edit_description]: 'Edit recruitment',
   [KEY.recruitment_applet_open_to_other_positions]: 'Open for more',
   [KEY.recruitment_applet_overview_description]: 'See how far the recruitment has come',
