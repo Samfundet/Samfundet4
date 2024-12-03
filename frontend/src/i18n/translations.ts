@@ -150,6 +150,7 @@ export const nb = prepareTranslations({
   [KEY.common_something_went_wrong]: 'Noe gikk galt',
   [KEY.common_click_here]: 'klikk her',
   [KEY.common_total]: 'Totalt',
+  [KEY.common_out_of]: 'av',
   [KEY.common_count]: 'Antall',
   [KEY.common_guests]: 'Gjester',
   [KEY.common_occasion]: 'Annledning',
@@ -263,6 +264,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_all_applications]: 'Alle søknader',
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
   [KEY.recruitment_will_be_anonymized]: 'All info relatert til dine søknader vil bli slettet 3 uker etter opptaket',
+  [KEY.recruitment_interview]: 'intervju',
   [KEY.recruitment_interviews]: 'Intervjuer',
   [KEY.recruitment_interview_planned]: 'Intervjuer planlagt',
   [KEY.recruitment_interviewer]: 'Intervjuer',
@@ -397,7 +399,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_separate_recruitment]: 'Separat opptak',
 
   // Recruitment applets
-  [KEY.recruitment_applet_dashboard_description]: 'Gå til ditt personlige dashbord',
+  [KEY.recruitment_applet_dashboard_description]: 'Ditt personlige dashbord',
   [KEY.recruitment_applet_edit_description]: 'Rediger opptaket',
   [KEY.recruitment_applet_open_to_other_positions]: 'Åpen for mer',
   [KEY.recruitment_applet_overview_description]: 'Se hvor langt opptaket har kommet',
@@ -639,6 +641,7 @@ export const en = prepareTranslations({
   [KEY.common_click_here]: 'click here',
   [KEY.common_total]: 'In total',
   [KEY.common_count]: 'Number of',
+  [KEY.common_out_of]: 'out of',
   [KEY.common_guests]: 'Guests',
   [KEY.common_occasion]: 'Occasion',
   [KEY.common_have]: 'have',
@@ -751,6 +754,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_not_applied]: 'You have not applied to any positions yet',
   [KEY.recruitment_will_be_anonymized]:
     'All info related to the applications will be anonymized three weeks after the recruitment is over',
+  [KEY.recruitment_interview]: 'interview',
   [KEY.recruitment_interviews]: 'Interviews',
   [KEY.recruitment_interview_planned]: 'Interviews planned',
   [KEY.recruitment_interviewer]: 'Interviewer',
@@ -861,7 +865,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_separate_recruitment]: 'Seperate recruitment',
 
   // Recruitment applets
-  [KEY.recruitment_applet_dashboard_description]: 'Go to your personal dashboard',
+  [KEY.recruitment_applet_dashboard_description]: 'Your personal dashboard',
   [KEY.recruitment_applet_edit_description]: 'Edit recruitment',
   [KEY.recruitment_applet_open_to_other_positions]: 'Open for more',
   [KEY.recruitment_applet_overview_description]: 'See how far the recruitment has come',
