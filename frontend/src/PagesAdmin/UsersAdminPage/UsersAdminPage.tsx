@@ -15,8 +15,6 @@ export function UsersAdminPage() {
   const title = t(KEY.common_users);
   useTitle(title);
 
-  const INITIAL_PAGE = 1;
-
   const {
     data: users,
     totalItems,
@@ -27,7 +25,7 @@ export function UsersAdminPage() {
     isLoading,
   } = usePaginatedQuery<UserDto>({
     queryKey: ['admin-users'],
-    queryFn: (page: number) => getUsers(INITIAL_PAGE),
+    queryFn: (page: number) => getUsers(page),
   });
 
   const columns = [

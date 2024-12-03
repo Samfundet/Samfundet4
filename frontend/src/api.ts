@@ -106,23 +106,24 @@ export async function impersonateUser(userId: number): Promise<boolean> {
   return response.status === 200;
 }
 
-export async function getUsers(page?: number): Promise<UserDto[] | PageNumberPaginationType<UserDto>> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users;
-  if (page) {
-    const paginatedUrl = `${url}?page=${page}`;
-    const response = await axios.get<PageNumberPaginationType<UserDto>>(paginatedUrl, { withCredentials: true });
-    return response.data;
-  }
+// export async function getUsers(page?: number): Promise<UserDto[] | PageNumberPaginationType<UserDto>> {
+//   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users;
+//   if (page) {
+//     const paginatedUrl = `${url}?page=${page}`;
+//     const response = await axios.get<PageNumberPaginationType<UserDto>>(paginatedUrl, { withCredentials: true });
+//     return response.data;
+//   }
 
-  const response = await axios.get<UserDto[]>(url, { withCredentials: true });
-  return response.data;
-}
-
-// export async function getPaginatedUsers(page = 1): Promise<PageNumberPaginationType<UserDto>> {
-//   const url = `${BACKEND_DOMAIN + ROUTES.backend.samfundet__users}?page=${page}`;
-//   const response = await axios.get<PageNumberPaginationType<UserDto>>(url, { withCredentials: true });
+//   const response = await axios.get<UserDto[]>(url, { withCredentials: true });
 //   return response.data;
 // }
+
+export async function getUsers(page?: number): Promise<PageNumberPaginationType<UserDto>> {
+  const url = `${BACKEND_DOMAIN + ROUTES.backend.samfundet__users}?page=${page}`;
+  const response = await axios.get<PageNumberPaginationType<UserDto>>(url, { withCredentials: true });
+  console.log(response.data);
+  return response.data;
+}
 
 export async function assignUserToGroup(username: string, group_name: string): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__assign_group;

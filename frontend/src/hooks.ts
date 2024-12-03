@@ -533,9 +533,9 @@ interface UsePaginatedQueryResult<T> {
 export function usePaginatedQuery<T>({
   queryKey,
   queryFn,
-  initialPage = 1,
+  //initialPage = 1,
 }: UsePaginatedQueryOptions<T>): UsePaginatedQueryResult<T> {
-  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, error } = useQuery({
     queryKey: [...queryKey, currentPage],
