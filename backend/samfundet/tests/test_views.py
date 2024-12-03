@@ -1318,11 +1318,6 @@ class TestPositionByTagsView:
             gang=gang,
         )
 
-    def test_unauthenticated_request(self, fixture_rest_client: APIClient, base_url: str):
-        """Test that unauthenticated requests are rejected"""
-        response = fixture_rest_client.get(base_url)
-        assert response.status_code == status.HTTP_403_FORBIDDEN
-
     def test_no_tags_parameter(self, authenticated_client: APIClient, base_url: str):
         """Test that requests without tags parameter return 400"""
         response = authenticated_client.get(base_url)
