@@ -10,22 +10,14 @@ import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import styles from './UserFeedback.module.scss';
 
-type UserFeedbackProps = {
-  enabled: boolean;
-};
-
 type FormProps = {
   text: string;
   contact_email?: string;
 };
 
-export function UserFeedback({ enabled }: UserFeedbackProps) {
+export function UserFeedback() {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-
-  if (!enabled) {
-    return <div />;
-  }
 
   const handleFormSubmit = (formData: FormProps) => {
     postFeedback({

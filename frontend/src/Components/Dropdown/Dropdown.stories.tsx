@@ -1,4 +1,4 @@
-import type { ComponentMeta, ComponentStory, Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { Dropdown } from './Dropdown';
 
 // Local component config.

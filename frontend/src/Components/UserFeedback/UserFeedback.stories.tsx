@@ -8,7 +8,7 @@ export default {
 } as ComponentMeta<typeof UserFeedback>;
 
 const Template: ComponentStory<typeof UserFeedback> = () => {
-  return <UserFeedback enabled={true} />;
+  return <UserFeedback />;
 };
 
 export const Primary = Template.bind({});

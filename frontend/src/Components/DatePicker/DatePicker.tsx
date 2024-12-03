@@ -1,10 +1,10 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { format } from 'date-fns';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, MiniCalendar } from '~/Components';
+import { MiniCalendar } from '~/Components';
 import { useClickOutside } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import styles from './DatePicker.module.scss';
