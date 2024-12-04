@@ -1,14 +1,26 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import { Button, Link } from '~/Components';
 import { NotFound } from '~/assets';
 import { SUPPORT_EMAIL } from '~/constants';
-import { useTitle } from '~/hooks';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './NotFoundPage.module.scss';
 
 export function NotFoundPage() {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const navigate = useCustomNavigate();
+
+  // Hack for recruitment-only mode
+  useEffect(() => {
+    if (pathname === ROUTES.frontend.home) {
+      navigate({ url: ROUTES.frontend.recruitment });
+    }
+  }, [navigate, pathname]);
+
   useTitle(t(KEY.notfoundpage_title));
   return (
     <div className={styles.container}>
