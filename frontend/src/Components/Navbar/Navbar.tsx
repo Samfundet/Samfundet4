@@ -16,6 +16,7 @@ import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
 import { HamburgerMenu, LanguageButton, NavbarItem } from './components';
+import { dbT, getObjectFieldOrNumber } from '~/utils';
 
 const scrollDistanceForOpaque = 30;
 
@@ -107,6 +108,22 @@ export function Navbar() {
     </>
   );
 
+  const showActiveRecruitments = activeRecruitments !== undefined && activeRecruitments?.length > 0;
+
+  const recruitmentLinks = showActiveRecruitments && (
+    <>
+      {activeRecruitments?.map((recruitment) =>
+        <Link
+          url={ROUTES.frontend.about}
+          className={styles.navbar_dropdown_link}
+          onAfterClick={() => setExpandedDropdown('')}
+        >
+          {dbT(recruitment, 'name')} {getObjectFieldOrNumber<number>(recruitment.organization, 'id') ?? 0}
+        </Link>
+      )}
+    </>
+  );
+
   const navbarHeaders = (
     <div className={isDesktop ? styles.navbar_main_links : styles.navbar_main_links_mobile}>
       <NavbarItem
@@ -133,7 +150,8 @@ export function Navbar() {
         expandedDropdown={expandedDropdown}
         route={ROUTES.frontend.recruitment}
         label={t(KEY.common_volunteer)}
-        labelClassName={activeRecruitments && styles.active_recruitment}
+        labelClassName={showActiveRecruitments ? styles.active_recruitment : ''}
+        dropdownLinks={recruitmentLinks}
       />
     </div>
   );
