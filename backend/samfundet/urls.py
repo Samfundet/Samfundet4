@@ -106,7 +106,7 @@ urlpatterns = [
         name='recruitment_application_update_state_gang',
     ),
     path(
-        'recruitment-position-organized-applications/<slug:pk>/',
+        'recruitment-position-organized-applications/<id:pk>/',
         views.RecruitmentPositionOrganizedApplicationsView.as_view(),
         name='recruitment_position_organized_applications',
     ),
