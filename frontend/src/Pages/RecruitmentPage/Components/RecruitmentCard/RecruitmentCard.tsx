@@ -14,7 +14,7 @@ type RecruitmentCardProps = {
   recruitment_name?: string;
   shown_application_deadline?: string;
   reprioritization_deadline_for_applicant?: string;
-  organization_id: number;
+  organization_name?: OrgNameTypeValue;
   isAuthenticated?: boolean;
 };
 
@@ -38,28 +38,11 @@ export function RecruitmentCard({
   recruitment_name = 'N/A',
   shown_application_deadline = 'N/A',
   reprioritization_deadline_for_applicant = 'N/A',
-  organization_id,
+  organization_name = OrgNameType.FALLBACK,
 }: RecruitmentCardProps) {
   const isDesktop = useDesktop();
   const isDarkTheme = useIsDarkTheme();
-  const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
   const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    getOrganization(organization_id)
-      .then((response) => {
-        if (Object.values(OrgNameType).includes(response.name as OrgNameTypeValue)) {
-          setOrganizationName(response.name as OrgNameTypeValue);
-        } else {
-          setOrganizationName(OrgNameType.FALLBACK);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        setOrganizationName(OrgNameType.FALLBACK);
-      });
-    setLoading(false);
-  }, [organization_id]);
 
   const cardHeaderText = (
     <Text size={isDesktop ? 'l' : 'm'} as="strong">
@@ -73,7 +56,7 @@ export function RecruitmentCard({
         <Text size="m" as="strong">
           {t(KEY.recruitment_organization)}
         </Text>
-        {organizationName}
+        {organization_name}
       </Text>
       <Text size="m" as="p">
         <Text size="m" as="strong">
@@ -105,20 +88,18 @@ export function RecruitmentCard({
   return loading ? (
     <SamfundetLogoSpinner />
   ) : (
-    <div key={recruitment_id} className={CARD_STYLE[organizationName].orgStyle}>
+    <div key={recruitment_id} className={CARD_STYLE[organization_name].orgStyle}>
       <div className={styles.cardHeader}>{cardHeaderText}</div>
       <div className={styles.cardText}>{cardContentText}</div>
       <div className={styles.cardLogo}>
-        {organizationName && (
-          <Logo
-            color={isDarkTheme ? 'light' : 'org-color'}
-            organization={organizationName}
-            size={isDesktop ? 'small' : 'xsmall'}
-          />
-        )}
+        <Logo
+          color={isDarkTheme ? 'light' : 'org-color'}
+          organization={organization_name}
+          size={isDesktop ? 'small' : 'xsmall'}
+        />
       </div>
       <div className={styles.personalRow}>
-        <PersonalRow recruitmentId={recruitment_id} organizationName={organizationName} />
+        <PersonalRow recruitmentId={recruitment_id} organizationName={organization_name} />
       </div>
     </div>
   );

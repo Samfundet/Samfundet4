@@ -5,7 +5,8 @@ import { getActiveRecruitments } from '~/api';
 import type { RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { dbT, getObjectFieldOrNumber } from '~/utils';
+import type { OrgNameTypeValue } from '~/types';
+import { dbT } from '~/utils';
 import { NoPositions, RecruitmentCard } from './Components';
 import styles from './RecruitmentPage.module.scss';
 
@@ -40,7 +41,7 @@ export function RecruitmentPage() {
                 recruitment_name={dbT(recruitment, 'name')}
                 shown_application_deadline={recruitment.shown_application_deadline}
                 reprioritization_deadline_for_applicant={recruitment.reprioritization_deadline_for_applicant}
-                organization_id={getObjectFieldOrNumber<number>(recruitment.organization, 'id') ?? 0}
+                organization_name={recruitment.organization.name as OrgNameTypeValue}
               />
             ))
           ) : (
