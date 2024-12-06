@@ -8,7 +8,7 @@ import { ROUTES } from '~/routes';
 
 type PersonalRowProps = {
   recruitmentId: string;
-  organizationName: string;
+  organizationName?: string;
   showRecruitmentBtn?: boolean;
 };
 
