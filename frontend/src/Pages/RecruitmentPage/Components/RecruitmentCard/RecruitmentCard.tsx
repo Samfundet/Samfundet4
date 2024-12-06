@@ -42,7 +42,6 @@ export function RecruitmentCard({
 }: RecruitmentCardProps) {
   const isDesktop = useDesktop();
   const isDarkTheme = useIsDarkTheme();
-  const [loading, setLoading] = useState<boolean>(true);
 
   const cardHeaderText = (
     <Text size={isDesktop ? 'l' : 'm'} as="strong">
@@ -85,9 +84,7 @@ export function RecruitmentCard({
     </>
   );
 
-  return loading ? (
-    <SamfundetLogoSpinner />
-  ) : (
+  return (
     <div key={recruitment_id} className={CARD_STYLE[organization_name].orgStyle}>
       <div className={styles.cardHeader}>{cardHeaderText}</div>
       <div className={styles.cardText}>{cardContentText}</div>
@@ -102,5 +99,5 @@ export function RecruitmentCard({
         <PersonalRow recruitmentId={recruitment_id} organizationName={organization_name} />
       </div>
     </div>
-  );
+  )
 }
