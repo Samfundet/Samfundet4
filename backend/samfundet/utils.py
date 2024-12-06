@@ -42,6 +42,15 @@ def event_query(*, query: QueryDict, events: QuerySet[Event] = None) -> QuerySet
     return events
 
 
+def user_query(*, query: QueryDict, users: QuerySet[User] = None) -> QuerySet[User]:
+    if not users:
+        users = User.objects.all()
+    search = query.get('search', None)
+    if search:
+        users = users.filter(Q(username__icontains=search) | Q(first_name__icontains=search) | Q(last_name__icontains=search))
+    return users
+
+
 def generate_timeslots(start_time: datetime.time, end_time: datetime.time, interval_minutes: int) -> list[str]:
     # Convert from datetime.time objects to datetime.datetime
     start_datetime = datetime.datetime.combine(datetime.datetime.today(), start_time)

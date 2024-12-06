@@ -5,6 +5,7 @@ import csv
 import hmac
 import hashlib
 from typing import Any
+from itertools import chain
 
 from guardian.shortcuts import get_objects_for_user
 
@@ -38,9 +39,9 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 
-from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
+from .utils import user_query, event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
-from .models.role import Role
+from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .serializers import (
     TagSerializer,
     GangSerializer,
@@ -67,11 +68,13 @@ from .serializers import (
     EventGroupSerializer,
     PermissionSerializer,
     RecruitmentSerializer,
+    UserOrgRoleSerializer,
     ClosedPeriodSerializer,
     FoodCategorySerializer,
     OrganizationSerializer,
     SaksdokumentSerializer,
     UserFeedbackSerializer,
+    UserGangRoleSerializer,
     InterviewRoomSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
@@ -82,6 +85,7 @@ from .serializers import (
     ReservationCheckSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
+    UserGangSectionRoleSerializer,
     RecruitmentStatisticsSerializer,
     RecruitmentForRecruiterSerializer,
     RecruitmentSeparatePositionSerializer,
@@ -134,6 +138,7 @@ from .models.recruitment import (
     Recruitment,
     InterviewRoom,
     OccupiedTimeslot,
+    RecruitmentGangStat,
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
@@ -325,6 +330,22 @@ class RoleView(ModelViewSet):
     serializer_class = RoleSerializer
     queryset = Role.objects.all()
 
+    @action(detail=True, methods=['get'])
+    def users(self, request: Request, pk: int) -> Response:
+        role = get_object_or_404(Role, id=pk)
+
+        org_roles = UserOrgRole.objects.filter(role=role).select_related('user', 'obj')
+        gang_roles = UserGangRole.objects.filter(role=role).select_related('user', 'obj')
+        section_roles = UserGangSectionRole.objects.filter(role=role).select_related('user', 'obj')
+
+        org_data = UserOrgRoleSerializer(org_roles, many=True).data
+        gang_data = UserGangRoleSerializer(gang_roles, many=True).data
+        section_data = UserGangSectionRoleSerializer(section_roles, many=True).data
+
+        combined = list(chain(org_data, gang_data, section_data))
+
+        return Response(combined)
+
 
 # =============================== #
 #            Sulten               #
@@ -472,6 +493,10 @@ class AllUsersView(ListAPIView):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+    def get(self, request: Request) -> Response:
+        users = user_query(query=request.query_params)
+        return Response(data=UserSerializer(users, many=True).data)
 
 
 class ImpersonateView(APIView):
@@ -1349,3 +1374,21 @@ class PurchaseFeedbackView(CreateAPIView):
                 form=purchase_model,
             )
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+class GangApplicationCountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, recruitment_id: int, gang_id: int) -> Response:
+        # Get total applications from RecruitmentGangStat
+        gang_stat = get_object_or_404(RecruitmentGangStat, gang_id=gang_id, recruitment_stats__recruitment_id=recruitment_id)
+
+        return Response(
+            {
+                'total_applications': gang_stat.application_count,
+                'total_applicants': gang_stat.applicant_count,
+                'average_priority': gang_stat.average_priority,
+                'total_accepted': gang_stat.total_accepted,
+                'total_rejected': gang_stat.total_rejected,
+            }
+        )

@@ -37,7 +37,7 @@ export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
                 <Link
                   url={reverse({
                     pattern: ROUTES.frontend.recruitment_application,
-                    urlParams: { positionId: pos.id, gangId: gang.id },
+                    urlParams: { positionId: pos.id, recruitmentId: pos.recruitment },
                   })}
                   className={styles.position_short_desc}
                 >
