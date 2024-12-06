@@ -56,6 +56,7 @@ import {
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
   RecruitmentSeparatePositionFormAdminPage,
+  RecruitmentSharedInterviewPositionsFormAdminPage,
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
@@ -374,6 +375,35 @@ export const router = createBrowserRouter(
               element={
                 <PermissionRoute required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} element={<RecruitmentOverviewPage />} />
               }
+            />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_sharedinterviewgroup_create}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => (
+                  <Link url={pathname}>
+                    {t(KEY.common_create)} {t(KEY.recruitment_interview_group)}
+                  </Link>
+                ),
+              }}
+              element={<PermissionRoute required={[]} element={<RecruitmentSharedInterviewPositionsFormAdminPage />} />}
+            />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_sharedinterviewgroup_edit}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => (
+                  <Link url={pathname}>
+                    {t(KEY.common_edit)} {t(KEY.recruitment_interview_group)}
+                  </Link>
+                ),
+              }}
+              element={<PermissionRoute required={[]} element={<RecruitmentSharedInterviewPositionsFormAdminPage />} />}
+            />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_room_overview}
+              element={<RoomAdminPage />}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_applet_room_overview)}</Link>,
+              }}
             />
             <Route
               path={ROUTES.frontend.admin_recruitment_create}

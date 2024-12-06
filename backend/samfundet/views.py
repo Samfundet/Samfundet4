@@ -659,6 +659,13 @@ class RecruitmentForRecruiterView(ModelViewSet):
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentSharedInterviewPositionsView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = RecruitmentPositionSharedInterviewGroupSerializer
+    queryset = RecruitmentPositionSharedInterviewGroup.objects.all()
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentStatisticsView(ModelViewSet):
     permission_classes = (DjangoModelPermissions,)  # Allow read only to permissions on perms
     serializer_class = RecruitmentStatisticsSerializer
@@ -1136,7 +1143,7 @@ class ActiveRecruitmentsView(ListAPIView):
         return Recruitment.objects.filter(visible_from__lte=timezone.now(), actual_application_deadline__gte=timezone.now())
 
 
-class RecruitmentInterviewGroupView(APIView):
+class RecruitmentSharedInterviewPositionsRecruitmentView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(

@@ -428,12 +428,16 @@ export type RecruitmentSeparatePositionDto = {
   recruitment?: string;
 };
 
-export type RecruitmentSharedInterviewGroupDto = {
+export type RecruitmentSharedInterviewPositionsDto = {
   id?: number;
   recruitment?: string;
   name_nb: string;
   name_en: string;
   positions: RecruitmentPositionDto[];
+};
+
+export type RecruitmentSharedInterviewPositionsPostDto = Omit<RecruitmentSharedInterviewPositionsDto, 'positions'> & {
+  positions: number[];
 };
 
 export type UserPriorityDto = {
@@ -464,6 +468,8 @@ export type RecruitmentPositionDto = {
   tags: string;
 
   interviewers?: UserDto[];
+
+  shared_interview_group?: number;
 
   total_applicants?: number;
   processed_applicants?: number;

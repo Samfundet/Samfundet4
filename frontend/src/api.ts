@@ -33,7 +33,8 @@ import type {
   RecruitmentPositionPostDto,
   RecruitmentPositionPutDto,
   RecruitmentSeparatePositionDto,
-  RecruitmentSharedInterviewGroupDto,
+  RecruitmentSharedInterviewPositionsDto,
+  RecruitmentSharedInterviewPositionsPostDto,
   RecruitmentStatsDto,
   RecruitmentUnprocessedApplicationsDto,
   RecruitmentUserDto,
@@ -819,9 +820,9 @@ export async function getRecruitmentApplicationsForGang(
   return await axios.get(url, { withCredentials: true });
 }
 
-export async function getRecruitmentSharedInterviewGroups(
+export async function getRecruitmentSharedInterviewPositionss(
   recruitmentId: string,
-): Promise<AxiosResponse<RecruitmentSharedInterviewGroupDto[]>> {
+): Promise<AxiosResponse<RecruitmentSharedInterviewPositionsDto[]>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -831,6 +832,47 @@ export async function getRecruitmentSharedInterviewGroups(
       },
     });
   return await axios.get(url, { withCredentials: true });
+}
+
+export async function getRecruitmentSharedInterviewPositions(
+  sharedInterviewGroupId: string,
+): Promise<AxiosResponse<RecruitmentSharedInterviewPositionsDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_sharedinterviewgroups_detail,
+      urlParams: {
+        pk: sharedInterviewGroupId,
+      },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function putRecruitmentSharedInterviewPositions(
+  sharedInterviewGroupId: string,
+  sharedInterviewGroup: Partial<RecruitmentSharedInterviewPositionsPostDto>,
+): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_sharedinterviewgroups_detail,
+      urlParams: {
+        pk: sharedInterviewGroupId,
+      },
+    });
+  return await axios.put<RecruitmentApplicationDto>(url, sharedInterviewGroup, { withCredentials: true });
+}
+
+export async function postRecruitmentSharedInterviewPositions(
+  sharedInterviewGroup: Partial<RecruitmentSharedInterviewPositionsPostDto>,
+): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_sharedinterviewgroups_list,
+    });
+  console.log(sharedInterviewGroup);
+  return await axios.post<RecruitmentApplicationDto>(url, sharedInterviewGroup, { withCredentials: true });
 }
 
 export async function downloadCSVGangRecruitment(recruitmentId: string, gangId: string): Promise<void> {

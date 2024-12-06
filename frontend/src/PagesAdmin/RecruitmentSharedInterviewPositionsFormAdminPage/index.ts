@@ -1,0 +1,1 @@
+export { RecruitmentSharedInterviewPositionsFormAdminPage } from './RecruitmentSharedInterviewPositionsFormAdminPage';

@@ -1,7 +1,7 @@
 import { type ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { CrudButtons, Link, type Tab, TabView } from '~/Components';
+import { Button, CrudButtons, Link, type Tab, TabView } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteRecruitmentSeparatePosition, getRecruitment, getRecruitmentGangs } from '~/api';
 import type { RecruitmentDto, RecruitmentGangDto, RecruitmentSeparatePositionDto } from '~/dto';
@@ -11,7 +11,9 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { AppletContainer, RecruitmentInterviewGroupsList } from './components';
+import { AppletContainer, RecruitmentSharedInterviewPositionsList } from './components';
+
+import styles from './RecruitmentGangOverviewPage.module.scss';
 
 export function RecruitmentGangOverviewPage() {
   const { recruitmentId } = useParams();
@@ -124,7 +126,26 @@ export function RecruitmentGangOverviewPage() {
         label: t(KEY.recruitment_gangs_with_separate_positions),
         value: <Table columns={tableSeparatePositionColumns} data={tableSeparatePositionData ?? []} />,
       },
-      { key: 3, label: t(KEY.recruitment_interview_groups), value: <RecruitmentInterviewGroupsList /> },
+      {
+        key: 3,
+        label: t(KEY.recruitment_interview_group_create_header),
+        value: (
+          <>
+            <Button
+              className={styles.button}
+              theme="success"
+              rounded={true}
+              link={reverse({
+                pattern: ROUTES.frontend.admin_recruitment_sharedinterviewgroup_create,
+                urlParams: { recruitmentId: recruitmentId },
+              })}
+            >
+              {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_interview_group)}`)}
+            </Button>{' '}
+            <RecruitmentSharedInterviewPositionsList />
+          </>
+        ),
+      },
     ];
   }, [gangs, recruitment, t, recruitmentId, navigate, deleteSeparatePositionHandler]);
 
