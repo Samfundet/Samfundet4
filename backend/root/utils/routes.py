@@ -611,5 +611,6 @@ samfundet__recruitment_interview_availability = 'samfundet:recruitment_interview
 samfundet__recruitment_availability = 'samfundet:recruitment_availability'
 samfundet__feedback = 'samfundet:feedback'
 samfundet__purchase_feedback = 'samfundet:purchase_feedback'
+samfundet__gang_application_stats = 'samfundet:gang-application-stats'
 static__path = ''
 media__path = ''

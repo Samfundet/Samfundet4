@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Logo, OccupiedFormModal, Page, SamfundetLogoSpinner, Text, ToggleSwitch, Video } from '~/Components';
+import { Button, Logo, OccupiedFormModal, Page, SamfundetLogoSpinner, Text, Video } from '~/Components';
 import { PersonalRow } from '~/Pages/RecruitmentPage';
 import { getOrganization, getRecruitment } from '~/api';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
@@ -14,6 +14,8 @@ import { dbT, getObjectFieldOrNumber } from '~/utils';
 import { GangSeparatePositions, GangTypeContainer, RecruitmentTabs } from './Components';
 import styles from './OrganizationRecruitmentPage.module.scss';
 
+type ViewMode = 'list' | 'tab';
+
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
   const { recruitmentId } = useParams<{ recruitmentId: string }>();
@@ -23,6 +25,8 @@ export function OrganizationRecruitmentPage() {
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
   const [loading, setLoading] = useState<boolean>(true);
+  const [positionsViewMode, setViewMode] = useState<ViewMode>('list');
+
   useTitle(dbT(recruitment, 'name') ?? '');
 
   useEffect(() => {
@@ -76,13 +80,7 @@ export function OrganizationRecruitmentPage() {
               {dbT(recruitment, 'name')}
             </Text>
           </div>
-          {recruitment?.promo_media ? (
-            <>
-              <Video embedId={recruitment.promo_media} className={styles.video} />
-            </>
-          ) : (
-            <></>
-          )}
+          {recruitment?.promo_media && <Video embedId={recruitment.promo_media} className={styles.video} />}
           <div
             className={classNames(
               organizationName === 'Samfundet' && styles.samfRecruitmentSubHeader,
@@ -109,11 +107,22 @@ export function OrganizationRecruitmentPage() {
           </div>
           <div className={styles.openPositionsWrapper}>
             <div className={styles.optionsContainer}>
-              <ToggleSwitch checked={viewAllPositions} onChange={toggleViewAll} />
-              <Text>Placeholder for tag-autocomplete search </Text>
-              {/*^^^ issue #1275 */}
+              <div className={styles.viewModeControll}>
+                <Button
+                  theme={positionsViewMode === 'list' ? 'selected' : 'outlined'}
+                  onClick={() => setViewMode('list')}
+                >
+                  {t(KEY.common_list_view)}
+                </Button>
+                <Button
+                  theme={positionsViewMode === 'tab' ? 'selected' : 'outlined'}
+                  onClick={() => setViewMode('tab')}
+                >
+                  {t(KEY.common_tab_view)}
+                </Button>
+              </div>
             </div>
-            {recruitmentId && (viewAllPositions ? <GangTypeContainer /> : <RecruitmentTabs />)}
+            {recruitmentId && (positionsViewMode === 'list' ? <GangTypeContainer /> : <RecruitmentTabs />)}
             {recruitment?.separate_positions && recruitment.separate_positions.length > 0 && (
               <GangSeparatePositions recruitmentSeparatePositions={recruitment.separate_positions} />
             )}
