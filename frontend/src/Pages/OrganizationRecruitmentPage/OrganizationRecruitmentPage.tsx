@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Button, OccupiedFormModal, Page, SamfundetLogoSpinner, Text, Video } from '~/Components';
+import { IconButton, Page, SamfundetLogoSpinner, Text, Video } from '~/Components';
 import { PersonalRow } from '~/Pages/RecruitmentPage';
 import { getOrganization, getRecruitment } from '~/api';
 import { TextItem } from '~/constants';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
 import type { RecruitmentDto } from '~/dto';
 import { useDesktop, useTextItem, useTitle } from '~/hooks';
-import { KEY } from '~/i18n/constants';
-import { OrgNameType, type OrgNameTypeValue } from '~/types';
+import { COLORS, OrgNameType, type OrgNameTypeValue } from '~/types';
 import { dbT, getObjectFieldOrNumber } from '~/utils';
 import { GangSeparatePositions, GangTypeContainer, RecruitmentTabs } from './Components';
 import styles from './OrganizationRecruitmentPage.module.scss';
@@ -91,22 +90,26 @@ export function OrganizationRecruitmentPage() {
         <Text as={'strong'} size={'m'}>
           {descriptionText}
         </Text>
-        {recruitmentId && (
-          <>
-            <OccupiedFormModal recruitmentId={+recruitmentId} />
-            <PersonalRow recruitmentId={recruitmentId} organizationName={organizationName} showRecruitmentBtn={false} />
-          </>
-        )}
       </div>
       <div className={styles.openPositionsWrapper}>
         <div className={styles.optionsContainer}>
+          {recruitmentId && (
+            <PersonalRow recruitmentId={recruitmentId} organizationName={organizationName} showRecruitmentBtn={false} />
+          )}
           <div className={styles.viewModeControll}>
-            <Button theme={positionsViewMode === 'list' ? 'selected' : 'outlined'} onClick={() => setViewMode('list')}>
-              {t(KEY.common_list_view)}
-            </Button>
-            <Button theme={positionsViewMode === 'tab' ? 'selected' : 'outlined'} onClick={() => setViewMode('tab')}>
-              {t(KEY.common_tab_view)}
-            </Button>
+            <IconButton
+              title=""
+              color={positionsViewMode === 'list' ? COLORS.black : COLORS.grey_35}
+              avatarColor={positionsViewMode === 'list' ? COLORS.white : COLORS.white}
+              onClick={() => setViewMode('list')}
+              icon={'material-symbols:view-list'}
+            />
+            <IconButton
+              title=""
+              color={positionsViewMode === 'tab' ? COLORS.black : COLORS.grey_35}
+              onClick={() => setViewMode('tab')}
+              icon={'material-symbols:tabs-outline-rounded'}
+            />
           </div>
         </div>
         {recruitmentId && (positionsViewMode === 'list' ? <GangTypeContainer /> : <RecruitmentTabs />)}
