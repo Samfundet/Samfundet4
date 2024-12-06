@@ -1162,25 +1162,25 @@ class RecruitmentPositionOrganizedApplications(CustomBaseSerializer):
         model = RecruitmentPosition
         fields = ['unprocessed', 'withdrawn', 'accepted', 'rejected', 'hardtoget']
 
-    def get_unprocessed(self, instance: RecruitmentPosition):  # noqa: ANN201
+    def get_unprocessed(self, instance: RecruitmentPosition):  # noqa: ANN201 type: ignore[no-untyped-def]
         unprocessed = instance.applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.NOT_SET)
         return self.ApplicationSerializer(unprocessed, many=True).data
 
-    def get_withdrawn(self, instance: RecruitmentPosition):  # noqa: ANN201
+    def get_withdrawn(self, instance: RecruitmentPosition):  # noqa: ANN201 type: ignore[no-untyped-def]
         withdrawn = instance.applications.filter(withdrawn=True)
         return self.ApplicationSerializer(withdrawn, many=True).data
 
-    def get_rejected(self, instance: RecruitmentPosition):  # noqa: ANN201
+    def get_rejected(self, instance: RecruitmentPosition):  # noqa: ANN201 type: ignore[no-untyped-def]
         rejected = instance.applications.filter(
             withdrawn=False, recruiter_status__in=[RecruitmentStatusChoices.AUTOMATIC_REJECTION, RecruitmentStatusChoices.REJECTION]
         )
         return self.ApplicationSerializer(rejected, many=True).data
 
-    def get_accepted(self, instance: RecruitmentPosition):  # noqa: ANN201
+    def get_accepted(self, instance: RecruitmentPosition):  # noqa: ANN201 type: ignore[no-untyped-def]
         accepted = instance.applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED)
         return self.ApplicationSerializer(accepted, many=True).data
 
-    def get_hardtoget(self, instance: RecruitmentPosition):  # noqa: ANN201
+    def get_hardtoget(self, instance: RecruitmentPosition):  # noqa: ANN201 type: ignore[no-untyped-def]
         hardtoget = instance.applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_REJECTED)
         return self.ApplicationSerializer(hardtoget, many=True).data
 
