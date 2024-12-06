@@ -15,7 +15,7 @@ import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT, getObjectFieldOrNumber } from '~/utils';
+import { dbT } from '~/utils';
 import styles from './Navbar.module.scss';
 import { HamburgerMenu, LanguageButton, NavbarItem } from './components';
 
