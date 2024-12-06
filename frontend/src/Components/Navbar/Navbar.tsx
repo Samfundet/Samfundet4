@@ -13,10 +13,11 @@ import type { RecruitmentDto } from '~/dto';
 import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { dbT, getObjectFieldOrNumber } from '~/utils';
 import styles from './Navbar.module.scss';
 import { HamburgerMenu, LanguageButton, NavbarItem } from './components';
-import { dbT, getObjectFieldOrNumber } from '~/utils';
 
 const scrollDistanceForOpaque = 30;
 
@@ -112,15 +113,19 @@ export function Navbar() {
 
   const recruitmentLinks = showActiveRecruitments && (
     <>
-      {activeRecruitments?.map((recruitment) =>
+      {activeRecruitments?.map((recruitment) => (
         <Link
-          url={ROUTES.frontend.about}
+          key={recruitment.id}
+          url={reverse({
+            pattern: ROUTES.frontend.organization_recruitment,
+            urlParams: { recruitmentId: recruitment?.id },
+          })}
           className={styles.navbar_dropdown_link}
           onAfterClick={() => setExpandedDropdown('')}
         >
-          {dbT(recruitment, 'name')} {getObjectFieldOrNumber<number>(recruitment.organization, 'id') ?? 0}
+          {dbT(recruitment, 'name')} {recruitment.organization.toString()}
         </Link>
-      )}
+      ))}
     </>
   );
 
@@ -152,6 +157,7 @@ export function Navbar() {
         label={t(KEY.common_volunteer)}
         labelClassName={showActiveRecruitments ? styles.active_recruitment : ''}
         dropdownLinks={recruitmentLinks}
+        showDropDownIcon={false}
       />
     </div>
   );
