@@ -76,6 +76,8 @@ if TYPE_CHECKING:
 if TYPE_CHECKING:
     from typing import Any
 
+from rest_framework.utils.serializer_helpers import ReturnList
+
 
 class TagSerializer(CustomBaseSerializer):
     class Meta:
@@ -1162,25 +1164,25 @@ class RecruitmentPositionOrganizedApplications(CustomBaseSerializer):
         model = RecruitmentPosition
         fields = ['unprocessed', 'withdrawn', 'accepted', 'rejected', 'hardtoget']
 
-    def get_unprocessed(self, instance: RecruitmentPosition):  # noqa: ANN201 type: ignore[no-untyped-def]
+    def get_unprocessed(self, instance: RecruitmentPosition) -> ReturnList:
         unprocessed = instance.applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.NOT_SET)
         return self.ApplicationSerializer(unprocessed, many=True).data
 
-    def get_withdrawn(self, instance: RecruitmentPosition):  # noqa: ANN201 type: ignore[no-untyped-def]
+    def get_withdrawn(self, instance: RecruitmentPosition) -> ReturnList:
         withdrawn = instance.applications.filter(withdrawn=True)
         return self.ApplicationSerializer(withdrawn, many=True).data
 
-    def get_rejected(self, instance: RecruitmentPosition):  # noqa: ANN201 type: ignore[no-untyped-def]
+    def get_rejected(self, instance: RecruitmentPosition) -> ReturnList:
         rejected = instance.applications.filter(
             withdrawn=False, recruiter_status__in=[RecruitmentStatusChoices.AUTOMATIC_REJECTION, RecruitmentStatusChoices.REJECTION]
         )
         return self.ApplicationSerializer(rejected, many=True).data
 
-    def get_accepted(self, instance: RecruitmentPosition):  # noqa: ANN201 type: ignore[no-untyped-def]
+    def get_accepted(self, instance: RecruitmentPosition) -> ReturnList:
         accepted = instance.applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED)
         return self.ApplicationSerializer(accepted, many=True).data
 
-    def get_hardtoget(self, instance: RecruitmentPosition):  # noqa: ANN201 type: ignore[no-untyped-def]
+    def get_hardtoget(self, instance: RecruitmentPosition) -> ReturnList:
         hardtoget = instance.applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_REJECTED)
         return self.ApplicationSerializer(hardtoget, many=True).data
 
