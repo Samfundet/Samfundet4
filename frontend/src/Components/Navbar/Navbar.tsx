@@ -13,7 +13,9 @@ import type { RecruitmentDto } from '~/dto';
 import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
 import styles from './Navbar.module.scss';
 import { HamburgerMenu, LanguageButton, NavbarItem } from './components';
 
@@ -107,6 +109,26 @@ export function Navbar() {
     </>
   );
 
+  const showActiveRecruitments = activeRecruitments !== undefined && activeRecruitments?.length > 0;
+
+  const recruitmentLinks = showActiveRecruitments && (
+    <>
+      {activeRecruitments?.map((recruitment) => (
+        <Link
+          key={recruitment.id}
+          url={reverse({
+            pattern: ROUTES.frontend.organization_recruitment,
+            urlParams: { recruitmentId: recruitment?.id },
+          })}
+          className={styles.navbar_dropdown_link}
+          onAfterClick={() => setExpandedDropdown('')}
+        >
+          {dbT(recruitment, 'name')} {recruitment.organization.toString()}
+        </Link>
+      ))}
+    </>
+  );
+
   const navbarHeaders = (
     <div className={isDesktop ? styles.navbar_main_links : styles.navbar_main_links_mobile}>
       <NavbarItem
@@ -133,7 +155,9 @@ export function Navbar() {
         expandedDropdown={expandedDropdown}
         route={ROUTES.frontend.recruitment}
         label={t(KEY.common_volunteer)}
-        labelClassName={activeRecruitments && styles.active_recruitment}
+        labelClassName={showActiveRecruitments ? styles.active_recruitment : ''}
+        dropdownLinks={recruitmentLinks}
+        showDropDownIcon={false}
       />
     </div>
   );
