@@ -4,15 +4,43 @@ import { Input, type InputProps } from '~/Components';
 export interface NumberInputProps extends Omit<InputProps, 'onChange'> {
   onChange?: (...event: unknown[]) => void;
   allowDecimal?: boolean;
+  clamp?: boolean;
 }
 
 export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
-  ({ onChange, value, type, allowDecimal = true, ...props }, ref) => {
+  ({ onChange, value, type, min, max, allowDecimal = true, clamp = true, onBlur, ...props }, ref) => {
     const [inputValue, setInputValue] = useState(value || '');
 
     useEffect(() => {
       setInputValue(value || '');
     }, [value]);
+
+    const canClamp = clamp && (min !== undefined || max !== undefined);
+
+    function clampValue(n: number) {
+      if (!canClamp) {
+        return n;
+      }
+      let clamped = n;
+      if (min !== undefined) {
+        clamped = Math.max(clamped, Number(min));
+      }
+      if (max !== undefined) {
+        clamped = Math.min(clamped, Number(max));
+      }
+      return clamped;
+    }
+
+    function handleOnBlur(event: React.FocusEvent<HTMLInputElement>) {
+      if (canClamp) {
+        const clamped = clampValue(Number(event.target.value) || 0);
+        if (!Number.isNaN(clamped)) {
+          setInputValue(clamped);
+          onChange?.(clamped);
+        }
+      }
+      onBlur?.(event);
+    }
 
     function isValidPartial(s: string) {
       // Allows for partial inputs like "-" or "1."
@@ -69,7 +97,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
         event.preventDefault();
         const add = event.key === 'ArrowUp' ? 1 : -1;
-        const newVal = (Number(inputValue) || 0) + add;
+        const newVal = clampValue((Number(inputValue) || 0) + add);
         if (!Number.isNaN(newVal)) {
           setInputValue(newVal);
           onChange?.(newVal);
@@ -99,6 +127,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         onKeyDown={onKeyDown}
         onBeforeInput={onBeforeInput}
         onChange={handleOnChange}
+        onBlur={handleOnBlur}
         {...props}
       />
     );
