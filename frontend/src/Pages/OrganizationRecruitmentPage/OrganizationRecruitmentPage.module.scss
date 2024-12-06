@@ -7,10 +7,11 @@
 }
 
 .container {
-  @include flex-column-center;
+  @include flex-column;
+  align-items: flex-start;
   width: 85%;
   gap: 2rem;
-  margin: 1rem;
+  padding-top: 1rem;
 }
 
 .organizationHeader {
@@ -24,11 +25,11 @@
 }
 
 .video {
-  width: 50%;
+  width: 70%;
   aspect-ratio: 16 / 9;
   border: none;
   @include for-tablet-down {
-    width: 80%;
+    width: 100%;
   }
 }
 

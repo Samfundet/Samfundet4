@@ -1,13 +1,13 @@
-import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Button, Logo, OccupiedFormModal, Page, SamfundetLogoSpinner, Text, Video } from '~/Components';
+import { Button, OccupiedFormModal, Page, SamfundetLogoSpinner, Text, Video } from '~/Components';
 import { PersonalRow } from '~/Pages/RecruitmentPage';
 import { getOrganization, getRecruitment } from '~/api';
+import { TextItem } from '~/constants';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
 import type { RecruitmentDto } from '~/dto';
-import { useDesktop, useTitle } from '~/hooks';
+import { useDesktop, useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { OrgNameType, type OrgNameTypeValue } from '~/types';
 import { dbT, getObjectFieldOrNumber } from '~/utils';
@@ -21,7 +21,7 @@ export function OrganizationRecruitmentPage() {
   const { recruitmentId } = useParams<{ recruitmentId: string }>();
   const [viewAllPositions, setViewAllPositions] = useState<boolean>(true);
   const { t } = useTranslation();
-  const { changeOrgTheme, organizationTheme } = useOrganizationContext();
+  const { changeOrgTheme } = useOrganizationContext();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
   const [loading, setLoading] = useState<boolean>(true);
@@ -63,72 +63,57 @@ export function OrganizationRecruitmentPage() {
     }
   }, [organizationName, changeOrgTheme]);
 
-  function toggleViewAll() {
-    const toggledValue = !viewAllPositions;
-    setViewAllPositions(toggledValue);
+  const descriptionText = (() => {
+    switch (organizationName) {
+      case OrgNameType.SAMFUNDET_NAME:
+        return useTextItem(TextItem.samf_recruitment_description);
+      case OrgNameType.UKA_NAME:
+        return useTextItem(TextItem.uka_recruitment_description);
+      case OrgNameType.ISFIT_NAME:
+        return useTextItem(TextItem.isfit_recruitment_description);
+      default:
+        return useTextItem(TextItem.uka_recruitment_description);
+    }
+  })();
+
+  if (loading) {
+    return <SamfundetLogoSpinner />;
   }
 
   return (
     <Page className={styles.recruitmentPage}>
-      {loading ? (
-        <SamfundetLogoSpinner />
-      ) : (
-        <div className={styles.container}>
-          <div className={styles.organizationHeader} style={{ backgroundColor: organizationTheme?.pagePrimaryColor }}>
-            <Logo organization={organizationName} color="light" size={isDesktop ? 'small' : 'xsmall'} />
-            <Text as="strong" size={isDesktop ? 'xl' : 'l'}>
-              {dbT(recruitment, 'name')}
-            </Text>
-          </div>
-          {recruitment?.promo_media && <Video embedId={recruitment.promo_media} className={styles.video} />}
-          <div
-            className={classNames(
-              organizationName === 'Samfundet' && styles.samfRecruitmentSubHeader,
-              organizationName === 'UKA' && styles.ukaRecruitmentSubHeader,
-              organizationName === 'ISFiT' && styles.isfitRecruitmentSubHeader,
-              styles.basicRecruitmentSubHeader,
-            )}
-          >
-            <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
-              {t(KEY.recruitment_apply_for)} {organizationName}
-            </Text>
-          </div>
-          <div className={styles.personalRow}>
-            {recruitmentId && (
-              <>
-                <OccupiedFormModal recruitmentId={+recruitmentId} />
-                <PersonalRow
-                  recruitmentId={recruitmentId}
-                  organizationName={organizationName}
-                  showRecruitmentBtn={false}
-                />
-              </>
-            )}
-          </div>
-          <div className={styles.openPositionsWrapper}>
-            <div className={styles.optionsContainer}>
-              <div className={styles.viewModeControll}>
-                <Button
-                  theme={positionsViewMode === 'list' ? 'selected' : 'outlined'}
-                  onClick={() => setViewMode('list')}
-                >
-                  {t(KEY.common_list_view)}
-                </Button>
-                <Button
-                  theme={positionsViewMode === 'tab' ? 'selected' : 'outlined'}
-                  onClick={() => setViewMode('tab')}
-                >
-                  {t(KEY.common_tab_view)}
-                </Button>
-              </div>
-            </div>
-            {recruitmentId && (positionsViewMode === 'list' ? <GangTypeContainer /> : <RecruitmentTabs />)}
-            {recruitment?.separate_positions && recruitment.separate_positions.length > 0 && (
-              <GangSeparatePositions recruitmentSeparatePositions={recruitment.separate_positions} />
-            )}
+      <div className={styles.container}>
+        <Text as="strong" size={isDesktop ? 'xl' : 'l'}>
+          {dbT(recruitment, 'name')}
+        </Text>
+        {recruitment?.promo_media && <Video embedId={recruitment.promo_media} className={styles.video} />}
+
+        <Text as={'strong'} size={'m'}>
+          {descriptionText}
+        </Text>
+        {recruitmentId && (
+          <>
+            <OccupiedFormModal recruitmentId={+recruitmentId} />
+            <PersonalRow recruitmentId={recruitmentId} organizationName={organizationName} showRecruitmentBtn={false} />
+          </>
+        )}
+      </div>
+      <div className={styles.openPositionsWrapper}>
+        <div className={styles.optionsContainer}>
+          <div className={styles.viewModeControll}>
+            <Button theme={positionsViewMode === 'list' ? 'selected' : 'outlined'} onClick={() => setViewMode('list')}>
+              {t(KEY.common_list_view)}
+            </Button>
+            <Button theme={positionsViewMode === 'tab' ? 'selected' : 'outlined'} onClick={() => setViewMode('tab')}>
+              {t(KEY.common_tab_view)}
+            </Button>
           </div>
         </div>
-      )}
+        {recruitmentId && (positionsViewMode === 'list' ? <GangTypeContainer /> : <RecruitmentTabs />)}
+        {recruitment?.separate_positions && recruitment.separate_positions.length > 0 && (
+          <GangSeparatePositions recruitmentSeparatePositions={recruitment.separate_positions} />
+        )}
+      </div>
     </Page>
   );
 }

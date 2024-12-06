@@ -70,16 +70,20 @@ export function useMobile(): boolean {
 /**
  *  Hook that returns the correct translation for given key
  */
-export function useTextItem(key: TextItemValue, language?: string): string | undefined {
+export function useTextItem(key: TextItemValue, language?: string): string {
   const [textItem, setTextItem] = useState<TextItemDto>();
   const { i18n } = useTranslation();
   const isNorwegian = (language || i18n.language) === LANGUAGES.NB;
   useEffect(() => {
-    getTextItem(key).then((data) => {
-      setTextItem(data);
-    });
+    getTextItem(key)
+      .then((data) => {
+        setTextItem(data);
+      })
+      .catch(() => {
+        setTextItem(undefined);
+      });
   }, [key]);
-  return isNorwegian ? textItem?.text_nb : textItem?.text_en;
+  return isNorwegian ? textItem?.text_nb || '' : textItem?.text_en || '';
 }
 
 /**
