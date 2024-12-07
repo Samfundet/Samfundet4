@@ -103,6 +103,7 @@ export type SamfFormFieldType =
   | 'date_time'
   | 'date'
   | 'time'
+  | 'file'
   | 'upload_image'
   | 'upload_pdf'
   | 'phonenumber';
@@ -132,6 +133,7 @@ export const SamfFormGenerators: Record<SamfFormFieldType, GeneratorFunction<any
   date_time: makeStandardInputFunction<Date>('datetime-local'),
   date: makeStandardInputFunction<Date>('date'),
   time: makeStandardInputFunction<Date>('time'),
+  file: makeFilePickerFunction('any'),
   upload_image: makeFilePickerFunction('image'),
   upload_pdf: makeFilePickerFunction('pdf'),
   phonenumber: makePhoneNumberInput,

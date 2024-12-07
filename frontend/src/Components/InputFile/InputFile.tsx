@@ -5,23 +5,25 @@ import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { TimeDisplay } from '../TimeDisplay';
 import styles from './InputFile.module.scss';
+import { Link } from '../Link';
 
-export type InputFileType = 'image' | 'pdf';
+export type InputFileType = 'image' | 'pdf' | 'any';
 
 export type InputFileProps = {
-  fileType: InputFileType;
+  fileType?: InputFileType;
   label?: ReactNode;
+  existing_url?: string;
   error?: boolean | string;
-  onSelected: (file: File) => void;
+  onSelected?: (file: File) => void;
 };
 
-export function InputFile({ fileType, label, error = false, onSelected }: InputFileProps) {
+export function InputFile({ fileType='any', label, existing_url, error = false, onSelected }: InputFileProps) {
   const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | undefined>(undefined);
 
   function handleOnChange(e?: ChangeEvent<HTMLInputElement>) {
-    if (e === undefined) return;
+    if (e === undefined || onSelected === undefined) return;
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(undefined);
     } else {
@@ -58,10 +60,11 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
   const icons: Record<InputFileType, string> = {
     image: 'mdi:image',
     pdf: 'mdi:file',
+    any: 'mdi:file',
   };
 
   const horizontalPreview = fileType === 'pdf';
-  const typePreviewClass = `preview_${fileType.toLowerCase()}`;
+  const typePreviewClass = `preview_${fileType?.toLowerCase()}`;
   const fileSizeMb = ((selectedFile?.size ?? 0) / 1024 / 1024).toFixed(2);
   const isError = error !== false;
 
@@ -69,6 +72,8 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
     <div>
       {/* Visual label */}
       <label>{label}</label>
+      {existing_url && <Link className={styles.title} url={existing_url} target='external'>{existing_url}</Link>}
+
       {/* Label container to accept button input */}
       <label className={classNames(styles.file_label, horizontalPreview && styles.horizontal, isError && styles.error)}>
         <input type="file" accept={acceptTypes()} onChange={handleOnChange} style={{ display: 'none' }} />
@@ -79,31 +84,46 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
             <Icon icon={icons[fileType] ?? ''} />
             {t(KEY.inputfile_choose_a_file)}
           </div>
-          {fileType === 'image' && (
-            <span className={styles.title}>{selectedFile?.name ?? t(KEY.inputfile_no_file_selected)}</span>
-          )}
-        </div>
-
-        {/* File Preview */}
-        <div className={classNames(styles.selected_container, fileType === 'pdf' && styles.pdf)}>
-          {/* PDF shows additional information */}
-          {fileType === 'pdf' && (
-            <div className={styles.preview_meta}>
-              <p className={styles.title}>{selectedFile?.name ?? t(KEY.inputfile_no_file_selected)}</p>
-              <p>
-                <TimeDisplay timestamp={new Date(selectedFile?.lastModified ?? 0)} />
-              </p>
-              <p>{fileSizeMb} MB</p>
-            </div>
-          )}
-          {/* Image/pdf preview. Shows empty preview for pdf type */}
-          {(fileType === 'pdf' || preview) && (
-            <div className={classNames(styles.preview_container, styles[typePreviewClass])}>
-              {preview && <img className={styles.preview} src={preview} alt="Preview" />}
-            </div>
-          )}
+          { 
+          (existing_url && !selectedFile)  ?
+            (
+              <Link className={styles.title} url={existing_url} target='external'>{existing_url}</Link>
+            ):
+          (          
+          <span className={styles.title}>{selectedFile?.name ?? t(KEY.inputfile_no_file_selected)}</span>
+           )
+          
+          
+          }
         </div>
       </label>
     </div>
   );
 }
+
+
+/**
+ *        
+ <div className={classNames(styles.selected_container, fileType === 'pdf' && styles.pdf)}>
+ {fileType === 'pdf' && (
+   <div className={styles.preview_meta}>
+     <p className={styles.title}>{selectedFile?.name ?? t(KEY.inputfile_no_file_selected)}</p>
+     <p>
+       <TimeDisplay timestamp={new Date(selectedFile?.lastModified ?? 0)} />
+     </p>
+     <p>{fileSizeMb} MB</p>
+   </div>
+ )}
+ {fileType === 'any' && (
+   <div className={styles.preview_meta}>
+     <p className={styles.title}>{selectedFile?.name ?? t(KEY.inputfile_no_file_selected)}</p>
+     <p>{fileSizeMb} MB</p>
+   </div>
+ )}
+ {(fileType === 'pdf' || (fileType === 'image' || preview)) && (
+   <div className={classNames(styles.preview_container, styles[typePreviewClass])}>
+     {preview && <img className={styles.preview} src={preview} alt="Preview" />}
+   </div>
+ )}
+</div>
+ */

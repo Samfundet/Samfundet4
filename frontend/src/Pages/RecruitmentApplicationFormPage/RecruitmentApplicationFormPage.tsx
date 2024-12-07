@@ -209,6 +209,9 @@ export function RecruitmentApplicationFormPage() {
           >
             <h2 className={styles.label}>{t(KEY.recruitment_application)}:</h2>
             <SamfFormField field="application_text" type="text_long" />{' '}
+            <SamfFormField field="file" type="file" props={{existing_url: 'www.google.com'}} />
+            <SamfFormField field="file" type="upload_image" />
+            <SamfFormField field="file" type="upload_pdf" />
           </SamfForm>
         ) : (
           <div>
