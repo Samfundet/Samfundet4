@@ -6,6 +6,7 @@ import { KEY } from '~/i18n/constants';
 import { TimeDisplay } from '../TimeDisplay';
 import styles from './InputFile.module.scss';
 import { Link } from '../Link';
+import { getFileNameFromUrl, isFileImage } from '~/utils';
 
 export type InputFileType = 'image' | 'pdf' | 'any';
 
@@ -21,6 +22,8 @@ export function InputFile({ fileType='any', label, existing_url, error = false, 
   const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | undefined>(undefined);
+  const [isImage, setIsImage] = useState<boolean>(false);
+
 
   function handleOnChange(e?: ChangeEvent<HTMLInputElement>) {
     if (e === undefined || onSelected === undefined) return;
@@ -30,6 +33,9 @@ export function InputFile({ fileType='any', label, existing_url, error = false, 
       setSelectedFile(e.target.files?.[0]);
       if (e.target.files?.[0] !== undefined) {
         onSelected(e.target.files?.[0]);
+        setIsImage(isFileImage(e.target.files?.[0].name));
+      } else {
+        setIsImage(false);
       }
     }
   }
@@ -56,7 +62,7 @@ export function InputFile({ fileType='any', label, existing_url, error = false, 
     }
     return '*';
   }
-
+  
   const icons: Record<InputFileType, string> = {
     image: 'mdi:image',
     pdf: 'mdi:file',
@@ -72,8 +78,6 @@ export function InputFile({ fileType='any', label, existing_url, error = false, 
     <div>
       {/* Visual label */}
       <label>{label}</label>
-      {existing_url && <Link className={styles.title} url={existing_url} target='external'>{existing_url}</Link>}
-
       {/* Label container to accept button input */}
       <label className={classNames(styles.file_label, horizontalPreview && styles.horizontal, isError && styles.error)}>
         <input type="file" accept={acceptTypes()} onChange={handleOnChange} style={{ display: 'none' }} />
@@ -87,43 +91,35 @@ export function InputFile({ fileType='any', label, existing_url, error = false, 
           { 
           (existing_url && !selectedFile)  ?
             (
-              <Link className={styles.title} url={existing_url} target='external'>{existing_url}</Link>
+              <Link className={styles.title} url={existing_url} target='external'>{getFileNameFromUrl(existing_url)}</Link>
             ):
           (          
           <span className={styles.title}>{selectedFile?.name ?? t(KEY.inputfile_no_file_selected)}</span>
            )
-          
-          
+      
+    
           }
         </div>
+
+  <div className={styles.selected_container}>
+  {preview &&
+    <>
+    <div className={styles.preview_meta}>
+      <p>
+        <TimeDisplay timestamp={new Date(selectedFile?.lastModified ?? 0)} />
+      </p>
+      <p>{fileSizeMb} MB</p>
+    </div>
+    {isImage && (
+      <div className={classNames(styles.preview_container, styles[typePreviewClass])}>
+        {preview && <img className={styles.preview} src={preview} alt="Preview" />}
+      </div>
+      )
+    }
+    </>
+  }
+  </div>
       </label>
     </div>
   );
 }
-
-
-/**
- *        
- <div className={classNames(styles.selected_container, fileType === 'pdf' && styles.pdf)}>
- {fileType === 'pdf' && (
-   <div className={styles.preview_meta}>
-     <p className={styles.title}>{selectedFile?.name ?? t(KEY.inputfile_no_file_selected)}</p>
-     <p>
-       <TimeDisplay timestamp={new Date(selectedFile?.lastModified ?? 0)} />
-     </p>
-     <p>{fileSizeMb} MB</p>
-   </div>
- )}
- {fileType === 'any' && (
-   <div className={styles.preview_meta}>
-     <p className={styles.title}>{selectedFile?.name ?? t(KEY.inputfile_no_file_selected)}</p>
-     <p>{fileSizeMb} MB</p>
-   </div>
- )}
- {(fileType === 'pdf' || (fileType === 'image' || preview)) && (
-   <div className={classNames(styles.preview_container, styles[typePreviewClass])}>
-     {preview && <img className={styles.preview} src={preview} alt="Preview" />}
-   </div>
- )}
-</div>
- */

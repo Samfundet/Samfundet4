@@ -123,6 +123,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-align: right;
+  pointer-events: all;
   @include for-mobile-only {
     flex-direction: column;
   }

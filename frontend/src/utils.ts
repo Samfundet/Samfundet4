@@ -151,6 +151,15 @@ export function getFullName(u: UserDto): string {
   return `${u.first_name} ${u.last_name}`.trim();
 }
 
+export function getFileNameFromUrl(url: string): string {
+  let url_split = url.split('/');
+  return url_split[url_split.length-1];
+}
+
+export function isFileImage(file_name: string): boolean {
+  return file_name.match(/\.(jpg|jpeg|png|gif)$/i) != null;
+}
+
 /** Helper to determine if a KeyValue is truthy. */
 export function isTruthy(value = ''): boolean {
   const falsy = ['', 'no', 'zero', '0'];
