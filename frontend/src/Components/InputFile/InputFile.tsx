@@ -3,10 +3,10 @@ import classNames from 'classnames';
 import { type ChangeEvent, type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
+import { getFileNameFromUrl, isFileImage } from '~/utils';
+import { Link } from '../Link';
 import { TimeDisplay } from '../TimeDisplay';
 import styles from './InputFile.module.scss';
-import { Link } from '../Link';
-import { getFileNameFromUrl, isFileImage } from '~/utils';
 
 export type InputFileType = 'image' | 'pdf' | 'any';
 
@@ -18,12 +18,11 @@ export type InputFileProps = {
   onSelected?: (file: File) => void;
 };
 
-export function InputFile({ fileType='any', label, existing_url, error = false, onSelected }: InputFileProps) {
+export function InputFile({ fileType = 'any', label, existing_url, error = false, onSelected }: InputFileProps) {
   const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | undefined>(undefined);
   const [isImage, setIsImage] = useState<boolean>(false);
-
 
   function handleOnChange(e?: ChangeEvent<HTMLInputElement>) {
     if (e === undefined || onSelected === undefined) return;
@@ -62,7 +61,7 @@ export function InputFile({ fileType='any', label, existing_url, error = false, 
     }
     return '*';
   }
-  
+
   const icons: Record<InputFileType, string> = {
     image: 'mdi:image',
     pdf: 'mdi:file',
@@ -88,37 +87,32 @@ export function InputFile({ fileType='any', label, existing_url, error = false, 
             <Icon icon={icons[fileType] ?? ''} />
             {t(KEY.inputfile_choose_a_file)}
           </div>
-          { 
-          (existing_url && !selectedFile)  ?
-            (
-              <Link className={styles.title} url={existing_url} target='external'>{getFileNameFromUrl(existing_url)}</Link>
-            ):
-          (          
-          <span className={styles.title}>{selectedFile?.name ?? t(KEY.inputfile_no_file_selected)}</span>
-           )
-      
-    
-          }
+          {existing_url && !selectedFile ? (
+            <Link className={styles.title} url={existing_url} target="external">
+              {getFileNameFromUrl(existing_url)}
+            </Link>
+          ) : (
+            <span className={styles.title}>{selectedFile?.name ?? t(KEY.inputfile_no_file_selected)}</span>
+          )}
         </div>
 
-  <div className={styles.selected_container}>
-  {preview &&
-    <>
-    <div className={styles.preview_meta}>
-      <p>
-        <TimeDisplay timestamp={new Date(selectedFile?.lastModified ?? 0)} />
-      </p>
-      <p>{fileSizeMb} MB</p>
-    </div>
-    {isImage && (
-      <div className={classNames(styles.preview_container, styles[typePreviewClass])}>
-        {preview && <img className={styles.preview} src={preview} alt="Preview" />}
-      </div>
-      )
-    }
-    </>
-  }
-  </div>
+        <div className={styles.selected_container}>
+          {preview && (
+            <>
+              <div className={styles.preview_meta}>
+                <p>
+                  <TimeDisplay timestamp={new Date(selectedFile?.lastModified ?? 0)} />
+                </p>
+                <p>{fileSizeMb} MB</p>
+              </div>
+              {isImage && (
+                <div className={classNames(styles.preview_container, styles[typePreviewClass])}>
+                  {preview && <img className={styles.preview} src={preview} alt="Preview" />}
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </label>
     </div>
   );

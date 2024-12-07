@@ -152,8 +152,8 @@ export function getFullName(u: UserDto): string {
 }
 
 export function getFileNameFromUrl(url: string): string {
-  let url_split = url.split('/');
-  return url_split[url_split.length-1];
+  const url_split = url.split('/');
+  return url_split[url_split.length - 1];
 }
 
 export function isFileImage(file_name: string): boolean {
