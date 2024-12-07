@@ -15,10 +15,18 @@ export type InputFileProps = {
   label?: ReactNode;
   existing_url?: string;
   error?: boolean | string;
+  acceptedTypes?: string;
   onSelected?: (file: File) => void;
 };
 
-export function InputFile({ fileType = 'any', label, existing_url, error = false, onSelected }: InputFileProps) {
+export function InputFile({
+  fileType = 'any',
+  acceptedTypes,
+  label,
+  existing_url,
+  error = false,
+  onSelected,
+}: InputFileProps) {
   const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | undefined>(undefined);
@@ -52,14 +60,21 @@ export function InputFile({ fileType = 'any', label, existing_url, error = false
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
-  function acceptTypes() {
-    switch (fileType) {
-      case 'image':
-        return 'image/*';
-      case 'pdf':
-        return 'application/pdf';
+  useEffect(() => {
+    if (existing_url && isFileImage(existing_url)) {
+      setIsImage(true);
+      setPreview(existing_url);
     }
-    return '*';
+  }, [existing_url]);
+
+  function acceptTypes() {
+    if (fileType === 'any' && !acceptedTypes) {
+      return '*';
+    }
+    let types = acceptedTypes ? acceptedTypes : '';
+    if (fileType === 'image') types += ', image/*';
+    if (fileType === 'pdf') types += ', application/pdf';
+    return types;
   }
 
   const icons: Record<InputFileType, string> = {
