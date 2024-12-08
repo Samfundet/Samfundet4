@@ -971,8 +971,15 @@ def test_update_application_recruiter_priority_gang(
 
 
 def test_update_application_recruiter_status_gang(
-    fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_application: RecruitmentApplication
+    fixture_rest_client: APIClient,
+    fixture_recruitment: Recruitment,
+    fixture_user: User,
+    fixture_user2: User,
+    fixture_recruitment_application: RecruitmentApplication,
 ):
+    # Need to find a way to adjust timezone or set the times of recruitment to now
+    # To able to set recruitment to now due to the fields are required to be in future
+
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user2)
     fixture_recruitment_application.user = fixture_user2
@@ -1047,7 +1054,11 @@ def test_update_application_recruiter_priority_position(
 
 
 def test_update_application_recruiter_status_position(
-    fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_application: RecruitmentApplication
+    fixture_rest_client: APIClient,
+    fixture_recruitment: Recruitment,
+    fixture_user: User,
+    fixture_user2: User,
+    fixture_recruitment_application: RecruitmentApplication,
 ):
     ### Arrange ###
     fixture_rest_client.force_authenticate(user=fixture_user2)

@@ -1071,7 +1071,7 @@ class RecruitmentApplicationForGangUpdateStateView(APIView):
             if 'recruiter_priority' in update_serializer.data:
                 application.recruiter_priority = update_serializer.data['recruiter_priority']
             if 'recruiter_status' in update_serializer.data:
-                application.recruiter_status = update_serializer.data['recruiter_status']
+                application.recruiter_status = application.clean_set_recruiter_status(update_serializer.data['recruiter_status'])
             application.save()
             applications = RecruitmentApplication.objects.filter(
                 recruitment_position__gang=application.recruitment_position.gang,
@@ -1097,7 +1097,7 @@ class RecruitmentApplicationForPositionUpdateStateView(APIView):
             if 'recruiter_priority' in update_serializer.data:
                 application.recruiter_priority = update_serializer.data['recruiter_priority']
             if 'recruiter_status' in update_serializer.data:
-                application.recruiter_status = update_serializer.data['recruiter_status']
+                application.recruiter_status = application.clean_set_recruiter_status(update_serializer.data['recruiter_status'])
             application.save()
             application.update_applicant_state()
             applications = RecruitmentApplication.objects.filter(

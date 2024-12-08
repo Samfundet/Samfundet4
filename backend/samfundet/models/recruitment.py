@@ -398,7 +398,6 @@ class RecruitmentApplication(CustomBaseModel):
             )
             if shared_interview:
                 self.interview = shared_interview.interview
-
         super().save(*args, **kwargs)
 
     def get_total_interviews(self) -> int:
@@ -425,6 +424,13 @@ class RecruitmentApplication(CustomBaseModel):
                 if application.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED:
                     application.applicant_state = RecruitmentApplicantStates.NOT_WANTED
                 application.save()
+
+    def clean_set_recruiter_status(self, status: RecruitmentStatusChoices) -> RecruitmentStatusChoices:
+        if status not in [RecruitmentStatusChoices.CALLED_AND_ACCEPTED, RecruitmentStatusChoices.CALLED_AND_REJECTED]:
+            return status
+        if timezone.now() < self.recruitment.reprioritization_deadline_for_groups:
+            return self.recruiter_status
+        return status
 
 
 class RecruitmentInterviewAvailability(CustomBaseModel):
