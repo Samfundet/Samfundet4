@@ -95,6 +95,42 @@ class TestRecruitmentClean:
         assert Recruitment.SHOWN_AFTER_ACTUAL_ERROR in e['shown_application_deadline']
 
 
+class TestRecruitmentPosition:
+    default_data = {
+        'name_en': 'Name_en',
+        'name_nb': 'Name_nb',
+        'short_description_nb': 'short_description_nb',
+        'short_description_en': 'short_description_en',
+        'long_description_nb': 'long_description_nb',
+        'long_description_en': 'long_description_en',
+        'is_funksjonaer_position': False,
+        'default_application_letter_nb': 'default_application_letter_nb',
+        'default_application_letter_en': 'default_application_letter_en',
+        'norwegian_applicants_only': False,
+        'tags': 'tag1, tag2, tag3',
+    }
+
+    def test_create_recruitmentposition_gang(self, fixture_recruitment: Recruitment, fixture_gang: Gang):
+        test_position = RecruitmentPosition.objects.create(**self.default_data, recruitment=fixture_recruitment, gang=fixture_gang)
+        assert test_position.id
+
+    def test_edit_recruitmentposition_gang_from_other_org(self, fixture_recruitment: Recruitment, fixture_gang: Gang, fixture_gang_org2: Gang):
+        test_position = RecruitmentPosition.objects.create(**self.default_data, recruitment=fixture_recruitment, gang=fixture_gang)
+        assert test_position.id
+
+        with pytest.raises(ValidationError) as error:
+            test_position.gang = fixture_gang_org2
+            test_position.save()
+        e = dict(error.value)
+        assert RecruitmentPosition.POSITION_NOT_IN_RECRUITMENTORGANIZATION_ERROR in e['gang']
+
+    def test_create_recruitmentposition_gang_from_other_org(self, fixture_recruitment: Recruitment, fixture_gang_org2: Gang):
+        with pytest.raises(ValidationError) as error:
+            RecruitmentPosition.objects.create(**self.default_data, recruitment=fixture_recruitment, gang=fixture_gang_org2)
+        e = dict(error.value)
+        assert RecruitmentPosition.POSITION_NOT_IN_RECRUITMENTORGANIZATION_ERROR in e['gang']
+
+
 class TestRecruitmentStats:
     def test_recruitment_has_stats(self, fixture_recruitment: Recruitment):
         """Check if fixture_recruitment has the related object"""
