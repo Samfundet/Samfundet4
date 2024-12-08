@@ -465,7 +465,7 @@ export const router = createBrowserRouter(
                 handle={{
                   crumb: ({ pathname }: UIMatch) => (
                     <Link url={pathname}>
-                      {t(KEY.common_create)} {t(KEY.recruitment_gangs_with_separate_positions)}
+                      {t(KEY.common_create)} {t(KEY.recruitment_positions_with_separate_recruitment)}
                     </Link>
                   ),
                 }}
@@ -482,7 +482,7 @@ export const router = createBrowserRouter(
                 handle={{
                   crumb: ({ pathname }: UIMatch, { separatePosition }: SeparatePositionLoader) => (
                     <Link url={pathname}>
-                      {t(KEY.common_edit)} {t(KEY.recruitment_gangs_with_separate_positions)} -{' '}
+                      {t(KEY.common_edit)} {t(KEY.recruitment_positions_with_separate_recruitment)} -{' '}
                       {separatePosition ? dbT(separatePosition, 'name') : t(KEY.common_unknown)}
                     </Link>
                   ),
