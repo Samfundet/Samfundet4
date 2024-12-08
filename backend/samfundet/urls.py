@@ -136,6 +136,11 @@ urlpatterns = [
         name='recruitment_recruiter_dashboard',
     ),
     path(
+        'recruitment-download-applications-csv/<int:recruitment_id>/',
+        views.DownloadRecruitmentApplicationCSV.as_view(),
+        name='recruitment_download_applications_csv',
+    ),
+    path(
         'recruitment-download-gang-application-csv/<int:recruitment_id>/<int:gang_id>',
         views.DownloadRecruitmentApplicationGangCSV.as_view(),
         name='recruitment_download_gang_application_csv',
