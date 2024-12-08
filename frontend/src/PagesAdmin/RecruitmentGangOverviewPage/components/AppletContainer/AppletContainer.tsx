@@ -63,7 +63,9 @@ export function AppletContainer({ recruitmentId }: Props) {
 
           <AppletCard
             title={t(KEY.recruitment_separate_recruitment)}
-            description={lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_positions_with_separate_recruitment)}`)}
+            description={lowerCapitalize(
+              `${t(KEY.common_create)} ${t(KEY.recruitment_positions_with_separate_recruitment)}`,
+            )}
             url={reverse({
               pattern: ROUTES.frontend.admin_recruitment_gang_separateposition_create,
               urlParams: { recruitmentId },
