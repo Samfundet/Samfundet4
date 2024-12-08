@@ -237,26 +237,38 @@ def fixture_organization2() -> Iterator[Organization]:
 
 @pytest.fixture
 def fixture_gang(fixture_organization: Organization) -> Iterator[Gang]:
-    organization = Gang.objects.create(
+    gang = Gang.objects.create(
         name_nb='Gang',
         name_en='Gang',
         abbreviation='G',
         organization=fixture_organization,
     )
-    yield organization
-    organization.delete()
+    yield gang
+    gang.delete()
 
 
 @pytest.fixture
-def fixture_gang2(fixture_organization2: Organization) -> Iterator[Gang]:
-    organization = Gang.objects.create(
+def fixture_gang2(fixture_organization: Organization) -> Iterator[Gang]:
+    gang = Gang.objects.create(
         name_nb='Gang 2',
         name_en='Gang 2',
         abbreviation='G2',
+        organization=fixture_organization,
+    )
+    yield gang
+    gang.delete()
+
+
+@pytest.fixture
+def fixture_gang_org2(fixture_organization2: Organization) -> Iterator[Gang]:
+    gang = Gang.objects.create(
+        name_nb='Gang 3',
+        name_en='Gang 3',
+        abbreviation='G3',
         organization=fixture_organization2,
     )
-    yield organization
-    organization.delete()
+    yield gang
+    gang.delete()
 
 
 @pytest.fixture

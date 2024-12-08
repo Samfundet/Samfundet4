@@ -185,11 +185,24 @@ class RecruitmentPosition(CustomBaseModel):
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'
 
+    # Error messages
+    ONLY_ONE_OWNER_ERROR = 'Position must be owned by either gang or section, not both'
+    NO_OWNER_ERROR = 'Position must have an owner, either a gang or a gang section'
+    POSITION_NOT_IN_RECRUITMENTORGANIZATION_ERROR = 'Position must be of the organization which hosts the recruitment'
+
     def clean(self) -> None:
         super().clean()
+        errors: dict[str, list[ValidationError]] = defaultdict(list)
 
-        if (self.gang and self.section) or not (self.gang or self.section):
-            raise ValidationError('Position must be owned by either gang or section, not both')
+        if self.gang and self.gang.organization != self.recruitment.organization:
+            errors['gang'].append(self.POSITION_NOT_IN_RECRUITMENTORGANIZATION_ERROR)
+        if self.gang and self.section:
+            errors['gang'].append(self.ONLY_ONE_OWNER_ERROR)
+            errors['section'].append(self.ONLY_ONE_OWNER_ERROR)
+        elif not (self.gang or self.section):
+            errors['gang'].append(self.NO_OWNER_ERROR)
+            errors['section'].append(self.NO_OWNER_ERROR)
+        raise ValidationError(errors)
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         if self.norwegian_applicants_only:
