@@ -37,7 +37,7 @@ class SendRejectionMailViewTests(TestCase):
             actual_application_deadline=timezone.now() + timedelta(days=5),
             shown_application_deadline=timezone.now() + timedelta(days=4),
             reprioritization_deadline_for_applicant=timezone.now() + timedelta(days=6),
-            reprioritization_deadline_for_groups=timezone.now() + timedelta(days=7),
+            reprioritization_deadline_for_gangs=timezone.now() + timedelta(days=7),
             organization=self.organization,
         )
 

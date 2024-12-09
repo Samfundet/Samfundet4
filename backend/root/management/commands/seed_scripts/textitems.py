@@ -45,7 +45,7 @@ def seed():
         {
             'key': 'volunteering',
             'text_nb': 'Det meste av arbeid på Studentersamfundet i Trondhjem gjøres gjennom dugnad av studenter. Arbeidet er organisert i enheter som kalles gjenger. Potensielle nye medlemmer må søke den aktuelle gjengen om opptak, og gjengen vurderer hver enkelt søker. Med sine omtrent 1700 frivillige utgjør det indre miljøet i Studentersamfundet en betydelig del av det organiserte fritidstilbudet til studenter i Trondheim.',
-            'text_en': 'Most of the work at Samfundet is done on a voluntary basis by students. The work is organized into units called groups. Prospective new members must apply to the appropriate group for application and the group reviews each applicant. With around 1700 volunteers, the internal environment of Samfundet constitutes a significant part of organized leisure activities for students in Trondheim.',
+            'text_en': 'Most of the work at Samfundet is done on a voluntary basis by students. The work is organized into units called gangs. Prospective new members must apply to the appropriate group for application and the group reviews each applicant. With around 1700 volunteers, the internal environment of Samfundet constitutes a significant part of organized leisure activities for students in Trondheim.',
         },
         {
             'key': 'the_society_meeting',
@@ -166,7 +166,7 @@ def seed():
         {
             'key': 'why_member_list_7',
             'text_nb': 'Mulighet til å bli med i en av Studentersamfundets gjenger, UKAs og ISFITs gjenger, og å stille til valg i Storsalen.',
-            'text_en': "Opportunity to become a part of one of Samfundet's internal groups, UKA's and ISFIT's groups, and run for election at Storsalen.",
+            'text_en': "Opportunity to become a part of one of Samfundet's internal gangs, UKA's and ISFIT's gangs, and run for election at Storsalen.",
         },
         {
             'key': 'membership_prices_header',
@@ -351,7 +351,7 @@ def seed():
         {
             'key': 'gangspage_text',
             'text_nb': 'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
-            'text_en': 'Samfundet consists of more than 20 groups (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
+            'text_en': 'Samfundet consists of more than 20 gangs (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
         },
     ]
 

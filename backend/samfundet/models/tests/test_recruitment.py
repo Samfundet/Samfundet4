@@ -21,7 +21,7 @@ datetime_fields_expecting_error = [
     'actual_application_deadline',
     'shown_application_deadline',
     'reprioritization_deadline_for_applicant',
-    'reprioritization_deadline_for_groups',
+    'reprioritization_deadline_for_gangs',
 ]
 
 
@@ -78,12 +78,12 @@ class TestRecruitmentClean:
         assert Recruitment.ACTUAL_AFTER_REPRIORITIZATION in e['actual_application_deadline']
         assert Recruitment.REPRIORITIZATION_BEFORE_ACTUAL in e['reprioritization_deadline_for_applicant']
 
-    def test_reprioritization_deadline_for_applicant_before_reprioritization_deadline_for_groups(self, fixture_org):
+    def test_reprioritization_deadline_for_applicant_before_reprioritization_deadline_for_gangs(self, fixture_org):
         future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 2)
         with pytest.raises(ValidationError) as error:
             _create_recruitment_with_dt(overrides={'reprioritization_deadline_for_applicant': future_more})
         e = dict(error.value)
-        assert Recruitment.REPRIORITIZATION_GROUP_BEFORE_APPLICANT in e['reprioritization_deadline_for_groups']
+        assert Recruitment.REPRIORITIZATION_GROUP_BEFORE_APPLICANT in e['reprioritization_deadline_for_gangs']
         assert Recruitment.REPRIORITIZATION_APPLICANT_AFTER_GROUP in e['reprioritization_deadline_for_applicant']
 
     def test_actual_deadline_before_shown_deadline(self, fixture_org):

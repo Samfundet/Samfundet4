@@ -13,18 +13,18 @@ import { dbT } from '~/utils';
 import styles from './GangsPage.module.scss';
 
 /**
- * Page for displaying all the different groups ordered by what type of group they are
- * Such as Organizing, events, drift, then displaying all of these groups
+ * Page for displaying all the different gangs ordered by what type of gangs they are
+ * Such as Organizing, events, drift, then displaying all of these gangs
  */
 export function GangsPage() {
   const { t } = useTranslation();
-  const [groups, setGroups] = useState<GangTypeDto[]>([]);
+  const [gangs, setGangs] = useState<GangTypeDto[]>([]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getOrganizedGangList()
       .then((data) => {
-        setGroups(data);
+        setGangs(data);
       })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
@@ -39,9 +39,9 @@ export function GangsPage() {
           <h1 className={styles.header}>{t(KEY.gangspage_title)}</h1>
           <p className={styles.description}>{useTextItem(TextItem.gangspage_text)}</p>
         </div>
-        {groups.map((element: GangTypeDto) => (
-          <div key={element.id} className={styles.groups}>
-            <div className={styles.groupsTitle}>{dbT(element, 'title')}</div>
+        {gangs.map((element: GangTypeDto) => (
+          <div key={element.id} className={styles.gangs}>
+            <div className={styles.gangsTitle}>{dbT(element, 'title')}</div>
             <ImageList
               textMaxLength={12}
               images={
