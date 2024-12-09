@@ -30,6 +30,7 @@ import type {
   RecruitmentGangDto,
   RecruitmentGangStatDto,
   RecruitmentPositionDto,
+  RecruitmentPositionOrganizedApplicationsDto,
   RecruitmentPositionPostDto,
   RecruitmentPositionPutDto,
   RecruitmentSeparatePositionDto,
@@ -824,6 +825,20 @@ export async function getRecruitmentApplicationsForGang(
   return await axios.get(url, { withCredentials: true });
 }
 
+export async function getRecruitmentPositionOrganizedApplications(
+  positionId: string,
+): Promise<AxiosResponse<RecruitmentPositionOrganizedApplicationsDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_position_organized_applications,
+      urlParams: {
+        pk: positionId,
+      },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
 export async function getRecruitmentSharedInterviewGroups(
   recruitmentId: string,
 ): Promise<AxiosResponse<RecruitmentSharedInterviewGroupDto[]>> {
@@ -893,7 +908,7 @@ export async function updateRecruitmentApplicationStateForGang(
 export async function updateRecruitmentApplicationStateForPosition(
   applicationId: string,
   application: Partial<RecruitmentApplicationStateDto>,
-): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
+): Promise<AxiosResponse<RecruitmentPositionOrganizedApplicationsDto>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
