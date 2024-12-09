@@ -10,6 +10,7 @@ import type { TextItemValue } from './constants/TextItems';
 import { useAuthContext } from './context/AuthContext';
 import { useGlobalContext } from './context/GlobalContextProvider';
 import type { TextItemDto } from './dto';
+import { STATUS } from './http_status_codes';
 import { LANGUAGES } from './i18n/types';
 
 // Make typescript happy.
@@ -75,9 +76,19 @@ export function useTextItem(key: TextItemValue, language?: string): string | und
   const { i18n } = useTranslation();
   const isNorwegian = (language || i18n.language) === LANGUAGES.NB;
   useEffect(() => {
-    getTextItem(key).then((data) => {
-      setTextItem(data);
-    });
+    getTextItem(key)
+      .then((data) => {
+        setTextItem(data);
+      })
+      .catch((error) => {
+        if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
+        }
+        setTextItem({
+          key: 'HEST',
+          text_nb: 'ERROR ERROR kontakt MG:WEB om manglende tekst ERROR ERROR',
+          text_en: 'ERROR ERROR contact MG:WEB about lacking text ERROR ERROR',
+        });
+      });
   }, [key]);
   return isNorwegian ? textItem?.text_nb : textItem?.text_en;
 }
