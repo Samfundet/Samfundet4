@@ -4,23 +4,25 @@ import { toast } from 'react-toastify';
 import { ImageList } from '~/Components/ImageList';
 import type { ImageProps } from '~/Components/ImageList/ImageList';
 import { Page } from '~/Components/Page';
-import { getGangList } from '~/api';
+import { getOrganizedGangList } from '~/api';
+import { TextItem } from '~/constants';
 import type { GangDto, GangTypeDto } from '~/dto';
+import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
-import styles from './GroupsPage.module.scss';
+import styles from './GangsPage.module.scss';
 
 /**
  * Page for displaying all the different groups ordered by what type of group they are
  * Such as Organizing, events, drift, then displaying all of these groups
  */
-export function GroupsPage() {
+export function GangsPage() {
   const { t } = useTranslation();
   const [groups, setGroups] = useState<GangTypeDto[]>([]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
-    getGangList()
+    getOrganizedGangList()
       .then((data) => {
         setGroups(data);
       })
@@ -34,8 +36,8 @@ export function GroupsPage() {
     <Page>
       <div className={styles.wrapper}>
         <div className={styles.description}>
-          <h1 className={styles.header}>{t(KEY.groupspage_gangs_title)}</h1>
-          <p className={styles.description}>{t(KEY.groupspage_gangs_text)}</p>
+          <h1 className={styles.header}>{t(KEY.gangspage_title)}</h1>
+          <p className={styles.description}>{useTextItem(TextItem.gangspage_text)}</p>
         </div>
         {groups.map((element: GangTypeDto) => (
           <div key={element.id} className={styles.groups}>

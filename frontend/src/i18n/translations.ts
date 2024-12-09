@@ -225,10 +225,8 @@ export const nb = prepareTranslations({
   [KEY.contributors_page_text]: 'Samfundet.no utvikles av MG::Web, som er en seksjon i Markedsføringsgjengen.',
   [KEY.contributors_page_past_developers]: 'Tidligere utviklere',
 
-  // GroupsPage:
-  [KEY.groupspage_gangs_text]:
-    'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
-  [KEY.groupspage_gangs_title]: 'Gjengene på Samfundet',
+  // GangsPage:
+  [KEY.gangspage_title]: 'Gjengene på Samfundet',
 
   // EventPageAge:
   [KEY.eighteen]: '18 år',
@@ -713,10 +711,8 @@ export const en = prepareTranslations({
   [KEY.loginpage_passwords_must_match]: 'Passwords must match',
   [KEY.loginpage_login_failed]: 'Login failed',
 
-  // GroupsPage:
-  [KEY.groupspage_gangs_text]:
-    'Samfundet consists of more than 20 groups (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
-  [KEY.groupspage_gangs_title]: 'The groups at Samfundet',
+  // GangsPage:
+  [KEY.gangspage_title]: 'The groups at Samfundet',
 
   // EventPageAge:
   [KEY.eighteen]: '18 years',

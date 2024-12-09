@@ -3,7 +3,7 @@ export const ROUTES_FRONTEND = {
   //    General/Public    //
   // ==================== //
   home: '/',
-  groups: '/groups/',
+  groups: '/gangs/',
   health: '/health/',
   about: '/about/',
   venues: '/venues/',

@@ -348,6 +348,11 @@ def seed():
             'text_nb': 'Har du noen øvrige kommentarer til arrangementet?',
             'text_en': 'Do you have any other feedback in regards to the event?',
         },
+        {
+            'key': 'gangspage_text',
+            'text_nb': 'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
+            'text_en': 'Samfundet consists of more than 20 groups (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
+        },
     ]
 
     TextItem.objects.all().delete()

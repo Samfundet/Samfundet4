@@ -241,9 +241,8 @@ export const KEY = {
 
   role_edit_could_not_load_permissions: 'role_edit_could_not_load_permissions',
 
-  // GroupsPage:
-  groupspage_gangs_text: 'groupspage_gangs_text',
-  groupspage_gangs_title: 'groupspage_gangs_title',
+  // GangsPage:
+  gangspage_title: 'gangspage_title',
 
   // EventPageAge:
   eighteen: 'eighteen',
