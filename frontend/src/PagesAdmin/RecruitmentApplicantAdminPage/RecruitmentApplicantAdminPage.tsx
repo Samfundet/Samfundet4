@@ -84,6 +84,9 @@ export function RecruitmentApplicantAdminPage() {
         </Text>
         <Text>{recruitmentApplication?.application_text}</Text>
       </div>
+      <div className={classNames(styles.infoContainer)}>
+        <RecruitmentInterviewNotesForm initialData={initialData} />
+      </div>
       <div className={styles.withdrawContainer}>
         {recruitmentApplication?.withdrawn ? (
           <Text as="i" size="l" className={styles.withdrawnText}>
@@ -102,10 +105,6 @@ export function RecruitmentApplicantAdminPage() {
           </Button>
         )}
       </div>
-      <div className={classNames(styles.infoContainer)}>
-        <RecruitmentInterviewNotesForm initialData={initialData} />
-      </div>
-
       <div className={classNames(styles.infoContainer)}>
         <Text size="l" as="strong" className={styles.textBottom}>
           {t(KEY.recruitment_all_applications)}
