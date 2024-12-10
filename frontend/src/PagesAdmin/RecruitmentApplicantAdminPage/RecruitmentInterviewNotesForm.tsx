@@ -1,6 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Textarea } from '~/Components';
 import { KEY } from '~/i18n/constants';
@@ -17,16 +19,34 @@ interface RecruitmentInterviewNotesFormProps {
 
 export function RecruitmentInterviewNotesForm({ initialData }: RecruitmentInterviewNotesFormProps) {
   const { t } = useTranslation();
-
+  const [currentNotes, setCurrentNotes] = useState(initialData.notes || '');
   const form = useForm<RecruitmentInterviewNotesFormType>({
     resolver: zodResolver(recruitmentNotesSchema),
     defaultValues: initialData,
   });
 
-  function handleUpdateNotes(value: string) {
-    // TODO: Update notes using a put request
-    console.log(value);
+
+
+  async function handleUpdateNotes(value: string) {
+    try {
+      // TODO: Update notes using a put request
+      console.log("Updating notes");
+      // Simulate a successful PUT request. TODO: Replace with successful PUT request
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      toast.success("Notes updated successfully!");
+    } catch (error) {
+      toast.error("Failed to update notes.");
+    }
   }
+
+  const handleNotesChange = (newNotes: string) => {
+    if (newNotes !== currentNotes) {
+      setCurrentNotes(newNotes);
+      handleUpdateNotes(newNotes);
+    }
+  };
+
+
 
   return (
     <Form {...form}>
@@ -43,7 +63,7 @@ export function RecruitmentInterviewNotesForm({ initialData }: RecruitmentInterv
                     {...field}
                     onBlur={(newNotes) => {
                       field.onBlur(); // Call the default onBlur handler from react-hook-form
-                      handleUpdateNotes(newNotes.target.value); // Call your custom function on blur
+                      handleNotesChange(newNotes.target.value); // Call your custom function on blur
                     }}
                   />
                 </FormControl>

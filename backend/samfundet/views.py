@@ -25,7 +25,7 @@ from django.utils import timezone
 from django.core.mail import EmailMessage
 from django.db.models import Q, Count, QuerySet
 from django.shortcuts import get_object_or_404
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.utils.encoding import force_bytes
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
@@ -39,7 +39,7 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 
-from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
+from .utils import user_query, event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .serializers import (
@@ -76,6 +76,7 @@ from .serializers import (
     UserFeedbackSerializer,
     UserGangRoleSerializer,
     InterviewRoomSerializer,
+    ChangePasswordSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
@@ -137,6 +138,7 @@ from .models.recruitment import (
     Recruitment,
     InterviewRoom,
     OccupiedTimeslot,
+    RecruitmentGangStat,
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
@@ -480,6 +482,20 @@ class RegisterView(APIView):
         return res
 
 
+class ChangePasswordView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request: Request) -> Response:
+        serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        new_password = serializer.validated_data['new_password']
+        user = request.user
+        user.set_password(new_password)
+        user.save()
+        update_session_auth_hash(request, user)
+        return Response({'message': 'Successfully updated password'}, status=status.HTTP_200_OK)
+
+
 class UserView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -491,6 +507,10 @@ class AllUsersView(ListAPIView):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+    def get(self, request: Request) -> Response:
+        users = user_query(query=request.query_params)
+        return Response(data=UserSerializer(users, many=True).data)
 
 
 class ImpersonateView(APIView):
@@ -1377,3 +1397,21 @@ class PurchaseFeedbackView(CreateAPIView):
                 form=purchase_model,
             )
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+class GangApplicationCountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, recruitment_id: int, gang_id: int) -> Response:
+        # Get total applications from RecruitmentGangStat
+        gang_stat = get_object_or_404(RecruitmentGangStat, gang_id=gang_id, recruitment_stats__recruitment_id=recruitment_id)
+
+        return Response(
+            {
+                'total_applications': gang_stat.application_count,
+                'total_applicants': gang_stat.applicant_count,
+                'average_priority': gang_stat.average_priority,
+                'total_accepted': gang_stat.total_accepted,
+                'total_rejected': gang_stat.total_rejected,
+            }
+        )

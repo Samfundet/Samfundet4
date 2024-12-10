@@ -15,7 +15,6 @@ import type {
   InterviewDto,
   InterviewRoomDto,
   KeyValueDto,
-  MailDto,
   MenuDto,
   MenuItemDto,
   OccupiedTimeslotDto,
@@ -29,6 +28,7 @@ import type {
   RecruitmentAvailabilityDto,
   RecruitmentDto,
   RecruitmentGangDto,
+  RecruitmentGangStatDto,
   RecruitmentPositionDto,
   RecruitmentPositionPostDto,
   RecruitmentPositionPutDto,
@@ -84,6 +84,11 @@ export async function register(data: RegistrationDto): Promise<number> {
   axios.defaults.headers.common['X-CSRFToken'] = new_token;
 
   return response.status;
+}
+
+export async function changePassword(current_password: string, new_password: string): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__change_password;
+  return await axios.post(url, { current_password, new_password }, { withCredentials: true });
 }
 
 export async function getUser(): Promise<UserDto> {
@@ -1088,16 +1093,18 @@ export async function postFeedback(feedbackData: FeedbackDto): Promise<AxiosResp
   return response;
 }
 
-export async function postRejectionMail(recruitmentId: string, rejectionMail: MailDto): Promise<AxiosResponse> {
+export async function getRecruitmentGangStats(
+  recruitmentId: string,
+  gangId: string,
+): Promise<AxiosResponse<RecruitmentGangStatDto>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
-      pattern: ROUTES.backend.samfundet__rejected_applicants,
-      queryParams: {
-        recruitment: recruitmentId,
+      pattern: ROUTES.backend.samfundet__gang_application_stats,
+      urlParams: {
+        recruitmentId: recruitmentId,
+        gangId: gangId,
       },
     });
-  const response = await axios.post(url, rejectionMail, { withCredentials: true });
-
-  return response;
+  return await axios.get(url, { withCredentials: true });
 }

@@ -572,6 +572,7 @@ export const ROUTES_BACKEND = {
   samfundet__login: '/login/',
   samfundet__register: '/register/',
   samfundet__logout: '/logout/',
+  samfundet__change_password: '/password/change/',
   samfundet__user: '/user/',
   samfundet__groups: '/groups/',
   samfundet__users: '/users/',
@@ -609,6 +610,7 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_availability: '/recruitment/:id/availability/',
   samfundet__feedback: '/feedback/',
   samfundet__purchase_feedback: '/purchase-feedback/',
+  samfundet__gang_application_stats: '/recruitment/:recruitmentId/gang/:gangId/stats/',
   static__path: '/static/:path',
   media__path: '/media/:path',
 } as const;

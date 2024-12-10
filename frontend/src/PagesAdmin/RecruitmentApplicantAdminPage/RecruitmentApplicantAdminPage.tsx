@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -36,7 +35,7 @@ export function RecruitmentApplicantAdminPage() {
 
   const recruitmentApplication = data?.data.application;
   const applicant = data?.data.user;
-  const otherRecruitmentApplication = data?.data.other_applications;
+  const otherRecruitmentApplications = data?.data.other_applications;
   const interviewNotes = recruitmentApplication?.interview?.notes;
 
   const adminWithdraw = useMutation({
@@ -88,7 +87,24 @@ export function RecruitmentApplicantAdminPage() {
       <div className={classNames(styles.infoContainer)}>
         <RecruitmentInterviewNotesForm initialData={initialData} />
       </div>
-
+      <div className={styles.withdrawContainer}>
+        {recruitmentApplication?.withdrawn ? (
+          <Text as="i" size="l" className={styles.withdrawnText}>
+            {t(KEY.recruitment_withdrawn)}
+          </Text>
+        ) : (
+          <Button
+            theme="samf"
+            onClick={() => {
+              if (recruitmentApplication?.id) {
+                adminWithdraw.mutate(recruitmentApplication.id);
+              }
+            }}
+          >
+            {t(KEY.recruitment_withdraw_application)}
+          </Button>
+        )}
+      </div>
       <div className={classNames(styles.infoContainer)}>
         <Text size="l" as="strong" className={styles.textBottom}>
           {t(KEY.recruitment_all_applications)}
@@ -102,8 +118,8 @@ export function RecruitmentApplicantAdminPage() {
             t(KEY.recruitment_interview_time),
           ]}
           data={
-            otherRecruitmentApplication
-              ? otherRecruitmentApplication.map((element) => {
+            otherRecruitmentApplications
+              ? otherRecruitmentApplications.map((element) => {
                   return {
                     cells: [
                       {
@@ -157,24 +173,6 @@ export function RecruitmentApplicantAdminPage() {
               : []
           }
         />
-      </div>
-      <div className={styles.withdrawContainer}>
-        {recruitmentApplication?.withdrawn ? (
-          <Text as="i" size="l" className={styles.withdrawnText}>
-            {t(KEY.recruitment_withdrawn)}
-          </Text>
-        ) : (
-          <Button
-            theme="samf"
-            onClick={() => {
-              if (recruitmentApplication?.id) {
-                adminWithdraw.mutate(recruitmentApplication.id);
-              }
-            }}
-          >
-            {t(KEY.recruitment_withdraw_application)}
-          </Button>
-        )}
       </div>
     </AdminPage>
   );
