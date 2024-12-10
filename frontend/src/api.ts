@@ -389,7 +389,7 @@ export async function getOrganization(id: number | undefined): Promise<Organizat
   return response.data;
 }
 
-export async function getGangList(): Promise<GangTypeDto[]> {
+export async function getOrganizedGangList(): Promise<GangTypeDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__gangsorganized_list;
   const response = await axios.get<GangTypeDto[]>(url, { withCredentials: true });
 
