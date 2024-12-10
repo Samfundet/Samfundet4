@@ -131,6 +131,7 @@ export const KEY = {
   common_occasion: 'common_occasion',
   common_phonenumber: 'common_phonenumber',
   common_password: 'common_password',
+  common_current: 'common_current',
   common_about_us: 'common_about_us',
   common_overview: 'common_overview',
   common_recruitmentposition: 'common_recruitmentposition',
@@ -223,6 +224,8 @@ export const KEY = {
   // ==================== //
 
   role_content_type: 'role_content_type',
+  change_password: 'change_password',
+  new_password: 'new_password',
 
   // LoginPage:
   loginpage_register: 'loginpage_register',

@@ -28,6 +28,7 @@ import {
   RouteOverviewPage,
   SaksdokumenterPage,
   SignUpPage,
+  UserChangePasswordPage,
   VenuePage,
 } from '~/Pages';
 import {
@@ -147,6 +148,12 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin}
             element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_GANG]} element={<AdminPage />} />}
+          />
+          {/* User pages */}
+          <Route
+            path={ROUTES.frontend.user_change_password}
+            element={<UserChangePasswordPage />}
+            handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.change_password)}</Link> }}
           />
           {/* Gangs */}
           <Route
