@@ -84,9 +84,9 @@ export function useTextItem(key: TextItemValue, language?: string): string | und
         if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
         }
         setTextItem({
-          key: 'HEST',
-          text_nb: 'ERROR ERROR kontakt MG:WEB om manglende tekst ERROR ERROR',
-          text_en: 'ERROR ERROR contact MG:WEB about lacking text ERROR ERROR',
+          key: 'MISSING_TEXTITEM',
+          text_nb: 'ERROR ERROR Manglende tekst, kontakt redaksjon@samfundet.no ERROR ERROR',
+          text_en: 'ERROR ERROR Missing text, contact redaksjon@samfundet.no ERROR ERROR',
         });
       });
   }, [key]);
