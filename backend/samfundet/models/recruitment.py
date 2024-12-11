@@ -199,14 +199,18 @@ class RecruitmentPosition(CustomBaseModel):
         errors: dict[str, list[ValidationError]] = defaultdict(list)
 
         if self.gang and self.section:
+            # Both gang and section provide
             errors['gang'].append(self.ONLY_ONE_OWNER_ERROR)
             errors['section'].append(self.ONLY_ONE_OWNER_ERROR)
         elif not (self.gang or self.section):
+            # neither gang nor section provided
             errors['gang'].append(self.NO_OWNER_ERROR)
             errors['section'].append(self.NO_OWNER_ERROR)
         if self.has_file_upload:
+            # Check Norwegian file description
             if not self.file_description_nb or len(self.file_description_nb) == 0:
                 errors['file_description_nb'].append(self.FILE_DESCRIPTION_REQUIRED_ERROR)
+            # Check English file description
             if not self.file_description_en or len(self.file_description_en) == 0:
                 errors['file_description_en'].append(self.FILE_DESCRIPTION_REQUIRED_ERROR)
         raise ValidationError(errors)
