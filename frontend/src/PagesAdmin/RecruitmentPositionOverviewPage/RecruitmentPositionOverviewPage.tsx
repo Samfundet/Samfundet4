@@ -25,8 +25,6 @@ export function RecruitmentPositionOverviewPage() {
   const [acceptedApplicants, setAcceptedApplicants] = useState<RecruitmentApplicationDto[]>([]);
   const [hardtogetApplicants, setHardtogetApplicants] = useState<RecruitmentApplicationDto[]>([]); //Applicants that have been offered a position, but did not accept it
 
-  const [recruiterStatuses, setRecruiterStatuses] = useState<[][]>([]);
-
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   const load = useCallback(() => {
