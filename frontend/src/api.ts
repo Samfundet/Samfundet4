@@ -597,7 +597,7 @@ export async function getRecruitmentPositionsGangForGang(
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_positions_gang_for_gangs,
-      queryParams: { recruitment: recruitmentId, gang: gangId },
+      urlParams: { recruitmentId: recruitmentId, gangId: gangId },
     });
   const response = await axios.get(url, { withCredentials: true });
 

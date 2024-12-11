@@ -14,6 +14,11 @@ export type PositionLoader = {
   position: RecruitmentPositionDto | undefined;
 };
 
+export type RecruitmentGangLoader = {
+  recruitment: RecruitmentDto | undefined;
+  gang: GangDto | undefined;
+};
+
 export type SeparatePositionLoader = {
   separatePosition: RecruitmentSeparatePositionDto | undefined;
 };

@@ -94,7 +94,7 @@ urlpatterns = [
         views.RecruitmentInterviewGroupView.as_view(),
         name='recruitment_shared_interviews',
     ),
-    path('recruitment-positions-gang-for-gangs/', views.RecruitmentPositionsPerGangForGangView.as_view(), name='recruitment_positions_gang_for_gangs'),
+    path('recruitment-positions-gang-for-gangs/<int:recruitment_id>/<int:gang_id>/', views.RecruitmentPositionsPerGangForGangView.as_view(), name='recruitment_positions_gang_for_gangs'),
     path('recruitment-set-interview/<slug:pk>/', views.RecruitmentApplicationSetInterviewView.as_view(), name='recruitment_set_interview'),
     path(
         'recruitment-application-states-choices',

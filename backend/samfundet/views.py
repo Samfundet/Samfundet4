@@ -731,7 +731,7 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
-class RecruitmentPositionsPerGangForApplicantView(ListAPIView):
+class RecruitmentPositionsPerGangForApplicantView(APIView):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionForApplicantSerializer
 
@@ -748,20 +748,18 @@ class RecruitmentPositionsPerGangForApplicantView(ListAPIView):
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
-class RecruitmentPositionsPerGangForGangView(ListAPIView):
+class RecruitmentPositionsPerGangForGangView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentPositionSerializer
 
-    def get_queryset(self) -> Response | None:
-        """
-        Optionally restricts the returned positions to a given recruitment,
-        by filtering against a `recruitment` query parameter in the URL.
-        """
-        recruitment = self.request.query_params.get('recruitment', None)
-        gang = self.request.query_params.get('gang', None)
-        if recruitment is not None and gang is not None:
-            return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
-        return None
+    def get(self, request: Request, recruitment_id: int, gang_id: int) -> Response:
+        gang = get_object_or_404(Gang, id=gang_id)
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        if recruitment.resolve_org() != gang.resolve_org():
+            return Response("Gang not found in recruitment organization", status=status.HTTP_404_NOT_FOUND)
+        data = RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
+        return Response(data=self.serializer_class(data,many=True).data, status=status.HTTP_200_OK)
+
 
 
 class SendRejectionMailView(APIView):

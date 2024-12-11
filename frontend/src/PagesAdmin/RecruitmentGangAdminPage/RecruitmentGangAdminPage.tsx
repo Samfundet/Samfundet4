@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLoaderData, useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getGang, getRecruitment, getRecruitmentPositionsGangForGang } from '~/api';
+import { getRecruitmentPositionsGangForGang } from '~/api';
 import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
@@ -14,11 +14,13 @@ import { ROUTES } from '~/routes';
 import { dbT, getObjectFieldOrNumber, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentGangAdminPage.module.scss';
+import { RecruitmentGangLoader } from '~/router/loaders';
 
 export function RecruitmentGangAdminPage() {
   const { recruitmentId, gangId } = useParams();
   const navigate = useNavigate();
   const [gang, setGang] = useState<GangDto>();
+  const loader = useLoaderData() as RecruitmentGangLoader | undefined;
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
@@ -32,28 +34,35 @@ export function RecruitmentGangAdminPage() {
   // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (recruitmentId && gangId) {
-      Promise.allSettled([
-        getRecruitmentPositionsGangForGang(recruitmentId, gangId).then((data) => {
-          setRecruitmentPositions(data.data);
-        }),
-        getGang(gangId).then((data) => {
-          setGang(data);
-        }),
-        getRecruitment(recruitmentId).then(async (data) => {
-          setRecruitment(data.data);
-        }),
-      ])
-        .then(() => {
-          setShowSpinner(false);
-        })
-        .catch((data) => {
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.not_found, { replace: true });
-          }
-          toast.error(t(KEY.common_something_went_wrong));
-        });
+      getRecruitmentPositionsGangForGang(recruitmentId, gangId).then((data) => {
+        setRecruitmentPositions(data.data);
+      })
+      .catch((data) => {
+        if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+          navigate(ROUTES.frontend.not_found, { replace: true });
+        }
+        toast.error(t(KEY.common_something_went_wrong));
+      })
     }
   }, [recruitmentId, gangId]);
+
+  
+  useEffect(()=> {
+    if(recruitmentPositions && gang && gang) {
+      setShowSpinner(false);
+    }
+  },
+    [recruitmentPositions, gang, recruitment]
+  )
+
+  useEffect(() => {
+    if (loader) {
+      setGang(loader.gang);
+      setRecruitment(loader.recruitment);
+    }
+  }, [loader]);
+
+
 
   const tableColumns = [
     { content: t(KEY.recruitment_position), sortable: true },
