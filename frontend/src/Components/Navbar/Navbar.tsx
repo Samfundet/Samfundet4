@@ -108,10 +108,7 @@ export function Navbar() {
       </a>
     </>
   );
-
-  const showActiveRecruitments = activeRecruitments !== undefined && activeRecruitments?.length > 0;
-
-  const recruitmentLinks = showActiveRecruitments && (
+  const recruitmentLinks = (
     <>
       {activeRecruitments?.map((recruitment) => (
         <Link
@@ -155,7 +152,7 @@ export function Navbar() {
         expandedDropdown={expandedDropdown}
         route={ROUTES.frontend.recruitment}
         label={t(KEY.common_volunteer)}
-        labelClassName={showActiveRecruitments ? styles.active_recruitment : ''}
+        labelClassName={activeRecruitments && styles.active_recruitment}
         dropdownLinks={recruitmentLinks}
         showDropDownIcon={false}
       />
