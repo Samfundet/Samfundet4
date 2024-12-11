@@ -1150,7 +1150,7 @@ class RecruitmentInterviewGroupView(APIView):
         return Response(data=RecruitmentPositionSharedInterviewGroupSerializer(interview_groups, many=True).data, status=status.HTTP_200_OK)
 
 
-class DownloadRecruitmentApplicationCSV(APIView):
+class DownloadAllRecruitmentApplicationCSV(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(
@@ -1200,7 +1200,7 @@ class DownloadRecruitmentApplicationCSV(APIView):
                     'Prioritet': application.get_recruiter_priority_display(),
                     'Status': application.get_recruiter_status_display(),
                     'Søkers rangering': f'{application.applicant_priority}/{application.get_total_applications()}',
-                    'Intervjuer satt': f'{application.get_total_interviews_for_gang()}/{application.get_total_applications_for_gang()}',
+                    'Intervjuer satt': f'{application.get_total_interviews()}/{application.get_total_applications()}',
                 }
             )
 
@@ -1255,7 +1255,7 @@ class DownloadRecruitmentApplicationGangCSV(APIView):
                     'Prioritet': application.get_recruiter_priority_display(),
                     'Status': application.get_recruiter_status_display(),
                     'Søkers rangering': f'{application.applicant_priority}/{application.get_total_applications()}',
-                    'Intervjuer satt': f'{application.get_total_interviews()}/{application.get_total_applications()}',
+                    'Intervjuer satt': f'{application.get_total_interviews_for_gang()}/{application.get_total_applications_for_gang()}',
                 }
             )
 

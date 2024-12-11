@@ -136,8 +136,8 @@ urlpatterns = [
         name='recruitment_recruiter_dashboard',
     ),
     path(
-        'recruitment-download-applications-csv/<int:recruitment_id>/',
-        views.DownloadRecruitmentApplicationCSV.as_view(),
+        'recruitment-download-all-applications-csv/<int:recruitment_id>/',
+        views.DownloadAllRecruitmentApplicationCSV.as_view(),
         name='recruitment_download_applications_csv',
     ),
     path(
