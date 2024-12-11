@@ -10,11 +10,11 @@ import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import type { RecruitmentGangLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
 import { dbT, getObjectFieldOrNumber, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentGangAdminPage.module.scss';
-import { RecruitmentGangLoader } from '~/router/loaders';
 
 export function RecruitmentGangAdminPage() {
   const { recruitmentId, gangId } = useParams();
@@ -34,26 +34,24 @@ export function RecruitmentGangAdminPage() {
   // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (recruitmentId && gangId) {
-      getRecruitmentPositionsGangForGang(recruitmentId, gangId).then((data) => {
-        setRecruitmentPositions(data.data);
-      })
-      .catch((data) => {
-        if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-          navigate(ROUTES.frontend.not_found, { replace: true });
-        }
-        toast.error(t(KEY.common_something_went_wrong));
-      })
+      getRecruitmentPositionsGangForGang(recruitmentId, gangId)
+        .then((data) => {
+          setRecruitmentPositions(data.data);
+        })
+        .catch((data) => {
+          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            navigate(ROUTES.frontend.not_found, { replace: true });
+          }
+          toast.error(t(KEY.common_something_went_wrong));
+        });
     }
   }, [recruitmentId, gangId]);
 
-  
-  useEffect(()=> {
-    if(recruitmentPositions && gang && gang) {
+  useEffect(() => {
+    if (recruitmentPositions && gang && gang) {
       setShowSpinner(false);
     }
-  },
-    [recruitmentPositions, gang, recruitment]
-  )
+  }, [recruitmentPositions, gang, recruitment]);
 
   useEffect(() => {
     if (loader) {
@@ -61,8 +59,6 @@ export function RecruitmentGangAdminPage() {
       setRecruitment(loader.recruitment);
     }
   }, [loader]);
-
-
 
   const tableColumns = [
     { content: t(KEY.recruitment_position), sortable: true },

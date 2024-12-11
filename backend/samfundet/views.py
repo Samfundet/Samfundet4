@@ -756,10 +756,9 @@ class RecruitmentPositionsPerGangForGangView(APIView):
         gang = get_object_or_404(Gang, id=gang_id)
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
         if recruitment.resolve_org() != gang.resolve_org():
-            return Response("Gang not found in recruitment organization", status=status.HTTP_404_NOT_FOUND)
+            return Response('Gang not found in recruitment organization', status=status.HTTP_404_NOT_FOUND)
         data = RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
-        return Response(data=self.serializer_class(data,many=True).data, status=status.HTTP_200_OK)
-
+        return Response(data=self.serializer_class(data, many=True).data, status=status.HTTP_200_OK)
 
 
 class SendRejectionMailView(APIView):
