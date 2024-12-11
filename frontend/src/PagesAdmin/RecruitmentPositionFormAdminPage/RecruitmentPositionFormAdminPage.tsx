@@ -16,7 +16,13 @@ export function RecruitmentPositionFormAdminPage() {
   const navigate = useNavigate();
   const { recruitmentId, gangId, positionId } = useParams();
   const [position, setPosition] = useState<Partial<RecruitmentPositionDto>>();
-  const [users, setUsers] = useState<Partial<UserDto[]>>();
+  const [users, setUsers] = useState<UserDto[]>();
+
+  useEffect(() => {
+    getUsers().then((data) => {
+      setUsers(data);
+    });
+  }, []);
 
   useEffect(() => {
     if (positionId) {
@@ -35,9 +41,6 @@ export function RecruitmentPositionFormAdminPage() {
           );
         });
     }
-    getUsers().then((data) => {
-      setUsers(data);
-    });
   }, [positionId, recruitmentId, gangId, navigate, t]);
 
   const initialData: Partial<RecruitmentPositionDto> = {

@@ -48,7 +48,7 @@ interface FormProps {
   positionId?: string;
   recruitmentId?: string;
   gangId?: string;
-  users?: Partial<UserDto[]>;
+  users?: UserDto[];
 }
 
 export function RecruitmentPositionForm({ initialData, positionId, recruitmentId, gangId, users }: FormProps) {
@@ -98,12 +98,10 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
 
   // Convert users array to dropdown options
   const interviewerOptions =
-    users
-      ?.filter((user) => user?.id && (user?.username || user?.first_name))
-      .map((user) => ({
-        value: user?.id,
-        label: user?.username || `${user?.first_name} ${user?.last_name}`,
-      })) || [];
+    users?.map((user) => ({
+      value: user.id,
+      label: user?.username || `${user?.first_name} ${user?.last_name}`,
+    })) || [];
 
   // Get currently selected interviewers
   const selectedInterviewers = form.watch('interviewer_ids') || [];
@@ -282,11 +280,9 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
                     selected={interviewerOptions.filter(
                       (option) => option.value && selectedInterviewers.includes(option.value),
                     )}
-                    onChange={(values) => {
-                      field.onChange(values);
-                    }}
                     optionsLabel="Available Interviewers"
                     selectedLabel="Selected Interviewers"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
