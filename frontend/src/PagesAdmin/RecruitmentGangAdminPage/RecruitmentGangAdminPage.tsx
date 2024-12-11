@@ -48,7 +48,7 @@ export function RecruitmentGangAdminPage() {
   }, [recruitmentId, gangId]);
 
   useEffect(() => {
-    if (recruitmentPositions && gang && gang) {
+    if (recruitmentPositions && gang && recruitment) {
       setShowSpinner(false);
     }
   }, [recruitmentPositions, gang, recruitment]);
