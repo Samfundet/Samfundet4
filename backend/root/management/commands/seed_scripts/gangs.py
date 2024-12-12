@@ -79,7 +79,7 @@ def seed():  # noqa: C901
         for gang_type in GANGS[org]:
             gtype = None
             if gang_type != '':
-                gtype, _ = GangType.objects.get_or_create(title_nb=gang_type)
+                gtype, _ = GangType.objects.get_or_create(title_nb=gang_type, organization=organization)
 
             for gang in GANGS[org][gang_type]:
                 name, abbr, sections = gang
