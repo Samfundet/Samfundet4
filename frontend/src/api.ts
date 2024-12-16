@@ -87,6 +87,11 @@ export async function register(data: RegistrationDto): Promise<number> {
   return response.status;
 }
 
+export async function changePassword(current_password: string, new_password: string): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__change_password;
+  return await axios.post(url, { current_password, new_password }, { withCredentials: true });
+}
+
 export async function getUser(): Promise<UserDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__user;
   const response = await axios.get<UserDto>(url, { withCredentials: true });
