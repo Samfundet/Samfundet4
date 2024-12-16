@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { SamfundetLogoSpinner, type Tab, TabBar, Text } from '~/Components';
 import { GangsTabs } from '~/Pages/OrganizationRecruitmentPage/Components/GangsTabs/GangsTabs';
 import { NoPositions } from '~/Pages/RecruitmentPage/Components/NoPositions/NoPositions';
-import { getGangList } from '~/api';
+import { getOrganizedGangList } from '~/api';
 import type { GangTypeDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
@@ -17,7 +17,7 @@ export function RecruitmentTabs() {
 
   useEffect(() => {
     setLoading(true);
-    getGangList()
+    getOrganizedGangList()
       //TODO: DO IN ISSUE #1121, only get GANG TYPES recruiting in "this" recruitment.
       // also, this API call should probably be renamed "getGangCategoryList"
       // THIS CAN ALSO BE USED IN GangsTypeContainer/GangPositionDropdown
