@@ -24,5 +24,6 @@ export { RecruitmentPage } from './RecruitmentPage';
 export { RouteOverviewPage } from './RouteOverviewPage';
 export { SaksdokumenterPage } from './SaksdokumenterPage';
 export { SignUpPage } from './SignUpPage';
+export { UserChangePasswordPage } from './UserChangePasswordPage';
 export { VenuePage } from './VenuePage';
 export { OrganizationRecruitmentPage } from './OrganizationRecruitmentPage';

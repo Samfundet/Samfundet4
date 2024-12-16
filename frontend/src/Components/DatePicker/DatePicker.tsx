@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { format } from 'date-fns';
-import { useMemo } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MiniCalendar } from '~/Components';
@@ -21,56 +21,52 @@ type DatePickerProps = {
   maxDate?: Date;
 };
 
-export function DatePicker({
-  value: initialValue,
-  onChange,
-  disabled,
-  label,
-  buttonClassName,
-  minDate,
-  maxDate,
-}: DatePickerProps) {
-  const isControlled = initialValue !== undefined;
+export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
+  ({ value: initialValue, onChange, disabled, label, buttonClassName, minDate, maxDate }, ref) => {
+    const isControlled = initialValue !== undefined;
 
-  const [date, setDate] = useState<Date | null>(null);
-  const [open, setOpen] = useState(false);
+    const [date, setDate] = useState<Date | null>(null);
+    const [open, setOpen] = useState(false);
 
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
-  const clickOutsideRef = useClickOutside<HTMLDivElement>(() => setOpen(false));
+    const clickOutsideRef = useClickOutside<HTMLDivElement>(() => setOpen(false));
 
-  const value = useMemo(() => {
-    if (isControlled) {
-      return initialValue;
+    const value = useMemo(() => {
+      if (isControlled) {
+        return initialValue;
+      }
+      return date;
+    }, [isControlled, initialValue, date]);
+
+    function handleChange(d: Date | null) {
+      setDate(d);
+      onChange?.(d);
     }
-    return date;
-  }, [isControlled, initialValue, date]);
 
-  function handleChange(d: Date | null) {
-    setDate(d);
-    onChange?.(d);
-  }
-
-  return (
-    <div className={styles.container} ref={clickOutsideRef}>
-      <button
-        type="button"
-        className={classNames(styles.button, buttonClassName)}
-        onClick={() => setOpen((v) => !v)}
-        disabled={disabled}
-      >
-        <Icon icon="material-symbols:calendar-month-outline-rounded" />
-        {value ? format(value, 'PPP') : <span>{label ?? t(KEY.pick_a_date)}</span>}
-      </button>
-      <div className={classNames(styles.popover, !open && styles.hidden)}>
-        <MiniCalendar
-          baseDate={value || new Date()}
-          onChange={handleChange}
-          minDate={minDate}
-          maxDate={maxDate}
-          displayLabel
-        />
+    return (
+      <div className={styles.container} ref={clickOutsideRef}>
+        <button
+          type="button"
+          className={classNames(styles.button, buttonClassName)}
+          onClick={() => setOpen((v) => !v)}
+          disabled={disabled}
+          ref={ref}
+        >
+          <Icon icon="material-symbols:calendar-month-outline-rounded" />
+          {value ? format(value, 'PPP') : <span>{label ?? t(KEY.pick_a_date)}</span>}
+        </button>
+        <div className={classNames(styles.popover, !open && styles.hidden)}>
+          <MiniCalendar
+            baseDate={value || new Date()}
+            onChange={handleChange}
+            minDate={minDate}
+            maxDate={maxDate}
+            displayLabel
+          />
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  },
+);
+DatePicker.displayName = 'DatePicker';

@@ -3,6 +3,7 @@ import styles from './Button.module.scss';
 
 export const themeToStyleMap = {
   basic: styles.button_basic,
+  selected: styles.button_selected,
   pure: styles.pure,
   text: styles.button_text,
   samf: styles.button_samf,

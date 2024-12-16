@@ -15,6 +15,7 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.password_validation import validate_password
 
 from root.constants import PHONE_NUMBER_REGEX
 from root.utils.mixins import CustomBaseSerializer
@@ -233,6 +234,22 @@ class ClosedPeriodSerializer(CustomBaseSerializer):
     class Meta:
         model = ClosedPeriod
         fields = '__all__'
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    current_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_current_password(self, value: str) -> str:
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError('Incorrect current password')
+        return value
+
+    def validate_new_password(self, value: str) -> str:
+        user = self.context['request'].user
+        validate_password(value, user)
+        return value
 
 
 class LoginSerializer(serializers.Serializer):
