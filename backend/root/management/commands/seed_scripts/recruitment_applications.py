@@ -26,13 +26,7 @@ def seed():
     for position_index, position in enumerate(positions):
         for user in sample(users, randint(0, 5)):  # Create between 0 and 5 instances for each position
             application_data = APPLICATION_DATA.copy()
-            application_data.update(
-                {
-                    'recruitment_position': position,
-                    'recruitment': position.recruitment,
-                    'user': user
-                }
-            )
+            application_data.update({'recruitment_position': position, 'recruitment': position.recruitment, 'user': user})
             _application, created = RecruitmentApplication.objects.get_or_create(**application_data)
 
             if created:
