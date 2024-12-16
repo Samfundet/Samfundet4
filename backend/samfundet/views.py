@@ -29,6 +29,7 @@ from django.contrib.auth import login, logout, update_session_auth_hash
 from django.utils.encoding import force_bytes
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group, Permission
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
@@ -881,30 +882,43 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
     queryset = RecruitmentApplication.objects.all()
 
     def update(self, request: Request, pk: int) -> Response:
-        data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
+        data = request.data.dict() if isinstance(request.data,
+                                                 QueryDict) else request.data
         recruitment_position = get_object_or_404(RecruitmentPosition, pk=pk)
+        existing_application = RecruitmentApplication.objects.filter(
+            user=request.user, recruitment_position=pk).first()
+        # If update
+        if existing_application:
+            try:
+                existing_application.withdrawn = False
+                existing_application.application_text = data['application_text']
+                existing_application.save()
+                serializer = self.serializer_class(existing_application)
+                return Response(serializer.data, status.HTTP_200_OK)
+            except ValidationError as e:
+                return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
+
+        # If create
         data['recruitment_position'] = recruitment_position.pk
         data['recruitment'] = recruitment_position.recruitment.pk
         data['user'] = request.user.pk
-        serializer = self.get_serializer(data=data)
+        serializer = self.get_serializer(
+                                         data=data)
         if serializer.is_valid():
-            existing_application = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
-            if existing_application:
-                existing_application.application_text = serializer.validated_data['application_text']
-                existing_application.save()
-                serializer = self.get_serializer(existing_application)
-                return Response(serializer.data, status=status.HTTP_200_OK)
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request: Request, pk: int) -> Response:
-        application = get_object_or_404(RecruitmentApplication, user=request.user, recruitment_position=pk)
+        application = get_object_or_404(RecruitmentApplication,
+                                        user=request.user,
+                                        recruitment_position=pk)
 
         user_id = request.query_params.get('user_id')
         if user_id:
             # TODO: Add permissions
-            application = RecruitmentApplication.objects.filter(recruitment_position=pk, user_id=user_id).first()
+            application = RecruitmentApplication.objects.filter(
+                recruitment_position=pk, user_id=user_id).first()
         serializer = self.get_serializer(application)
         return Response(serializer.data)
 
@@ -914,7 +928,8 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
         user_id = request.query_params.get('user_id')
 
         if not recruitment_id:
-            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'A recruitment parameter is required'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
 
@@ -925,9 +940,11 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
 
         if user_id:
             # TODO: Add permissions
-            applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user_id=user_id)
+            applications = RecruitmentApplication.objects.filter(
+                recruitment=recruitment, user_id=user_id)
         else:
-            applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user)
+            applications = RecruitmentApplication.objects.filter(
+                recruitment=recruitment, user=request.user)
 
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
