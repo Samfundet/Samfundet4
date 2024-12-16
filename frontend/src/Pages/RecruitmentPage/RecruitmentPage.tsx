@@ -5,8 +5,6 @@ import { getActiveRecruitments } from '~/api';
 import type { RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import type { OrgNameTypeValue } from '~/types';
-import { dbT } from '~/utils';
 import { NoPositions, RecruitmentCard } from './Components';
 import styles from './RecruitmentPage.module.scss';
 

@@ -19,7 +19,7 @@ import {
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { FormDescription } from '~/Components/Forms/Form';
 import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
-import type { OrganizationDto, RecruitmentDto, RecruitmentWriteDto } from '~/dto';
+import type { OrganizationDto, RecruitmentWriteDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import type { RecruitmentLoader } from '~/router/loaders';
