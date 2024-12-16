@@ -211,6 +211,9 @@ export const nb = prepareTranslations({
   [KEY.new_password]: 'Nytt passord',
   [KEY.admin_impersonate]: 'Stjel identitet',
   [KEY.admin_stop_impersonate]: 'Stopp identitetstyveri',
+  [KEY.admin_role_page_orggangsection]: 'Org/Gjeng/Seksjon',
+  [KEY.admin_role_page_role_since]: 'Hatt rollen siden',
+  [KEY.admin_role_page_given_by]: 'Gitt av',
 
   // LoginPage:
   [KEY.loginpage_register]: 'Lag bruker',
@@ -704,6 +707,9 @@ export const en = prepareTranslations({
   [KEY.new_password]: 'New password',
   [KEY.admin_impersonate]: 'Impersonate',
   [KEY.admin_stop_impersonate]: 'Stop impersonation',
+  [KEY.admin_role_page_orggangsection]: 'Org/Gang/Section',
+  [KEY.admin_role_page_role_since]: 'Had role since',
+  [KEY.admin_role_page_given_by]: 'Given by',
 
   // LoginPage:
   [KEY.loginpage_register]: 'Create user',
