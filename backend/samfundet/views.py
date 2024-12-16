@@ -27,9 +27,9 @@ from django.db.models import Q, Count, QuerySet
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.utils.encoding import force_bytes
+from django.core.exceptions import ValidationError
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
-from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group, Permission
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 

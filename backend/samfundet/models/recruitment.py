@@ -386,7 +386,10 @@ class RecruitmentApplication(CustomBaseModel):
         current_application = RecruitmentApplication.objects.filter(
             pk=self.pk).first()
         # validates if there are not two applications for same user and same recruitmentposition
-        if not current_application and RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, recruitment_position=self.recruitment_position).first():
+        if not current_application and RecruitmentApplication.objects.filter(
+                user=self.user,
+                recruitment=self.recruitment,
+                recruitment_position=self.recruitment_position).first():
             errors['recruitment_position'].append(self.ALREADY_APPLIED_ERROR)
         # If there is max applications, check if applicant have applied to not to many
         if self.recruitment.max_applications:
