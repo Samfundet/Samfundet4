@@ -81,6 +81,7 @@ export { TextAreaField } from './TextAreaField';
 export { ThemeSwitch } from './ThemeSwitch';
 export { TimeDisplay } from './TimeDisplay';
 export { TimeDuration } from './TimeDuration';
+export { TimeslotButton } from './TimeslotButton';
 export { TimeslotSelector } from './TimeslotSelector';
 export { ToggleSwitch } from './ToggleSwitch';
 export { ToolTip } from './ToolTip';
