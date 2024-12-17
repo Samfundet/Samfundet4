@@ -4,6 +4,7 @@ import { AuthContextProvider } from '~/context/AuthContext';
 import '~/global.scss';
 import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import { RouterProvider } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -17,12 +18,25 @@ const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error, query) => {
       console.error(error);
+
+      // Don't show toast on HTTP 404 errors
+      if (error instanceof AxiosError && error.response?.status === 404) {
+        return;
+      }
+
       toast.error((query.meta?.errorMsg as string) ?? t(KEY.common_something_went_wrong));
     },
   }),
   defaultOptions: {
     queries: {
-      retry: 2, // default is 3
+      retry: (failureCount, error) => {
+        // Don't retry on HTTP 404 responses
+        if (error instanceof AxiosError && error.response?.status === 404) {
+          return false;
+        }
+        // max 2 retries
+        return failureCount < 2;
+      },
     },
   },
 });
