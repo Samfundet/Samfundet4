@@ -60,7 +60,7 @@ def generate_timeslots(start_time: datetime.time, end_time: datetime.time, inter
     # Calculate the number of intervals. Rounded to ensure we don't bypass end_time
     num_intervals = int(diff.total_seconds() / (interval_minutes * 60))
 
-    timeslots = [start_datetime + datetime.timedelta(minutes=i * interval_minutes) for i in range(num_intervals + 1)]
+    timeslots = [start_datetime + datetime.timedelta(minutes=i * interval_minutes) for i in range(num_intervals)]
     formatted = [timeslot.strftime('%H:%M') for timeslot in timeslots]
 
     return formatted
