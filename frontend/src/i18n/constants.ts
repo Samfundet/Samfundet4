@@ -464,6 +464,7 @@ export const KEY = {
   interview_availability_description: 'interview_availability_description',
   interview_availability_interval_description: 'interview_availability_interval_description',
   interview_availability_error_end_date_before_start_date: 'interview_availability_error_end_date_before_start_date',
+  available_timeslots: 'available_timeslots',
 
   // Feedback
   feedback_type: 'feedback_type',

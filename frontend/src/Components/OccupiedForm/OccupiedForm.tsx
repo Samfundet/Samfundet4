@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { MiniCalendar, TimeslotContainer } from '~/Components';
+import { MiniCalendar, TimeslotSelector } from '~/Components';
 import { getOccupiedTimeslots, getRecruitmentAvailability, postOccupiedTimeslots } from '~/api';
 import type { OccupiedTimeslotDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
@@ -111,13 +111,13 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
               markers={markers}
             />
 
-            <TimeslotContainer
+            <TimeslotSelector
               selectedDate={selectedDate}
               timeslots={timeslots}
-              onChange={(slots) => setOccupiedTimeslots(slots)}
-              activeTimeslots={occupiedTimeslots}
-              selectMultiple={true}
-              hasDisabledTimeslots={false}
+              onChange={setOccupiedTimeslots}
+              selectedTimeslots={occupiedTimeslots}
+              selectMultiple
+              label={t(KEY.occupied_select_time_text)}
             />
           </div>
 

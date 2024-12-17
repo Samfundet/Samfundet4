@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import classNames from 'classnames';
 import { addDays, addMinutes, format, parse } from 'date-fns';
 import i18next from 'i18next';
 import { useState } from 'react';
@@ -19,7 +18,7 @@ import {
   Input,
   MiniCalendar,
   NumberInput,
-  TimeslotContainer,
+  TimeslotSelector,
 } from '~/Components';
 import { FormDescription } from '~/Components/Forms/Form';
 import type { RecruitmentInterviewAvailabilityDto } from '~/dto';
@@ -156,6 +155,7 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
                     <Input
                       type="text"
                       placeholder="HH:MM"
+                      maxLength={5}
                       onChange={(e) => {
                         onChange(e);
                         updateTimeslotPreview();
@@ -177,6 +177,7 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
                     <Input
                       type="text"
                       placeholder="HH:MM"
+                      maxLength={5}
                       onChange={(e) => {
                         onChange(e);
                         updateTimeslotPreview();
@@ -217,11 +218,11 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
             <div className={styles.preview}>
               <MiniCalendar minDate={fromDate} maxDate={toDate} baseDate={fromDate || new Date()} displayLabel={true} />
               {timeslots && (
-                <TimeslotContainer
+                <TimeslotSelector
                   selectedDate={new Date()}
                   timeslots={timeslots}
-                  selectMultiple={false}
-                  hasDisabledTimeslots={false}
+                  label={t(KEY.available_timeslots)}
+                  readOnly
                 />
               )}
             </div>

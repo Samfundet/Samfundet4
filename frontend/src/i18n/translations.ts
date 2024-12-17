@@ -465,6 +465,7 @@ export const nb = prepareTranslations({
   [KEY.interview_availability_interval_description]:
     'Et intervall på 30 minutter vil gi tidsluker på 08:00, 08:30, 09:00, osv.',
   [KEY.interview_availability_error_end_date_before_start_date]: 'Sluttdato må være etter startdato',
+  [KEY.available_timeslots]: 'Tilgjengelige tidspunkt',
 
   // Feedback
   [KEY.feedback_type]: 'Type tilbakemelding',
@@ -981,6 +982,7 @@ export const en = prepareTranslations({
   [KEY.interview_availability_interval_description]:
     'An interval of 30 minutes will give timeslots of 08:00, 08:30, 09:00, etc.',
   [KEY.interview_availability_error_end_date_before_start_date]: 'End date must be after start date',
+  [KEY.available_timeslots]: 'Available times',
 
   // Feedback
   [KEY.feedback_type]: 'Feedback type',
