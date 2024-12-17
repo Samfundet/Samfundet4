@@ -96,16 +96,13 @@ th {
 
 .sortable_th {
   cursor: pointer;
+  position: relative;
   transition: 0.2s;
 }
 
 .sort_icons {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  float: right;
-
+  position: absolute;
+  right: 0;
   .icon {
     background-color: transparent;
     padding: 2px;
