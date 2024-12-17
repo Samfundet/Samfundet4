@@ -63,8 +63,8 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
     defaultValues: {
       start_date: data?.start_date ? new Date(data.start_date) : undefined,
       end_date: data?.end_date ? new Date(data.end_date) : undefined,
-      start_time: data?.start_time,
-      end_time: data?.end_time,
+      start_time: data?.start_time || '',
+      end_time: data?.end_time || '',
       timeslot_interval: data?.timeslot_interval || 30,
     },
   });
