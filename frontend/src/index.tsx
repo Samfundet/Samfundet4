@@ -17,13 +17,12 @@ import { router } from '~/router/router';
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error, query) => {
-      console.error(error);
-
-      // Don't show toast on HTTP 404 errors
+      // Ignore HTTP 404 responses
       if (error instanceof AxiosError && error.response?.status === 404) {
         return;
       }
 
+      console.error(error);
       toast.error((query.meta?.errorMsg as string) ?? t(KEY.common_something_went_wrong));
     },
   }),
