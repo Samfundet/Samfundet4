@@ -1,9 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { addDays, addMinutes, format, parse } from 'date-fns';
 import i18next from 'i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 import {
   Button,
@@ -21,7 +23,8 @@ import {
   TimeslotSelector,
 } from '~/Components';
 import { FormDescription } from '~/Components/Forms/Form';
-import type { RecruitmentInterviewAvailabilityDto } from '~/dto';
+import { postRecruitmentAvailability } from '~/api';
+import type { RecruitmentAvailabilityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import {
   AVAILABILITY_TIMESLOT_INTERVAL,
@@ -32,7 +35,8 @@ import {
 import styles from './RecruitmentInterviewAvailabilityForm.module.scss';
 
 type Props = {
-  data?: RecruitmentInterviewAvailabilityDto;
+  recruitmentId: number;
+  data?: RecruitmentAvailabilityDto;
 };
 
 const schema = z
@@ -50,27 +54,54 @@ const schema = z
 
 type SchemaType = z.infer<typeof schema>;
 
-export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
-  const [fromDate, setFromDate] = useState<Date | undefined>(new Date());
-  const [toDate, setToDate] = useState<Date | undefined>(new Date());
+export function RecruitmentInterviewAvailabilityForm({ recruitmentId, data }: Props) {
+  const defaultStartDate = data?.start_date ? new Date(data.start_date) : undefined;
+  const defaultEndDate = data?.end_date ? new Date(data.end_date) : undefined;
+
+  const [fromDate, setFromDate] = useState<Date | undefined>(defaultStartDate);
+  const [toDate, setToDate] = useState<Date | undefined>(defaultEndDate);
 
   const [timeslots, setTimeslots] = useState<string[]>([]);
 
   const { t } = useTranslation();
 
+  const { mutate, isPending } = useMutation({
+    mutationFn: ({ recruitmentId, data }: { recruitmentId: number; data: Partial<RecruitmentAvailabilityDto> }) =>
+      postRecruitmentAvailability(recruitmentId, data),
+    onSuccess: () => {
+      toast.success(t(KEY.common_save_successful));
+    },
+  });
+
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      start_date: data?.start_date ? new Date(data.start_date) : undefined,
-      end_date: data?.end_date ? new Date(data.end_date) : undefined,
+      start_date: defaultStartDate,
+      end_date: defaultEndDate,
       start_time: data?.start_time || '',
       end_time: data?.end_time || '',
       timeslot_interval: data?.timeslot_interval || 30,
     },
   });
 
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+    updateTimeslotPreview();
+  }, [data]);
+
   function onSubmit(values: SchemaType) {
-    console.log('Values:', values);
+    mutate({
+      recruitmentId,
+      data: {
+        start_date: format(values.start_date, 'yyyy-LL-dd'),
+        end_date: format(values.end_date, 'yyyy-LL-dd'),
+        start_time: values.start_time,
+        end_time: values.end_time,
+        timeslot_interval: values.timeslot_interval,
+      },
+    });
   }
 
   function updateTimeslotPreview() {
@@ -110,6 +141,7 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
             <FormField
               control={form.control}
               name="start_date"
+              disabled={isPending}
               render={({ field: { onChange, ...fieldProps } }) => (
                 <FormItem>
                   <FormLabel>{t(KEY.start_date)}</FormLabel>
@@ -129,6 +161,7 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
             <FormField
               control={form.control}
               name="end_date"
+              disabled={isPending}
               render={({ field: { onChange, ...fieldProps } }) => (
                 <FormItem>
                   <FormLabel>{t(KEY.end_date)}</FormLabel>
@@ -148,6 +181,7 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
             <FormField
               control={form.control}
               name="start_time"
+              disabled={isPending}
               render={({ field: { onChange, ...fieldProps } }) => (
                 <FormItem>
                   <FormLabel>{t(KEY.start_time)}</FormLabel>
@@ -170,6 +204,7 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
             <FormField
               control={form.control}
               name="end_time"
+              disabled={isPending}
               render={({ field: { onChange, ...fieldProps } }) => (
                 <FormItem>
                   <FormLabel>{t(KEY.end_time)}</FormLabel>
@@ -192,6 +227,7 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
             <FormField
               control={form.control}
               name="timeslot_interval"
+              disabled={isPending}
               render={({ field: { onChange, ...fieldProps } }) => (
                 <FormItem>
                   <FormLabel>{t(KEY.common_interval)}</FormLabel>
@@ -229,7 +265,7 @@ export function RecruitmentInterviewAvailabilityForm({ data }: Props) {
           </div>
         </div>
         <div className={styles.action_row}>
-          <Button type="submit" theme="green" rounded>
+          <Button type="submit" theme="green" disabled={isPending} rounded>
             {t(KEY.common_save)}
           </Button>
         </div>

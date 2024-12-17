@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 import re
 import itertools
 from typing import TYPE_CHECKING
@@ -1008,12 +1009,21 @@ class RecruitmentApplicationForApplicantSerializer(CustomBaseSerializer):
 
 class RecruitmentInterviewAvailabilitySerializer(CustomBaseSerializer):
     # Set custom format to remove seconds from start/end times, as they are ignored
-    start_time = serializers.DateTimeField(format='%H:%M')
-    end_time = serializers.DateTimeField(format='%H:%M')
+    start_time = serializers.TimeField(format='%H:%M')
+    end_time = serializers.TimeField(format='%H:%M')
 
     class Meta:
         model = RecruitmentInterviewAvailability
         fields = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+
+    def validate(self, data: dict) -> dict:
+        start_date: datetime.date = data.get('start_date')
+        end_date: datetime.date = data.get('end_date')
+
+        if start_date > end_date:
+            raise serializers.ValidationError("end_date must be greater than start_date")
+
+        return super().validate(data)
 
 
 class OccupiedTimeslotSerializer(serializers.ModelSerializer):

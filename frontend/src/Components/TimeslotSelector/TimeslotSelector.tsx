@@ -39,7 +39,6 @@ export function TimeslotSelector({
   const [dragSetSelected, setDragSetSelected] = useState(false);
 
   useEffect(() => {
-    console.log(selectedTimeslots);
     onChange?.(selectedTimeslots);
   }, [onChange, selectedTimeslots]);
 

@@ -29,6 +29,7 @@ import type {
   RecruitmentDto,
   RecruitmentGangDto,
   RecruitmentGangStatDto,
+  RecruitmentInterviewAvailabilityDto,
   RecruitmentPositionDto,
   RecruitmentPositionPostDto,
   RecruitmentPositionPutDto,
@@ -610,6 +611,19 @@ export async function getRecruitmentPositionsGangForGang(
   const response = await axios.get(url, { withCredentials: true });
 
   return response;
+}
+
+export async function postRecruitmentAvailability(
+  recruitmentId: number,
+  data: Partial<RecruitmentInterviewAvailabilityDto>,
+): Promise<AxiosResponse<RecruitmentAvailabilityDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_availability,
+      urlParams: { id: recruitmentId },
+    });
+  return await axios.post(url, data, { withCredentials: true });
 }
 
 export async function getRecruitmentAvailability(
