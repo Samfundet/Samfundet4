@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useMouseDown } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { formatDateYMD, lowerCapitalize } from '~/utils';
-import styles from './TimeslotContainer.module.scss';
+import styles from './TimeslotSelector.module.scss';
 import { TimeslotButton } from './components/TimeslotButton';
 
 type Props = {
@@ -19,7 +19,7 @@ type Props = {
   label?: string;
 };
 
-export function TimeslotContainer({
+export function TimeslotSelector({
   selectedDate,
   timeslots,
   onChange,
