@@ -1280,6 +1280,9 @@ class RecruitmentAvailabilityView(APIView):
             {
                 'start_date': availability.start_date,
                 'end_date': availability.end_date,
+                'start_time': start_time.strftime('%H:%M'),
+                'end_time': end_time.strftime('%H:%M'),
+                'timeslot_interval': interval,
                 'timeslots': timeslots,
             }
         )

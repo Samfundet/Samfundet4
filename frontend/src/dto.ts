@@ -41,6 +41,9 @@ export type RecruitmentInterviewAvailabilityDto = {
 export type RecruitmentAvailabilityDto = {
   start_date: string;
   end_date: string;
+  start_time: string;
+  end_time: string;
+  timeslot_interval: number;
   timeslots: string[];
 };
 
