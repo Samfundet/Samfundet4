@@ -340,7 +340,7 @@ export const KEY = {
   recruitment_accepted_applicants: 'recruitment_accepted_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
   recrutment_export_to_csv: 'recrutment_export_to_csv',
-  recruitment_gangs_with_separate_positions: 'recruitment_gangs_with_separate_positions',
+  recruitment_positions_with_separate_recruitment: 'recruitment_positions_with_separate_recruitment',
   application_deadline: 'application_deadline',
   recruitment_applicants_without_interview: 'recruitment_applicants_without_interview',
   recruitment_applicants_without_interview_help_text: 'recruitment_applicants_without_interview_help_text',
@@ -429,6 +429,9 @@ export const KEY = {
   admin_saksdokumenter_cannot_reupload: 'admin_saksdokumenter_cannot_reupload',
   admin_impersonate: 'admin_impersonate',
   admin_stop_impersonate: 'admin_stop_impersonate',
+  admin_role_page_orggangsection: 'admin_role_page_orggangsection',
+  admin_role_page_role_since: 'admin_role_page_role_since',
+  admin_role_page_given_by: 'admin_role_page_given_by',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',

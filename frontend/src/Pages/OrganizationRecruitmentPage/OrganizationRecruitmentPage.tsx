@@ -4,17 +4,32 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Logo, OccupiedFormModal, Page, SamfundetLogoSpinner, Text, Video } from '~/Components';
 import { PersonalRow } from '~/Pages/RecruitmentPage';
-import { getOrganization, getRecruitment } from '~/api';
+import { getRecruitment } from '~/api';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
 import type { RecruitmentDto } from '~/dto';
 import { useDesktop, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { OrgNameType, type OrgNameTypeValue } from '~/types';
-import { dbT, getObjectFieldOrNumber } from '~/utils';
+import { dbT } from '~/utils';
 import { GangSeparatePositions, GangTypeContainer, RecruitmentTabs } from './Components';
 import styles from './OrganizationRecruitmentPage.module.scss';
 
 type ViewMode = 'list' | 'tab';
+
+const ORG_STYLES = {
+  [OrgNameType.SAMFUNDET_NAME]: {
+    subHeaderStyle: styles.samfRecruitmentSubHeader,
+  },
+  [OrgNameType.UKA_NAME]: {
+    subHeaderStyle: styles.ukaRecruitmentSubHeader,
+  },
+  [OrgNameType.ISFIT_NAME]: {
+    subHeaderStyle: styles.isfitRecruitmentSubHeader,
+  },
+  [OrgNameType.FALLBACK]: {
+    subHeaderStyle: '',
+  },
+};
 
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
@@ -23,7 +38,6 @@ export function OrganizationRecruitmentPage() {
   const { t } = useTranslation();
   const { changeOrgTheme, organizationTheme } = useOrganizationContext();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
-  const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
   const [loading, setLoading] = useState<boolean>(true);
   const [positionsViewMode, setViewMode] = useState<ViewMode>('list');
 
@@ -43,25 +57,10 @@ export function OrganizationRecruitmentPage() {
 
   useEffect(() => {
     if (recruitment) {
-      getOrganization(getObjectFieldOrNumber<number>(recruitment.organization, 'id'))
-        .then((response) => {
-          if (Object.values(OrgNameType).includes(response.name as OrgNameTypeValue)) {
-            setOrganizationName(response.name as OrgNameTypeValue);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          setOrganizationName(OrgNameType.FALLBACK);
-        });
+      changeOrgTheme(recruitment.organization.name as OrgNameTypeValue);
     }
     setLoading(false);
-  }, [recruitment]);
-
-  useEffect(() => {
-    if (organizationName) {
-      changeOrgTheme(organizationName);
-    }
-  }, [organizationName, changeOrgTheme]);
+  }, [recruitment, changeOrgTheme]);
 
   function toggleViewAll() {
     const toggledValue = !viewAllPositions;
@@ -75,7 +74,11 @@ export function OrganizationRecruitmentPage() {
       ) : (
         <div className={styles.container}>
           <div className={styles.organizationHeader} style={{ backgroundColor: organizationTheme?.pagePrimaryColor }}>
-            <Logo organization={organizationName} color="light" size={isDesktop ? 'small' : 'xsmall'} />
+            <Logo
+              organization={(recruitment?.organization.name as OrgNameTypeValue) ?? OrgNameType.FALLBACK}
+              color="light"
+              size={isDesktop ? 'small' : 'xsmall'}
+            />
             <Text as="strong" size={isDesktop ? 'xl' : 'l'}>
               {dbT(recruitment, 'name')}
             </Text>
@@ -83,14 +86,12 @@ export function OrganizationRecruitmentPage() {
           {recruitment?.promo_media && <Video embedId={recruitment.promo_media} className={styles.video} />}
           <div
             className={classNames(
-              organizationName === 'Samfundet' && styles.samfRecruitmentSubHeader,
-              organizationName === 'UKA' && styles.ukaRecruitmentSubHeader,
-              organizationName === 'ISFiT' && styles.isfitRecruitmentSubHeader,
+              ORG_STYLES[(recruitment?.organization.name as OrgNameTypeValue) ?? OrgNameType.FALLBACK].subHeaderStyle,
               styles.basicRecruitmentSubHeader,
             )}
           >
             <Text as={'strong'} size={isDesktop ? 'xl' : 'l'}>
-              {t(KEY.recruitment_apply_for)} {organizationName}
+              {t(KEY.recruitment_apply_for)} {recruitment?.organization.name}
             </Text>
           </div>
           <div className={styles.personalRow}>
@@ -99,7 +100,7 @@ export function OrganizationRecruitmentPage() {
                 <OccupiedFormModal recruitmentId={+recruitmentId} />
                 <PersonalRow
                   recruitmentId={recruitmentId}
-                  organizationName={organizationName}
+                  organizationName={recruitment?.organization.name}
                   showRecruitmentBtn={false}
                 />
               </>
