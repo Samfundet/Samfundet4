@@ -109,7 +109,7 @@ class TestRecruitmentPosition:
         'norwegian_applicants_only': False,
         'tags': 'tag1, tag2, tag3',
     }
-   
+
     def test_create_recruitmentposition_gang(self, fixture_recruitment: Recruitment, fixture_gang: Gang):
         test_position = RecruitmentPosition.objects.create(**self.default_data, recruitment=fixture_recruitment, gang=fixture_gang)
         assert test_position.id
@@ -170,6 +170,7 @@ class TestRecruitmentPosition:
             **self.default_data, section=fixture_gang_section, has_file_upload=True, file_description_en='Description', file_description_nb='Description'
         )
         assert test_position.id
+
 
 class TestRecruitmentStats:
     def test_recruitment_has_stats(self, fixture_recruitment: Recruitment):
