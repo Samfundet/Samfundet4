@@ -74,6 +74,7 @@ urlpatterns = [
     path('home/', views.HomePageView().as_view(), name='home'),
     path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
     path('webhook/', views.WebhookView.as_view(), name='webhook'),
+    path('gangtypes/<int:organization>/', views.GangTypeOrganizationView.as_view(), name='gangsorganized'),
     ########## Lyche ##########
     path('check-reservation/', views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
     ########## Recruitment ##########

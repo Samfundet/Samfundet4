@@ -307,6 +307,15 @@ class GangTypeView(ModelViewSet):
     queryset = GangType.objects.all()
 
 
+class GangTypeOrganizationView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = GangTypeSerializer
+
+    def get(self, request: Request, organization: int) -> Response:
+        data = GangType.objects.filter(organization=organization)
+        return Response(data=self.serializer_class(data, many=True).data, status=status.HTTP_200_OK)
+
+
 class InformationPageView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = InformationPageSerializer
