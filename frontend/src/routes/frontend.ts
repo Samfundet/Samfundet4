@@ -35,6 +35,12 @@ export const ROUTES_FRONTEND = {
   sulten_reservation: '/lyche/reservation/',
   sulten_about: '/lyche/about/',
   sulten_contact: 'lyche/contact/',
+
+  // ==================== //
+  //  User control panel  //
+  // ==================== //
+  user_change_password: '/control-panel/password/',
+
   // ==================== //
   //      Admin pages     //
   // ==================== //

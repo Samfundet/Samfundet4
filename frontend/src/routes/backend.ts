@@ -570,6 +570,7 @@ export const ROUTES_BACKEND = {
   samfundet__login: '/login/',
   samfundet__register: '/register/',
   samfundet__logout: '/logout/',
+  samfundet__change_password: '/password/change/',
   samfundet__user: '/user/',
   samfundet__groups: '/groups/',
   samfundet__users: '/users/',

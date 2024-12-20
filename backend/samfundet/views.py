@@ -25,7 +25,7 @@ from django.utils import timezone
 from django.core.mail import EmailMessage
 from django.db.models import Q, Count, QuerySet
 from django.shortcuts import get_object_or_404
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.utils.encoding import force_bytes
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
@@ -76,6 +76,7 @@ from .serializers import (
     UserFeedbackSerializer,
     UserGangRoleSerializer,
     InterviewRoomSerializer,
+    ChangePasswordSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
@@ -479,6 +480,20 @@ class RegisterView(APIView):
             headers={XCSRFTOKEN: new_csrf_token},
         )
         return res
+
+
+class ChangePasswordView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request: Request) -> Response:
+        serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        new_password = serializer.validated_data['new_password']
+        user = request.user
+        user.set_password(new_password)
+        user.save()
+        update_session_auth_hash(request, user)
+        return Response({'message': 'Successfully updated password'}, status=status.HTTP_200_OK)
 
 
 class UserView(APIView):

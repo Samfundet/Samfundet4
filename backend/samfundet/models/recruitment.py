@@ -143,6 +143,16 @@ class RecruitmentPosition(CustomBaseModel):
     gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting', null=True, blank=True)
     section = models.ForeignKey(GangSection, on_delete=models.CASCADE, help_text='The section that is recruiting', null=True, blank=True)
 
+    has_file_upload = models.BooleanField(help_text='Does position have file upload', default=False)
+    file_description_nb = models.TextField(help_text='Description of file needed (NB)', null=True, blank=True)
+    file_description_en = models.TextField(help_text='Description of file needed (EN)', null=True, blank=True)
+
+    # TODO: Implement tag functionality
+    tags = models.CharField(max_length=100, help_text='Tags for the position')
+
+    # TODO: Implement interviewer functionality
+    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
+
     recruitment = models.ForeignKey(
         Recruitment,
         on_delete=models.CASCADE,
@@ -160,12 +170,6 @@ class RecruitmentPosition(CustomBaseModel):
         on_delete=models.SET_NULL,
         help_text='Shared interviewgroup for position',
     )
-
-    # TODO: Implement tag functionality
-    tags = models.CharField(max_length=100, help_text='Tags for the position')
-
-    # TODO: Implement interviewer functionality
-    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
 
     def get_section_name(self, language: str = 'nb') -> str | None:
         if not self.section:
@@ -190,11 +194,31 @@ class RecruitmentPosition(CustomBaseModel):
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'
 
-    def clean(self) -> None:
-        super().clean()
+    # Error messages
+    ONLY_ONE_OWNER_ERROR = 'Position must be owned by either gang or section, not both'
+    NO_OWNER_ERROR = 'Position must have an owner, either a gang or a gang section'
+    FILE_DESCRIPTION_REQUIRED_ERROR = 'Description of file is needed, if position has file upload'
 
-        if (self.gang and self.section) or not (self.gang or self.section):
-            raise ValidationError('Position must be owned by either gang or section, not both')
+    def clean(self) -> None:  # noqa: C901
+        super().clean()
+        errors: dict[str, list[ValidationError]] = defaultdict(list)
+
+        if self.gang and self.section:
+            # Both gang and section provide
+            errors['gang'].append(self.ONLY_ONE_OWNER_ERROR)
+            errors['section'].append(self.ONLY_ONE_OWNER_ERROR)
+        elif not (self.gang or self.section):
+            # neither gang nor section provided
+            errors['gang'].append(self.NO_OWNER_ERROR)
+            errors['section'].append(self.NO_OWNER_ERROR)
+        if self.has_file_upload:
+            # Check Norwegian file description
+            if not self.file_description_nb or len(self.file_description_nb) == 0:
+                errors['file_description_nb'].append(self.FILE_DESCRIPTION_REQUIRED_ERROR)
+            # Check English file description
+            if not self.file_description_en or len(self.file_description_en) == 0:
+                errors['file_description_en'].append(self.FILE_DESCRIPTION_REQUIRED_ERROR)
+        raise ValidationError(errors)
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         if self.norwegian_applicants_only:
