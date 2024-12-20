@@ -1195,7 +1195,7 @@ class DownloadAllRecruitmentApplicationCSV(APIView):
                 'Intervjusted',
                 'Prioritet',
                 'Status',
-                'Søkers rangering',
+                'Sokers rangering',
                 'Intervjuer satt',
             ],
         )
@@ -1214,7 +1214,7 @@ class DownloadAllRecruitmentApplicationCSV(APIView):
                     'Intervjusted': application.interview.interview_location if application.interview else '',
                     'Prioritet': application.get_recruiter_priority_display(),
                     'Status': application.get_recruiter_status_display(),
-                    'Søkers rangering': f'{application.applicant_priority}/{application.get_total_applications()}',
+                    'Sokers rangering': f'{application.applicant_priority}/{application.get_total_applications()}',
                     'Intervjuer satt': f'{application.get_total_interviews()}/{application.get_total_applications()}',
                 }
             )
@@ -1252,8 +1252,8 @@ class DownloadRecruitmentApplicationGangCSV(APIView):
                 'Intervjusted',
                 'Prioritet',
                 'Status',
-                'Søkers rangering',
-                'Intervjuer satt',
+                'Sokers rangering (Hele Opptak)',
+                'Intervjuer satt (For Gjeng)',
             ],
         )
         writer.writeheader()
@@ -1269,7 +1269,7 @@ class DownloadRecruitmentApplicationGangCSV(APIView):
                     'Intervjusted': application.interview.interview_location if application.interview else '',
                     'Prioritet': application.get_recruiter_priority_display(),
                     'Status': application.get_recruiter_status_display(),
-                    'Søkers rangering': f'{application.applicant_priority}/{application.get_total_applications()}',
+                    'Sokers rangering (Hele Opptak)': f'{application.applicant_priority}/{application.get_total_applications()}',
                     'Intervjuer satt': f'{application.get_total_interviews_for_gang()}/{application.get_total_applications_for_gang()}',
                 }
             )
