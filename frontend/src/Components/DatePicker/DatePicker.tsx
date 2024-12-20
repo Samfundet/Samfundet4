@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { format } from 'date-fns';
-import React, { forwardRef, useMemo } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MiniCalendar } from '~/Components';
