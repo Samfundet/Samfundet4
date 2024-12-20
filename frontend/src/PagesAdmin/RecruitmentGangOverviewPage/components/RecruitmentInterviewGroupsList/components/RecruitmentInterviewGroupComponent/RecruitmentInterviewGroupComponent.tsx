@@ -1,5 +1,5 @@
 import { ExpandableHeader, Table } from '~/Components';
-import type { RecruitmentSharedInterviewGroupDto, RecruitmentStatsDto } from '~/dto';
+import type { RecruitmentSharedInterviewGroupDto } from '~/dto';
 import { dbT } from '~/utils';
 import styles from './RecruitmentInterviewGroupComponent.module.scss';
 

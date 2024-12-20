@@ -109,7 +109,7 @@ class TestRecruitmentPosition:
         'norwegian_applicants_only': False,
         'tags': 'tag1, tag2, tag3',
     }
-
+   
     def test_create_recruitmentposition_gang(self, fixture_recruitment: Recruitment, fixture_gang: Gang):
         test_position = RecruitmentPosition.objects.create(**self.default_data, recruitment=fixture_recruitment, gang=fixture_gang)
         assert test_position.id
@@ -130,6 +130,46 @@ class TestRecruitmentPosition:
         e = dict(error.value)
         assert RecruitmentPosition.POSITION_NOT_IN_RECRUITMENTORGANIZATION_ERROR in e['gang']
 
+    def test_create_recruitmentposition_section(self, fixture_gang_section: GangSection):
+        test_position = RecruitmentPosition.objects.create(**self.default_data, section=fixture_gang_section)
+        assert test_position.id
+
+    def test_create_recruitmentposition_no_section(self):
+        with pytest.raises(ValidationError) as error:
+            RecruitmentPosition.objects.create(**self.default_data)
+        e = dict(error.value)
+        assert RecruitmentPosition.NO_OWNER_ERROR in e['section']
+        assert RecruitmentPosition.NO_OWNER_ERROR in e['gang']
+
+    def test_create_recruitmentposition_only_one_owner(self, fixture_gang_section: GangSection, fixture_gang: Gang):
+        with pytest.raises(ValidationError) as error:
+            RecruitmentPosition.objects.create(**self.default_data, section=fixture_gang_section, gang=fixture_gang)
+        e = dict(error.value)
+        assert RecruitmentPosition.ONLY_ONE_OWNER_ERROR in e['section']
+        assert RecruitmentPosition.ONLY_ONE_OWNER_ERROR in e['gang']
+
+    def test_create_recruitmentposition_file_upload_no_description(self, fixture_gang_section: GangSection):
+        with pytest.raises(ValidationError) as error:
+            RecruitmentPosition.objects.create(**self.default_data, section=fixture_gang_section, has_file_upload=True)
+        e = dict(error.value)
+        assert RecruitmentPosition.FILE_DESCRIPTION_REQUIRED_ERROR in e['file_description_nb']
+        assert RecruitmentPosition.FILE_DESCRIPTION_REQUIRED_ERROR in e['file_description_en']
+
+        with pytest.raises(ValidationError) as error:
+            RecruitmentPosition.objects.create(**self.default_data, section=fixture_gang_section, has_file_upload=True, file_description_en='Description')
+        e = dict(error.value)
+        assert RecruitmentPosition.FILE_DESCRIPTION_REQUIRED_ERROR in e['file_description_nb']
+
+        with pytest.raises(ValidationError) as error:
+            RecruitmentPosition.objects.create(**self.default_data, section=fixture_gang_section, has_file_upload=True, file_description_nb='Description')
+        e = dict(error.value)
+        assert RecruitmentPosition.FILE_DESCRIPTION_REQUIRED_ERROR in e['file_description_en']
+
+    def test_create_recruitmentposition_file_upload(self, fixture_gang_section: GangSection):
+        test_position = RecruitmentPosition.objects.create(
+            **self.default_data, section=fixture_gang_section, has_file_upload=True, file_description_en='Description', file_description_nb='Description'
+        )
+        assert test_position.id
 
 class TestRecruitmentStats:
     def test_recruitment_has_stats(self, fixture_recruitment: Recruitment):
