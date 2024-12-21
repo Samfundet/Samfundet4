@@ -6,10 +6,13 @@ $event-header-height: 5em;
 $event-header-bg-light: rgba(255, 255, 255, 0.9);
 $event-header-bg-dark: rgba(31, 31, 31, 0.9);
 
-
 @keyframes anim-in {
-  0% { transform: translateY(-1em); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(-1em);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .header_row {
@@ -87,7 +90,7 @@ $event-header-bg-dark: rgba(31, 31, 31, 0.9);
   gap: 1em;
   @include for-mobile-only {
     justify-content: center;
-    padding-bottom: .3em;
+    padding-bottom: 0.3em;
   }
 }
 
@@ -134,7 +137,6 @@ $event-header-bg-dark: rgba(31, 31, 31, 0.9);
   font-weight: 700;
   color: $red-samf;
   text-align: center;
-  padding: .5em;
-  border-radius: .5em .5em 0 0;
+  padding: 0.5em;
+  border-radius: 0.5em 0.5em 0 0;
 }
-

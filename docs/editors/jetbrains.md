@@ -11,12 +11,12 @@ easier.
 
 Contents:
 
-* [PyCharm](#pycharm)
-    * [Plugins](#plugins)
-    * [Python Interpreter](#python-interpreter)
-* [WebStorm](#webstorm)
-    * [Plugins](#plugins-1)
-    * [Dependencies](#dependencies)
+- [PyCharm](#pycharm)
+  - [Plugins](#plugins)
+  - [Python Interpreter](#python-interpreter)
+- [WebStorm](#webstorm)
+  - [Plugins](#plugins-1)
+  - [Dependencies](#dependencies)
 
 ---
 
@@ -24,12 +24,12 @@ Contents:
 
 ### Plugins
 
-* [IdeaVim](https://plugins.jetbrains.com/plugin/164-ideavim)
-    * The most important one
-    * Add `set relativenumber` to `~/.ideavimrc` to get relative line numbering in your editor!
-        * You can open this file by clicking the "V" logo in the bottom right of your editor then `Open ~/.ideavimrc`
-* [ruff](https://plugins.jetbrains.com/plugin/20574-ruff)
-    * Formatter/linter for Python
+- [IdeaVim](https://plugins.jetbrains.com/plugin/164-ideavim)
+  - The most important one
+  - Add `set relativenumber` to `~/.ideavimrc` to get relative line numbering in your editor!
+    - You can open this file by clicking the "V" logo in the bottom right of your editor then `Open ~/.ideavimrc`
+- [ruff](https://plugins.jetbrains.com/plugin/20574-ruff)
+  - Formatter/linter for Python
 
 ### Python Interpreter
 
@@ -65,16 +65,16 @@ environment:
 
 ### Plugins
 
-* [IdeaVim](https://plugins.jetbrains.com/plugin/164-ideavim)
-    * The most important one
-    * Add `set relativenumber` to `~/.ideavimrc` to get relative line numbering in your editor!
-        * You can open this file by clicking the "V" logo in the bottom right of your editor then `Open ~/.ideavimrc`
-* [Biome](https://plugins.jetbrains.com/plugin/22761-biome)
-    * Formatter/linter for frontend code.
-    * Below is the recommended configuration (`Settings -> Language & Frameworks -> Biome`). It'll automatically format
-      and apply safe fixes on save (which in the
-      JetBrains world means when you tab/switch windows)
-      ![Biome configuration](./assets/biome_config.png)
+- [IdeaVim](https://plugins.jetbrains.com/plugin/164-ideavim)
+  - The most important one
+  - Add `set relativenumber` to `~/.ideavimrc` to get relative line numbering in your editor!
+    - You can open this file by clicking the "V" logo in the bottom right of your editor then `Open ~/.ideavimrc`
+- [Biome](https://plugins.jetbrains.com/plugin/22761-biome)
+  - Formatter/linter for frontend code.
+  - Below is the recommended configuration (`Settings -> Language & Frameworks -> Biome`). It'll automatically format
+    and apply safe fixes on save (which in the
+    JetBrains world means when you tab/switch windows)
+    ![Biome configuration](./assets/biome_config.png)
 
 ### Dependencies
 

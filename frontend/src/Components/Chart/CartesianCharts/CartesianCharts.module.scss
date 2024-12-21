@@ -1,34 +1,34 @@
-@import "../../../constants";
+@import '../../../constants';
 
-@import "../../../mixins";
+@import '../../../mixins';
 
-.container{
+.container {
   display: grid;
   grid-template-rows: auto auto;
   grid-template-columns: auto auto;
   grid-template-areas:
-    "chartTitle chartTitle"
-    "vLegend  chart"
-    "hLegend hLegend";
+    'chartTitle chartTitle'
+    'vLegend  chart'
+    'hLegend hLegend';
   padding: 0.25rem;
   height: fit-content;
   width: fit-content;
   border: 2px solid $black;
 }
 
-.chartTitleContainer{
+.chartTitleContainer {
   grid-area: chartTitle;
   @include flex-column-center;
   padding: 0;
 }
 
-.vLegendContainer{
+.vLegendContainer {
   grid-area: vLegend;
   @include flex-column-center;
   width: 1rem;
 }
 
-.vAxisLegend{
+.vAxisLegend {
   rotate: -90deg;
 }
 
@@ -37,10 +37,8 @@
   @include flex-column-center;
 }
 
-.hLegendContainer{
+.hLegendContainer {
   grid-area: hLegend;
   @include flex-column-center;
   height: 1rem;
 }
-
-

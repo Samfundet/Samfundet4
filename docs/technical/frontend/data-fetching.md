@@ -10,8 +10,8 @@ We use [React Query](https://tanstack.com/query/v3) for state management. State 
 to get 100% right and safe, which is why using a library such as RQ is a good idea. It saves us from a lot of potential
 common bugs and headaches with managing state all by ourselves.
 
-If you're not convinced, read this [great article](https://tkdodo.eu/blog/why-you-want-react-query) by TkDodo on *Why
-You ~~Want~~ Need React Query*. It explores a lot of common pitfalls/bugs. At the time of me writing this, these
+If you're not convinced, read this [great article](https://tkdodo.eu/blog/why-you-want-react-query) by TkDodo on _Why
+You ~~Want~~ Need React Query_. It explores a lot of common pitfalls/bugs. At the time of me writing this, these
 pitfalls/bugs are found absolutely everywhere we do data fetching in Samfundet4. Hopefully over time, we will replace
 these instances with safe state management using RQ.
 
@@ -26,12 +26,12 @@ To get started, in our component/page, call the `useQuery` hook like so, providi
 
 ```ts
 const { data, isLoading, isError } = useQuery({
-    queryKey: ['informationpages'],
-    queryFn: getInformationPages,
+  queryKey: ['informationpages'],
+  queryFn: getInformationPages,
 });
 ```
 
-The project has a single global *Query Client*. This acts kind of like a global request and response cache. It contains
+The project has a single global _Query Client_. This acts kind of like a global request and response cache. It contains
 all the data fetched by the `useQuery` hook. You can think of it as a simple Key-Value store. In the above example, the
 data fetched by the `getInformationPages` function is stored by the Query Client using the query key. The query key
 therefore needs to be unique for the data we're fetching.
@@ -45,24 +45,24 @@ the possibility of key collisions. Here are some examples of how to use the fact
 ```ts
 // Get all information pages
 const { data } = useQuery({
-    queryKey: infoPageKeys.all,
-    queryFn: getInformationPages,
+  queryKey: infoPageKeys.all,
+  queryFn: getInformationPages,
 });
 ```
 
 ```ts
 // Get specific user
 const { data } = useQuery({
-    queryKey: userKeys.detail(userId),
-    queryFn: () => getUser(userId),
+  queryKey: userKeys.detail(userId),
+  queryFn: () => getUser(userId),
 });
 ```
 
 ```ts
 // Get information pages with filter
 const { data } = useQuery({
-    queryKey: infoPageKeys.list([search, page]),
-    queryFn: () => getInformationPages(search, page),
+  queryKey: infoPageKeys.list([search, page]),
+  queryFn: () => getInformationPages(search, page),
 });
 ```
 
@@ -77,34 +77,34 @@ Doing this is quite simple with the query key factory, and we are able to invali
 ```ts
 // Invalidate absolutely all information page data
 queryClient.invalidateQueries({
-    queryKey: infoPageKeys.all
+  queryKey: infoPageKeys.all,
 });
 
 // Invalidate all information page lists
 queryClient.invalidateQueries({
-    queryKey: infoPageKeys.lists()
+  queryKey: infoPageKeys.lists(),
 });
 
 // Invalidate a specific information page's data
 queryClient.invalidateQueries({
-    queryKey: infoPageKeys.detail(id)
+  queryKey: infoPageKeys.detail(id),
 });
 ```
 
 ## Error handling
 
-We have a very simple error handler defined in the *Query Client*. If the query function returns an error (for instance,
+We have a very simple error handler defined in the _Query Client_. If the query function returns an error (for instance,
 HTTP 500), we will log it as an error to the console, and display a toast with an error message. This error message is
 by default generic (i.e. "Something went wrong!"), but it can be overwritten by the useQuery-caller if desired. We do
 this using the `meta` and `errorMsg` options in the useQuery hook.
 
 ```ts
 const { data, isLoading, isError } = useQuery({
-    queryKey: infoPageKeys.all,
-    queryFn: getInformationPages,
-    meta: {
-        errorMsg: "We couldn't find the pages!"
-    }
+  queryKey: infoPageKeys.all,
+  queryFn: getInformationPages,
+  meta: {
+    errorMsg: "We couldn't find the pages!",
+  },
 });
 ```
 
@@ -113,11 +113,11 @@ Note that you can (and should) use translations here as well:
 
 ```ts
 const { data, isLoading, isError } = useQuery({
-    queryKey: infoPageKeys.all,
-    queryFn: getInformationPages,
-    meta: {
-        errorMsg: t(KEY.something_something)
-    }
+  queryKey: infoPageKeys.all,
+  queryFn: getInformationPages,
+  meta: {
+    errorMsg: t(KEY.something_something),
+  },
 });
 ```
 

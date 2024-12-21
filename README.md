@@ -6,7 +6,6 @@
 
 Samfundet4 is the latest and greatest iteration of samfundet.no. It's built using Django and React.
 
-
 ## Documentation Overview
 
 > [!TIP]
@@ -16,7 +15,7 @@ Samfundet4 is the latest and greatest iteration of samfundet.no. It's built usin
 
 - [Creating react components (conventions)](./docs/technical/frontend/components.md)
 - [Forms and schemas](./docs/technical/frontend/forms.md)
-    - [*Deprecated: SamfForm*](./docs/technical/frontend/samfform.md)
+  - [_Deprecated: SamfForm_](./docs/technical/frontend/samfform.md)
 - [Cypress Setup Documentation](./docs/technical/frontend/cypress.md)
 - [Data fetching and State management](./docs/technical/frontend/data-fetching.md)
 
@@ -34,7 +33,7 @@ Samfundet4 is the latest and greatest iteration of samfundet.no. It's built usin
 ### Workflow
 
 - [Work Methodology](./docs/work-methodology.md)
-    - How to contribute to the project
+  - How to contribute to the project
 - [Useful Commands](./docs/useful-commands.md)
 - [Useful Docker aliases](./docs/docker-project-specific-commands.md)
 - [Common error messages](./docs/common-errors.md)
@@ -53,7 +52,7 @@ Samfundet4 is the latest and greatest iteration of samfundet.no. It's built usin
 
 ### Editor configuration
 
-* [JetBrains (WebStorm, PyCharm, etc...)](./docs/editors/jetbrains.md)
-* [VS Code](./docs/editors/vscode.md)
-* [Vim/Neovim](./docs/editors/vim.md)
-* [Emacs](./docs/editors/emacs.md)
+- [JetBrains (WebStorm, PyCharm, etc...)](./docs/editors/jetbrains.md)
+- [VS Code](./docs/editors/vscode.md)
+- [Vim/Neovim](./docs/editors/vim.md)
+- [Emacs](./docs/editors/emacs.md)

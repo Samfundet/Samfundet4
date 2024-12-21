@@ -31,7 +31,9 @@ $checkmark: '\2714'; /* ASCII "check"-symbol. */
   margin-right: 10px;
   margin-left: 10px;
   flex-shrink: 0;
-  transition: background 0.15s, border-color 0.15s; /* Bakgrunn kommer gradvis inn. */
+  transition:
+    background 0.15s,
+    border-color 0.15s; /* Bakgrunn kommer gradvis inn. */
 }
 
 /* Her velges (og styles) det elementet med klassen .checkbox__box som ligger rett etter(ved bruk av +) elementet med klassen .checkbox__input, når det sistnevnte elementet er "checked". */

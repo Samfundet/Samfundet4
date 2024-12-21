@@ -4,14 +4,14 @@
 
 ## Requirements
 
-* [Homebrew](https://docs.brew.sh/Installation)
-    * MacOS package manager
-* [Poetry](https://python-poetry.org/docs/)
-    * Backend dependency manager
-* [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)
-    * Frontend dependency manager
-* [pyenv](https://github.com/pyenv/pyenv)
-    * Python version manager. Lets you easily install the same Python version that Samfundet4 expects.
+- [Homebrew](https://docs.brew.sh/Installation)
+  - MacOS package manager
+- [Poetry](https://python-poetry.org/docs/)
+  - Backend dependency manager
+- [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)
+  - Frontend dependency manager
+- [pyenv](https://github.com/pyenv/pyenv)
+  - Python version manager. Lets you easily install the same Python version that Samfundet4 expects.
 
 ## Installing
 

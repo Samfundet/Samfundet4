@@ -2,9 +2,8 @@
 
 @import 'src/mixins';
 
-
 .row {
-  border:none;
+  border: none;
 }
 
 .header {
@@ -19,7 +18,7 @@
   &:hover {
     filter: brightness(105%);
     background-color: $red-samf;
-   }
+  }
   padding: 0.2em 0.4em;
 }
 
@@ -29,28 +28,27 @@
 
 .withdrawn {
   background-color: $withdrawn;
-   &:hover {
+  &:hover {
     filter: brightness(95%);
     background-color: $withdrawn;
-   }
-   border:none;
+  }
+  border: none;
 }
 
 .accepted {
   background-color: $accepted;
-   &:hover {
+  &:hover {
     filter: brightness(95%);
     background-color: $accepted;
-   }
-   border:none;
+  }
+  border: none;
 }
 
 .rejected {
   background-color: $rejected;
-   &:hover {
+  &:hover {
     filter: brightness(95%);
     background-color: $rejected;
-   }
-   border:none;
+  }
+  border: none;
 }
-

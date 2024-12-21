@@ -47,7 +47,8 @@
 .number {
   -webkit-appearance: textfield;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     -moz-appearance: initial;
   }
 }

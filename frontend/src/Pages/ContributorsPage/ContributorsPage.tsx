@@ -13,7 +13,13 @@ import type { Contributor } from './types';
 // biome-ignore format: array should not be formatted
 const CONTRIBUTORS: Contributor[] = [
   // H17
-  { name: 'Kevin Kristiansen', github: 'KevinKristiansen', from: 'H17', to: 'V20', websjef: { from: 'V18', to: 'H18' } },
+  {
+    name: 'Kevin Kristiansen',
+    github: 'KevinKristiansen',
+    from: 'H17',
+    to: 'V20',
+    websjef: { from: 'V18', to: 'H18' },
+  },
   // H19
   { name: 'Emil Telstad', github: 'emilte', from: 'H19' },
   { name: 'Sigve Røkenes', github: 'evgiz', from: 'H19', to: 'H23', websjef: { from: 'H20', to: 'V21' } },
@@ -34,7 +40,13 @@ const CONTRIBUTORS: Contributor[] = [
   { name: 'Eirik Hoem', github: 'eiriksho', from: 'H22', to: 'V23' },
   { name: 'Simen Seeberg-Rommetveit', github: 'simensee', from: 'H22' },
   // V23
-  { name: 'Robin Espinosa Jelle', github: 'robines', from: 'V23', picture: robines, websjef: { from: 'H23', to: 'V24' } },
+  {
+    name: 'Robin Espinosa Jelle',
+    github: 'robines',
+    from: 'V23',
+    picture: robines,
+    websjef: { from: 'H23', to: 'V24' },
+  },
   { name: 'Johanne Grønlien Gjedrem', github: 'johannegg', from: 'V23' },
   { name: 'Tinius Presterud', github: 'tiniuspre', from: 'V23', to: 'V24' },
   // H23
@@ -45,7 +57,7 @@ const CONTRIBUTORS: Contributor[] = [
   // V24
   { name: 'Emil Solberg', github: 'emsoraffa', from: 'V24' },
   // H24
-  { name: 'Anders Meyer Hegre', github: 'andsamfu', from: 'H24'},
+  { name: 'Anders Meyer Hegre', github: 'andsamfu', from: 'H24' },
   { name: 'Lida Victoria Johnsen', github: 'lidavic', from: 'H24' },
 ];
 

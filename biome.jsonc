@@ -19,25 +19,25 @@
       "**/.history/**/*", // VSCode extension.
       "**/staticroot/**/*", // Django static files.
       "**/static/**/*", // Django static files.
-      "**/.venv/**/*"
-    ]
+      "**/.venv/**/*",
+    ],
   },
   "organizeImports": {
-    "enabled": true
+    "enabled": true,
   },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
-    }
+      "recommended": true,
+    },
   },
   "formatter": {
     "indentStyle": "space",
-    "lineWidth": 120
+    "lineWidth": 120,
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "single"
-    }
-  }
+      "quoteStyle": "single",
+    },
+  },
 }

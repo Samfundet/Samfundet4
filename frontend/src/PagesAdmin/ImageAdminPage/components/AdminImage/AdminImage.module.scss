@@ -2,7 +2,6 @@
 
 @import 'src/mixins';
 
-
 .imageContainer {
   @include rounded;
   @include shadow-light;

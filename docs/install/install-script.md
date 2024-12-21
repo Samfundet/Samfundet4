@@ -35,7 +35,7 @@ cd ~/my-projects/test; rm -rf Samfundet4; read -s -p "Github PAT token: " TOKEN 
 <summary>Flags explained (show/hide)</summary>
 
 > - X_INTERACTIVE (y/n): determines how many prompts you receive before performing an action.  
-    > curl:
+>   curl:
 > - -f: fail fast
 > - -s: silent, no progress-meter
 > - -S: show error on fail

@@ -6,47 +6,49 @@ import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Textarea } from '~/Components';
 import { KEY } from '~/i18n/constants';
+import { putRecrutmentInterviewNotes } from '~/api';
+import { useMutation } from '@tanstack/react-query';
 
 const recruitmentNotesSchema = z.object({
   notes: z.string(),
+  interviewId: z.number(),
 });
 
 type RecruitmentInterviewNotesFormType = z.infer<typeof recruitmentNotesSchema>;
 
 interface RecruitmentInterviewNotesFormProps {
   initialData: Partial<RecruitmentInterviewNotesFormType>;
+  interviewId?: number;
 }
 
-export function RecruitmentInterviewNotesForm({ initialData }: RecruitmentInterviewNotesFormProps) {
+export function RecruitmentInterviewNotesForm({ initialData, interviewId }: RecruitmentInterviewNotesFormProps) {
   const { t } = useTranslation();
   const [currentNotes, setCurrentNotes] = useState(initialData.notes || '');
   const form = useForm<RecruitmentInterviewNotesFormType>({
     resolver: zodResolver(recruitmentNotesSchema),
-    defaultValues: initialData,
+    defaultValues: {
+      notes: initialData.notes || '',
+      interviewId: interviewId || 0,
+    },
   });
 
-
-
-  async function handleUpdateNotes(value: string) {
-    try {
-      // TODO: Update notes using a put request
-      console.log("Updating notes");
-      // Simulate a successful PUT request. TODO: Replace with successful PUT request
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast.success("Notes updated successfully!");
-    } catch (error) {
-      toast.error("Failed to update notes.");
-    }
-  }
+  const handleUpdateNotes = useMutation({
+    mutationFn: ({ notes, interviewId }: { notes: string; interviewId: number }) =>
+      putRecrutmentInterviewNotes(notes, interviewId),
+    onSuccess: () => {
+      toast.success(t(KEY.common_update_successful));
+    },
+    onError: (error) => {
+      toast.error(t(KEY.common_something_went_wrong));
+    },
+  });
 
   const handleNotesChange = (newNotes: string) => {
-    if (newNotes !== currentNotes) {
+    if (newNotes !== currentNotes && interviewId) {
       setCurrentNotes(newNotes);
-      handleUpdateNotes(newNotes);
+      handleUpdateNotes.mutate({ notes: newNotes, interviewId });
     }
   };
-
-
 
   return (
     <Form {...form}>

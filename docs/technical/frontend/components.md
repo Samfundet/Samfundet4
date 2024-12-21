@@ -66,9 +66,9 @@ This document will show examples of desired component-structure, followed by a d
 
 Component written for reusability. These components are typically included in the design system. They only accept props and do not depend on Redux or Context.
 
--   Located under `Components/`
--   Contains storybook file `<component-name>.stories.tsx`.
--   Follows the other conventions in [### Composed component](#composed-component)
+- Located under `Components/`
+- Contains storybook file `<component-name>.stories.tsx`.
+- Follows the other conventions in [### Composed component](#composed-component)
 
 <br>
 
@@ -84,7 +84,7 @@ Component built for some parts of the application. Typically not reusable. They 
 6. May contain `types.ts` to group types used by the component or sub-components.
 7. May contain `testdata.ts` to write objects or generators for easy testing.
 8. May contain `utils.ts` to group helper-functions and other constants.
-    - If the file grows too big. Create a folder `utils` and group functions into named files instead.
+   - If the file grows too big. Create a folder `utils` and group functions into named files instead.
 9. May contain a folder `__tests__` containing a `<component-name>.test.tsx` file.
 10. May contain a folder `components` to group sub-components.
     - These conventions are recursive, meaning sub-components have the same structure.

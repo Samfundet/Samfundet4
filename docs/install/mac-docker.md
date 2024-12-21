@@ -4,10 +4,10 @@
 
 ## Requirements
 
-* [Homebrew](https://docs.brew.sh/Installation)
-* [colima](https://github.com/abiosoft/colima?tab=readme-ov-file#getting-started)
+- [Homebrew](https://docs.brew.sh/Installation)
+- [colima](https://github.com/abiosoft/colima?tab=readme-ov-file#getting-started)
   or [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-    * colima can be more performant than Docker Desktop, but is less easy to use
+  - colima can be more performant than Docker Desktop, but is less easy to use
 
 ## Installing
 

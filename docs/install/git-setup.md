@@ -20,6 +20,7 @@ Samfundet4 project.
 In your terminal, run `ssh-keygen`
 
 This will generate two files: `~/.ssh/id_rsa` and `~/.ssh/id_rsa.pub`.
+
 </details>
 
 ## Adding it to GitHub

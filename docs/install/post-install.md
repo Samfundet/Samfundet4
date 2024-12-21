@@ -9,7 +9,7 @@ topic, but we give some pointers in the [Editor configuration](../introduction.m
 
 After you've set up your editor/IDE, we recommend diving in head-first and just picking
 an [issue](https://github.com/Samfundet/Samfundet4/issues) you'd like to solve. Be sure to have
-the [Documentation Overview](../README.md) open and ready for *when* you get stuck :-) If you find that some parts of
+the [Documentation Overview](../README.md) open and ready for _when_ you get stuck :-) If you find that some parts of
 the documentation are lacking, don't be afraid to create a PR to fix it!
 
 ## Resetting the database
@@ -31,6 +31,6 @@ your branch.
 The easiest way to fix this is to simply delete the migration file you have created, and running the `makemigrations`
 command again:
 
-* Docker: `docker compose exec backend bash`
-    * Then run the same Poetry command as in the line below
-* Native: `poetry run python3 manage.py makemigrations`
+- Docker: `docker compose exec backend bash`
+  - Then run the same Poetry command as in the line below
+- Native: `poetry run python3 manage.py makemigrations`

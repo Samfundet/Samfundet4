@@ -27,7 +27,7 @@ This lets us easily use it in a Zod schema, and make it optional like so:
 
 ```ts
 const schema = z.object({
-    username: USERNAME.optional(),
+  username: USERNAME.optional(),
 });
 ```
 
@@ -43,7 +43,7 @@ this here for example's sake).
 import { z } from 'zod';
 
 const schema = z.object({
-    username: z.string().min(3).max(24),
+  username: z.string().min(3).max(24),
 });
 ```
 
@@ -73,28 +73,28 @@ Now use the `Form` wrapper components to build our form.
 
 ```jsx
 export function YourForm() {
-    // ...
+  // ...
 
-    return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <FormField
-                    control={form.control}
-                    name="username"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Username</FormLabel>
-                            <FormDescription>Pick wisely, this cannot be changed later!</FormDescription>
-                            <FormControl>
-                                <Input placeholder="Username" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            </form>
-        </Form>
-    );
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormDescription>Pick wisely, this cannot be changed later!</FormDescription>
+              <FormControl>
+                <Input placeholder="Username" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  );
 }
 ```
 
@@ -105,12 +105,12 @@ optional `avatar` file field.
 
 ```jsx
 const schema = z.object({
-    image_file: z
-        .instanceof(File)
-        .refine((file) => file.size < 1024 * 1024 * 2, {
-            message: "File can't be larger than 2 MB"
-        })
-        .nullable(),
+  image_file: z
+    .instanceof(File)
+    .refine((file) => file.size < 1024 * 1024 * 2, {
+      message: "File can't be larger than 2 MB",
+    })
+    .nullable(),
 });
 ```
 
@@ -121,21 +121,16 @@ we only want a single file, so we return the first item in the `FileList`.
 
 ```jsx
 <FormField
-    control={form.control}
-    name="image_file"
-    render={({ field: { value, onChange, ...fieldProps } }) => (
-        <FormItem>
-            <FormControl>
-                <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(event) => onChange(event.target.files?.[0])}
-                    {...fieldProps}
-                />
-            </FormControl>
-            <FormMessage />
-        </FormItem>
-    )}
+  control={form.control}
+  name="image_file"
+  render={({ field: { value, onChange, ...fieldProps } }) => (
+    <FormItem>
+      <FormControl>
+        <Input type="file" accept="image/*" onChange={(event) => onChange(event.target.files?.[0])} {...fieldProps} />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
 />
 ```
 
@@ -147,17 +142,17 @@ NumberInput component which does all this for us.
 
 ```jsx
 <FormField
-    control={form.control}
-    name="duration"
-    render={({ field }) => (
-        <FormItem>
-            <FormLabel>Duration</FormLabel>
-            <FormControl>
-                <NumberInput disabled={submitting} {...field} />
-            </FormControl>
-            <FormMessage />
-        </FormItem>
-    )}
+  control={form.control}
+  name="duration"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Duration</FormLabel>
+      <FormControl>
+        <NumberInput disabled={submitting} {...field} />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
 />
 ```
 
@@ -169,9 +164,9 @@ If you provide `value` to Dropdown, it'll be controlled. If you don't, it will b
 
 ```ts
 const options: DropdownOption<string>[] = [
-    { label: 'Samfundet', value: 'samfundet' },
-    { label: 'UKA', value: 'uka' },
-    { label: 'ISFiT', value: 'isfit' },
+  { label: 'Samfundet', value: 'samfundet' },
+  { label: 'UKA', value: 'uka' },
+  { label: 'ISFiT', value: 'isfit' },
 ];
 ```
 
@@ -179,39 +174,37 @@ Controlled:
 
 ```jsx
 <FormField
-    control={form.control}
-    name="organization"
-    render={({ field }) => (
-        <FormItem>
-            <FormLabel>Organization</FormLabel>
-            <FormDescription>Which organization does this object belong to?</FormDescription>
-            <FormControl>
-                <Dropdown options={options} {...field} />
-            </FormControl>
-        </FormItem>
-    )}
->
-</FormField>
+  control={form.control}
+  name="organization"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Organization</FormLabel>
+      <FormDescription>Which organization does this object belong to?</FormDescription>
+      <FormControl>
+        <Dropdown options={options} {...field} />
+      </FormControl>
+    </FormItem>
+  )}
+></FormField>
 ```
 
 Uncontrolled:
 
 ```jsx
 <FormField
-    control={form.control}
-    name="organization"
-    // Note how we extract `value` here, to avoid applying it to Dropdown
-    render={({ field: { value, ...fieldProps } }) => (
-        <FormItem>
-            <FormLabel>Organization</FormLabel>
-            <FormDescription>Which organization does this object belong to?</FormDescription>
-            <FormControl>
-                <Dropdown options={options} {...fieldProps} />
-            </FormControl>
-        </FormItem>
-    )}
->
-</FormField>
+  control={form.control}
+  name="organization"
+  // Note how we extract `value` here, to avoid applying it to Dropdown
+  render={({ field: { value, ...fieldProps } }) => (
+    <FormItem>
+      <FormLabel>Organization</FormLabel>
+      <FormDescription>Which organization does this object belong to?</FormDescription>
+      <FormControl>
+        <Dropdown options={options} {...fieldProps} />
+      </FormControl>
+    </FormItem>
+  )}
+></FormField>
 ```
 
 You can also add a "null option". This is a blank option which is added to the top of the dropdown list. This is useful
@@ -234,9 +227,7 @@ dropdown, to further indicate that a special option is selected. Examples of som
 <Dropdown options={options} nullOption={{ label: 'Pick an organization', disabled: true }} />
 ```
 
-
 ## Example
 
 To see an example form in action, check out the form on the [components page](http://localhost:3000/components),
 and [its code](../../../frontend/src/Pages/ComponentPage/ExampleForm.tsx).
-

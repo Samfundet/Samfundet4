@@ -29,7 +29,7 @@ $panel-dark-bg: #333333;
   border-right: 1px solid $panel-light-border;
   display: flex;
   flex-direction: column;
-  gap: .2em;
+  gap: 0.2em;
   overflow-y: auto;
   z-index: 10;
   opacity: 1;
@@ -103,7 +103,7 @@ $panel-dark-bg: #333333;
   padding: 0.75em;
   padding-top: 0.5em;
   margin-top: 0.25em;
-  gap: .5em;
+  gap: 0.5em;
 
   @include theme-dark {
     border-color: $grey-1;
@@ -120,15 +120,15 @@ $panel-dark-bg: #333333;
   @include flex-row;
   text-align: right;
   gap: 1em;
-  padding: .5em .5em;
+  padding: 0.5em 0.5em;
   padding-left: 1em;
   margin-left: 0.5em;
   margin-right: 0.5em;
   cursor: pointer;
-  transition: .2s;
+  transition: 0.2s;
   color: $grey-1;
   text-decoration: none;
-  border-radius: .5em;
+  border-radius: 0.5em;
   white-space: nowrap;
 
   @include theme-dark {
@@ -181,7 +181,7 @@ $panel-dark-bg: #333333;
 .open_panel_desktop {
   position: fixed;
   height: 100%;
-  padding : 0.2em;
+  padding: 0.2em;
   display: flex;
   align-items: center;
   justify-content: center;

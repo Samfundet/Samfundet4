@@ -2,7 +2,7 @@
 
 @import 'src/mixins';
 
-.recruitmentTableContainer{
+.recruitmentTableContainer {
   @include flex-column-center;
   width: 100%;
   margin-top: 2rem;

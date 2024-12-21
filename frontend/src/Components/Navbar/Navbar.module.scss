@@ -9,7 +9,7 @@
 
 // Background
 $navbar-bg: white;
-$navbar-bg-transparent: linear-gradient(to bottom, rgba(0, 0, 0, .3) 0%, transparent);
+$navbar-bg-transparent: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, transparent);
 $navbar-bg-dark: black;
 $navbar-bg-dark-transparent: $navbar-bg-transparent;
 $navbar-dropdown-bg: rgba(255, 255, 255, 0.6);
@@ -54,7 +54,6 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   z-index: 12;
   white-space: nowrap;
   box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.06);
-
 }
 
 .navbar_inner {
@@ -138,7 +137,8 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   opacity: 1;
 }
 
-.navbar_dropdown_link, .navbar_logout_button {
+.navbar_dropdown_link,
+.navbar_logout_button {
   padding: 0.5rem 1rem;
   text-decoration: none;
   transition: 0.1s;
@@ -211,9 +211,9 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   /* Link hover for regular navbar */
   &:hover {
     background: linear-gradient(
-        to bottom,
-        $navbar-link-dark-hover-gradient-top,
-        $navbar-link-dark-hover-gradient-bottom
+      to bottom,
+      $navbar-link-dark-hover-gradient-top,
+      $navbar-link-dark-hover-gradient-bottom
     );
     color: #eeeeee;
     text-decoration: none;
@@ -322,7 +322,6 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   @include for-desktop-up {
     display: none;
   }
-
 }
 
 /* A way to make the "Information" text look more centered

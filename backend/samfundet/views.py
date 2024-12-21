@@ -941,7 +941,7 @@ class RecruitmentApplicationInterviewNotesView(APIView):
         interview = get_object_or_404(Interview, pk=interview_id)
         update_serializer = self.serializer_class(interview, data=request.data, partial=True)
         if update_serializer.is_valid() and 'notes' in update_serializer.validated_data:
-            interview.interview_notes = update_serializer.validated_data['notes']
+            interview.notes = update_serializer.validated_data['notes']
             interview.save()
             return Response(status=status.HTTP_200_OK)
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

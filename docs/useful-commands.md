@@ -48,8 +48,10 @@
 <br>
 
 ### 🐍 Pyenv: Install python
+
 > `pyenv` must be installed.  
 > Must run inside same directory as [.python-version](/backend/.python-version).
+
 ```bash
 pyenv install
 ```
@@ -58,9 +60,11 @@ pyenv install
 <br>
 
 ### 🐍 Python: Call submodule of Python
+
 ```bash
 python -m <module>
 ```
+
 ```bash
 # Example:
 python -m poetry
@@ -70,6 +74,7 @@ python -m poetry
 <br>
 
 ### 🐍 Python: Install poetry
+
 ```bash
 python -m pip install poetry
 ```
@@ -78,7 +83,9 @@ python -m pip install poetry
 <br>
 
 ### 🐍 Poetry: Install virtual environment with dependencies
+
 > Must run inside same directory as [Pipfile](/backend/Pipfile).
+
 ```bash
 POETRY_VIRTUALENVS_IN_PROJECT=1 python -m poetry install
 ```
@@ -87,6 +94,7 @@ POETRY_VIRTUALENVS_IN_PROJECT=1 python -m poetry install
 <br>
 
 ### 🐍 Poetry: Install package
+
 ```bash
 python -m poetry install <package>
 ```
@@ -95,6 +103,7 @@ python -m poetry install <package>
 <br>
 
 ### 🐍 Poetry: Uninstall package
+
 ```bash
 python -m poetry uninstall <package>
 ```
@@ -103,6 +112,7 @@ python -m poetry uninstall <package>
 <br>
 
 ### 🐍 Poetry: Activate virtual environment
+
 ```bash
 python -m poetry shell
 ```
@@ -111,9 +121,11 @@ python -m poetry shell
 <br>
 
 ### 🐍 Poetry: Run command inside virtual environment
+
 ```bash
 python -m poetry run <command>
 ```
+
 ```bash
 # Example:
 python -m poetry run python -V
@@ -123,6 +135,7 @@ python -m poetry run python -V
 <br>
 
 ### 🐍 Django: Show all commands
+
 ```bash
 python -m poetry run python manage.py
 ```
@@ -131,10 +144,12 @@ python -m poetry run python manage.py
 <br>
 
 ### 🐍 Django: Run command
+
 ```bash
 # Locally:
 python -m poetry run python manage.py <command>
 ```
+
 ```bash
 # Inside container:
 docker compose exec backend python -m poetry run python manage.py <command>
@@ -144,8 +159,9 @@ docker compose exec backend python -m poetry run python manage.py <command>
 <br>
 
 ### 🐍 Django: Makemigrations
+
 ```bash
-# Locally: 
+# Locally:
 python -m poetry run python manage.py makemigrations
 ```
 
@@ -153,8 +169,9 @@ python -m poetry run python manage.py makemigrations
 <br>
 
 ### 🐍 Django: Migrate
+
 ```bash
-# Locally: 
+# Locally:
 python -m poetry run python manage.py makemigrations
 ```
 
@@ -162,6 +179,7 @@ python -m poetry run python manage.py makemigrations
 <br>
 
 ### 🐍 Django: Start server
+
 ```bash
 python -m poetry run python manage.py runserver
 ```
@@ -170,6 +188,7 @@ python -m poetry run python manage.py runserver
 <br>
 
 ### 🐍 Django: Show all urls
+
 ```bash
 python -m poetry run python manage.py show_urls -f table
 ```
@@ -178,6 +197,7 @@ python -m poetry run python manage.py show_urls -f table
 <br>
 
 ### 🐍 Django: Collect all staticfiles
+
 ```bash
 python -m poetry run python manage.py collectstatic
 ```
@@ -186,6 +206,7 @@ python -m poetry run python manage.py collectstatic
 <br>
 
 ### 🐍 Django: Open shell
+
 ```bash
 python -m poetry run python manage.py shell_plus
 ```
@@ -194,6 +215,7 @@ python -m poetry run python manage.py shell_plus
 <br>
 
 ### 🐍 Django: Collect all staticfiles
+
 ```bash
 python -m poetry run python manage.py collectstatic
 ```
@@ -209,10 +231,13 @@ python -m poetry run python manage.py collectstatic
 Be sure to check out the documentation for [Docker command aliases](./docker-project-specific-commands.md).
 
 ### 🐳 Docker: Run command inside container
+
 > `<container-name>` is defined under `services` in [docker-compose.yml](/docker-compose.yml).
+
 ```bash
 docker compose exec <container-name> <command>
 ```
+
 ```bash
 # Example:
 docker compose exec backend echo "Hello World!"
@@ -222,7 +247,9 @@ docker compose exec backend echo "Hello World!"
 <br>
 
 ### 🐳 Docker: Remove containers
+
 > `<container-name>` is defined under `services` in [docker-compose.yml](/docker-compose.yml).
+
 ```bash
 docker compose down
 ```
@@ -231,10 +258,13 @@ docker compose down
 <br>
 
 ### 🐳 Docker: Open shell in container
+
 > `<container-name>` is defined under `services` in [docker-compose.yml](/docker-compose.yml).
+
 ```bash
 docker compose exec <container-name> <command>
 ```
+
 ```bash
 # Example:
 docker compose exec backend bash
@@ -243,12 +273,14 @@ docker compose exec backend bash
 <br>
 <br>
 
-
 ### 🐳 Docker: Run command inside already running container
+
 > `<container-name>` is defined under `services` in [docker-compose.yml](/docker-compose.yml).
+
 ```bash
 docker compose exec <container-name> <command>
 ```
+
 ```bash
 # Example:
 docker compose exec backend echo "Hello World!"
@@ -257,13 +289,15 @@ docker compose exec backend echo "Hello World!"
 <br>
 <br>
 
-
 ### 🐳 Docker: Run a one-off container with command
+
 > `--rm` removes container after exiting.  
 > `<container-name>` is defined under `services` in [docker-compose.yml](/docker-compose.yml).
+
 ```bash
 docker compose run --rm <container-name> <command>
 ```
+
 ```bash
 # Example:
 docker compose run --rm backend echo "Hello World!"
@@ -273,6 +307,7 @@ docker compose run --rm backend echo "Hello World!"
 <br>
 
 ### 🐳 Docker: Build project
+
 ```bash
 docker compose build
 ```
@@ -281,6 +316,7 @@ docker compose build
 <br>
 
 ### 🐳 Docker: Start all containers
+
 ```bash
 docker compose up
 ```
@@ -289,10 +325,13 @@ docker compose up
 <br>
 
 ### 🐳 Docker: Start individual container
+
 > `<container-name>` is defined under `services` in [docker-compose.yml](/docker-compose.yml).
+
 ```bash
 docker compose up <container-name>
 ```
+
 ```bash
 # Example:
 docker compose up backend
@@ -303,11 +342,13 @@ docker compose up backend
 <br>
 
 ## 🧶 Yarn
+
 > Must run in same directory as [package.json](/frontend/package.json).
 
 <br>
 
 ### 🧶 Npm: Install yarn
+
 ```bash
 npm install --global yarn
 ```
@@ -316,6 +357,7 @@ npm install --global yarn
 <br>
 
 ### 🧶 Yarn: Install dependencies
+
 ```bash
 yarn install
 ```
@@ -324,6 +366,7 @@ yarn install
 <br>
 
 ### 🧶 Yarn: Install package
+
 ```bash
 yarn add <package>
 ```
@@ -332,6 +375,7 @@ yarn add <package>
 <br>
 
 ### 🧶 Yarn: Uninstall package
+
 ```bash
 yarn remove <package>
 ```
@@ -340,6 +384,7 @@ yarn remove <package>
 <br>
 
 ### 🧶 Yarn: Start server
+
 ```bash
 yarn start
 ```
@@ -348,6 +393,7 @@ yarn start
 <br>
 
 ### 🧶 Yarn: Start Storybook
+
 ```bash
 yarn storybook
 ```
@@ -356,6 +402,7 @@ yarn storybook
 <br>
 
 ### 🧶 Yarn: Open Cypress GUI
+
 ```bash
 yarn cypress open
 ```
@@ -364,6 +411,7 @@ yarn cypress open
 <br>
 
 ### 🧶 Yarn: Run Cypress (no GUI)
+
 ```bash
 yarn cypress run
 ```

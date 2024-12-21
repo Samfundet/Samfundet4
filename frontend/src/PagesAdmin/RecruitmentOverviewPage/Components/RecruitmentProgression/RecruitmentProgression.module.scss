@@ -1,28 +1,28 @@
-@import "src/constants";
+@import 'src/constants';
 
-@import "src/mixins";
+@import 'src/mixins';
 
-.container{
+.container {
   margin-top: 2rem;
   @include flex-column-center;
-  gap:2rem;
+  gap: 2rem;
 }
 
-.progressBar{
+.progressBar {
   width: 50vw;
 }
 
-.gangButton{
+.gangButton {
   width: 100%;
 }
 
-.gridWrapper{
+.gridWrapper {
   display: grid;
   grid-template-rows: 1fr 1fr;
   place-items: center;
 }
 
-.progressReport{
+.progressReport {
   @include flex-column;
   align-self: center;
   gap: 1rem;
@@ -30,7 +30,7 @@
   padding: 0.5rem;
 }
 
-.avslagsepostContainer{
+.avslagsepostContainer {
   @include flex-column;
   align-self: center;
   gap: 1rem;
@@ -38,6 +38,6 @@
   padding: 0.5rem;
 }
 
-.lineDivider{
+.lineDivider {
   width: 100%;
 }

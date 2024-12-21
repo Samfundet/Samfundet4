@@ -8,7 +8,7 @@ enable us to answer queries like:
 
 > Does Bob have access to edit case document X, which belongs to the UKA organization?
 >
->Does Bob have access to view recruitment position X, which belongs to Web (a section of MG in the Samfundet
+> Does Bob have access to view recruitment position X, which belongs to Web (a section of MG in the Samfundet
 > organization)
 
 The system uses hierarchical permission checking. It first checks if a user has a permission to a specific object on the

@@ -18,19 +18,21 @@ For instance, to seed events run:
 
 - `python manage.py seed events`
 
-### Seeding in docker 
-<!-- 
+### Seeding in docker
+
+<!--
 `docker compose exec backend python -m pipenv run python manage.py seed`
 
 I find this very long and messy, so I prefer to have a terminal window inside the docker container all the time: -->
+
 After docker container is running:
 
-- 1) Open shell in Docker container: `docker compose exec backend bash`
-- 2) Enable poetry: `poetry shell` 
-- 3) Run seed script: `python manage.py seed`
-
+- 1. Open shell in Docker container: `docker compose exec backend bash`
+- 2. Enable poetry: `poetry shell`
+- 3. Run seed script: `python manage.py seed`
 
 ### Adding/changing seed scripts
+
 The seed script `seed.py` does not need to be modified to add new seed scripts.
 Instead, add scripts inside the `seed_scripts/` folder. In order for them to be detected, you must include it in the `seed_scripts/__init__.py` file:
 
@@ -38,7 +40,7 @@ Instead, add scripts inside the `seed_scripts/` folder. In order for them to be 
 from . import your_seed_script
 
 SEED_SCRIPTS = [
-    # ... 
+    # ...
     ('your_name', your_seed_script.your_function) # Add here
 ]
 ```
@@ -63,7 +65,7 @@ def seed():
             # ... other fields
         )
 
-        # Yield progress (number between 1-100) and a descriptive string. 
+        # Yield progress (number between 1-100) and a descriptive string.
         # Used for pretty loading indicators.
         yield i / COUNT, f"Created some object '{i}'"
 

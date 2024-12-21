@@ -30,7 +30,7 @@ you're not sure which to pick, just ask someone in MG::Web!
 
 ## Editor configuration
 
-* [JetBrains (WebStorm, PyCharm, etc...)](./editors/jetbrains.md)
-* [VS Code](./editors/vscode.md)
-* [Vim/Neovim](./editors/vim.md)
-* [Emacs](./editors/emacs.md)
+- [JetBrains (WebStorm, PyCharm, etc...)](./editors/jetbrains.md)
+- [VS Code](./editors/vscode.md)
+- [Vim/Neovim](./editors/vim.md)
+- [Emacs](./editors/emacs.md)

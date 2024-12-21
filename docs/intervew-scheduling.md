@@ -28,13 +28,13 @@ The system must also allow each gang to use the scheduling algorithm of their ch
 1. Navigate to my gang's recruitment overview page and click on a position.
 2. Hit the "Automatically schedule interviews" button.
 3. We are shown a dialog (or page), with a list of interviews the algorithm has suggested.
-    1. Each interview suggestion shows the date, time, and partaking interviewers
-    2. We are able to manually edit these interviews if we wish. This will allow us to manually edit the date, time,
-       location and partaking interviewers.
+   1. Each interview suggestion shows the date, time, and partaking interviewers
+   2. We are able to manually edit these interviews if we wish. This will allow us to manually edit the date, time,
+      location and partaking interviewers.
 4. We click the submit button, which saves the interviews and sends out emails to affected applicants and interviewers,
    notifying them of the upcoming interview.
-    1. The email must not contain sensitive information, it should only contain the name of the gang/section/position
-       the applicant has applied for, as well as the date, time, and location of the interview.
+   1. The email must not contain sensitive information, it should only contain the name of the gang/section/position
+      the applicant has applied for, as well as the date, time, and location of the interview.
 
 ## Interviewer's perspective
 
@@ -50,7 +50,7 @@ Owner refers to either the Gang or Section which owns the position.
 2. Fetch all rooms booked by Owner (if any)
 3. Fetch unavailability data for all interviewers and applicants
 4. For each unscheduled interview, do:
-    1. 
+   1.
 
 ### UKA/ISFiT
 
