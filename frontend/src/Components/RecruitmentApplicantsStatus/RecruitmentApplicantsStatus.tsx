@@ -1,10 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { InputField, TimeDisplay } from '~/Components';
+import { TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { type DropDownOption, Dropdown } from '~/Components/Dropdown/Dropdown';
+import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
-import { putRecruitmentApplicationForGang } from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -24,14 +23,14 @@ type RecruitmentApplicantsStatusProps = {
 };
 
 // TODO add backend to fetch these
-const priorityOptions: DropDownOption<number>[] = [
+const priorityOptions: DropdownOption<number>[] = [
   { label: 'Not Set', value: 0 },
   { label: 'Reserve', value: 1 },
   { label: 'Wanted', value: 2 },
   { label: 'Not Wanted', value: 3 },
 ];
 
-const statusOptions: DropDownOption<number>[] = [
+const statusOptions: DropdownOption<number>[] = [
   { label: 'Nothing', value: 0 },
   { label: 'Called and accepted', value: 1 },
   { label: 'Called and rejected', value: 2 },
@@ -57,13 +56,13 @@ export function RecruitmentApplicantsStatus({
   const navigate = useCustomNavigate();
 
   const tableColumns = [
-    { content: t(KEY.recruitment_applicant), sortable: true, hideSortButton: true },
-    { content: t(KEY.recruitment_priority), sortable: true, hideSortButton: true },
+    { content: t(KEY.recruitment_applicant), sortable: true, hideSortButton: false },
+    { content: t(KEY.recruitment_priority), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_interview_set), sortable: false, hideSortButton: true },
-    { content: t(KEY.recruitment_interview_time), sortable: true, hideSortButton: true },
-    { content: t(KEY.recruitment_interview_location), sortable: true, hideSortButton: true },
-    { content: t(KEY.recruitment_recruiter_priority), sortable: true, hideSortButton: true },
-    { content: t(KEY.recruitment_recruiter_status), sortable: true, hideSortButton: true },
+    { content: t(KEY.recruitment_interview_time), sortable: true, hideSortButton: false },
+    { content: t(KEY.recruitment_interview_location), sortable: true, hideSortButton: false },
+    { content: t(KEY.recruitment_recruiter_priority), sortable: true, hideSortButton: false },
+    { content: t(KEY.recruitment_recruiter_status), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_interview_notes), sortable: false, hideSortButton: true },
   ];
 
@@ -131,7 +130,7 @@ export function RecruitmentApplicantsStatus({
           content: (
             <SetInterviewManuallyModal
               recruitmentId={Number(recruitmentId) || 0}
-              isButtonRounded={true}
+              isButtonRounded={false}
               application={application}
               onSetInterview={onInterviewChange}
             />
@@ -186,25 +185,27 @@ export function RecruitmentApplicantsStatus({
         {
           style: applicationStatusStyle,
           content: (
-            <CrudButtons
-              onView={
-                application.interview?.interview_time != null
-                  ? () => {
-                      navigate({
-                        url: reverse({
-                          pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes,
-                          urlParams: {
-                            recruitmentId: recruitmentId,
-                            gangId: gangId,
-                            positionId: positionId,
-                            interviewId: application.interview?.id,
-                          },
-                        }),
-                      });
-                    }
-                  : undefined
-              }
-            />
+            <div className={styles.crud}>
+              <CrudButtons
+                onView={
+                  application.interview?.interview_time != null
+                    ? () => {
+                        navigate({
+                          url: reverse({
+                            pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes,
+                            urlParams: {
+                              recruitmentId: recruitmentId,
+                              gangId: gangId,
+                              positionId: positionId,
+                              interviewId: application.interview?.id,
+                            },
+                          }),
+                        });
+                      }
+                    : undefined
+                }
+              />
+            </div>
           ),
         },
       ],

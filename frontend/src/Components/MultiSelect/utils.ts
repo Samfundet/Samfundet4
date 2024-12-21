@@ -1,9 +1,9 @@
-import type { DropDownOption } from '../Dropdown/Dropdown';
+import type { DropdownOption } from '../Dropdown/Dropdown';
 
-export function searchFilter<T>(item: DropDownOption<T>, q: string): boolean {
+export function searchFilter<T>(item: DropdownOption<T>, q: string): boolean {
   return item.label.toLowerCase().includes(q.toLowerCase());
 }
 
-export function exists<T>(item: DropDownOption<T>, items: DropDownOption<T>[]): boolean {
+export function exists<T>(item: DropdownOption<T>, items: DropdownOption<T>[]): boolean {
   return items.some((_item) => _item.value === item.value);
 }

@@ -63,6 +63,7 @@ from .models.recruitment import (
     RecruitmentApplication,
     RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
+    RecruitmentPositionSharedInterviewGroup,
 )
 
 # Common fields:
@@ -170,17 +171,17 @@ class RoleAdmin(admin.ModelAdmin):
 
 @admin.register(UserOrgRole)
 class UserOrgRoleAdmin(admin.ModelAdmin):
-    list_display = ('user', 'role', 'obj')
+    list_display = ('user', 'role', 'obj', 'created_at', 'created_by')
 
 
 @admin.register(UserGangRole)
 class UserGangRoleAdmin(admin.ModelAdmin):
-    list_display = ('user', 'role', 'obj')
+    list_display = ('user', 'role', 'obj', 'created_at', 'created_by')
 
 
 @admin.register(UserGangSectionRole)
 class UserGangSectionRoleAdmin(admin.ModelAdmin):
-    list_display = ('user', 'role', 'obj')
+    list_display = ('user', 'role', 'obj', 'created_at', 'created_by')
 
 
 @admin.register(Permission)
@@ -713,6 +714,28 @@ class RecruitmentApplicationAdmin(CustomBaseAdmin):
     ]
     list_display_links = ['recruitment_position']
     list_select_related = True
+
+
+@admin.register(RecruitmentPositionSharedInterviewGroup)
+class RecruitmentPositionSharedInterviewGroupAdmin(CustomBaseAdmin):
+    sortable_by = [
+        'recruitment',
+        'name_en',
+        'name_nb',
+        '__str__',
+    ]
+    list_display = [
+        'recruitment',
+        'name_en',
+        'name_nb',
+        '__str__',
+    ]
+    search_fields = [
+        'recruitment',
+        'name_en',
+        'name_nb',
+        '__str__',
+    ]
 
 
 @admin.register(Organization)

@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { H3 } from '~/Components';
-import { AppletCard } from '~/PagesAdmin/RecruitmentGangOverviewPage/components';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { lowerCapitalize } from '~/utils';
+import { AppletCard } from '../AppletCard/AppletCard';
 import styles from './AppletContainer.module.scss';
 
 type AppletCategory = {
@@ -63,7 +63,9 @@ export function AppletContainer({ recruitmentId }: Props) {
 
           <AppletCard
             title={t(KEY.recruitment_separate_recruitment)}
-            description={lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_gangs_with_separate_positions)}`)}
+            description={lowerCapitalize(
+              `${t(KEY.common_create)} ${t(KEY.recruitment_positions_with_separate_recruitment)}`,
+            )}
             url={reverse({
               pattern: ROUTES.frontend.admin_recruitment_gang_separateposition_create,
               urlParams: { recruitmentId },

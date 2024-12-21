@@ -157,7 +157,11 @@ export function TimeslotContainer({
               key={timeslot}
               active={active}
               disabled={disabled || false}
-              onMouseDown={() => {
+              onMouseDown={(event) => {
+                if (event.button !== 0) {
+                  // Ignore if not primary mouse button
+                  return;
+                }
                 toggleTimeslot(selectedDate, timeslot);
                 setDragSetSelected(!active);
               }}

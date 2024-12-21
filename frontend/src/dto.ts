@@ -312,8 +312,8 @@ export type GangDto = {
   abbreviation: string;
   webpage?: string;
   logo?: string;
-  gang_type?: number;
-  info_page?: string;
+  gang_type?: number | null;
+  info_page?: string | null;
 };
 
 export type RecruitmentGangDto = GangDto & {
@@ -379,22 +379,35 @@ export type KeyValueDto = {
 export type RoleDto = {
   id: number;
   name: string;
-  permissions: string[];
+  permissions: number[];
+  content_type?: string | null;
 };
 
-export type UserGangRoleDto = {
+export type UserRole = {
   id: number;
-  obj: GangDto;
+  user: UserDto;
+  created_at: Date;
+  obj: OrganizationDto | GangDto | GangSectionDto;
+  created_by?: UserDto;
 };
 
-export type UserGangSectionRoleDto = {
-  id: number;
-  obj: GangSectionDto;
+export type UserGangRoleDto = Omit<UserRole, 'obj'> & {
+  gang: GangDto;
 };
 
-export type UserOrganizationRoleDto = {
-  id: number;
-  obj: OrganizationDto;
+export type UserGangSectionRoleDto = Omit<UserRole, 'obj'> & {
+  section: GangSectionDto;
+};
+
+export type UserOrganizationRoleDto = Omit<UserRole, 'obj'> & {
+  organization: OrganizationDto;
+};
+
+export type RoleUsersDto = {
+  user: UserDto;
+  org_role?: UserOrganizationRoleDto;
+  gang_role?: UserGangRoleDto;
+  section_role?: UserGangSectionRoleDto;
 };
 
 // ############################################################
@@ -411,9 +424,14 @@ export type RecruitmentDto = {
   reprioritization_deadline_for_applicant: string;
   reprioritization_deadline_for_groups: string;
   max_applications?: number;
-  organization: number | OrganizationDto;
+  organization: OrganizationDto;
   separate_positions?: RecruitmentSeparatePositionDto[];
   recruitment_progress?: number;
+  promo_media?: string;
+};
+
+export type RecruitmentWriteDto = RecruitmentDto & {
+  organization: number;
 };
 
 export type RecruitmentSeparatePositionDto = {
@@ -424,6 +442,14 @@ export type RecruitmentSeparatePositionDto = {
   description_en: string;
   url: string;
   recruitment?: string;
+};
+
+export type RecruitmentSharedInterviewGroupDto = {
+  id?: number;
+  recruitment?: string;
+  name_nb: string;
+  name_en: string;
+  positions: RecruitmentPositionDto[];
 };
 
 export type UserPriorityDto = {
@@ -460,9 +486,15 @@ export type RecruitmentPositionDto = {
   accepted_applicants?: number;
 };
 
-export type RecruitmentPositionPostDto = Omit<RecruitmentPositionDto, 'gang'> & { gang: { id: number } };
+export type RecruitmentPositionPostDto = Omit<RecruitmentPositionDto, 'gang' | 'id'> & {
+  gang: { id: number };
+  interviewer_ids?: number[];
+};
 
-export type RecruitmentPositionPutDto = Omit<RecruitmentPositionDto, 'gang' | 'id'> & { gang: { id: number } };
+export type RecruitmentPositionPutDto = Omit<RecruitmentPositionDto, 'gang'> & {
+  gang: { id: number };
+  interviewer_ids?: number[];
+};
 
 export type RecruitmentRecruitmentPositionDto = {
   id: number;
@@ -489,7 +521,7 @@ export type RecruitmentApplicationDto = {
   recruitment: number;
   user: UserDto;
   applicant_priority: number;
-  recruiter_priority?: number | string;
+  recruiter_priority?: number;
   recruiter_status?: number;
   applicant_state?: number;
   created_at: string;
@@ -540,9 +572,8 @@ export type RecruitmentCampusStatDto = {
 };
 
 export type RecruitmentGangStatDto = {
-  gang: string;
-  application_count: number;
-  applicant_count: number;
+  total_applications: number;
+  total_applicants: number;
   average_priority: number;
   total_accepted: number;
   total_rejected: number;

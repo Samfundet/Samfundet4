@@ -7,12 +7,13 @@ import styles from './GangPositionDropdown.module.scss';
 
 type GangItemProps = {
   type: GangTypeDto;
+  recruitmentId?: string;
   recruitmentPositions?: RecruitmentPositionDto[];
 };
 
 //TODO: DO IN ISSUE #1121, only get gang types recruiting from backend
 // TODO: so the filtering should be done from the backend
-export function GangPositionDropdown({ type, recruitmentPositions }: GangItemProps) {
+export function GangPositionDropdown({ type, recruitmentPositions, recruitmentId }: GangItemProps) {
   const filteredGangs = type.gangs
     .map((gang) => {
       const filteredPositions = recruitmentPositions?.filter((pos) => pos.gang.id === gang.id);
@@ -30,7 +31,7 @@ export function GangPositionDropdown({ type, recruitmentPositions }: GangItemPro
                 <Link
                   url={reverse({
                     pattern: ROUTES.frontend.recruitment_application,
-                    urlParams: { positionID: pos.id, gangID: gang.id },
+                    urlParams: { positionId: pos.id, recruitmentId: recruitmentId },
                   })}
                   className={styles.position_name}
                 >
@@ -39,7 +40,7 @@ export function GangPositionDropdown({ type, recruitmentPositions }: GangItemPro
                 <Link
                   url={reverse({
                     pattern: ROUTES.frontend.recruitment_application,
-                    urlParams: { positionID: pos.id, gangID: gang.id },
+                    urlParams: { positionId: pos.id, recruitmentId: recruitmentId },
                   })}
                   className={styles.position_short_desc}
                 >

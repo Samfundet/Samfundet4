@@ -95,6 +95,67 @@ class TestRecruitmentClean:
         assert Recruitment.SHOWN_AFTER_ACTUAL_ERROR in e['shown_application_deadline']
 
 
+class TestRecruitmentPosition:
+    default_data = {
+        'name_en': 'Name_en',
+        'name_nb': 'Name_nb',
+        'short_description_nb': 'short_description_nb',
+        'short_description_en': 'short_description_en',
+        'long_description_nb': 'long_description_nb',
+        'long_description_en': 'long_description_en',
+        'is_funksjonaer_position': False,
+        'default_application_letter_nb': 'default_application_letter_nb',
+        'default_application_letter_en': 'default_application_letter_en',
+        'norwegian_applicants_only': False,
+        'tags': 'tag1, tag2, tag3',
+    }
+
+    def test_create_recruitmentposition_gang(self, fixture_gang: Gang):
+        test_position = RecruitmentPosition.objects.create(**self.default_data, gang=fixture_gang)
+        assert test_position.id
+
+    def test_create_recruitmentposition_section(self, fixture_gang_section: GangSection):
+        test_position = RecruitmentPosition.objects.create(**self.default_data, section=fixture_gang_section)
+        assert test_position.id
+
+    def test_create_recruitmentposition_no_section(self):
+        with pytest.raises(ValidationError) as error:
+            RecruitmentPosition.objects.create(**self.default_data)
+        e = dict(error.value)
+        assert RecruitmentPosition.NO_OWNER_ERROR in e['section']
+        assert RecruitmentPosition.NO_OWNER_ERROR in e['gang']
+
+    def test_create_recruitmentposition_only_one_owner(self, fixture_gang_section: GangSection, fixture_gang: Gang):
+        with pytest.raises(ValidationError) as error:
+            RecruitmentPosition.objects.create(**self.default_data, section=fixture_gang_section, gang=fixture_gang)
+        e = dict(error.value)
+        assert RecruitmentPosition.ONLY_ONE_OWNER_ERROR in e['section']
+        assert RecruitmentPosition.ONLY_ONE_OWNER_ERROR in e['gang']
+
+    def test_create_recruitmentposition_file_upload_no_description(self, fixture_gang_section: GangSection):
+        with pytest.raises(ValidationError) as error:
+            RecruitmentPosition.objects.create(**self.default_data, section=fixture_gang_section, has_file_upload=True)
+        e = dict(error.value)
+        assert RecruitmentPosition.FILE_DESCRIPTION_REQUIRED_ERROR in e['file_description_nb']
+        assert RecruitmentPosition.FILE_DESCRIPTION_REQUIRED_ERROR in e['file_description_en']
+
+        with pytest.raises(ValidationError) as error:
+            RecruitmentPosition.objects.create(**self.default_data, section=fixture_gang_section, has_file_upload=True, file_description_en='Description')
+        e = dict(error.value)
+        assert RecruitmentPosition.FILE_DESCRIPTION_REQUIRED_ERROR in e['file_description_nb']
+
+        with pytest.raises(ValidationError) as error:
+            RecruitmentPosition.objects.create(**self.default_data, section=fixture_gang_section, has_file_upload=True, file_description_nb='Description')
+        e = dict(error.value)
+        assert RecruitmentPosition.FILE_DESCRIPTION_REQUIRED_ERROR in e['file_description_en']
+
+    def test_create_recruitmentposition_file_upload(self, fixture_gang_section: GangSection):
+        test_position = RecruitmentPosition.objects.create(
+            **self.default_data, section=fixture_gang_section, has_file_upload=True, file_description_en='Description', file_description_nb='Description'
+        )
+        assert test_position.id
+
+
 class TestRecruitmentStats:
     def test_recruitment_has_stats(self, fixture_recruitment: Recruitment):
         """Check if fixture_recruitment has the related object"""
@@ -248,7 +309,7 @@ class TestRecruitmentInterview:
         assert fixture_recruitment_position2.shared_interview_group is None
 
         # setup interview group
-        shared_group = RecruitmentPositionSharedInterviewGroup.objects.create(recruitment=fixture_recruitment)
+        shared_group = RecruitmentPositionSharedInterviewGroup.objects.create(recruitment=fixture_recruitment, name_en='name', name_nb='navn')
         fixture_recruitment_position.shared_interview_group = shared_group
         fixture_recruitment_position2.shared_interview_group = shared_group
         fixture_recruitment_position.save()
@@ -288,7 +349,7 @@ class TestRecruitmentInterview:
         assert fixture_recruitment_application2.recruitment_position == fixture_recruitment_position2
 
         # setup interview group
-        shared_group = RecruitmentPositionSharedInterviewGroup.objects.create(recruitment=fixture_recruitment)
+        shared_group = RecruitmentPositionSharedInterviewGroup.objects.create(recruitment=fixture_recruitment, name_en='name', name_nb='navn')
         fixture_recruitment_position.shared_interview_group = shared_group
         fixture_recruitment_position2.shared_interview_group = shared_group
         fixture_recruitment_position.save()

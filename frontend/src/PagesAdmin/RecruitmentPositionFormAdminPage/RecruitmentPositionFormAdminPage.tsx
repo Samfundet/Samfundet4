@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getRecruitmentPosition } from '~/api';
-import type { RecruitmentPositionDto } from '~/dto';
+import { getRecruitmentPosition, getUsers } from '~/api';
+import type { RecruitmentPositionDto, UserDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -16,6 +16,13 @@ export function RecruitmentPositionFormAdminPage() {
   const navigate = useNavigate();
   const { recruitmentId, gangId, positionId } = useParams();
   const [position, setPosition] = useState<Partial<RecruitmentPositionDto>>();
+  const [users, setUsers] = useState<UserDto[]>();
+
+  useEffect(() => {
+    getUsers().then((data) => {
+      setUsers(data);
+    });
+  }, []);
 
   useEffect(() => {
     if (positionId) {
@@ -48,6 +55,7 @@ export function RecruitmentPositionFormAdminPage() {
     default_application_letter_nb: position?.default_application_letter_nb || '',
     default_application_letter_en: position?.default_application_letter_en || '',
     tags: position?.tags || '',
+    interviewers: position?.interviewers || [],
   };
 
   const title = positionId
@@ -63,6 +71,7 @@ export function RecruitmentPositionFormAdminPage() {
         positionId={positionId}
         recruitmentId={recruitmentId}
         gangId={gangId}
+        users={users}
       />
     </AdminPageLayout>
   );
