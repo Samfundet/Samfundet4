@@ -37,6 +37,9 @@ export function RecruitmentApplicantAdminPage() {
   const applicant = data?.data.user;
   const otherRecruitmentApplications = data?.data.other_applications;
   const interviewNotes = recruitmentApplication?.interview?.notes;
+  const interviewId = recruitmentApplication?.interview?.id;
+
+  console.log(recruitmentApplication);
 
   const adminWithdraw = useMutation({
     mutationFn: (id: string) => {
@@ -84,6 +87,11 @@ export function RecruitmentApplicantAdminPage() {
         </Text>
         <Text>{recruitmentApplication?.application_text}</Text>
       </div>
+      {interviewId && (
+        <div className={classNames(styles.infoContainer)}>
+          <RecruitmentInterviewNotesForm initialData={initialData} interviewId={interviewId} />
+        </div>
+      )}
       <div className={styles.withdrawContainer}>
         {recruitmentApplication?.withdrawn ? (
           <Text as="i" size="l" className={styles.withdrawnText}>
@@ -102,10 +110,6 @@ export function RecruitmentApplicantAdminPage() {
           </Button>
         )}
       </div>
-      <div className={classNames(styles.infoContainer)}>
-        <RecruitmentInterviewNotesForm initialData={initialData} />
-      </div>
-
       <div className={classNames(styles.infoContainer)}>
         <Text size="l" as="strong" className={styles.textBottom}>
           {t(KEY.recruitment_all_applications)}
