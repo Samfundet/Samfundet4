@@ -39,8 +39,6 @@ export function RecruitmentApplicantAdminPage() {
   const interviewNotes = recruitmentApplication?.interview?.notes;
   const interviewId = recruitmentApplication?.interview?.id;
 
-  console.log(recruitmentApplication);
-
   const adminWithdraw = useMutation({
     mutationFn: (id: string) => {
       return withdrawRecruitmentApplicationRecruiter(id);

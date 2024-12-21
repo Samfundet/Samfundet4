@@ -1,13 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Textarea } from '~/Components';
-import { KEY } from '~/i18n/constants';
 import { putRecrutmentInterviewNotes } from '~/api';
-import { useMutation } from '@tanstack/react-query';
+import { KEY } from '~/i18n/constants';
 
 const recruitmentNotesSchema = z.object({
   notes: z.string(),
