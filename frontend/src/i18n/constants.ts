@@ -176,6 +176,7 @@ export const KEY = {
   common_processed: 'common_processed',
   common_rejected: 'common_rejected',
   common_it: 'common_it',
+  common_in: 'common_in',
   common_will: 'common_will',
   common_get: 'common_get',
   common_count: 'common_count',
@@ -375,6 +376,7 @@ export const KEY = {
   recruitment_admitted: 'recruitment_admitted',
   recruitment_statistics: 'recruitment_statistics',
   recruitment_applications: 'recruitment_applications',
+
   recruitment_applications_processed: 'recruitment_applications_processed',
   recruitment_automatic_rejection: 'recruitment_automatic_rejection',
   recruitment_rejection_email: 'recruitment_rejection_email',
