@@ -26,7 +26,12 @@ export function SetInterviewManuallyModal({
 
   return (
     <>
-      <Button theme="samf" rounded={isButtonRounded} onClick={() => setOpen(true)}>
+      <Button
+        theme="samf"
+        rounded={isButtonRounded}
+        onClick={() => setOpen(true)}
+        className={styles.set_interview_button}
+      >
         {t(KEY.recruitment_interview_set)}
       </Button>
 

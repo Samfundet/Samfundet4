@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Link } from '~/Components/Link/Link';
 import { SultenPage } from '~/Components/SultenPage';
 import { SamfForm } from '~/Forms/SamfForm';
@@ -31,19 +31,19 @@ export function LycheReservationPage() {
   const [reservation, setReservation] = useState<FormProps>();
   const [availableDate, setAvailableDate] = useState<boolean>(false);
 
-  const occasionOptions: DropDownOption<string>[] = [
+  const occasionOptions: DropdownOption<string>[] = [
     { value: 'DRINK', label: 'drikke' },
     { value: 'EAT', label: 'spise' },
   ];
 
-  const hoursOptions: DropDownOption<string>[] = [
+  const hoursOptions: DropdownOption<string>[] = [
     { value: '12:00', label: '12:00' },
     { value: '13:00', label: '13:00' },
     { value: '14:00', label: '14:00' },
     { value: '15:00', label: '15:00' },
   ];
 
-  const occupancyOptions: DropDownOption<number>[] = [
+  const occupancyOptions: DropdownOption<number>[] = [
     { value: 1, label: '1' },
     { value: 2, label: '2' },
     { value: 3, label: '3' },

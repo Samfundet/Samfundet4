@@ -28,13 +28,16 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "correctness": {
+        "noUnusedImports": "error",
+        "useHookAtTopLevel": "error"
+      }
     }
   },
   "formatter": {
     "indentStyle": "space",
-    "lineWidth": 120,
-    "lineEnding": "lf"
+    "lineWidth": 120
   },
   "javascript": {
     "formatter": {

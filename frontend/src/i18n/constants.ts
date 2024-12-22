@@ -54,6 +54,7 @@ export const KEY = {
   // Date related:
   common_today: 'common_today',
   common_tomorrow: 'common_tomorrow',
+  pick_a_date: 'pick_a_date',
 
   // No category:
   common_url: 'common_url',
@@ -61,6 +62,7 @@ export const KEY = {
   common_yes: 'common_yes',
   common_no: 'common_no',
   common_to: 'common_to',
+  common_any: 'common_any',
   common_all: 'common_all',
   common_price: 'common_price',
   common_food: 'common_food',
@@ -83,6 +85,7 @@ export const KEY = {
   common_card: 'common_card',
   common_tags: 'common_tags',
   common_gang: 'common_gang',
+  common_section: 'common_section',
   common_next: 'common_next',
   common_open: 'common_open',
   common_send: 'common_send',
@@ -121,12 +124,14 @@ export const KEY = {
   common_email: 'common_email',
   common_email_subject: 'common_email_subject',
   common_total: 'common_total',
+  common_out_of: 'common_out_of',
   common_roles: 'common_roles',
-  common_roles_view: 'common_roles_view',
+  common_role: 'common_role',
   common_guests: 'common_guests',
   common_occasion: 'common_occasion',
   common_phonenumber: 'common_phonenumber',
   common_password: 'common_password',
+  common_current: 'common_current',
   common_about_us: 'common_about_us',
   common_overview: 'common_overview',
   common_recruitmentposition: 'common_recruitmentposition',
@@ -166,6 +171,7 @@ export const KEY = {
   common_something_went_wrong: 'common_something_went_wrong',
   common_click_here: 'common_click_here',
   common_have: 'common_have',
+  recruitment_interview: 'recruitment_interview',
   common_been: 'common_been',
   common_processed: 'common_processed',
   common_rejected: 'common_rejected',
@@ -185,6 +191,8 @@ export const KEY = {
   common_administrate: 'common_administrate',
   common_administration: 'common_administration',
   common_unprocessed: 'common_unprocessed',
+  common_list_view: 'common_list_view',
+  common_tab_view: 'common_tab_view',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -215,6 +223,10 @@ export const KEY = {
   //        Others        //
   // ==================== //
 
+  role_content_type: 'role_content_type',
+  change_password: 'change_password',
+  new_password: 'new_password',
+
   // LoginPage:
   loginpage_register: 'loginpage_register',
   loginpage_internal_login: 'loginpage_internal_login',
@@ -226,6 +238,8 @@ export const KEY = {
   contributors_page_title: 'contributors_page_title',
   contributors_page_text: 'contributors_page_text',
   contributors_page_past_developers: 'contributors_page_past_developers',
+
+  role_edit_could_not_load_permissions: 'role_edit_could_not_load_permissions',
 
   // GroupsPage:
   groupspage_gangs_text: 'groupspage_gangs_text',
@@ -270,9 +284,14 @@ export const KEY = {
   recruitment_position: 'recruitment_position',
   recruitment_positions: 'recruitment_positions',
   recruitment_applicant: 'recruitment_applicant',
+  recruitment_interviewer: 'recruitment_interviewer',
+  recruitment_interviewers: 'recruitment_interviewers',
   recruitment_interviews: 'recruitment_interviews',
+  recruitment_interview_planned: 'recruitment_interview_planned',
   recruitment_no_interviews: 'recruitment_no_interviews',
   recruitment_interview_set: 'recruitment_interview_set',
+  recruitment_interview_groups: 'recruitment_interview_groups',
+  recruitment_interview_group: 'recruitment_interview_group',
   recruitment_applicants: 'recruitment_applicants',
   recruitment_interview_time: 'recruitment_interview_time',
   recruitment_interview_location: 'recruitment_interview_location',
@@ -310,6 +329,7 @@ export const KEY = {
   recrutment_default_application_letter: 'recrutment_default_application_letter',
   reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
   max_applications: 'max_applications',
+  recruitment_promo_media: 'recruitment_promo_media',
   recruitment_norwegian_applicants_only: 'recruitment_norwegian_applicants_only',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
@@ -320,7 +340,7 @@ export const KEY = {
   recruitment_accepted_applicants: 'recruitment_accepted_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
   recrutment_export_to_csv: 'recrutment_export_to_csv',
-  recruitment_gangs_with_separate_positions: 'recruitment_gangs_with_separate_positions',
+  recruitment_positions_with_separate_recruitment: 'recruitment_positions_with_separate_recruitment',
   application_deadline: 'application_deadline',
   recruitment_applicants_without_interview: 'recruitment_applicants_without_interview',
   recruitment_applicants_without_interview_help_text: 'recruitment_applicants_without_interview_help_text',
@@ -376,6 +396,7 @@ export const KEY = {
   recruitment_applet_edit_description: 'recruitment_applet_edit_description',
   recruitment_applet_open_to_other_positions: 'recruitment_applet_open_to_other_positions',
   recruitment_applet_overview_description: 'recruitment_applet_overview_description',
+  recruitment_applet_room_overview: 'recruitment_applet_room_overview',
   recruitment_applet_room_description: 'recruitment_applet_room_description',
   recruitment_applet_rejection_mail_description: 'recruitment_applet_rejection_mail_description',
   recruitment_applet_without_interview_title: 'recruitment_applet_without_interview_title',
@@ -410,6 +431,9 @@ export const KEY = {
   admin_saksdokumenter_cannot_reupload: 'admin_saksdokumenter_cannot_reupload',
   admin_impersonate: 'admin_impersonate',
   admin_stop_impersonate: 'admin_stop_impersonate',
+  admin_role_page_orggangsection: 'admin_role_page_orggangsection',
+  admin_role_page_role_since: 'admin_role_page_role_since',
+  admin_role_page_given_by: 'admin_role_page_given_by',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
@@ -460,6 +484,17 @@ export const KEY = {
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',
   saksdokumentpage_publication_date: 'saksdokumentpage_publication_date',
   eventsadminpage_successful_delete_toast: 'eventsadminpage_successful_delete_toast',
+  promo_media_description: 'promo_media_description',
+  promo_media_invalid: 'promo_media_invalid',
+
+  error_generic: 'error_generic',
+  error_generic_description: 'error_generic_description',
+  error_not_found: 'error_not_found',
+  error_not_found_description: 'error_not_found_description',
+  error_forbidden: 'error_forbidden',
+  error_forbidden_description: 'error_forbidden_description',
+  error_server_error: 'error_server_error',
+  error_server_error_description: 'error_server_error_description',
 } as const;
 
 // This will ensure that each value matches the key exactly.

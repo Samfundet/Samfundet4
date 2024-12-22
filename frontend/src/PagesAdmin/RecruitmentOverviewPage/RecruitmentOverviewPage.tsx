@@ -7,6 +7,7 @@ import type { Tab } from '~/Components/TabBar/TabBar';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getRecruitmentForRecruiter } from '~/api';
 import { RecruitmentDto, type RecruitmentForRecruiterDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { RecruitmentProgression } from './Components/RecruitmentProgression';
 import { RecruitmentStatistics } from './Components/RecruitmentStatistics';
@@ -28,7 +29,8 @@ export function RecruitmentOverviewPage() {
       { key: 2, label: t(KEY.recruitment_statistics), value: <RecruitmentStatistics statistics={data?.statistics} /> },
     ];
   }, [data, t]);
-
+    
+  useTitle(t(KEY.recruitment_overview));
   return (
     <AdminPageLayout title={`${t(KEY.recruitment_overview)}: ${RECRUITMENT_TITLE_PLACEHOLDER}`}>
       <TabView tabs={tabs} />
