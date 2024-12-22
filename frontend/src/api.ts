@@ -646,6 +646,14 @@ export async function postOccupiedTimeslots(
   return response;
 }
 
+export async function postRecruitmentToggleOpenForOtherPositions(
+  timeslots: OccupiedTimeslotDto,
+): Promise<AxiosResponse<OccupiedTimeslotDto>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_toggle_open_for_other_positions;
+  const response = await axios.post(url, timeslots, { withCredentials: true });
+  return response;
+}
+
 export async function getRecruitmentPositionForApplicant(
   positionId: string,
 ): Promise<AxiosResponse<RecruitmentPositionDto>> {

@@ -1285,6 +1285,16 @@ class RecruitmentAvailabilityView(APIView):
         )
 
 
+class RecruitmentToggleOpenForOtherPosition(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request: Request) -> Response:
+        user = request.user
+        user.recruitment_is_open_to_other_positions = not user.recruitment_is_open_to_other_positions
+        user.save()
+        return Response(data=user.recruitment_is_open_to_other_positions)
+
+
 class OccupiedTimeslotView(ListCreateAPIView):
     model = OccupiedTimeslot
     serializer_class = OccupiedTimeslotSerializer

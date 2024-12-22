@@ -50,6 +50,7 @@ export type RecruitmentUserDto = {
   email: string;
   phone_number?: string;
   campus?: CampusDto;
+  recruitment_is_open_to_other_positions?: boolean;
   recruitment_application_ids?: string[];
   applications: RecruitmentApplicationDto[];
   applications_without_interview: RecruitmentApplicationDto[];

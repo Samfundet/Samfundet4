@@ -1174,6 +1174,32 @@ def test_post_application_overflow(
     assert RecruitmentApplication.TOO_MANY_APPLICATIONS_ERROR in response2.data['recruitment']
 
 
+def test_toggle_recruitment_open_for_other_positions(
+    fixture_rest_client: APIClient,
+    fixture_user: User,
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_user)
+    assert fixture_user.recruitment_is_open_to_other_positions is False
+    url = reverse(routes.samfundet__recruitment_toggle_open_for_other_positions)
+
+    ### Update
+    response: Response = fixture_rest_client.post(path=url)
+
+    ### Assert ###
+    assert response.data is True
+    updated_user = User.objects.get(id=fixture_user.id)
+    assert updated_user.recruitment_is_open_to_other_positions == response.data
+
+    ### Update
+    response: Response = fixture_rest_client.post(path=url)
+
+    ### Assert ###
+    assert response.data is False
+    updated_user = User.objects.get(id=fixture_user.id)
+    assert updated_user.recruitment_is_open_to_other_positions == response.data
+
+
 def test_post_recruitment_reapply_overflow(
     fixture_rest_client: APIClient,
     fixture_user: User,
