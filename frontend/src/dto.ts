@@ -413,7 +413,16 @@ export type RecruitmentDto = {
   max_applications?: number;
   organization: number | OrganizationDto;
   separate_positions?: RecruitmentSeparatePositionDto[];
-  recruitment_progress?: number;
+};
+
+export type RecruitmentForRecruiterDto = RecruitmentDto & {
+  statistics: RecruitmentStatsDto;
+  recruitment_progress: number;
+  total_applicants: number;
+  total_processed_applicants: number;
+  total_unprocessed_applicants: number;
+  total_processed_applications: number;
+  total_unprocessed_applications: number;
 };
 
 export type RecruitmentSeparatePositionDto = {
@@ -540,7 +549,7 @@ export type RecruitmentCampusStatDto = {
 };
 
 export type RecruitmentGangStatDto = {
-  gang: string;
+  gang: GangDto;
   application_count: number;
   applicant_count: number;
   average_priority: number;
@@ -555,24 +564,14 @@ export type RecruitmentStatsDto = {
   total_applications: number;
   total_withdrawn: number;
   total_accepted: number;
+  total_rejected: number;
   average_gangs_applied_to_per_applicant: number;
   average_applications_per_applicant: number;
   time_stats: RecruitmentTimeStatDto[];
   date_stats: RecruitmentDateStatDto[];
-  gang_stats: RecruitmentGangDto[];
+  gang_stats: RecruitmentGangStatDto[];
   campus_stats: RecruitmentCampusStatDto[];
 };
-
-export type RecruitmentProgressionStatsDto = {
-  // Does processed data exist?
-  id: number
-  total_applications: number;
-  total_processed_applications: number;
-  total_admitted_applications: number;
-  total_rejected_applications: number;
-  gang_stats: GangStatsDto[];
-  rejection_email_count: number;
-}
 
 export type InterviewRoomDto = {
   id: number;
@@ -583,14 +582,6 @@ export type InterviewRoomDto = {
   recruitment: string;
   gang?: number;
 };
-
-export type GangStatsDto = {
-  // Unsure about this dto
-  id: number;
-  gang_name: string;
-  total_accepted: number;
-  total_rejected: number;
-}
 
 // ############################################################
 //                       Purchase Feedback

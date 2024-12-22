@@ -42,6 +42,7 @@ export function WithoutInterviewList({ applications }: WithoutInterviewListProps
       ],
     };
   }
+
   return (
     <div className={styles.container}>
       <Table columns={tableColumns} data={applications.map((application) => applicationToRow(application))} />

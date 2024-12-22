@@ -631,14 +631,11 @@ class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
 
 
 class RecruitmentGangStatSerializer(serializers.ModelSerializer):
-    gang = serializers.SerializerMethodField(method_name='gang_name', read_only=True)
+    gang = GangSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentGangStat
         exclude = ['id', 'recruitment_stats']
-
-    def gang_name(self, stat: RecruitmentGangStat) -> str:
-        return stat.gang.name_nb
 
 
 class RecruitmentStatisticsSerializer(serializers.ModelSerializer):
@@ -752,6 +749,12 @@ class RecruitmentSerializer(CustomBaseSerializer):
 class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
     separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
     recruitment_progress = serializers.SerializerMethodField(method_name='get_recruitment_progress', read_only=True)
+    total_applicants = serializers.SerializerMethodField(method_name='get_total_applicants', read_only=True)
+    total_processed_applicants = serializers.SerializerMethodField(method_name='get_total_processed_applicants', read_only=True)
+    total_unprocessed_applicants = serializers.SerializerMethodField(method_name='get_total_unprocessed_applicants', read_only=True)
+    total_processed_applications = serializers.SerializerMethodField(method_name='get_total_processed_applications', read_only=True)
+    total_unprocessed_applications = serializers.SerializerMethodField(method_name='get_total_unprocessed_applications', read_only=True)
+
     statistics = RecruitmentStatisticsSerializer(read_only=True)
 
     class Meta:
@@ -760,6 +763,21 @@ class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
 
     def get_recruitment_progress(self, instance: Recruitment) -> float:
         return instance.recruitment_progress()
+
+    def get_total_applicants(self, instance: Recruitment) -> int:
+        return instance.get_applicants().count()
+
+    def get_total_processed_applicants(self, instance: Recruitment) -> int:
+        return instance.get_processed_applicants().count()
+
+    def get_total_unprocessed_applicants(self, instance: Recruitment) -> int:
+        return instance.get_unprocessed_applicants().count()
+
+    def get_total_processed_applications(self, instance: Recruitment) -> int:
+        return instance.get_processed_applications().count()
+
+    def get_total_unprocessed_applications(self, instance: Recruitment) -> int:
+        return instance.get_unprocessed_applications().count()
 
 
 class RecruitmentPositionSerializer(CustomBaseSerializer):

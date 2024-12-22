@@ -13,7 +13,11 @@ import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './RecruitmentStatistics.module.scss';
 
-export function RecruitmentStatistics() {
+type RecruitmentStatisticsProps = {
+  statistics: RecruitmentStatsDto | undefined;
+};
+
+export function RecruitmentStatistics({ statistics }: RecruitmentStatisticsProps) {
   const { recruitmentId } = useParams();
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
@@ -35,35 +39,17 @@ export function RecruitmentStatistics() {
     toast.error(t(KEY.common_something_went_wrong));
   }
 
-  const {
-    data: stats,
-    isLoading,
-    error,
-  } = useQuery<RecruitmentStatsDto>({
-    queryKey: ['recruitmentStats', recruitmentId],
-    queryFn: () => getRecruitmentStats(recruitmentId as string),
-    enabled: typeof recruitmentId === 'string',
-  });
-
-  if (isLoading) {
-    return <SamfundetLogoSpinner position="center" />;
-  }
-
-  if (error) {
-    toast.error(t(KEY.common_something_went_wrong));
-  }
-
   return (
     <div className={styles.container}>
       <Text as={'strong'} size={'xl'}>
         {t(KEY.recruitment_statistics)}
       </Text>
-      {stats && (
+      {statistics ? (
         <>
           <Table
             data={[
-              { cells: [`${t(KEY.common_total)} ${t(KEY.recruitment_applicants)}`, stats.total_applicants] },
-              { cells: [`${t(KEY.common_total)} ${t(KEY.recruitment_applications)}`, stats.total_applications] },
+              { cells: [`${t(KEY.common_total)} ${t(KEY.recruitment_applicants)}`, statistics.total_applicants] },
+              { cells: [`${t(KEY.common_total)} ${t(KEY.recruitment_applications)}`, statistics.total_applications] },
             ]}
           />
           <div className={styles.subContainer}>
@@ -74,7 +60,7 @@ export function RecruitmentStatistics() {
               yAxisLegend={t(KEY.recruitment_applications)}
               xAxisLegend={t(KEY.common_time)}
               yLabelCount={10}
-              data={stats.time_stats.map((time) => {
+              data={statistics.time_stats.map((time) => {
                 return { value: time.count, label: time.hour.toString() };
               })}
             />
@@ -85,7 +71,7 @@ export function RecruitmentStatistics() {
               yAxisLegend={t(KEY.recruitment_applications)}
               xAxisLegend={t(KEY.common_date)}
               yLabelCount={10}
-              data={stats.date_stats.map((date) => {
+              data={statistics.date_stats.map((date) => {
                 return { value: date.count, label: date.date };
               })}
             />
@@ -94,68 +80,14 @@ export function RecruitmentStatistics() {
               chartTitle={t(KEY.recruitment_stats_campus_header)}
               legend={t(KEY.common_campus)}
               size="small"
-              data={stats.campus_stats.map((campus) => {
+              data={statistics.campus_stats.map((campus) => {
                 return { value: campus.count, label: campus.campus };
               })}
             />
           </div>
         </>
-      )}
-      {stats && (
-        <>
-          <Table
-            data={[
-              { cells: [`${t(KEY.common_total)} ${t(KEY.recruitment_applicants)}`, stats.total_applicants] },
-              { cells: [`${t(KEY.common_total)} ${t(KEY.recruitment_applications)}`, stats.total_applications] },
-            ]}
-          />
-          <div className={styles.subContainer} ref={div}>
-            <div
-              style={{
-                transform: `scaleX(${(width ?? 520) / 520})`,
-              }}
-              ref={chartRef}
-            >
-              <Chart
-                type="bar"
-                chartTitle={t(KEY.recruitment_stats_hours_header)}
-                size="medium"
-                yAxisLegend={t(KEY.recruitment_applications)}
-                xAxisLegend={t(KEY.common_time)}
-                yLabelCount={10}
-                data={stats.time_stats.map((time) => {
-                  return { value: time.count, label: time.hour.toString() };
-                })}
-              />
-            </div>
-            <div
-              style={{
-                transform: `scaleX(${(width ?? 670) / 670})`,
-              }}
-            >
-              <Chart
-                type="line"
-                chartTitle={t(KEY.recruitment_stats_date_header)}
-                size="large"
-                yAxisLegend={t(KEY.recruitment_applications)}
-                xAxisLegend={t(KEY.common_date)}
-                yLabelCount={10}
-                data={stats.date_stats.map((date) => {
-                  return { value: date.count, label: date.date };
-                })}
-              />
-            </div>
-            <Chart
-              type="pie"
-              chartTitle={t(KEY.recruitment_stats_campus_header)}
-              legend={t(KEY.common_campus)}
-              size="small"
-              data={stats.campus_stats.map((campus) => {
-                return { value: campus.count, label: campus.campus };
-              })}
-            />
-          </div>
-        </>
+      ) : (
+        <SamfundetLogoSpinner position="center" />
       )}
     </div>
   );
