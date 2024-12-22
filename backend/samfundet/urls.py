@@ -141,6 +141,11 @@ urlpatterns = [
         views.DownloadRecruitmentApplicationGangCSV.as_view(),
         name='recruitment_download_gang_application_csv',
     ),
+    path(
+        'recruitment-toggle-open-for-other-positions/',
+        views.RecruitmentToggleOpenForOtherPosition.as_view(),
+        name='recruitment_toggle_open_for_other_positions',
+    ),
     path('occupiedtimeslot/', views.OccupiedTimeslotView.as_view(), name='occupied_timeslots'),
     path('recruitment-interview-availability/', views.RecruitmentInterviewAvailabilityView.as_view(), name='recruitment_interview_availability'),
     path('recruitment/<int:id>/availability/', views.RecruitmentAvailabilityView.as_view(), name='recruitment_availability'),

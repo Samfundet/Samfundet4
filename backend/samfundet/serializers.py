@@ -1099,7 +1099,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
 class RecruitmentBasicUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number']
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', ' recruitment_is_open_to_other_positions']
 
 
 class RecruitmentRecruitmentPositionSerializer(serializers.ModelSerializer):
