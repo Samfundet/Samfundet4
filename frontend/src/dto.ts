@@ -441,7 +441,7 @@ export type RecruitmentForRecruiterDto = RecruitmentDto & {
 
 export type RecruitmentWriteDto = RecruitmentDto & {
   organization: number;
-}
+};
 
 export type RecruitmentSeparatePositionDto = {
   id?: number;
@@ -582,8 +582,8 @@ export type RecruitmentCampusStatDto = {
 
 export type RecruitmentGangStatDto = {
   gang: GangDto;
-  total_applications: number;
-  total_applicants: number;
+  application_count: number;
+  applicant_count: number;
   average_priority: number;
   total_accepted: number;
   total_rejected: number;

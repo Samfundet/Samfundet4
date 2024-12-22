@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -6,7 +5,6 @@ import { toast } from 'react-toastify';
 import { Chart, SamfundetLogoSpinner } from '~/Components';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
-import { getRecruitmentStats } from '~/api';
 import type { RecruitmentStatsDto } from '~/dto';
 import { useCustomNavigate, useParentElementWidth } from '~/hooks';
 import { KEY } from '~/i18n/constants';

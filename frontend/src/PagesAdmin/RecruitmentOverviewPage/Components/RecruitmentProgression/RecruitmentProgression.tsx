@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Link, ProgressBar, SamfundetLogoSpinner } from '~/Components';
-import { Table, type TableRow } from '~/Components/Table';
+import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
-import { getRecruitmentStats } from '~/api';
-import { GangStatsDto, type RecruitmentForRecruiterDto, type RecruitmentGangStatDto, RecruitmentStatsDto } from '~/dto';
+import type { RecruitmentForRecruiterDto, RecruitmentGangStatDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
