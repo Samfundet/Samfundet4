@@ -7,7 +7,6 @@ import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT, getObjectFieldOrNumber } from '~/utils';
 import { NoPositions, RecruitmentCard } from './Components';
 import styles from './RecruitmentPage.module.scss';
 
