@@ -84,7 +84,8 @@ export const ROUTES_FRONTEND = {
   admin_recruitment_users_three_interview_criteria:
     '/control-panel/recruitment/:recruitmentId/users-without-three-interviews/',
   admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-applications/',
-  admin_recruitment_is_open_to_other_positions: '/control-panel/recruitment/:recruitmentId/users-open-to-other-positions/',
+  admin_recruitment_is_open_to_other_positions:
+    '/control-panel/recruitment/:recruitmentId/users-open-to-other-positions/',
   admin_recruitment_overview: '/control-panel/recruitment/:recruitmentId/recruitment-overview/',
   admin_recruitment_gang_overview: '/control-panel/recruitment/:recruitmentId/gang-overview/',
   admin_recruitment_gang_overview_rejection_email:
