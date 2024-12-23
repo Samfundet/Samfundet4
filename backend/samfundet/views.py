@@ -1240,11 +1240,15 @@ class RecruitmentApplicationForRecruitersView(APIView):
 
     def get(self, request: Request, application_id: str) -> Response:
         application = get_object_or_404(RecruitmentApplication, id=application_id)
+        same_gang_applications = RecruitmentApplication.objects.filter(
+            user=application.user, recruitment=application.recruitment, recruitment_position__gang=application.recruitment_position.resolve_gang()
+        ).order_by('applicant_priority')
         other_applications = RecruitmentApplication.objects.filter(user=application.user, recruitment=application.recruitment).order_by('applicant_priority')
         return Response(
             data={
                 'application': RecruitmentApplicationForRecruiterSerializer(instance=application).data,
                 'user': UserForRecruitmentSerializer(instance=application.user).data,
+                'same_gang_applications': RecruitmentApplicationForRecruiterSerializer(same_gang_applications, many=True).data,
                 'other_applications': RecruitmentApplicationForRecruiterSerializer(other_applications, many=True).data,
             }
         )
