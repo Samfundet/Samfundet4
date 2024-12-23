@@ -110,9 +110,25 @@ class TestRecruitmentPosition:
         'tags': 'tag1, tag2, tag3',
     }
 
-    def test_create_recruitmentposition_gang(self, fixture_gang: Gang):
-        test_position = RecruitmentPosition.objects.create(**self.default_data, gang=fixture_gang)
+    def test_create_recruitmentposition_gang(self, fixture_recruitment: Recruitment, fixture_gang: Gang):
+        test_position = RecruitmentPosition.objects.create(**self.default_data, recruitment=fixture_recruitment, gang=fixture_gang)
         assert test_position.id
+
+    def test_edit_recruitmentposition_gang_from_other_org(self, fixture_recruitment: Recruitment, fixture_gang: Gang, fixture_gang_org2: Gang):
+        test_position = RecruitmentPosition.objects.create(**self.default_data, recruitment=fixture_recruitment, gang=fixture_gang)
+        assert test_position.id
+
+        with pytest.raises(ValidationError) as error:
+            test_position.gang = fixture_gang_org2
+            test_position.save()
+        e = dict(error.value)
+        assert RecruitmentPosition.POSITION_NOT_IN_RECRUITMENTORGANIZATION_ERROR in e['gang']
+
+    def test_create_recruitmentposition_gang_from_other_org(self, fixture_recruitment: Recruitment, fixture_gang_org2: Gang):
+        with pytest.raises(ValidationError) as error:
+            RecruitmentPosition.objects.create(**self.default_data, recruitment=fixture_recruitment, gang=fixture_gang_org2)
+        e = dict(error.value)
+        assert RecruitmentPosition.POSITION_NOT_IN_RECRUITMENTORGANIZATION_ERROR in e['gang']
 
     def test_create_recruitmentposition_section(self, fixture_gang_section: GangSection):
         test_position = RecruitmentPosition.objects.create(**self.default_data, section=fixture_gang_section)
@@ -125,9 +141,9 @@ class TestRecruitmentPosition:
         assert RecruitmentPosition.NO_OWNER_ERROR in e['section']
         assert RecruitmentPosition.NO_OWNER_ERROR in e['gang']
 
-    def test_create_recruitmentposition_only_one_owner(self, fixture_gang_section: GangSection, fixture_gang: Gang):
+    def test_create_recruitmentposition_only_one_owner(self, fixture_recruitment: Recruitment, fixture_gang_section: GangSection, fixture_gang: Gang):
         with pytest.raises(ValidationError) as error:
-            RecruitmentPosition.objects.create(**self.default_data, section=fixture_gang_section, gang=fixture_gang)
+            RecruitmentPosition.objects.create(**self.default_data, recruitment=fixture_recruitment, section=fixture_gang_section, gang=fixture_gang)
         e = dict(error.value)
         assert RecruitmentPosition.ONLY_ONE_OWNER_ERROR in e['section']
         assert RecruitmentPosition.ONLY_ONE_OWNER_ERROR in e['gang']

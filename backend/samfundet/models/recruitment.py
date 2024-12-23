@@ -192,6 +192,7 @@ class RecruitmentPosition(CustomBaseModel):
     # Error messages
     ONLY_ONE_OWNER_ERROR = 'Position must be owned by either gang or section, not both'
     NO_OWNER_ERROR = 'Position must have an owner, either a gang or a gang section'
+    POSITION_NOT_IN_RECRUITMENTORGANIZATION_ERROR = 'Position must be of the organization which hosts the recruitment'
     FILE_DESCRIPTION_REQUIRED_ERROR = 'Description of file is needed, if position has file upload'
 
     def clean(self) -> None:  # noqa: C901
@@ -206,6 +207,8 @@ class RecruitmentPosition(CustomBaseModel):
             # neither gang nor section provided
             errors['gang'].append(self.NO_OWNER_ERROR)
             errors['section'].append(self.NO_OWNER_ERROR)
+        if self.gang and self.gang.organization != self.recruitment.organization:
+            errors['gang'].append(self.POSITION_NOT_IN_RECRUITMENTORGANIZATION_ERROR)
         if self.has_file_upload:
             # Check Norwegian file description
             if not self.file_description_nb or len(self.file_description_nb) == 0:
