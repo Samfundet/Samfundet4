@@ -4,11 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, RecruitmentApplicantsStatus } from '~/Components';
 import { Text } from '~/Components/Text/Text';
-import {
-  getRecruitmentApplicationsForGang,
-  getRecruitmentPositionOrganizedApplications,
-  updateRecruitmentApplicationStateForPosition,
-} from '~/api';
+import { getRecruitmentPositionOrganizedApplications, updateRecruitmentApplicationStateForPosition } from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
