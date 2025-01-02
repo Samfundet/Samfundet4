@@ -60,7 +60,7 @@ export function RecruitmentAdminPage() {
         },
         {
           content: `${getFormattedDate(element.visible_from)}-${getFormattedDate(
-            element.reprioritization_deadline_for_groups,
+            element.reprioritization_deadline_for_gangs,
           )}`,
         },
         {

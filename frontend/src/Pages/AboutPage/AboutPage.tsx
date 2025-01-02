@@ -79,8 +79,8 @@ export function AboutPage() {
             <h2 className={styles.header}>{t(KEY.common_volunteering)}</h2>
             <p className={styles.text}>{useTextItem(TextItem.volunteering)}</p>
             <div className={styles.buttonTable}>
-              <Button className={styles.tableButton} theme="basic" link={ROUTES.frontend.groups}>
-                {t(KEY.common_the_groups_at_samfundet).toUpperCase()}
+              <Button className={styles.tableButton} theme="basic" link={ROUTES.frontend.gangs}>
+                {t(KEY.common_the_gangs_at_samfundet).toUpperCase()}
               </Button>
               <Button className={styles.tableButton} theme="basic">
                 {t(KEY.common_volunteer).toUpperCase()}
