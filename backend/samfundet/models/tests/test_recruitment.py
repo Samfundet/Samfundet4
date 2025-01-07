@@ -481,6 +481,153 @@ class TestRecruitmentApplication:
         assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
         assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
 
+    def test_recruitmentapplication_total_applications_two_gangs(
+        self,
+        fixture_user: User,
+        fixture_recruitment_position: RecruitmentPosition,
+        fixture_recruitment_position2: RecruitmentPosition,
+        fixture_gang2: Gang,
+        fixture_recruitment: Recruitment,
+    ):
+        fixture_recruitment_position2.gang = fixture_gang2
+        fixture_recruitment_position2.save()
+
+        assert fixture_recruitment_position2.gang != fixture_recruitment_position.gang
+
+        test_application1 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=1,
+        )
+        test_application2 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=2,
+        )
+        test_application1.save()
+        test_application2.save()
+        assert test_application1.get_total_applications() > 0
+        assert test_application1.get_total_applications() == test_application2.get_total_applications()
+        assert test_application1.get_total_applications_for_gang() == 1
+        assert test_application2.get_total_applications_for_gang() == 1
+        assert test_application1.get_total_applications_for_gang() != test_application1.get_total_applications()
+        assert test_application2.get_total_applications_for_gang() != test_application2.get_total_applications()
+
+    def test_recruitmentapplication_total_applications_single_gang(
+        self,
+        fixture_user: User,
+        fixture_recruitment_position: RecruitmentPosition,
+        fixture_recruitment_position2: RecruitmentPosition,
+        fixture_recruitment: Recruitment,
+    ):
+        test_application1 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=1,
+        )
+        test_application2 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=2,
+        )
+        test_application1.save()
+        test_application2.save()
+        assert test_application1.get_total_applications() > 0
+        assert test_application1.get_total_applications() == test_application2.get_total_applications()
+        assert test_application1.get_total_applications_for_gang() == test_application2.get_total_applications_for_gang()
+        assert test_application1.get_total_applications_for_gang() == test_application1.get_total_applications()
+
+    def test_recruitmentapplication_total_interviews_two_gangs(
+        self,
+        fixture_user: User,
+        fixture_recruitment_position: RecruitmentPosition,
+        fixture_recruitment_position2: RecruitmentPosition,
+        fixture_gang2: Gang,
+        fixture_recruitment: Recruitment,
+    ):
+        fixture_recruitment_position2.gang = fixture_gang2
+        fixture_recruitment_position2.save()
+        # Create two interviews with separate gangs
+        assert fixture_recruitment_position2.gang != fixture_recruitment_position.gang
+
+        test_application1 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=1,
+        )
+        test_application2 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=2,
+        )
+        # assign 1 interview to one of them
+        test_application1.interview = Interview.objects.create()
+        test_application1.save()
+        test_application2.save()
+        assert test_application1.get_total_interviews() > 0
+        assert test_application1.get_total_interviews() == test_application2.get_total_interviews()
+        assert test_application1.get_total_interviews_for_gang() == test_application1.get_total_interviews()
+        assert test_application2.get_total_interviews_for_gang() != test_application2.get_total_interviews()
+
+        # test with both having an interview each
+        test_application2.interview = Interview.objects.create()
+        test_application1.save()
+        test_application2.save()
+        assert test_application1.get_total_interviews() > 0
+        assert test_application1.get_total_interviews() == test_application2.get_total_interviews()
+        assert test_application1.get_total_interviews_for_gang() == test_application2.get_total_interviews_for_gang()
+        assert test_application1.get_total_interviews_for_gang() != test_application1.get_total_interviews()
+        assert test_application2.get_total_interviews_for_gang() != test_application2.get_total_interviews()
+
+    def test_recruitmentapplication_total_interviews_single_gang(
+        self,
+        fixture_user: User,
+        fixture_recruitment_position: RecruitmentPosition,
+        fixture_recruitment_position2: RecruitmentPosition,
+        fixture_recruitment: Recruitment,
+    ):
+        test_application1 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=1,
+        )
+        test_application2 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=2,
+        )
+        test_application1.interview = Interview.objects.create()
+        test_application1.save()
+        test_application2.save()
+        assert test_application1.get_total_interviews() > 0
+        assert test_application1.get_total_interviews() == test_application2.get_total_interviews()
+        assert test_application1.get_total_interviews_for_gang() == test_application2.get_total_interviews_for_gang()
+        assert test_application1.get_total_interviews_for_gang() == test_application1.get_total_interviews()
+
+        test_application2.interview = Interview.objects.create()
+        test_application1.save()
+        test_application2.save()
+        assert test_application1.get_total_interviews() > 0
+        assert test_application1.get_total_interviews() == test_application2.get_total_interviews()
+        assert test_application1.get_total_interviews_for_gang() == test_application2.get_total_interviews_for_gang()
+        assert test_application1.get_total_interviews_for_gang() == test_application1.get_total_interviews()
+
 
 class TestRecruitmentApplicationStatus:
     def test_check_called_accepted_sets_auto_rejection(
