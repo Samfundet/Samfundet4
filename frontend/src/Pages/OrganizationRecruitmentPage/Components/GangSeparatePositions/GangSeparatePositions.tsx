@@ -14,7 +14,7 @@ export function GangSeparatePositions({ recruitmentSeparatePositions }: GangSepa
   return (
     <ExpandableHeader
       showByDefault={true}
-      label={t(KEY.recruitment_gangs_with_separate_positions)}
+      label={t(KEY.recruitment_positions_with_separate_recruitment)}
       className={styles.separate_header}
     >
       {recruitmentSeparatePositions.map((pos) => (

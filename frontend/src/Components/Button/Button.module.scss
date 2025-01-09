@@ -14,7 +14,8 @@
   justify-content: center;
 
   // Remove underline when button is a link
-  &, &:hover {
+  &,
+  &:hover {
     text-decoration: none;
   }
 
@@ -35,6 +36,19 @@
 .button_basic {
   background-color: white;
   color: black;
+}
+
+.button_selected {
+  background-color: white;
+  color: black;
+  box-shadow: inset 0 0 1.5px 2px rgba(0, 0, 0, 0.15);
+  cursor: default;
+
+  // Override hover effects for selected buttons
+  &:hover:not([disabled]) {
+    filter: none;
+    box-shadow: inset 0 0 1.5px 2px rgba(0, 0, 0, 0.15);
+  }
 }
 
 .button_samf {
@@ -169,4 +183,3 @@
     text-decoration: underline;
   }
 }
-
