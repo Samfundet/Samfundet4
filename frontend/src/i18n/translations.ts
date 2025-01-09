@@ -112,6 +112,7 @@ export const nb = prepareTranslations({
   [KEY.common_phonenumber]: 'Telefonnummer',
   [KEY.common_register]: 'Registrer',
   [KEY.common_password]: 'passord',
+  [KEY.common_current]: 'Nåværende',
   [KEY.common_about_us]: 'Om oss',
   [KEY.common_previous]: 'Forrige',
   [KEY.common_required]: 'Påkrevd',
@@ -206,8 +207,13 @@ export const nb = prepareTranslations({
   //        Others        //
   // ==================== //
   [KEY.role_content_type]: 'Hierarkinivå',
+  [KEY.change_password]: 'Bytt passord',
+  [KEY.new_password]: 'Nytt passord',
   [KEY.admin_impersonate]: 'Stjel identitet',
   [KEY.admin_stop_impersonate]: 'Stopp identitetstyveri',
+  [KEY.admin_role_page_orggangsection]: 'Org/Gjeng/Seksjon',
+  [KEY.admin_role_page_role_since]: 'Hatt rollen siden',
+  [KEY.admin_role_page_given_by]: 'Gitt av',
 
   // LoginPage:
   [KEY.loginpage_register]: 'Lag bruker',
@@ -280,7 +286,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_no_gangs]: 'Ingen gjenger',
   [KEY.recruitment_no_active]: 'Ingen aktive opptak',
   [KEY.recruitment_interview_notes]: 'Intervju notater',
-  [KEY.recruitment_priority]: 'Søkers prioritet',
+  [KEY.recruitment_priority]: 'Sokers prioritet',
   [KEY.recruitment_recruiter_priority]: 'Prioritet',
   [KEY.recruitment_recruiter_status]: 'Status',
   [KEY.common_not_set]: 'Ikke satt',
@@ -362,7 +368,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_no_current_applications_gang]: 'Denne gjengen har ennå ikke fått noen søknader',
   [KEY.recruitment_apply_for]: 'Søk verv hos',
   [KEY.recruitment_position_categorized_by_gang]: 'kategorisert på gjeng',
-  [KEY.recruitment_gangs_with_separate_positions]: 'Gjenger med separat opptak',
+  [KEY.recruitment_positions_with_separate_recruitment]: 'Stillinger med separat opptak',
   [KEY.error_recruitment_form_1]: 'Vist søknadfrist kan ikke være før opptaket blir synlig',
   [KEY.error_recruitment_form_2]: 'Faktisk søknadsfrist kan ikke være før vist søknadsfrist',
   [KEY.error_recruitment_form_3]: 'Omprioriteringsfrist kan ikke være før faktisk søknadsfrist',
@@ -601,6 +607,7 @@ export const en = prepareTranslations({
   [KEY.common_phonenumber]: 'Phone number',
   [KEY.common_lastname]: 'Last name',
   [KEY.common_password]: 'password',
+  [KEY.common_current]: 'Current',
   [KEY.common_select_all]: 'Select all',
   [KEY.common_unselect_all]: 'Unselect all',
   [KEY.common_overview]: 'Overview',
@@ -696,8 +703,13 @@ export const en = prepareTranslations({
   //        Others        //
   // ==================== //
   [KEY.role_content_type]: 'Hierarchical level',
+  [KEY.change_password]: 'Change password',
+  [KEY.new_password]: 'New password',
   [KEY.admin_impersonate]: 'Impersonate',
   [KEY.admin_stop_impersonate]: 'Stop impersonation',
+  [KEY.admin_role_page_orggangsection]: 'Org/Gang/Section',
+  [KEY.admin_role_page_role_since]: 'Had role since',
+  [KEY.admin_role_page_given_by]: 'Given by',
 
   // LoginPage:
   [KEY.loginpage_register]: 'Create user',
@@ -854,7 +866,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_stats_date_header]: 'Total applicants per day',
   [KEY.recruitment_apply_for]: 'Apply for position at',
   [KEY.recruitment_position_categorized_by_gang]: 'categorized by gang',
-  [KEY.recruitment_gangs_with_separate_positions]: 'Groups with separate recruitment',
+  [KEY.recruitment_positions_with_separate_recruitment]: 'Positions with separate recruitment',
   [KEY.error_recruitment_form_1]: 'Displayed deadline cannot be before the recruitment becomes visible',
   [KEY.error_recruitment_form_2]: 'Actual deadline cannot be before the displayed deadline',
   [KEY.error_recruitment_form_3]: 'Reprioritization deadline cannot be before the actual deadline',
