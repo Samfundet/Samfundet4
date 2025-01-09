@@ -12,9 +12,13 @@ import styles from './OccupiedForm.module.scss';
 type Props = {
   recruitmentId: number;
   onCancel?: () => void;
+  onConfirm?: () => void;
+  header?: string;
+  subHeader?: string;
+  saveButtonText?: string;
 };
 
-export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
+export function OccupiedForm({ recruitmentId = 1, onCancel, onConfirm, header, subHeader, saveButtonText }: Props) {
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState(true);
@@ -62,6 +66,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
     postOccupiedTimeslots(data)
       .then(() => {
         toast.success(t(KEY.common_update_successful));
+        onConfirm?.();
       })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
@@ -92,14 +97,19 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
 
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>{t(KEY.occupied_title)}</h3>
+      <h3 className={styles.title}> {header ? t(header) : t(KEY.occupied_title)}</h3>
 
       {loading ? (
         <span className={styles.subtitle}>{t(KEY.common_loading)}...</span>
       ) : (
         <>
           <span className={styles.subtitle}>
-            <Trans i18nKey={KEY.occupied_help_text} />
+            {' '}
+            {subHeader ? (
+              <Trans i18nKey={subHeader} components={{ strong: <strong /> }} />
+            ) : (
+              <Trans i18nKey={KEY.occupied_help_text} />
+            )}
           </span>
           <div className={styles.date_container}>
             <MiniCalendar
@@ -126,7 +136,7 @@ export function OccupiedForm({ recruitmentId = 1, onCancel }: Props) {
               {t(KEY.common_cancel)}
             </Button>
             <Button display="block" theme="samf" onClick={save}>
-              {t(KEY.common_save)}
+              {saveButtonText ? t(saveButtonText) : t(KEY.common_save)}
             </Button>
           </div>
         </>
