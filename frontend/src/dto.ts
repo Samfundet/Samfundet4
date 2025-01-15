@@ -532,6 +532,7 @@ export type RecruitmentApplicationDto = {
 export type RecruitmentApplicationRecruiterDto = {
   user: RecruitmentUserDto;
   application: RecruitmentApplicationDto;
+  same_gang_applications: RecruitmentApplicationDto[];
   other_applications: RecruitmentApplicationDto[];
 };
 
