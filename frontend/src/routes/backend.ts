@@ -581,6 +581,7 @@ export const ROUTES_BACKEND = {
   samfundet__home: '/home/',
   samfundet__assign_group: '/assign_group/',
   samfundet__webhook: '/webhook/',
+  samfundet__gangsorganized: '/gangtypes/:organization/',
   samfundet__check_reservation: '/check-reservation/',
   samfundet__active_recruitments: '/active-recruitments/',
   samfundet__recruitment_positions: '/recruitment-positions/',
