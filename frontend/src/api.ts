@@ -37,8 +37,10 @@ import type {
   RecruitmentStatsDto,
   RecruitmentUnprocessedApplicationsDto,
   RecruitmentUserDto,
+  RecruitmentWriteDto,
   RegistrationDto,
   RoleDto,
+  RoleUsersDto,
   SaksdokumentDto,
   TextItemDto,
   UserDto,
@@ -84,6 +86,11 @@ export async function register(data: RegistrationDto): Promise<number> {
   axios.defaults.headers.common['X-CSRFToken'] = new_token;
 
   return response.status;
+}
+
+export async function changePassword(current_password: string, new_password: string): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__change_password;
+  return await axios.post(url, { current_password, new_password }, { withCredentials: true });
 }
 
 export async function getUser(): Promise<UserDto> {
@@ -543,14 +550,14 @@ export async function getRecruitment(id: string): Promise<AxiosResponse<Recruitm
   return response;
 }
 
-export async function postRecruitment(recruitmentData: RecruitmentDto): Promise<AxiosResponse> {
+export async function postRecruitment(recruitmentData: RecruitmentWriteDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_list;
   const response = await axios.post(url, recruitmentData, { withCredentials: true });
 
   return response;
 }
 
-export async function putRecruitment(id: string, recruitment: Partial<RecruitmentDto>): Promise<AxiosResponse> {
+export async function putRecruitment(id: string, recruitment: Partial<RecruitmentWriteDto>): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_detail, urlParams: { pk: id } });
   const response = await axios.put<RecruitmentDto>(url, recruitment, { withCredentials: true });
@@ -567,6 +574,13 @@ export async function getRecruitmentPositions(recruitmentId: string): Promise<Ax
   const response = await axios.get(url, { withCredentials: true });
 
   return response;
+}
+
+export async function getRoleUsers(id: number): Promise<RoleUsersDto[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__role_users, urlParams: { pk: id } });
+  const response = await axios.get<RoleUsersDto[]>(url, { withCredentials: true });
+
+  return response.data;
 }
 
 export async function getRecruitmentPositionsGangForApplicant(

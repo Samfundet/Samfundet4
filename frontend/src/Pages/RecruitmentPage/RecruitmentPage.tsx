@@ -5,7 +5,6 @@ import { getActiveRecruitments } from '~/api';
 import type { RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { dbT, getObjectFieldOrNumber } from '~/utils';
 import { NoPositions, RecruitmentCard } from './Components';
 import styles from './RecruitmentPage.module.scss';
 
@@ -34,14 +33,7 @@ export function RecruitmentPage() {
             <SamfundetLogoSpinner />
           ) : recruitments && recruitments.length > 0 ? (
             recruitments.map((recruitment: RecruitmentDto) => (
-              <RecruitmentCard
-                key={recruitment.id}
-                recruitment_id={recruitment.id}
-                recruitment_name={dbT(recruitment, 'name')}
-                shown_application_deadline={recruitment.shown_application_deadline}
-                reprioritization_deadline_for_applicant={recruitment.reprioritization_deadline_for_applicant}
-                organization_id={getObjectFieldOrNumber<number>(recruitment.organization, 'id') ?? 0}
-              />
+              <RecruitmentCard recruitment={recruitment} key={recruitment.id} />
             ))
           ) : (
             <NoPositions />
