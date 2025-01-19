@@ -201,7 +201,7 @@ export const KEY = {
   common_film_club: 'common_film_club',
   common_privacy_policy: 'common_privacy_policy',
   common_facilitation: 'common_facilitation',
-  common_the_groups_at_samfundet: 'common_the_groups_at_samfundet',
+  common_the_gangs_at_samfundet: 'common_the_gangs_at_samfundet',
   common_volunteering: 'common_volunteering',
   common_overview_map: 'common_overview_map',
   common_new_building: 'common_new_building',
@@ -242,9 +242,8 @@ export const KEY = {
 
   role_edit_could_not_load_permissions: 'role_edit_could_not_load_permissions',
 
-  // GroupsPage:
-  groupspage_gangs_text: 'groupspage_gangs_text',
-  groupspage_gangs_title: 'groupspage_gangs_title',
+  // GangsPage:
+  gangspage_title: 'gangspage_title',
 
   // EventPageAge:
   eighteen: 'eighteen',
@@ -328,7 +327,7 @@ export const KEY = {
   actual_application_deadline: 'actual_application_deadline',
   recruitment_number_of_applications: 'recruitment_number_of_applications',
   recrutment_default_application_letter: 'recrutment_default_application_letter',
-  reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
+  reprioritization_deadline_for_gangs: 'reprioritization_deadline_for_gangs',
   max_applications: 'max_applications',
   recruitment_promo_media: 'recruitment_promo_media',
   recruitment_norwegian_applicants_only: 'recruitment_norwegian_applicants_only',

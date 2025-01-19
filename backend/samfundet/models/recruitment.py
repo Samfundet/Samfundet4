@@ -28,7 +28,7 @@ class Recruitment(CustomBaseModel):
     )
     shown_application_deadline = models.DateTimeField(null=False, blank=False, help_text='The deadline that is shown to applicants')
     reprioritization_deadline_for_applicant = models.DateTimeField(null=False, blank=False, help_text='Before allocation meeting')
-    reprioritization_deadline_for_groups = models.DateTimeField(null=False, blank=False, help_text='Reprioritization deadline for groups')
+    reprioritization_deadline_for_gangs = models.DateTimeField(null=False, blank=False, help_text='Reprioritization deadline for groups')
     organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
 
     max_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Max applications per applicant')
@@ -78,7 +78,7 @@ class Recruitment(CustomBaseModel):
             'actual_application_deadline',
             'shown_application_deadline',
             'reprioritization_deadline_for_applicant',
-            'reprioritization_deadline_for_groups',
+            'reprioritization_deadline_for_gangs',
         ]:
             if getattr(self, field) < now:
                 errors[field].append(self.NOT_IN_FUTURE_ERROR)
@@ -95,8 +95,8 @@ class Recruitment(CustomBaseModel):
             errors['reprioritization_deadline_for_applicant'].append(self.REPRIORITIZATION_BEFORE_ACTUAL)
             errors['actual_application_deadline'].append(self.ACTUAL_AFTER_REPRIORITIZATION)
 
-        if self.reprioritization_deadline_for_groups < self.reprioritization_deadline_for_applicant:
-            errors['reprioritization_deadline_for_groups'].append(self.REPRIORITIZATION_GROUP_BEFORE_APPLICANT)
+        if self.reprioritization_deadline_for_gangs < self.reprioritization_deadline_for_applicant:
+            errors['reprioritization_deadline_for_gangs'].append(self.REPRIORITIZATION_GROUP_BEFORE_APPLICANT)
             errors['reprioritization_deadline_for_applicant'].append(self.REPRIORITIZATION_APPLICANT_AFTER_GROUP)
 
         raise ValidationError(errors)
