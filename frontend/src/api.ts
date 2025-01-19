@@ -27,6 +27,7 @@ import type {
   RecruitmentApplicationStateDto,
   RecruitmentAvailabilityDto,
   RecruitmentDto,
+  RecruitmentForRecruiterDto,
   RecruitmentGangDto,
   RecruitmentGangStatDto,
   RecruitmentPositionDto,
@@ -1090,6 +1091,15 @@ export async function postPurchaseFeedback(feedback: PurchaseFeedbackDto): Promi
 export async function getRecruitmentStats(id: string): Promise<RecruitmentStatsDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_stats_detail, urlParams: { pk: id } });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getRecruitmentForRecruiter(id: string): Promise<RecruitmentForRecruiterDto> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__recruitment_for_recruiter_detail, urlParams: { pk: id } });
   const response = await axios.get(url, { withCredentials: true });
 
   return response.data;

@@ -374,10 +374,12 @@ export const KEY = {
   recruitment_dashboard_description: 'recruitment_dashboard_description',
   recruitment_application: 'recruitment_application',
   recruitment_admitted: 'recruitment_admitted',
+  recruitment_rejected: 'recruitment_rejected',
   recruitment_statistics: 'recruitment_statistics',
   recruitment_applications: 'recruitment_applications',
 
   recruitment_applications_processed: 'recruitment_applications_processed',
+  recruitment_applicants_processed: 'recruitment_applicants_processed',
   recruitment_automatic_rejection: 'recruitment_automatic_rejection',
   recruitment_rejection_email: 'recruitment_rejection_email',
   recruitment_stats_hours_header: 'recruitment_stats_hours_header',

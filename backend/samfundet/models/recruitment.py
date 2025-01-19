@@ -9,6 +9,7 @@ from collections import defaultdict
 from django.db import models, transaction
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import UserManager
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
@@ -39,11 +40,25 @@ class Recruitment(CustomBaseModel):
             return self.organization_id
         return self.organization
 
+    def get_applicants(self) -> UserManager[User]:
+        return User.objects.filter(id__in=self.applications.values_list('user__id'))
+
+    def get_unprocessed_applications(self) -> models.BaseManager[RecruitmentApplication]:
+        return self.applications.filter(recruiter_status=RecruitmentStatusChoices.NOT_SET)
+
+    def get_processed_applications(self) -> models.BaseManager[RecruitmentApplication]:
+        return self.applications.exclude(recruiter_status=RecruitmentStatusChoices.NOT_SET)
+
+    def get_unprocessed_applicants(self) -> UserManager[User]:
+        return self.get_applicants().filter(id__in=self.get_unprocessed_applications().values_list('user__id'))
+
+    def get_processed_applicants(self) -> UserManager[User]:
+        return self.get_applicants().exclude(id__in=self.get_unprocessed_applications().values_list('user__id'))
+
     def recruitment_progress(self) -> float:
-        applications = RecruitmentApplication.objects.filter(recruitment=self)
-        if applications.count() == 0:
+        if self.applications.count() == 0:
             return 1
-        return applications.exclude(recruiter_status=RecruitmentStatusChoices.NOT_SET).count() / applications.count()
+        return self.get_processed_applications().count() / self.applications.count()
 
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
@@ -523,6 +538,9 @@ class RecruitmentStatistics(FullCleanSaveMixin):
     # Total accepted applicants
     total_accepted = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total accepted applicants')
 
+    # Total rejected applicants
+    total_rejected = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total rejected applicants')
+
     # Average amount of different gangs an applicant applies for
     average_gangs_applied_to_per_applicant = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
 
@@ -531,10 +549,19 @@ class RecruitmentStatistics(FullCleanSaveMixin):
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.total_applications = self.recruitment.applications.count()
-        self.total_applicants = self.recruitment.applications.values('user').distinct().count()
+        self.total_applicants = self.recruitment.get_applicants().count()
         self.total_withdrawn = self.recruitment.applications.filter(withdrawn=True).count()
         self.total_accepted = (
             self.recruitment.applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
+        )
+        self.total_rejected = (
+            self.recruitment.get_applicants()
+            .exclude(
+                id__in=self.recruitment.applications.filter(
+                    recruiter_status__in=[RecruitmentStatusChoices.CALLED_AND_ACCEPTED, RecruitmentStatusChoices.NOT_SET]
+                ).values_list('user__id')
+            )
+            .count()
         )
         if self.total_applicants > 0:
             self.average_gangs_applied_to_per_applicant = (
