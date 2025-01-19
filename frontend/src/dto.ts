@@ -422,12 +422,21 @@ export type RecruitmentDto = {
   actual_application_deadline: string;
   shown_application_deadline: string;
   reprioritization_deadline_for_applicant: string;
-  reprioritization_deadline_for_groups: string;
+  reprioritization_deadline_for_gangs: string;
   max_applications?: number;
   organization: OrganizationDto;
   separate_positions?: RecruitmentSeparatePositionDto[];
-  recruitment_progress?: number;
   promo_media?: string;
+};
+
+export type RecruitmentForRecruiterDto = RecruitmentDto & {
+  statistics: RecruitmentStatsDto;
+  recruitment_progress: number;
+  total_applicants: number;
+  total_processed_applicants: number;
+  total_unprocessed_applicants: number;
+  total_processed_applications: number;
+  total_unprocessed_applications: number;
 };
 
 export type RecruitmentWriteDto = RecruitmentDto & {
@@ -572,8 +581,9 @@ export type RecruitmentCampusStatDto = {
 };
 
 export type RecruitmentGangStatDto = {
-  total_applications: number;
-  total_applicants: number;
+  gang: GangDto;
+  application_count: number;
+  applicant_count: number;
   average_priority: number;
   total_accepted: number;
   total_rejected: number;
@@ -586,11 +596,12 @@ export type RecruitmentStatsDto = {
   total_applications: number;
   total_withdrawn: number;
   total_accepted: number;
+  total_rejected: number;
   average_gangs_applied_to_per_applicant: number;
   average_applications_per_applicant: number;
   time_stats: RecruitmentTimeStatDto[];
   date_stats: RecruitmentDateStatDto[];
-  gang_stats: RecruitmentGangDto[];
+  gang_stats: RecruitmentGangStatDto[];
   campus_stats: RecruitmentCampusStatDto[];
 };
 

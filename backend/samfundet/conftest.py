@@ -375,7 +375,7 @@ def fixture_recruitment(fixture_organization: Organization) -> Iterator[Recruitm
         actual_application_deadline=now + 3 * one_hour + one_week,
         shown_application_deadline=now + one_hour + one_week,
         reprioritization_deadline_for_applicant=now + 4 * one_hour + one_week,
-        reprioritization_deadline_for_groups=now + 6 * one_hour + one_week,
+        reprioritization_deadline_for_gangs=now + 6 * one_hour + one_week,
         organization=fixture_organization,
     )
     yield recruitment

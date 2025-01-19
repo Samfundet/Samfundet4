@@ -5,7 +5,7 @@ export { ComponentPage } from './ComponentPage';
 export { ContributorsPage } from './ContributorsPage';
 export { EventPage } from './EventPage';
 export { EventsPage } from './EventsPage';
-export { GroupsPage } from './GroupsPage';
+export { GangsPage } from './GangsPage';
 export { HealthPage } from './HealthPage';
 export { HomePage } from './HomePage';
 export { InformationListPage } from './InformationListPage';

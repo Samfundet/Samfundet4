@@ -8,7 +8,7 @@ import {
   ContributorsPage,
   EventPage,
   EventsPage,
-  GroupsPage,
+  GangsPage,
   HealthPage,
   HomePage,
   InformationListPage,
@@ -115,7 +115,7 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
           <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
           <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
-          <Route path={ROUTES.frontend.groups} element={<GroupsPage />} />
+          <Route path={ROUTES.frontend.gangs} element={<GangsPage />} />
           <Route path={ROUTES.frontend.events} element={<EventsPage />} />
           <Route path={ROUTES.frontend.event} element={<EventPage />} />
           <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
