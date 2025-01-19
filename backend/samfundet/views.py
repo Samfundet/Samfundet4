@@ -1172,6 +1172,63 @@ class RecruitmentInterviewGroupView(APIView):
         return Response(data=RecruitmentPositionSharedInterviewGroupSerializer(interview_groups, many=True).data, status=status.HTTP_200_OK)
 
 
+class DownloadAllRecruitmentApplicationCSV(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(
+        self,
+        request: Request,
+        recruitment_id: int,
+    ) -> HttpResponse:
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        applications = RecruitmentApplication.objects.filter(recruitment=recruitment)
+
+        filename = f"opptak_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        response = HttpResponse(
+            content_type='text/csv',
+            headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
+        )
+        writer = csv.DictWriter(
+            response,
+            fieldnames=[
+                'Navn',
+                'Telefon',
+                'Epost',
+                'Campus',
+                'Stilling',
+                'Gjeng',
+                'Seksjon',
+                'Intervjutid',
+                'Intervjusted',
+                'Prioritet',
+                'Status',
+                'Sokers rangering',
+                'Intervjuer satt',
+            ],
+        )
+        writer.writeheader()
+        for application in applications:
+            writer.writerow(
+                {
+                    'Navn': application.user.get_full_name(),
+                    'Telefon': application.user.phone_number,
+                    'Epost': application.user.email,
+                    'Campus': application.user.campus.name_en if application.user.campus else '',
+                    'Stilling': application.recruitment_position.name_nb,
+                    'Gjeng': application.recruitment_position.gang.name_nb,
+                    'Seksjon': application.recruitment_position.get_section_name('nb'),
+                    'Intervjutid': application.interview.interview_time if application.interview else '',
+                    'Intervjusted': application.interview.interview_location if application.interview else '',
+                    'Prioritet': application.get_recruiter_priority_display(),
+                    'Status': application.get_recruiter_status_display(),
+                    'Sokers rangering': f'{application.applicant_priority}/{application.get_total_applications()}',
+                    'Intervjuer satt': f'{application.get_total_interviews()}/{application.get_total_applications()}',
+                }
+            )
+
+        return response
+
+
 class DownloadRecruitmentApplicationGangCSV(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -1202,8 +1259,8 @@ class DownloadRecruitmentApplicationGangCSV(APIView):
                 'Intervjusted',
                 'Prioritet',
                 'Status',
-                'Søkers rangering',
-                'Intervjuer satt',
+                'Sokers rangering (Hele Opptak)',
+                'Intervjuer satt (For Gjeng)',
             ],
         )
         writer.writeheader()
@@ -1219,8 +1276,8 @@ class DownloadRecruitmentApplicationGangCSV(APIView):
                     'Intervjusted': application.interview.interview_location if application.interview else '',
                     'Prioritet': application.get_recruiter_priority_display(),
                     'Status': application.get_recruiter_status_display(),
-                    'Søkers rangering': f'{application.applicant_priority}/{application.get_total_applications()}',
-                    'Intervjuer satt': f'{application.get_total_interviews()}/{application.get_total_applications()}',
+                    'Sokers rangering (Hele Opptak)': f'{application.applicant_priority}/{application.get_total_applications()}',
+                    'Intervjuer satt (For Gjeng)': f'{application.get_total_interviews_for_gang()}/{application.get_total_applications_for_gang()}',
                 }
             )
 

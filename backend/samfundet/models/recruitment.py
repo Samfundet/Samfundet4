@@ -186,6 +186,11 @@ class RecruitmentPosition(CustomBaseModel):
         help_text='Shared interviewgroup for position',
     )
 
+    def get_section_name(self, language: str = 'nb') -> str | None:
+        if not self.section:
+            return None
+        return self.section.name_nb if language == 'nb' else self.section.name_en
+
     def resolve_section(self, *, return_id: bool = False) -> GangSection | int:
         if return_id:
             # noinspection PyTypeChecker
@@ -439,6 +444,18 @@ class RecruitmentApplication(CustomBaseModel):
                 self.interview = shared_interview.interview
 
         super().save(*args, **kwargs)
+
+    def get_total_interviews_for_gang(self) -> int:
+        return (
+            RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, recruitment_position__gang=self.resolve_gang(), withdrawn=False)
+            .exclude(interview=None)
+            .count()
+        )
+
+    def get_total_applications_for_gang(self) -> int:
+        return RecruitmentApplication.objects.filter(
+            user=self.user, recruitment=self.recruitment, withdrawn=False, recruitment_position__gang=self.resolve_gang()
+        ).count()
 
     def get_total_interviews(self) -> int:
         return RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).exclude(interview=None).count()
