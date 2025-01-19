@@ -1,0 +1,1 @@
+export { RecruitmentApplicantInfo } from './RecruitmentApplicantInfo';
