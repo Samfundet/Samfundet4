@@ -630,6 +630,38 @@ class TestRecruitmentApplication:
 
 
 class TestRecruitmentApplicationStatus:
+    def test_recruitmentstats_create(self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment):
+        application = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=1,
+        )
+        assert application.id
+
+    def test_recruitmentstats_no_doubleapplication_for_position(
+        self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment
+    ):
+        application = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=1,
+        )
+        assert application.id
+        with pytest.raises(ValidationError) as error:
+            RecruitmentApplication.objects.create(
+                user=application.user,
+                recruitment_position=application.recruitment_position,
+                recruitment=application.recruitment,
+                application_text='I have applied a secound time!',
+                applicant_priority=1,
+            )
+        e = dict(error.value)
+        assert RecruitmentApplication.ALREADY_APPLIED_ERROR in e['recruitment_position']
+
     def test_check_called_accepted_sets_auto_rejection(
         self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
     ):
