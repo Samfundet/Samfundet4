@@ -1,5 +1,5 @@
+import type { OrgNameTypeValue } from '~/types';
 import { IsfitLogo, SamfundetLogo, UkaLogo } from './components';
-import { OrgNameTypeValue } from '~/types';
 
 export type LogoPalette = {
   primary: string;

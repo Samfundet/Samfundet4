@@ -2,7 +2,7 @@
 
 @import 'src/mixins';
 
-/* stylelint-disable selector-max-combinators, selector-max-compound-selectors, selector-max-type, max-nesting-depth */
+/* stylelint-disable selector-max-combinators, selector-max-compound-selectors, selector-max-type */
 
 // Backgrounds
 $table-bg: #ffffff;
@@ -34,7 +34,7 @@ $sort-icon-color-dark: #bbbbbb;
   text-align: left;
   background-color: $table-bg;
   color: $table-font-color;
-  border-radius: .25em;
+  border-radius: 0.25em;
   overflow: hidden;
   @include theme-dark {
     background-color: $table-bg-dark;
@@ -66,7 +66,6 @@ tbody {
       background-color: $table-bg-hover-dark;
     }
   }
-
 }
 
 td {
@@ -97,16 +96,13 @@ th {
 
 .sortable_th {
   cursor: pointer;
+  position: relative;
   transition: 0.2s;
 }
 
 .sort_icons {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  float: right;
-
+  position: absolute;
+  right: 0;
   .icon {
     background-color: transparent;
     padding: 2px;
@@ -121,6 +117,27 @@ th {
       background-color: $sort-icon-bg-dark;
       color: $sort-icon-color-dark;
     }
+  }
+}
+
+.expandableRow {
+  cursor: pointer;
+}
+
+.childTable {
+  width: 95%;
+  border-collapse: collapse;
+  border-radius: 0.9em;
+  border-top: solid 0.5em $grey-5;
+  border-bottom: solid 0.5em $grey-5;
+  color: $table-font-color;
+  overflow: hidden;
+  @include theme-dark {
+    background-color: $table-bg-dark;
+    color: $table-font-color-dark;
+  }
+  th {
+    font-size: 1em;
   }
 }
 

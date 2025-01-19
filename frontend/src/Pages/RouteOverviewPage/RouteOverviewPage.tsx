@@ -12,25 +12,23 @@ export function RouteOverviewPage() {
       <h1>Routes</h1>
       <br />
 
-      {Object.entries(ROUTES).map((domainRouteObj, index) => {
+      {Object.entries(ROUTES).map((domainRouteObj) => {
         const domain = domainRouteObj[0];
         const domainRoutes = domainRouteObj[1];
 
         return (
-          <div key={index}>
+          <div key={domain}>
             <h2>{domain}:</h2>
             <br />
-            {Object.entries(domainRoutes).map((routes, index) => {
+            {Object.entries(domainRoutes).map((routes) => {
               const routeName = routes[0];
               const route = routes[1];
               const displayName = showName ? routeName : route;
               return (
-                <>
-                  <Link key={index} url={route}>
-                    {displayName}
-                  </Link>
+                <span key={route}>
+                  <Link url={route}>{displayName}</Link>
                   <br />
-                </>
+                </span>
               );
             })}
             <br />

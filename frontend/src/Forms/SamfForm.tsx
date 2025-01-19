@@ -1,12 +1,13 @@
 import classNames from 'classnames';
-import React, { Dispatch, ReactNode, createContext, useEffect, useMemo, useReducer, useState } from 'react';
+import type React from 'react';
+import { type Dispatch, type ReactNode, createContext, useEffect, useMemo, useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '~/Components/Button';
 import { usePermission } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { PERM } from '~/permissions';
 import styles from './SamfForm.module.scss';
-import { FormFieldReturnType } from './SamfFormFieldTypes';
+import type { FormFieldReturnType } from './SamfFormFieldTypes';
 
 // ---------------------------------- //
 //              Types                 //
@@ -213,6 +214,7 @@ export function SamfForm<T extends FormType>({
   }, [state.values, onChange]);
 
   // Allert parent of changes in form validity
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     onValidityChanged?.(allValid);
   }, [state.errors, allValid, onValidityChanged]);
@@ -239,7 +241,7 @@ export function SamfForm<T extends FormType>({
         {Object.keys(state.errors).map((field) => (
           <div
             key={field}
-            className={classNames(styles.debug_row, state.errors[field as keyof T] != false && styles.debug_error)}
+            className={classNames(styles.debug_row, state.errors[field as keyof T] !== false && styles.debug_error)}
           >
             {field}: {JSON.stringify(state.errors[field as keyof T])}
           </div>
@@ -279,7 +281,7 @@ export function SamfForm<T extends FormType>({
           )}
           {canDebug && (
             <>
-              <br></br>
+              <br />
               <Button preventDefault={true} display="pill" onClick={() => setIsDebugMode(!isDebugMode)}>
                 Debug
               </Button>

@@ -5,14 +5,14 @@ import { Button } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { getMenuItems, getMenus } from '~/api';
-import { useTitle, useCustomNavigate } from '~/hooks';
-import { FoodCategoryDto, MenuDto, MenuItemDto } from '~/dto';
+import type { FoodCategoryDto, MenuDto, MenuItemDto } from '~/dto';
+import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './SultenMenuAdminPage.module.scss';
-import { reverse } from '~/named-urls';
 
 export function SultenMenuAdminPage() {
   const navigate = useCustomNavigate();
@@ -23,6 +23,7 @@ export function SultenMenuAdminPage() {
   useTitle(t(KEY.admin_sultenmenu_title));
 
   // Get Menus and Menuitems
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     Promise.all([
       getMenuItems()
@@ -44,7 +45,6 @@ export function SultenMenuAdminPage() {
     ]).then(() => {
       setShowSpinner(false);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const tableMenuItemsColumns = [
@@ -59,7 +59,7 @@ export function SultenMenuAdminPage() {
     return [
       dbT(menuItem, 'name'),
       menuItem.food_category ? dbT(menuItem.food_category as FoodCategoryDto, 'name') : '',
-      (menuItem.price_member + '/' + menuItem.price) as string,
+      `${menuItem.price_member}/${menuItem.price}` as string,
       {
         content: (
           <CrudButtons
@@ -114,12 +114,12 @@ export function SultenMenuAdminPage() {
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
       <div>
         <h2 className={styles.subheader}>{t(KEY.sulten_dishes)}</h2>
-        <Table columns={tableMenuItemsColumns} data={menuItems.map((item) => menuItemsTableRow(item))} />
+        <Table columns={tableMenuItemsColumns} data={menuItems.map((item) => ({ cells: menuItemsTableRow(item) }))} />
       </div>
 
       <div>
         <h2 className={styles.subheader}>{t(KEY.common_menu)}</h2>
-        <Table columns={tableMenusColumns} data={menus.map((item) => menuTableRow(item))} />
+        <Table columns={tableMenusColumns} data={menus.map((item) => ({ cells: menuTableRow(item) }))} />
       </div>
     </AdminPageLayout>
   );

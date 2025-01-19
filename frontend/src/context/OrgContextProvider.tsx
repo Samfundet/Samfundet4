@@ -1,5 +1,5 @@
-import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
-import { Children, COLORS, OrganizationTheme, OrgNameType, OrgNameTypeValue } from '~/types';
+import { type Dispatch, type SetStateAction, createContext, useContext, useEffect, useState } from 'react';
+import { COLORS, type Children, OrgNameType, type OrgNameTypeValue, type OrganizationTheme } from '~/types';
 
 export const organizationThemes: Record<OrgNameTypeValue, OrganizationTheme> = {
   [OrgNameType.SAMFUNDET_NAME]: {

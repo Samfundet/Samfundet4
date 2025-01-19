@@ -1,4 +1,4 @@
-import { ComponentMeta } from '@storybook/react';
+import type { ComponentMeta } from '@storybook/react';
 import { ImageCard } from './ImageCard';
 
 export default {

@@ -1,5 +1,4 @@
 /* stylelint-disable selector-max-class */
-/* stylelint-disable max-nesting-depth */
 @import 'src/mixins';
 
 @import 'src/constants';
@@ -7,6 +6,8 @@
 /* Hamburger menu */
 #navbar_hamburger {
   display: none;
+  border: none;
+  background: none;
 
   @include for-tablet-down {
     height: 69%;

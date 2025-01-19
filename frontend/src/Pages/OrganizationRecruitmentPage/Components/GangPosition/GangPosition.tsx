@@ -1,5 +1,5 @@
 import { ExpandableHeader, Link } from '~/Components';
-import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
+import type { GangTypeDto, RecruitmentPositionDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
@@ -28,7 +28,7 @@ export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
                 <Link
                   url={reverse({
                     pattern: ROUTES.frontend.recruitment_application,
-                    urlParams: { positionID: pos.id, gangID: gang.id },
+                    urlParams: { positionId: pos.id, gangId: gang.id },
                   })}
                   className={styles.position_name}
                 >
@@ -37,7 +37,7 @@ export function GangPosition({ type, recruitmentPositions }: GangItemProps) {
                 <Link
                   url={reverse({
                     pattern: ROUTES.frontend.recruitment_application,
-                    urlParams: { positionID: pos.id, gangID: gang.id },
+                    urlParams: { positionId: pos.id, recruitmentId: pos.recruitment },
                   })}
                   className={styles.position_short_desc}
                 >

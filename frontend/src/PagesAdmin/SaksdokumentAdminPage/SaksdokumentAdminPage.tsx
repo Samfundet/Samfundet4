@@ -7,7 +7,7 @@ import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { getSaksdokumenter } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
-import { SaksdokumentDto } from '~/dto';
+import type { SaksdokumentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -26,6 +26,7 @@ export function SaksdokumentAdminPage() {
   useTitle(t(KEY.admin_saksdokumenter_title));
 
   // Get documents
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getSaksdokumenter()
       .then((data) => {
@@ -36,7 +37,6 @@ export function SaksdokumentAdminPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Filtered
@@ -47,7 +47,7 @@ export function SaksdokumentAdminPage() {
     // Filter by match all keywords.
     return documents.filter((doc) => {
       for (const kw of keywords) {
-        if (doc.title_nb?.toLowerCase().indexOf(kw) == -1) return false;
+        if (doc.title_nb?.toLowerCase().indexOf(kw) === -1) return false;
       }
       return true;
     });
@@ -106,7 +106,7 @@ export function SaksdokumentAdminPage() {
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
       <InputField icon="mdi:search" onChange={setSearchQuery} />
       <div className={styles.table_container}>
-        <Table columns={tableColumns} data={filterDocuments().map((doc) => documentTableRow(doc))} />
+        <Table columns={tableColumns} data={filterDocuments().map((doc) => ({ cells: documentTableRow(doc) }))} />
       </div>
     </AdminPageLayout>
   );

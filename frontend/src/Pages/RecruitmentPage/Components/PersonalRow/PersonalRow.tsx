@@ -1,18 +1,18 @@
+import { t } from 'i18next';
 import { Button } from '~/Components';
+import { useAuthContext } from '~/context/AuthContext';
+import { useCustomNavigate } from '~/hooks';
+import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { t } from 'i18next';
-import { KEY } from '~/i18n/constants';
-import { useCustomNavigate } from '~/hooks';
-import { useAuthContext } from '~/context/AuthContext';
 
 type PersonalRowProps = {
-  recruitmentID: string;
-  organizationName: string;
+  recruitmentId: string;
+  organizationName?: string;
   showRecruitmentBtn?: boolean;
 };
 
-export function PersonalRow({ recruitmentID, organizationName, showRecruitmentBtn = true }: PersonalRowProps) {
+export function PersonalRow({ recruitmentId, organizationName, showRecruitmentBtn = true }: PersonalRowProps) {
   const navigate = useCustomNavigate();
   const { user } = useAuthContext();
 
@@ -25,12 +25,12 @@ export function PersonalRow({ recruitmentID, organizationName, showRecruitmentBt
             navigate({
               url: reverse({
                 pattern: ROUTES.frontend.organization_recruitment,
-                urlParams: { recruitmentID },
+                urlParams: { recruitmentId },
               }),
             });
           }}
         >
-          {t(KEY.recruitment_apply_for) + ' ' + (organizationName ?? 'N/A')}
+          {`${t(KEY.recruitment_apply_for)} ${organizationName ?? 'N/A'}`}
         </Button>
       )}
       {user ? (
@@ -40,7 +40,7 @@ export function PersonalRow({ recruitmentID, organizationName, showRecruitmentBt
             navigate({
               url: reverse({
                 pattern: ROUTES.frontend.recruitment_application_overview,
-                urlParams: { recruitmentID },
+                urlParams: { recruitmentId },
               }),
             });
           }}

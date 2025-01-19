@@ -1,9 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { ExpandableHeader, Link, Text } from '~/Components';
-import { RecruitmentSeparatePositionDto } from '~/dto';
+import type { RecruitmentSeparatePositionDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from './GangSeparatePositions.module.scss';
-import { KEY } from '~/i18n/constants';
-import { useTranslation } from 'react-i18next';
 
 type GangSeparatePositionsProps = {
   recruitmentSeparatePositions: RecruitmentSeparatePositionDto[];
@@ -14,7 +14,7 @@ export function GangSeparatePositions({ recruitmentSeparatePositions }: GangSepa
   return (
     <ExpandableHeader
       showByDefault={true}
-      label={t(KEY.recruitment_gangs_with_separate_positions)}
+      label={t(KEY.recruitment_positions_with_separate_recruitment)}
       className={styles.separate_header}
     >
       {recruitmentSeparatePositions.map((pos) => (

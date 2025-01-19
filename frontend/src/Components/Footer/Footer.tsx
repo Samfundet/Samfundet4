@@ -1,6 +1,6 @@
+import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '~/Components';
-import { Icon } from '@iconify/react';
 import {
   isfit,
   isfitWhite,
@@ -13,11 +13,11 @@ import {
   uka,
   ukaWhite,
 } from '~/assets';
-import { KEY } from '~/i18n/constants';
-import styles from './Footer.module.scss';
-import { ROUTES } from '~/routes';
-import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { THEME } from '~/constants';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
+import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
+import styles from './Footer.module.scss';
 
 export function Footer() {
   const { t } = useTranslation();

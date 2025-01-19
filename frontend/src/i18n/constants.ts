@@ -1,3 +1,5 @@
+import type { MirrorKeys, TranslationKeys } from './types';
+
 /**
  * Mapping of every existing translation key.
  *
@@ -52,11 +54,15 @@ export const KEY = {
   // Date related:
   common_today: 'common_today',
   common_tomorrow: 'common_tomorrow',
+  pick_a_date: 'pick_a_date',
 
   // No category:
+  common_url: 'common_url',
+  common_manage: 'common_manage',
   common_yes: 'common_yes',
   common_no: 'common_no',
   common_to: 'common_to',
+  common_any: 'common_any',
   common_all: 'common_all',
   common_price: 'common_price',
   common_food: 'common_food',
@@ -79,6 +85,7 @@ export const KEY = {
   common_card: 'common_card',
   common_tags: 'common_tags',
   common_gang: 'common_gang',
+  common_section: 'common_section',
   common_next: 'common_next',
   common_open: 'common_open',
   common_send: 'common_send',
@@ -108,17 +115,23 @@ export const KEY = {
   common_whatsup: 'common_whatsup',
   common_contact: 'common_contact',
   common_unknown: 'common_unknown',
-  common_sponsor: 'common_sponsors',
+  common_sponsor: 'common_sponsor',
+  common_gang_type: 'common_gang_type',
   common_username: 'common_username',
   common_lastname: 'common_lastname',
   common_register: 'common_register',
   common_users: 'common_users',
   common_email: 'common_email',
+  common_email_subject: 'common_email_subject',
   common_total: 'common_total',
+  common_out_of: 'common_out_of',
+  common_roles: 'common_roles',
+  common_role: 'common_role',
   common_guests: 'common_guests',
   common_occasion: 'common_occasion',
   common_phonenumber: 'common_phonenumber',
   common_password: 'common_password',
+  common_current: 'common_current',
   common_about_us: 'common_about_us',
   common_overview: 'common_overview',
   common_recruitmentposition: 'common_recruitmentposition',
@@ -135,6 +148,7 @@ export const KEY = {
   common_contact_us: 'common_contact_us',
   common_doors_date: 'common_doors_date',
   common_restaurant: 'common_restaurant',
+  common_permissions: 'common_permissions',
   common_member: 'common_member',
   common_membership: 'common_membership',
   common_select_all: 'common_select_all',
@@ -157,8 +171,9 @@ export const KEY = {
   common_something_went_wrong: 'common_something_went_wrong',
   common_click_here: 'common_click_here',
   common_have: 'common_have',
-  common_been: 'been',
-  common_processed: 'processed',
+  recruitment_interview: 'recruitment_interview',
+  common_been: 'common_been',
+  common_processed: 'common_processed',
   common_rejected: 'common_rejected',
   common_it: 'common_it',
   common_will: 'common_will',
@@ -170,8 +185,14 @@ export const KEY = {
   common_when: 'common_when',
   common_come_back_later: 'common_come_back_later',
   common_be: 'common_be',
+  common_room: 'common_room',
   common_filter: 'common_filter',
-
+  common_personal: 'common_personal',
+  common_administrate: 'common_administrate',
+  common_administration: 'common_administration',
+  common_unprocessed: 'common_unprocessed',
+  common_list_view: 'common_list_view',
+  common_tab_view: 'common_tab_view',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -179,7 +200,7 @@ export const KEY = {
   common_film_club: 'common_film_club',
   common_privacy_policy: 'common_privacy_policy',
   common_facilitation: 'common_facilitation',
-  common_the_groups_at_samfundet: 'commong_the_groups_at_samfundet',
+  common_the_groups_at_samfundet: 'common_the_groups_at_samfundet',
   common_volunteering: 'common_volunteering',
   common_overview_map: 'common_overview_map',
   common_new_building: 'common_new_building',
@@ -202,6 +223,10 @@ export const KEY = {
   //        Others        //
   // ==================== //
 
+  role_content_type: 'role_content_type',
+  change_password: 'change_password',
+  new_password: 'new_password',
+
   // LoginPage:
   loginpage_register: 'loginpage_register',
   loginpage_internal_login: 'loginpage_internal_login',
@@ -213,6 +238,8 @@ export const KEY = {
   contributors_page_title: 'contributors_page_title',
   contributors_page_text: 'contributors_page_text',
   contributors_page_past_developers: 'contributors_page_past_developers',
+
+  role_edit_could_not_load_permissions: 'role_edit_could_not_load_permissions',
 
   // GroupsPage:
   groupspage_gangs_text: 'groupspage_gangs_text',
@@ -257,7 +284,14 @@ export const KEY = {
   recruitment_position: 'recruitment_position',
   recruitment_positions: 'recruitment_positions',
   recruitment_applicant: 'recruitment_applicant',
+  recruitment_interviewer: 'recruitment_interviewer',
+  recruitment_interviewers: 'recruitment_interviewers',
+  recruitment_interviews: 'recruitment_interviews',
+  recruitment_interview_planned: 'recruitment_interview_planned',
+  recruitment_no_interviews: 'recruitment_no_interviews',
   recruitment_interview_set: 'recruitment_interview_set',
+  recruitment_interview_groups: 'recruitment_interview_groups',
+  recruitment_interview_group: 'recruitment_interview_group',
   recruitment_applicants: 'recruitment_applicants',
   recruitment_interview_time: 'recruitment_interview_time',
   recruitment_interview_location: 'recruitment_interview_location',
@@ -277,31 +311,36 @@ export const KEY = {
   recruitment_applyfor: 'recruitment_applyfor',
   recruitment_applyforhelp: 'recruitment_applyforhelp',
   recruitment_volunteerfor: 'recruitment_volunteerfor',
-  recruitment_otherpositions: 'KEY.recruitment_otherpositions',
+  recruitment_otherpositions: 'recruitment_otherpositions',
   recruitment_visible_from: 'recruitment_visible_from',
   recruitment_administrate: 'recruitment_administrate',
   recruitment_administrate_positions: 'recruitment_administrate_positions',
   recruitment_administrate_applications: 'recruitment_administrate_applications',
+  recruitment_unprocessed_applicants: 'recruitment_unprocessed_applicants',
   recruitment_administrate_reservations: 'recruitment_administrate_reservations',
   recruitment_my_applications: 'recruitment_my_applications',
   recruitment_all_applications: 'recruitment_all_applications',
   recruitment_not_applied: 'recruitment_not_applied',
   recruitment_will_be_anonymized: 'recruitment_will_be_anonymized',
+  recruitment_create_room: 'recruitment_create_room',
   shown_application_deadline: 'shown_application_deadline',
-  actual_application_deadlin: 'actual_application_deadline',
+  actual_application_deadline: 'actual_application_deadline',
   recruitment_number_of_applications: 'recruitment_number_of_applications',
   recrutment_default_application_letter: 'recrutment_default_application_letter',
   reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
   max_applications: 'max_applications',
+  recruitment_promo_media: 'recruitment_promo_media',
   recruitment_norwegian_applicants_only: 'recruitment_norwegian_applicants_only',
   reprioritization_deadline_for_applicant: 'reprioritization_deadline_for_applicant',
   recruitment_show_unprocessed_applicants: 'recruitment_show_unprocessed_applicants',
+  recruitment_applicants_open_to_other_positions: 'recruitment_applicants_open_to_other_positions',
+  recruitment_applicants_open_to_other_positions_help_text: 'recruitment_applicants_open_to_other_positions_help_text',
   recruitment_show_all_applicants: 'recruitment_show_all_applicants',
   recruitment_processed: 'recruitment_processed',
   recruitment_accepted_applicants: 'recruitment_accepted_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
   recrutment_export_to_csv: 'recrutment_export_to_csv',
-  recruitment_gangs_with_separate_positions: 'recruitment_gangs_with_separate_positions',
+  recruitment_positions_with_separate_recruitment: 'recruitment_positions_with_separate_recruitment',
   application_deadline: 'application_deadline',
   recruitment_applicants_without_interview: 'recruitment_applicants_without_interview',
   recruitment_applicants_without_interview_help_text: 'recruitment_applicants_without_interview_help_text',
@@ -309,15 +348,19 @@ export const KEY = {
   recruitment_applicant_top_position: 'recruitment_applicant_top_position',
   recruitment_withdrawn_applications: 'recruitment_withdrawn_applications',
   recruitment_rejected_applications: 'recruitment_rejected_applications',
+  recruitment_hardtoget_applications: 'recruitment_hardtoget_applications',
   recruitment_accepted_applications: 'recruitment_accepted_applications',
   recruitment_rejected_applications_help_text: 'recruitment_rejected_applications_help_text',
+  recruitment_hardtoget_applications_help_text: 'recruitment_hardtoget_applications_help_text',
   recruitment_accepted_applications_help_text: 'recruitment_accepted_applications_help_text',
   recruitment_accepted_applications_empty_text: 'recruitment_accepted_applications_empty_text',
-  recruitment_rejected_applications_empty_text: 'recruitment_rejected_applications_empty_text ',
+  recruitment_rejected_applications_empty_text: 'recruitment_rejected_applications_empty_text',
+  recruitment_hardtoget_applications_empty_text: 'recruitment_hardtoget_applications_empty_text',
   recruitment_withdrawn_applications_empty_text: 'recruitment_withdrawn_applications_empty_text',
   recruitment_withdrawn: 'recruitment_withdrawn',
-  recruitment_withdraw_application: 'KEY.recruitment_withdraw_application',
+  recruitment_withdraw_application: 'recruitment_withdraw_application',
   recruitment_withdrawn_message: 'recruitment_withdrawn_message',
+  recruitment_confirm_withdraw_application: 'recruitment_confirm_withdraw_application',
   recruitment_three_interviews_criteria_button: 'recruitment_three_interviews_criteria_button',
   recruitment_three_interviews_criteria_header: 'recruitment_three_interviews_criteria_header',
   recruitment_revert_status: 'recruitment_revert_status',
@@ -326,6 +369,8 @@ export const KEY = {
   recruitment_no_current_applications_gang: 'recruitment_no_current_applications_gang',
   recruitment_progression: 'recruitment_progression',
   recruitment_overview: 'recruitment_overview',
+  recruitment_recruiter_dashboard: 'recruitment_recruiter_dashboard',
+  recruitment_dashboard_description: 'recruitment_dashboard_description',
   recruitment_application: 'recruitment_application',
   recruitment_admitted: 'recruitment_admitted',
   recruitment_statistics: 'recruitment_statistics',
@@ -333,12 +378,31 @@ export const KEY = {
   recruitment_applications_processed: 'recruitment_applications_processed',
   recruitment_automatic_rejection: 'recruitment_automatic_rejection',
   recruitment_rejection_email: 'recruitment_rejection_email',
+  recruitment_stats_hours_header: 'recruitment_stats_hours_header',
+  recruitment_stats_campus_header: 'recruitment_stats_campus_header',
+  recruitment_stats_date_header: 'recruitment_stats_date_header',
   recruitment_apply_for: 'recruitment_apply_for',
   recruitment_position_categorized_by_gang: 'recruitment_position_categorized_by_gang',
   error_recruitment_form_1: 'error_recruitment_form_1',
   error_recruitment_form_2: 'error_recruitment_form_2',
   error_recruitment_form_3: 'error_recruitment_form_3',
   error_recruitment_form_4: 'error_recruitment_form_4',
+  recruitment_separate_recruitment: 'recruitment_separate_recruitment',
+
+  // Recruitment applets
+  recruitment_applet_dashboard_description: 'recruitment_applet_dashboard_description',
+  recruitment_applet_edit_description: 'recruitment_applet_edit_description',
+  recruitment_applet_open_to_other_positions: 'recruitment_applet_open_to_other_positions',
+  recruitment_applet_overview_description: 'recruitment_applet_overview_description',
+  recruitment_applet_room_overview: 'recruitment_applet_room_overview',
+  recruitment_applet_room_description: 'recruitment_applet_room_description',
+  recruitment_applet_rejection_mail_description: 'recruitment_applet_rejection_mail_description',
+  recruitment_applet_without_interview_title: 'recruitment_applet_without_interview_title',
+  recruitment_applet_without_interview_description: 'recruitment_applet_without_interview_description',
+  recruitment_applet_three_interview_title: 'recruitment_applet_three_interview_title',
+  recruitment_choose_interview_time_and_location: 'recruitment_choose_interview_time_and_location',
+  recruitment_choose_interview_time: 'recruitment_choose_interview_time',
+  recruitment_choose_interview_location: 'recruitment_choose_interview_location',
 
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
@@ -347,8 +411,8 @@ export const KEY = {
   admin_images_title: 'admin_images_title',
   admin_images_create: 'admin_images_create',
   admin_steal_identity: 'admin_steal_identity',
-  adminpage_gangs_title: 'admin_gangs_title',
-  adminpage_gangs_create: 'admin_gangs_create',
+  adminpage_gangs_title: 'adminpage_gangs_title',
+  adminpage_gangs_create: 'adminpage_gangs_create',
   admin_opening_hours_hint: 'admin_opening_hours_hint',
   admin_closed_period_title: 'admin_closed_period_title',
   admin_saksdokumenter_title: 'admin_saksdokumenter_title',
@@ -363,6 +427,11 @@ export const KEY = {
   admin_information_confirm_cancel: 'admin_information_confirm_cancel',
   admin_gangsadminpage_abbreviation: 'admin_gangsadminpage_abbreviation',
   admin_saksdokumenter_cannot_reupload: 'admin_saksdokumenter_cannot_reupload',
+  admin_impersonate: 'admin_impersonate',
+  admin_stop_impersonate: 'admin_stop_impersonate',
+  admin_role_page_orggangsection: 'admin_role_page_orggangsection',
+  admin_role_page_role_since: 'admin_role_page_role_since',
+  admin_role_page_given_by: 'admin_role_page_given_by',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
@@ -413,19 +482,20 @@ export const KEY = {
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',
   saksdokumentpage_publication_date: 'saksdokumentpage_publication_date',
   eventsadminpage_successful_delete_toast: 'eventsadminpage_successful_delete_toast',
+  promo_media_description: 'promo_media_description',
+  promo_media_invalid: 'promo_media_invalid',
+
+  error_generic: 'error_generic',
+  error_generic_description: 'error_generic_description',
+  error_not_found: 'error_not_found',
+  error_not_found_description: 'error_not_found_description',
+  error_forbidden: 'error_forbidden',
+  error_forbidden_description: 'error_forbidden_description',
+  error_server_error: 'error_server_error',
+  error_server_error_description: 'error_server_error_description',
 } as const;
 
-/**
- * Types used for type-proofing translations.
- * Reveals errors in translations.ts if some keys are not translated.
- */
-export type KeyKeys = keyof typeof KEY;
-export type KeyValues = (typeof KEY)[KeyKeys];
-
-export const LANGUAGES = {
-  NB: 'nb',
-  EN: 'en',
-} as const;
-
-export type LanguageKey = keyof typeof LANGUAGES;
-export type LanguageValue = (typeof LANGUAGES)[LanguageKey];
+// This will ensure that each value matches the key exactly.
+// Very similar to validateKeyEqualsValue.
+// Fortunately this is in typescript and will protect the pipeline.
+KEY as MirrorKeys<TranslationKeys>;

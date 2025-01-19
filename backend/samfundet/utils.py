@@ -3,10 +3,12 @@ from __future__ import annotations
 import datetime
 
 from django.http import QueryDict
-from django.db.models import Q
+from django.db.models import Q, Model
 from django.utils.timezone import make_aware
 from django.core.exceptions import ValidationError
 from django.db.models.query import QuerySet
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 from .models import User
 from .models.event import Event
@@ -38,6 +40,15 @@ def event_query(*, query: QueryDict, events: QuerySet[Event] = None) -> QuerySet
     if location:
         events = events.filter(location__icontains=location)  # TODO should maybe be a foreignKey?
     return events
+
+
+def user_query(*, query: QueryDict, users: QuerySet[User] = None) -> QuerySet[User]:
+    if not users:
+        users = User.objects.all()
+    search = query.get('search', None)
+    if search:
+        users = users.filter(Q(username__icontains=search) | Q(first_name__icontains=search) | Q(last_name__icontains=search))
+    return users
 
 
 def generate_timeslots(start_time: datetime.time, end_time: datetime.time, interval_minutes: int) -> list[str]:
@@ -90,3 +101,10 @@ def get_occupied_timeslots_from_request(
                 occupied_timeslots.append(OccupiedTimeslot(user=user, recruitment=recruitment, start_dt=start_date, end_dt=end_date))
 
     return occupied_timeslots
+
+
+def get_perm(*, perm: str, model: type[Model]) -> Permission:
+    codename = perm.split('.')[1] if '.' in perm else perm
+    content_type = ContentType.objects.get_for_model(model=model)
+    permission = Permission.objects.get(codename=codename, content_type=content_type)
+    return permission

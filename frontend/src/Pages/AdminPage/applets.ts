@@ -1,4 +1,4 @@
-import { AppletCategory } from '~/Components/AdminBox/types';
+import type { AppletCategory } from '~/Components/AdminBox/types';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 
@@ -15,7 +15,7 @@ export const appletCategories: AppletCategory[] = [
         url: ROUTES.frontend.admin_events,
       },
       {
-        title_nb: 'Informasjons­­sider',
+        title_nb: 'Informasjonssider',
         title_en: 'Information pages',
         perm: PERM.SAMFUNDET_ADD_INFORMATIONPAGE,
         icon: 'ph:note-pencil-light',
@@ -55,6 +55,13 @@ export const appletCategories: AppletCategory[] = [
         perm: PERM.SAMFUNDET_VIEW_USER,
         icon: 'mdi:person-search',
         url: ROUTES.frontend.admin_users,
+      },
+      {
+        title_nb: 'Roller',
+        title_en: 'Roles',
+        perm: PERM.SAMFUNDET_VIEW_ROLE,
+        icon: 'ph:user-circle-gear',
+        url: ROUTES.frontend.admin_roles,
       },
       {
         title_nb: 'Gjenger',

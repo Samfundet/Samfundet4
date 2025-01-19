@@ -7,9 +7,9 @@ type LycheMenuDividerProps = {
 export function LycheMenuDivider({ title }: LycheMenuDividerProps) {
   return (
     <div className={styles.lyche_menu_divider}>
-      <div className={styles.lyche_menu_divider_left}></div>
+      <div className={styles.lyche_menu_divider_left} />
       <div className={styles.lyche_menu_divider_title}> {title}</div>
-      <div className={styles.lyche_menu_divider_right}></div>
+      <div className={styles.lyche_menu_divider_right} />
     </div>
   );
 }

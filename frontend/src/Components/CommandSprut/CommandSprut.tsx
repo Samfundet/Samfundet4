@@ -40,6 +40,7 @@ export function CommandSprut({ openKey = 's' }: CommandMenuProps) {
     return (
       <>
         {[...Array(getRandomInt(30))].map((_, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
           <SpawnSprut key={i} />
         ))}
       </>

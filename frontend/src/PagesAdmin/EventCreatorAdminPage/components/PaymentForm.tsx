@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { EventCustomTicketDto, EventDto } from '~/dto';
+import type { EventCustomTicketDto, EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { ALL_TICKET_TYPES, EventTicketTypeValue } from '~/types';
+import { ALL_TICKET_TYPES, type EventTicketTypeValue } from '~/types';
 import { getTicketTypeKey } from '~/utils';
 import { CustomTicketEditor } from './CustomTicketEditor';
 
@@ -18,7 +18,7 @@ export function PaymentForm({ event, onChange }: PaymentFormProps) {
   const { t } = useTranslation();
 
   // Dropdown for price group
-  const ticketTypeOptions: DropDownOption<EventTicketTypeValue>[] = ALL_TICKET_TYPES.map((ticketType) => {
+  const ticketTypeOptions: DropdownOption<EventTicketTypeValue>[] = ALL_TICKET_TYPES.map((ticketType) => {
     return {
       value: ticketType,
       label: t(getTicketTypeKey(ticketType)) ?? '',

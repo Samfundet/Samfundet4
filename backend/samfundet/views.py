@@ -5,6 +5,7 @@ import csv
 import hmac
 import hashlib
 from typing import Any
+from itertools import chain
 
 from guardian.shortcuts import get_objects_for_user
 
@@ -18,15 +19,17 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
+from django.conf import settings
 from django.http import QueryDict, HttpResponse
 from django.utils import timezone
+from django.core.mail import EmailMessage
 from django.db.models import Q, Count, QuerySet
 from django.shortcuts import get_object_or_404
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.utils.encoding import force_bytes
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
 from root.constants import (
@@ -37,12 +40,14 @@ from root.constants import (
 )
 from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM
 
-from .utils import event_query, generate_timeslots, get_occupied_timeslots_from_request
+from .utils import user_query, event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
+from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .serializers import (
     TagSerializer,
     GangSerializer,
     MenuSerializer,
+    RoleSerializer,
     UserSerializer,
     EventSerializer,
     GroupSerializer,
@@ -62,13 +67,17 @@ from .serializers import (
     TextItemSerializer,
     InterviewSerializer,
     EventGroupSerializer,
+    PermissionSerializer,
     RecruitmentSerializer,
+    UserOrgRoleSerializer,
     ClosedPeriodSerializer,
     FoodCategorySerializer,
     OrganizationSerializer,
     SaksdokumentSerializer,
     UserFeedbackSerializer,
+    UserGangRoleSerializer,
     InterviewRoomSerializer,
+    ChangePasswordSerializer,
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
@@ -78,8 +87,10 @@ from .serializers import (
     ReservationCheckSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
+    UserGangSectionRoleSerializer,
     RecruitmentStatisticsSerializer,
     RecruitmentForRecruiterSerializer,
+    RecruitmentSeparatePositionSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
     RecruitmentPositionForApplicantSerializer,
@@ -87,6 +98,8 @@ from .serializers import (
     RecruitmentApplicationForApplicantSerializer,
     RecruitmentApplicationForRecruiterSerializer,
     RecruitmentApplicationUpdateForGangSerializer,
+    RecruitmentShowUnprocessedApplicationsSerializer,
+    RecruitmentPositionSharedInterviewGroupSerializer,
 )
 from .models.event import (
     Event,
@@ -126,10 +139,13 @@ from .models.recruitment import (
     Recruitment,
     InterviewRoom,
     OccupiedTimeslot,
+    RecruitmentGangStat,
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
+    RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
+    RecruitmentPositionSharedInterviewGroup,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
@@ -310,6 +326,28 @@ class BlogPostView(ModelViewSet):
     queryset = BlogPost.objects.all()
 
 
+class RoleView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = RoleSerializer
+    queryset = Role.objects.all()
+
+    @action(detail=True, methods=['get'])
+    def users(self, request: Request, pk: int) -> Response:
+        role = get_object_or_404(Role, id=pk)
+
+        org_roles = UserOrgRole.objects.filter(role=role).select_related('user', 'obj')
+        gang_roles = UserGangRole.objects.filter(role=role).select_related('user', 'obj')
+        section_roles = UserGangSectionRole.objects.filter(role=role).select_related('user', 'obj')
+
+        org_data = UserOrgRoleSerializer(org_roles, many=True).data
+        gang_data = UserGangRoleSerializer(gang_roles, many=True).data
+        section_data = UserGangSectionRoleSerializer(section_roles, many=True).data
+
+        combined = list(chain(org_data, gang_data, section_data))
+
+        return Response(combined)
+
+
 # =============================== #
 #            Sulten               #
 # =============================== #
@@ -445,6 +483,20 @@ class RegisterView(APIView):
         return res
 
 
+class ChangePasswordView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request: Request) -> Response:
+        serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        new_password = serializer.validated_data['new_password']
+        user = request.user
+        user.set_password(new_password)
+        user.save()
+        update_session_auth_hash(request, user)
+        return Response({'message': 'Successfully updated password'}, status=status.HTTP_200_OK)
+
+
 class UserView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -456,6 +508,10 @@ class AllUsersView(ListAPIView):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+    def get(self, request: Request) -> Response:
+        users = user_query(query=request.query_params)
+        return Response(data=UserSerializer(users, many=True).data)
 
 
 class ImpersonateView(APIView):
@@ -493,6 +549,11 @@ class ProfileView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+
+
+class PermissionView(ModelViewSet):
+    serializer_class = PermissionSerializer
+    queryset = Permission.objects.all()
 
 
 class WebhookView(APIView):
@@ -641,6 +702,13 @@ class RecruitmentPositionForApplicantView(ModelViewSet):
     queryset = RecruitmentPosition.objects.all()
 
 
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentSeparatePositionView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentSeparatePositionSerializer
+    queryset = RecruitmentSeparatePosition.objects.all()
+
+
 class RecruitmentApplicationView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentApplicationForGangSerializer
@@ -697,6 +765,70 @@ class RecruitmentPositionsPerGangForGangView(ListAPIView):
         return None
 
 
+class SendRejectionMailView(APIView):
+    def post(self, request: Request) -> Response:
+        try:
+            subject = request.data.get('subject')
+            text = request.data.get('text')
+            recruitment = request.data.get('recruitment')
+            if recruitment is None:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+            # Only users who have never been contacted with an offer should get a rejection mail
+            # Retrieve all users who has a non-withdrawn rejected application in current recruitment
+            rejected_users = User.objects.filter(
+                applications__recruitment=recruitment,
+                applications__recruiter_status=RecruitmentStatusChoices.REJECTION,
+                applications__withdrawn=False,
+            )
+
+            # Retrieve all users who have been contacted with an offer
+            contacted_users = User.objects.filter(
+                applications__recruitment=recruitment,
+                applications__recruiter_status__in=[
+                    RecruitmentStatusChoices.CALLED_AND_ACCEPTED,
+                    RecruitmentStatusChoices.CALLED_AND_REJECTED,
+                ],
+            )
+
+            # Remove users who have been contacted with an offer from the rejected users list
+            final_rejected_users = rejected_users.exclude(id__in=contacted_users.values('id'))
+
+            rejected_user_emails = list(final_rejected_users.values_list('email', flat=True))
+
+            email = EmailMessage(
+                subject=subject,
+                body=text,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[],  # Empty 'To' field since we're using BCC
+                bcc=rejected_user_emails,
+            )
+
+            email.send(fail_silently=False)
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentUnprocessedApplicationsPerRecruitment(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentShowUnprocessedApplicationsSerializer
+
+    def get_queryset(self) -> Response | None:
+        """
+        Optionally restricts the returned positions to a given recruitment,
+        by filtering against a `recruitment` query parameter in the URL.
+        """
+        recruitment = self.request.query_params.get('recruitment', None)
+        if recruitment is not None:
+            return RecruitmentApplication.objects.filter(
+                recruitment=recruitment,
+                recruiter_status=RecruitmentStatusChoices.NOT_SET,
+            )
+        return None
+
+
 class ApplicantsWithoutThreeInterviewsCriteriaView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -710,6 +842,21 @@ class ApplicantsWithoutThreeInterviewsCriteriaView(APIView):
         ).filter(interview_count__lt=3, application_count__gte=3)
 
         return Response(data=UserForRecruitmentSerializer(data, recruitment=recruitment, many=True).data, status=status.HTTP_200_OK)
+
+
+class RecruitmentRecruiterDashboardView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, pk: int) -> Response:
+        recruitment = get_object_or_404(Recruitment, pk=pk)
+        applications = RecruitmentApplication.objects.filter(recruitment=recruitment, interview__interviewers__in=[request.user])
+        return Response(
+            data={
+                'recruitment': RecruitmentSerializer(recruitment).data,
+                'applications': RecruitmentApplicationForGangSerializer(applications, many=True).data,
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 class ApplicantsWithoutInterviewsView(APIView):
@@ -1005,6 +1152,77 @@ class ActiveRecruitmentsView(ListAPIView):
         return Recruitment.objects.filter(visible_from__lte=timezone.now(), actual_application_deadline__gte=timezone.now())
 
 
+class RecruitmentInterviewGroupView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(
+        self,
+        request: Request,
+        recruitment_id: int,
+    ) -> HttpResponse:
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        interview_groups = RecruitmentPositionSharedInterviewGroup.objects.filter(recruitment=recruitment)
+
+        return Response(data=RecruitmentPositionSharedInterviewGroupSerializer(interview_groups, many=True).data, status=status.HTTP_200_OK)
+
+
+class DownloadAllRecruitmentApplicationCSV(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(
+        self,
+        request: Request,
+        recruitment_id: int,
+    ) -> HttpResponse:
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        applications = RecruitmentApplication.objects.filter(recruitment=recruitment)
+
+        filename = f"opptak_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        response = HttpResponse(
+            content_type='text/csv',
+            headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
+        )
+        writer = csv.DictWriter(
+            response,
+            fieldnames=[
+                'Navn',
+                'Telefon',
+                'Epost',
+                'Campus',
+                'Stilling',
+                'Gjeng',
+                'Seksjon',
+                'Intervjutid',
+                'Intervjusted',
+                'Prioritet',
+                'Status',
+                'Sokers rangering',
+                'Intervjuer satt',
+            ],
+        )
+        writer.writeheader()
+        for application in applications:
+            writer.writerow(
+                {
+                    'Navn': application.user.get_full_name(),
+                    'Telefon': application.user.phone_number,
+                    'Epost': application.user.email,
+                    'Campus': application.user.campus.name_en if application.user.campus else '',
+                    'Stilling': application.recruitment_position.name_nb,
+                    'Gjeng': application.recruitment_position.gang.name_nb,
+                    'Seksjon': application.recruitment_position.get_section_name('nb'),
+                    'Intervjutid': application.interview.interview_time if application.interview else '',
+                    'Intervjusted': application.interview.interview_location if application.interview else '',
+                    'Prioritet': application.get_recruiter_priority_display(),
+                    'Status': application.get_recruiter_status_display(),
+                    'Sokers rangering': f'{application.applicant_priority}/{application.get_total_applications()}',
+                    'Intervjuer satt': f'{application.get_total_interviews()}/{application.get_total_applications()}',
+                }
+            )
+
+        return response
+
+
 class DownloadRecruitmentApplicationGangCSV(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -1035,8 +1253,8 @@ class DownloadRecruitmentApplicationGangCSV(APIView):
                 'Intervjusted',
                 'Prioritet',
                 'Status',
-                'Søkers rangering',
-                'Intervjuer satt',
+                'Sokers rangering (Hele Opptak)',
+                'Intervjuer satt (For Gjeng)',
             ],
         )
         writer.writeheader()
@@ -1052,8 +1270,8 @@ class DownloadRecruitmentApplicationGangCSV(APIView):
                     'Intervjusted': application.interview.interview_location if application.interview else '',
                     'Prioritet': application.get_recruiter_priority_display(),
                     'Status': application.get_recruiter_status_display(),
-                    'Søkers rangering': f'{application.applicant_priority}/{application.get_total_applications()}',
-                    'Intervjuer satt': f'{application.get_total_interviews()}/{application.get_total_applications()}',
+                    'Sokers rangering (Hele Opptak)': f'{application.applicant_priority}/{application.get_total_applications()}',
+                    'Intervjuer satt (For Gjeng)': f'{application.get_total_interviews_for_gang()}/{application.get_total_applications_for_gang()}',
                 }
             )
 
@@ -1245,3 +1463,21 @@ class PurchaseFeedbackView(CreateAPIView):
                 form=purchase_model,
             )
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+class GangApplicationCountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, recruitment_id: int, gang_id: int) -> Response:
+        # Get total applications from RecruitmentGangStat
+        gang_stat = get_object_or_404(RecruitmentGangStat, gang_id=gang_id, recruitment_stats__recruitment_id=recruitment_id)
+
+        return Response(
+            {
+                'total_applications': gang_stat.application_count,
+                'total_applicants': gang_stat.applicant_count,
+                'average_priority': gang_stat.average_priority,
+                'total_accepted': gang_stat.total_accepted,
+                'total_rejected': gang_stat.total_rejected,
+            }
+        )

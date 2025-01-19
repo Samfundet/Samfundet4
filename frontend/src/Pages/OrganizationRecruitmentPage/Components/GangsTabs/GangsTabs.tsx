@@ -1,12 +1,12 @@
-import { GangDto, GangTypeDto } from '~/dto';
 import { useCallback, useEffect, useState } from 'react';
-import { Tab, TabBar, Text } from '~/Components';
-import { dbT } from '~/utils';
+import { useTranslation } from 'react-i18next';
+import { type Tab, TabBar, Text } from '~/Components';
 import { PositionsTable } from '~/Pages/OrganizationRecruitmentPage/Components/PositionsTable/PositionsTable';
-import styles from './GangsTabs.module.scss';
+import type { GangDto, GangTypeDto } from '~/dto';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { useTranslation } from 'react-i18next';
+import { dbT } from '~/utils';
+import styles from './GangsTabs.module.scss';
 
 type GangTabsProps = {
   currentGangCategory: Tab<GangTypeDto>;

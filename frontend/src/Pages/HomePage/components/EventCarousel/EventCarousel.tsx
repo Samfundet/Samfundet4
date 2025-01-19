@@ -1,7 +1,7 @@
-import { useAuthContext } from '~/context/AuthContext';
 import { Carousel, IconButton, ImageCard } from '~/Components';
 import { BACKEND_DOMAIN } from '~/constants';
-import { EventDto, HomePageElementDto } from '~/dto';
+import { useAuthContext } from '~/context/AuthContext';
+import type { EventDto, HomePageElementDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
@@ -25,6 +25,7 @@ export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps
     return (
       <Carousel className={wrapperClass} spacing={spacing}>
         {Array.from({ length: skeletonCount }).map((_, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value we can use here
           <ImageCard key={i} isSkeleton />
         ))}
       </Carousel>
@@ -54,6 +55,7 @@ export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps
             imageUrl={BACKEND_DOMAIN + event.image_url}
             description={event_short_dsc}
             url={url}
+            ticket_type={event.ticket_type}
           >
             <div className={styles.button_bar}>
               {canChangeEvent && (

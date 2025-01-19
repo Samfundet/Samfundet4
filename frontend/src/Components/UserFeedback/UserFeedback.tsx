@@ -1,36 +1,28 @@
-import styles from './UserFeedback.module.scss';
-import { IconButton, Modal } from '~/Components';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { IconButton, Modal } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { useTranslation } from 'react-i18next';
-import { KEY } from '~/i18n/constants';
 import { postFeedback } from '~/api';
-import { useTextItem } from '~/hooks';
 import { TextItem } from '~/constants';
-import { toast } from 'react-toastify';
-
-type UserFeedbackProps = {
-  enabled: boolean;
-};
+import { useTextItem } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import styles from './UserFeedback.module.scss';
 
 type FormProps = {
   text: string;
   contact_email?: string;
 };
 
-export function UserFeedback({ enabled }: UserFeedbackProps) {
+export function UserFeedback() {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-
-  if (!enabled) {
-    return <div></div>;
-  }
 
   const handleFormSubmit = (formData: FormProps) => {
     postFeedback({
       ...formData,
-      screen_resolution: window.innerWidth + 'x' + window.innerHeight,
+      screen_resolution: `${window.innerWidth}x${window.innerHeight}`,
       path: window.location.pathname,
     })
       .then(() => {
@@ -61,7 +53,7 @@ export function UserFeedback({ enabled }: UserFeedbackProps) {
         <SamfFormField<string, FormProps>
           field={'contact_email'}
           type={'email'}
-          label={t(KEY.common_email) + ' (' + t(KEY.common_not_required) + ')'}
+          label={`${t(KEY.common_email)} (${t(KEY.common_not_required)})`}
         />
       </SamfForm>
     );

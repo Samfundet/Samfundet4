@@ -2,18 +2,19 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '~/context/AuthContext';
 import { Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
+import { Text } from '~/Components/Text/Text';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import {
   getRecruitmentApplicationForPosition,
-  putRecruitmentApplication,
   getRecruitmentPositionForApplicant,
   getRecruitmentPositionsGangForApplicant,
+  putRecruitmentApplication,
   withdrawRecruitmentApplicationApplicant,
 } from '~/api';
-import { RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
+import { useAuthContext } from '~/context/AuthContext';
+import type { RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -21,7 +22,6 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
 import styles from './RecruitmentApplicationFormPage.module.scss';
-import { Text } from '~/Components/Text/Text';
 
 type FormProps = {
   application_text: string;
@@ -40,13 +40,13 @@ export function RecruitmentApplicationFormPage() {
 
   const [loading, setLoading] = useState(true);
 
-  const { positionID } = useParams();
+  const { positionId, recruitmentId } = useParams();
 
   useTitle(recruitmentPosition ? (dbT(recruitmentPosition, 'name') as string) : '');
 
   useEffect(() => {
     Promise.allSettled([
-      getRecruitmentPositionForApplicant(positionID as string)
+      getRecruitmentPositionForApplicant(positionId as string)
         .then((res) => {
           setRecruitmentPosition(res.data);
         })
@@ -57,14 +57,14 @@ export function RecruitmentApplicationFormPage() {
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
         }),
-      getRecruitmentApplicationForPosition(positionID as string).then((res) => {
+      getRecruitmentApplicationForPosition(positionId as string).then((res) => {
         setRecruitmentApplication(res.data);
         console.log(res.data);
       }),
     ]).then(() => {
       setLoading(false);
     });
-  }, [positionID, standardNavigate, t]);
+  }, [positionId, standardNavigate, t]);
 
   useEffect(() => {
     getRecruitmentPositionsGangForApplicant(
@@ -76,14 +76,14 @@ export function RecruitmentApplicationFormPage() {
   }, [recruitmentPosition]);
 
   function withdrawApplication() {
-    if (positionID) {
-      withdrawRecruitmentApplicationApplicant(positionID)
+    if (positionId) {
+      withdrawRecruitmentApplicationApplicant(positionId)
         .then(() => {
           navigate({
             url: reverse({
               pattern: ROUTES.frontend.recruitment_application_overview,
               urlParams: {
-                recruitmentID: recruitmentPosition?.recruitment,
+                recruitmentId: recruitmentPosition?.recruitment,
               },
             }),
           });
@@ -96,13 +96,13 @@ export function RecruitmentApplicationFormPage() {
   }
 
   function handleOnSubmit(data: FormProps) {
-    putRecruitmentApplication(data as Partial<RecruitmentApplicationDto>, positionID ? +positionID : 1)
+    putRecruitmentApplication(data as Partial<RecruitmentApplicationDto>, positionId ? +positionId : 1)
       .then(() => {
         navigate({
           url: reverse({
             pattern: ROUTES.frontend.recruitment_application_overview,
             urlParams: {
-              recruitmentID: recruitmentPosition?.recruitment,
+              recruitmentId: recruitmentPosition?.recruitment,
             },
           }),
         });
@@ -121,7 +121,7 @@ export function RecruitmentApplicationFormPage() {
     );
   }
 
-  if (!positionID || isNaN(Number(positionID))) {
+  if (!positionId || Number.isNaN(Number(positionId))) {
     return (
       <Page>
         <div className={styles.container}>
@@ -132,7 +132,7 @@ export function RecruitmentApplicationFormPage() {
     );
   }
 
-  const submitText = t(KEY.common_send) + ' ' + t(KEY.recruitment_application);
+  const submitText = `${t(KEY.common_send)} ${t(KEY.recruitment_application)}`;
 
   return (
     <Page>
@@ -164,18 +164,18 @@ export function RecruitmentApplicationFormPage() {
             <h2 className={styles.sub_header}>
               {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
             </h2>
-            {recruitmentPositionsForGang?.map((pos, index) => {
-              if (pos.id !== recruitmentPosition?.id) {
+            {recruitmentPositionsForGang?.map((pos) => {
+              if (pos.id === recruitmentPosition?.id) {
                 return (
                   <Button
-                    key={index}
+                    key={pos.id}
                     display="pill"
                     theme="outlined"
                     onClick={() => {
                       navigate({
                         url: reverse({
                           pattern: ROUTES.frontend.recruitment_application,
-                          urlParams: { positionID: pos.id, gangID: pos.gang.id },
+                          urlParams: { positionId: pos.id, recruitmentId: recruitmentId },
                         }),
                       });
                     }}

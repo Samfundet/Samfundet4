@@ -1,4 +1,4 @@
-import { LogoProps, LogoPalette } from '~/Components/Logo/Logo';
+import type { LogoPalette, LogoProps } from '~/Components/Logo/Logo';
 import { COLORS } from '~/types';
 
 type IsfitLogoProps = {
@@ -37,6 +37,7 @@ export function IsfitLogo({ color, size }: IsfitLogoProps) {
       xmlSpace="preserve"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>ISFiT Logo</title>
       <defs id="defs1" />
       <path
         id="isfit-I-dot-1"

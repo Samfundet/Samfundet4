@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import { useExpandableListContext } from '../ExpandableListContextProvider/ExpandableListContextProvider';
 import styles from './Parent.module.scss';
 
@@ -16,13 +16,13 @@ export function Parent({ content, children, onClick, nestedDepth }: ParentProps)
   const [isVisible, setIsVisible] = useState(false);
 
   function handleClick() {
-    onClick && onClick();
+    onClick?.();
     setShowChildren(true);
     setDepth(depth ? depth + 1 : 1);
   }
 
   useEffect(() => {
-    if (depth == nestedDepth) {
+    if (depth === nestedDepth) {
       setShowChildren(false);
       setIsVisible(true);
     } else {
@@ -33,10 +33,10 @@ export function Parent({ content, children, onClick, nestedDepth }: ParentProps)
   return (
     <>
       {isVisible && (
-        <div className={classNames(styles.item, styles.parent)} onClick={handleClick}>
+        <button type="button" className={classNames(styles.item, styles.parent)} onClick={handleClick}>
           <div>{content}</div>
           <div>{'>'}</div>
-        </div>
+        </button>
       )}
 
       {showChildren && children}

@@ -1,3 +1,4 @@
+import { Button } from '~/Components';
 import {
   assignUserToGroup,
   getApplicantsWithoutInterviews,
@@ -14,7 +15,6 @@ import {
   login,
   logout,
 } from '~/api';
-import { Button } from '~/Components';
 
 import styles from './ApiTestingPage.module.scss';
 

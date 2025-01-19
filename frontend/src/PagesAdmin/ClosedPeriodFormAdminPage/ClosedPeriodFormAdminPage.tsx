@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -34,8 +34,8 @@ export function ClosedPeriodFormAdminPage() {
   const { id } = useParams();
 
   // Stuff to do on first render.
-  //TODO add permissions on render
-
+  // TODO add permissions on render
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     // TODO add fix on no id on editpage
     if (id === undefined) {
@@ -64,7 +64,6 @@ export function ClosedPeriodFormAdminPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(data);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   function handleOnSubmit(data: formType) {
@@ -86,32 +85,24 @@ export function ClosedPeriodFormAdminPage() {
     <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <SamfForm onSubmit={handleOnSubmit} initialData={initialData}>
         <div className={styles.row}>
-          <SamfFormField
-            field="message_no"
-            type="text_long"
-            label={`${labelMessage} (${t(KEY.common_norwegian)})`}
-          ></SamfFormField>
-          <SamfFormField
-            field="message_en"
-            type="text_long"
-            label={`${labelMessage} (${t(KEY.common_english)})`}
-          ></SamfFormField>
+          <SamfFormField field="message_no" type="text_long" label={`${labelMessage} (${t(KEY.common_norwegian)})`} />
+          <SamfFormField field="message_en" type="text_long" label={`${labelMessage} (${t(KEY.common_english)})`} />
         </div>
         <div className={styles.row}>
           <SamfFormField
             field="description_no"
             type="text_long"
             label={`${labelDescription} (${t(KEY.common_norwegian)})`}
-          ></SamfFormField>
+          />
           <SamfFormField
             field="description_en"
             type="text_long"
             label={`${labelDescription} (${t(KEY.common_english)})`}
-          ></SamfFormField>
+          />
         </div>
         <div className={styles.row}>
-          <SamfFormField field="start_dt" type="date" label={`${t(KEY.start_time)}`}></SamfFormField>
-          <SamfFormField field="end_dt" type="date" label={`${t(KEY.end_time)}`}></SamfFormField>
+          <SamfFormField field="start_dt" type="date" label={`${t(KEY.start_time)}`} />
+          <SamfFormField field="end_dt" type="date" label={`${t(KEY.end_time)}`} />
         </div>
       </SamfForm>
     </AdminPageLayout>

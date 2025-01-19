@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { postPurchaseFeedback } from '~/api';
-import { PurchaseFeedbackDto } from '~/dto';
+import type { PurchaseFeedbackDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import styles from './PurchaseFeedbackForm.module.scss';
 
@@ -46,6 +46,7 @@ export function PurchaseFeedbackForm({ title, questions, alternatives }: Purchas
         <h1 className={styles.title}>{title}</h1>
         <div className={styles.buttonContainer}>
           {alternatives.map((alternatives, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
             <div key={index} className={styles.checkboxContainer}>
               <div className={styles.checkbox}>
                 <SamfFormField required={false} field={alternatives} type="checkbox" />
@@ -55,6 +56,7 @@ export function PurchaseFeedbackForm({ title, questions, alternatives }: Purchas
           ))}
         </div>
         {questions.map((questions, index) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
           <div key={index} className={styles.questionContainer}>
             <SamfFormField required={true} field={questions} type="text" label={questions} />
           </div>

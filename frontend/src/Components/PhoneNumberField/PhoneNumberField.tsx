@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { InputField, InputFieldProps } from '~/Components';
+import { InputField, type InputFieldProps } from '~/Components';
 import { PHONENUMBER_REGEX } from '~/constants';
 import { KEY } from '~/i18n/constants';
 

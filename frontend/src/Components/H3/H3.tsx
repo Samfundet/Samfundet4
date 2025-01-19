@@ -1,6 +1,6 @@
 import classNames from 'classnames';
+import type React from 'react';
 import styles from './H3.module.scss';
-import React from 'react';
 
 interface Props extends React.HTMLAttributes<HTMLHeadingElement> {
   className?: string;

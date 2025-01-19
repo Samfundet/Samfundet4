@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
-import { SultenNavbar } from '~/Components/SultenNavbar';
 import { SultenFooter } from '~/Components/SultenFooter';
+import { SultenNavbar } from '~/Components/SultenNavbar';
 
 export function SultenOutlet() {
   return (

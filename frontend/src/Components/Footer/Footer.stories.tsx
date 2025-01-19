@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Footer } from './Footer';
 
 // Local component config.
@@ -7,9 +7,7 @@ export default {
   component: Footer,
 } as ComponentMeta<typeof Footer>;
 
-const Template: ComponentStory<typeof Footer> = function () {
-  return <Footer />;
-};
+const Template: ComponentStory<typeof Footer> = () => <Footer />;
 
 export const Basic = Template.bind({});
 Basic.args = {};

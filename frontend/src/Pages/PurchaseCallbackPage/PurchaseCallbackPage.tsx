@@ -16,7 +16,7 @@ export function PurchaseCallbackPage() {
   ];
   return (
     <>
-      <PurchaseFeedbackForm title={title} questions={questions} alternatives={alternatives}></PurchaseFeedbackForm>
+      <PurchaseFeedbackForm title={title} questions={questions} alternatives={alternatives} />
     </>
   );
 }

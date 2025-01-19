@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Select } from './Select';
 
 // Local component config.
@@ -11,9 +11,7 @@ export default {
   },
 } as ComponentMeta<typeof Select>;
 
-const Template: ComponentStory<typeof Select> = function (args) {
-  return <Select {...args}></Select>;
-};
+const Template: ComponentStory<typeof Select> = (args) => <Select {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {

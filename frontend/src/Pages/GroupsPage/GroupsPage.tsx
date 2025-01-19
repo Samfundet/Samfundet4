@@ -1,12 +1,11 @@
-/* eslint-disable max-len */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { ImageList } from '~/Components/ImageList';
-import { ImageProps } from '~/Components/ImageList/ImageList';
+import type { ImageProps } from '~/Components/ImageList/ImageList';
 import { Page } from '~/Components/Page';
 import { getGangList } from '~/api';
-import { GangDto, GangTypeDto } from '~/dto';
+import type { GangDto, GangTypeDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from './GroupsPage.module.scss';
@@ -19,6 +18,7 @@ export function GroupsPage() {
   const { t } = useTranslation();
   const [groups, setGroups] = useState<GangTypeDto[]>([]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getGangList()
       .then((data) => {
@@ -28,7 +28,6 @@ export function GroupsPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -38,8 +37,8 @@ export function GroupsPage() {
           <h1 className={styles.header}>{t(KEY.groupspage_gangs_title)}</h1>
           <p className={styles.description}>{t(KEY.groupspage_gangs_text)}</p>
         </div>
-        {groups.map((element: GangTypeDto, key: number) => (
-          <div key={key} className={styles.groups}>
+        {groups.map((element: GangTypeDto) => (
+          <div key={element.id} className={styles.groups}>
             <div className={styles.groupsTitle}>{dbT(element, 'title')}</div>
             <ImageList
               textMaxLength={12}

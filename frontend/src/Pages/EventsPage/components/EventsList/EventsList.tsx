@@ -1,12 +1,12 @@
 import { Icon } from '@iconify/react';
-import { ReactNode, useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, IconButton, InputField, Link, TimeDisplay } from '~/Components';
 import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
-import { Table, TableRow } from '~/Components/Table';
+import { Table, type TableRow } from '~/Components/Table';
 import { BACKEND_DOMAIN } from '~/constants';
-import { EventDto } from '~/dto';
+import type { EventDto } from '~/dto';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -37,18 +37,14 @@ export function EventsList({ events }: EventsListProps) {
 
   // TODO debounce and move header/filtering stuff to a separate component
   function filteredEvents() {
-    const allEvents = Object.keys(events)
-      .map((k: string) => events[k])
-      .flat();
+    const allEvents = Object.keys(events).flatMap((k: string) => events[k]);
     return eventQuery(allEvents, query);
   }
 
   // TODO improve table view for events
   function getEventRows(): TableRow[] {
-    const rows: TableRow[] = [];
-
-    filteredEvents().forEach((event: EventDto) => {
-      rows.push([
+    return filteredEvents().map((event) => ({
+      cells: [
         {
           content: (
             <Link
@@ -69,17 +65,15 @@ export function EventsList({ events }: EventsListProps) {
         event.location,
         event.category,
         event.ticket_type,
-      ]);
-    });
-
-    return rows;
+      ],
+    }));
   }
 
   function getEventCards(): ReactNode[] {
-    return filteredEvents().map((event: EventDto, key: number) => {
+    return filteredEvents().map((event: EventDto) => {
       const time_display = <TimeDisplay timestamp={event.start_dt} displayType="event-datetime" />;
       return (
-        <div className={styles.event_container} key={key}>
+        <div className={styles.event_container} key={event.id}>
           <ImageCard
             date={event.start_dt.toString()}
             imageUrl={BACKEND_DOMAIN + event.image_url}
@@ -88,6 +82,7 @@ export function EventsList({ events }: EventsListProps) {
             description={dbT(event, 'description_short') ?? ''}
             compact={true}
             url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
+            ticket_type={event.ticket_type}
           />
         </div>
       );

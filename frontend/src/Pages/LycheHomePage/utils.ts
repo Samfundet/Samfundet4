@@ -1,4 +1,4 @@
-import { VenueDto } from '~/dto';
+import type { VenueDto } from '~/dto';
 
 export function getIsConsistentWeekdayOpeningHours(venue?: VenueDto): boolean {
   return (

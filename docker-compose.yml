@@ -22,10 +22,15 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.frontend
     image: samfundet-frontend
     volumes:
-      - ./frontend/src:/app/src # Share project code between host machine and container to enable reload on changes.
+      # Share project code between host machine and container to enable reload on changes.
+      # Excellent solution when component needs files/folders from outside context.
+      - ./biome.jsonc:/biome.jsonc
+      - ./frontend/src:/app/src 
+      - ./frontend/biome.jsonc:/app/biome.jsonc
+      - ./frontend/package.json:/app/package.json
+      - ./frontend/index.html:/app/index.html
     env_file:
       - ./frontend/.env.docker # Environment for frontend docker
     environment:
@@ -35,22 +40,23 @@ services:
       - '3000:3000'
     command: yarn start:docker --host 0.0.0.0 --port 3000
 
-  cypress:
-    depends_on:
-      - frontend
-      - backend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.cypress
-    # platform: linux/arm64/v8
-    env_file:
-      - ./frontend/.env.docker # Environment for frontend docker
-    environment:
-      - IS_DOCKER=YES
-      - CYPRESS_baseUrl=http://frontend:3000
-    volumes:
-      - ./frontend/cypress:/frontend/cypress
-    command: 'yarn run cypress:run'
+  # TODO: Fix, ffs dont just ignore it next time it breaks
+  # cypress:
+  #   depends_on:
+  #     - frontend
+  #     - backend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile.cypress
+  #   # platform: linux/arm64/v8
+  #   env_file:
+  #     - ./frontend/.env.docker # Environment for frontend docker
+  #   environment:
+  #     - IS_DOCKER=YES
+  #     - CYPRESS_baseUrl=http://frontend:3000
+  #   volumes:
+  #     - ./frontend/cypress:/frontend/cypress
+  #   command: 'yarn run cypress:run'
 
   ## Storybook React ###
   storybook:

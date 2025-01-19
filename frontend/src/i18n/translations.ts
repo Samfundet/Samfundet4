@@ -1,7 +1,7 @@
-/* eslint-disable max-len */
-import { KEY, KeyValues } from '~/i18n/constants';
+import { KEY } from '~/i18n/constants';
+import { prepareTranslations } from './utils';
 
-export const nb: Record<KeyValues, string> = {
+export const nb = prepareTranslations({
   // ==================== //
   //        Common        //
   // ==================== //
@@ -40,14 +40,18 @@ export const nb: Record<KeyValues, string> = {
   // Date related
   [KEY.common_today]: 'I dag',
   [KEY.common_tomorrow]: 'I morgen',
+  [KEY.pick_a_date]: 'Velg en dato',
 
   // Other common
+  [KEY.common_url]: 'URL',
+  [KEY.common_manage]: 'Håndter',
   [KEY.common_yes]: 'Ja',
   [KEY.common_no]: 'Nei',
   [KEY.common_to]: 'Til',
   [KEY.common_all]: 'Alle',
   [KEY.common_price]: 'Pris',
   [KEY.common_food]: 'Mat',
+  [KEY.common_any]: 'Hvilken som helst',
   [KEY.common_preferences]: 'Preferanser',
   [KEY.common_buy]: 'Kjøp',
   [KEY.common_not]: 'Ikke',
@@ -64,8 +68,10 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_next]: 'Neste',
   [KEY.common_save]: 'Lagre',
   [KEY.common_gang]: 'Gjeng',
-  [KEY.common_table]: 'Bord',
   [KEY.common_gangs]: 'Gjenger',
+  [KEY.common_section]: 'Seksjon',
+  [KEY.common_table]: 'Bord',
+  [KEY.common_gang_type]: 'Gjengtype',
   [KEY.common_edit]: 'Rediger',
   [KEY.common_sheet]: 'Tabell',
   [KEY.common_max]: 'Maks',
@@ -77,6 +83,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_title]: 'Tittel',
   [KEY.common_login]: 'Logg inn',
   [KEY.common_users]: 'Brukere',
+  [KEY.common_roles]: 'Roller',
+  [KEY.common_role]: 'Rolle',
   [KEY.common_active]: 'Aktiv',
   [KEY.common_event]: 'Arrangement',
   [KEY.common_repeat]: 'Repeter',
@@ -100,9 +108,11 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_unknown]: 'Ukjent',
   [KEY.common_lastname]: 'Etternavn',
   [KEY.common_email]: 'Epost',
+  [KEY.common_email_subject]: 'Emne',
   [KEY.common_phonenumber]: 'Telefonnummer',
   [KEY.common_register]: 'Registrer',
   [KEY.common_password]: 'passord',
+  [KEY.common_current]: 'Nåværende',
   [KEY.common_about_us]: 'Om oss',
   [KEY.common_previous]: 'Forrige',
   [KEY.common_required]: 'Påkrevd',
@@ -118,6 +128,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_member]: 'Medlem',
   [KEY.common_membership]: 'Medlemskap',
   [KEY.common_doors_date]: 'Dørene åpner',
+  [KEY.common_permissions]: 'Tilganger',
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Kontakt oss',
   [KEY.common_select_all]: 'Velg alle',
@@ -140,6 +151,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_something_went_wrong]: 'Noe gikk galt',
   [KEY.common_click_here]: 'klikk her',
   [KEY.common_total]: 'Totalt',
+  [KEY.common_out_of]: 'av',
   [KEY.common_count]: 'Antall',
   [KEY.common_guests]: 'Gjester',
   [KEY.common_occasion]: 'Annledning',
@@ -157,8 +169,14 @@ export const nb: Record<KeyValues, string> = {
   [KEY.common_when]: 'når',
   [KEY.common_come_back_later]: 'Kom tilbake senere',
   [KEY.common_be]: 'bli',
+  [KEY.common_room]: 'Rom',
   [KEY.common_filter]: 'Filter',
-
+  [KEY.common_unprocessed]: 'Ubehandlet',
+  [KEY.common_personal]: 'Personlig',
+  [KEY.common_administrate]: 'Administrer',
+  [KEY.common_administration]: 'Administrasjon',
+  [KEY.common_list_view]: 'Liste visning',
+  [KEY.common_tab_view]: 'Fane visning',
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
   [KEY.common_press]: 'presse',
@@ -188,6 +206,15 @@ export const nb: Record<KeyValues, string> = {
   // ==================== //
   //        Others        //
   // ==================== //
+  [KEY.role_content_type]: 'Hierarkinivå',
+  [KEY.change_password]: 'Bytt passord',
+  [KEY.new_password]: 'Nytt passord',
+  [KEY.admin_impersonate]: 'Stjel identitet',
+  [KEY.admin_stop_impersonate]: 'Stopp identitetstyveri',
+  [KEY.admin_role_page_orggangsection]: 'Org/Gjeng/Seksjon',
+  [KEY.admin_role_page_role_since]: 'Hatt rollen siden',
+  [KEY.admin_role_page_given_by]: 'Gitt av',
+
   // LoginPage:
   [KEY.loginpage_register]: 'Lag bruker',
   [KEY.loginpage_login_failed]: 'Innlogging feilet',
@@ -243,7 +270,15 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_all_applications]: 'Alle søknader',
   [KEY.recruitment_not_applied]: 'Du har ikke sendt søknader til noen stillinger ennå',
   [KEY.recruitment_will_be_anonymized]: 'All info relatert til dine søknader vil bli slettet 3 uker etter opptaket',
+  [KEY.recruitment_interview]: 'intervju',
+  [KEY.recruitment_interviews]: 'Intervjuer',
+  [KEY.recruitment_interview_planned]: 'Intervjuer planlagt',
+  [KEY.recruitment_interviewer]: 'Intervjuer',
+  [KEY.recruitment_interviewers]: 'Intervjuere',
+  [KEY.recruitment_no_interviews]: 'Ingen intervjuer',
   [KEY.recruitment_interview_set]: 'Sett intervju',
+  [KEY.recruitment_interview_groups]: 'Intervjugrupper',
+  [KEY.recruitment_interview_group]: 'Intervjugrupper',
   [KEY.recruitment_interview_time]: 'Intervjutid',
   [KEY.recruitment_interview_location]: 'Intervjusted',
   [KEY.recruitment_no_positions]: 'Ingen verv',
@@ -251,7 +286,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_no_gangs]: 'Ingen gjenger',
   [KEY.recruitment_no_active]: 'Ingen aktive opptak',
   [KEY.recruitment_interview_notes]: 'Intervju notater',
-  [KEY.recruitment_priority]: 'Søkers prioritet',
+  [KEY.recruitment_priority]: 'Sokers prioritet',
   [KEY.recruitment_recruiter_priority]: 'Prioritet',
   [KEY.recruitment_recruiter_status]: 'Status',
   [KEY.common_not_set]: 'Ikke satt',
@@ -272,13 +307,18 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_administrate]: 'Administrer opptak',
   [KEY.recruitment_administrate_positions]: 'Administrer stillinger',
   [KEY.recruitment_administrate_applications]: 'Administrer søknader',
+  [KEY.recruitment_unprocessed_applicants]: 'Uprossesserte søkere',
+  [KEY.recruitment_applicants_open_to_other_positions]: 'Søkere interessert i andre stillinger',
+  [KEY.recruitment_applicants_open_to_other_positions_help_text]:
+    'Søkere som er reservert må/bør klareres med gjengen som har reservert søkeren.',
   [KEY.recruitment_administrate_reservations]: 'Administrer reservasjoner',
   [KEY.shown_application_deadline]: 'Vist søknadsfrist',
-  [KEY.actual_application_deadlin]: 'Faktisk søknadsfrist',
+  [KEY.actual_application_deadline]: 'Faktisk søknadsfrist',
   [KEY.recruitment_number_of_applications]: 'Antall søknader',
   [KEY.recrutment_default_application_letter]: 'Standard søknadstekst',
   [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
   [KEY.max_applications]: 'Maks søknader per bruker',
+  [KEY.recruitment_promo_media]: 'Promo video',
   [KEY.recruitment_norwegian_applicants_only]: 'Kun norsktalende søkere',
   [KEY.reprioritization_deadline_for_applicant]: 'Omprioriteringsfrist',
   [KEY.recruitment_show_unprocessed_applicants]: 'Vis ubehandlede søkere',
@@ -291,6 +331,7 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_applications]: 'søknader',
   [KEY.recruitment_progression]: 'Opptak fremgang',
   [KEY.recruitment_overview]: 'Opptak oversikt',
+  [KEY.recruitment_recruiter_dashboard]: 'Dashbord',
   [KEY.recruitment_statistics]: 'Opptak statistikk',
   [KEY.recruitment_applications_processed]: 'søknader behandlet',
   [KEY.recruitment_automatic_rejection]: 'Automatisk avslag',
@@ -302,32 +343,44 @@ export const nb: Record<KeyValues, string> = {
   [KEY.recruitment_applicant_top_position]: 'Mest ønskede verv',
   [KEY.recruitment_withdrawn_applications]: 'Trukkede søknader',
   [KEY.recruitment_rejected_applications]: 'Søkere som får automatisk avslag',
+  [KEY.recruitment_hardtoget_applications]: 'Søkere som har takket nei til stillingen',
   [KEY.recruitment_accepted_applications]: 'Søkere vi har tatt opp',
   [KEY.recruitment_rejected_applications_help_text]:
     'Disse vil få en automatisk epost om avslag dersom de ikke får tilbud om et annet verv.',
+  [KEY.recruitment_hardtoget_applications_help_text]:
+    'Disse har takket nei til stillingen og vil dermed ikke få noen avslagsmail.',
   [KEY.recruitment_accepted_applications_help_text]:
     'Disse vil IKKE få en automatisk epost om avslag. Det er derfor veldig viktig å bekrefte at listen er korrekt.',
   [KEY.recruitment_accepted_applications_empty_text]: 'Ingen søkere er markert som kontaktet.',
   [KEY.recruitment_rejected_applications_empty_text]: 'Ingen søkere vil få automatisk avslag på epost.',
+  [KEY.recruitment_hardtoget_applications_empty_text]: 'Ingen søkere har takket nei til stillingen.',
   [KEY.recruitment_withdrawn_applications_empty_text]: 'Ingen trekte søknader.',
   [KEY.recruitment_withdrawn]: 'Trukket',
   [KEY.recruitment_withdraw_application]: 'Trekk søknad',
+  [KEY.recruitment_confirm_withdraw_application]: 'Er du sikker på at du vil trekke søknaden?',
   [KEY.recruitment_withdrawn_message]: 'Du har trukket søknaden din fra denne stillingen',
+  [KEY.recruitment_stats_hours_header]: 'Antall søkere per time',
+  [KEY.recruitment_stats_campus_header]: 'Antall søkere per campus',
+  [KEY.recruitment_stats_date_header]: 'Antall søkere per dag',
   [KEY.recruitment_revert_status]: 'Fjern Status',
   [KEY.recruitment_no_current_positions]: 'Denne gjengen har ingen åpne stillinger for dette opptaket',
   [KEY.recruitment_no_current_applications_position]: 'Denne stilling har ennå ikke fått noen søknader',
   [KEY.recruitment_no_current_applications_gang]: 'Denne gjengen har ennå ikke fått noen søknader',
   [KEY.recruitment_apply_for]: 'Søk verv hos',
   [KEY.recruitment_position_categorized_by_gang]: 'kategorisert på gjeng',
-  [KEY.recruitment_gangs_with_separate_positions]: 'Gjenger med separat opptak',
+  [KEY.recruitment_positions_with_separate_recruitment]: 'Stillinger med separat opptak',
   [KEY.error_recruitment_form_1]: 'Vist søknadfrist kan ikke være før opptaket blir synlig',
   [KEY.error_recruitment_form_2]: 'Faktisk søknadsfrist kan ikke være før vist søknadsfrist',
   [KEY.error_recruitment_form_3]: 'Omprioriteringsfrist kan ikke være før faktisk søknadsfrist',
   [KEY.error_recruitment_form_4]: 'Flaggefrist kan ikke være før omprioriteringsfrist',
   [KEY.recruitment_three_interviews_criteria_header]:
-    'Søkere med mindre enn 3 intervjuer, men har søkte på flere enn 3 verv',
+    'Søkere med færre enn 3 intervjuer, men har søkte på flere enn 3 verv',
   [KEY.recruitment_three_interviews_criteria_button]: 'Søkere med mindre enn 3 intervjuer',
-
+  [KEY.recruitment_choose_interview_time_and_location]: 'Velg tid og sted for intervju',
+  [KEY.recruitment_choose_interview_time]: 'Velg intervjutid',
+  [KEY.recruitment_choose_interview_location]: 'Velg intervjusted',
+  [KEY.recruitment_dashboard_description]:
+    'Her har man oversikt over dine kommende intervjuer, stillinger du har noe å gjøre med, og kan sette tider du er tilgjengelig til å avholde intervjuer',
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
@@ -348,6 +401,20 @@ export const nb: Record<KeyValues, string> = {
   [KEY.admin_information_confirm_delete]: 'Er du sikker du vil slette denne informasjonssiden?',
   [KEY.admin_information_confirm_cancel]: 'Er du sikker på at du vil gå tilbake uten å lagre?',
   [KEY.admin_gangsadminpage_abbreviation]: 'Forkortelse',
+  [KEY.recruitment_create_room]: 'Opprett rom',
+  [KEY.recruitment_separate_recruitment]: 'Separat opptak',
+
+  // Recruitment applets
+  [KEY.recruitment_applet_dashboard_description]: 'Ditt personlige dashbord',
+  [KEY.recruitment_applet_edit_description]: 'Rediger opptaket',
+  [KEY.recruitment_applet_open_to_other_positions]: 'Åpen for mer',
+  [KEY.recruitment_applet_overview_description]: 'Se hvor langt opptaket har kommet',
+  [KEY.recruitment_applet_room_overview]: 'Romoversikt',
+  [KEY.recruitment_applet_room_description]: 'Opprett rom for intervju',
+  [KEY.recruitment_applet_rejection_mail_description]: 'Send mail til de som ikke fikk tilbud',
+  [KEY.recruitment_applet_without_interview_title]: 'Uten intervju',
+  [KEY.recruitment_applet_without_interview_description]: 'Søkere som ikke har noen intervju satt',
+  [KEY.recruitment_applet_three_interview_title]: '< 3 intervju',
 
   // CommandMenu:
   [KEY.command_menu_label]: 'Global kommando meny',
@@ -367,6 +434,8 @@ export const nb: Record<KeyValues, string> = {
   [KEY.command_menu_shortcut_opening_hours]: 'Åpningstider',
   [KEY.command_menu_shortcut_control_panel]: 'Kontrollpanel',
   [KEY.command_menu_shortcut_about_samfundet]: 'Om Samfundet',
+
+  [KEY.role_edit_could_not_load_permissions]: 'Klarte ikke laste inn tilganger',
 
   // Sulten / Lyche
   [KEY.sulten_what_is_lyche]: 'Hva er Lyche?',
@@ -413,9 +482,22 @@ export const nb: Record<KeyValues, string> = {
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
-};
 
-export const en: Record<KeyValues, string> = {
+  [KEY.promo_media_description]: 'Lenke eller ID til en YouTube-video',
+  [KEY.promo_media_invalid]: 'Må være en gyldig lenke til en YouTube-video',
+
+  // Errors
+  [KEY.error_generic]: 'Uventet feil',
+  [KEY.error_generic_description]: 'En uventet feil oppsto, vennligst prøv igjen',
+  [KEY.error_not_found]: 'Ikke funnet',
+  [KEY.error_not_found_description]: 'Ressursen du forsøkte å hente ble ikke funnet',
+  [KEY.error_forbidden]: 'Ingen adgang',
+  [KEY.error_forbidden_description]: 'Du har ikke adgang til å se denne ressursen',
+  [KEY.error_server_error]: 'Serverfeil',
+  [KEY.error_server_error_description]: 'En serverfeil har opptstått',
+});
+
+export const en = prepareTranslations({
   // ==================== //
   //        Common        //
   // ==================== //
@@ -454,14 +536,18 @@ export const en: Record<KeyValues, string> = {
   // Date related
   [KEY.common_today]: 'Today',
   [KEY.common_tomorrow]: 'Tomorrow',
+  [KEY.pick_a_date]: 'Pick a date',
 
   // No category:
+  [KEY.common_url]: 'URL',
+  [KEY.common_manage]: 'Manage',
   [KEY.common_yes]: 'Yes',
   [KEY.common_no]: 'No',
   [KEY.common_to]: 'To',
   [KEY.common_all]: 'All',
   [KEY.common_price]: 'Price',
   [KEY.common_food]: 'Food',
+  [KEY.common_any]: 'Any',
   [KEY.common_preferences]: 'Preferences',
   [KEY.common_buy]: 'Buy',
   [KEY.common_not]: 'Not',
@@ -484,6 +570,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_next]: 'Next',
   [KEY.common_gang]: 'Gang',
   [KEY.common_gangs]: 'Gangs',
+  [KEY.common_gang_type]: 'Gang type',
+  [KEY.common_section]: 'Section',
   [KEY.common_max]: 'Max',
   [KEY.common_image]: 'Image',
   [KEY.common_venue]: 'Venue',
@@ -491,6 +579,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_title]: 'Title',
   [KEY.common_login]: 'Log in',
   [KEY.common_users]: 'Users',
+  [KEY.common_roles]: 'Roles',
+  [KEY.common_role]: 'Role',
   [KEY.common_active]: 'Active',
   [KEY.common_cancel]: 'Cancel',
   [KEY.common_venues]: 'Venues',
@@ -513,9 +603,11 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_unknown]: 'Unknown',
   [KEY.common_register]: 'Register',
   [KEY.common_email]: 'Email',
+  [KEY.common_email_subject]: 'Subject',
   [KEY.common_phonenumber]: 'Phone number',
   [KEY.common_lastname]: 'Last name',
   [KEY.common_password]: 'password',
+  [KEY.common_current]: 'Current',
   [KEY.common_select_all]: 'Select all',
   [KEY.common_unselect_all]: 'Unselect all',
   [KEY.common_overview]: 'Overview',
@@ -543,6 +635,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_opening_hours]: 'Opening hours',
   [KEY.common_general]: 'General',
   [KEY.common_doors_date]: 'Doors',
+  [KEY.common_permissions]: 'Permissions',
   [KEY.common_long_description]: 'Long description',
   [KEY.common_short_description]: 'Short description',
   [KEY.common_back_to_samfundet]: 'Back to samfundet.no',
@@ -555,11 +648,13 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_click_here]: 'click here',
   [KEY.common_total]: 'In total',
   [KEY.common_count]: 'Number of',
+  [KEY.common_out_of]: 'out of',
   [KEY.common_guests]: 'Guests',
   [KEY.common_occasion]: 'Occasion',
   [KEY.common_have]: 'have',
   [KEY.common_been]: 'been',
   [KEY.common_be]: 'be',
+  [KEY.common_personal]: 'Personal',
   [KEY.common_rejected]: 'rejected',
   [KEY.common_it]: 'it',
   [KEY.common_will]: 'will',
@@ -571,6 +666,10 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_come_back_later]: 'Come back later',
   [KEY.common_loading]: 'Loading',
   [KEY.common_filter]: 'Filter',
+  [KEY.common_room]: 'Room',
+  [KEY.common_unprocessed]: 'Unprocessed',
+  [KEY.common_list_view]: 'List view',
+  [KEY.common_tab_view]: 'Tab view',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -590,7 +689,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.common_contact_information]: 'Contact information',
   [KEY.common_about_samfundet]: 'About Samfundet',
   [KEY.common_processed]: 'Processed',
-
+  [KEY.common_administrate]: 'Administrate',
+  [KEY.common_administration]: 'Administration',
   // Price groups:
   [KEY.common_ticket_type]: 'Ticket',
   [KEY.common_ticket_type_free]: 'Free',
@@ -602,6 +702,15 @@ export const en: Record<KeyValues, string> = {
   // ==================== //
   //        Others        //
   // ==================== //
+  [KEY.role_content_type]: 'Hierarchical level',
+  [KEY.change_password]: 'Change password',
+  [KEY.new_password]: 'New password',
+  [KEY.admin_impersonate]: 'Impersonate',
+  [KEY.admin_stop_impersonate]: 'Stop impersonation',
+  [KEY.admin_role_page_orggangsection]: 'Org/Gang/Section',
+  [KEY.admin_role_page_role_since]: 'Had role since',
+  [KEY.admin_role_page_given_by]: 'Given by',
+
   // LoginPage:
   [KEY.loginpage_register]: 'Create user',
   [KEY.loginpage_internal_login]: 'Log in as internal',
@@ -657,7 +766,15 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_not_applied]: 'You have not applied to any positions yet',
   [KEY.recruitment_will_be_anonymized]:
     'All info related to the applications will be anonymized three weeks after the recruitment is over',
+  [KEY.recruitment_interview]: 'interview',
+  [KEY.recruitment_interviews]: 'Interviews',
+  [KEY.recruitment_interview_planned]: 'Interviews planned',
+  [KEY.recruitment_interviewer]: 'Interviewer',
+  [KEY.recruitment_interviewers]: 'Interviewers',
+  [KEY.recruitment_no_interviews]: 'No interviews',
   [KEY.recruitment_interview_set]: 'Set Interview',
+  [KEY.recruitment_interview_groups]: 'Interview groups',
+  [KEY.recruitment_interview_group]: 'Interview group',
   [KEY.recruitment_interview_time]: 'Interview Time',
   [KEY.recruitment_interview_location]: 'Interview Location',
   [KEY.recruitment_interview_notes]: 'Interview notes',
@@ -685,13 +802,18 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_administrate]: 'Administrate recruitment',
   [KEY.recruitment_administrate_positions]: 'Administrate positions',
   [KEY.recruitment_administrate_applications]: 'Administrate applications',
+  [KEY.recruitment_unprocessed_applicants]: 'Unprocessed applicants',
+  [KEY.recruitment_applicants_open_to_other_positions]: 'Applicants interested in other positions',
+  [KEY.recruitment_applicants_open_to_other_positions_help_text]:
+    'Applicants that are reserved should be cleared with the gang that has reserved the applicant.',
   [KEY.recruitment_administrate_reservations]: 'Administrate reservations',
-  [KEY.actual_application_deadlin]: 'Actual deadline',
+  [KEY.actual_application_deadline]: 'Actual deadline',
   [KEY.shown_application_deadline]: 'Displayed deadline',
   [KEY.recruitment_number_of_applications]: 'Number of applications',
   [KEY.recrutment_default_application_letter]: 'Default application letter',
   [KEY.reprioritization_deadline_for_groups]: 'Group reprioritization deadline',
   [KEY.max_applications]: 'Max applications per user',
+  [KEY.recruitment_promo_media]: 'Promo video',
   [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
   [KEY.recruitment_show_unprocessed_applicants]: 'Show unprocessed applicants',
   [KEY.recruitment_show_all_applicants]: 'Show all applicants',
@@ -703,6 +825,7 @@ export const en: Record<KeyValues, string> = {
   [KEY.application_deadline]: 'Application deadline',
   [KEY.recruitment_progression]: 'Recruitment progression',
   [KEY.recruitment_overview]: 'Recruitment overview',
+  [KEY.recruitment_recruiter_dashboard]: 'Dashboard',
   [KEY.recruitment_admitted]: 'admitted',
   [KEY.recruitment_statistics]: 'Recruitment statistics',
   [KEY.recruitment_applications]: 'applications',
@@ -716,29 +839,57 @@ export const en: Record<KeyValues, string> = {
   [KEY.recruitment_applicant_top_position]: 'Most desired position',
   [KEY.recruitment_withdrawn_applications]: 'Withdrawn applications',
   [KEY.recruitment_rejected_applications]: 'Automatically rejected applicants',
+  [KEY.recruitment_hardtoget_applications]: 'Applicants who declined the position',
   [KEY.recruitment_accepted_applications]: 'Applicants we have contacted and accepted',
   [KEY.recruitment_rejected_applications_help_text]:
     'These will get an automatic rejection email if they are not accepted for a different position',
+  [KEY.recruitment_hardtoget_applications_help_text]:
+    'These applicants have declined the position and will not receive a rejection email.',
   [KEY.recruitment_accepted_applications_help_text]:
     'These will NOT get an automatic rejection email, important to double check if everyone is accounted for',
   [KEY.recruitment_accepted_applications_empty_text]: 'No applicants are marked as contacted.',
   [KEY.recruitment_rejected_applications_empty_text]:
     'No applicants are marked to receive an automatic rejection email.',
+  [KEY.recruitment_hardtoget_applications_empty_text]: 'No applicants have declined the position.',
+
   [KEY.recruitment_withdrawn_applications_empty_text]: 'No withdrawn applications.',
   [KEY.recruitment_withdrawn]: 'Withdrawn',
   [KEY.recruitment_withdrawn_message]: 'You have withdrawn your application to this position',
+  [KEY.recruitment_confirm_withdraw_application]: 'Are you sure you want to withdraw this application?',
   [KEY.recruitment_revert_status]: 'Revert status',
   [KEY.recruitment_no_current_positions]: 'This gang does not have any available positions for this recruitment',
   [KEY.recruitment_no_current_applications_position]: 'This gang has no current applicants',
   [KEY.recruitment_no_current_applications_gang]: 'This gang has no current applicants',
   [KEY.recruitment_withdraw_application]: 'Withdraw application',
+  [KEY.recruitment_stats_hours_header]: 'Total applicants per hour',
+  [KEY.recruitment_stats_campus_header]: 'Total applicants per campus',
+  [KEY.recruitment_stats_date_header]: 'Total applicants per day',
   [KEY.recruitment_apply_for]: 'Apply for position at',
   [KEY.recruitment_position_categorized_by_gang]: 'categorized by gang',
-  [KEY.recruitment_gangs_with_separate_positions]: 'Groups with separate admission',
+  [KEY.recruitment_positions_with_separate_recruitment]: 'Positions with separate recruitment',
   [KEY.error_recruitment_form_1]: 'Displayed deadline cannot be before the recruitment becomes visible',
   [KEY.error_recruitment_form_2]: 'Actual deadline cannot be before the displayed deadline',
   [KEY.error_recruitment_form_3]: 'Reprioritization deadline cannot be before the actual deadline',
   [KEY.error_recruitment_form_4]: 'Group reprioritization deadline cannot be before the reprioritization deadline',
+  [KEY.recruitment_dashboard_description]:
+    'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcomming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
+  [KEY.recruitment_create_room]: 'Create room',
+  [KEY.recruitment_separate_recruitment]: 'Seperate recruitment',
+
+  // Recruitment applets
+  [KEY.recruitment_applet_dashboard_description]: 'Your personal dashboard',
+  [KEY.recruitment_applet_edit_description]: 'Edit recruitment',
+  [KEY.recruitment_applet_open_to_other_positions]: 'Open for more',
+  [KEY.recruitment_applet_overview_description]: 'See how far the recruitment has come',
+  [KEY.recruitment_applet_room_overview]: 'Room overview',
+  [KEY.recruitment_applet_room_description]: 'Create room for interviews',
+  [KEY.recruitment_applet_rejection_mail_description]: "Send mail to those who didn't get an offer",
+  [KEY.recruitment_applet_without_interview_title]: 'Without interview',
+  [KEY.recruitment_applet_without_interview_description]: 'Applicants without any interviews set',
+  [KEY.recruitment_applet_three_interview_title]: '< 3 interviews',
+  [KEY.recruitment_choose_interview_time_and_location]: 'Choose time and location of interview',
+  [KEY.recruitment_choose_interview_time]: 'Choose time of interview',
+  [KEY.recruitment_choose_interview_location]: 'Choose location of interview',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
@@ -762,6 +913,10 @@ export const en: Record<KeyValues, string> = {
   [KEY.admin_information_confirm_cancel]: 'Are you sure you want to exit without saving?',
   [KEY.admin_saksdokumenter_cannot_reupload]: 'It is not possible to change the uploaded file.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
+
+  [KEY.promo_media_description]: 'Link or ID of a YouTube video',
+  [KEY.promo_media_invalid]: 'Must be a valid link to a YouTube video',
+
   [KEY.recruitment_three_interviews_criteria_header]:
     'Applicants with less than 3 interviews, but have applied to more than 3 positions',
   [KEY.recruitment_three_interviews_criteria_button]: 'Applicants with less than 3 interviews',
@@ -783,6 +938,8 @@ export const en: Record<KeyValues, string> = {
   [KEY.command_menu_shortcut_opening_hours]: 'Opening hours',
   [KEY.command_menu_shortcut_control_panel]: 'Control panel',
   [KEY.command_menu_shortcut_about_samfundet]: 'About Samfundet',
+
+  [KEY.role_edit_could_not_load_permissions]: 'Could not load permissions',
 
   // Sulten / Lyche:
   [KEY.sulten_dishes]: 'Dishes',
@@ -828,4 +985,13 @@ export const en: Record<KeyValues, string> = {
   [KEY.inputfile_no_file_selected]: 'No file selected',
   [KEY.notfoundpage_title]: 'Page not found',
   [KEY.notfoundpage_contact_prompt]: 'If you believe this is an error, please',
-};
+
+  [KEY.error_generic]: 'Unexpected error',
+  [KEY.error_generic_description]: 'An unexpected error has occurred',
+  [KEY.error_not_found]: 'Not found',
+  [KEY.error_not_found_description]: 'The resource you requested was not found',
+  [KEY.error_forbidden]: 'Forbidden',
+  [KEY.error_forbidden_description]: 'You do not have permission to view this resource',
+  [KEY.error_server_error]: 'Server error',
+  [KEY.error_server_error_description]: 'A server error has occurred',
+});

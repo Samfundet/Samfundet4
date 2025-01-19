@@ -40,8 +40,9 @@ cd ..
 ##################################
 
 cd backend || exit
-poetry install --sync
-poetry run python manage.py migrate
-poetry run python manage.py collectstatic --noinput
+source aliases.sh
+poetry-sync-prod
+poetry-migrate-apply
+poetry-run-collectstatic
 touch reload # Trigger restart of uwsgi server.
 cd ..

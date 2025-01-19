@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { SultenNavbar } from './SultenNavbar';
 
 export default {
@@ -14,8 +14,6 @@ export default {
   ],
 } as ComponentMeta<typeof SultenNavbar>;
 
-const OneEvent: ComponentStory<typeof SultenNavbar> = function () {
-  return <SultenNavbar />;
-};
+const OneEvent: ComponentStory<typeof SultenNavbar> = () => <SultenNavbar />;
 
 export const Basic = OneEvent.bind({});

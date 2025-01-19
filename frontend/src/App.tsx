@@ -8,6 +8,9 @@ import 'react-toastify/dist/ReactToastify.min.css';
 // Neccessary import for translations.
 import { CommandMenu, UserFeedback, useScrollToTop } from './Components';
 import './i18n/i18n';
+import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
+import { makeZodI18nMap } from 'zod-i18n-map';
 
 export function App() {
   const goatCounterCode = import.meta.env.VITE_GOATCOUNTER_CODE;
@@ -15,13 +18,17 @@ export function App() {
   const localSetup = isDev ? '{"allow_local": true}' : undefined;
   const isDarkTheme = useIsDarkTheme();
 
+  // Make form error messages automatically translate
+  const { t } = useTranslation();
+  z.setErrorMap(makeZodI18nMap({ t, handlePath: false }));
+
   // Must be called within <BrowserRouter> because it uses hook useLocation().
   useGoatCounter();
   useScrollToTop();
 
   return (
     <HelmetProvider>
-      <UserFeedback enabled={true} />
+      <UserFeedback />
       {goatCounterCode && (
         <Helmet>
           {/* Helmet is linked to <head>. Used to add scripts. */}

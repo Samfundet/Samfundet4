@@ -1,6 +1,6 @@
-import { Dispatch, ReactNode, SetStateAction } from 'react';
-import { KV } from '~/constants';
-import { themeToStyleMap } from '~/Components/Button/utils';
+import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type { themeToStyleMap } from '~/Components/Button/utils';
+import type { KV } from '~/constants';
 /** Module for global generic types. */
 
 /** Type for home page element. */
@@ -38,6 +38,7 @@ export const COLORS = {
   white: '#ffffff',
   black: '#000000',
   black_1: '#161616',
+  black_2: '#222222',
   grey_5: '#f4f4f4',
   grey_4: '#eeeeee',
   grey_35: '#cccccc',
@@ -149,4 +150,40 @@ export type OrganizationTheme = {
   pageSecondaryColor: string;
   pageTertiaryColor?: string;
   buttonTheme: keyof typeof themeToStyleMap;
+};
+
+// Recruitment mappings
+
+// Recruitment Status Choices Enum
+export const RecruitmentStatusChoices = {
+  NOT_SET: 'Not Set',
+  CALLED_AND_ACCEPTED: 'Called and Accepted',
+  CALLED_AND_REJECTED: 'Called and Rejected',
+  REJECTION: 'Rejection',
+  AUTOMATIC_REJECTION: 'Automatic Rejection',
+} as const;
+
+// Recruitment Status Choices Mapping
+export const RecruitmentStatusChoicesMapping: { [key: number]: string } = {
+  0: RecruitmentStatusChoices.NOT_SET,
+  1: RecruitmentStatusChoices.CALLED_AND_ACCEPTED,
+  2: RecruitmentStatusChoices.CALLED_AND_REJECTED,
+  3: RecruitmentStatusChoices.REJECTION,
+  4: RecruitmentStatusChoices.AUTOMATIC_REJECTION,
+} as const;
+
+// Recruitment Priority Choices Enum
+export const RecruitmentPriorityChoices = {
+  NOT_SET: 'Not Set',
+  RESERVE: 'Reserve',
+  WANTED: 'Wanted',
+  NOT_WANTED: 'Not Wanted',
+} as const;
+
+// Recruitment Priority Choices Mapping
+export const RecruitmentPriorityChoicesMapping: { [key: number]: string } = {
+  0: RecruitmentPriorityChoices.NOT_SET,
+  1: RecruitmentPriorityChoices.RESERVE,
+  2: RecruitmentPriorityChoices.WANTED,
+  3: RecruitmentPriorityChoices.NOT_WANTED,
 };

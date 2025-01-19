@@ -1,4 +1,4 @@
-import { LogoPalette, LogoProps } from '~/Components/Logo/Logo';
+import type { LogoPalette, LogoProps } from '~/Components/Logo/Logo';
 import { COLORS } from '~/types';
 
 type UkaLogoProps = {
@@ -37,6 +37,7 @@ export function UkaLogo({ color, size }: UkaLogoProps) {
       id="uka-logo"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>UKA Logo</title>
       <defs id="defs3" />
       <path
         d="M 0.001708,0.02333813 0,28.109347 c 0,16.392639 13.685131,28.044594 27.472521,28.044594

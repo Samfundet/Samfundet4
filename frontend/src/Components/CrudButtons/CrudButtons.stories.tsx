@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { CrudButtons } from './CrudButtons';
 
 // Local component config.
@@ -10,7 +10,7 @@ export default {
   },
 } as ComponentMeta<typeof CrudButtons>;
 
-const Template: ComponentStory<typeof CrudButtons> = function () {
+const Template: ComponentStory<typeof CrudButtons> = () => {
   function onClick() {
     alert('Hello!');
   }

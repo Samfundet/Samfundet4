@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { EventDto } from '~/dto';
+import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { EventTicketType } from '~/types';
 import { dbT, getTicketTypeKey } from '~/utils';
@@ -27,7 +27,7 @@ export function TicketTypeRow({ event }: TicketTypeRowProps) {
           <td className={styles.table_element_left}>{index === 0 ? 'BILLETT' : <>&nbsp;</>}</td>
           <td className={styles.table_element_right}>
             <b> {dbT(ticket, 'name')} </b>
-            <br></br>
+            <br />
             <span> {ticket.price},- </span>
           </td>
         </tr>

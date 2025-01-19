@@ -1,4 +1,4 @@
-import { compile, Key, parse } from 'path-to-regexp';
+import { type Key, type ParamData, compile, parse } from 'path-to-regexp';
 
 // Credit: https://github.com/kennedykori/named-urls/blob/master/src/index.ts
 
@@ -11,9 +11,7 @@ export type ExtraFields = {
   star: string;
 };
 
-export interface Include {
-  <dR extends Routes>(path: string, routes: dR): dR & ExtraFields;
-}
+export type Include = <dR extends Routes>(path: string, routes: dR) => dR & ExtraFields;
 
 export type Routes = {
   [path: string]: string | Routes;
@@ -27,10 +25,7 @@ export interface ReverseParams {
   queryParams?: Params;
 }
 
-export interface Reverse {
-  (params: ReverseParams): string;
-  // (pattern: string, params?: ReverseParams, queryParams?: ReverseParams): string;
-}
+export type Reverse = (params: ReverseParams) => string;
 
 export type ReverseForce = Reverse;
 
@@ -58,32 +53,32 @@ export const include: Include = (base, routes) => {
   /** Reserved attributes from nested prefixing of base. */
   const preventPrefixFields = ['base', 'star'];
 
-  Object.keys(routes)
-    .filter((route) => !preventPrefixFields.includes(route))
-    .forEach((route) => {
-      const url = routes[route];
+  const filteredRoutes = Object.keys(routes).filter((route) => !preventPrefixFields.includes(route));
 
-      if (typeof url === 'object') {
-        // nested include - prefix all sub-routes with base
-        mappedRoutes[route] = include(base, url);
-      } else if (typeof url === 'string') {
-        // route - prefix with base and replace duplicate //
-        mappedRoutes[route] = url.indexOf('/') === 0 ? url : [base, url].join('/').replace('//', '/');
-      } else {
-        // don't allow invalid routes object
-        throw new TypeError(
-          // eslint-disable-next-line max-len
-          `"${route}" is not valid. A routes object can only contain a string, an object or the "toString" method as values.`,
-        );
-      }
-    });
+  for (const route of filteredRoutes) {
+    const url = routes[route];
+
+    if (typeof url === 'object') {
+      // nested include - prefix all sub-routes with base
+      mappedRoutes[route] = include(base, url);
+    } else if (typeof url === 'string') {
+      // route - prefix with base and replace duplicate //
+      mappedRoutes[route] = url.indexOf('/') === 0 ? url : [base, url].join('/').replace('//', '/');
+    } else {
+      // don't allow invalid routes object
+      throw new TypeError(
+        `"${route}" is not valid. A routes object can only contain a string, an object or the "toString" method as values.`,
+      );
+    }
+  }
+
   return mappedRoutes as typeof routes & ExtraFields;
 };
 
 /**
  * Helper to reverse patterns and inject params.
  */
-function compileWithParams<P extends Params>(pattern: string, params: P) {
+function compileWithParams<P extends ParamData>(pattern: string, params: P) {
   const reversed = compile<P>(pattern);
 
   return reversed(params);
@@ -107,8 +102,14 @@ function compileWithParams<P extends Params>(pattern: string, params: P) {
  */
 export const reverse: Reverse = ({ pattern, urlParams = {}, queryParams = {} }) => {
   try {
+    // tostring all number values in urlParams
+    const urlParamsStringified = Object.keys(urlParams).reduce<Record<string, string>>((newUrlParams, urlParamKey) => {
+      const value = urlParams[urlParamKey];
+      return Object.assign(newUrlParams, { [urlParamKey]: `${value}` }); // Converts number to string.
+    }, {});
+
     // Compile pattern with params, e.g.: '/some/:param/' => '/some/replaced/'
-    const compiledRoute = compileWithParams(pattern, urlParams);
+    const compiledRoute = compileWithParams(pattern, urlParamsStringified);
 
     // Strip undefined values and convert to string.
     // Needed because URLSearchParams only accepts Record<string,string>.
@@ -116,7 +117,7 @@ export const reverse: Reverse = ({ pattern, urlParams = {}, queryParams = {} }) 
       (newQueryParams, queryParamKey) => {
         const value = queryParams[queryParamKey];
         if (value === undefined) return newQueryParams;
-        return Object.assign(newQueryParams, { [queryParamKey]: value + '' }); // Converts number to string.
+        return Object.assign(newQueryParams, { [queryParamKey]: `${value}` }); // Converts number to string.
       },
       {},
     );
@@ -124,8 +125,7 @@ export const reverse: Reverse = ({ pattern, urlParams = {}, queryParams = {} }) 
     // Convert objects to searchParams, e.g.: {q: 'test', id: '2'} => 'q=test&id=2'
     const queryParamsParsed = new URLSearchParams(queryParamsExisting).toString();
 
-    const finalRoute = queryParamsParsed === '' ? compiledRoute : `${compiledRoute}?${queryParamsParsed}`;
-    return finalRoute;
+    return queryParamsParsed === '' ? compiledRoute : `${compiledRoute}?${queryParamsParsed}`;
   } catch (err) {
     if (Object.values(urlParams).includes(undefined)) {
       console.log('urlParams', urlParams);
@@ -141,10 +141,9 @@ export const reverse: Reverse = ({ pattern, urlParams = {}, queryParams = {} }) 
 
       // Find expected params.
       const tokens = parse(pattern)
-        .filter((token) => typeof token === 'object')
+        .tokens.filter((token) => typeof token === 'object')
         .map((token) => {
-          token = token as Key; // We have filtered on objects, we know this is a Key.
-          return token.name;
+          return (token as Key).name; // We have filtered on objects, we know this is a Key.
         });
 
       // Parse expected and received params to strings.
@@ -159,9 +158,14 @@ export const reverse: Reverse = ({ pattern, urlParams = {}, queryParams = {} }) 
 
 export const reverseForce: ReverseForce = ({ pattern, urlParams = {} }) => {
   try {
-    return compileWithParams(pattern, urlParams);
+    // tostring all number values in urlParams
+    const urlParamsStringified = Object.keys(urlParams).reduce<Record<string, string>>((newUrlParams, urlParamKey) => {
+      const value = urlParams[urlParamKey];
+      return Object.assign(newUrlParams, { [urlParamKey]: `${value}` }); // Converts number to string.
+    }, {});
+    return compileWithParams(pattern, urlParamsStringified);
   } catch (err) {
-    const tokens = parse(pattern);
+    const tokens = parse(pattern).tokens;
 
     return tokens.filter((token: unknown) => typeof token === 'string').join('');
   }

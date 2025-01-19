@@ -1,7 +1,7 @@
-import { type ReactNode } from 'react';
-import { ROUTES } from '~/routes';
-import { useAuthContext } from '~/context/AuthContext';
+import type { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import { useAuthContext } from '~/context/AuthContext';
+import { ROUTES } from '~/routes';
 import { hasPermissions } from '~/utils';
 
 type ProtectedRouteProps = {
@@ -19,7 +19,6 @@ type ProtectedRouteProps = {
  *
  * This assumes auth is already loaded. If it's not, then auth will likely be null.
  */
-
 export function ProtectedRoute({
   authState,
   requirePermissions,

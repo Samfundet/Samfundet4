@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import styles from './InterviewForm.module.scss';
-import { Modal } from '../Modal';
-import { IconButton } from '../IconButton';
-import { InterviewForm } from './InterviewForm';
 import { useTranslation } from 'react-i18next';
+import type { RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { Button } from '../Button';
-import { RecruitmentApplicationDto } from '~/dto';
+import { IconButton } from '../IconButton';
+import { Modal } from '../Modal';
+import { InterviewForm } from './InterviewForm';
+import styles from './InterviewForm.module.scss';
 
 type InterviewFormModalProps = {
   application: RecruitmentApplicationDto;

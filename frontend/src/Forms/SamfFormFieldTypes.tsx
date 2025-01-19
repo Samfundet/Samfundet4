@@ -1,23 +1,24 @@
-import { ReactElement } from 'react';
+import type React from 'react';
+import type { ReactElement } from 'react';
 import {
   Checkbox,
-  CheckboxProps,
+  type CheckboxProps,
   Dropdown,
-  DropdownProps,
+  type DropdownProps,
   InputField,
-  InputFieldProps,
+  type InputFieldProps,
   InputFile,
-  InputFileProps,
+  type InputFileProps,
   PhoneNumberField,
   TextAreaField,
-  TextAreaFieldProps,
 } from '~/Components';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
-import { ImagePicker, ImagePickerProps } from '~/Components/ImagePicker/ImagePicker';
-import { InputFieldType } from '~/Components/InputField/InputField';
-import { InputFileType } from '~/Components/InputFile/InputFile';
-import { ImageDto } from '~/dto';
-import { SamfError } from './SamfForm';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
+import { ImagePicker, type ImagePickerProps } from '~/Components/ImagePicker/ImagePicker';
+import type { InputFieldType } from '~/Components/InputField/InputField';
+import type { InputFileType } from '~/Components/InputFile/InputFile';
+import type { TextAreaFieldProps } from '~/Components/TextAreaField';
+import type { ImageDto } from '~/dto';
+import type { SamfError } from './SamfForm';
 import styles from './SamfForm.module.scss';
 
 // ---------------------------------- //
@@ -30,7 +31,7 @@ export type FormFieldReturnType =
   | string
   | number
   | boolean
-  | DropDownOption<unknown>
+  | DropdownOption<unknown>
   | ImageDto
   | Date
   | File
@@ -73,12 +74,12 @@ export type FieldProps =
  */
 export type SamfFormFieldArgs<T extends FormFieldReturnType> = {
   value: T; // Current value of field
-  onChange(value: T): void; // Callback to change field
+  onChange(value: T | undefined): void; // Callback to change field
   error: SamfError;
   label?: string; // Text label above the input
   // Custom args for options type
-  defaultOption?: DropDownOption<unknown>;
-  options?: DropDownOption<unknown>[];
+  defaultOption?: DropdownOption<unknown>;
+  options?: DropdownOption<unknown>[];
   props?: FieldProps;
 };
 
@@ -116,7 +117,7 @@ export type GeneratorFunction<T extends FormFieldReturnType> = (args: SamfFormFi
 /**
  * Map of all implemented SamfFormField types to their generator functions.
  * */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export const SamfFormGenerators: Record<SamfFormFieldType, GeneratorFunction<any>> = {
   text: makeStandardInputFunction<string>('text'),
   email: makeStandardInputFunction<string>('email'),
@@ -178,24 +179,27 @@ function makeCheckboxInput(args: SamfFormFieldArgs<boolean>) {
     <Checkbox
       {...(args.props as CheckboxProps)}
       checked={safeVal}
-      label={args.label}
       className={styles.input_element}
-      onChange={args.onChange}
-      error={args.error}
+      onChange={(e) => args.onChange((e as React.ChangeEvent<HTMLInputElement>).target.checked)}
     />
   );
 }
 
 // Options dropdown input
 // # issue 1090
-function makeOptionsInput(args: SamfFormFieldArgs<DropDownOption<unknown>>) {
+function makeOptionsInput(args: SamfFormFieldArgs<DropdownOption<unknown>>) {
   const errorBoolean = args.error !== false && args.error !== undefined;
   return (
+    // @ts-ignore
     <Dropdown<unknown>
       {...(args.props as DropdownProps<number | string>)}
       defaultValue={args.defaultOption}
       options={args.options}
-      onChange={args.onChange as (value?: unknown) => void}
+      value={args.value?.value}
+      onChange={(value) => {
+        const selectedOption = args.options?.find((option) => option.value === value);
+        args.onChange(selectedOption ?? args.defaultOption);
+      }}
       label={args.label}
       error={errorBoolean}
       className={styles.input_element}

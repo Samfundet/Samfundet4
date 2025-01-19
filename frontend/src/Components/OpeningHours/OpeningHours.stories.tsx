@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { OpeningHours } from './OpeningHours';
 
 // Local component config.
@@ -7,9 +7,7 @@ export default {
   component: OpeningHours,
 } as ComponentMeta<typeof OpeningHours>;
 
-const Template: ComponentStory<typeof OpeningHours> = function (args) {
-  return <OpeningHours {...args} />;
-};
+const Template: ComponentStory<typeof OpeningHours> = (args) => <OpeningHours {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {
