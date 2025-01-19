@@ -171,17 +171,17 @@ class RoleAdmin(admin.ModelAdmin):
 
 @admin.register(UserOrgRole)
 class UserOrgRoleAdmin(admin.ModelAdmin):
-    list_display = ('user', 'role', 'obj')
+    list_display = ('user', 'role', 'obj', 'created_at', 'created_by')
 
 
 @admin.register(UserGangRole)
 class UserGangRoleAdmin(admin.ModelAdmin):
-    list_display = ('user', 'role', 'obj')
+    list_display = ('user', 'role', 'obj', 'created_at', 'created_by')
 
 
 @admin.register(UserGangSectionRole)
 class UserGangSectionRoleAdmin(admin.ModelAdmin):
-    list_display = ('user', 'role', 'obj')
+    list_display = ('user', 'role', 'obj', 'created_at', 'created_by')
 
 
 @admin.register(Permission)

@@ -155,6 +155,14 @@ export function getFullName(u: UserDto): string {
   return `${u.first_name} ${u.last_name}`.trim();
 }
 
+export function getFullDisplayName(u: UserDto): string {
+  const fullName = getFullName(u);
+  if (!fullName) {
+    return u.username;
+  }
+  return `${fullName} (${u.username})`;
+}
+
 /** Helper to determine if a KeyValue is truthy. */
 export function isTruthy(value = ''): boolean {
   const falsy = ['', 'no', 'zero', '0'];
@@ -251,6 +259,10 @@ export function niceDateTime(time: string | undefined): string | undefined {
 
 export function formatDateYMD(d: Date): string {
   return format(d, 'yyyy.LL.dd');
+}
+
+export function formatDateYMDWithTime(d: Date): string {
+  return format(d, 'yyyy.LL.dd HH:mm');
 }
 
 /**
