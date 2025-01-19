@@ -604,6 +604,7 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_recruiter_dashboard: '/recruitment-recruiter-dashboard/:pk/',
   samfundet__recruitment_download_applications_csv: '/recruitment-download-all-applications-csv/:recruitmentId/',
   samfundet__recruitment_download_gang_application_csv: '/recruitment-download-gang-application-csv/:recruitmentId/:gangId',
+  samfundet__recruitment_toggle_open_for_other_positions: '/recruitment-toggle-open-for-other-positions/',
   samfundet__occupied_timeslots: '/occupiedtimeslot/',
   samfundet__recruitment_interview_availability: '/recruitment-interview-availability/',
   samfundet__recruitment_availability: '/recruitment/:id/availability/',

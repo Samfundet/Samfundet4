@@ -127,6 +127,8 @@ class User(AbstractUser):
         on_delete=models.PROTECT,
     )
 
+    recruitment_is_open_to_other_positions = models.BooleanField(default=False, blank=True, verbose_name='Is open to other positions in recruitment')
+
     class Meta:
         permissions = [
             ('debug', 'Can view debug mode'),

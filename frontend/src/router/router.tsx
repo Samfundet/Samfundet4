@@ -535,7 +535,7 @@ export const router = createBrowserRouter(
                 }}
               />
               <Route
-                path={ROUTES.frontend.admin_recruitment_open_to_other_positions}
+                path={ROUTES.frontend.admin_recruitment_is_open_to_other_positions}
                 element={
                   <PermissionRoute
                     required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
