@@ -9,6 +9,7 @@ from collections import defaultdict
 from django.db import models, transaction
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import UserManager
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
@@ -39,11 +40,25 @@ class Recruitment(CustomBaseModel):
             return self.organization_id
         return self.organization
 
+    def get_applicants(self) -> UserManager[User]:
+        return User.objects.filter(id__in=self.applications.values_list('user__id'))
+
+    def get_unprocessed_applications(self) -> models.BaseManager[RecruitmentApplication]:
+        return self.applications.filter(recruiter_status=RecruitmentStatusChoices.NOT_SET)
+
+    def get_processed_applications(self) -> models.BaseManager[RecruitmentApplication]:
+        return self.applications.exclude(recruiter_status=RecruitmentStatusChoices.NOT_SET)
+
+    def get_unprocessed_applicants(self) -> UserManager[User]:
+        return self.get_applicants().filter(id__in=self.get_unprocessed_applications().values_list('user__id'))
+
+    def get_processed_applicants(self) -> UserManager[User]:
+        return self.get_applicants().exclude(id__in=self.get_unprocessed_applications().values_list('user__id'))
+
     def recruitment_progress(self) -> float:
-        applications = RecruitmentApplication.objects.filter(recruitment=self)
-        if applications.count() == 0:
+        if self.applications.count() == 0:
             return 1
-        return applications.exclude(recruiter_status=RecruitmentStatusChoices.NOT_SET).count() / applications.count()
+        return self.get_processed_applications().count() / self.applications.count()
 
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
@@ -143,6 +158,16 @@ class RecruitmentPosition(CustomBaseModel):
     gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting', null=True, blank=True)
     section = models.ForeignKey(GangSection, on_delete=models.CASCADE, help_text='The section that is recruiting', null=True, blank=True)
 
+    has_file_upload = models.BooleanField(help_text='Does position have file upload', default=False)
+    file_description_nb = models.TextField(help_text='Description of file needed (NB)', null=True, blank=True)
+    file_description_en = models.TextField(help_text='Description of file needed (EN)', null=True, blank=True)
+
+    # TODO: Implement tag functionality
+    tags = models.CharField(max_length=100, help_text='Tags for the position')
+
+    # TODO: Implement interviewer functionality
+    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
+
     recruitment = models.ForeignKey(
         Recruitment,
         on_delete=models.CASCADE,
@@ -161,11 +186,10 @@ class RecruitmentPosition(CustomBaseModel):
         help_text='Shared interviewgroup for position',
     )
 
-    # TODO: Implement tag functionality
-    tags = models.CharField(max_length=100, help_text='Tags for the position')
-
-    # TODO: Implement interviewer functionality
-    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
+    def get_section_name(self, language: str = 'nb') -> str | None:
+        if not self.section:
+            return None
+        return self.section.name_nb if language == 'nb' else self.section.name_en
 
     def resolve_section(self, *, return_id: bool = False) -> GangSection | int:
         if return_id:
@@ -185,11 +209,31 @@ class RecruitmentPosition(CustomBaseModel):
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'
 
-    def clean(self) -> None:
-        super().clean()
+    # Error messages
+    ONLY_ONE_OWNER_ERROR = 'Position must be owned by either gang or section, not both'
+    NO_OWNER_ERROR = 'Position must have an owner, either a gang or a gang section'
+    FILE_DESCRIPTION_REQUIRED_ERROR = 'Description of file is needed, if position has file upload'
 
-        if (self.gang and self.section) or not (self.gang or self.section):
-            raise ValidationError('Position must be owned by either gang or section, not both')
+    def clean(self) -> None:  # noqa: C901
+        super().clean()
+        errors: dict[str, list[ValidationError]] = defaultdict(list)
+
+        if self.gang and self.section:
+            # Both gang and section provide
+            errors['gang'].append(self.ONLY_ONE_OWNER_ERROR)
+            errors['section'].append(self.ONLY_ONE_OWNER_ERROR)
+        elif not (self.gang or self.section):
+            # neither gang nor section provided
+            errors['gang'].append(self.NO_OWNER_ERROR)
+            errors['section'].append(self.NO_OWNER_ERROR)
+        if self.has_file_upload:
+            # Check Norwegian file description
+            if not self.file_description_nb or len(self.file_description_nb) == 0:
+                errors['file_description_nb'].append(self.FILE_DESCRIPTION_REQUIRED_ERROR)
+            # Check English file description
+            if not self.file_description_en or len(self.file_description_en) == 0:
+                errors['file_description_en'].append(self.FILE_DESCRIPTION_REQUIRED_ERROR)
+        raise ValidationError(errors)
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         if self.norwegian_applicants_only:
@@ -401,6 +445,18 @@ class RecruitmentApplication(CustomBaseModel):
 
         super().save(*args, **kwargs)
 
+    def get_total_interviews_for_gang(self) -> int:
+        return (
+            RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, recruitment_position__gang=self.resolve_gang(), withdrawn=False)
+            .exclude(interview=None)
+            .count()
+        )
+
+    def get_total_applications_for_gang(self) -> int:
+        return RecruitmentApplication.objects.filter(
+            user=self.user, recruitment=self.recruitment, withdrawn=False, recruitment_position__gang=self.resolve_gang()
+        ).count()
+
     def get_total_interviews(self) -> int:
         return RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).exclude(interview=None).count()
 
@@ -482,6 +538,9 @@ class RecruitmentStatistics(FullCleanSaveMixin):
     # Total accepted applicants
     total_accepted = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total accepted applicants')
 
+    # Total rejected applicants
+    total_rejected = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total rejected applicants')
+
     # Average amount of different gangs an applicant applies for
     average_gangs_applied_to_per_applicant = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
 
@@ -490,10 +549,19 @@ class RecruitmentStatistics(FullCleanSaveMixin):
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.total_applications = self.recruitment.applications.count()
-        self.total_applicants = self.recruitment.applications.values('user').distinct().count()
+        self.total_applicants = self.recruitment.get_applicants().count()
         self.total_withdrawn = self.recruitment.applications.filter(withdrawn=True).count()
         self.total_accepted = (
             self.recruitment.applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
+        )
+        self.total_rejected = (
+            self.recruitment.get_applicants()
+            .exclude(
+                id__in=self.recruitment.applications.filter(
+                    recruiter_status__in=[RecruitmentStatusChoices.CALLED_AND_ACCEPTED, RecruitmentStatusChoices.NOT_SET]
+                ).values_list('user__id')
+            )
+            .count()
         )
         if self.total_applicants > 0:
             self.average_gangs_applied_to_per_applicant = (
