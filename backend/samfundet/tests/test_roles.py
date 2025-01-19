@@ -119,7 +119,7 @@ def test_has_perm_different_orgs(
 def test_has_perm_different_gangs(
     fixture_user: User,
     fixture_gang: Gang,
-    fixture_gang2: Gang,
+    fixture_gang_org2: Gang,
     fixture_gang_permission: Permission,
     fixture_role: Role,
 ):
@@ -132,7 +132,7 @@ def test_has_perm_different_gangs(
     UserGangRole.objects.create(user=fixture_user, role=fixture_role, obj=fixture_gang)
 
     assert backend.has_perm(fixture_user, fixture_gang_permission.codename, fixture_gang)
-    assert not backend.has_perm(fixture_user, fixture_gang_permission.codename, fixture_gang2)
+    assert not backend.has_perm(fixture_user, fixture_gang_permission.codename, fixture_gang_org2)
 
 
 def test_has_perm_different_gang_sections(
@@ -185,7 +185,7 @@ def test_has_perm_org_downward(
     fixture_organization: Organization,
     fixture_organization2: Organization,
     fixture_gang: Gang,
-    fixture_gang2: Gang,
+    fixture_gang_org2: Gang,
     fixture_gang_section: GangSection,
     fixture_role: Role,
     fixture_org_permission: Permission,
@@ -230,7 +230,7 @@ def test_has_perm_org_downward(
 
     assert backend.has_perm(fixture_user, fixture_gang_section_permission.codename, fixture_gang_section)
 
-    fixture_gang_section.gang = fixture_gang2
+    fixture_gang_section.gang = fixture_gang_org2
 
     assert not backend.has_perm(fixture_user, fixture_gang_section_permission.codename, fixture_gang_section)
 

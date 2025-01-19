@@ -588,7 +588,7 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_show_unprocessed_applicants: '/recruitment-show-unprocessed-applicants/',
   samfundet__recruitment_positions_gang_for_applicants: '/recruitment-positions-gang-for-applicant/',
   samfundet__recruitment_shared_interviews: '/recruitment-shared-interview-groups/:recruitmentId/',
-  samfundet__recruitment_positions_gang_for_gangs: '/recruitment-positions-gang-for-gangs/',
+  samfundet__recruitment_positions_gang_for_gangs: '/recruitment-positions-gang-for-gangs/:recruitmentId/:gangId/',
   samfundet__recruitment_set_interview: '/recruitment-set-interview/:pk/',
   samfundet__recruitment_application_states_choices: '/recruitment-application-states-choices',
   samfundet__recruitment_application_update_state_gang: '/recruitment-application-update-state-gang/:pk/',
