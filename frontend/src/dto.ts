@@ -27,6 +27,17 @@ export type CampusDto = {
   abbreviation?: string;
 };
 
+export type RecruitmentInterviewAvailabilityDto = {
+  id: number;
+  start_date: string;
+  end_date: string;
+  start_time: string;
+  end_time: string;
+  timeslot_interval: number;
+  recruitment_id: number;
+  position_id?: number;
+};
+
 export type RecruitmentAvailabilityDto = {
   start_date: string;
   end_date: string;
