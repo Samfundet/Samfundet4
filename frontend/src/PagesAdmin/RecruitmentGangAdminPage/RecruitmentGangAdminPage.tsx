@@ -154,7 +154,7 @@ export function RecruitmentGangAdminPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={isLoading}>
-      <Table columns={tableColumns} data={data} />
+      <Table columns={tableColumns} data={data ?? []} />
     </AdminPageLayout>
   );
 }
