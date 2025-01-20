@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigate, useParams } from 'react-router-dom';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getRecruitmentPositionsGangForGang } from '~/api';
-import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
+import type { GangDto, RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -31,8 +31,8 @@ export function RecruitmentGangAdminPage() {
   // TODO add way to handle 404s
   const { data: recruitmentPositions, isLoading } = useQuery({
     queryKey: ['recruitmentGangAdmin', recruitmentId, gangId],
-    queryFn: () => (recruitmentId && gangId) ? getRecruitmentPositionsGangForGang(recruitmentId, gangId) : undefined,
-    enabled: (!!recruitmentId && !!gangId),
+    queryFn: () => (recruitmentId && gangId ? getRecruitmentPositionsGangForGang(recruitmentId, gangId) : undefined),
+    enabled: !!recruitmentId && !!gangId,
   });
 
   useEffect(() => {
