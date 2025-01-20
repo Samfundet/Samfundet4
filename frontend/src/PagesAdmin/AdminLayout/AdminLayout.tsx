@@ -15,7 +15,7 @@ import styles from './AdminLayout.module.scss';
 
 /**
  * Wraps admin routes with the standard navbar and a side panel with common links
- * for editing events, groups, etc.
+ * for editing events, gangs, etc.
  * @returns Layout with outlet
  */
 export function AdminLayout() {
