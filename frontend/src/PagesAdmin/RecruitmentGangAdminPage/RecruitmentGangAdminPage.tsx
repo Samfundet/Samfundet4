@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { getRecruitmentPositionsGangForGang } from '~/api';
 import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import { useTitle } from '~/hooks';
-import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import type { RecruitmentGangLoader } from '~/router/loaders';
@@ -22,8 +21,6 @@ export function RecruitmentGangAdminPage() {
   const [gang, setGang] = useState<GangDto>();
   const loader = useLoaderData() as RecruitmentGangLoader | undefined;
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
-  const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   const title = `${getObjectFieldOrNumber<string>(recruitment?.organization, 'name')} - ${dbT(
     recruitment,
@@ -31,27 +28,12 @@ export function RecruitmentGangAdminPage() {
   )} - ${dbT(gang, 'name')}`;
   useTitle(title);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
-  useEffect(() => {
-    if (recruitmentId && gangId) {
-      getRecruitmentPositionsGangForGang(recruitmentId, gangId)
-        .then((data) => {
-          setRecruitmentPositions(data.data);
-        })
-        .catch((data) => {
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.not_found, { replace: true });
-          }
-          toast.error(t(KEY.common_something_went_wrong));
-        });
-    }
-  }, [recruitmentId, gangId]);
-
-  useEffect(() => {
-    if (recruitmentPositions && gang && recruitment) {
-      setShowSpinner(false);
-    }
-  }, [recruitmentPositions, gang, recruitment]);
+  // TODO add way to handle 404s
+  const { data: recruitmentPositions, isLoading } = useQuery({
+    queryKey: ['recruitmentGangAdmin', recruitmentId, gangId],
+    queryFn: () => (recruitmentId && gangId) ? getRecruitmentPositionsGangForGang(recruitmentId, gangId) : undefined,
+    enabled: (!!recruitmentId && !!gangId),
+  });
 
   useEffect(() => {
     if (loader) {
@@ -69,7 +51,7 @@ export function RecruitmentGangAdminPage() {
     { content: ' ', sortable: false },
   ];
 
-  const data = recruitmentPositions.map((recruitmentPosition) => {
+  const data = recruitmentPositions?.data.map((recruitmentPosition) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
       urlParams: { recruitmentId: recruitmentId, gangId: gangId, positionId: recruitmentPosition.id },
@@ -171,7 +153,7 @@ export function RecruitmentGangAdminPage() {
   );
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={isLoading}>
       <Table columns={tableColumns} data={data} />
     </AdminPageLayout>
   );
