@@ -21,7 +21,7 @@ datetime_fields_expecting_error = [
     'actual_application_deadline',
     'shown_application_deadline',
     'reprioritization_deadline_for_applicant',
-    'reprioritization_deadline_for_groups',
+    'reprioritization_deadline_for_gangs',
 ]
 
 
@@ -78,12 +78,12 @@ class TestRecruitmentClean:
         assert Recruitment.ACTUAL_AFTER_REPRIORITIZATION in e['actual_application_deadline']
         assert Recruitment.REPRIORITIZATION_BEFORE_ACTUAL in e['reprioritization_deadline_for_applicant']
 
-    def test_reprioritization_deadline_for_applicant_before_reprioritization_deadline_for_groups(self, fixture_org):
+    def test_reprioritization_deadline_for_applicant_before_reprioritization_deadline_for_gangs(self, fixture_org):
         future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 2)
         with pytest.raises(ValidationError) as error:
             _create_recruitment_with_dt(overrides={'reprioritization_deadline_for_applicant': future_more})
         e = dict(error.value)
-        assert Recruitment.REPRIORITIZATION_GROUP_BEFORE_APPLICANT in e['reprioritization_deadline_for_groups']
+        assert Recruitment.REPRIORITIZATION_GROUP_BEFORE_APPLICANT in e['reprioritization_deadline_for_gangs']
         assert Recruitment.REPRIORITIZATION_APPLICANT_AFTER_GROUP in e['reprioritization_deadline_for_applicant']
 
     def test_actual_deadline_before_shown_deadline(self, fixture_org):
@@ -630,6 +630,38 @@ class TestRecruitmentApplication:
 
 
 class TestRecruitmentApplicationStatus:
+    def test_recruitmentstats_create(self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment):
+        application = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=1,
+        )
+        assert application.id
+
+    def test_recruitmentstats_no_doubleapplication_for_position(
+        self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment
+    ):
+        application = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=1,
+        )
+        assert application.id
+        with pytest.raises(ValidationError) as error:
+            RecruitmentApplication.objects.create(
+                user=application.user,
+                recruitment_position=application.recruitment_position,
+                recruitment=application.recruitment,
+                application_text='I have applied a secound time!',
+                applicant_priority=1,
+            )
+        e = dict(error.value)
+        assert RecruitmentApplication.ALREADY_APPLIED_ERROR in e['recruitment_position']
+
     def test_check_called_accepted_sets_auto_rejection(
         self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
     ):
