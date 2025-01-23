@@ -21,7 +21,7 @@ datetime_fields_expecting_error = [
     'actual_application_deadline',
     'shown_application_deadline',
     'reprioritization_deadline_for_applicant',
-    'reprioritization_deadline_for_gangs',
+    'reprioritization_deadline_for_groups',
 ]
 
 
@@ -78,12 +78,12 @@ class TestRecruitmentClean:
         assert Recruitment.ACTUAL_AFTER_REPRIORITIZATION in e['actual_application_deadline']
         assert Recruitment.REPRIORITIZATION_BEFORE_ACTUAL in e['reprioritization_deadline_for_applicant']
 
-    def test_reprioritization_deadline_for_applicant_before_reprioritization_deadline_for_gangs(self, fixture_org):
+    def test_reprioritization_deadline_for_applicant_before_reprioritization_deadline_for_groups(self, fixture_org):
         future_more = timezone.now() + timezone.timedelta(days=FUTURE_DAYS + 2)
         with pytest.raises(ValidationError) as error:
             _create_recruitment_with_dt(overrides={'reprioritization_deadline_for_applicant': future_more})
         e = dict(error.value)
-        assert Recruitment.REPRIORITIZATION_GROUP_BEFORE_APPLICANT in e['reprioritization_deadline_for_gangs']
+        assert Recruitment.REPRIORITIZATION_GROUP_BEFORE_APPLICANT in e['reprioritization_deadline_for_groups']
         assert Recruitment.REPRIORITIZATION_APPLICANT_AFTER_GROUP in e['reprioritization_deadline_for_applicant']
 
     def test_actual_deadline_before_shown_deadline(self, fixture_org):
@@ -110,9 +110,25 @@ class TestRecruitmentPosition:
         'tags': 'tag1, tag2, tag3',
     }
 
-    def test_create_recruitmentposition_gang(self, fixture_gang: Gang):
-        test_position = RecruitmentPosition.objects.create(**self.default_data, gang=fixture_gang)
+    def test_create_recruitmentposition_gang(self, fixture_recruitment: Recruitment, fixture_gang: Gang):
+        test_position = RecruitmentPosition.objects.create(**self.default_data, recruitment=fixture_recruitment, gang=fixture_gang)
         assert test_position.id
+
+    def test_edit_recruitmentposition_gang_from_other_org(self, fixture_recruitment: Recruitment, fixture_gang: Gang, fixture_gang_org2: Gang):
+        test_position = RecruitmentPosition.objects.create(**self.default_data, recruitment=fixture_recruitment, gang=fixture_gang)
+        assert test_position.id
+
+        with pytest.raises(ValidationError) as error:
+            test_position.gang = fixture_gang_org2
+            test_position.save()
+        e = dict(error.value)
+        assert RecruitmentPosition.POSITION_NOT_IN_RECRUITMENTORGANIZATION_ERROR in e['gang']
+
+    def test_create_recruitmentposition_gang_from_other_org(self, fixture_recruitment: Recruitment, fixture_gang_org2: Gang):
+        with pytest.raises(ValidationError) as error:
+            RecruitmentPosition.objects.create(**self.default_data, recruitment=fixture_recruitment, gang=fixture_gang_org2)
+        e = dict(error.value)
+        assert RecruitmentPosition.POSITION_NOT_IN_RECRUITMENTORGANIZATION_ERROR in e['gang']
 
     def test_create_recruitmentposition_section(self, fixture_gang_section: GangSection):
         test_position = RecruitmentPosition.objects.create(**self.default_data, section=fixture_gang_section)
@@ -125,9 +141,9 @@ class TestRecruitmentPosition:
         assert RecruitmentPosition.NO_OWNER_ERROR in e['section']
         assert RecruitmentPosition.NO_OWNER_ERROR in e['gang']
 
-    def test_create_recruitmentposition_only_one_owner(self, fixture_gang_section: GangSection, fixture_gang: Gang):
+    def test_create_recruitmentposition_only_one_owner(self, fixture_recruitment: Recruitment, fixture_gang_section: GangSection, fixture_gang: Gang):
         with pytest.raises(ValidationError) as error:
-            RecruitmentPosition.objects.create(**self.default_data, section=fixture_gang_section, gang=fixture_gang)
+            RecruitmentPosition.objects.create(**self.default_data, recruitment='fixture_recruitment, section=fixture_gang_section, gang=fixture_gang)
         e = dict(error.value)
         assert RecruitmentPosition.ONLY_ONE_OWNER_ERROR in e['section']
         assert RecruitmentPosition.ONLY_ONE_OWNER_ERROR in e['gang']
@@ -368,6 +384,180 @@ class TestRecruitmentInterview:
         assert fixture_recruitment_application2.interview == interview
 
 
+class TestRecruitmentPositionStats:
+
+    def test_recruitmentstats_position_update_reprioritization_no_interviews(
+        self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment_position2: RecruitmentPosition, fixture_recruitment: Recruitment
+    ):
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first() is None
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position2).first() is None
+        # Without Interview2
+        application = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=1,
+        )
+        # Without Interview2
+        application2 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=2,
+        )
+
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first() is None
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position2).first() is None
+
+        # Move application 2, postion 2 up
+        application2.update_priority(1)
+
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first() is None
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position2).first() is None
+
+    def test_recruitmentstats_position_update_reprioritization_before_interview(
+        self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment_position2: RecruitmentPosition, fixture_recruitment: Recruitment
+    ):
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first() is None
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position2).first() is None
+
+        interview = Interview.objects.create(interview_time=timezone.now() + timezone.timedelta(hours=3), interview_location='Eurovision 2024')
+
+        # Without Interview2
+        application = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            interview = interview,
+            applicant_priority=1,
+        )
+
+        interview2 = Interview.objects.create(interview_time=timezone.now() + timezone.timedelta(hours=4), interview_location='Eurovision 2025')
+
+        # Without Interview2
+        application2 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            interview = interview2,
+            applicant_priority=2,
+        )
+
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first() is None
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position2).first() is None
+
+        # Move application 2, postion 2 up
+        application2.update_priority(1)
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first() is None
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position2).first() is None
+
+    def test_recruitmentstats_position_update_reprioritization_one_interview(
+        self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment_position2: RecruitmentPosition, fixture_recruitment: Recruitment
+    ):
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first() is None
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position2).first() is None
+
+        interview = Interview.objects.create(interview_time=timezone.now() - timezone.timedelta(hours=3), interview_location='Eurovision 2024')
+
+        # Without Interview2
+        application = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            interview = interview,
+            applicant_priority=1,
+        )
+
+        # Without Interview2
+        application2 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            interview = interview2,
+            applicant_priority=2,
+        )
+
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first().
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position2).first() is None
+
+        # Move application 1, 1 position down
+        application.update_priority(-1)
+        position_stats = fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first()
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position2).first() is None
+        assert position_stats.repriorization_value == -1
+        assert position_stats.repriorization_count == 1
+        assert position_stats.normalized_repriorization_value() == -1.0
+
+        application.update_priority(1)
+        position_stats = fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first()
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position2).first() is None
+        assert position_stats.repriorization_value == 0
+        assert position_stats.repriorization_count == 2
+        assert position_stats.normalized_repriorization_value() == 0.0
+
+    def test_recruitmentstats_position_update_reprioritization_two_interview(
+        self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment_position2: RecruitmentPosition, fixture_recruitment: Recruitment
+    ):
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first() is None
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position2).first() is None
+
+        interview = Interview.objects.create(interview_time=timezone.now() - timezone.timedelta(hours=3), interview_location='Eurovision 2024')
+
+        # Without Interview2
+        application = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            interview = interview,
+            applicant_priority=1,
+        )
+
+        interview2 = Interview.objects.create(interview_time=timezone.now() - timezone.timedelta(hours=3), interview_location='Eurovision 2024')
+
+        # Without Interview2
+        application2 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            interview = interview2,
+            applicant_priority=2,
+        )
+
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first().
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position2).first() is None
+
+        # Move application 1, 1 position down
+        application.update_priority(-1)
+        position_stats = fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first()
+        position_stats2 = fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position2).first()
+
+        assert position_stats.repriorization_value == -1
+        assert position_stats.repriorization_count == 1
+        assert position_stats.normalized_repriorization_value() == -1.0
+        assert position_stats2.repriorization_value == 1
+        assert position_stats2.repriorization_count == 1
+        assert position_stats2.normalized_repriorization_value() == 1.0
+
+        application.update_priority(1)
+        position_stats = fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first()
+        position_stats2 = fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position2).first()
+
+        assert position_stats.repriorization_value == 0
+        assert position_stats.repriorization_count == 2
+        assert position_stats.normalized_repriorization_value() == 0.0
+        assert position_stats2.repriorization_value == 0
+        assert position_stats2.repriorization_count == 2
+        assert position_stats2.normalized_repriorization_value() == 0.0
+
+
 class TestRecruitmentGangStat:
     def test_recruitmentstats_gang_single_application_single_gang(
         self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment
@@ -481,187 +671,8 @@ class TestRecruitmentApplication:
         assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
         assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
 
-    def test_recruitmentapplication_total_applications_two_gangs(
-        self,
-        fixture_user: User,
-        fixture_recruitment_position: RecruitmentPosition,
-        fixture_recruitment_position2: RecruitmentPosition,
-        fixture_gang2: Gang,
-        fixture_recruitment: Recruitment,
-    ):
-        fixture_recruitment_position2.gang = fixture_gang2
-        fixture_recruitment_position2.save()
-
-        assert fixture_recruitment_position2.gang != fixture_recruitment_position.gang
-
-        test_application1 = RecruitmentApplication.objects.create(
-            user=fixture_user,
-            recruitment_position=fixture_recruitment_position,
-            recruitment=fixture_recruitment,
-            application_text='I have applied',
-            applicant_priority=1,
-        )
-        test_application2 = RecruitmentApplication.objects.create(
-            user=fixture_user,
-            recruitment_position=fixture_recruitment_position2,
-            recruitment=fixture_recruitment,
-            application_text='I have applied',
-            applicant_priority=2,
-        )
-        test_application1.save()
-        test_application2.save()
-        assert test_application1.get_total_applications() > 0
-        assert test_application1.get_total_applications() == test_application2.get_total_applications()
-        assert test_application1.get_total_applications_for_gang() == 1
-        assert test_application2.get_total_applications_for_gang() == 1
-        assert test_application1.get_total_applications_for_gang() != test_application1.get_total_applications()
-        assert test_application2.get_total_applications_for_gang() != test_application2.get_total_applications()
-
-    def test_recruitmentapplication_total_applications_single_gang(
-        self,
-        fixture_user: User,
-        fixture_recruitment_position: RecruitmentPosition,
-        fixture_recruitment_position2: RecruitmentPosition,
-        fixture_recruitment: Recruitment,
-    ):
-        test_application1 = RecruitmentApplication.objects.create(
-            user=fixture_user,
-            recruitment_position=fixture_recruitment_position,
-            recruitment=fixture_recruitment,
-            application_text='I have applied',
-            applicant_priority=1,
-        )
-        test_application2 = RecruitmentApplication.objects.create(
-            user=fixture_user,
-            recruitment_position=fixture_recruitment_position2,
-            recruitment=fixture_recruitment,
-            application_text='I have applied',
-            applicant_priority=2,
-        )
-        test_application1.save()
-        test_application2.save()
-        assert test_application1.get_total_applications() > 0
-        assert test_application1.get_total_applications() == test_application2.get_total_applications()
-        assert test_application1.get_total_applications_for_gang() == test_application2.get_total_applications_for_gang()
-        assert test_application1.get_total_applications_for_gang() == test_application1.get_total_applications()
-
-    def test_recruitmentapplication_total_interviews_two_gangs(
-        self,
-        fixture_user: User,
-        fixture_recruitment_position: RecruitmentPosition,
-        fixture_recruitment_position2: RecruitmentPosition,
-        fixture_gang2: Gang,
-        fixture_recruitment: Recruitment,
-    ):
-        fixture_recruitment_position2.gang = fixture_gang2
-        fixture_recruitment_position2.save()
-        # Create two interviews with separate gangs
-        assert fixture_recruitment_position2.gang != fixture_recruitment_position.gang
-
-        test_application1 = RecruitmentApplication.objects.create(
-            user=fixture_user,
-            recruitment_position=fixture_recruitment_position,
-            recruitment=fixture_recruitment,
-            application_text='I have applied',
-            applicant_priority=1,
-        )
-        test_application2 = RecruitmentApplication.objects.create(
-            user=fixture_user,
-            recruitment_position=fixture_recruitment_position2,
-            recruitment=fixture_recruitment,
-            application_text='I have applied',
-            applicant_priority=2,
-        )
-        # assign 1 interview to one of them
-        test_application1.interview = Interview.objects.create()
-        test_application1.save()
-        test_application2.save()
-        assert test_application1.get_total_interviews() > 0
-        assert test_application1.get_total_interviews() == test_application2.get_total_interviews()
-        assert test_application1.get_total_interviews_for_gang() == test_application1.get_total_interviews()
-        assert test_application2.get_total_interviews_for_gang() != test_application2.get_total_interviews()
-
-        # test with both having an interview each
-        test_application2.interview = Interview.objects.create()
-        test_application1.save()
-        test_application2.save()
-        assert test_application1.get_total_interviews() > 0
-        assert test_application1.get_total_interviews() == test_application2.get_total_interviews()
-        assert test_application1.get_total_interviews_for_gang() == test_application2.get_total_interviews_for_gang()
-        assert test_application1.get_total_interviews_for_gang() != test_application1.get_total_interviews()
-        assert test_application2.get_total_interviews_for_gang() != test_application2.get_total_interviews()
-
-    def test_recruitmentapplication_total_interviews_single_gang(
-        self,
-        fixture_user: User,
-        fixture_recruitment_position: RecruitmentPosition,
-        fixture_recruitment_position2: RecruitmentPosition,
-        fixture_recruitment: Recruitment,
-    ):
-        test_application1 = RecruitmentApplication.objects.create(
-            user=fixture_user,
-            recruitment_position=fixture_recruitment_position,
-            recruitment=fixture_recruitment,
-            application_text='I have applied',
-            applicant_priority=1,
-        )
-        test_application2 = RecruitmentApplication.objects.create(
-            user=fixture_user,
-            recruitment_position=fixture_recruitment_position2,
-            recruitment=fixture_recruitment,
-            application_text='I have applied',
-            applicant_priority=2,
-        )
-        test_application1.interview = Interview.objects.create()
-        test_application1.save()
-        test_application2.save()
-        assert test_application1.get_total_interviews() > 0
-        assert test_application1.get_total_interviews() == test_application2.get_total_interviews()
-        assert test_application1.get_total_interviews_for_gang() == test_application2.get_total_interviews_for_gang()
-        assert test_application1.get_total_interviews_for_gang() == test_application1.get_total_interviews()
-
-        test_application2.interview = Interview.objects.create()
-        test_application1.save()
-        test_application2.save()
-        assert test_application1.get_total_interviews() > 0
-        assert test_application1.get_total_interviews() == test_application2.get_total_interviews()
-        assert test_application1.get_total_interviews_for_gang() == test_application2.get_total_interviews_for_gang()
-        assert test_application1.get_total_interviews_for_gang() == test_application1.get_total_interviews()
-
 
 class TestRecruitmentApplicationStatus:
-    def test_recruitmentstats_create(self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment):
-        application = RecruitmentApplication.objects.create(
-            user=fixture_user,
-            recruitment_position=fixture_recruitment_position,
-            recruitment=fixture_recruitment,
-            application_text='I have applied',
-            applicant_priority=1,
-        )
-        assert application.id
-
-    def test_recruitmentstats_no_doubleapplication_for_position(
-        self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment
-    ):
-        application = RecruitmentApplication.objects.create(
-            user=fixture_user,
-            recruitment_position=fixture_recruitment_position,
-            recruitment=fixture_recruitment,
-            application_text='I have applied',
-            applicant_priority=1,
-        )
-        assert application.id
-        with pytest.raises(ValidationError) as error:
-            RecruitmentApplication.objects.create(
-                user=application.user,
-                recruitment_position=application.recruitment_position,
-                recruitment=application.recruitment,
-                application_text='I have applied a secound time!',
-                applicant_priority=1,
-            )
-        e = dict(error.value)
-        assert RecruitmentApplication.ALREADY_APPLIED_ERROR in e['recruitment_position']
-
     def test_check_called_accepted_sets_auto_rejection(
         self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
     ):
