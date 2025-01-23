@@ -289,12 +289,27 @@ class GangType(CustomBaseModel):
     title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
 
+    organization = models.ForeignKey(
+        to=Organization,
+        related_name='gangtypes',
+        verbose_name='Organisasjon',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+
     class Meta:
         verbose_name = 'GangType'
         verbose_name_plural = 'GangTypes'
 
     def __str__(self) -> str:
         return f'{self.title_nb}'
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        if return_id:
+            # noinspection PyTypeChecker
+            return self.organization_id
+        return self.organization
 
 
 class Gang(CustomBaseModel):

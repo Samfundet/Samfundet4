@@ -1,6 +1,10 @@
+import { AxiosError } from 'axios';
 import { format } from 'date-fns';
 import i18next from 'i18next';
 import type { CSSProperties } from 'react';
+import type { UseFormReturn } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import type { z } from 'zod';
 import { CURSOR_TRAIL_CLASS, THEME_KEY, type ThemeValue } from '~/constants';
 import type { UserDto } from '~/dto';
 import { KEY } from './i18n/constants';
@@ -151,6 +155,14 @@ export function getFullName(u: UserDto): string {
   return `${u.first_name} ${u.last_name}`.trim();
 }
 
+export function getFullDisplayName(u: UserDto): string {
+  const fullName = getFullName(u);
+  if (!fullName) {
+    return u.username;
+  }
+  return `${fullName} (${u.username})`;
+}
+
 /** Helper to determine if a KeyValue is truthy. */
 export function isTruthy(value = ''): boolean {
   const falsy = ['', 'no', 'zero', '0'];
@@ -247,6 +259,10 @@ export function niceDateTime(time: string | undefined): string | undefined {
 
 export function formatDateYMD(d: Date): string {
   return format(d, 'yyyy.LL.dd');
+}
+
+export function formatDateYMDWithTime(d: Date): string {
+  return format(d, 'yyyy.LL.dd HH:mm');
 }
 
 /**
@@ -369,4 +385,56 @@ export function immutableSet(list: unknown[], oldValue: unknown, newValue: unkno
 
 export function IsNumber(value: unknown): value is number {
   return typeof value === 'number';
+}
+
+/**
+ * Handles serializer errors from backend by attempting to set any errors for
+ * the given form. If none are found, display generic error toast.
+ *
+ * You can also include Norwegian translations for the English errors returned
+ * from Django by using the `nbTranslationMap` parameter. It is a key-value
+ * map, where only part of the key has to match (case-sensitive) with the
+ * original message.
+ *
+ * Example:
+ * ```js
+ * // Original message: "This password is too common."
+ *
+ * handleServerFormErrors(error, form, { 'too common': 'Dette passordet er for vanlig' })
+ * ```
+ */
+export function handleServerFormErrors<T extends z.ZodType>(
+  error: unknown,
+  form: UseFormReturn<z.infer<T>>,
+  nbTranslationMap?: Record<string, string>,
+) {
+  if (!(error instanceof AxiosError)) {
+    return;
+  }
+
+  let setFormErrors = false;
+  const serverErrors = (error.response?.data as Record<string, string[]>) || null;
+  if (serverErrors) {
+    const formValues = form.getValues();
+    for (const [field, messages] of Object.entries(serverErrors)) {
+      if (!(field in formValues)) {
+        continue;
+      }
+      let message = messages[0];
+      if (nbTranslationMap) {
+        for (const [from, to] of Object.entries(nbTranslationMap)) {
+          if (message.includes(from)) {
+            message = dbT({ msg_en: message, msg_nb: to }, 'msg') || message;
+            break;
+          }
+        }
+      }
+      form.setError(field as z.infer<T>, { message });
+      setFormErrors = true;
+    }
+  }
+
+  if (!setFormErrors) {
+    toast.error(i18next.t(KEY.error_generic_description));
+  }
 }
