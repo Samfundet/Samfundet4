@@ -13,7 +13,7 @@
   margin: 1rem;
 }
 
-.organizationHeader{
+.organizationHeader {
   display: grid;
   grid-template-columns: auto auto;
   align-items: center;
@@ -27,12 +27,12 @@
   width: 50%;
   aspect-ratio: 16 / 9;
   border: none;
-  @include for-tablet-down{
+  @include for-tablet-down {
     width: 80%;
   }
 }
 
-.basicRecruitmentSubHeader{
+.basicRecruitmentSubHeader {
   @include flex-row-center;
   width: 100%;
   padding: 0.25rem;
@@ -40,16 +40,15 @@
   text-align: center;
 }
 
-.samfRecruitmentSubHeader{
+.samfRecruitmentSubHeader {
   @extend .basicRecruitmentSubHeader;
   color: white;
   background-color: $red-samf;
 }
 
-.optionsContainer{
+.optionsContainer {
   @include flex-row-center;
   gap: 1rem;
-
 }
 
 .personalRow {
@@ -57,21 +56,27 @@
   gap: 1rem;
 }
 
-.ukaRecruitmentSubHeader{
+.ukaRecruitmentSubHeader {
   @extend .samfRecruitmentSubHeader;
   background-color: $blue-uka;
 }
 
-.isfitRecruitmentSubHeader{
+.isfitRecruitmentSubHeader {
   @extend .samfRecruitmentSubHeader;
   background-color: $blue-isfit;
 }
 
 .openPositionsWrapper {
-  @include  flex-column-center;
+  @include flex-column-center;
   width: 100%;
   gap: 1rem;
 }
 
-
-
+.viewModeControll {
+  display: flex;
+  width: 100%;
+  gap: 2rem;
+  background-color: $grey-4;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+}
