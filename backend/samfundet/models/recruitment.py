@@ -612,6 +612,12 @@ class RecruitmentStatistics(FullCleanSaveMixin):
             if not created:
                 campus_stat.save()
 
+    def generate_position_stats(self) -> None:
+        for position in RecruitmentPosition.objects.all():
+            position_stat, created = RecruitmentPosition.objects.get_or_create(recruitment_stats=self, recruitment_position=position)
+            if not created:
+                position_stat.save()
+            
     def generate_gang_stats(self) -> None:
         for gang in Gang.objects.filter(id__in=self.recruitment.positions.values_list('gang', flat=True)):
             gang_stat, created = RecruitmentGangStat.objects.get_or_create(recruitment_stats=self, gang=gang)
@@ -688,6 +694,35 @@ class RecruitmentCampusStat(models.Model):
 
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
         return self.recruitment_stats.resolve_org(return_id=return_id)
+
+
+class RecruitmentPositionStat(models.Model):
+    recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='position_stats')
+    recruitment_position = models.ForeignKey(RecruitmentPosition, on_delete=models.CASCADE, blank=False, null=False, related_name='position_stats')
+
+    # Takes two values to get a normalized value, should only be updated after interview
+    # Will give an estimate of quality of interview
+    repriorization_value = models.IntegerField(default=0, blank=True, null=True, verbose_name="Collected value of repriorization (after interview)")
+    repriorization_count = models.PositiveIntegerField(default=0,blank=True, null=True, verbose_name="Amount of repriorizations (after interview)")
+
+    # Withdrawn rate of total applicants, due to some positions having higher applicant count
+    withdrawn_rate = models.FloatField(default=0, blank=True, null=True, verbose_name="Collected value of repriorization (after interview)")
+
+
+    def __str__(self) -> str:
+        return f'{self.recruitment_stats} {self.recruitment_position}'
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        self.withdrawn_rate =  self.recruitment_position.applications.filter(withdrawn=True).count() / self.recruitment_position.applications.count()
+        super().save(*args, **kwargs)
+
+    def normalized_repriorization_value(self) -> float:
+        return self.repriorization_value / self.repriorization_count
+
+    def update_repriorization_stats(self, value: int) -> None:
+        self.repriorization_count += value
+        self.repriorization_count += 1
+        self.save()
 
 
 class RecruitmentGangStat(models.Model):

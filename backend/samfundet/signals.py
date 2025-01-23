@@ -2,11 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
+from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
 
 from .models import User, Profile, UserPreference
-from .models.recruitment import Recruitment, RecruitmentStatistics, RecruitmentApplication
+from .models.recruitment import Recruitment, RecruitmentStatistics, RecruitmentApplication, RecruitmentPositionStat
 from .models.model_choices import RecruitmentStatusChoices
 
 
@@ -85,3 +86,17 @@ def application_applicant_rejected_or_accepted(sender: RecruitmentApplication, i
             ).exclude(id=obj.id):
                 other_application.recruiter_status = RecruitmentStatusChoices.NOT_SET
                 other_application.save()
+
+
+@receiver(pre_save, sender=RecruitmentApplication)
+def application_on_repriorization_update(sender: RecruitmentApplication, instance: RecruitmentApplication, **kwargs: Any) -> None:  # noqa C901
+    """Whenever an applicant updates"""
+    obj = RecruitmentApplication.objects.filter(pk=instance.pk).first()
+    if not obj:
+        return
+    # Check if priority is updated after interview
+    # This will reflect the quality of the interview
+    if obj.applicant_priority != instance.applicant_priority and obj.interview and obj.interview.interview_time < timezone.now():
+        recruitment_stats = RecruitmentStatistics.objects.filter(recruitment=obj.recruitment)
+        position_stats, _created =  RecruitmentPositionStat.objects.get_or_create(recruitment_position=obj.recruitment_position,recruitment_stats=recruitment_stats)
+        position_stats.update_repriorization_stats(value=instance.applicant_priority-obj.applicant_priority)
