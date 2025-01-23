@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
     dependencies = [
         (
             "samfundet",
-            "0014_rename_reprioritization_deadline_for_groups_recruitment_reprioritization_deadline_for_gangs",
+            "0014_rename_reprioritization_deadline_for_gangs_recruitment_reprioritization_deadline_for_gangs",
         ),
     ]
 
