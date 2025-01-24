@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { getUsers } from '~/api';
 import { InputField } from '~/Components';
 import { formatDate } from '~/Components/OccupiedForm/utils';
 import { Table } from '~/Components/Table';
+import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
+import { getUsers } from '~/api';
 import type { UserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { ROUTES } from '~/routes';
 import { getFullName } from '~/utils';
-import { ImpersonateButton } from './components';
 import styles from './UsersAdminPage.module.scss';
+import { ImpersonateButton } from './components';
 
 
 
@@ -41,7 +41,7 @@ export function UsersAdminPage() {
     const keywords = searchQuery.split(' ');
     return users.filter((usr: UserDto) => {
       for (const kw of keywords) {
-        const fullname = `${usr.first_name} ${usr.last_name}`
+        const fullname = `${usr.first_name} ${usr.last_name}`;
         if (fullname?.toLowerCase().indexOf(kw.toLowerCase()) === -1) return false;
       }
       return true;
