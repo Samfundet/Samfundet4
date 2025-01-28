@@ -13,7 +13,7 @@ export function LycheMenuPage() {
     <SultenPage>
       <LycheFrame>
         <MenuItem
-          dishTitle="LYCHEBRØD"
+          dishTitle="HAMBURGERBRØD"
           dishDescription="Serveres med en skål aioli på siden."
           allergens="Allergener: Gluten (hvete), sulfitt og egg (aioli)"
           price="19,- / 29,-"
