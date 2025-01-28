@@ -13,9 +13,6 @@ import { getFullName } from '~/utils';
 import styles from './UsersAdminPage.module.scss';
 import { ImpersonateButton } from './components';
 
-
-
-
 export function UsersAdminPage() {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -23,18 +20,17 @@ export function UsersAdminPage() {
   const [loading, setLoading] = useState(true);
   const title: string = t(KEY.common_users);
   const backendUrl = ROUTES.backend.admin__samfundet_user_changelist;
-  
+
   useEffect(() => {
     setLoading(true);
     getUsers()
-    .then(setUsers)
-    .catch((err) => {
-      toast.error(t(KEY.common_something_went_wrong));
-      console.error(err);
-    })
-    .finally(() => setLoading(false));
+      .then(setUsers)
+      .catch((err) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(err);
+      })
+      .finally(() => setLoading(false));
   }, [t]);
-  
 
   function filterUsers(): UserDto[] {
     if (searchQuery === '') return users;
@@ -47,7 +43,7 @@ export function UsersAdminPage() {
       return true;
     });
   }
-  
+
   const userColumns = [
     { content: t(KEY.common_username), sortable: true },
     { content: t(KEY.common_name), sortable: true },
@@ -57,7 +53,7 @@ export function UsersAdminPage() {
     { content: '' },
   ];
 
-  function userTableRow(user: UserDto){
+  function userTableRow(user: UserDto) {
     return [
       {
         content: user.username,
@@ -82,15 +78,14 @@ export function UsersAdminPage() {
       {
         content: <ImpersonateButton userId={user.id} />,
       },
-    ]
+    ];
   }
 
-  
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} loading={loading} > 
-      <InputField icon='mdi:search' onChange={setSearchQuery} />
+    <AdminPageLayout title={title} backendUrl={backendUrl} loading={loading}>
+      <InputField icon="mdi:search" onChange={setSearchQuery} />
       <div className={styles.table_container}>
-        <Table columns={userColumns} data={filterUsers().map((doc)=>({cells: userTableRow(doc)}))} />
+        <Table columns={userColumns} data={filterUsers().map((doc) => ({ cells: userTableRow(doc) }))} />
       </div>
     </AdminPageLayout>
   );
