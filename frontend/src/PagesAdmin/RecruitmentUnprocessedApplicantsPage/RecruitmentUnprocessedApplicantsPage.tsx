@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Link, Table } from '~/Components';
+import { Link, Table } from '~/Components';
 import { getRecruitmentUnprocessedApplicants } from '~/api';
 import type { RecruitmentUnprocessedApplicationsDto } from '~/dto';
 import { useTitle } from '~/hooks';
