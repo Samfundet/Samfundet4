@@ -9,6 +9,7 @@ from collections import defaultdict
 from django.db import models, transaction
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import UserManager
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
@@ -27,7 +28,7 @@ class Recruitment(CustomBaseModel):
     )
     shown_application_deadline = models.DateTimeField(null=False, blank=False, help_text='The deadline that is shown to applicants')
     reprioritization_deadline_for_applicant = models.DateTimeField(null=False, blank=False, help_text='Before allocation meeting')
-    reprioritization_deadline_for_groups = models.DateTimeField(null=False, blank=False, help_text='Reprioritization deadline for groups')
+    reprioritization_deadline_for_gangs = models.DateTimeField(null=False, blank=False, help_text='Reprioritization deadline for groups')
     organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
 
     max_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Max applications per applicant')
@@ -39,11 +40,25 @@ class Recruitment(CustomBaseModel):
             return self.organization_id
         return self.organization
 
+    def get_applicants(self) -> UserManager[User]:
+        return User.objects.filter(id__in=self.applications.values_list('user__id'))
+
+    def get_unprocessed_applications(self) -> models.BaseManager[RecruitmentApplication]:
+        return self.applications.filter(recruiter_status=RecruitmentStatusChoices.NOT_SET)
+
+    def get_processed_applications(self) -> models.BaseManager[RecruitmentApplication]:
+        return self.applications.exclude(recruiter_status=RecruitmentStatusChoices.NOT_SET)
+
+    def get_unprocessed_applicants(self) -> UserManager[User]:
+        return self.get_applicants().filter(id__in=self.get_unprocessed_applications().values_list('user__id'))
+
+    def get_processed_applicants(self) -> UserManager[User]:
+        return self.get_applicants().exclude(id__in=self.get_unprocessed_applications().values_list('user__id'))
+
     def recruitment_progress(self) -> float:
-        applications = RecruitmentApplication.objects.filter(recruitment=self)
-        if applications.count() == 0:
+        if self.applications.count() == 0:
             return 1
-        return applications.exclude(recruiter_status=RecruitmentStatusChoices.NOT_SET).count() / applications.count()
+        return self.get_processed_applications().count() / self.applications.count()
 
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
@@ -63,7 +78,7 @@ class Recruitment(CustomBaseModel):
             'actual_application_deadline',
             'shown_application_deadline',
             'reprioritization_deadline_for_applicant',
-            'reprioritization_deadline_for_groups',
+            'reprioritization_deadline_for_gangs',
         ]:
             if getattr(self, field) < now:
                 errors[field].append(self.NOT_IN_FUTURE_ERROR)
@@ -80,8 +95,8 @@ class Recruitment(CustomBaseModel):
             errors['reprioritization_deadline_for_applicant'].append(self.REPRIORITIZATION_BEFORE_ACTUAL)
             errors['actual_application_deadline'].append(self.ACTUAL_AFTER_REPRIORITIZATION)
 
-        if self.reprioritization_deadline_for_groups < self.reprioritization_deadline_for_applicant:
-            errors['reprioritization_deadline_for_groups'].append(self.REPRIORITIZATION_GROUP_BEFORE_APPLICANT)
+        if self.reprioritization_deadline_for_gangs < self.reprioritization_deadline_for_applicant:
+            errors['reprioritization_deadline_for_gangs'].append(self.REPRIORITIZATION_GROUP_BEFORE_APPLICANT)
             errors['reprioritization_deadline_for_applicant'].append(self.REPRIORITIZATION_APPLICANT_AFTER_GROUP)
 
         raise ValidationError(errors)
@@ -170,6 +185,11 @@ class RecruitmentPosition(CustomBaseModel):
         on_delete=models.SET_NULL,
         help_text='Shared interviewgroup for position',
     )
+
+    def get_section_name(self, language: str = 'nb') -> str | None:
+        if not self.section:
+            return None
+        return self.section.name_nb if language == 'nb' else self.section.name_en
 
     def resolve_section(self, *, return_id: bool = False) -> GangSection | int:
         if return_id:
@@ -373,15 +393,24 @@ class RecruitmentApplication(CustomBaseModel):
                 break
         self.organize_priorities()
 
+    ALREADY_APPLIED_ERROR = 'Already created an application for this recruitment'
+
     REAPPLY_TOO_MANY_APPLICATIONS_ERROR = 'Can not reapply application, too many active application'
     TOO_MANY_APPLICATIONS_ERROR = 'Too many applications for recruitment'
 
-    def clean(self, *args: tuple, **kwargs: dict) -> None:
+    def clean(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
         super().clean()
         errors: dict[str, list[ValidationError]] = defaultdict(list)
 
+        # Cant use not self.pk, due to UUID generating it before save
+        current_application = RecruitmentApplication.objects.filter(pk=self.pk).first()
+        # validates if there are not two applications for same user and same recruitmentposition
+        if (
+            not current_application
+            and RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, recruitment_position=self.recruitment_position).first()
+        ):
+            errors['recruitment_position'].append(self.ALREADY_APPLIED_ERROR)
         # If there is max applications, check if applicant have applied to not to many
-        # Cant use not self.pk, due to UUID generating it before save.
         if self.recruitment.max_applications:
             user_applications_count = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
             current_application = RecruitmentApplication.objects.filter(pk=self.pk).first()
@@ -424,6 +453,18 @@ class RecruitmentApplication(CustomBaseModel):
                 self.interview = shared_interview.interview
 
         super().save(*args, **kwargs)
+
+    def get_total_interviews_for_gang(self) -> int:
+        return (
+            RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, recruitment_position__gang=self.resolve_gang(), withdrawn=False)
+            .exclude(interview=None)
+            .count()
+        )
+
+    def get_total_applications_for_gang(self) -> int:
+        return RecruitmentApplication.objects.filter(
+            user=self.user, recruitment=self.recruitment, withdrawn=False, recruitment_position__gang=self.resolve_gang()
+        ).count()
 
     def get_total_interviews(self) -> int:
         return RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).exclude(interview=None).count()
@@ -506,6 +547,9 @@ class RecruitmentStatistics(FullCleanSaveMixin):
     # Total accepted applicants
     total_accepted = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total accepted applicants')
 
+    # Total rejected applicants
+    total_rejected = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total rejected applicants')
+
     # Average amount of different gangs an applicant applies for
     average_gangs_applied_to_per_applicant = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
 
@@ -514,10 +558,19 @@ class RecruitmentStatistics(FullCleanSaveMixin):
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.total_applications = self.recruitment.applications.count()
-        self.total_applicants = self.recruitment.applications.values('user').distinct().count()
+        self.total_applicants = self.recruitment.get_applicants().count()
         self.total_withdrawn = self.recruitment.applications.filter(withdrawn=True).count()
         self.total_accepted = (
             self.recruitment.applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
+        )
+        self.total_rejected = (
+            self.recruitment.get_applicants()
+            .exclude(
+                id__in=self.recruitment.applications.filter(
+                    recruiter_status__in=[RecruitmentStatusChoices.CALLED_AND_ACCEPTED, RecruitmentStatusChoices.NOT_SET]
+                ).values_list('user__id')
+            )
+            .count()
         )
         if self.total_applicants > 0:
             self.average_gangs_applied_to_per_applicant = (

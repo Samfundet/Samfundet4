@@ -37,7 +37,7 @@ class SendRejectionMailViewTests(TestCase):
             actual_application_deadline=timezone.now() + timedelta(days=5),
             shown_application_deadline=timezone.now() + timedelta(days=4),
             reprioritization_deadline_for_applicant=timezone.now() + timedelta(days=6),
-            reprioritization_deadline_for_groups=timezone.now() + timedelta(days=7),
+            reprioritization_deadline_for_gangs=timezone.now() + timedelta(days=7),
             organization=self.organization,
         )
 
@@ -63,6 +63,7 @@ class SendRejectionMailViewTests(TestCase):
         self.user_withdrawn = User.objects.create(username='withdrawn-user', email='withdrawn@example.com')
         self.user_contacted = User.objects.create(username='contacted-user', email='contacted@example.com')
         self.user_rejected_but_contacted = User.objects.create(username='skurra-user', email='hard.to.get@example.com')
+        self.user_rejected_but_contacted2 = User.objects.create(username='skurra-user2', email='hard2.to.get@example.com')
 
         self.admin_user = User.objects.create_superuser(username='admin', email='admin@example.com', password='adminpassword')
 
@@ -111,7 +112,7 @@ class SendRejectionMailViewTests(TestCase):
         )
 
         RecruitmentApplication.objects.create(
-            user=self.user_rejected_but_contacted,
+            user=self.user_rejected_but_contacted2,
             recruitment=self.recruitment,
             recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED,
             withdrawn=False,
