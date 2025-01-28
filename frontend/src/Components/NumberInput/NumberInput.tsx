@@ -97,7 +97,9 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
         event.preventDefault();
         const add = event.key === 'ArrowUp' ? 1 : -1;
-        const newVal = clampValue((Number(inputValue) || 0) + add);
+        const multiplier = event.shiftKey ? 10 : 1;
+
+        const newVal = clampValue((Number(inputValue) || 0) + add * multiplier);
         if (!Number.isNaN(newVal)) {
           setInputValue(newVal);
           onChange?.(newVal);
