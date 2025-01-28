@@ -104,17 +104,6 @@ export function RecruitmentUnprocessedApplicantsPage() {
 
   const header = (
     <>
-      <Button
-        theme="success"
-        rounded={true}
-        link={reverse({
-          pattern: ROUTES.frontend.admin_recruitment_gang_overview,
-          urlParams: { recruitmentId: recruitmentId },
-        })}
-      >
-        {t(KEY.common_go_back)}
-      </Button>
-      {/* Display the total number of applicants */}
       <p>
         {t(KEY.recruitment_applicants)}: {totalRows}
       </p>
