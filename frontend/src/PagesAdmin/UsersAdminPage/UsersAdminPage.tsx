@@ -82,10 +82,10 @@ export function UsersAdminPage() {
   }
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} loading={loading}>
+    <AdminPageLayout title={title} loading={loading}>
       <InputField icon="mdi:search" onChange={setSearchQuery} />
       <div className={styles.table_container}>
-        <Table columns={userColumns} data={filterUsers().map((doc) => ({ cells: userTableRow(doc) }))} />
+        <Table data={filterUsers().map((doc) => ({ cells: userTableRow(doc) }))} columns={userColumns}/>
       </div>
     </AdminPageLayout>
   );
