@@ -579,7 +579,9 @@ export const router = createBrowserRouter(
                 <Route
                   path={ROUTES.frontend.admin_recruitment_gang_all_applications}
                   element={<RecruitmentGangAllApplicantsAdminPage />}
-                  handle={{crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_all_applications)}</Link>}}
+                  handle={{
+                    crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_all_applications)}</Link>,
+                  }}
                 />
                 {/* Position */}
                 <Route
