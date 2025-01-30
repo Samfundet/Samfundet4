@@ -116,7 +116,7 @@ export function AppletContainer({ recruitmentId }: Props) {
             title={t(KEY.recruitment_applet_open_to_other_positions)}
             description={t(KEY.recruitment_applicants_open_to_other_positions)}
             url={reverse({
-              pattern: ROUTES.frontend.admin_recruitment_open_to_other_positions,
+              pattern: ROUTES.frontend.admin_recruitment_is_open_to_other_positions,
               urlParams: { recruitmentId: recruitmentId },
             })}
           />
