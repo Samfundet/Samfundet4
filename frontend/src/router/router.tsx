@@ -394,10 +394,6 @@ export const router = createBrowserRouter(
               element={<RecruitmentGangAllApplicantsAdminPage />}
             />
             <Route
-              path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
-              element={<RecruitmentUsersWithoutInterviewGangPage />}
-            />
-            <Route
               path={ROUTES.frontend.admin_recruitment_applicant}
               element={
                 <PermissionRoute
