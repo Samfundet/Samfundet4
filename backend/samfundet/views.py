@@ -40,6 +40,8 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 
+from samfundet.pagination import CustomPageNumberPagination
+
 from .utils import user_query, event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
@@ -521,6 +523,17 @@ class AllUsersView(ListAPIView):
     def get(self, request: Request) -> Response:
         users = user_query(query=request.query_params)
         return Response(data=UserSerializer(users, many=True).data)
+
+
+class PaginatedUsersView(ListAPIView):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = UserSerializer
+    pagination_class = CustomPageNumberPagination
+
+    def get_queryset(self) -> QuerySet[User]:
+        queryset = User.objects.all()
+
+        return queryset.order_by('username')
 
 
 class ImpersonateView(APIView):
@@ -1200,7 +1213,7 @@ class DownloadAllRecruitmentApplicationCSV(APIView):
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
         applications = RecruitmentApplication.objects.filter(recruitment=recruitment)
 
-        filename = f"opptak_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        filename = f'opptak_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime("%Y-%m-%d %H.%M")}.csv'
         response = HttpResponse(
             content_type='text/csv',
             headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
@@ -1259,7 +1272,7 @@ class DownloadRecruitmentApplicationGangCSV(APIView):
         gang = get_object_or_404(Gang, id=gang_id)
         applications = RecruitmentApplication.objects.filter(recruitment_position__gang=gang, recruitment=recruitment)
 
-        filename = f"opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        filename = f'opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime("%Y-%m-%d %H.%M")}.csv'
         response = HttpResponse(
             content_type='text/csv',
             headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
