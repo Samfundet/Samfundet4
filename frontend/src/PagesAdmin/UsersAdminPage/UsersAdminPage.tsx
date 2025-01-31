@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { PagedPagination, SamfundetLogoSpinner } from '~/Components';
+import { PagedPagination, Table } from '~/Components';
 import { formatDate } from '~/Components/OccupiedForm/utils';
-import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getUsersPaginated } from '~/api';
 import type { UserDto } from '~/dto';
@@ -68,7 +67,7 @@ export function UsersAdminPage() {
   });
 
   return (
-    <AdminPageLayout title={title}>
+    <AdminPageLayout title={title} loading={isLoading}>
       {totalPages > 1 && (
         <PagedPagination
           currentPage={currentPage}
@@ -77,8 +76,7 @@ export function UsersAdminPage() {
           onPageChange={setCurrentPage}
         />
       )}
-
-      {isLoading ? <SamfundetLogoSpinner position="center" /> : <Table data={tableData} columns={columns} />}
+      <Table data={tableData} columns={columns} />
     </AdminPageLayout>
   );
 }
