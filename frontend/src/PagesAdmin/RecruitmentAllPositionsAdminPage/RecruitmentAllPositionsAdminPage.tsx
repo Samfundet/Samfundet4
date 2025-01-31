@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, ExpandableHeader, Table } from '~/Components';
+import { Button, ExpandableHeader, Table, ToggleSwitch } from '~/Components';
 import { getAllRecruitmentApplications } from '~/api';
 import type { RecruitmentApplicationDto } from '~/dto';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -44,7 +44,11 @@ export function RecruitmentAllPositionsAdminPage() {
   // Table columns, row building, etc.
   const tableColumns = [
     { content: 'Position', sortable: false },
-    { content: 'Priority', sortable: true },
+    { content: 'Interview location', sortable: false },
+    { content: 'Interview time', sortable: false },
+    { content: 'Priority', sortable: false },
+    { content: 'Føring', sortable: false },
+    { content: 'Status', sortable: false },
   ];
 
   const applicationsToTableRows = (applications: RecruitmentApplicationDto[]) =>
@@ -55,8 +59,28 @@ export function RecruitmentAllPositionsAdminPage() {
           content: <strong>{app.recruitment_position.name_nb}</strong>,
         },
         {
+          value: app.interview?.interview_location,
+          content: <span>{app.interview?.interview_location ? app.interview?.interview_location : 'N/A'}</span>,
+        },
+        {
+          value: app.interview?.interview_time,
+          content: <span>{app.interview?.interview_time ? app.interview?.interview_time : 'N/A'}</span>,
+        },
+        {
           value: app.applicant_priority,
           content: <span>{app.applicant_priority}</span>,
+        },
+        {
+          value: 'Føring',
+          content: (
+            <span>
+              Tillat å gi tilbud <ToggleSwitch />
+            </span>
+          ),
+        },
+        {
+          value: app.recruiter_status,
+          content: <span>{app.recruiter_status ? app.recruiter_status : 'N/A'}</span>,
         },
       ],
     }));
