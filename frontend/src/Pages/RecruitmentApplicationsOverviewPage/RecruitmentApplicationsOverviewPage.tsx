@@ -33,8 +33,13 @@ export function RecruitmentApplicationsOverviewPage() {
         </div>
         <OccupiedFormModal recruitmentId={Number.parseInt(recruitmentId ?? '')} />
         <p>{t(KEY.recruitment_will_be_anonymized)}</p>
-        <ActiveApplications recruitmentId={recruitmentId} queryKey={QUERY_KEYS} />
-        <WithdrawnApplications recruitmentId={recruitmentId} queryKey={QUERY_KEYS} />
+
+        {recruitmentId && (
+          <>
+            <ActiveApplications recruitmentId={recruitmentId} queryKey={QUERY_KEYS} />
+            <WithdrawnApplications recruitmentId={recruitmentId} queryKey={QUERY_KEYS} />
+          </>
+        )}
       </div>
     </Page>
   );

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link, Table } from '~/Components';
-import { getWithdrawRecruitmentApplicationApplicant } from '~/api';
+import { getWithdrawnRecruitmentApplicationsApplicant } from '~/api';
 import type { RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -11,16 +11,15 @@ import type { ApplicantApplicationManagementQK } from '../../RecruitmentApplicat
 import styles from './WithdrawnApplications.module.scss';
 
 type WithdrawnApplicationsProps = {
-  recruitmentId?: string;
+  recruitmentId: string;
   queryKey: ApplicantApplicationManagementQK;
 };
 export function WithdrawnApplications({ recruitmentId, queryKey }: WithdrawnApplicationsProps) {
   const { t } = useTranslation();
 
   const { data: withdrawnApplications = [] } = useQuery({
-    queryKey: queryKey.withdrawnApplications(recruitmentId as string),
-    queryFn: () =>
-      getWithdrawRecruitmentApplicationApplicant(recruitmentId as string).then((response) => response.data),
+    queryKey: queryKey.withdrawnApplications(recruitmentId),
+    queryFn: () => getWithdrawnRecruitmentApplicationsApplicant(recruitmentId).then((response) => response.data),
     enabled: !!recruitmentId,
   });
 
