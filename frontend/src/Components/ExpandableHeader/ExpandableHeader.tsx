@@ -7,7 +7,7 @@ type HeaderThemes = 'parent' | 'child';
 
 type ExpandableHeaderProps = {
   className?: string;
-  label?: string;
+  label?: Children;
   children?: Children;
   showByDefault?: boolean;
   theme?: HeaderThemes;

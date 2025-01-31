@@ -593,9 +593,7 @@ export async function getAllRecruitmentApplications(
       pattern: ROUTES.backend.samfundet__recruitment_all_applications,
       queryParams: { recruitment: recruitmentId },
     });
-  const response = await axios.get(url, { withCredentials: true });
-
-  return response.data;
+  return axios.get<RecruitmentApplicationDto[]>(url, { withCredentials: true });
 }
 
 export async function getRecruitmentPositionsGangForApplicant(
