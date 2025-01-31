@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, ExpandableHeader, Table, ToggleSwitch } from '~/Components';
-import { getAllRecruitmentApplications } from '~/api';
-import type { RecruitmentApplicationDto } from '~/dto';
+import { getAllRecruitmentApplications, getRecruitment } from '~/api';
+import type { RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentAllPositionsAdminPage.module.scss';
 
@@ -13,10 +13,17 @@ type GroupedDataItem = {
 
 export function RecruitmentAllPositionsAdminPage() {
   const [recruitmentApplications, setRecruitmentApplications] = useState<RecruitmentApplicationDto[]>([]);
+  const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const { recruitmentId } = useParams();
 
   useEffect(() => {
     if (recruitmentId) {
+      getRecruitment(recruitmentId)
+        .then((response) => {
+          setRecruitment(response.data);
+        })
+        .catch(console.error);
+
       getAllRecruitmentApplications(recruitmentId)
         .then((response) => {
           setRecruitmentApplications(response.data);
@@ -100,12 +107,16 @@ export function RecruitmentAllPositionsAdminPage() {
             </div>
             <div>{user.email}</div>
             <div>{user.phone_number || 'N/A'}</div>
-            <Button
-              theme="blue"
-              onClick={() => alert('Add interview modal + conditionaly render based on UKA/ISFiT/KSG')}
-            >
-              Set interview
-            </Button>
+            {recruitment?.organization.name !== 'Samfundet' && (
+              <Button
+                theme="blue"
+                onClick={() =>
+                  alert('Add interview modal + conditionaly render based on UKA/ISFiT/KSG --> must use perms for this')
+                }
+              >
+                Set interview
+              </Button>
+            )}
           </div>
         }
         className={styles.expandable_header}
@@ -116,7 +127,11 @@ export function RecruitmentAllPositionsAdminPage() {
     );
   });
 
-  return <AdminPageLayout title="All Positions">{applicantList}</AdminPageLayout>;
+  return (
+    <AdminPageLayout title={`All positions for ${recruitment?.name_en} at ${recruitment?.organization.name}`}>
+      {applicantList}
+    </AdminPageLayout>
+  );
 }
 
 /** =====================
