@@ -1398,7 +1398,7 @@ class TestPositionByTagsView:
             actual_application_deadline=fixture_recruitment.actual_application_deadline,
             shown_application_deadline=fixture_recruitment.shown_application_deadline,
             reprioritization_deadline_for_applicant=fixture_recruitment.reprioritization_deadline_for_applicant,
-            reprioritization_deadline_for_groups=fixture_recruitment.reprioritization_deadline_for_groups,
+            reprioritization_deadline_for_gangs=fixture_recruitment.reprioritization_deadline_for_gangs,
             organization=fixture_organization,
         )
         self.create_position('2', 'developer', other_recruitment, fixture_gang)
