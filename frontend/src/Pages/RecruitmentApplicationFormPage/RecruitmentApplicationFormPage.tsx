@@ -156,34 +156,34 @@ export function RecruitmentApplicationFormPage() {
     );
   }
 
+  const handlePosNavigate = (pos: RecruitmentPositionDto) => {
+    navigate({
+      url: reverse({
+        pattern: ROUTES.frontend.recruitment_application,
+        urlParams: {
+          recruitmentId: pos.recruitment,
+          positionId: pos.id,
+        },
+      }),
+    });
+  };
+
   const submitText = `${t(KEY.common_send)} ${t(KEY.recruitment_application)}`;
 
-  const similarPositionsBtns = recruitmentPositionsForGang && recruitmentPositionsForGang.length > 0 && (
+  const otherPositionsAtGang = recruitmentPositionsForGang && recruitmentPositionsForGang.length > 0 && (
     <div className={styles.other_positions}>
       <h2 className={styles.sub_header}>
         {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
       </h2>
       {recruitmentPositionsForGang?.map((pos) => (
-        <Button
-          key={pos.id}
-          display="pill"
-          theme="outlined"
-          onClick={() => {
-            navigate({
-              url: reverse({
-                pattern: ROUTES.frontend.recruitment_application,
-                urlParams: { recruitmentId: pos.recruitment, positionId: pos.id },
-              }),
-            });
-          }}
-        >
-          {dbT(pos, 'name')}
+        <Button key={pos.id} display="pill" theme="outlined" onClick={() => handlePosNavigate(pos)}>
+          {dbT(pos, 'name')} wewe
         </Button>
       ))}
     </div>
   );
 
-  const otherPositionsAtGang = (
+  const similarPositionsBtns = (
     <div className={styles.other_positions}>
       {similarPositions?.positions && (
         <Fragment>
@@ -193,17 +193,7 @@ export function RecruitmentApplicationFormPage() {
               key={similarPosition.id}
               display="pill"
               theme="outlined"
-              onClick={() => {
-                navigate({
-                  url: reverse({
-                    pattern: ROUTES.frontend.recruitment_application,
-                    urlParams: {
-                      recruitmentId: similarPosition.recruitment,
-                      positionId: similarPosition.id,
-                    },
-                  }),
-                });
-              }}
+              onClick={() => handlePosNavigate(similarPosition)}
             >
               {dbT(similarPosition, 'name')}
             </Button>
