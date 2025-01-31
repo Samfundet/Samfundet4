@@ -158,7 +158,7 @@ export function RecruitmentApplicationFormPage() {
 
   const submitText = `${t(KEY.common_send)} ${t(KEY.recruitment_application)}`;
 
-  const similarPositionsView = (
+  const similarPositionsBtns = recruitmentPositionsForGang && recruitmentPositionsForGang.length > 0 && (
     <div className={styles.other_positions}>
       <h2 className={styles.sub_header}>
         {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
@@ -172,7 +172,7 @@ export function RecruitmentApplicationFormPage() {
             navigate({
               url: reverse({
                 pattern: ROUTES.frontend.recruitment_application,
-                urlParams: { positionId: pos.id, gangId: pos.gang.id },
+                urlParams: { recruitmentId: pos.recruitment, positionId: pos.id },
               }),
             });
           }}
@@ -180,6 +180,36 @@ export function RecruitmentApplicationFormPage() {
           {dbT(pos, 'name')}
         </Button>
       ))}
+    </div>
+  );
+
+  const otherPositionsAtGang = (
+    <div className={styles.other_positions}>
+      {similarPositions?.positions && (
+        <Fragment>
+          <h2 className={styles.sub_header}>{t(KEY.recruitment_similar_positions)}</h2>
+          {similarPositions.positions.map((similarPosition) => (
+            <Button
+              key={similarPosition.id}
+              display="pill"
+              theme="outlined"
+              onClick={() => {
+                navigate({
+                  url: reverse({
+                    pattern: ROUTES.frontend.recruitment_application,
+                    urlParams: {
+                      recruitmentId: similarPosition.recruitment,
+                      positionId: similarPosition.id,
+                    },
+                  }),
+                });
+              }}
+            >
+              {dbT(similarPosition, 'name')}
+            </Button>
+          ))}
+        </Fragment>
+      )}
     </div>
   );
 
@@ -231,60 +261,8 @@ export function RecruitmentApplicationFormPage() {
             <h2 className={styles.sub_header}>{t(KEY.recruitment_applyfor)}</h2>
             <p className={styles.text}>{t(KEY.recruitment_applyforhelp)}</p>
           </div>
-          {recruitmentPositionsForGang && recruitmentPositionsForGang.length > 0 && (
-            <div className={styles.other_positions}>
-              <h2 className={styles.sub_header}>
-                {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
-              </h2>
-              {recruitmentPositionsForGang.map((pos) => (
-                <Button
-                  key={pos.id}
-                  display="pill"
-                  theme="outlined"
-                  onClick={() => {
-                    navigate({
-                      url: reverse({
-                        pattern: ROUTES.frontend.recruitment_application,
-                        urlParams: {
-                          recruitmentId: pos.recruitment,
-                          positionId: pos.id,
-                        },
-                      }),
-                    });
-                  }}
-                >
-                  {dbT(pos, 'name')}
-                </Button>
-              ))}
-            </div>
-          )}
-          <div className={styles.other_positions}>
-            {similarPositions?.positions && (
-              <Fragment>
-                <h2 className={styles.sub_header}>{t(KEY.recruitment_similar_positions)}</h2>
-                {similarPositions.positions.map((similarPosition) => (
-                  <Button
-                    key={similarPosition.id}
-                    display="pill"
-                    theme="outlined"
-                    onClick={() => {
-                      navigate({
-                        url: reverse({
-                          pattern: ROUTES.frontend.recruitment_application,
-                          urlParams: {
-                            recruitmentId: similarPosition.recruitment,
-                            positionId: similarPosition.id,
-                          },
-                        }),
-                      });
-                    }}
-                  >
-                    {dbT(similarPosition, 'name')}
-                  </Button>
-                ))}
-              </Fragment>
-            )}
-          </div>
+          {similarPositionsBtns}
+          {otherPositionsAtGang}
         </div>
         {recruitmentApplication && (
           <div className={styles.withdrawn_container}>
