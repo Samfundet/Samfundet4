@@ -492,6 +492,16 @@ class UserView(APIView):
 class AllUsersView(ListAPIView):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = UserSerializer
+
+    def get_queryset(self) -> QuerySet[User]:
+        queryset = User.objects.all()
+
+        return queryset.order_by('username')
+
+
+class PaginatedUsersView(ListAPIView):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = UserSerializer
     pagination_class = CustomPageNumberPagination
 
     def get_queryset(self) -> QuerySet[User]:
@@ -1165,7 +1175,7 @@ class DownloadRecruitmentApplicationGangCSV(APIView):
         gang = get_object_or_404(Gang, id=gang_id)
         applications = RecruitmentApplication.objects.filter(recruitment_position__gang=gang, recruitment=recruitment)
 
-        filename = f"opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        filename = f'opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime("%Y-%m-%d %H.%M")}.csv'
         response = HttpResponse(
             content_type='text/csv',
             headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
