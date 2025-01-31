@@ -158,6 +158,31 @@ export function RecruitmentApplicationFormPage() {
 
   const submitText = `${t(KEY.common_send)} ${t(KEY.recruitment_application)}`;
 
+  const similarPositionsView = (
+    <div className={styles.other_positions}>
+      <h2 className={styles.sub_header}>
+        {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
+      </h2>
+      {recruitmentPositionsForGang?.map((pos) => (
+        <Button
+          key={pos.id}
+          display="pill"
+          theme="outlined"
+          onClick={() => {
+            navigate({
+              url: reverse({
+                pattern: ROUTES.frontend.recruitment_application,
+                urlParams: { positionId: pos.id, gangId: pos.gang.id },
+              }),
+            });
+          }}
+        >
+          {dbT(pos, 'name')}
+        </Button>
+      ))}
+    </div>
+  );
+
   return (
     <Page>
       <div className={styles.container}>
@@ -220,7 +245,10 @@ export function RecruitmentApplicationFormPage() {
                     navigate({
                       url: reverse({
                         pattern: ROUTES.frontend.recruitment_application,
-                        urlParams: { positionId: pos.id, gangId: pos.gang.id },
+                        urlParams: {
+                          recruitmentId: pos.recruitment,
+                          positionId: pos.id,
+                        },
                       }),
                     });
                   }}
@@ -243,7 +271,10 @@ export function RecruitmentApplicationFormPage() {
                       navigate({
                         url: reverse({
                           pattern: ROUTES.frontend.recruitment_application,
-                          urlParams: { positionId: similarPosition.id, gangId: similarPosition.gang.id },
+                          urlParams: {
+                            recruitmentId: similarPosition.recruitment,
+                            positionId: similarPosition.id,
+                          },
                         }),
                       });
                     }}
