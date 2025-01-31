@@ -177,7 +177,7 @@ export function RecruitmentApplicationFormPage() {
       </h2>
       {recruitmentPositionsForGang?.map((pos) => (
         <Button key={pos.id} display="pill" theme="outlined" onClick={() => handlePosNavigate(pos)}>
-          {dbT(pos, 'name')} wewe
+          {dbT(pos, 'name')}
         </Button>
       ))}
     </div>
