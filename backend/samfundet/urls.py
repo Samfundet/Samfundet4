@@ -63,6 +63,7 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('register/', views.RegisterView.as_view(), name='register'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('password/change/', views.ChangePasswordView.as_view(), name='change-password'),
     path('user/', views.UserView.as_view(), name='user'),
     path('groups/', views.AllGroupsView.as_view(), name='groups'),
     path('users/', views.AllUsersView.as_view(), name='users'),
@@ -74,6 +75,7 @@ urlpatterns = [
     path('home/', views.HomePageView().as_view(), name='home'),
     path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
     path('webhook/', views.WebhookView.as_view(), name='webhook'),
+    path('gangtypes/<int:organization>/', views.GangTypeOrganizationView.as_view(), name='gangsorganized'),
     ########## Lyche ##########
     path('check-reservation/', views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
     ########## Recruitment ##########
@@ -137,6 +139,11 @@ urlpatterns = [
         name='recruitment_recruiter_dashboard',
     ),
     path(
+        'recruitment-download-all-applications-csv/<int:recruitment_id>/',
+        views.DownloadAllRecruitmentApplicationCSV.as_view(),
+        name='recruitment_download_applications_csv',
+    ),
+    path(
         'recruitment-download-gang-application-csv/<int:recruitment_id>/<int:gang_id>',
         views.DownloadRecruitmentApplicationGangCSV.as_view(),
         name='recruitment_download_gang_application_csv',
@@ -146,4 +153,5 @@ urlpatterns = [
     path('recruitment/<int:id>/availability/', views.RecruitmentAvailabilityView.as_view(), name='recruitment_availability'),
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
     path('purchase-feedback/', views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
+    path('recruitment/<int:recruitment_id>/gang/<int:gang_id>/stats/', views.GangApplicationCountView.as_view(), name='gang-application-stats'),
 ]
