@@ -102,7 +102,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
             withoutInterviewCount,
             t(KEY.common_out_of),
             t(KEY.common_total).toLowerCase(),
-            gangStats.data.total_applicants,
+            gangStats.data.applicant_count,
             t(KEY.recruitment_applications),
             t(KEY.common_have),
             t(KEY.recruitment_interview),

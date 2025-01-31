@@ -15,7 +15,7 @@ import styles from './AdminLayout.module.scss';
 
 /**
  * Wraps admin routes with the standard navbar and a side panel with common links
- * for editing events, groups, etc.
+ * for editing events, gangs, etc.
  * @returns Layout with outlet
  */
 export function AdminLayout() {
@@ -31,7 +31,7 @@ export function AdminLayout() {
       if (applet.url === undefined) return <></>;
 
       // Create panel item
-      const selected = location.pathname.toLowerCase().indexOf(applet.url) !== -1;
+      const selected = location.pathname === applet.url;
       return (
         <Link
           key={index}
@@ -48,13 +48,21 @@ export function AdminLayout() {
     [location, isMobile, panelOpen],
   );
 
-  const selectedIndex = window.location.href.endsWith(ROUTES_FRONTEND.admin);
-
   useEffect(() => {
     if (!isMobile) {
       setPanelOpen(true);
     }
   }, [isMobile]);
+
+  const userApplets: Applet[] = [
+    { url: ROUTES_FRONTEND.admin, icon: 'mdi:person', title_nb: 'Profil', title_en: 'Profile' },
+    {
+      url: ROUTES_FRONTEND.user_change_password,
+      icon: 'mdi:password',
+      title_nb: 'Bytt passord',
+      title_en: 'Change password',
+    },
+  ];
 
   const panel = (
     <div className={classNames(styles.panel, !panelOpen && styles.mobile_panel_closed)}>
@@ -65,10 +73,7 @@ export function AdminLayout() {
       {/* Header */}
       <div className={styles.panel_header}>{t(KEY.control_panel_title)}</div>
       {/* Index */}
-      <Link className={classNames(styles.panel_item, selectedIndex && styles.selected)} url={ROUTES_FRONTEND.admin}>
-        <Icon icon="mdi:person" />
-        {t(KEY.common_profile)}
-      </Link>
+      {userApplets.map((applet, index) => makeAppletShortcut(applet, index))}
       <br />
       {/* Applets */}
       {appletCategories.map((category) => {

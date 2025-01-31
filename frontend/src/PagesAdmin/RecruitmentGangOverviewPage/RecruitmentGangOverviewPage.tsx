@@ -121,7 +121,7 @@ export function RecruitmentGangOverviewPage() {
       { key: 1, label: t(KEY.common_gangs), value: <Table columns={tableGangColumns} data={tableGangData} /> },
       {
         key: 2,
-        label: t(KEY.recruitment_gangs_with_separate_positions),
+        label: t(KEY.recruitment_positions_with_separate_recruitment),
         value: <Table columns={tableSeparatePositionColumns} data={tableSeparatePositionData ?? []} />,
       },
       { key: 3, label: t(KEY.recruitment_interview_groups), value: <RecruitmentInterviewGroupsList /> },

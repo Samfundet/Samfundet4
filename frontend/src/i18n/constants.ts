@@ -131,6 +131,7 @@ export const KEY = {
   common_occasion: 'common_occasion',
   common_phonenumber: 'common_phonenumber',
   common_password: 'common_password',
+  common_current: 'common_current',
   common_about_us: 'common_about_us',
   common_overview: 'common_overview',
   common_recruitmentposition: 'common_recruitmentposition',
@@ -175,6 +176,7 @@ export const KEY = {
   common_processed: 'common_processed',
   common_rejected: 'common_rejected',
   common_it: 'common_it',
+  common_in: 'common_in',
   common_will: 'common_will',
   common_get: 'common_get',
   common_count: 'common_count',
@@ -190,6 +192,8 @@ export const KEY = {
   common_administrate: 'common_administrate',
   common_administration: 'common_administration',
   common_unprocessed: 'common_unprocessed',
+  common_list_view: 'common_list_view',
+  common_tab_view: 'common_tab_view',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -197,7 +201,7 @@ export const KEY = {
   common_film_club: 'common_film_club',
   common_privacy_policy: 'common_privacy_policy',
   common_facilitation: 'common_facilitation',
-  common_the_groups_at_samfundet: 'common_the_groups_at_samfundet',
+  common_the_gangs_at_samfundet: 'common_the_gangs_at_samfundet',
   common_volunteering: 'common_volunteering',
   common_overview_map: 'common_overview_map',
   common_new_building: 'common_new_building',
@@ -221,6 +225,8 @@ export const KEY = {
   // ==================== //
 
   role_content_type: 'role_content_type',
+  change_password: 'change_password',
+  new_password: 'new_password',
 
   // LoginPage:
   loginpage_register: 'loginpage_register',
@@ -236,9 +242,8 @@ export const KEY = {
 
   role_edit_could_not_load_permissions: 'role_edit_could_not_load_permissions',
 
-  // GroupsPage:
-  groupspage_gangs_text: 'groupspage_gangs_text',
-  groupspage_gangs_title: 'groupspage_gangs_title',
+  // GangsPage:
+  gangspage_title: 'gangspage_title',
 
   // EventPageAge:
   eighteen: 'eighteen',
@@ -322,7 +327,7 @@ export const KEY = {
   actual_application_deadline: 'actual_application_deadline',
   recruitment_number_of_applications: 'recruitment_number_of_applications',
   recrutment_default_application_letter: 'recrutment_default_application_letter',
-  reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
+  reprioritization_deadline_for_gangs: 'reprioritization_deadline_for_gangs',
   max_applications: 'max_applications',
   recruitment_promo_media: 'recruitment_promo_media',
   recruitment_norwegian_applicants_only: 'recruitment_norwegian_applicants_only',
@@ -335,7 +340,7 @@ export const KEY = {
   recruitment_accepted_applicants: 'recruitment_accepted_applicants',
   recruitment_show_applicants_without_interview: 'recruitment_show_applicants_without_interview',
   recrutment_export_to_csv: 'recrutment_export_to_csv',
-  recruitment_gangs_with_separate_positions: 'recruitment_gangs_with_separate_positions',
+  recruitment_positions_with_separate_recruitment: 'recruitment_positions_with_separate_recruitment',
   application_deadline: 'application_deadline',
   recruitment_applicants_without_interview: 'recruitment_applicants_without_interview',
   recruitment_applicants_without_interview_help_text: 'recruitment_applicants_without_interview_help_text',
@@ -368,9 +373,12 @@ export const KEY = {
   recruitment_dashboard_description: 'recruitment_dashboard_description',
   recruitment_application: 'recruitment_application',
   recruitment_admitted: 'recruitment_admitted',
+  recruitment_rejected: 'recruitment_rejected',
   recruitment_statistics: 'recruitment_statistics',
   recruitment_applications: 'recruitment_applications',
+
   recruitment_applications_processed: 'recruitment_applications_processed',
+  recruitment_applicants_processed: 'recruitment_applicants_processed',
   recruitment_automatic_rejection: 'recruitment_automatic_rejection',
   recruitment_rejection_email: 'recruitment_rejection_email',
   recruitment_stats_hours_header: 'recruitment_stats_hours_header',
@@ -424,6 +432,9 @@ export const KEY = {
   admin_saksdokumenter_cannot_reupload: 'admin_saksdokumenter_cannot_reupload',
   admin_impersonate: 'admin_impersonate',
   admin_stop_impersonate: 'admin_stop_impersonate',
+  admin_role_page_orggangsection: 'admin_role_page_orggangsection',
+  admin_role_page_role_since: 'admin_role_page_role_since',
+  admin_role_page_given_by: 'admin_role_page_given_by',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
@@ -449,6 +460,9 @@ export const KEY = {
   occupied_select_time_text: 'occupied_select_time_text',
   occupied_title: 'occupied_title',
   occupied_show: 'occupied_show',
+  confirm_occupied_time: 'confirm_occupied_time',
+  confirm_occupied_time_text: 'confirm_occupied_time_text',
+  confirm_occupied_time_send_application: 'confirm_occupied_time_send_application',
 
   // Feedback
   feedback_type: 'feedback_type',
