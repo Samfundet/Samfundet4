@@ -136,7 +136,11 @@ export function RecruitmentAllPositionsAdminPage() {
   return (
     <AdminPageLayout
       title={`All positions for ${recruitment?.name_en} at ${recruitment?.organization.name}`}
-      header={<Button theme={'green'}>Set all interviews</Button>}
+      header={
+        <Button theme={'green'} onClick={() => alert('TODO: add automatic interview distribution')}>
+          Set all interviews
+        </Button>
+      }
     >
       {applicantList}
     </AdminPageLayout>
