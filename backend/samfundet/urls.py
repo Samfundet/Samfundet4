@@ -51,6 +51,9 @@ router.register('recruitment-applications-for-group', views.RecruitmentApplicati
 router.register('recruitment-applications-for-gang', views.RecruitmentApplicationForGangView, 'recruitment_applications_for_gang')
 router.register('recruitment-applications-for-position', views.RecruitmentApplicationForRecruitmentPositionView, 'recruitment_applications_for_position')
 router.register('interview', views.InterviewView, 'interview')
+router.register(
+    'recruitment-withdrawn-applications-for-applicant', views.RecruitmentWithdrawnApplicationsForApplicant, 'recruitment-withdrawn-applications-for-applicant'
+)
 
 app_name = 'samfundet'
 
@@ -153,4 +156,9 @@ urlpatterns = [
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
     path('purchase-feedback/', views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
     path('recruitment/<int:recruitment_id>/gang/<int:gang_id>/stats/', views.GangApplicationCountView.as_view(), name='gang-application-stats'),
+    # path(
+    #     'recruitment-withdrawn-applications/',
+    #     views.RecruitmentWithdrawnApplicationsForApplicant.as_view(),
+    #     name='recruitment_withdrawn_applications',
+    # ),
 ]
