@@ -113,7 +113,7 @@ export async function getUsers(): Promise<UserDto[]> {
 }
 
 export async function getUsersPaginated(page: number): Promise<PageNumberPaginationType<UserDto>> {
-  const url = `${BACKEND_DOMAIN + ROUTES.backend.samfundet__users}?page=${page}`;
+  const url = `${BACKEND_DOMAIN + ROUTES.backend.samfundet__users_paginated}?page=${page}`;
   const response = await axios.get<PageNumberPaginationType<UserDto>>(url, { withCredentials: true });
   return response.data;
 }
