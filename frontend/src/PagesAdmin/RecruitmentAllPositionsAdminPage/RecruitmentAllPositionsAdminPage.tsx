@@ -6,6 +6,11 @@ import type { RecruitmentApplicationDto } from '~/dto';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentAllPositionsAdminPage.module.scss';
 
+type GroupedDataItem = {
+  user: RecruitmentApplicationDto['user'];
+  applications: RecruitmentApplicationDto[];
+};
+
 export function RecruitmentAllPositionsAdminPage() {
   const [recruitmentApplications, setRecruitmentApplications] = useState<RecruitmentApplicationDto[]>([]);
   const { recruitmentId } = useParams();
@@ -14,78 +19,71 @@ export function RecruitmentAllPositionsAdminPage() {
     if (recruitmentId) {
       getAllRecruitmentApplications(recruitmentId)
         .then((response) => {
-          // If your DRF is paginated, you might need `response.data.results` instead of `response.data`
           setRecruitmentApplications(response.data);
         })
         .catch(console.error);
     }
   }, [recruitmentId]);
 
-  // Group applications by user
-  const groupedByUser = recruitmentApplications.reduce(
-    (acc, application) => {
-      const userId = application.user.id; // or some unique user identifier
-      if (!acc[userId]) {
-        acc[userId] = {
-          user: application.user,
-          applications: [],
-        };
-      }
-      acc[userId].applications.push(application);
-      return acc;
-    },
-    {} as Record<string, { user: RecruitmentApplicationDto['user']; applications: RecruitmentApplicationDto[] }>,
-  );
+  // 1) Group applications by user
+  const groupedByUser = recruitmentApplications.reduce<Record<string, GroupedDataItem>>((acc, application) => {
+    const userId = application.user.id;
+    if (!acc[userId]) {
+      acc[userId] = { user: application.user, applications: [] };
+    }
+    acc[userId].applications.push(application);
+    return acc;
+  }, {});
 
-  // Convert the object into an array to map over
-  const groupedData = Object.values(groupedByUser);
+  // 2) Convert to an array
+  let groupedData = Object.values(groupedByUser);
 
-  //  Define the columns for your Table
+  // 3) Reorder that array by overlap
+  groupedData = reorderApplicantsByOverlap(groupedData);
+
+  // Table columns, row building, etc.
   const tableColumns = [
     { content: 'Position', sortable: false },
     { content: 'Priority', sortable: true },
   ];
 
-  // A helper function to build the rows for each user's table
   const applicationsToTableRows = (applications: RecruitmentApplicationDto[]) =>
-    applications.map((app) => {
-      return {
-        cells: [
-          {
-            value: app.recruitment_position.name_nb,
-            content: <strong>{app.recruitment_position.name_nb}</strong>,
-          },
-          {
-            value: app.applicant_priority,
-            content: <span>{app.applicant_priority}</span>,
-          },
-        ],
-      };
-    });
+    applications.map((app) => ({
+      cells: [
+        {
+          value: app.recruitment_position.name_nb,
+          content: <strong>{app.recruitment_position.name_nb}</strong>,
+        },
+        {
+          value: app.applicant_priority,
+          content: <span>{app.applicant_priority}</span>,
+        },
+      ],
+    }));
 
-  const headerLabel = (user: RecruitmentApplicationDto['user']) => {
-    return (
-      <div className={styles.header_label}>
-        <div>
-          {user.first_name} {user.last_name}
-        </div>
-        <Button theme="blue" onClick={() => console.log('click')}>
-          Set interview
-        </Button>
-      </div>
-    );
-  };
-
-  // Render one ExpandableHeader per user
+  // Render ExpandableHeader
   const applicantList = groupedData.map(({ user, applications }) => {
-    // Build the table data for this user
     const tableData = applicationsToTableRows(applications);
 
     return (
       <ExpandableHeader
         key={user.id}
         showByDefault={true}
-        label={headerLabel(user)}
+        label={
+          <div className={styles.header_label}>
+            <div>
+              {user.first_name} {user.last_name}
+            </div>
+            <div>{user.email}</div>
+            <div>{user.phone_number || 'N/A'}</div>
+            <Button
+              theme="blue"
+              onClick={() => alert('Add interview modal + conditionaly render based on UKA/ISFiT/KSG')}
+            >
+              Set interview
+            </Button>
+          </div>
+        }
         className={styles.expandable_header}
         theme="child"
       >
@@ -95,4 +93,68 @@ export function RecruitmentAllPositionsAdminPage() {
   });
 
   return <AdminPageLayout title="All Positions">{applicantList}</AdminPageLayout>;
+}
+
+/** =====================
+ * Helper Functions
+ * =====================
+ **/
+
+function buildPositionSets(groupedData: GroupedDataItem[]) {
+  return groupedData.map((item) => ({
+    ...item,
+    positionSet: new Set(item.applications.map((app) => app.recruitment_position.id)),
+  }));
+}
+
+function overlap(setA: Set<number>, setB: Set<number>): number {
+  // Intersection count
+  const [smaller, bigger] = setA.size < setB.size ? [setA, setB] : [setB, setA];
+  let count = 0;
+  for (const pos of smaller) {
+    if (bigger.has(pos)) count++;
+  }
+  return count;
+}
+
+function reorderApplicantsByOverlap(groupedData: GroupedDataItem[]): GroupedDataItem[] {
+  if (groupedData.length <= 1) return groupedData;
+
+  const withSets = buildPositionSets(groupedData);
+
+  // Pick an initial user.
+  const sorted: typeof withSets = [];
+  let maxIndex = 0;
+  let maxSize = 0;
+  for (let i = 0; i < withSets.length; i++) {
+    const size = withSets[i].positionSet.size;
+    if (size > maxSize) {
+      maxSize = size;
+      maxIndex = i;
+    }
+  }
+  sorted.push(withSets[maxIndex]);
+  withSets.splice(maxIndex, 1);
+
+  // Greedily pick next user with the maximum overlap with the last user in `sorted`
+  while (withSets.length > 0) {
+    const last = sorted[sorted.length - 1];
+    let bestIndex = 0;
+    let bestOverlap = -1;
+    for (let i = 0; i < withSets.length; i++) {
+      const o = overlap(last.positionSet, withSets[i].positionSet);
+      if (o > bestOverlap) {
+        bestOverlap = o;
+        bestIndex = i;
+      }
+    }
+    sorted.push(withSets[bestIndex]);
+    withSets.splice(bestIndex, 1);
+  }
+
+  // Remove positionSet before returning
+  return sorted.map((item) => {
+    const { positionSet, ...rest } = item;
+    return rest;
+  });
 }
