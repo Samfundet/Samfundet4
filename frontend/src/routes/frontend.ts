@@ -3,7 +3,7 @@ export const ROUTES_FRONTEND = {
   //    General/Public    //
   // ==================== //
   home: '/',
-  groups: '/groups/',
+  gangs: '/gangs/',
   health: '/health/',
   about: '/about/',
   venues: '/venues/',
@@ -19,7 +19,7 @@ export const ROUTES_FRONTEND = {
   contributors: '/contributors',
   // Recruitment:
   recruitment: '/recruitment/',
-  recruitment_application: '/recruitment/position/:positionId/',
+  recruitment_application: '/recruitment/:recruitmentId/position/:positionId/',
   recruitment_application_overview: '/recruitment/:recruitmentId/my-applications/',
   organization_recruitment: '/recruitment/:recruitmentId/',
   contact: '/contact',
@@ -35,6 +35,12 @@ export const ROUTES_FRONTEND = {
   sulten_reservation: '/lyche/reservation/',
   sulten_about: '/lyche/about/',
   sulten_contact: 'lyche/contact/',
+
+  // ==================== //
+  //  User control panel  //
+  // ==================== //
+  user_change_password: '/control-panel/password/',
+
   // ==================== //
   //      Admin pages     //
   // ==================== //
@@ -77,7 +83,7 @@ export const ROUTES_FRONTEND = {
   admin_recruitment_create: '/control-panel/recruitment/create/',
   admin_recruitment_users_three_interview_criteria:
     '/control-panel/recruitment/:recruitmentId/users-without-three-interviews/',
-  admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-applications/',
+  admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-interview/',
   admin_recruitment_open_to_other_positions: '/control-panel/recruitment/:recruitmentId/users-open-to-other-positions/',
   admin_recruitment_overview: '/control-panel/recruitment/:recruitmentId/recruitment-overview/',
   admin_recruitment_gang_overview: '/control-panel/recruitment/:recruitmentId/gang-overview/',

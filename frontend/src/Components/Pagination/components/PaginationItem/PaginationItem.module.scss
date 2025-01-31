@@ -1,0 +1,8 @@
+.item {
+  display: flex;
+  justify-content: center;
+  min-width: 3rem;
+  max-width: 4rem;
+  flex-basis: 3rem;
+  flex-shrink: 1;
+}

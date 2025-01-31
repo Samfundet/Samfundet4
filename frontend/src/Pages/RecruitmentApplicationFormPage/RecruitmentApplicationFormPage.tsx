@@ -1,8 +1,9 @@
+import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Link, Page, SamfundetLogoSpinner } from '~/Components';
+import { Button, Link, Modal, OccupiedForm, Page, SamfundetLogoSpinner } from '~/Components';
 import { Text } from '~/Components/Text/Text';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
@@ -37,6 +38,9 @@ export function RecruitmentApplicationFormPage() {
   const [recruitmentPositionsForGang, setRecruitmentPositionsForGang] = useState<RecruitmentPositionDto[]>();
 
   const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
+  const [openOccupiedForm, setOpenOccupiedForm] = useState(false);
+  const [formData, setFormData] = useState<FormProps>();
+  const [recruitmentId, setRecruitmentId] = useState(0);
 
   const [loading, setLoading] = useState(true);
 
@@ -49,6 +53,7 @@ export function RecruitmentApplicationFormPage() {
       getRecruitmentPositionForApplicant(positionId as string)
         .then((res) => {
           setRecruitmentPosition(res.data);
+          setRecruitmentId(Number.parseInt(res.data.recruitment));
         })
         .catch((error) => {
           if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
@@ -59,7 +64,6 @@ export function RecruitmentApplicationFormPage() {
         }),
       getRecruitmentApplicationForPosition(positionId as string).then((res) => {
         setRecruitmentApplication(res.data);
-        console.log(res.data);
       }),
     ]).then(() => {
       setLoading(false);
@@ -96,6 +100,11 @@ export function RecruitmentApplicationFormPage() {
   }
 
   function handleOnSubmit(data: FormProps) {
+    setFormData(data);
+    setOpenOccupiedForm(true);
+  }
+
+  function submitData(data: FormProps) {
     putRecruitmentApplication(data as Partial<RecruitmentApplicationDto>, positionId ? +positionId : 1)
       .then(() => {
         navigate({
@@ -137,6 +146,28 @@ export function RecruitmentApplicationFormPage() {
   return (
     <Page>
       <div className={styles.container}>
+        {openOccupiedForm && (
+          <Modal isOpen={openOccupiedForm} className={styles.occupied_modal}>
+            <>
+              <button
+                type="button"
+                className={styles.close_btn}
+                title="Close"
+                onClick={() => setOpenOccupiedForm(false)}
+              >
+                <Icon icon="octicon:x-24" width={24} />
+              </button>
+              <OccupiedForm
+                recruitmentId={recruitmentId}
+                onCancel={() => setOpenOccupiedForm(false)}
+                onConfirm={() => formData && submitData(formData)}
+                header="confirm_occupied_time"
+                subHeader="confirm_occupied_time_text"
+                saveButtonText="confirm_occupied_time_send_application"
+              />
+            </>
+          </Modal>
+        )}
         <div className={styles.row}>
           <div className={styles.text_container}>
             <h1 className={styles.header}>{dbT(recruitmentPosition, 'name')}</h1>
@@ -175,7 +206,7 @@ export function RecruitmentApplicationFormPage() {
                       navigate({
                         url: reverse({
                           pattern: ROUTES.frontend.recruitment_application,
-                          urlParams: { positionId: pos.id, gangId: pos.gang.id },
+                          urlParams: { positionId: pos.id, recruitmentId: recruitmentId },
                         }),
                       });
                     }}
