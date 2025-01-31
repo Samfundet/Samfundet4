@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Button, ExpandableHeader, Table, ToggleSwitch } from '~/Components';
 import { getAllRecruitmentApplications, getRecruitment } from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
+import { RecruitmentStatusChoicesMapping } from '~/types';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentAllPositionsAdminPage.module.scss';
 
@@ -50,6 +51,7 @@ export function RecruitmentAllPositionsAdminPage() {
 
   // Table columns, row building, etc.
   const tableColumns = [
+    { content: 'Gang', sortable: false },
     { content: 'Position', sortable: false },
     { content: 'Interview location', sortable: false },
     { content: 'Interview time', sortable: false },
@@ -62,16 +64,20 @@ export function RecruitmentAllPositionsAdminPage() {
     applications.map((app) => ({
       cells: [
         {
+          value: app.recruitment_position.gang.abbreviation,
+          content: <strong>{app.recruitment_position.gang.abbreviation ?? 'N/A'}</strong>,
+        },
+        {
           value: app.recruitment_position.name_nb,
-          content: <strong>{app.recruitment_position.name_nb}</strong>,
+          content: <span>{app.recruitment_position.name_nb}</span>,
         },
         {
           value: app.interview?.interview_location,
-          content: <span>{app.interview?.interview_location ? app.interview?.interview_location : 'N/A'}</span>,
+          content: <span>{app.interview?.interview_location ?? 'N/A'}</span>,
         },
         {
           value: app.interview?.interview_time,
-          content: <span>{app.interview?.interview_time ? app.interview?.interview_time : 'N/A'}</span>,
+          content: <span>{app.interview?.interview_time ?? 'N/A'}</span>,
         },
         {
           value: app.applicant_priority,
@@ -87,7 +93,7 @@ export function RecruitmentAllPositionsAdminPage() {
         },
         {
           value: app.recruiter_status,
-          content: <span>{app.recruiter_status ? app.recruiter_status : 'N/A'}</span>,
+          content: <span>{RecruitmentStatusChoicesMapping[app.recruiter_status]}</span>,
         },
       ],
     }));
@@ -128,7 +134,10 @@ export function RecruitmentAllPositionsAdminPage() {
   });
 
   return (
-    <AdminPageLayout title={`All positions for ${recruitment?.name_en} at ${recruitment?.organization.name}`}>
+    <AdminPageLayout
+      title={`All positions for ${recruitment?.name_en} at ${recruitment?.organization.name}`}
+      header={<Button theme={'blue'}>Set all interviews</Button>}
+    >
       {applicantList}
     </AdminPageLayout>
   );
