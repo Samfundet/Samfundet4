@@ -6,8 +6,8 @@ import hmac
 import hashlib
 import operator
 from typing import Any
-from itertools import chain
 from functools import reduce
+from itertools import chain
 
 from guardian.shortcuts import get_objects_for_user
 
@@ -1490,6 +1490,7 @@ class PositionByTagsView(ListAPIView):
     Fetches recruitment positions by common tags for a specific recruitment.
     Expects tags as query parameter in format: ?tags=tag1,tag2,tag3
     Optionally accepts position_id parameter to exclude current position
+    This view expects a string which contains tags separated by comma from the client.
     """
 
     permission_classes = [AllowAny]
