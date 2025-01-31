@@ -6,9 +6,9 @@ from rest_framework.response import Response
 from rest_framework.pagination import CursorPagination, PageNumberPagination, LimitOffsetPagination
 
 
-# 1. Page Number Pagination
+# Page Number Pagination
 class CustomPageNumberPagination(PageNumberPagination):
-    page_size = 2
+    page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 50
 
@@ -28,14 +28,14 @@ class CustomPageNumberPagination(PageNumberPagination):
     # URLs will look like: /api/items/?page=2
 
 
-# 2. Limit-Offset Pagination
+# Limit-Offset Pagination
 class CustomLimitOffsetPagination(LimitOffsetPagination):
     default_limit = 10
     max_limit = 100
     # URLs will look like: /api/items/?limit=10&offset=20
 
 
-# # 3. Cursor Pagination (good for infinite scroll)
+# Cursor Pagination (good for infinite scroll)
 class CustomCursorPagination(CursorPagination):
     page_size = 10
     ordering = '-created_at'  # Must specify ordering field
