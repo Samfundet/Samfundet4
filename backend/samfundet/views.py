@@ -518,15 +518,11 @@ class UserView(APIView):
 class AllUsersView(ListAPIView):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = UserSerializer
-
-    def get_queryset(self) -> QuerySet[User]:
-        queryset = User.objects.all()
+    queryset = User.objects.all()
 
     def get(self, request: Request) -> Response:
         users = user_query(query=request.query_params)
         return Response(data=UserSerializer(users, many=True).data)
-
-        return queryset.order_by('username')
 
 
 class PaginatedUsersView(ListAPIView):
