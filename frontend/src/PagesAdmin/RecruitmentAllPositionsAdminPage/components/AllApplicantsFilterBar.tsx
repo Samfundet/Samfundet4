@@ -2,9 +2,14 @@ import { useState } from 'react';
 import { Button, InputField } from '~/Components';
 import styles from './AllApplicantsFilterBar.module.scss';
 
-type FilterType = 'name' | 'noRejections' | 'similar' | 'conflicts' | 'noConflicts' | 'specific' | null;
+export type FilterType = 'name' | 'noRejections' | 'similar' | 'conflicts' | 'noConflicts' | 'specific' | null;
 
-export function AllApplicantsFilterBar() {
+type AllApplicantsFilterBarProps = {
+  onFilterChange: (filterType: FilterType) => void;
+  onSearchChange: (searchTerm: string) => void;
+};
+
+export function AllApplicantsFilterBar({ onFilterChange, onSearchChange }: AllApplicantsFilterBarProps) {
   const [activeFilter, setActiveFilter] = useState<FilterType>(null);
 
   const filters: Array<{ type: FilterType; label: string }> = [
@@ -17,13 +22,18 @@ export function AllApplicantsFilterBar() {
   ];
 
   const handleFilterClick = (filterType: FilterType) => {
-    setActiveFilter(filterType === activeFilter ? null : filterType);
+    const newFilterType = filterType === activeFilter ? null : filterType;
+    setActiveFilter(newFilterType);
+    onFilterChange(newFilterType);
   };
 
   return (
     <div>
-      <InputField icon="mdi:search" placeholder="Search for applicant" />
-
+      <InputField
+        icon="mdi:search"
+        placeholder="Search for applicant"
+        onChange={(event) => onSearchChange(event.target.value)}
+      />
       <div className={styles.filte_buttons}>
         {filters.map(({ type, label }) => (
           <Button

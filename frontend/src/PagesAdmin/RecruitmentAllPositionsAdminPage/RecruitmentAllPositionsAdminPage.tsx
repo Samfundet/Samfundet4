@@ -7,7 +7,7 @@ import type { RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { RecruitmentStatusChoicesMapping } from '~/types';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { AllApplicantsFilterBar } from './components/AllApplicantsFilterBar';
+import { AllApplicantsFilterBar, type FilterType } from './components/AllApplicantsFilterBar';
 import { AllApplicationsExpandableHeader } from './components/AllApplicationsExpandableHeader';
 
 type GroupedDataItem = {
@@ -18,9 +18,21 @@ type GroupedDataItem = {
 export function RecruitmentAllPositionsAdminPage() {
   const [recruitmentApplications, setRecruitmentApplications] = useState<RecruitmentApplicationDto[]>([]);
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
+  const [activeFilter, setActiveFilter] = useState<FilterType>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
   const { recruitmentId } = useParams();
   const { t } = useTranslation();
 
+  const handleFilterChange = (filterType: FilterType) => {
+    setActiveFilter(filterType);
+    alert(`Filter changed to: ${filterType} MUST BE IMPLEMENTED`);
+  };
+
+  const handleSearchChange = (term: string) => {
+    setSearchTerm(term);
+    alert(`Search term changed to: ${term} MUST BE IMPLEMENTED`);
+  };
   useEffect(() => {
     if (recruitmentId) {
       getRecruitment(recruitmentId)
@@ -64,7 +76,7 @@ export function RecruitmentAllPositionsAdminPage() {
     { content: t(KEY.recruitment_recruiter_status), sortable: false },
   ];
 
-  const handleAllowCall = (application: RecruitmentApplicationDto) => {
+  const handleAllowCall = () => {
     alert('IMPLEMENT CONTACT CONTROL FUNCTIONALITY');
   };
 
@@ -136,7 +148,7 @@ export function RecruitmentAllPositionsAdminPage() {
       title={`${recruitment?.name_en} ${t(KEY.common_at)} ${recruitment?.organization.name}`}
       header={pageHeader}
     >
-      <AllApplicantsFilterBar />
+      <AllApplicantsFilterBar onFilterChange={handleFilterChange} onSearchChange={handleSearchChange} />
       {applicantList}
     </AdminPageLayout>
   );
