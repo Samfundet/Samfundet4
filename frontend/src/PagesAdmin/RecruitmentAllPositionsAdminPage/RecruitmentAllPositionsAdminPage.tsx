@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Table, ToggleSwitch } from '~/Components';
 import { getAllRecruitmentApplications, getRecruitment } from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { RecruitmentStatusChoicesMapping } from '~/types';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -13,6 +14,7 @@ type GroupedDataItem = {
   user: RecruitmentApplicationDto['user'];
   applications: RecruitmentApplicationDto[];
 };
+const browserTabTitle = 'All applicants';
 
 export function RecruitmentAllPositionsAdminPage() {
   const [recruitmentApplications, setRecruitmentApplications] = useState<RecruitmentApplicationDto[]>([]);
@@ -23,6 +25,8 @@ export function RecruitmentAllPositionsAdminPage() {
   const { recruitmentId } = useParams();
   const { t } = useTranslation();
 
+  useTitle(browserTabTitle);
+
   const handleFilterChange = (filterType: FilterType) => {
     setActiveFilter(filterType);
     alert(`Filter changed to: ${filterType} MUST BE IMPLEMENTED`);
@@ -32,6 +36,7 @@ export function RecruitmentAllPositionsAdminPage() {
     setSearchTerm('SearchTerm');
     alert('MUST BE IMPLEMENTED');
   };
+
   useEffect(() => {
     if (recruitmentId) {
       getRecruitment(recruitmentId)
