@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Button, ExpandableHeader, Table, ToggleSwitch } from '~/Components';
+import { Button, Table, ToggleSwitch } from '~/Components';
 import { getAllRecruitmentApplications, getRecruitment } from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { RecruitmentStatusChoicesMapping } from '~/types';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import styles from './RecruitmentAllPositionsAdminPage.module.scss';
+import { AllApplicationsExpandableHeader } from './components/AllApplicationsExpandableHeader';
 
 type GroupedDataItem = {
   user: RecruitmentApplicationDto['user'];
@@ -16,6 +18,7 @@ export function RecruitmentAllPositionsAdminPage() {
   const [recruitmentApplications, setRecruitmentApplications] = useState<RecruitmentApplicationDto[]>([]);
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const { recruitmentId } = useParams();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (recruitmentId) {
@@ -51,13 +54,13 @@ export function RecruitmentAllPositionsAdminPage() {
 
   // Table columns, row building, etc.
   const tableColumns = [
-    { content: 'Gang', sortable: false },
-    { content: 'Position', sortable: false },
-    { content: 'Interview location', sortable: false },
-    { content: 'Interview time', sortable: false },
-    { content: 'Priority', sortable: false },
-    { content: 'Føring', sortable: false },
-    { content: 'Status', sortable: false },
+    { content: t(KEY.common_gang), sortable: false },
+    { content: t(KEY.common_recruitmentposition), sortable: false },
+    { content: t(KEY.recruitment_interview_location), sortable: false },
+    { content: t(KEY.recruitment_interview_time), sortable: false },
+    { content: t(KEY.recruitment_priority), sortable: false },
+    { content: t(KEY.recruitment_allow_to_contact), sortable: false },
+    { content: t(KEY.recruitment_recruiter_status), sortable: false },
   ];
 
   const applicationsToTableRows = (applications: RecruitmentApplicationDto[]) =>
@@ -84,12 +87,8 @@ export function RecruitmentAllPositionsAdminPage() {
           content: <span>{app.applicant_priority}</span>,
         },
         {
-          value: 'Føring',
-          content: (
-            <span>
-              Tillat å gi tilbud <ToggleSwitch />
-            </span>
-          ),
+          value: 'Allow to contact',
+          content: <ToggleSwitch />,
         },
         {
           value: app.recruiter_status,
@@ -98,47 +97,30 @@ export function RecruitmentAllPositionsAdminPage() {
       ],
     }));
 
-  // Render ExpandableHeader
-  const applicantList = groupedData.map(({ user, applications }) => {
-    const tableData = applicationsToTableRows(applications);
+  // Render applicant list only if recruitment exists
+  const applicantList = recruitment
+    ? groupedData.map(({ user, applications }) => {
+        if (!user) return null;
 
-    return (
-      <ExpandableHeader
-        key={user.id}
-        showByDefault={true}
-        label={
-          <div className={styles.header_label}>
-            <div>
-              {user.first_name} {user.last_name}
-            </div>
-            <div>{user.email}</div>
-            <div>{user.phone_number || 'N/A'}</div>
-            {recruitment?.organization.name !== 'Samfundet' && (
-              <Button
-                theme="blue"
-                onClick={() =>
-                  alert('Add interview modal + conditionaly render based on UKA/ISFiT/KSG --> must use perms for this')
-                }
-              >
-                Set interview
-              </Button>
-            )}
-          </div>
-        }
-        className={styles.expandable_header}
-        theme="child"
-      >
-        <Table columns={tableColumns} data={tableData} defaultSortColumn={1} />
-      </ExpandableHeader>
-    );
-  });
+        const tableData = applicationsToTableRows(applications);
+
+        return (
+          <AllApplicationsExpandableHeader
+            recruitment={recruitment}
+            user={user}
+            key={user.id}
+            table={<Table columns={tableColumns} data={tableData} defaultSortColumn={1} />}
+          />
+        );
+      })
+    : null;
 
   return (
     <AdminPageLayout
       title={`All positions for ${recruitment?.name_en} at ${recruitment?.organization.name}`}
       header={
         <Button theme={'green'} onClick={() => alert('TODO: add automatic interview distribution')}>
-          Set all interviews
+          {t(KEY.recruitment_interview_set_all)}
         </Button>
       }
     >
@@ -160,7 +142,6 @@ function buildPositionSets(groupedData: GroupedDataItem[]) {
 }
 
 function overlap(setA: Set<number>, setB: Set<number>): number {
-  // Intersection count
   const [smaller, bigger] = setA.size < setB.size ? [setA, setB] : [setB, setA];
   let count = 0;
   for (const pos of smaller) {
@@ -174,7 +155,7 @@ function reorderApplicantsByOverlap(groupedData: GroupedDataItem[]): GroupedData
 
   const withSets = buildPositionSets(groupedData);
 
-  // Pick an initial user.
+  // Pick an initial user
   const sorted: typeof withSets = [];
   let maxIndex = 0;
   let maxSize = 0;
