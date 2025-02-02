@@ -24,10 +24,9 @@ export function AllApplicantsFilterBar() {
       {filters.map(({ type, label }) => (
         <Button
           key={type}
-          theme="outlined"
+          theme={activeFilter === type ? 'samf' : 'outlined'}
           display="pill"
-          rounded={true}
-          className={activeFilter === type ? styles.active : ''}
+          className={styles.filter_button}
           onClick={() => handleFilterClick(type)}
         >
           {label}

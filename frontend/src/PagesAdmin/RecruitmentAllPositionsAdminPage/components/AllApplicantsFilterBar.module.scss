@@ -1,24 +1,23 @@
 @import 'src/constants';
-
 @import 'src/mixins';
 
+.filter_button {
+  width: fit-content;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 .filter_bar {
-  overflow-x: scroll;
-  width: 50%;
+  overflow-x: auto;
+  width: 80%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: row;
   gap: 1rem;
+  padding: 0.5rem 0.25rem;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
-  :global(.button_outlined).active {
-    border-color: $red-samf;
-    color: $red-samf;
-    border-width: 2px;
-
-    &:hover:not([disabled]) {
-      border-color: $red-samf;
-      color: $red-samf;
-      filter: none;
-    }
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
