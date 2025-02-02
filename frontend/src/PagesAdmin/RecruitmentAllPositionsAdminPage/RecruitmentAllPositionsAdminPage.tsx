@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Table, ToggleSwitch } from '~/Components';
 import { getAllRecruitmentApplications, getRecruitment } from '~/api';
-import type { RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
+import type { RecruitmentApplicationDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { applicationKeys, recruitmentKeys } from '~/queryKeys';
 import { RecruitmentStatusChoicesMapping } from '~/types';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { AllApplicantsFilterBar, AllApplicationsExpandableHeader, type FilterType } from './components';
@@ -17,8 +19,6 @@ type GroupedDataItem = {
 const browserTabTitle = 'All applicants';
 
 export function RecruitmentAllPositionsAdminPage() {
-  const [recruitmentApplications, setRecruitmentApplications] = useState<RecruitmentApplicationDto[]>([]);
-  const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [activeFilter, setActiveFilter] = useState<FilterType>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -37,24 +37,20 @@ export function RecruitmentAllPositionsAdminPage() {
     alert('MUST BE IMPLEMENTED');
   };
 
-  useEffect(() => {
-    if (recruitmentId) {
-      getRecruitment(recruitmentId)
-        .then((response) => {
-          setRecruitment(response.data);
-        })
-        .catch(console.error);
+  const { data: recruitment, isLoading: isLoadingRecruitment } = useQuery({
+    queryKey: recruitmentKeys.all,
+    queryFn: () => getRecruitment(recruitmentId!),
+    enabled: !!recruitmentId,
+  });
 
-      getAllRecruitmentApplications(recruitmentId)
-        .then((response) => {
-          setRecruitmentApplications(response.data);
-        })
-        .catch(console.error);
-    }
-  }, [recruitmentId]);
+  const { data: recruitmentApplications, isLoading: isLoadingApplications } = useQuery({
+    queryKey: applicationKeys.all,
+    queryFn: () => getAllRecruitmentApplications(recruitmentId!),
+    enabled: !!recruitmentId,
+  });
 
   // 1) Group applications by user
-  const groupedByUser = recruitmentApplications.reduce<Record<string, GroupedDataItem>>((acc, application) => {
+  const groupedByUser = recruitmentApplications?.data.reduce<Record<string, GroupedDataItem>>((acc, application) => {
     const userId = application.user.id;
     if (!acc[userId]) {
       acc[userId] = { user: application.user, applications: [] };
@@ -63,11 +59,14 @@ export function RecruitmentAllPositionsAdminPage() {
     return acc;
   }, {});
 
-  // 2) Convert to an array
-  let groupedData = Object.values(groupedByUser);
+  let groupedData: GroupedDataItem[] = [];
+  if (groupedByUser) {
+    // 2) Convert to an array
+    groupedData = Object.values(groupedByUser);
 
-  // 3) Reorder that array by overlap
-  groupedData = reorderApplicantsByOverlap(groupedData);
+    // 3) Reorder that array by overlap
+    groupedData = reorderApplicantsByOverlap(groupedData);
+  }
 
   // Table columns, row building, etc.
   const tableColumns = [
@@ -131,7 +130,7 @@ export function RecruitmentAllPositionsAdminPage() {
 
         return (
           <AllApplicationsExpandableHeader
-            recruitment={recruitment}
+            recruitment={recruitment.data}
             user={user}
             key={user.id}
             table={<Table columns={tableColumns} data={tableData} defaultSortColumn={1} />}
@@ -149,8 +148,9 @@ export function RecruitmentAllPositionsAdminPage() {
 
   return (
     <AdminPageLayout
-      title={`${recruitment?.name_en} ${t(KEY.common_at)} ${recruitment?.organization.name}`}
+      title={`${recruitment?.data.name_en} ${t(KEY.common_at)} ${recruitment?.data.organization.name}`}
       header={pageHeader}
+      loading={isLoadingRecruitment}
     >
       <AllApplicantsFilterBar onFilterChange={handleFilterChange} onSearchChange={handleSearchChange} />
       {applicantList}
