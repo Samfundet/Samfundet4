@@ -22,7 +22,7 @@ export function AllApplicantsFilterBar() {
 
   return (
     <div>
-      <InputField icon="mdi:search" placeholder="Search for user" />
+      <InputField icon="mdi:search" placeholder="Search for applicant" />
 
       <div className={styles.filte_buttons}>
         {filters.map(({ type, label }) => (
