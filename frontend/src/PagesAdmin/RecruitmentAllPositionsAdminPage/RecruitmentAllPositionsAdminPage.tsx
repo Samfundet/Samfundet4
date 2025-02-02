@@ -64,6 +64,10 @@ export function RecruitmentAllPositionsAdminPage() {
     { content: t(KEY.recruitment_recruiter_status), sortable: false },
   ];
 
+  const handleAllowCall = (application: RecruitmentApplicationDto) => {
+    alert('IMPLEMENT CONTACT CONTROL FUNCTIONALITY');
+  };
+
   const applicationsToTableRows = (applications: RecruitmentApplicationDto[]) =>
     applications.map((app) => ({
       cells: [
@@ -89,7 +93,7 @@ export function RecruitmentAllPositionsAdminPage() {
         },
         {
           value: 'Allow to contact',
-          content: <ToggleSwitch />,
+          content: <ToggleSwitch onChange={() => handleAllowCall(app)} />,
         },
         {
           value: app.recruiter_status,
