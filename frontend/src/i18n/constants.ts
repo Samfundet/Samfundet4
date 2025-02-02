@@ -416,6 +416,8 @@ export const KEY = {
   recruitment_choose_interview_time_and_location: 'recruitment_choose_interview_time_and_location',
   recruitment_choose_interview_time: 'recruitment_choose_interview_time',
   recruitment_choose_interview_location: 'recruitment_choose_interview_location',
+  recruitment_all_applicants: 'recruitment_all_applicants',
+  recruitment_manage_all_applicants: 'recruitment_manage_all_applicants',
 
   // Admin:
   admin_users_last_active: 'admin_users_last_active',

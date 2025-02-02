@@ -427,6 +427,8 @@ export const nb = prepareTranslations({
   [KEY.recruitment_applet_without_interview_title]: 'Uten intervju',
   [KEY.recruitment_applet_without_interview_description]: 'Søkere som ikke har noen intervju satt',
   [KEY.recruitment_applet_three_interview_title]: '< 3 intervju',
+  [KEY.recruitment_all_applicants]: 'Alle søkere',
+  [KEY.recruitment_manage_all_applicants]: 'Administrer alle søkere for dette opptaket',
 
   // CommandMenu:
   [KEY.command_menu_label]: 'Global kommando meny',
@@ -894,6 +896,16 @@ export const en = prepareTranslations({
   [KEY.recruitment_separate_recruitment]: 'Seperate recruitment',
   [KEY.recruitment_allow_to_contact]: 'Allow to contact',
   [KEY.recruitment_interview_set_all]: 'Set all interviews',
+  [KEY.recruitment_choose_interview_time_and_location]: 'Choose time and location of interview',
+  [KEY.recruitment_choose_interview_time]: 'Choose time of interview',
+  [KEY.recruitment_choose_interview_location]: 'Choose location of interview',
+  [KEY.recruitment_all_applicants_filter_name]: 'Sort by name',
+  [KEY.recruitment_all_applicants_filter_no_rejections]: 'Display only where the applicant is wanted',
+  [KEY.recruitment_all_applicants_filter_similar]: 'Sort by the same positions',
+  [KEY.recruitment_all_applicants_filter_conflicts]: 'Display conflicts only',
+  [KEY.recruitment_all_applicants_filter_no_conflicts]: 'Display no conflicts',
+  [KEY.recruitment_all_applicants_filter_specific]: 'Display applicant by positions',
+  [KEY.recruitment_search_for_applicant]: 'Search for applicant',
 
   // Recruitment applets
   [KEY.recruitment_applet_dashboard_description]: 'Your personal dashboard',
@@ -906,16 +918,8 @@ export const en = prepareTranslations({
   [KEY.recruitment_applet_without_interview_title]: 'Without interview',
   [KEY.recruitment_applet_without_interview_description]: 'Applicants without any interviews set',
   [KEY.recruitment_applet_three_interview_title]: '< 3 interviews',
-  [KEY.recruitment_choose_interview_time_and_location]: 'Choose time and location of interview',
-  [KEY.recruitment_choose_interview_time]: 'Choose time of interview',
-  [KEY.recruitment_choose_interview_location]: 'Choose location of interview',
-  [KEY.recruitment_all_applicants_filter_name]: 'Sort by name',
-  [KEY.recruitment_all_applicants_filter_no_rejections]: 'Display only where the applicant is wanted',
-  [KEY.recruitment_all_applicants_filter_similar]: 'Sort by the same positions',
-  [KEY.recruitment_all_applicants_filter_conflicts]: 'Display conflicts only',
-  [KEY.recruitment_all_applicants_filter_no_conflicts]: 'Display no conflicts',
-  [KEY.recruitment_all_applicants_filter_specific]: 'Display applicant by positions',
-  [KEY.recruitment_search_for_applicant]: 'Search for applicant',
+  [KEY.recruitment_all_applicants]: 'All applicants',
+  [KEY.recruitment_manage_all_applicants]: 'Manage all applicants for this recruitment',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
