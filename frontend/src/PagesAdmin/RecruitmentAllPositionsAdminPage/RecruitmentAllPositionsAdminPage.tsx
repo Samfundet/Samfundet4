@@ -7,8 +7,7 @@ import type { RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { RecruitmentStatusChoicesMapping } from '~/types';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { AllApplicantsFilterBar, type FilterType } from './components/AllApplicantsFilterBar';
-import { AllApplicationsExpandableHeader } from './components/AllApplicationsExpandableHeader';
+import { AllApplicantsFilterBar, AllApplicationsExpandableHeader, type FilterType } from './components';
 
 type GroupedDataItem = {
   user: RecruitmentApplicationDto['user'];
