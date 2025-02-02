@@ -20,18 +20,26 @@ export function AllApplicationsExpandableHeader({
 }: AllApplicationsExpandableHeaderProps) {
   const { t } = useTranslation();
 
-  const headerLabel = (
-    <div className={styles.header_label}>
-      <div>
-        {user.first_name} {user.last_name}
-      </div>
-      <div>{user.email}</div>
-      <div>{user.phone_number || 'N/A'}</div>
-      {recruitment?.organization.name !== 'Samfundet' && (
+  const setInterviewsButton = (
+    <div className={styles.set_interview_button}>
+      <div className={styles.header_label_item}>
         <Button theme="blue" onClick={onSetInterviewClick}>
           {t(KEY.recruitment_interview_set)}
         </Button>
-      )}
+      </div>
+    </div>
+  );
+
+  const headerLabel = (
+    <div className={styles.header_label}>
+      <div className={styles.applicant_contact_container}>
+        <div className={styles.header_label_item}>
+          {user.first_name} {user.last_name}
+        </div>
+        <div className={styles.header_label_item}>{user.email}</div>
+        <div className={styles.header_label_item}>{user.phone_number || 'N/A'}</div>
+      </div>
+      {recruitment?.organization.name !== 'Samfundet' && setInterviewsButton}
     </div>
   );
 

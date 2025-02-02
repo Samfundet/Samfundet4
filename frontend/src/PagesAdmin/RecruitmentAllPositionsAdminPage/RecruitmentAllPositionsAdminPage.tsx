@@ -97,6 +97,10 @@ export function RecruitmentAllPositionsAdminPage() {
       ],
     }));
 
+  const handleSetInterviewsForApplicant = () => {
+    alert('IMPLEMENT ABILITY TO SET MULTIPLE INTERVIEWS FOR A SINGLE APPLICANT');
+  };
+
   // Render applicant list only if recruitment exists
   const applicantList = recruitment
     ? groupedData.map(({ user, applications }) => {
@@ -110,6 +114,7 @@ export function RecruitmentAllPositionsAdminPage() {
             user={user}
             key={user.id}
             table={<Table columns={tableColumns} data={tableData} defaultSortColumn={1} />}
+            onSetInterviewClick={handleSetInterviewsForApplicant}
           />
         );
       })

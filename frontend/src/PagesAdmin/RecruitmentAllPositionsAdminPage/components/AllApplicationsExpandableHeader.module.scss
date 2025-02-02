@@ -2,13 +2,6 @@
 
 @import 'src/mixins';
 
-.header_label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: row;
-}
-
 .expandable_header {
   background-color: $red_samf;
   color: white;
@@ -26,4 +19,28 @@
   @include theme-dark {
     background-color: #400000;
   }
+}
+
+.header_label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+}
+
+.applicant_contact_container {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(200px, 2fr) minmax(150px, 1fr);
+  gap: 2rem;
+  align-items: center;
+}
+
+.header_label_item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0; // Allows text truncation to work in grid
+}
+
+.set_interview_button {
+  justify-self: end; // Aligns button to the right
 }
