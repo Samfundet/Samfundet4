@@ -290,6 +290,7 @@ export const KEY = {
   recruitment_interview_planned: 'recruitment_interview_planned',
   recruitment_no_interviews: 'recruitment_no_interviews',
   recruitment_interview_set: 'recruitment_interview_set',
+  recruitment_interview_set_all: 'recruitment_interview_set_all',
   recruitment_interview_groups: 'recruitment_interview_groups',
   recruitment_interview_group: 'recruitment_interview_group',
   recruitment_applicants: 'recruitment_applicants',
@@ -376,6 +377,7 @@ export const KEY = {
   recruitment_rejected: 'recruitment_rejected',
   recruitment_statistics: 'recruitment_statistics',
   recruitment_applications: 'recruitment_applications',
+  recruitment_allow_to_contact: 'recruitment_allow_to_contact',
 
   recruitment_applications_processed: 'recruitment_applications_processed',
   recruitment_applicants_processed: 'recruitment_applicants_processed',

@@ -404,6 +404,8 @@ export const nb = prepareTranslations({
   [KEY.admin_gangsadminpage_abbreviation]: 'Forkortelse',
   [KEY.recruitment_create_room]: 'Opprett rom',
   [KEY.recruitment_separate_recruitment]: 'Separat opptak',
+  [KEY.recruitment_allow_to_contact]: 'Tillatt å kontakte',
+  [KEY.recruitment_interview_set_all]: 'Sett alle intervjuer',
 
   // Recruitment applets
   [KEY.recruitment_applet_dashboard_description]: 'Ditt personlige dashbord',
@@ -881,6 +883,8 @@ export const en = prepareTranslations({
     'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcomming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
   [KEY.recruitment_create_room]: 'Create room',
   [KEY.recruitment_separate_recruitment]: 'Seperate recruitment',
+  [KEY.recruitment_allow_to_contact]: 'Allow to contact',
+  [KEY.recruitment_interview_set_all]: 'Set all interviews',
 
   // Recruitment applets
   [KEY.recruitment_applet_dashboard_description]: 'Your personal dashboard',
