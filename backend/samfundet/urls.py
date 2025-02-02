@@ -153,5 +153,5 @@ urlpatterns = [
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
     path('purchase-feedback/', views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
     path('recruitment/<int:recruitment_id>/gang/<int:gang_id>/stats/', views.GangApplicationCountView.as_view(), name='gang-application-stats'),
-    path('recruitment/all-applications/', views.RecruitmentApplicationsPerRecruitmentView.as_view(), name='recruitment-all-applications'),
+    path('recruitment/all-applications/', views.RecruitmentAllApplicationsPerRecruitmentView.as_view(), name='recruitment-all-applications'),
 ]

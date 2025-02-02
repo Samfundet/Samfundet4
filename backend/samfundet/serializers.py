@@ -1155,7 +1155,7 @@ class RecruitmentShowUnprocessedApplicationsSerializer(serializers.ModelSerializ
         return instance.recruitment_position.name_nb
 
 
-class RecruitmentApplicationsPerRecruitmentSerializer(serializers.ModelSerializer):
+class RecruitmentAllApplicationsPerRecruitmentSerializer(serializers.ModelSerializer):
     user = RecruitmentBasicUserSerializer(read_only=True)
     recruitment_position = RecruitmentRecruitmentPositionSerializer(read_only=True)
 

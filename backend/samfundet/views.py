@@ -98,9 +98,9 @@ from .serializers import (
     RecruitmentApplicationForApplicantSerializer,
     RecruitmentApplicationForRecruiterSerializer,
     RecruitmentApplicationUpdateForGangSerializer,
-    RecruitmentApplicationsPerRecruitmentSerializer,
     RecruitmentShowUnprocessedApplicationsSerializer,
     RecruitmentPositionSharedInterviewGroupSerializer,
+    RecruitmentAllApplicationsPerRecruitmentSerializer,
 )
 from .models.event import (
     Event,
@@ -732,9 +732,10 @@ class RecruitmentApplicationView(ModelViewSet):
     queryset = RecruitmentApplication.objects.all()
 
 
-class RecruitmentApplicationsPerRecruitmentView(ListAPIView):
+class RecruitmentAllApplicationsPerRecruitmentView(ListAPIView):
+    # TODO: IMPLEMENT HIGHEST LEVEL OF RECRUITMENT PERSMISSIONS. Something like GU_OPPTAKSANSVARLIG, MG_WEB, UKA_HR, ISFiT_RECRUITMENT
     permission_classes = [IsAuthenticated]
-    serializer_class = RecruitmentApplicationsPerRecruitmentSerializer
+    serializer_class = RecruitmentAllApplicationsPerRecruitmentSerializer
 
     def get_queryset(self) -> QuerySet[RecruitmentApplication]:
         """Get all applications for a specific recruitment."""
@@ -1215,7 +1216,7 @@ class DownloadAllRecruitmentApplicationCSV(APIView):
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
         applications = RecruitmentApplication.objects.filter(recruitment=recruitment)
 
-        filename = f"opptak_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        filename = f'opptak_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime("%Y-%m-%d %H.%M")}.csv'
         response = HttpResponse(
             content_type='text/csv',
             headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
@@ -1274,7 +1275,7 @@ class DownloadRecruitmentApplicationGangCSV(APIView):
         gang = get_object_or_404(Gang, id=gang_id)
         applications = RecruitmentApplication.objects.filter(recruitment_position__gang=gang, recruitment=recruitment)
 
-        filename = f"opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        filename = f'opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime("%Y-%m-%d %H.%M")}.csv'
         response = HttpResponse(
             content_type='text/csv',
             headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
