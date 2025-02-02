@@ -104,11 +104,11 @@ export function RecruitmentAllPositionsAdminPage() {
         },
         {
           value: 'Allow to contact',
-          content: <ToggleSwitch onChange={() => handleAllowCall(app)} />,
+          content: <ToggleSwitch onChange={() => handleAllowCall} />,
         },
         {
           value: app.recruiter_status,
-          content: <span>{RecruitmentStatusChoicesMapping[app.recruiter_status]}</span>,
+          content: app.recruiter_status ? <span>{RecruitmentStatusChoicesMapping[app.recruiter_status]}</span> : 'N/A',
         },
       ],
     }));
