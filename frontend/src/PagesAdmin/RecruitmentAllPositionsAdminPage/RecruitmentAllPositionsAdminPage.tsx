@@ -29,9 +29,9 @@ export function RecruitmentAllPositionsAdminPage() {
     alert(`Filter changed to: ${filterType} MUST BE IMPLEMENTED`);
   };
 
-  const handleSearchChange = (term: string) => {
-    setSearchTerm(term);
-    alert(`Search term changed to: ${term} MUST BE IMPLEMENTED`);
+  const handleSearchChange = () => {
+    setSearchTerm('SearchTerm');
+    alert('MUST BE IMPLEMENTED');
   };
   useEffect(() => {
     if (recruitmentId) {

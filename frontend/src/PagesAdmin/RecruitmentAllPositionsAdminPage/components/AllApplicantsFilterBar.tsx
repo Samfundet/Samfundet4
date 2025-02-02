@@ -7,7 +7,7 @@ export type FilterType = 'name' | 'noRejections' | 'similar' | 'conflicts' | 'no
 
 type AllApplicantsFilterBarProps = {
   onFilterChange: (filterType: FilterType) => void;
-  onSearchChange: (searchTerm: string) => void;
+  onSearchChange: () => void;
 };
 
 export function AllApplicantsFilterBar({ onFilterChange, onSearchChange }: AllApplicantsFilterBarProps) {
@@ -34,7 +34,7 @@ export function AllApplicantsFilterBar({ onFilterChange, onSearchChange }: AllAp
       <InputField
         icon="mdi:search"
         placeholder={t(KEY.recruitment_search_for_applicant)}
-        onChange={(event) => onSearchChange(event.target.value)}
+        onChange={() => onSearchChange()}
       />
       <div className={styles.filte_buttons}>
         {filters.map(({ type, label }) => (
