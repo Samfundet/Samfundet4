@@ -383,6 +383,14 @@ export const nb = prepareTranslations({
   [KEY.recruitment_choose_interview_location]: 'Velg intervjusted',
   [KEY.recruitment_dashboard_description]:
     'Her har man oversikt over dine kommende intervjuer, stillinger du har noe å gjøre med, og kan sette tider du er tilgjengelig til å avholde intervjuer',
+  [KEY.recruitment_all_applicants_filter_name]: 'Sorter på navn',
+  [KEY.recruitment_all_applicants_filter_no_rejections]: 'Vis kun verv hvor søkeren er ønsket',
+  [KEY.recruitment_all_applicants_filter_similar]: 'Sorter på like stillinger',
+  [KEY.recruitment_all_applicants_filter_conflicts]: 'Vis kun konflikter',
+  [KEY.recruitment_all_applicants_filter_no_conflicts]: 'Vis kun uten konflikter',
+  [KEY.recruitment_all_applicants_filter_specific]: 'Vis kun søkere for spesifikke verv',
+  [KEY.recruitment_search_for_applicant]: 'Søk etter søker',
+
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
@@ -901,6 +909,13 @@ export const en = prepareTranslations({
   [KEY.recruitment_choose_interview_time_and_location]: 'Choose time and location of interview',
   [KEY.recruitment_choose_interview_time]: 'Choose time of interview',
   [KEY.recruitment_choose_interview_location]: 'Choose location of interview',
+  [KEY.recruitment_all_applicants_filter_name]: 'Sort by name',
+  [KEY.recruitment_all_applicants_filter_no_rejections]: 'Only positions where the applicant is wanted',
+  [KEY.recruitment_all_applicants_filter_similar]: 'Sort by the same positions',
+  [KEY.recruitment_all_applicants_filter_conflicts]: 'Display conflicts only',
+  [KEY.recruitment_all_applicants_filter_no_conflicts]: 'Display no conflicts',
+  [KEY.recruitment_all_applicants_filter_specific]: 'Display applicant by positions',
+  [KEY.recruitment_search_for_applicant]: 'Search for applicant',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',

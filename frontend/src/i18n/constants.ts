@@ -394,6 +394,13 @@ export const KEY = {
   error_recruitment_form_3: 'error_recruitment_form_3',
   error_recruitment_form_4: 'error_recruitment_form_4',
   recruitment_separate_recruitment: 'recruitment_separate_recruitment',
+  recruitment_all_applicants_filter_name: 'recruitment_all_applicants_filter_name',
+  recruitment_all_applicants_filter_no_rejections: 'recruitment_all_applicants_filter_no_rejections',
+  recruitment_all_applicants_filter_similar: 'recruitment_all_applicants_filter_similar',
+  recruitment_all_applicants_filter_conflicts: 'recruitment_all_applicants_filter_conflicts',
+  recruitment_all_applicants_filter_no_conflicts: 'recruitment_all_applicants_filter_no_conflicts',
+  recruitment_all_applicants_filter_specific: 'recruitment_all_applicants_filter_specific',
+  recruitment_search_for_applicant: 'recruitment_search_for_applicant',
 
   // Recruitment applets
   recruitment_applet_dashboard_description: 'recruitment_applet_dashboard_description',

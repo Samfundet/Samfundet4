@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button, InputField } from '~/Components';
+import { KEY } from '~/i18n/constants';
 import styles from './AllApplicantsFilterBar.module.scss';
-
 export type FilterType = 'name' | 'noRejections' | 'similar' | 'conflicts' | 'noConflicts' | 'specific' | null;
 
 type AllApplicantsFilterBarProps = {
@@ -11,14 +12,15 @@ type AllApplicantsFilterBarProps = {
 
 export function AllApplicantsFilterBar({ onFilterChange, onSearchChange }: AllApplicantsFilterBarProps) {
   const [activeFilter, setActiveFilter] = useState<FilterType>(null);
+  const { t } = useTranslation();
 
   const filters: Array<{ type: FilterType; label: string }> = [
-    { type: 'name', label: 'Sorter på navn' },
-    { type: 'noRejections', label: 'Vis kun verv hvor søkeren er ønsket' },
-    { type: 'similar', label: 'Sorter på like stillinger' },
-    { type: 'conflicts', label: 'Vis kun konflikter' },
-    { type: 'noConflicts', label: 'Vis kun uten konflikter' },
-    { type: 'specific', label: 'Vis kun søkere for spesifikke verv' },
+    { type: 'name', label: t(KEY.recruitment_all_applicants_filter_name) },
+    { type: 'noRejections', label: t(KEY.recruitment_all_applicants_filter_no_rejections) },
+    { type: 'similar', label: t(KEY.recruitment_all_applicants_filter_similar) },
+    { type: 'conflicts', label: t(KEY.recruitment_all_applicants_filter_conflicts) },
+    { type: 'noConflicts', label: t(KEY.recruitment_all_applicants_filter_no_conflicts) },
+    { type: 'specific', label: t(KEY.recruitment_all_applicants_filter_specific) },
   ];
 
   const handleFilterClick = (filterType: FilterType) => {
@@ -31,7 +33,7 @@ export function AllApplicantsFilterBar({ onFilterChange, onSearchChange }: AllAp
     <div>
       <InputField
         icon="mdi:search"
-        placeholder="Search for applicant"
+        placeholder={t(KEY.recruitment_search_for_applicant)}
         onChange={(event) => onSearchChange(event.target.value)}
       />
       <div className={styles.filte_buttons}>
