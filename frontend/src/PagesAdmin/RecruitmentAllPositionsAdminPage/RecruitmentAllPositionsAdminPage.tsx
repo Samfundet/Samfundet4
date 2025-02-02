@@ -120,14 +120,16 @@ export function RecruitmentAllPositionsAdminPage() {
       })
     : null;
 
+  const pageHeader = (
+    <Button theme={'green'} onClick={() => alert('TODO: add automatic interview distribution')}>
+      {t(KEY.recruitment_interview_set_all)}
+    </Button>
+  );
+
   return (
     <AdminPageLayout
       title={`All positions for ${recruitment?.name_en} at ${recruitment?.organization.name}`}
-      header={
-        <Button theme={'green'} onClick={() => alert('TODO: add automatic interview distribution')}>
-          {t(KEY.recruitment_interview_set_all)}
-        </Button>
-      }
+      header={pageHeader}
     >
       {applicantList}
     </AdminPageLayout>
@@ -135,7 +137,7 @@ export function RecruitmentAllPositionsAdminPage() {
 }
 
 /** =====================
- * Helper Functions
+ * Helper Functions for sorting applications
  * =====================
  **/
 
