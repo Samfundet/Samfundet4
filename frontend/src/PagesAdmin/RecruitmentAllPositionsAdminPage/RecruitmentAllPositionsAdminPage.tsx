@@ -7,6 +7,7 @@ import type { RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { RecruitmentStatusChoicesMapping } from '~/types';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { AllApplicantsFilterBar } from './components/AllApplicantsFilterBar';
 import { AllApplicationsExpandableHeader } from './components/AllApplicationsExpandableHeader';
 
 type GroupedDataItem = {
@@ -128,9 +129,10 @@ export function RecruitmentAllPositionsAdminPage() {
 
   return (
     <AdminPageLayout
-      title={`All positions for ${recruitment?.name_en} at ${recruitment?.organization.name}`}
+      title={`${recruitment?.name_en} ${t(KEY.common_at)} ${recruitment?.organization.name}`}
       header={pageHeader}
     >
+      <AllApplicantsFilterBar />
       {applicantList}
     </AdminPageLayout>
   );

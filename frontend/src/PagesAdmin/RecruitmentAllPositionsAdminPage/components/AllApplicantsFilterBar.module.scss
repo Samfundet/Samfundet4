@@ -1,0 +1,24 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.filter_bar {
+  overflow-x: scroll;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 1rem;
+
+  :global(.button_outlined).active {
+    border-color: $red-samf;
+    color: $red-samf;
+    border-width: 2px;
+
+    &:hover:not([disabled]) {
+      border-color: $red-samf;
+      color: $red-samf;
+      filter: none;
+    }
+  }
+}
