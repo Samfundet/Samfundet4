@@ -109,7 +109,7 @@ export function RecruitmentAllPositionsAdminPage() {
         },
         {
           value: 'Allow to contact',
-          content: <ToggleSwitch onChange={() => handleAllowCall} />,
+          content: <ToggleSwitch onChange={() => handleAllowCall()} />,
         },
         {
           value: app.recruiter_status,

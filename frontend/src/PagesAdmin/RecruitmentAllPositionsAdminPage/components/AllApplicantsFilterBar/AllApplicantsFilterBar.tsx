@@ -36,7 +36,7 @@ export function AllApplicantsFilterBar({ onFilterChange, onSearchChange }: AllAp
         placeholder={t(KEY.recruitment_search_for_applicant)}
         onChange={() => onSearchChange()}
       />
-      <div className={styles.filte_buttons}>
+      <div className={styles.filte_buttons_container}>
         {filters.map(({ type, label }) => (
           <Button
             key={type}
