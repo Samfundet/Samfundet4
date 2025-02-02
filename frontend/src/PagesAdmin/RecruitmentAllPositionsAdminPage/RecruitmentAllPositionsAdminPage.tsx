@@ -39,14 +39,24 @@ export function RecruitmentAllPositionsAdminPage() {
 
   const { data: recruitment, isLoading: isLoadingRecruitment } = useQuery({
     queryKey: recruitmentKeys.all,
-    queryFn: () => getRecruitment(recruitmentId!),
-    enabled: !!recruitmentId,
+    queryFn: () => {
+      if (!recruitmentId) {
+        throw new Error('Recruitment ID is required');
+      }
+      return getRecruitment(recruitmentId);
+    },
+    enabled: Boolean(recruitmentId),
   });
 
   const { data: recruitmentApplications, isLoading: isLoadingApplications } = useQuery({
     queryKey: applicationKeys.all,
-    queryFn: () => getAllRecruitmentApplications(recruitmentId!),
-    enabled: !!recruitmentId,
+    queryFn: () => {
+      if (!recruitmentId) {
+        throw new Error('Recruitment ID is required');
+      }
+      return getAllRecruitmentApplications(recruitmentId);
+    },
+    enabled: Boolean(recruitmentId),
   });
 
   // 1) Group applications by user
