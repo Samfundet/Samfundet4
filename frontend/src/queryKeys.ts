@@ -38,3 +38,11 @@ export const applicationKeys = {
   details: () => [...applicationKeys.all, 'detail'] as const,
   detail: (id: number) => [...applicationKeys.details(), id] as const,
 };
+
+export const recruitmentGangKeys = {
+  all: ['recruitmentGangs'] as const,
+  lists: () => [...recruitmentGangKeys.all, 'list'] as const,
+  list: (filters: unknown[]) => [...recruitmentGangKeys.lists(), { filters }] as const,
+  details: () => [...recruitmentGangKeys.all, 'detail'] as const,
+  detail: (id: number) => [...recruitmentGangKeys.details(), id] as const,
+};

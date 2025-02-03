@@ -2,20 +2,31 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Button, Table, ToggleSwitch } from '~/Components';
-import { getAllRecruitmentApplications, getRecruitment } from '~/api';
-import type { RecruitmentApplicationDto } from '~/dto';
+import { Button, Link, Table, ToggleSwitch } from '~/Components';
+import { getAllRecruitmentApplications, getRecruitment, getRecruitmentGangs } from '~/api';
+import type { GangDto, RecruitmentApplicationDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { applicationKeys, recruitmentKeys } from '~/queryKeys';
+import { reverse } from '~/named-urls';
+import { applicationKeys, recruitmentGangKeys, recruitmentKeys } from '~/queryKeys';
+import { ROUTES } from '~/routes';
 import { RecruitmentStatusChoicesMapping } from '~/types';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { AllApplicantsFilterBar, AllApplicationsExpandableHeader, type FilterType } from './components';
 
-type GroupedDataItem = {
+interface GroupedDataItem {
   user: RecruitmentApplicationDto['user'];
   applications: RecruitmentApplicationDto[];
-};
+}
+
+interface GangMapping {
+  [key: number]: {
+    name_en: string;
+    name_nb: string;
+    abbreviation: string;
+  };
+}
+
 const browserTabTitle = 'All applicants';
 
 export function RecruitmentAllPositionsAdminPage() {
@@ -67,6 +78,19 @@ export function RecruitmentAllPositionsAdminPage() {
     enabled: Boolean(recruitmentId),
   });
 
+  const { data: recruitmentGangs, isLoading: isLoadingRecruitmentGangs } = useQuery({
+    queryKey: recruitmentGangKeys.all,
+    queryFn: () => {
+      if (!recruitmentId) {
+        throw new Error('Recruitment ID is required');
+      }
+      return getRecruitmentGangs(recruitmentId);
+    },
+    enabled: Boolean(recruitmentId),
+  });
+
+  const gangMapping = createGangMapping(recruitmentGangs);
+
   // 1) Group applications by user
   const groupedByUser = recruitmentApplications?.data.reduce<Record<string, GroupedDataItem>>((acc, application) => {
     const userId = application.user.id;
@@ -98,38 +122,52 @@ export function RecruitmentAllPositionsAdminPage() {
   ];
 
   const applicationsToTableRows = (applications: RecruitmentApplicationDto[]) =>
-    applications.map((app) => ({
-      cells: [
-        {
-          value: app.recruitment_position.gang.abbreviation,
-          content: <strong>{app.recruitment_position.gang.abbreviation ?? 'N/A'}</strong>,
-        },
-        {
-          value: app.recruitment_position.name_nb,
-          content: <span>{app.recruitment_position.name_nb}</span>,
-        },
-        {
-          value: app.interview?.interview_location,
-          content: <span>{app.interview?.interview_location ?? 'N/A'}</span>,
-        },
-        {
-          value: app.interview?.interview_time,
-          content: <span>{app.interview?.interview_time ?? 'N/A'}</span>,
-        },
-        {
-          value: app.applicant_priority,
-          content: <span>{app.applicant_priority}</span>,
-        },
-        {
-          value: 'Allow to contact',
-          content: <ToggleSwitch onChange={() => handleAllowCall()} />,
-        },
-        {
-          value: app.recruiter_status,
-          content: app.recruiter_status ? <span>{RecruitmentStatusChoicesMapping[app.recruiter_status]}</span> : 'N/A',
-        },
-      ],
-    }));
+    applications.map((app) => {
+      const gangId = app.recruitment_position.gang as unknown as number; // in this case "gang" in the object is the gangId, not the gang object
+      const gangDetails = gangMapping?.[gangId];
+
+      const positionPageUrl = reverse({
+        pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
+        urlParams: { recruitmentId: recruitmentId, gangId: gangId, positionId: app.recruitment_position.id },
+      });
+
+      return {
+        cells: [
+          {
+            value: gangDetails?.abbreviation || gangDetails?.name_en || 'N/A',
+            content: <strong>{gangDetails?.abbreviation || gangDetails?.name_en || 'N/A'}</strong>,
+          },
+          {
+            value: app.recruitment_position.name_nb,
+            content: <Link url={positionPageUrl}>{app.recruitment_position.name_nb}</Link>,
+          },
+          {
+            value: app.interview?.interview_location,
+            content: <span>{app.interview?.interview_location ?? 'N/A'}</span>,
+          },
+          {
+            value: app.interview?.interview_time,
+            content: <span>{app.interview?.interview_time ?? 'N/A'}</span>,
+          },
+          {
+            value: app.applicant_priority,
+            content: <span>{app.applicant_priority}</span>,
+          },
+          {
+            value: 'Allow to contact',
+            content: <ToggleSwitch onChange={() => handleAllowCall()} />,
+          },
+          {
+            value: app.recruiter_status,
+            content: app.recruiter_status ? (
+              <span>{RecruitmentStatusChoicesMapping[app.recruiter_status]}</span>
+            ) : (
+              'N/A'
+            ),
+          },
+        ],
+      };
+    });
 
   // Render applicant list only if recruitment exists
   const applicantList = recruitment
@@ -230,3 +268,20 @@ function reorderApplicantsByOverlap(groupedData: GroupedDataItem[]): GroupedData
     return rest;
   });
 }
+
+/**
+ * Helper function for mapping gang.....
+ */
+
+const createGangMapping = (gangs: GangDto[] | undefined): GangMapping => {
+  return (
+    gangs?.reduce<GangMapping>((acc, gang) => {
+      acc[gang.id] = {
+        name_en: gang.name_en,
+        name_nb: gang.name_nb,
+        abbreviation: gang.abbreviation,
+      };
+      return acc;
+    }, {}) ?? {}
+  );
+};
