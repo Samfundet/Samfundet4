@@ -37,6 +37,14 @@ export function RecruitmentAllPositionsAdminPage() {
     alert('MUST BE IMPLEMENTED');
   };
 
+  const handleSetInterviewsForApplicant = () => {
+    alert('IMPLEMENT ABILITY TO SET MULTIPLE INTERVIEWS FOR A SINGLE APPLICANT');
+  };
+
+  const handleAllowCall = () => {
+    alert('IMPLEMENT CONTACT CONTROL FUNCTIONALITY');
+  };
+
   const { data: recruitment, isLoading: isLoadingRecruitment } = useQuery({
     queryKey: recruitmentKeys.all,
     queryFn: () => {
@@ -89,10 +97,6 @@ export function RecruitmentAllPositionsAdminPage() {
     { content: t(KEY.recruitment_recruiter_status), sortable: false },
   ];
 
-  const handleAllowCall = () => {
-    alert('IMPLEMENT CONTACT CONTROL FUNCTIONALITY');
-  };
-
   const applicationsToTableRows = (applications: RecruitmentApplicationDto[]) =>
     applications.map((app) => ({
       cells: [
@@ -126,10 +130,6 @@ export function RecruitmentAllPositionsAdminPage() {
         },
       ],
     }));
-
-  const handleSetInterviewsForApplicant = () => {
-    alert('IMPLEMENT ABILITY TO SET MULTIPLE INTERVIEWS FOR A SINGLE APPLICANT');
-  };
 
   // Render applicant list only if recruitment exists
   const applicantList = recruitment
@@ -169,7 +169,7 @@ export function RecruitmentAllPositionsAdminPage() {
 }
 
 /** =====================
- * Helper Functions for sorting applications
+ * Helper functions for sorting applicants on the client
  * =====================
  **/
 
