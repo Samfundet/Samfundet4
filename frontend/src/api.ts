@@ -113,8 +113,8 @@ export async function impersonateUser(userId: number): Promise<boolean> {
   return response.status === 200;
 }
 
-export async function getUsers(): Promise<UserDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users;
+export async function getUsers(search?: string): Promise<UserDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users + (search ? `?search=${search}` : '');
   const response = await axios.get<UserDto[]>(url, { withCredentials: true });
   return response.data;
 }

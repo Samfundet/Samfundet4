@@ -1,47 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { InputField } from '~/Components';
 import { formatDate } from '~/Components/OccupiedForm/utils';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getUsers } from '~/api';
 import type { UserDto } from '~/dto';
+import { useDebounce } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
 import { getFullName } from '~/utils';
 import styles from './UsersAdminPage.module.scss';
 import { ImpersonateButton } from './components';
 
 export function UsersAdminPage() {
   const { t } = useTranslation();
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [users, setUsers] = useState<UserDto[]>([]);
-  const [loading, setLoading] = useState(true);
   const title: string = t(KEY.common_users);
-  const backendUrl = ROUTES.backend.admin__samfundet_user_changelist;
 
-  useEffect(() => {
-    setLoading(true);
-    getUsers()
-      .then(setUsers)
-      .catch((err) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(err);
-      })
-      .finally(() => setLoading(false));
-  }, [t]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-  function filterUsers(): UserDto[] {
-    if (searchQuery === '') return users;
-    const keywords = searchQuery.split(' ');
-    return users.filter((usr: UserDto) => {
-      for (const kw of keywords) {
-        const fullname = `${usr.first_name} ${usr.last_name}`;
-        if (fullname?.toLowerCase().indexOf(kw.toLowerCase()) === -1) return false;
-      }
-      return true;
-    });
+  const { data: users = [] } = useQuery({ 
+    queryKey: ['users', debouncedSearchTerm],
+    queryFn: () => getUsers(debouncedSearchTerm),
+    enabled: true,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+  });
+
+  function handleSearchQuery(searchString: string) {
+    setSearchTerm(searchString);
   }
 
   const userColumns = [
@@ -82,10 +70,10 @@ export function UsersAdminPage() {
   }
 
   return (
-    <AdminPageLayout title={title} loading={loading}>
-      <InputField icon="mdi:search" onChange={setSearchQuery} />
+    <AdminPageLayout title={title}>
+      <InputField icon="mdi:search" onChange={handleSearchQuery} />
       <div className={styles.table_container}>
-        <Table data={filterUsers().map((doc) => ({ cells: userTableRow(doc) }))} columns={userColumns} />
+        <Table data={users.map((user) => ({ cells: userTableRow(user) }))} columns={userColumns} />
       </div>
     </AdminPageLayout>
   );

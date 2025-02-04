@@ -47,9 +47,10 @@ def user_query(*, query: QueryDict, users: QuerySet[User] = None) -> QuerySet[Us
         users = User.objects.all()
     search = query.get('search', None)
     if search:
-        users = users.filter(Q(username__icontains=search) | Q(first_name__icontains=search) | Q(last_name__icontains=search))
+        for name in search.split():
+            users = users.filter((Q(username__icontains=name) | Q(first_name__icontains=name) | Q(last_name__icontains=name)))
+        return users
     return users
-
 
 def generate_timeslots(start_time: datetime.time, end_time: datetime.time, interval_minutes: int) -> list[str]:
     # Convert from datetime.time objects to datetime.datetime
