@@ -1,12 +1,11 @@
-import React from 'react';
 import classNames from 'classnames';
+import React from 'react';
 import styles from './Input.module.scss';
 
 /**
  * Common props shared by both controlled & uncontrolled versions.
  */
-interface PrimitiveInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'defaultValue'> {
+interface PrimitiveInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'defaultValue'> {
   className?: string;
   type?: React.HTMLInputTypeAttribute;
 }

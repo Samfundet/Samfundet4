@@ -1,5 +1,5 @@
-import React from 'react';
 import classNames from 'classnames';
+import React from 'react';
 import styles from './Checkbox.module.scss';
 
 export type PrimitiveCheckboxProps = Omit<

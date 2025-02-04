@@ -71,13 +71,8 @@ function getDefaultValues(data: Partial<RecruitmentPositionDto>): SchemaType {
     interviewer_ids: data.interviewers?.map((i) => i.id) ?? [],
   };
 }
-export function RecruitmentPositionForm({
-  initialData,
-  positionId,
-  recruitmentId,
-  gangId,
-  users,
-}: FormProps) {
+
+export function RecruitmentPositionForm({ initialData, positionId, recruitmentId, gangId, users }: FormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -140,10 +135,7 @@ export function RecruitmentPositionForm({
               <FormItem className={styles.item}>
                 <FormLabel>{t(KEY.recruitment_norwegian_applicants_only)}</FormLabel>
                 <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onChange={field.onChange}
-                  />
+                  <Checkbox checked={field.value} onChange={field.onChange} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -244,10 +236,7 @@ export function RecruitmentPositionForm({
               <FormItem className={styles.item}>
                 <FormLabel>{t(KEY.recruitment_funksjonaer)}</FormLabel>
                 <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onChange={field.onChange}
-                  />
+                  <Checkbox checked={field.value} onChange={field.onChange} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
