@@ -20,7 +20,7 @@ export function UsersAdminPage() {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-  const { data: users = [] } = useQuery({ 
+  const { data: users = [] } = useQuery({
     queryKey: ['users', debouncedSearchTerm],
     queryFn: () => getUsers(debouncedSearchTerm),
     enabled: true,
