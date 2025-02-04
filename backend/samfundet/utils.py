@@ -48,7 +48,7 @@ def user_query(*, query: QueryDict, users: QuerySet[User] = None) -> QuerySet[Us
     search = query.get('search', None)
     if search:
         for name in search.split():
-            users = users.filter((Q(username__icontains=name) | Q(first_name__icontains=name) | Q(last_name__icontains=name)))
+            users = users.filter(Q(username__icontains=name) | Q(first_name__icontains=name) | Q(last_name__icontains=name))
         return users
     return users
 
