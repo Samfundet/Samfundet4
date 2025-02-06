@@ -102,8 +102,6 @@ export const ROUTES_FRONTEND = {
 
   admin_recruitment_gang_position_applicants_overview:
     '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId',
-  admin_recruitment_gang_position_applicants_interview_notes:
-    '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId/interview-notes/:interviewId',
   admin_recruitment_gang_all_applications: '/control-panel/recruitment/:recruitmentId/:gangId/all-applications/',
   admin_recruitment_gang_users_without_interview:
     '/control-panel/recruitment/:recruitmentId/:gangId/users-without-interviews/',
