@@ -3,17 +3,32 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { IconButton, Page, SamfundetLogoSpinner, Text, Video } from '~/Components';
 import { PersonalRow } from '~/Pages/RecruitmentPage';
-import { getOrganization, getRecruitment } from '~/api';
+import { getRecruitment } from '~/api';
 import { TextItem } from '~/constants';
 import { useOrganizationContext } from '~/context/OrgContextProvider';
 import type { RecruitmentDto } from '~/dto';
 import { useDesktop, useTextItem, useTitle } from '~/hooks';
 import { COLORS, OrgNameType, type OrgNameTypeValue } from '~/types';
-import { dbT, getObjectFieldOrNumber } from '~/utils';
+import { dbT } from '~/utils';
 import { GangSeparatePositions, GangTypeContainer, RecruitmentTabs } from './Components';
 import styles from './OrganizationRecruitmentPage.module.scss';
 
 type ViewMode = 'list' | 'tab';
+
+const ORG_STYLES = {
+  [OrgNameType.SAMFUNDET_NAME]: {
+    subHeaderStyle: styles.samfRecruitmentSubHeader,
+  },
+  [OrgNameType.UKA_NAME]: {
+    subHeaderStyle: styles.ukaRecruitmentSubHeader,
+  },
+  [OrgNameType.ISFIT_NAME]: {
+    subHeaderStyle: styles.isfitRecruitmentSubHeader,
+  },
+  [OrgNameType.FALLBACK]: {
+    subHeaderStyle: '',
+  },
+};
 
 export function OrganizationRecruitmentPage() {
   const isDesktop = useDesktop();
@@ -22,11 +37,28 @@ export function OrganizationRecruitmentPage() {
   const { t } = useTranslation();
   const { changeOrgTheme } = useOrganizationContext();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
-  const [organizationName, setOrganizationName] = useState<OrgNameTypeValue>(OrgNameType.FALLBACK);
   const [loading, setLoading] = useState<boolean>(true);
   const [positionsViewMode, setViewMode] = useState<ViewMode>('list');
 
   useTitle(dbT(recruitment, 'name') ?? '');
+
+  const samfText = useTextItem(TextItem.samf_recruitment_description);
+  const ukaText = useTextItem(TextItem.uka_recruitment_description);
+  const isfitText = useTextItem(TextItem.isfit_recruitment_description);
+  const fallbackText = useTextItem(TextItem.uka_recruitment_description); // Default
+
+  const descriptionText = (() => {
+    switch (recruitment?.organization.name as OrgNameTypeValue) {
+      case OrgNameType.SAMFUNDET_NAME:
+        return samfText;
+      case OrgNameType.UKA_NAME:
+        return ukaText;
+      case OrgNameType.ISFIT_NAME:
+        return isfitText;
+      default:
+        return fallbackText;
+    }
+  })();
 
   useEffect(() => {
     if (recruitmentId) {
@@ -42,38 +74,10 @@ export function OrganizationRecruitmentPage() {
 
   useEffect(() => {
     if (recruitment) {
-      getOrganization(getObjectFieldOrNumber<number>(recruitment.organization, 'id'))
-        .then((response) => {
-          if (Object.values(OrgNameType).includes(response.name as OrgNameTypeValue)) {
-            setOrganizationName(response.name as OrgNameTypeValue);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          setOrganizationName(OrgNameType.FALLBACK);
-        });
+      changeOrgTheme(recruitment.organization.name as OrgNameTypeValue);
     }
     setLoading(false);
-  }, [recruitment]);
-
-  useEffect(() => {
-    if (organizationName) {
-      changeOrgTheme(organizationName);
-    }
-  }, [organizationName, changeOrgTheme]);
-
-  const descriptionText = (() => {
-    switch (organizationName) {
-      case OrgNameType.SAMFUNDET_NAME:
-        return useTextItem(TextItem.samf_recruitment_description);
-      case OrgNameType.UKA_NAME:
-        return useTextItem(TextItem.uka_recruitment_description);
-      case OrgNameType.ISFIT_NAME:
-        return useTextItem(TextItem.isfit_recruitment_description);
-      default:
-        return useTextItem(TextItem.uka_recruitment_description);
-    }
-  })();
+  }, [recruitment, changeOrgTheme]);
 
   if (loading) {
     return <SamfundetLogoSpinner />;
@@ -94,7 +98,11 @@ export function OrganizationRecruitmentPage() {
       <div className={styles.openPositionsWrapper}>
         <div className={styles.optionsContainer}>
           {recruitmentId && (
-            <PersonalRow recruitmentId={recruitmentId} organizationName={organizationName} showRecruitmentBtn={false} />
+            <PersonalRow
+              recruitmentId={recruitmentId}
+              organizationName={recruitment?.organization.name}
+              showRecruitmentBtn={false}
+            />
           )}
           <div className={styles.viewModeControll}>
             <IconButton

@@ -27,6 +27,7 @@ import type {
   RecruitmentApplicationStateDto,
   RecruitmentAvailabilityDto,
   RecruitmentDto,
+  RecruitmentForRecruiterDto,
   RecruitmentGangDto,
   RecruitmentGangStatDto,
   RecruitmentPositionDto,
@@ -37,8 +38,10 @@ import type {
   RecruitmentStatsDto,
   RecruitmentUnprocessedApplicationsDto,
   RecruitmentUserDto,
+  RecruitmentWriteDto,
   RegistrationDto,
   RoleDto,
+  RoleUsersDto,
   SaksdokumentDto,
   TextItemDto,
   UserDto,
@@ -86,6 +89,11 @@ export async function register(data: RegistrationDto): Promise<number> {
   return response.status;
 }
 
+export async function changePassword(current_password: string, new_password: string): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__change_password;
+  return await axios.post(url, { current_password, new_password }, { withCredentials: true });
+}
+
 export async function getUser(): Promise<UserDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__user;
   const response = await axios.get<UserDto>(url, { withCredentials: true });
@@ -105,8 +113,8 @@ export async function impersonateUser(userId: number): Promise<boolean> {
   return response.status === 200;
 }
 
-export async function getUsers(): Promise<UserDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users;
+export async function getUsers(search?: string): Promise<UserDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users + (search ? `?search=${search}` : '');
   const response = await axios.get<UserDto[]>(url, { withCredentials: true });
   return response.data;
 }
@@ -384,7 +392,7 @@ export async function getOrganization(id: number | undefined): Promise<Organizat
   return response.data;
 }
 
-export async function getGangList(): Promise<GangTypeDto[]> {
+export async function getOrganizedGangList(): Promise<GangTypeDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__gangsorganized_list;
   const response = await axios.get<GangTypeDto[]>(url, { withCredentials: true });
 
@@ -543,14 +551,14 @@ export async function getRecruitment(id: string): Promise<AxiosResponse<Recruitm
   return response;
 }
 
-export async function postRecruitment(recruitmentData: RecruitmentDto): Promise<AxiosResponse> {
+export async function postRecruitment(recruitmentData: RecruitmentWriteDto): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_list;
   const response = await axios.post(url, recruitmentData, { withCredentials: true });
 
   return response;
 }
 
-export async function putRecruitment(id: string, recruitment: Partial<RecruitmentDto>): Promise<AxiosResponse> {
+export async function putRecruitment(id: string, recruitment: Partial<RecruitmentWriteDto>): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_detail, urlParams: { pk: id } });
   const response = await axios.put<RecruitmentDto>(url, recruitment, { withCredentials: true });
@@ -567,6 +575,13 @@ export async function getRecruitmentPositions(recruitmentId: string): Promise<Ax
   const response = await axios.get(url, { withCredentials: true });
 
   return response;
+}
+
+export async function getRoleUsers(id: number): Promise<RoleUsersDto[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__role_users, urlParams: { pk: id } });
+  const response = await axios.get<RoleUsersDto[]>(url, { withCredentials: true });
+
+  return response.data;
 }
 
 export async function getRecruitmentPositionsGangForApplicant(
@@ -964,6 +979,16 @@ export async function putRecruitmentApplication(
   return response;
 }
 
+export async function putRecrutmentInterviewNotes(notes: string, interviewId: number): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_application_interview_notes,
+      urlParams: { interviewId: interviewId },
+    });
+  return await axios.put(url, { notes: notes }, { withCredentials: true });
+}
+
 export async function getRecruitmentApplicationForPosition(
   positionId: string,
 ): Promise<AxiosResponse<RecruitmentApplicationDto>> {
@@ -1076,6 +1101,15 @@ export async function postPurchaseFeedback(feedback: PurchaseFeedbackDto): Promi
 export async function getRecruitmentStats(id: string): Promise<RecruitmentStatsDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_stats_detail, urlParams: { pk: id } });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getRecruitmentForRecruiter(id: string): Promise<RecruitmentForRecruiterDto> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__recruitment_for_recruiter_detail, urlParams: { pk: id } });
   const response = await axios.get(url, { withCredentials: true });
 
   return response.data;

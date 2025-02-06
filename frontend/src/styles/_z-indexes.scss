@@ -1,0 +1,24 @@
+// This file is used to define z-indexes for the application.
+// It is used to keep track of the z-indexes used in the application and to avoid conflicts between them.
+// To add a new z-index, find out where it should belong, and add it to the corresponding section.
+// When adding a new index do this by adding a new variable and incrementing the previous one by 1.
+//
+// Before adding "button" z-index:
+//
+// background-z-index: $base-z-index + 1
+// modal: $background-z-index + 1
+//
+// After adding "button" z-index:
+//
+// background-z-index: $base-z-index + 1
+// button: $background-z-index + 1
+// modal: $button + 1
+//
+
+$base-z-index: 0;
+$tooltip-z-index: $base-z-index + 1;
+$feedback-z-index: $tooltip-z-index + 1;
+$navbar-z-index: $feedback-z-index + 1;
+$modal-z-index: $navbar-z-index + 1;
+// For instance snowflakes, confetti, sprut, etc.
+$decoration-overlay-z-index: $modal-z-index + 1;

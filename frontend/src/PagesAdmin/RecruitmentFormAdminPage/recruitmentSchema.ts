@@ -12,7 +12,7 @@ export const recruitmentSchema = z
     shown_application_deadline: LOCAL_DATETIME,
     actual_application_deadline: LOCAL_DATETIME,
     reprioritization_deadline_for_applicant: LOCAL_DATETIME,
-    reprioritization_deadline_for_groups: LOCAL_DATETIME,
+    reprioritization_deadline_for_gangs: LOCAL_DATETIME,
     organization: z.number().min(1, { message: 'Organization is required' }),
     max_applications: z.number().min(0).max(99).optional(),
     promo_media: z.string(),
@@ -53,12 +53,12 @@ export const recruitmentSchema = z
   .refine(
     (data) => {
       const reprioritizationDeadlineForApplicant = new Date(data.reprioritization_deadline_for_applicant);
-      const reprioritizationDeadlineForGroups = new Date(data.reprioritization_deadline_for_groups);
+      const reprioritizationDeadlineForGroups = new Date(data.reprioritization_deadline_for_gangs);
       return reprioritizationDeadlineForGroups > reprioritizationDeadlineForApplicant;
     },
     {
       message: i18next.t(KEY.error_recruitment_form_4),
-      path: ['reprioritization_deadline_for_groups'],
+      path: ['reprioritization_deadline_for_gangs'],
     },
   )
   .refine(

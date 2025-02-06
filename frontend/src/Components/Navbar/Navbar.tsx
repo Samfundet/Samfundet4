@@ -56,6 +56,8 @@ export function Navbar() {
     });
   }, []);
 
+  const showActiveRecruitments = activeRecruitments !== undefined && activeRecruitments?.length > 0;
+
   // Return profile button for navbar if logged in.
   const mobileProfileButton = (
     <div className={styles.navbar_profile_button}>
@@ -133,7 +135,7 @@ export function Navbar() {
         expandedDropdown={expandedDropdown}
         route={ROUTES.frontend.recruitment}
         label={t(KEY.common_volunteer)}
-        labelClassName={activeRecruitments && styles.active_recruitment}
+        labelClassName={showActiveRecruitments ? styles.active_recruitment : ''}
       />
     </div>
   );

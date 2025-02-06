@@ -97,6 +97,9 @@ export const TextItem = {
   purchase_feedback_alternative_4: 'purchase_feedback_alternative_4',
   purchase_feedback_question_1: 'purchase_feedback_question_1',
   purchase_feedback_question_2: 'purchase_feedback_question_2',
+
+  // Gangspage
+  gangspage_text: 'gangspage_text',
 } as const;
 
 export type TextItemValue = (typeof TextItem)[keyof typeof TextItem];
