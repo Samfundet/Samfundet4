@@ -13,6 +13,8 @@ recruitments = [
         'shown_application_deadline': timezone.now() + timezone.timedelta(days=9),
         'actual_application_deadline': timezone.now() + timezone.timedelta(days=10),
         'reprioritization_deadline_for_applicant': timezone.now() + timezone.timedelta(days=11),
+        'reprioritization_deadline_for_groups': timezone.now() + timezone.timedelta(days=12),
+        'promo_media': 'x4dzJ8z1j5M',
         'reprioritization_deadline_for_gangs': timezone.now() + timezone.timedelta(days=12),
     },
     {
@@ -22,6 +24,8 @@ recruitments = [
         'shown_application_deadline': timezone.now() - timezone.timedelta(days=51),
         'actual_application_deadline': timezone.now() - timezone.timedelta(days=50),
         'reprioritization_deadline_for_applicant': timezone.now() - timezone.timedelta(days=52),
+        'reprioritization_deadline_for_groups': timezone.now() - timezone.timedelta(days=53),
+        'promo_media': 'x4dzJ8z1j5M',
         'reprioritization_deadline_for_gangs': timezone.now() - timezone.timedelta(days=53),
     },
     {
@@ -31,6 +35,8 @@ recruitments = [
         'shown_application_deadline': timezone.now() - timezone.timedelta(days=51),
         'actual_application_deadline': timezone.now() - timezone.timedelta(days=50),
         'reprioritization_deadline_for_applicant': timezone.now() - timezone.timedelta(days=52),
+        'reprioritization_deadline_for_groups': timezone.now() - timezone.timedelta(days=53),
+        'promo_media': 'x4dzJ8z1j5M',
         'reprioritization_deadline_for_gangs': timezone.now() - timezone.timedelta(days=53),
     },
 ]

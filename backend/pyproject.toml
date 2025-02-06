@@ -33,7 +33,6 @@ skip-magic-trailing-comma = false # Similar to yapf. Trailing comma signals mult
 # See list of all rules: rulehttps://docs.astral.sh/ruff/rules
 preview = true
 explicit-preview-rules = true
-ignore-init-module-imports = true # This implicit export strategy is used in this project.
 
 
 # See list of implemented and overlapping rules from pylint.
