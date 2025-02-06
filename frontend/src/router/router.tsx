@@ -569,6 +569,7 @@ export const router = createBrowserRouter(
               >
                 <Route
                   path={ROUTES.frontend.admin_recruitment_gang_position_overview}
+                  loader={recruitmentGangLoader}
                   element={<PermissionRoute required={[]} element={<RecruitmentGangAdminPage />} />}
                 />
                 <Route

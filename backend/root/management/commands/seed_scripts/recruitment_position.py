@@ -21,10 +21,10 @@ def seed():
     RecruitmentPosition.objects.all().delete()
     yield 0, 'Deleted old recruitmentpositions'
 
-    gangs = Gang.objects.all()
     recruitments = Recruitment.objects.all()
     created_count = 0
     for recruitment_index, recruitment in enumerate(recruitments):
+        gangs = Gang.objects.filter(organization=recruitment.organization)
         for gang_index, gang in enumerate(sample(list(gangs), 6)):
             for i in range(2):  # Create 2 instances for each gang and recruitment
                 position_data = POSITION_DATA.copy()

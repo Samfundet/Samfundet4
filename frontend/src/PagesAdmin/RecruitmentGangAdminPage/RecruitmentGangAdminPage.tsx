@@ -1,15 +1,15 @@
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useLoaderData, useNavigate, useParams } from 'react-router-dom';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getGang, getRecruitment, getRecruitmentPositionsGangForGang } from '~/api';
-import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
+import { getRecruitmentPositionsGangForGang } from '~/api';
+import type { GangDto, RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
-import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import type { RecruitmentGangLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
 import { dbT, getObjectFieldOrNumber, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -19,9 +19,8 @@ export function RecruitmentGangAdminPage() {
   const { recruitmentId, gangId } = useParams();
   const navigate = useNavigate();
   const [gang, setGang] = useState<GangDto>();
+  const loader = useLoaderData() as RecruitmentGangLoader | undefined;
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
-  const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   const title = `${getObjectFieldOrNumber<string>(recruitment?.organization, 'name')} - ${dbT(
     recruitment,
@@ -29,31 +28,19 @@ export function RecruitmentGangAdminPage() {
   )} - ${dbT(gang, 'name')}`;
   useTitle(title);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
+  // TODO add way to handle 404s
+  const { data: recruitmentPositions, isLoading } = useQuery({
+    queryKey: ['recruitmentGangAdmin', recruitmentId, gangId],
+    queryFn: () => (recruitmentId && gangId ? getRecruitmentPositionsGangForGang(recruitmentId, gangId) : undefined),
+    enabled: !!recruitmentId && !!gangId,
+  });
+
   useEffect(() => {
-    if (recruitmentId && gangId) {
-      Promise.allSettled([
-        getRecruitmentPositionsGangForGang(recruitmentId, gangId).then((data) => {
-          setRecruitmentPositions(data.data);
-        }),
-        getGang(gangId).then((data) => {
-          setGang(data);
-        }),
-        getRecruitment(recruitmentId).then(async (data) => {
-          setRecruitment(data.data);
-        }),
-      ])
-        .then(() => {
-          setShowSpinner(false);
-        })
-        .catch((data) => {
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.not_found, { replace: true });
-          }
-          toast.error(t(KEY.common_something_went_wrong));
-        });
+    if (loader) {
+      setGang(loader.gang);
+      setRecruitment(loader.recruitment);
     }
-  }, [recruitmentId, gangId]);
+  }, [loader]);
 
   const tableColumns = [
     { content: t(KEY.recruitment_position), sortable: true },
@@ -64,7 +51,7 @@ export function RecruitmentGangAdminPage() {
     { content: ' ', sortable: false },
   ];
 
-  const data = recruitmentPositions.map((recruitmentPosition) => {
+  const data = recruitmentPositions?.data.map((recruitmentPosition) => {
     const pageUrl = reverse({
       pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
       urlParams: { recruitmentId: recruitmentId, gangId: gangId, positionId: recruitmentPosition.id },
@@ -166,8 +153,8 @@ export function RecruitmentGangAdminPage() {
   );
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
-      <Table columns={tableColumns} data={data} />
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={isLoading}>
+      <Table columns={tableColumns} data={data ?? []} />
     </AdminPageLayout>
   );
 }
