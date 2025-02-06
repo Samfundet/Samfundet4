@@ -148,6 +148,9 @@ urlpatterns = [
         name='recruitment_download_gang_application_csv',
     ),
     path('occupiedtimeslot/', views.OccupiedTimeslotView.as_view(), name='occupied_timeslots'),
+    path(
+        'recruitment/<int:recruitment_id>/interviewer-availability/', views.InterviewerAvailabilityForDate.as_view(), name='interviewer-availability-for-date'
+    ),
     path('recruitment-interview-availability/', views.RecruitmentInterviewAvailabilityView.as_view(), name='recruitment_interview_availability'),
     path('recruitment/<int:id>/availability/', views.RecruitmentAvailabilityView.as_view(), name='recruitment_availability'),
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
