@@ -44,7 +44,6 @@ import {
   ImageFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
-  InterviewNotesPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
   RecruitmentApplicantAdminPage,
@@ -403,10 +402,6 @@ export const router = createBrowserRouter(
                   element={<RecruitmentApplicantAdminPage />}
                 />
               }
-            />
-            <Route
-              path={ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes}
-              element={<InterviewNotesPage />}
             />
             {/* Specific recruitment */}
             {/* TODO ADD PERMISSIONS */}
