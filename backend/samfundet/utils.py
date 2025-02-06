@@ -52,6 +52,7 @@ def user_query(*, query: QueryDict, users: QuerySet[User] = None) -> QuerySet[Us
         return users
     return users
 
+
 def generate_timeslots(start_time: datetime.time, end_time: datetime.time, interval_minutes: int) -> list[str]:
     # Convert from datetime.time objects to datetime.datetime
     start_datetime = datetime.datetime.combine(datetime.datetime.today(), start_time)
