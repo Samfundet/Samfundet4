@@ -5,6 +5,7 @@ import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { RecruitmentStatusChoicesMapping } from '~/types';
 import styles from './ProcessedApplicants.module.scss';
 
 type ProcessedType = 'rejected' | 'withdrawn' | 'accepted' | 'hardtoget';
@@ -51,7 +52,13 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
         { content: application.user?.email, value: application.user?.email },
         { content: application.interview?.interview_time, value: application.interview?.interview_time },
         { content: application.interview?.interview_location, value: application.interview?.interview_location },
-        { content: application.recruiter_status, value: application.recruiter_status },
+        {
+          content:
+            application.recruiter_status !== undefined
+              ? RecruitmentStatusChoicesMapping[application.recruiter_status]
+              : 'N/A',
+          value: application.recruiter_status,
+        },
         revertStateFunction && {
           content: (
             <Button

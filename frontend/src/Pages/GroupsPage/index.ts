@@ -1,1 +1,0 @@
-export { GroupsPage } from './GroupsPage';
