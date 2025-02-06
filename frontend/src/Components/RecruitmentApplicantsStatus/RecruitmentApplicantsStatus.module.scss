@@ -91,3 +91,14 @@
   display: flex;
   justify-content: center;
 }
+
+
+.wrapper .text{
+  position:relative;
+  bottom: 0px;
+  visibility: hidden;
+}
+
+.wrapper:hover .text{
+  visibility: visible;
+}

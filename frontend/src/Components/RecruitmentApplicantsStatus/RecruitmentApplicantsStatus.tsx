@@ -103,25 +103,29 @@ export function RecruitmentApplicantsStatus({
           value: application.user.first_name,
           style: applicationStatusStyle,
           content: (
-            <Link
-              url={reverse({
-                pattern: ROUTES.frontend.admin_recruitment_applicant,
-                urlParams: {
-                  applicationID: application.id,
-                },
-              })}
-              className={styles.text}
-            >
-              {`${application.user.first_name} ${application.user.last_name}`}
-            </Link>
+            <div className={styles.wrapper}>
+              <Link
+                url={reverse({
+                  pattern: ROUTES.frontend.admin_recruitment_applicant,
+                  urlParams: {
+                    applicationID: application.id,
+                  },
+                })}
+                className={styles.text}
+              >
+                {`${application.user.first_name} ${application.user.last_name}`}
+              </Link>
+            </div>
           ),
         },
         {
           value: application.applicant_priority,
           style: applicationStatusStyle,
           content: (
-            <div className={styles.text}>
-              {application.applicant_priority} / {application?.application_count}
+            <div className={styles.wrapper}>
+              <div className={styles.text}>
+                {application.applicant_priority} / {application?.application_count}
+              </div>
             </div>
           ),
         },
