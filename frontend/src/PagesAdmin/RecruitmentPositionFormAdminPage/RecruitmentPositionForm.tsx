@@ -23,7 +23,7 @@ import type { RecruitmentPositionDto, UserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { NON_EMPTY_STRING, OPTIONAL_NON_EMPTY_STRING} from '~/schema/strings';
+import { NON_EMPTY_STRING, OPTIONAL_NON_EMPTY_STRING } from '~/schema/strings';
 import styles from './RecruitmentPositionFormAdminPage.module.scss';
 
 const schema = z.object({
@@ -68,7 +68,7 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
       recruitment: recruitmentId ?? '',
       interviewer_ids: data.interviewer_ids || [],
       default_application_letter_nb: data.default_application_letter_nb || '',
-      default_application_letter_en: data.default_application_letter_en || '', 
+      default_application_letter_en: data.default_application_letter_en || '',
     };
 
     const action = positionId
