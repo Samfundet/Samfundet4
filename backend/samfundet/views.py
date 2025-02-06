@@ -4,7 +4,9 @@ import os
 import csv
 import hmac
 import hashlib
+import operator
 from typing import Any
+from functools import reduce
 from itertools import chain
 
 from guardian.shortcuts import get_objects_for_user
@@ -1214,7 +1216,7 @@ class DownloadAllRecruitmentApplicationCSV(APIView):
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
         applications = RecruitmentApplication.objects.filter(recruitment=recruitment)
 
-        filename = f"opptak_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        filename = f'opptak_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime("%Y-%m-%d %H.%M")}.csv'
         response = HttpResponse(
             content_type='text/csv',
             headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
@@ -1273,7 +1275,7 @@ class DownloadRecruitmentApplicationGangCSV(APIView):
         gang = get_object_or_404(Gang, id=gang_id)
         applications = RecruitmentApplication.objects.filter(recruitment_position__gang=gang, recruitment=recruitment)
 
-        filename = f"opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        filename = f'opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime("%Y-%m-%d %H.%M")}.csv'
         response = HttpResponse(
             content_type='text/csv',
             headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
@@ -1495,3 +1497,53 @@ class GangApplicationCountView(APIView):
                 'total_rejected': gang_stat.total_rejected,
             }
         )
+
+
+class PositionByTagsView(ListAPIView):
+    """
+    Fetches recruitment positions by common tags for a specific recruitment.
+    Expects tags as query parameter in format: ?tags=tag1,tag2,tag3
+    Optionally accepts position_id parameter to exclude current position
+    This view expects a string which contains tags separated by comma from the client.
+    """
+
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionForApplicantSerializer
+
+    def get_queryset(self) -> QuerySet:
+        recruitment_id = self.kwargs.get('id')
+        tags_param = self.request.query_params.get('tags')
+        current_position_id = self.request.query_params.get('position_id')
+
+        if not tags_param:
+            return RecruitmentPosition.objects.none()
+
+        # Split and clean the tags
+        tags = [tag.strip() for tag in tags_param.split(',') if tag.strip()]
+
+        if not tags:
+            return RecruitmentPosition.objects.none()
+
+        # Create Q objects for each tag to search in the tags field
+        tag_queries = [Q(tags__icontains=tag) for tag in tags]
+
+        # Combine queries with OR operator
+        combined_query = reduce(operator.or_, tag_queries)
+
+        # Base queryset with recruitment and tag filtering
+        queryset = RecruitmentPosition.objects.filter(combined_query, recruitment_id=recruitment_id).select_related('gang')
+
+        # Exclude current position if position_id is provided
+        if current_position_id:
+            queryset = queryset.exclude(id=current_position_id)
+
+        return queryset
+
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        if not request.query_params.get('tags'):
+            return Response({'message': 'No tags provided in query parameters'}, status=status.HTTP_400_BAD_REQUEST)
+
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response({'count': len(serializer.data), 'positions': serializer.data})

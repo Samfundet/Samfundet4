@@ -20,6 +20,7 @@ import type {
   OccupiedTimeslotDto,
   OrganizationDto,
   PermissionDto,
+  PositionsByTagResponse,
   PurchaseFeedbackDto,
   RecruitmentApplicationDto,
   RecruitmentApplicationRecruiterDto,
@@ -1136,4 +1137,21 @@ export async function getRecruitmentGangStats(
       },
     });
   return await axios.get(url, { withCredentials: true });
+}
+
+export async function getPositionsByTag(
+  recruitmentId: string,
+  tags: string,
+  currentPositionId: number,
+): Promise<PositionsByTagResponse> {
+  const url = `${
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_positions_by_tags,
+      urlParams: { id: recruitmentId },
+    })
+  }?tags=${encodeURIComponent(tags)}&position_id=${currentPositionId}`;
+
+  const response = await axios.get<PositionsByTagResponse>(url, { withCredentials: true });
+  return response.data;
 }
