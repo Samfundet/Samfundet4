@@ -100,7 +100,7 @@ def seed():
         {
             'key': 'uka_recruitment_description',
             'text_nb': 'UKA har opptak ved starten av hvert semester. Vi ønsker at du søker til oss som frivillig! Som frivillig i UKA får du muligheten til å være med på å arrangere Norges største kulturfestival.',
-            'text_en': 'UKA has recruitments at the start of each semester. We would like you to apply to us as a volunteer! As a volunteer in UKA, you get the opportunity to help organize Norway\'s largest cultural festival.',
+            'text_en': "UKA has recruitments at the start of each semester. We would like you to apply to us as a volunteer! As a volunteer in UKA, you get the opportunity to help organize Norway's largest cultural festival.",
         },
         {
             'key': 'no_recruitment_uka_header',
