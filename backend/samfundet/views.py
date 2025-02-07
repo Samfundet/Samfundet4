@@ -5,6 +5,7 @@ import csv
 import hmac
 import hashlib
 from typing import Any
+from datetime import datetime
 from itertools import chain
 
 from guardian.shortcuts import get_objects_for_user
@@ -1214,7 +1215,7 @@ class DownloadAllRecruitmentApplicationCSV(APIView):
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
         applications = RecruitmentApplication.objects.filter(recruitment=recruitment)
 
-        filename = f"opptak_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        filename = f'opptak_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime("%Y-%m-%d %H.%M")}.csv'
         response = HttpResponse(
             content_type='text/csv',
             headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
@@ -1273,7 +1274,7 @@ class DownloadRecruitmentApplicationGangCSV(APIView):
         gang = get_object_or_404(Gang, id=gang_id)
         applications = RecruitmentApplication.objects.filter(recruitment_position__gang=gang, recruitment=recruitment)
 
-        filename = f"opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        filename = f'opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime("%Y-%m-%d %H.%M")}.csv'
         response = HttpResponse(
             content_type='text/csv',
             headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
@@ -1494,4 +1495,21 @@ class GangApplicationCountView(APIView):
                 'total_accepted': gang_stat.total_accepted,
                 'total_rejected': gang_stat.total_rejected,
             }
+        )
+
+
+class InterviewerAvailabilityForDate(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, recruitment_id: int) -> Response:
+        date = datetime.fromisoformat(request.query_params.get('date'))
+        interviewers = request.query_params.get('interviewers', [])
+
+        return Response(
+            OccupiedTimeslot.objects.filter(
+                recruitment__id=recruitment_id,
+                user__in=interviewers,
+                start_dt__date__lte=date,
+                end_dt__date__gte=date,
+            )
         )
