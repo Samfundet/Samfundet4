@@ -126,11 +126,11 @@ export function RecruitmentInterviewAvailabilityForm({ recruitmentId, data }: Pr
     const interval = data.timeslot_interval;
     const intervalCount = Math.floor(diff / (interval * 60));
 
-    const x = [];
+    const intervalList = [];
     for (let i = 0; i < intervalCount; i++) {
-      x.push(format(addMinutes(startTime, i * interval), 'HH:mm'));
+      intervalList.push(format(addMinutes(startTime, i * interval), 'HH:mm'));
     }
-    setTimeslots(x);
+    setTimeslots(intervalList);
   }
 
   return (
