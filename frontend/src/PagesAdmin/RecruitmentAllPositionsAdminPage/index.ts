@@ -1,0 +1,1 @@
+export { RecruitmentAllPositionsAdminPage } from './RecruitmentAllPositionsAdminPage';

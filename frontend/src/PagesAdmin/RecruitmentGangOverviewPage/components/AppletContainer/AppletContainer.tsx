@@ -78,6 +78,15 @@ export function AppletContainer({ recruitmentId }: Props) {
             url="#"
             disabled={true}
           />
+
+          <AppletCard
+            title={t(KEY.recruitment_all_applicants)}
+            description={t(KEY.recruitment_manage_all_applicants)}
+            url={reverse({
+              pattern: ROUTES.frontend.admin_recruitment_all_positions,
+              urlParams: { recruitmentId },
+            })}
+          />
         </>
       ),
     },

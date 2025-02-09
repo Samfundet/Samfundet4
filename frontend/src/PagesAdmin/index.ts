@@ -13,6 +13,7 @@ export { InformationFormAdminPage } from './InformationFormAdminPage';
 export { InterviewNotesPage } from './InterviewNotesAdminPage';
 export { OpeningHoursAdminPage } from './OpeningHoursAdminPage';
 export { RecruitmentAdminPage } from './RecruitmentAdminPage';
+export { RecruitmentAllPositionsAdminPage } from './RecruitmentAllPositionsAdminPage';
 export { RecruitmentApplicantAdminPage } from './RecruitmentApplicantAdminPage';
 export { RecruitmentFormAdminPage } from './RecruitmentFormAdminPage';
 export { RecruitmentGangAdminPage } from './RecruitmentGangAdminPage';
@@ -27,9 +28,9 @@ export { RecruitmentSeparatePositionFormAdminPage } from './RecruitmentSeparateP
 export { RecruitmentUnprocessedApplicantsPage } from './RecruitmentUnprocessedApplicantsPage';
 export { RecruitmentUsersWithoutInterviewGangPage } from './RecruitmentUsersWithoutInterviewGangPage';
 export { RecruitmentUsersWithoutThreeInterviewCriteriaPage } from './RecruitmentUsersWithoutThreeInterviewCriteriaPage';
-export { RolesAdminPage } from './RolesAdminPage';
 export { RoleAdminPage } from './RoleAdminPage';
 export { RoleFormAdminPage } from './RoleFormAdminPage';
+export { RolesAdminPage } from './RolesAdminPage';
 export { CreateInterviewRoomPage, RoomAdminPage } from './RoomAdminPage';
 export { SaksdokumentAdminPage } from './SaksdokumentAdminPage';
 export { SaksdokumentFormAdminPage } from './SaksdokumentFormAdminPage';

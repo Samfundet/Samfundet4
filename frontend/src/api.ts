@@ -584,6 +584,18 @@ export async function getRoleUsers(id: number): Promise<RoleUsersDto[]> {
   return response.data;
 }
 
+export async function getAllRecruitmentApplications(
+  recruitmentId: string,
+): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_all_applications,
+      queryParams: { recruitment: recruitmentId },
+    });
+  return axios.get<RecruitmentApplicationDto[]>(url, { withCredentials: true });
+}
+
 export async function getRecruitmentPositionsGangForApplicant(
   recruitmentId: number | string,
   gangId: number | string | undefined,
