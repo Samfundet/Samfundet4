@@ -106,14 +106,14 @@ export function RecruitmentApplicantsStatus({
             <div className={styles.wrapper}>
               <div className={styles.show_div}>{t(KEY.common_show)}</div>
               <Link
-                  url={reverse({
-                    pattern: ROUTES.frontend.admin_recruitment_applicant,
-                    urlParams: {
-                      applicationID: application.id,
-                    },
-                  })}
-                  className={styles.text}
-                >
+                url={reverse({
+                  pattern: ROUTES.frontend.admin_recruitment_applicant,
+                  urlParams: {
+                    applicationID: application.id,
+                  },
+                })}
+                className={styles.text}
+              >
                 {`${application.user.first_name} ${application.user.last_name}`}
               </Link>
             </div>
