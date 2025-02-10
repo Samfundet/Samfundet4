@@ -1,0 +1,25 @@
+@import '/src/_constants.scss';
+
+@import '/src/styles/_colors.scss';
+
+@import '/src/styles/_z-indexes.scss';
+
+@import '/src/styles/_spacing.scss';
+
+.container {
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: $isfit-navbar-height;
+  background-color: $isfit-primary;
+  padding: $spacing-sm $spacing-md;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: $navbar-z-index;
+}
+
+.logo {
+  height: 100%;
+}

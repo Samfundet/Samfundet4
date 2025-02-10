@@ -1,4 +1,4 @@
-[**&larr; Back: Documentation Overview**](./README.md)
+[**&larr; Back: Documentation Overview**](../README.md#documentation-overview)
 
 # Introduction to Samfundet4
 

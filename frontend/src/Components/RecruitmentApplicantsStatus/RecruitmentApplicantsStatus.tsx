@@ -1,10 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { InputField, TimeDisplay } from '~/Components';
+import { TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
-import { putRecruitmentApplicationForGang } from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -104,25 +103,31 @@ export function RecruitmentApplicantsStatus({
           value: application.user.first_name,
           style: applicationStatusStyle,
           content: (
-            <Link
-              url={reverse({
-                pattern: ROUTES.frontend.admin_recruitment_applicant,
-                urlParams: {
-                  applicationID: application.id,
-                },
-              })}
-              className={styles.text}
-            >
-              {`${application.user.first_name} ${application.user.last_name}`}
-            </Link>
+            <div className={styles.wrapper}>
+              <div className={styles.show_div}>{t(KEY.common_show)}</div>
+              <Link
+                url={reverse({
+                  pattern: ROUTES.frontend.admin_recruitment_applicant,
+                  urlParams: {
+                    applicationID: application.id,
+                  },
+                })}
+                className={styles.text}
+              >
+                {`${application.user.first_name} ${application.user.last_name}`}
+              </Link>
+            </div>
           ),
         },
         {
           value: application.applicant_priority,
           style: applicationStatusStyle,
           content: (
-            <div className={styles.text}>
-              {application.applicant_priority} / {application?.application_count}
+            <div className={styles.wrapper}>
+              <div className={styles.show_div}>{t(KEY.common_show)}</div>
+              <div className={styles.text}>
+                {application.applicant_priority} / {application?.application_count}
+              </div>
             </div>
           ),
         },

@@ -171,17 +171,17 @@ class RoleAdmin(admin.ModelAdmin):
 
 @admin.register(UserOrgRole)
 class UserOrgRoleAdmin(admin.ModelAdmin):
-    list_display = ('user', 'role', 'obj')
+    list_display = ('user', 'role', 'obj', 'created_at', 'created_by')
 
 
 @admin.register(UserGangRole)
 class UserGangRoleAdmin(admin.ModelAdmin):
-    list_display = ('user', 'role', 'obj')
+    list_display = ('user', 'role', 'obj', 'created_at', 'created_by')
 
 
 @admin.register(UserGangSectionRole)
 class UserGangSectionRoleAdmin(admin.ModelAdmin):
-    list_display = ('user', 'role', 'obj')
+    list_display = ('user', 'role', 'obj', 'created_at', 'created_by')
 
 
 @admin.register(Permission)
@@ -636,7 +636,7 @@ class RecruitmentAdmin(CustomBaseAdmin):
         'visible_from',
         'shown_application_deadline',
         'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups',
+        'reprioritization_deadline_for_gangs',
     ]
     search_fields = [
         'name_nb',
