@@ -383,18 +383,6 @@ export const router = createBrowserRouter(
               handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
             />
             <Route
-              path={ROUTES.frontend.admin_recruitment_gang_all_applications}
-              element={<RecruitmentGangAllApplicantsAdminPage />}
-            />
-            <Route
-              path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
-              element={<RecruitmentUsersWithoutInterviewGangPage />}
-            />
-            <Route
-              path={ROUTES.frontend.admin_recruitment_users_three_interview_criteria}
-              element={<RecruitmentUsersWithoutThreeInterviewCriteriaPage />}
-            />
-            <Route
               path={ROUTES.frontend.admin_recruitment_applicant}
               element={
                 <PermissionRoute
@@ -496,7 +484,6 @@ export const router = createBrowserRouter(
                   ),
                 }}
               />
-
               <Route
                 path={ROUTES.frontend.admin_recruitment_users_without_interview}
                 element={<RecruitmentUsersWithoutInterviewGangPage />}
@@ -504,6 +491,16 @@ export const router = createBrowserRouter(
                 handle={{
                   crumb: ({ pathname }: UIMatch) => (
                     <Link url={pathname}>{t(KEY.recruitment_show_applicants_without_interview)}</Link>
+                  ),
+                }}
+              />
+              <Route
+                path={ROUTES.frontend.admin_recruitment_users_three_interview_criteria}
+                element={<RecruitmentUsersWithoutThreeInterviewCriteriaPage />}
+                loader={recruitmentLoader}
+                handle={{
+                  crumb: ({ pathname }: UIMatch) => (
+                    <Link url={pathname}>{t(KEY.recruitment_applet_three_interview_title)}</Link>
                   ),
                 }}
               />
@@ -576,6 +573,13 @@ export const router = createBrowserRouter(
                         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
                       </Link>
                     ),
+                  }}
+                />
+                <Route
+                  path={ROUTES.frontend.admin_recruitment_gang_all_applications}
+                  element={<RecruitmentGangAllApplicantsAdminPage />}
+                  handle={{
+                    crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_all_applications)}</Link>,
                   }}
                 />
                 {/* Position */}
