@@ -377,12 +377,6 @@ export const router = createBrowserRouter(
               }
             />
             <Route
-              path={ROUTES.frontend.admin_recruitment_overview}
-              element={
-                <PermissionRoute required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} element={<RecruitmentOverviewPage />} />
-              }
-            />
-            <Route
               path={ROUTES.frontend.admin_recruitment_create}
               element={
                 <PermissionRoute required={[PERM.SAMFUNDET_ADD_RECRUITMENT]} element={<RecruitmentFormAdminPage />} />
@@ -425,6 +419,15 @@ export const router = createBrowserRouter(
                 ),
               }}
             >
+              <Route
+                path={ROUTES.frontend.admin_recruitment_overview}
+                element={
+                  <PermissionRoute required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} element={<RecruitmentOverviewPage />} />
+                }
+                handle={{
+                  crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_overview)}</Link>,
+                }}
+              />
               <Route
                 path={ROUTES.frontend.admin_recruitment_edit}
                 element={
@@ -579,6 +582,13 @@ export const router = createBrowserRouter(
                         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
                       </Link>
                     ),
+                  }}
+                />
+                <Route
+                  path={ROUTES.frontend.admin_recruitment_gang_all_applications}
+                  element={<RecruitmentGangAllApplicantsAdminPage />}
+                  handle={{
+                    crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_all_applications)}</Link>,
                   }}
                 />
                 {/* Position */}
