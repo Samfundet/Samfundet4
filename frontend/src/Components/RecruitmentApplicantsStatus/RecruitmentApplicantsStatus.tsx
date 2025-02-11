@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { TimeDisplay } from '~/Components';
-import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
@@ -63,7 +62,6 @@ export function RecruitmentApplicantsStatus({
     { content: t(KEY.recruitment_interview_location), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_recruiter_priority), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_recruiter_status), sortable: true, hideSortButton: false },
-    { content: t(KEY.recruitment_interview_notes), sortable: false, hideSortButton: true },
   ];
 
   function updateApplications(id: string, field: string, value: string | number | undefined) {
@@ -186,32 +184,6 @@ export function RecruitmentApplicantsStatus({
               options={statusOptions}
               onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_status, value)}
             />
-          ),
-        },
-        {
-          style: applicationStatusStyle,
-          content: (
-            <div className={styles.crud}>
-              <CrudButtons
-                onView={
-                  application.interview?.interview_time != null
-                    ? () => {
-                        navigate({
-                          url: reverse({
-                            pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes,
-                            urlParams: {
-                              recruitmentId: recruitmentId,
-                              gangId: gangId,
-                              positionId: positionId,
-                              interviewId: application.interview?.id,
-                            },
-                          }),
-                        });
-                      }
-                    : undefined
-                }
-              />
-            </div>
           ),
         },
       ],
