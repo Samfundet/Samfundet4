@@ -550,6 +550,14 @@ export type InterviewDto = {
   interviewers?: UserDto[];
 };
 
+export type RecruitmentPositionOrganizedApplicationsDto = {
+  unprocessed: RecruitmentApplicationDto[];
+  withdrawn: RecruitmentApplicationDto[];
+  rejected: RecruitmentApplicationDto[];
+  accepted: RecruitmentApplicationDto[];
+  hardtoget: RecruitmentApplicationDto[];
+};
+
 export type RecruitmentApplicationDto = {
   id: string;
   interview?: InterviewDto;
