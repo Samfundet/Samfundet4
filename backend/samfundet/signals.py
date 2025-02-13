@@ -89,14 +89,15 @@ def application_applicant_rejected_or_accepted(sender: RecruitmentApplication, i
 
 
 @receiver(pre_save, sender=RecruitmentApplication)
-def application_on_repriorization_update(sender: RecruitmentApplication, instance: RecruitmentApplication, **kwargs: Any) -> None:  # noqa C901
+def application_on_update_positionstat(sender: RecruitmentApplication, instance: RecruitmentApplication, **kwargs: Any) -> None:
     """Whenever an applicant updates"""
     obj = RecruitmentApplication.objects.filter(pk=instance.pk).first()
     if not obj:
         return
     # Check if priority is updated after interview
     # This will reflect the quality of the interview
+    recruitment_stats = RecruitmentStatistics.objects.filter(recruitment=obj.recruitment).first()
+    position_stats, _created = RecruitmentPositionStat.objects.get_or_create(recruitment_position=obj.recruitment_position, recruitment_stats=recruitment_stats)
     if obj.applicant_priority != instance.applicant_priority and obj.interview and obj.interview.interview_time < timezone.now():
-        recruitment_stats = RecruitmentStatistics.objects.filter(recruitment=obj.recruitment)
-        position_stats, _created =  RecruitmentPositionStat.objects.get_or_create(recruitment_position=obj.recruitment_position,recruitment_stats=recruitment_stats)
-        position_stats.update_repriorization_stats(value=instance.applicant_priority-obj.applicant_priority)
+        position_stats.update_repriorization_stats(value=obj.applicant_priority - instance.applicant_priority)
+    position_stats.save()
