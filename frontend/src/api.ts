@@ -20,6 +20,7 @@ import type {
   OccupiedTimeslotDto,
   OrganizationDto,
   PermissionDto,
+  PositionsByTagResponse,
   PurchaseFeedbackDto,
   RecruitmentApplicationDto,
   RecruitmentApplicationRecruiterDto,
@@ -113,8 +114,8 @@ export async function impersonateUser(userId: number): Promise<boolean> {
   return response.status === 200;
 }
 
-export async function getUsers(): Promise<UserDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users;
+export async function getUsers(search?: string): Promise<UserDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users + (search ? `?search=${search}` : '');
   const response = await axios.get<UserDto[]>(url, { withCredentials: true });
   return response.data;
 }
@@ -1136,4 +1137,21 @@ export async function getRecruitmentGangStats(
       },
     });
   return await axios.get(url, { withCredentials: true });
+}
+
+export async function getPositionsByTag(
+  recruitmentId: string,
+  tags: string,
+  currentPositionId: number,
+): Promise<PositionsByTagResponse> {
+  const url = `${
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_positions_by_tags,
+      urlParams: { id: recruitmentId },
+    })
+  }?tags=${encodeURIComponent(tags)}&position_id=${currentPositionId}`;
+
+  const response = await axios.get<PositionsByTagResponse>(url, { withCredentials: true });
+  return response.data;
 }
