@@ -1,23 +1,45 @@
-from typing import Iterator, Any
+from __future__ import annotations
+
+from typing import Any
+from datetime import time, datetime
+from collections.abc import Iterator
 
 import pytest
-from django.core.files.images import ImageFile
 
-from datetime import time, datetime
-from django.utils import timezone
-from django.test import Client
 from rest_framework.test import APIClient
-from django.contrib.auth.models import Group
 
-from root.settings import BASE_DIR
-from samfundet.constants import DEV_PASSWORD
-from samfundet.models.billig import BilligEvent
-from samfundet.models.event import Event
-from samfundet.models.model_choices import EventAgeRestriction, EventTicketType, RecruitmentPriorityChoices, RecruitmentStatusChoices
-from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentAdmission
-from samfundet.models.general import User, Image, InformationPage, Organization, Gang, BlogPost, TextItem, Venue, Table, Reservation
+from django.test import Client, TestCase
+from django.utils import timezone
+from django.core.files.images import ImageFile
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
 
 import root.management.commands.seed_scripts.billig as billig_seed
+from root.settings import BASE_DIR
+
+from samfundet.constants import DEV_PASSWORD
+from samfundet.models.role import Role
+from samfundet.models.event import Event
+from samfundet.models.billig import BilligEvent
+from samfundet.models.general import (
+    Gang,
+    User,
+    Image,
+    Merch,
+    Table,
+    Venue,
+    Campus,
+    BlogPost,
+    TextItem,
+    GangSection,
+    Reservation,
+    Organization,
+    MerchVariation,
+    InformationPage,
+)
+from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentApplication
+from samfundet.models.model_choices import EventTicketType, EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
+
 """
 This module contains fixtures available in pytests.
 These do not need to be imported.
@@ -26,8 +48,6 @@ It's recommended to yield objects, and tear them down afterwards.
 
 https://docs.pytest.org/en/7.1.x/how-to/fixtures.html
 """
-
-from django.test import TestCase
 
 TestCase.databases = {'default', 'billig'}
 
@@ -117,25 +137,29 @@ def fixture_user_pw() -> Iterator[str]:
 
 
 @pytest.fixture
-def fixture_user(fixture_user_pw: str) -> Iterator[User]:
-    user = User.objects.create_user(
-        username='user',
-        email='user@test.com',
-        password=fixture_user_pw,
-    )
+def fixture_campus() -> Iterator[Campus]:
+    campus = Campus.objects.create(name_nb='Samf', name_en='Samf', abbreviation='Samf')
+    yield campus
+    campus.delete()
+
+
+@pytest.fixture
+def fixture_user(fixture_user_pw: str, fixture_campus: Campus) -> Iterator[User]:
+    user = User.objects.create_user(username='user', email='user@test.com', password=fixture_user_pw, campus=fixture_campus)
     yield user
     user.delete()
 
 
 @pytest.fixture
 def fixture_user2(fixture_user_pw: str) -> Iterator[User]:
-    user2 = User.objects.create_user(
+    # Extra user if need
+    user = User.objects.create_user(
         username='user2',
         email='user2@test.com',
         password=fixture_user_pw,
     )
-    yield user2
-    user2.delete()
+    yield user
+    user.delete()
 
 
 @pytest.fixture
@@ -205,6 +229,13 @@ def fixture_organization() -> Iterator[Organization]:
 
 
 @pytest.fixture
+def fixture_organization2() -> Iterator[Organization]:
+    organization = Organization.objects.create(name='UKA')
+    yield organization
+    organization.delete()
+
+
+@pytest.fixture
 def fixture_gang(fixture_organization: Organization) -> Iterator[Gang]:
     organization = Gang.objects.create(
         name_nb='Gang',
@@ -214,6 +245,82 @@ def fixture_gang(fixture_organization: Organization) -> Iterator[Gang]:
     )
     yield organization
     organization.delete()
+
+
+@pytest.fixture
+def fixture_gang2(fixture_organization2: Organization) -> Iterator[Gang]:
+    organization = Gang.objects.create(
+        name_nb='Gang 2',
+        name_en='Gang 2',
+        abbreviation='G2',
+        organization=fixture_organization2,
+    )
+    yield organization
+    organization.delete()
+
+
+@pytest.fixture
+def fixture_gang_section(fixture_gang: Gang) -> Iterator[GangSection]:
+    gang_section = GangSection.objects.create(
+        name_nb='Test Gang Section',
+        name_en='Test Gang Section',
+        gang=fixture_gang,
+    )
+    yield gang_section
+    gang_section.delete()
+
+
+@pytest.fixture
+def fixture_gang_section2(fixture_gang2: Gang) -> Iterator[GangSection]:
+    gang_section = GangSection.objects.create(
+        name_nb='Test Gang Section 2',
+        name_en='Test Gang Section 2',
+        gang=fixture_gang2,
+    )
+    yield gang_section
+    gang_section.delete()
+
+
+@pytest.fixture
+def fixture_role() -> Iterator[Role]:
+    role = Role.objects.create(
+        name='Test Role',
+    )
+    yield role
+    role.delete()
+
+
+@pytest.fixture
+def fixture_org_permission() -> Iterator[Permission]:
+    permission = Permission.objects.create(
+        name='Test Org Permission',
+        codename='test_org_permission',
+        content_type=ContentType.objects.get_for_model(Organization),
+    )
+    yield permission
+    permission.delete()
+
+
+@pytest.fixture
+def fixture_gang_permission() -> Iterator[Permission]:
+    permission = Permission.objects.create(
+        name='Test Gang Permission',
+        codename='test_gang_permission',
+        content_type=ContentType.objects.get_for_model(Gang),
+    )
+    yield permission
+    permission.delete()
+
+
+@pytest.fixture
+def fixture_gang_section_permission() -> Iterator[Permission]:
+    permission = Permission.objects.create(
+        name='Test Gang Section Permission',
+        codename='test_gang_section_permission',
+        content_type=ContentType.objects.get_for_model(GangSection),
+    )
+    yield permission
+    permission.delete()
 
 
 @pytest.fixture
@@ -228,19 +335,35 @@ def fixture_text_item() -> Iterator[TextItem]:
 
 
 @pytest.fixture
+def fixture_merch(fixture_image: Image) -> Iterator[Merch]:
+    merch = Merch.objects.create(
+        name_nb='basic merch', name_en='basic merch', description_nb='basic merch', description_en='basic merch', base_price=100, image=fixture_image
+    )
+    yield merch
+    merch.delete()
+
+
+@pytest.fixture
+def fixture_merchvariation(fixture_merch: Merch) -> Iterator[MerchVariation]:
+    merch_variation = MerchVariation.objects.create(specification='big', stock=69, merch=fixture_merch)
+    yield merch_variation
+    merch_variation.delete()
+
+
+@pytest.fixture
 def fixture_recruitment(fixture_organization: Organization) -> Iterator[Recruitment]:
     now = timezone.now()
     one_hour = timezone.timedelta(hours=1)
-
+    one_week = timezone.timedelta(days=7)
     # Create a recruitment instance with valid data
     recruitment = Recruitment.objects.create(
         name_nb='Test Recruitment NB',
         name_en='Test Recruitment EN',
         visible_from=now,
-        actual_application_deadline=now + 3 * one_hour,
-        shown_application_deadline=now + one_hour,
-        reprioritization_deadline_for_applicant=now + 4 * one_hour,
-        reprioritization_deadline_for_groups=now + 6 * one_hour,
+        actual_application_deadline=now + 3 * one_hour + one_week,
+        shown_application_deadline=now + one_hour + one_week,
+        reprioritization_deadline_for_applicant=now + 4 * one_hour + one_week,
+        reprioritization_deadline_for_gangs=now + 6 * one_hour + one_week,
         organization=fixture_organization,
     )
     yield recruitment
@@ -257,11 +380,31 @@ def fixture_recruitment_position(fixture_recruitment: Recruitment, fixture_gang:
         long_description_nb='Long Description NB',
         long_description_en='Long Description EN',
         is_funksjonaer_position=False,
-        default_admission_letter_nb='Default Admission Letter NB',
-        default_admission_letter_en='Default Admission Letter EN',
+        default_application_letter_nb='Default Application Letter NB',
+        default_application_letter_en='Default Application Letter EN',
         tags='tag1,tag2',
         gang=fixture_gang,
-        recruitment=fixture_recruitment
+        recruitment=fixture_recruitment,
+    )
+    yield recruitment_position
+    recruitment_position.delete()
+
+
+@pytest.fixture
+def fixture_recruitment_position2(fixture_recruitment: Recruitment, fixture_gang: Gang) -> Iterator[Recruitment]:
+    recruitment_position = RecruitmentPosition.objects.create(
+        name_nb='Position NB 2',
+        name_en='Position EN 2',
+        short_description_nb='Short Description NB 2',
+        short_description_en='Short Description EN 2',
+        long_description_nb='Long Description NB 2',
+        long_description_en='Long Description EN 2',
+        is_funksjonaer_position=False,
+        default_application_letter_nb='Default Application Letter NB 2',
+        default_application_letter_en='Default Application Letter EN 2',
+        tags='tag1,tag2',
+        gang=fixture_gang,
+        recruitment=fixture_recruitment,
     )
     yield recruitment_position
     recruitment_position.delete()
@@ -288,10 +431,13 @@ def fixture_blogpost(fixture_image: Image) -> Iterator[BlogPost]:
 
 
 @pytest.fixture
-def fixture_recruitment_admission(fixture_user: User, fixture_recruitment_position: RecruitmentPosition,
-                                  fixture_recruitment: Recruitment) -> Iterator[RecruitmentAdmission]:
-    admission = RecruitmentAdmission.objects.create(
-        admission_text='Test admission text',
+def fixture_recruitment_application(
+    fixture_user: User,
+    fixture_recruitment_position: RecruitmentPosition,
+    fixture_recruitment: Recruitment,
+) -> Iterator[RecruitmentApplication]:
+    application = RecruitmentApplication.objects.create(
+        application_text='Test application text',
         recruitment_position=fixture_recruitment_position,
         recruitment=fixture_recruitment,
         user=fixture_user,
@@ -299,8 +445,27 @@ def fixture_recruitment_admission(fixture_user: User, fixture_recruitment_positi
         recruiter_priority=RecruitmentPriorityChoices.NOT_SET,
         recruiter_status=RecruitmentStatusChoices.NOT_SET,
     )
-    yield admission
-    admission.delete()
+    yield application
+    application.delete()
+
+
+@pytest.fixture
+def fixture_recruitment_application2(
+    fixture_user: User,
+    fixture_recruitment_position2: RecruitmentPosition,
+    fixture_recruitment: Recruitment,
+) -> Iterator[RecruitmentApplication]:
+    application2 = RecruitmentApplication.objects.create(
+        application_text='Test application text',
+        recruitment_position=fixture_recruitment_position2,
+        recruitment=fixture_recruitment,
+        user=fixture_user,
+        applicant_priority=2,
+        recruiter_priority=RecruitmentPriorityChoices.NOT_SET,
+        recruiter_status=RecruitmentStatusChoices.NOT_SET,
+    )
+    yield application2
+    application2.delete()
 
 
 @pytest.fixture

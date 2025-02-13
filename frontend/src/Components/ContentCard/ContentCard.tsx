@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import classnames from 'classnames';
-import { ReactNode, useId } from 'react';
+import { type ReactNode, useId } from 'react';
 import { Skeleton } from '~/Components';
 import { useScreenCenterOffset } from '~/hooks';
 import { backgroundImageFromUrl } from '~/utils';

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { IconButton } from './IconButton';
 
 // Local component config.
@@ -7,7 +7,7 @@ export default {
   component: IconButton,
 } as ComponentMeta<typeof IconButton>;
 
-const Template: ComponentStory<typeof IconButton> = function (args) {
+const Template: ComponentStory<typeof IconButton> = (args) => {
   function onClick() {
     alert('Hello!');
   }

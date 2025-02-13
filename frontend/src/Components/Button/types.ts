@@ -1,4 +1,4 @@
-import { displayToStyleMap, themeToStyleMap } from './utils';
+import type { displayToStyleMap, themeToStyleMap } from './utils';
 
 export type ButtonTheme = keyof typeof themeToStyleMap;
 

@@ -1,0 +1,57 @@
+@import "/src/constants";
+
+@import "/src/mixins";
+
+.chartContainer {
+  @include flex-column-center;
+  gap: 1rem;
+  background-color: $background-secondary;
+  @include theme-dark {
+    background-color: $blue-deeper;
+    border: 2px solid $background-secondary;
+  }
+}
+
+.legendWrapper{
+  @include flex-column-center;
+}
+
+.labelsContainer {
+  padding: 0.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 100%;
+  overflow: scroll;
+  -ms-overflow-style: none;  /* HIDES SCROLLBAR IE and Edge */
+  scrollbar-width: none;  /* HIDES SCROLLBAR Firefox */
+  max-height: 250px;
+
+  @include theme-dark{
+    border: 1px solid $background-secondary;
+  }
+
+  @include for-mobile-only {
+    max-height: 150px;
+  }
+}
+
+/* HIDES SCROLLBAR */
+.labelsContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.labelWrapper{
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  min-width: 0;
+}
+
+.labelColor {
+  width: 1.25rem;
+  height: 1.25rem;
+}

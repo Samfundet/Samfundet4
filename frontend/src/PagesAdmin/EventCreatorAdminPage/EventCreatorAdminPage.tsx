@@ -1,21 +1,22 @@
-import { Button, ImageCard } from '~/Components';
-
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { t } from 'i18next';
-import { ReactElement, useState } from 'react';
+import { type ReactElement, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
-import { Tab, TabBar } from '~/Components/TabBar/TabBar';
+import { Button, ImageCard } from '~/Components';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
+import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { postEvent } from '~/api';
+import { getEvent, postEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
-import { EventDto } from '~/dto';
-import { useCustomNavigate, usePrevious } from '~/hooks';
+import type { EventDto, ImageDto } from '~/dto';
+import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { Children, EventAgeRestriction } from '~/types';
+import type { Children, EventAgeRestrictionValue, EventTicketTypeValue } from '~/types';
 import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
@@ -29,21 +30,67 @@ type EventCreatorStep = {
   template: ReactElement;
 };
 
+type FormType = {
+  // text and description
+  title_nb: string;
+  title_en: string;
+  description_long_nb: string;
+  description_long_en: string;
+  description_short_nb: string;
+  description_short_en: string;
+  // Date and information
+  start_dt: string;
+  duration: number;
+  category: string;
+  host: string;
+  location: string;
+  capacity: number;
+  // Payment/registration
+  age_restriction: EventAgeRestrictionValue;
+  ticket_type: EventTicketTypeValue;
+  // Graphics
+  image: ImageDto;
+  // Summary/Publication date
+  publish_dt: string;
+};
 export function EventCreatorAdminPage() {
+  const { t } = useTranslation();
   const navigate = useCustomNavigate();
   const [event, setEvent] = useState<Partial<EventDto>>();
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const { id } = useParams();
 
   // TODO these are temporary and must be fetched from API when implemented.
-  const eventCategoryOptions: DropDownOption<string>[] = [
+  const eventCategoryOptions: DropdownOption<string>[] = [
     { value: 'concert', label: 'Konsert' },
     { value: 'debate', label: 'Debatt' },
   ];
-  const ageLimitOptions: DropDownOption<EventAgeRestriction>[] = [
+  const ageLimitOptions: DropdownOption<EventAgeRestrictionValue>[] = [
     { value: 'none', label: 'Ingen' },
     { value: 'eighteen', label: '18 år' },
     { value: 'twenty', label: '20 år' },
     { value: 'mixed', label: '18 år (student), 20 år (ikke student)' },
   ];
+
+  //Fetch event data using the event ID
+  // biome-ignore lint/correctness/useExhaustiveDependencies: navigate does not need to be in deplist
+  useEffect(() => {
+    if (id) {
+      getEvent(id)
+        .then((eventData) => {
+          setEvent(eventData);
+          setShowSpinner(false);
+        })
+        .catch((error) => {
+          if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
+            navigate({ url: ROUTES.frontend.admin_events, replace: true });
+          }
+          toast.error(t(KEY.common_something_went_wrong));
+        });
+    } else {
+      setShowSpinner(false);
+    }
+  }, [id]);
 
   // ================================== //
   //          Creation Steps            //
@@ -60,16 +107,36 @@ export function EventCreatorAdminPage() {
       template: (
         <>
           <div className={styles.input_row}>
-            <SamfFormField field="title_nb" type="text" label="Tittel (norsk)" />
-            <SamfFormField field="title_en" type="text" label="Tittel (engelsk)" />
+            <SamfFormField<string, FormType> field="title_nb" type="text" label="Tittel (norsk)" required={true} />
+            <SamfFormField<string, FormType> field="title_en" type="text" label="Tittel (engelsk)" required={true} />
           </div>
           <div className={styles.input_row}>
-            <SamfFormField field="description_short_nb" type="text" label="Kort beskrivelse (norsk)" />
-            <SamfFormField field="description_short_en" type="text" label="Kort beskrivelse (engelsk)" />
+            <SamfFormField<string, FormType>
+              field="description_short_nb"
+              type="text"
+              label="Kort beskrivelse (norsk)"
+              required={true}
+            />
+            <SamfFormField<string, FormType>
+              field="description_short_en"
+              type="text"
+              label="Kort beskrivelse (engelsk)"
+              required={true}
+            />
           </div>
           <div className={styles.input_row}>
-            <SamfFormField field="description_long_nb" type="text-long" label="Lang beskrivelse (norsk)" />
-            <SamfFormField field="description_long_en" type="text-long" label="Lang beskrivelse (engelsk)" />
+            <SamfFormField<string, FormType>
+              field="description_long_nb"
+              type="text_long"
+              label="Lang beskrivelse (norsk)"
+              required={true}
+            />
+            <SamfFormField<string, FormType>
+              field="description_long_en"
+              type="text_long"
+              label="Lang beskrivelse (engelsk)"
+              required={true}
+            />
           </div>
         </>
       ),
@@ -82,14 +149,25 @@ export function EventCreatorAdminPage() {
       template: (
         <>
           <div className={styles.input_row}>
-            <SamfFormField field="start_dt" type="datetime" label="Dato & tid" />
-            <SamfFormField field="duration" type="number" label="Varighet (minutter)" />
+            <SamfFormField<string, FormType> field="start_dt" type="date_time" label="Dato & tid" required={true} />
+            <SamfFormField<number, FormType>
+              field="duration"
+              type="number"
+              label="Varighet (minutter)"
+              required={true}
+            />
           </div>
           <div className={styles.input_row}>
-            <SamfFormField field="category" type="options" label="Kategori" options={eventCategoryOptions} />
-            <SamfFormField field="host" type="text" label="Arrangør" />
-            <SamfFormField field="location" type="text" label="Lokale" />
-            <SamfFormField field="capacity" type="number" label="Kapasitet" />
+            <SamfFormField<string, FormType>
+              field="category"
+              type="options"
+              label="Kategori"
+              options={eventCategoryOptions}
+              required={true}
+            />
+            <SamfFormField<string, FormType> field="host" type="text" label="Arrangør" required={true} />
+            <SamfFormField<string, FormType> field="location" type="text" label="Lokale" required={true} />
+            <SamfFormField<number, FormType> field="capacity" type="number" label="Kapasitet" required={true} />
           </div>
         </>
       ),
@@ -101,7 +179,13 @@ export function EventCreatorAdminPage() {
       title_en: 'Payment/registration',
       template: (
         <>
-          <SamfFormField field="age_restriction" type="options" label="Aldersgrense" options={ageLimitOptions} />
+          <SamfFormField<string, FormType>
+            field="age_restriction"
+            type="options"
+            label="Aldersgrense"
+            options={ageLimitOptions}
+            required={true}
+          />
           <PaymentForm event={event ?? {}} onChange={(partial) => setEvent({ ...event, ...partial })} />
         </>
       ),
@@ -111,7 +195,7 @@ export function EventCreatorAdminPage() {
       key: 'graphics',
       title_nb: 'Grafikk',
       title_en: 'Graphics',
-      template: <SamfFormField field="image" type="image" />,
+      template: <SamfFormField field="image" type="image" required={true} />,
     },
     // Summary.
     {
@@ -120,7 +204,12 @@ export function EventCreatorAdminPage() {
       title_en: 'Summary',
       customIcon: 'ic:outline-remove-red-eye',
       template: (
-        <SamfFormField field="publish_dt" type="datetime" label={t(KEY.saksdokumentpage_publication_date) ?? ''} />
+        <SamfFormField
+          field="publish_dt"
+          type="date_time"
+          label={t(KEY.saksdokumentpage_publication_date) ?? ''}
+          required={true}
+        />
       ),
     },
   ];
@@ -146,7 +235,7 @@ export function EventCreatorAdminPage() {
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(JSON.stringify(error.response.data));
-        console.error('FAIL: ' + JSON.stringify(error));
+        console.error(`FAIL: ${JSON.stringify(error)}`);
       });
   }
 
@@ -169,7 +258,7 @@ export function EventCreatorAdminPage() {
 
     // Create label
     const label = (
-      <div className={styles.tab_label}>
+      <div className={styles.tab_label} key={step.key}>
         <Icon
           icon={icon}
           className={classNames(styles.tab_icon, valid && styles.done, error && styles.error)}
@@ -251,12 +340,15 @@ export function EventCreatorAdminPage() {
     return (
       <div key={step.key} style={{ display: hidden ? 'none' : 'block' }}>
         <SamfForm
-          onChange={(part) => setEvent({ ...event, ...part })}
-          onValidityChanged={(valid) => setStepCompleted(step, valid)}
+          onChange={(part) => setEvent({ ...event, ...part })} // TODO: BURDE VÆRE 'ny/oppdatert' event data ?
+          onValidityChanged={(valid) => {
+            setStepCompleted(step, valid);
+          }}
           validateOnInit={visited}
           devMode={false}
+          initialData={event as FormType} //TODO: BURDE VÆRE INITIAL EVENT ?
         >
-          {step.key == 'summary' ? eventPreview : <></>}
+          {step.key === 'summary' ? eventPreview : <></>}
           {step.template}
         </SamfForm>
       </div>
@@ -272,7 +364,7 @@ export function EventCreatorAdminPage() {
             {t(KEY.common_previous)}
           </Button>
         ) : (
-          <div></div>
+          <div />
         )}
         {currentFormTab.key !== createSteps.slice(-1)[0].key ? (
           <Button theme="blue" rounded={true} onClick={navigateTabs(1)}>
@@ -288,8 +380,9 @@ export function EventCreatorAdminPage() {
   );
 
   const title = lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`);
+  useTitle(title);
   return (
-    <AdminPageLayout title={title}>
+    <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <TabBar
         tabs={formTabs}
         selected={currentFormTab}
@@ -297,7 +390,7 @@ export function EventCreatorAdminPage() {
         vertical={false}
         spaceBetween={true}
       />
-      <br></br>
+      <br />
       <div className={styles.form_container}>
         {/* Render form */}
         {allForms}

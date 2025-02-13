@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from samfundet.models.general import Campus
 
 CAMPUS = [
@@ -15,13 +17,9 @@ CAMPUS = [
         'name_nb': 'Fotofagskolen',
     },
     {
-        'name_en': 'Kristiania University College',
-        'name_nb': 'Høyskolen Kristiania',
-    },
-    {
         'name_en': 'Trondheim Academy of Fine Art',
         'name_nb': 'Kunstakademiet i Trondheim',
-        'abbreviation': 'KIT'
+        'abbreviation': 'KIT',
     },
     {
         'name_en': 'NTNU Dragvoll',
@@ -40,10 +38,6 @@ CAMPUS = [
         'name_nb': 'NTNU Øya',
     },
     {
-        'name_en': 'NTNU Rotvoll',
-        'name_nb': 'NTNU Rotvoll',
-    },
-    {
         'name_en': 'NTNU Tunga',
         'name_nb': 'NTNU Tunga',
     },
@@ -60,11 +54,10 @@ CAMPUS = [
 
 
 def seed():
-    Campus.objects.all().delete()
     yield 0, 'Deleted old campus'
 
     for i, campus in enumerate(CAMPUS):
-        Campus.objects.create(**campus)
+        Campus.objects.get_or_create(**campus)
         yield i / len(CAMPUS), 'Creating venues'
 
     yield 100, f'Created {len(Campus.objects.all())} venues'

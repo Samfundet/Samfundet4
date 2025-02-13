@@ -1,56 +1,84 @@
-import itertools
+from __future__ import annotations
 
+import re
+import itertools
+from typing import TYPE_CHECKING
+from collections import defaultdict
+
+from guardian.models import UserObjectPermission, GroupObjectPermission
+
+from rest_framework import serializers
+
+from django.db.models import Q, QuerySet
+from django.core.files import File
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import Group, Permission
-from django.core.files import File
 from django.core.files.images import ImageFile
-from django.db.models import QuerySet
-from guardian.models import GroupObjectPermission, UserObjectPermission
+from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.password_validation import validate_password
 
-from root.utils.mixins import CustomBaseSerializer
-from rest_framework import serializers
 from root.constants import PHONE_NUMBER_REGEX
-from .models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
-from .models.recruitment import (
-    Recruitment,
-    RecruitmentPosition,
-    RecruitmentAdmission,
-    InterviewRoom,
-    Interview,
-    Occupiedtimeslot,
-)
-from .models.event import (Event, EventGroup, EventCustomTicket)
+from root.utils.mixins import FullCleanSerializer, CustomBaseSerializer
+
+from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
+from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
+from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
     Tag,
-    User,
-    Menu,
     Gang,
+    Menu,
+    User,
+    Image,
+    Merch,
     Table,
     Venue,
-    Image,
     Campus,
-    Infobox,
     Booking,
+    Infobox,
     Profile,
-    TextItem,
-    MenuItem,
+    BlogPost,
     GangType,
     KeyValue,
-    BlogPost,
+    MenuItem,
+    TextItem,
+    GangSection,
     Reservation,
-    Organization,
-    FoodCategory,
-    Saksdokument,
     ClosedPeriod,
+    FoodCategory,
+    Organization,
+    Saksdokument,
     FoodPreference,
+    MerchVariation,
     UserPreference,
     InformationPage,
+    UserFeedbackModel,
 )
+from .models.recruitment import (
+    Interview,
+    Recruitment,
+    InterviewRoom,
+    OccupiedTimeslot,
+    RecruitmentDateStat,
+    RecruitmentGangStat,
+    RecruitmentPosition,
+    RecruitmentTimeStat,
+    RecruitmentCampusStat,
+    RecruitmentStatistics,
+    RecruitmentApplication,
+    RecruitmentSeparatePosition,
+    RecruitmentInterviewAvailability,
+    RecruitmentPositionSharedInterviewGroup,
+)
+from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+
+if TYPE_CHECKING:
+    from typing import Any
+
+if TYPE_CHECKING:
+    from typing import Any
 
 
 class TagSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Tag
         fields = '__all__'
@@ -94,14 +122,12 @@ class ImageSerializer(CustomBaseSerializer):
 
 
 class EventCustomTicketSerializer(CustomBaseSerializer):
-
     class Meta:
         model = EventCustomTicket
         fields = '__all__'
 
 
 class BilligPriceGroupSerializer(CustomBaseSerializer):
-
     class Meta:
         model = BilligPriceGroup
         fields = ['id', 'name', 'can_be_put_on_card', 'membership_needed', 'netsale', 'price']
@@ -147,9 +173,7 @@ class BilligEventSerializer(CustomBaseSerializer):
 
 
 class EventListSerializer(serializers.ListSerializer):
-    """
-    Speedup fetching of billig events for lists serialization
-    """
+    """Speedup fetching of billig events for lists serialization"""
 
     def to_representation(self, events: list[Event] | QuerySet[Event]) -> list[str]:
         # Prefetch related/billig for speed
@@ -157,14 +181,13 @@ class EventListSerializer(serializers.ListSerializer):
             events = events.prefetch_related('custom_tickets')
             events = events.prefetch_related('image')
 
-        Event.prefetch_billig(events, tickets=True, prices=True)
+        Event.prefetch_billig(events=events, tickets=True, prices=True)
 
         # Use event serializer (child) as normal after
         return [self.child.to_representation(e) for e in events]
 
 
 class EventSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Event
         list_serializer_class = EventListSerializer
@@ -196,24 +219,37 @@ class EventSerializer(CustomBaseSerializer):
 
 
 class EventGroupSerializer(CustomBaseSerializer):
-
     class Meta:
         model = EventGroup
         fields = '__all__'
 
 
 class VenueSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Venue
         fields = '__all__'
 
 
 class ClosedPeriodSerializer(CustomBaseSerializer):
-
     class Meta:
         model = ClosedPeriod
         fields = '__all__'
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    current_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_current_password(self, value: str) -> str:
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError('Incorrect current password')
+        return value
+
+    def validate_new_password(self, value: str) -> str:
+        user = self.context['request'].user
+        validate_password(value, user)
+        return value
 
 
 class LoginSerializer(serializers.Serializer):
@@ -224,13 +260,14 @@ class LoginSerializer(serializers.Serializer):
     It will try to authenticate the user with when validated.
     https://www.guguweb.com/2022/01/23/django-rest-framework-authentication-the-easy-way/
     """
+
     username = serializers.CharField(label='Username', write_only=True)
     password = serializers.CharField(
         label='Password',
         # This will be used when the DRF browsable API is enabled.
         style={'input_type': 'password'},
         trim_whitespace=False,
-        write_only=True
+        write_only=True,
     )
 
     def validate(self, attrs: dict) -> dict:
@@ -265,6 +302,7 @@ class RegisterSerializer(serializers.Serializer):
       * lastname
       * password
     """
+
     username = serializers.CharField(label='Username', write_only=True)
     email = serializers.EmailField(label='Email', write_only=True)
     phone_number = serializers.RegexField(
@@ -279,10 +317,12 @@ class RegisterSerializer(serializers.Serializer):
         # This will be used when the DRF browsable API is enabled.
         style={'input_type': 'password'},
         trim_whitespace=False,
-        write_only=True
+        write_only=True,
     )
 
-    def validate(self, attrs: dict) -> dict:
+    ALREADY_EXISTS_MESSAGE = 'User already exists with this value'
+
+    def validate(self, attrs: dict) -> dict:  # noqa: C901
         # Inherited function.
         # Take username and password from request.
         username = attrs.get('username')
@@ -291,6 +331,18 @@ class RegisterSerializer(serializers.Serializer):
         firstname = attrs.get('firstname')
         lastname = attrs.get('lastname')
         password = attrs.get('password')
+        # Check for unique
+        existing_users = User.objects.filter(Q(username=username) | Q(email=email) | Q(phone_number=phone_number))
+
+        if existing_users:
+            errors: dict[str, list[ValidationError]] = defaultdict(list)
+            if username in existing_users.values_list('username', flat=True):
+                errors['username'].append(self.ALREADY_EXISTS_MESSAGE)
+            if email in existing_users.values_list('email', flat=True):
+                errors['email'].append(self.ALREADY_EXISTS_MESSAGE)
+            if phone_number in existing_users.values_list('phone_number', flat=True):
+                errors['phone_number'].append(self.ALREADY_EXISTS_MESSAGE)
+            raise serializers.ValidationError(errors)
 
         if username and password:
             # Try to authenticate the user using Django auth framework.
@@ -308,28 +360,30 @@ class RegisterSerializer(serializers.Serializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Group
         fields = '__all__'
 
 
-class ProfileSerializer(serializers.ModelSerializer):
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = '__all__'
 
+
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['id', 'nickname']
 
 
 class UserPreferenceSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserPreference
         fields = '__all__'
 
 
 class CampusSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Campus
         fields = '__all__'
@@ -368,7 +422,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         perm_objs = []
         for obj_perm in itertools.chain(user_object_perms_qs, group_object_perms_qs):
-            perm_objs.append(self._obj_permission_to_obj(obj_perm=obj_perm))
+            perm_objs.append(self._obj_permission_to_obj(obj_perm=obj_perm))  # noqa: PERF401
 
         return perm_objs
 
@@ -379,17 +433,39 @@ class UserSerializer(serializers.ModelSerializer):
 
 # GANGS ###
 class OrganizationSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Organization
         fields = '__all__'
 
 
 class GangSerializer(CustomBaseSerializer):
+    class Meta:
+        model = Gang
+        fields = '__all__'
+
+
+class GangSectionSerializer(CustomBaseSerializer):
+    class Meta:
+        model = GangSection
+        fields = '__all__'
+
+
+class RecruitmentGangSerializer(CustomBaseSerializer):
+    recruitment_positions = serializers.SerializerMethodField(method_name='get_positions_count', read_only=True)
 
     class Meta:
         model = Gang
         fields = '__all__'
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        # This will allow it to filter applications on recruitment
+        self.recruitment = kwargs.pop('recruitment', None)
+        self.gang = kwargs.pop('gang', None)
+        super().__init__(*args, **kwargs)
+
+    def get_positions_count(self, obj: Gang) -> list[int]:
+        """Return total number of positions for this gang's recruitment."""
+        return RecruitmentPosition.objects.filter(recruitment=self.recruitment, gang=obj).count()
 
 
 class GangTypeSerializer(CustomBaseSerializer):
@@ -401,17 +477,98 @@ class GangTypeSerializer(CustomBaseSerializer):
 
 
 class InformationPageSerializer(CustomBaseSerializer):
-
     class Meta:
         model = InformationPage
         fields = '__all__'
 
 
 class BlogPostSerializer(CustomBaseSerializer):
-
     class Meta:
         model = BlogPost
         fields = '__all__'
+
+
+class FoodPreferenceSerializer(CustomBaseSerializer):
+    class Meta:
+        model = FoodPreference
+        fields = '__all__'
+
+
+class FoodCategorySerializer(CustomBaseSerializer):
+    class Meta:
+        model = FoodCategory
+        fields = ['id', 'name_nb', 'name_en']
+
+
+class MenuItemSerializer(CustomBaseSerializer):
+    food_preferences = FoodPreferenceSerializer(many=True, read_only=True)  # Todo make this work with post
+    food_category = FoodCategorySerializer(read_only=True)
+
+    class Meta:
+        model = MenuItem
+        fields = '__all__'
+
+
+class MenuSerializer(CustomBaseSerializer):
+    menu_items = MenuItemSerializer(many=True)
+
+    class Meta:
+        model = Menu
+        fields = '__all__'
+
+
+class RoleSerializer(CustomBaseSerializer):
+    class Meta:
+        model = Role
+        fields = '__all__'
+
+
+class UserOrgRoleSerializer(CustomBaseSerializer):
+    user = UserSerializer()
+    org_role = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserOrgRole
+        fields = ('user', 'org_role')
+
+    def get_org_role(self, obj: UserOrgRole) -> dict:
+        return {
+            'created_at': obj.created_at,
+            'created_by': UserSerializer(obj.created_by).data,
+            'organization': OrganizationSerializer(obj.obj).data,
+        }
+
+
+class UserGangRoleSerializer(CustomBaseSerializer):
+    user = UserSerializer()
+    gang_role = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserGangRole
+        fields = ('user', 'gang_role')
+
+    def get_gang_role(self, obj: UserGangRole) -> dict:
+        return {
+            'created_at': obj.created_at,
+            'created_by': UserSerializer(obj.created_by).data,
+            'gang': GangSerializer(obj.obj).data,
+        }
+
+
+class UserGangSectionRoleSerializer(CustomBaseSerializer):
+    user = UserSerializer()
+    section_role = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserGangSectionRole
+        fields = ('user', 'section_role')
+
+    def get_section_role(self, obj: UserGangSectionRole) -> dict:
+        return {
+            'created_at': obj.created_at,
+            'created_by': UserSerializer(obj.created_by).data,
+            'section': GangSectionSerializer(obj.obj).data,
+        }
 
 
 class SaksdokumentSerializer(CustomBaseSerializer):
@@ -428,9 +585,7 @@ class SaksdokumentSerializer(CustomBaseSerializer):
         return instance.file.url if instance.file else None
 
     def create(self, validated_data: dict) -> Event:
-        """
-        Uses the write_only file field to create new document file.
-        """
+        """Uses the write_only file field to create new document file."""
         file = validated_data.pop('file')
         # Ensure file name ends with .pdf
         fname = validated_data['title_nb']
@@ -445,21 +600,18 @@ class SaksdokumentSerializer(CustomBaseSerializer):
 
 
 class TextItemSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = TextItem
         fields = '__all__'
 
 
 class InfoboxSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Infobox
         fields = '__all__'
 
 
 class KeyValueSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = KeyValue
         fields = '__all__'
@@ -470,52 +622,19 @@ class KeyValueSerializer(serializers.ModelSerializer):
 # =============================== #
 
 
-class FoodPreferenceSerializer(CustomBaseSerializer):
-
-    class Meta:
-        model = FoodPreference
-        fields = '__all__'
-
-
-class FoodCategorySerializer(CustomBaseSerializer):
-
-    class Meta:
-        model = FoodCategory
-        fields = '__all__'
-
-
-class MenuItemSerializer(CustomBaseSerializer):
-    food_preferences = FoodPreferenceSerializer(many=True)
-
-    class Meta:
-        model = MenuItem
-        fields = '__all__'
-
-
-class MenuSerializer(CustomBaseSerializer):
-    menu_items = MenuItemSerializer(many=True)
-
-    class Meta:
-        model = Menu
-        fields = '__all__'
-
-
 class TableSerializer(CustomBaseSerializer):
-
     class Meta:
         model = Table
         fields = '__all__'
 
 
-class ReservationSerializer(CustomBaseSerializer):
-
+class ReservationSerializer(FullCleanSerializer):
     class Meta:
         model = Reservation
         fields = '__all__'
 
 
 class ReservationCheckSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Reservation
         fields = ['guest_count', 'occasion', 'reservation_date']
@@ -531,153 +650,598 @@ class BookingSerializer(serializers.ModelSerializer):
 
 
 # =============================== #
+#              Merch              #
+# =============================== #
+
+
+class MerchVariationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MerchVariation
+        fields = '__all__'
+
+
+class MerchSerializer(serializers.ModelSerializer):
+    variations = MerchVariationSerializer(many=True, read_only=True)
+    stock = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Merch
+        fields = '__all__'
+
+    def get_stock(self, obj: Merch) -> int:
+        return obj.in_stock()
+
+
+# =============================== #
 #            Recruitment          #
 # =============================== #
 
 
+class RecruitmentTimeStatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentTimeStat
+        exclude = ['id', 'recruitment_stats']
+
+
+class RecruitmentDateStatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentDateStat
+        exclude = ['id', 'recruitment_stats']
+
+
+class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
+    campus = serializers.SerializerMethodField(method_name='campus_name', read_only=True)
+    applicant_percentage = serializers.SerializerMethodField(method_name='get_applicant_percentage', read_only=True)
+
+    class Meta:
+        model = RecruitmentCampusStat
+        exclude = ['id', 'recruitment_stats']
+
+    def campus_name(self, stat: RecruitmentCampusStat) -> str:
+        return stat.campus.name_nb if stat.campus else None
+
+    def get_applicant_percentage(self, stat: RecruitmentCampusStat) -> float:
+        return stat.normalized_applicant_percentage()
+
+
+class RecruitmentGangStatSerializer(serializers.ModelSerializer):
+    gang = GangSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentGangStat
+        exclude = ['id', 'recruitment_stats']
+
+
+class RecruitmentStatisticsSerializer(serializers.ModelSerializer):
+    time_stats = RecruitmentTimeStatSerializer(read_only=True, many=True)
+    date_stats = RecruitmentDateStatSerializer(read_only=True, many=True)
+    campus_stats = RecruitmentCampusStatSerializer(read_only=True, many=True)
+    gang_stats = RecruitmentGangStatSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = RecruitmentStatistics
+        fields = '__all__'
+
+
+class RecruitmentUpdateUserPrioritySerializer(serializers.Serializer):
+    direction = serializers.IntegerField(label='direction', write_only=True)
+
+
+class UserForRecruitmentSerializer(serializers.ModelSerializer):
+    applications = serializers.SerializerMethodField(method_name='get_applications', read_only=True)
+    applications_without_interview = serializers.SerializerMethodField(method_name='get_applications_without_interviews_for_recruitment', read_only=True)
+    top_application = serializers.SerializerMethodField(method_name='get_top_application', read_only=True)
+    campus = CampusSerializer()
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'phone_number',
+            'applications',
+            'campus',
+            'applications_without_interview',
+            'top_application',
+        ]
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        # This will allow it to filter applications on recruitment
+        self.recruitment = kwargs.pop('recruitment', None)
+        self.gang = kwargs.pop('gang', None)
+        super().__init__(*args, **kwargs)
+
+    def get_applications(self, obj: User) -> list[int]:
+        """Return list of recruitment application IDs for the user."""
+        applications = RecruitmentApplication.objects.filter(user=obj)
+        if self.recruitment:
+            applications = applications.filter(recruitment=self.recruitment)
+        if self.gang:
+            applications = applications.filter(recruitment_position__gang=self.gang)
+        return RecruitmentApplicationForApplicantSerializer(applications, many=True).data
+
+    def get_applications_without_interviews_for_recruitment(self, obj: User) -> list[int]:
+        """Return list of recruitment application IDs for the user."""
+        applications = RecruitmentApplication.objects.filter(user=obj, interview=None)
+        if self.recruitment:
+            applications = applications.filter(recruitment=self.recruitment)
+        if self.gang:
+            applications = applications.filter(recruitment_position__gang=self.gang)
+        return RecruitmentApplicationForApplicantSerializer(applications, many=True).data
+
+    def get_top_application(self, obj: User) -> list[int]:
+        applications = RecruitmentApplication.objects.filter(user=obj)
+        if self.recruitment:
+            applications = applications.filter(recruitment=self.recruitment)
+        if self.gang:
+            applications = applications.filter(recruitment_position__gang=self.gang)
+        return RecruitmentApplicationForApplicantSerializer(applications.order_by('applicant_priority').first()).data
+
+
+class InterviewerSerializer(CustomBaseSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'id',
+        ]
+
+
+class RecruitmentSeparatePositionSerializer(CustomBaseSerializer):
+    class Meta:
+        model = RecruitmentSeparatePosition
+        fields = [
+            'id',
+            'recruitment',
+            'name_nb',
+            'name_en',
+            'description_nb',
+            'description_en',
+            'url',
+        ]
+
+
 class RecruitmentSerializer(CustomBaseSerializer):
+    separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
+    promo_media = serializers.CharField(max_length=100, allow_blank=True, allow_null=True)
 
     class Meta:
         model = Recruitment
         fields = '__all__'
 
+    def validate_promo_media(self, value: str | None) -> str | None:
+        if value is None or value == '':
+            return None
+        match = re.search(r'(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))', value)
+        if match:
+            return match.group(3)
+        if len(value) == 11:
+            return value
+        raise ValidationError('Invalid youtube url')
 
-class UserForRecruitmentSerializer(serializers.ModelSerializer):
-    recruitment_admission_ids = serializers.SerializerMethodField()
+    def to_representation(self, instance: Recruitment) -> dict:
+        data = super().to_representation(instance)
+        data['organization'] = OrganizationSerializer(instance.organization).data
+        return data
+
+
+class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
+    separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
+    recruitment_progress = serializers.SerializerMethodField(method_name='get_recruitment_progress', read_only=True)
+    total_applicants = serializers.SerializerMethodField(method_name='get_total_applicants', read_only=True)
+    total_processed_applicants = serializers.SerializerMethodField(method_name='get_total_processed_applicants', read_only=True)
+    total_unprocessed_applicants = serializers.SerializerMethodField(method_name='get_total_unprocessed_applicants', read_only=True)
+    total_processed_applications = serializers.SerializerMethodField(method_name='get_total_processed_applications', read_only=True)
+    total_unprocessed_applications = serializers.SerializerMethodField(method_name='get_total_unprocessed_applications', read_only=True)
+
+    statistics = RecruitmentStatisticsSerializer(read_only=True)
 
     class Meta:
-        model = User
-        fields = [
-            'id',
-            'first_name',
-            'last_name',
-            'username',
-            'email',
-            'recruitment_admission_ids',  # Add this to the fields list
-        ]
+        model = Recruitment
+        fields = '__all__'
 
-    def get_recruitment_admission_ids(self, obj: User) -> list[int]:
-        """Return list of recruitment admission IDs for the user."""
-        return RecruitmentAdmission.objects.filter(user=obj).values_list('id', flat=True)
+    def get_recruitment_progress(self, instance: Recruitment) -> float:
+        return instance.recruitment_progress()
 
+    def get_total_applicants(self, instance: Recruitment) -> int:
+        return instance.get_applicants().count()
 
-class InterviewerSerializer(CustomBaseSerializer):
+    def get_total_processed_applicants(self, instance: Recruitment) -> int:
+        return instance.get_processed_applicants().count()
 
-    class Meta:
-        model = User
-        fields = [
-            'username',
-            'first_name',
-            'last_name',
-            'email',
-            'id',
-        ]
+    def get_total_unprocessed_applicants(self, instance: Recruitment) -> int:
+        return instance.get_unprocessed_applicants().count()
+
+    def get_total_processed_applications(self, instance: Recruitment) -> int:
+        return instance.get_processed_applications().count()
+
+    def get_total_unprocessed_applications(self, instance: Recruitment) -> int:
+        return instance.get_unprocessed_applications().count()
 
 
 class RecruitmentPositionSerializer(CustomBaseSerializer):
+    total_applicants = serializers.SerializerMethodField(method_name='get_total_applicants', read_only=True)
+    processed_applicants = serializers.SerializerMethodField(method_name='get_processed_applicants', read_only=True)
+    accepted_applicants = serializers.SerializerMethodField(method_name='get_accepted_applicants', read_only=True)
+
     gang = GangSerializer(read_only=True)
     interviewers = InterviewerSerializer(many=True, read_only=True)
+    interviewer_ids = serializers.ListField(child=serializers.IntegerField(), write_only=True, required=False)
 
     class Meta:
         model = RecruitmentPosition
         fields = '__all__'
 
-    def _update_interviewers(self, recruitment_position: RecruitmentPosition, interviewer_objects: list[dict]) -> None:
-        try:
-            interviewers = []
-            if interviewer_objects:
-                interviewer_ids = [interviewer.get('id') for interviewer in interviewer_objects]
-                if interviewer_ids:
-                    interviewers = User.objects.filter(id__in=interviewer_ids)
-            recruitment_position.interviewers.set(interviewers)
-        except (TypeError, KeyError):
-            raise ValidationError('Invalid data for interviewers.')
+    def _update_interviewers(
+        self,
+        *,
+        recruitment_position: RecruitmentPosition,
+        interviewer_ids: list[int],
+    ) -> None:
+        if interviewer_ids:
+            try:
+                interviewers = User.objects.filter(id__in=interviewer_ids)
+                found_ids = set(interviewers.values_list('id', flat=True))
+                invalid_ids = set(interviewer_ids) - found_ids
+
+                if invalid_ids:
+                    raise ValidationError(f'Invalid interviewer IDs: {invalid_ids}')
+
+                recruitment_position.interviewers.set(interviewers)
+            except (TypeError, ValueError):
+                raise ValidationError('Invalid interviewer IDs format.') from None
+        else:
+            recruitment_position.interviewers.clear()
+
+    def validate(self, data: dict) -> dict:
+        gang_id = self.initial_data.get('gang', {}).get('id')
+        if gang_id:
+            try:
+                data['gang'] = Gang.objects.get(id=gang_id)
+            except Gang.DoesNotExist:
+                raise serializers.ValidationError('Invalid gang id') from None
+
+        self.interviewer_ids = data.pop('interviewer_ids', [])
+
+        return super().validate(data)
 
     def create(self, validated_data: dict) -> RecruitmentPosition:
         recruitment_position = super().create(validated_data)
-        interviewer_objects = self.initial_data.get('interviewers', [])
-        self._update_interviewers(recruitment_position, interviewer_objects)
+        self._update_interviewers(recruitment_position=recruitment_position, interviewer_ids=self.interviewer_ids)
         return recruitment_position
 
     def update(self, instance: RecruitmentPosition, validated_data: dict) -> RecruitmentPosition:
         updated_instance = super().update(instance, validated_data)
-        interviewer_objects = self.initial_data.get('interviewers', [])
-        self._update_interviewers(updated_instance, interviewer_objects)
+        self._update_interviewers(recruitment_position=updated_instance, interviewer_ids=self.interviewer_ids)
         return updated_instance
 
+    def get_total_applicants(self, recruitment_position: RecruitmentPosition) -> int:
+        return RecruitmentApplication.objects.filter(recruitment_position=recruitment_position, withdrawn=False).count()
 
-class RecruitmentAdmissionForApplicantSerializer(serializers.ModelSerializer):
+    def get_processed_applicants(self, recruitment_position: RecruitmentPosition) -> int:
+        return (
+            RecruitmentApplication.objects.filter(recruitment_position=recruitment_position, withdrawn=False)
+            .exclude(recruiter_status=RecruitmentStatusChoices.NOT_SET)
+            .count()
+        )
+
+    def get_accepted_applicants(self, recruitment_position: RecruitmentPosition) -> int:
+        return RecruitmentApplication.objects.filter(
+            recruitment_position=recruitment_position, withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED
+        ).count()
+
+
+class ApplicantInterviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Interview
+        fields = [
+            'id',
+            'interview_time',
+            'interview_location',
+        ]
+
+
+class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
+    gang = GangSerializer()
 
     class Meta:
-        model = RecruitmentAdmission
+        model = RecruitmentPosition
         fields = [
-            'admission_text',
+            'id',
+            'name_nb',
+            'name_en',
+            'short_description_nb',
+            'short_description_en',
+            'long_description_nb',
+            'long_description_en',
+            'tags',
+            'is_funksjonaer_position',
+            'norwegian_applicants_only',
+            'default_application_letter_nb',
+            'default_application_letter_en',
+            'gang',
+            'recruitment',
+        ]
+
+
+class RecruitmentPositionSharedInterviewGroupSerializer(serializers.ModelSerializer):
+    positions = RecruitmentPositionForApplicantSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = RecruitmentPositionSharedInterviewGroup
+        fields = [
+            'id',
+            'recruitment',
+            'positions',
+            'name_en',
+            'name_nb',
+        ]
+
+
+class RecruitmentApplicationForApplicantSerializer(CustomBaseSerializer):
+    interview = ApplicantInterviewSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentApplication
+        fields = [
+            'id',
+            'application_text',
             'recruitment_position',
+            'applicant_priority',
+            'withdrawn',
+            'interview',
             'created_at',
+            'user',
+            'recruitment',
+        ]
+        read_only_fields = [
+            'applicant_priority',
             'withdrawn',
         ]
 
-    def create(self, validated_data: dict) -> RecruitmentAdmission:
+    def create(self, validated_data: dict) -> RecruitmentApplication:
         recruitment_position = validated_data['recruitment_position']
+        # should auto fail if no position exists
         recruitment = recruitment_position.recruitment
         user = self.context['request'].user
-        applicant_priority = 1
 
-        recruitment_admission = RecruitmentAdmission.objects.create(
-            admission_text=validated_data.get('admission_text'),
+        recruitment_application = RecruitmentApplication.objects.create(
+            application_text=validated_data.get('application_text'),
             recruitment_position=recruitment_position,
             recruitment=recruitment,
             user=user,
-            applicant_priority=applicant_priority,
         )
 
-        return recruitment_admission
+        return recruitment_application
+
+    def to_representation(self, instance: RecruitmentApplication) -> dict:
+        data = super().to_representation(instance)
+        data['recruitment_position'] = RecruitmentPositionForApplicantSerializer(instance.recruitment_position).data
+        return data
 
 
-class OccupiedtimeslotSerializer(serializers.ModelSerializer):
+class RecruitmentInterviewAvailabilitySerializer(CustomBaseSerializer):
+    # Set custom format to remove seconds from start/end times, as they are ignored
+    start_time = serializers.DateTimeField(format='%H:%M')
+    end_time = serializers.DateTimeField(format='%H:%M')
 
     class Meta:
-        model = Occupiedtimeslot
+        model = RecruitmentInterviewAvailability
+        fields = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+
+
+class OccupiedTimeslotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OccupiedTimeslot
         fields = '__all__'
 
 
 class ApplicantInfoSerializer(CustomBaseSerializer):
-    occupied_timeslots = OccupiedtimeslotSerializer(many=True)
+    occupied_timeslots = OccupiedTimeslotSerializer(many=True)
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'occupied_timeslots']
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'occupied_timeslots']
 
 
 class InterviewRoomSerializer(CustomBaseSerializer):
-
     class Meta:
         model = InterviewRoom
         fields = '__all__'
 
 
 class InterviewSerializer(CustomBaseSerializer):
+    interviewers = InterviewerSerializer(many=True, required=False)
 
     class Meta:
         model = Interview
         fields = '__all__'
 
+    def create(self, validated_data: dict) -> Interview:
+        interviewers_data = validated_data.pop('interviewers', [])
+        interview = super().create(validated_data)
+        interview.interviewers.set(interviewers_data)
+        return interview
 
-class RecruitmentAdmissionForGangSerializer(CustomBaseSerializer):
-    user = ApplicantInfoSerializer(read_only=True)
-    interview = InterviewSerializer(read_only=False)
+    def update(self, instance: Interview, validated_data: dict) -> Interview:
+        interviewers_data = validated_data.pop('interviewers', [])
+        instance = super().update(instance, validated_data)
+        instance.interviewers.set(interviewers_data)
+        return instance
+
+
+class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
+    recruitment_position = RecruitmentPositionForApplicantSerializer()
+    recruiter_priority = serializers.CharField(source='get_recruiter_priority_display')
+    interview_time = serializers.SerializerMethodField(method_name='get_interview_time', read_only=True)
+    interview = InterviewSerializer(read_only=True)
 
     class Meta:
-        model = RecruitmentAdmission
+        model = RecruitmentApplication
+        fields = [
+            'id',
+            'recruitment',
+            'user',
+            'application_text',
+            'recruitment_position',
+            'recruiter_status',
+            'applicant_priority',
+            'applicant_state',
+            'recruiter_priority',
+            'withdrawn',
+            'interview_time',
+            'interview',
+            'created_at',
+        ]
+        read_only_fields = [
+            'id',
+            'recruitment',
+            'user',
+            'application_text',
+            'recruitment_position',
+            'recruiter_status',
+            'applicant_priority',
+            'recruiter_priority',
+            'applicant_state',
+            'interview_time',
+            'withdrawn',
+            'interview',
+            'created_at',
+        ]
+
+    def get_interview_time(self, instance: RecruitmentApplication) -> str | None:
+        return instance.interview.interview_time if instance.interview else None
+
+
+class RecruitmentBasicUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number']
+
+
+class RecruitmentRecruitmentPositionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentPosition
+        fields = ['id', 'name_nb', 'name_en', 'gang']
+
+
+class RecruitmentShowUnprocessedApplicationsSerializer(serializers.ModelSerializer):
+    user = RecruitmentBasicUserSerializer(read_only=True)
+    recruitment_position = RecruitmentRecruitmentPositionSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentApplication
+        fields = [
+            'id',
+            'recruitment',
+            'user',
+            'applicant_priority',
+            'recruitment_position',
+            'recruiter_status',
+            'recruiter_priority',
+        ]
+        read_only_fields = [
+            'id',
+            'recruitment',
+            'user',
+            'applicant_priority',
+            'recruitment_position',
+            'recruiter_status',
+            'recruiter_priority',
+        ]
+
+    def get_recruitment_position(self, instance: RecruitmentApplication) -> str:
+        return instance.recruitment_position.name_nb
+
+
+class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
+    user = ApplicantInfoSerializer(read_only=True)
+    interview = InterviewSerializer(read_only=False)
+    interviewers = InterviewerSerializer(many=True, read_only=True)
+    recruitment_position = RecruitmentPositionSerializer(read_only=True)
+    application_count = serializers.SerializerMethodField(method_name='get_application_count', read_only=True)
+
+    class Meta:
+        model = RecruitmentApplication
         fields = '__all__'
 
-    def update(self, instance: RecruitmentAdmission, validated_data: dict) -> RecruitmentAdmission:
+    def update(self, instance: RecruitmentApplication, validated_data: dict) -> RecruitmentApplication:
+        # More or less this is rough, interview should be its own thing
         interview_data = validated_data.pop('interview', {})
 
         interview_instance = instance.interview
         interview_instance.interview_location = interview_data.get('interview_location', interview_instance.interview_location)
         interview_instance.interview_time = interview_data.get('interview_time', interview_instance.interview_time)
+        interviewers_data = validated_data.pop('interviewers', [])
+        interview_instance.interviewers.set(interviewers_data)
+        interview_instance.notes = interview_data.get('notes', interview_instance.notes)
         interview_instance.save()
 
-        # Update other fields of RecruitmentAdmission instance
+        # Update other fields of RecruitmentApplication instance
         return super().update(instance, validated_data)
+
+    def get_application_count(self, application: RecruitmentApplication) -> int:
+        return application.user.applications.filter(recruitment=application.recruitment).count()
+
+
+class RecruitmentApplicationUpdateForGangSerializer(serializers.Serializer):
+    recruiter_priority = serializers.ChoiceField(choices=RecruitmentPriorityChoices.choices, required=False)
+    recruiter_status = serializers.ChoiceField(choices=RecruitmentStatusChoices.choices, required=False)
+
+
+class UserFeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserFeedbackModel
+        fields = [
+            'text',
+            'contact_email',
+            'path',
+            'screen_resolution',
+        ]
+        extra_kwargs = {
+            'contact_email': {'required': False},
+            'screen_resolution': {'required': False},
+        }
+
+
+class PurchaseFeedbackAlternativeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PurchaseFeedbackAlternative
+        fields = ['alternative', 'selected']
+
+
+class PurchaseFeedbackQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PurchaseFeedbackQuestion
+        fields = ['question', 'answer']
+
+
+class PurchaseFeedbackSerializer(serializers.ModelSerializer):
+    alternatives = serializers.DictField(child=serializers.CharField())
+    responses = serializers.DictField(child=serializers.CharField())
+
+    class Meta:
+        model = PurchaseFeedbackModel
+        fields = ['event', 'title', 'alternatives', 'responses']
+
+    def create(self, validated_data: dict) -> PurchaseFeedbackModel:
+        alternatives_data = validated_data.pop('alternatives')
+        responses_data = validated_data.pop('responses')
+
+        event = validated_data.pop('event')
+
+        purchase_feedback = PurchaseFeedbackModel.objects.create(event=event, **validated_data)
+
+        for alternative, selected in alternatives_data.items():
+            PurchaseFeedbackAlternative.objects.create(form=purchase_feedback, alternative=alternative, selected=selected)
+
+        for question, answer in responses_data.items():
+            PurchaseFeedbackQuestion.objects.create(form=purchase_feedback, question=question, answer=answer)
+
+        return purchase_feedback

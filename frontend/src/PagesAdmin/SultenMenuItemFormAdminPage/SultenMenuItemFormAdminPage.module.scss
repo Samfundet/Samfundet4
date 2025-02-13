@@ -1,0 +1,20 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.row {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  margin-top: 1em;
+  gap: 1em;
+  @include for-tablet-up {
+    flex-direction: row;
+  }
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20%;
+}

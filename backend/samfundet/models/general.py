@@ -5,36 +5,32 @@
 from __future__ import annotations
 
 import re
-import random
+import secrets
 from typing import TYPE_CHECKING
+from datetime import date, time, datetime, timedelta
 from collections import defaultdict
-from django.utils import timezone
-from datetime import datetime, date, time, timedelta
 
-from notifications.base.models import AbstractNotification
-
-from django.contrib.auth.models import AbstractUser, Group
-from django.core.exceptions import ValidationError
-from django.db import models
 from guardian.shortcuts import assign_perm
-from django.utils.translation import gettext as _
 
-from root.utils.mixins import FullCleanSaveMixin, CustomBaseModel
+from django.db import models
+from django.utils import timezone
+from django.db.models import Q
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
+from django.contrib.auth.models import AbstractUser
+
 from root.utils import permissions
+from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
+
+from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
 
 from .utils.fields import LowerCaseField, PhoneNumberField
-
-from samfundet.models.model_choices import UserPreferenceTheme, ReservationOccasion, SaksdokumentCategory
+from .utils.string_utils import ellipsize
 
 if TYPE_CHECKING:
-    from typing import Any, Optional
+    from typing import Any
+
     from django.db.models import Model
-
-
-class Notification(AbstractNotification):
-
-    class Meta(AbstractNotification.Meta):
-        abstract = False
 
 
 class Tag(CustomBaseModel):
@@ -53,9 +49,9 @@ class Tag(CustomBaseModel):
     @classmethod
     def random_color(cls) -> str:
         hexnr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
-        c = random.choices(range(len(hexnr)), k=6)
+        c = [secrets.choice(range(len(hexnr))) for _ in range(6)]
         while sum(c) < (len(hexnr)) * 5:  # Controls if color is not too bright
-            c = random.choices(range(len(hexnr)), k=6)
+            c = [secrets.choice(range(len(hexnr))) for _ in range(6)]
         return ''.join([hexnr[i] for i in c])
 
     @classmethod
@@ -91,6 +87,7 @@ class Campus(FullCleanSaveMixin):
     name_nb = models.CharField(max_length=64, unique=True, blank=False, null=False)
     name_en = models.CharField(max_length=64, unique=True, blank=False, null=False)
     abbreviation = models.CharField(max_length=10, blank=True, null=True)
+    total_students = models.PositiveIntegerField(null=False, blank=False, default=1, verbose_name='Total students enrolled')
 
     def __str__(self) -> str:
         if not self.abbreviation:
@@ -137,7 +134,7 @@ class User(AbstractUser):
             ('impersonate', 'Can impersonate users'),
         ]
 
-    def has_perm(self, perm: str, obj: Optional[Model] = None) -> bool:
+    def has_perm(self, perm: str, obj: Model | None = None) -> bool:
         """
         Because Django's ModelBackend and django-guardian's ObjectPermissionBackend
         are completely separate, calling `has_perm()` with an `obj` will return `False`
@@ -270,25 +267,37 @@ class ClosedPeriod(CustomBaseModel):
 
 # GANGS ###
 class Organization(CustomBaseModel):
-    """
-    Object for mapping out the orgs with different gangs, eg. Samfundet, UKA, ISFiT
-    """
+    """Object for mapping out the orgs with different gangs, eg. Samfundet, UKA, ISFiT"""
+
     name = models.CharField(max_length=32, blank=False, null=False, unique=True)
 
     class Meta:
         verbose_name = 'Organization'
         verbose_name_plural = 'Organizations'
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        if return_id:
+            return self.id
+        return self
+
     def __str__(self) -> str:
         return self.name
 
 
 class GangType(CustomBaseModel):
-    """
-    Type of gang. eg. 'arrangerende', 'kunstnerisk' etc.
-    """
+    """Type of gang. eg. 'arrangerende', 'kunstnerisk' etc."""
+
     title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Norsk')
     title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Gruppetype Engelsk')
+
+    organization = models.ForeignKey(
+        to=Organization,
+        related_name='gangtypes',
+        verbose_name='Organisasjon',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = 'GangType'
@@ -296,6 +305,12 @@ class GangType(CustomBaseModel):
 
     def __str__(self) -> str:
         return f'{self.title_nb}'
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        if return_id:
+            # noinspection PyTypeChecker
+            return self.organization_id
+        return self.organization
 
 
 class Gang(CustomBaseModel):
@@ -317,21 +332,47 @@ class Gang(CustomBaseModel):
     gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
     info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
 
-    # Gang related permission groups
-    gang_leader_group = models.OneToOneField(Group, related_name='gang_as_leader', verbose_name='Gangleder', blank=True, null=True, on_delete=models.SET_NULL)
-    event_admin_group = models.OneToOneField(
-        Group, related_name='gang_as_event_admin_group', verbose_name='Arrangementgruppe', blank=True, null=True, on_delete=models.SET_NULL
-    )
-    recruitment_admin_group = models.OneToOneField(
-        Group, related_name='gang_as_recruitment_admin_group', verbose_name='Innganggruppe', blank=True, null=True, on_delete=models.SET_NULL
-    )
-
     class Meta:
         verbose_name = 'Gang'
         verbose_name_plural = 'Gangs'
 
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        if return_id:
+            # noinspection PyTypeChecker
+            return self.organization_id
+        return self.organization
+
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        if return_id:
+            return self.id
+        return self
+
     def __str__(self) -> str:
         return f'{self.gang_type} - {self.name_nb}'
+
+
+class GangSection(CustomBaseModel):
+    name_nb = models.CharField(max_length=64, blank=True, verbose_name='Navn Norsk')
+    name_en = models.CharField(max_length=64, blank=True, verbose_name='Navn Engelsk')
+    logo = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Logo')
+    gang = models.ForeignKey(Gang, blank=False, null=False, related_name='gang', on_delete=models.PROTECT, verbose_name='Gjeng')
+
+    def resolve_org(self, *, return_id: bool = False) -> Organization | int:
+        return self.gang.resolve_org(return_id=return_id)
+
+    def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
+        if return_id:
+            # noinspection PyTypeChecker
+            return self.gang_id
+        return self.gang
+
+    def resolve_section(self, *, return_id: bool = False) -> GangSection | int:
+        if return_id:
+            return self.id
+        return self
+
+    def __str__(self) -> str:
+        return f'{self.gang.name_nb} - {self.name_nb}'
 
 
 class InformationPage(CustomBaseModel):
@@ -401,7 +442,7 @@ class Table(CustomBaseModel):
         return f'{self.name_nb}'
 
 
-class Reservation(CustomBaseModel):
+class Reservation(FullCleanSaveMixin):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=64, blank=True, verbose_name='Navn')
     email = models.EmailField(max_length=64, blank=True, verbose_name='Epost')
@@ -421,16 +462,78 @@ class Reservation(CustomBaseModel):
     # TODO Maybe add method for reallocating reservations if tables are reserved, and prohibit if there is an existing
     table = models.ForeignKey(Table, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Bord')
 
-    def fetch_available_times_for_date(venue: int, seating: int, date: date) -> list[str]:
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        self.full_clean()
+        if not self.table:
+            self.table = Reservation.find_available_table(self.venue, self.guest_count, self.reservation_date, self.start_time, self.end_time)
+        super().save(*args, **kwargs)
+
+    def clean(self, *args: tuple, **kwargs: dict) -> None:
+        super().clean()
+
+        errors: dict[str, ValidationError] = defaultdict()
+
+        if not self.end_time:
+            self.end_time = (datetime.combine(self.reservation_date, self.start_time) + timedelta(hours=1)).time()
+
+        if self.end_time < self.start_time:
+            errors.setdefault('end_time', []).append('Time should be in the future')
+
+        if not Reservation.check_time(self.venue, self.guest_count, self.reservation_date, self.start_time, self.end_time):
+            errors.setdefault('start_time', []).append('There are no available tables for this date')
+
+        raise ValidationError(errors)
+
+    @staticmethod
+    def check_time(
+        venue: int,
+        guest_count: int,
+        reservation_date: date,
+        start_time: time,
+        end_time: time,
+    ) -> bool:
+        """Checks if time has available tables"""
+        return (
+            Reservation.find_available_table(
+                venue,
+                guest_count,
+                reservation_date,
+                start_time,
+                end_time,
+            )
+            is not None
+        )
+
+    @staticmethod
+    def find_available_table(
+        venue: int,
+        guest_count: int,
+        reservation_date: date,
+        start_time: time,
+        end_time: time,
+    ) -> Table | None:
+        tables = Table.objects.filter(venue=venue, seating__gte=guest_count)
+        if tables.count() == 0:
+            return None
+
+        reserved_tables = Reservation.objects.filter(
+            Q(venue=venue, reservation_date=reservation_date, table__in=tables)
+            & (Q(start_time__lte=end_time, end_time__gt=start_time) | Q(start_time__lt=end_time, end_time__gte=end_time))
+        )
+
+        return tables.exclude(id__in=reserved_tables.values_list('table_id', flat=True)).order_by('seating').first()
+
+    def fetch_available_times_for_date(*, venue: int, seating: int, date: date) -> list[str]:  # noqa: C901
         """
-            Method for returning available reservation times for a venue
-            Based on the amount of seating and the date
+        Method for returning available reservation times for a venue
+        Based on the amount of seating and the date
         """
         # Fetch tables that fits size criteria
         tables = Table.objects.filter(venue=venue, seating__gte=seating)
         # fetch all reservations for those tables for that date
-        reserved_tables = Reservation.objects.filter(venue=venue, reservation_date=date, table__in=tables).values('table', 'start_time',
-                                                                                                                  'end_time').order_by('start_time')
+        reserved_tables = (
+            Reservation.objects.filter(venue=venue, reservation_date=date, table__in=tables).values('table', 'start_time', 'end_time').order_by('start_time')
+        )
 
         # fetch opening hours for the date
         open_hours = Venue.objects.get(id=venue).get_opening_hours_date(date)
@@ -443,11 +546,11 @@ class Reservation(CustomBaseModel):
             occupied_table_times[tr['table']].append((tr['start_time'], tr['end_time']))
 
         # Checks if list of occupied tables are shorter than available tables
-        safe = (len(occupied_table_times) < len(tables) or len(reserved_tables) == 0)
+        safe = len(occupied_table_times) < len(tables) or len(reserved_tables) == 0
 
         available_hours: list[str] = []
-        if (len(tables) > 0):
-            while (c_time <= end_time):
+        if len(tables) > 0:
+            while c_time <= end_time:
                 available = False
                 # If there are still occupied tables for time
                 if not safe:
@@ -472,7 +575,7 @@ class Reservation(CustomBaseModel):
                     available_hours.append(c_time.strftime('%H:%M'))
 
                 # iterate to next half hour
-                c_time = (c_time + timezone.timedelta(minutes=30))
+                c_time = c_time + timezone.timedelta(minutes=30)
                 c_time = c_time + (timezone.datetime.min - c_time) % timedelta(minutes=30)
         return available_hours
 
@@ -615,15 +718,15 @@ class Booking(CustomBaseModel):
 
 
 class Infobox(CustomBaseModel):
-    title_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name='Infoboks titel (norsk)')
-    text_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name='Infoboks tekst (norsk)')
+    title_nb = models.CharField(max_length=60, blank=True, null=True, verbose_name='Tittel (norsk)')
+    text_nb = models.CharField(max_length=255, blank=True, null=True, verbose_name='Tekst (norsk)')
 
-    title_en = models.CharField(max_length=60, blank=False, null=False, verbose_name='Infoboks tekst (engelsk)')
-    text_en = models.CharField(max_length=255, blank=False, null=False, verbose_name='Infoboks tekst (engelsk)')
+    title_en = models.CharField(max_length=60, blank=False, null=False, verbose_name='Tittel (engelsk)')
+    text_en = models.CharField(max_length=255, blank=False, null=False, verbose_name='Tekst (engelsk)')
 
-    color = models.CharField(max_length=15, blank=False, null=False, verbose_name='Infoboks hexcolor eller css color-constant')
-    url = models.URLField(verbose_name='Infoboks utgående link', blank=True, null=True)
-    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Infoboks bilde')
+    color = models.CharField(max_length=15, blank=False, null=False, verbose_name='Farge på boks (hex color eller CSS-constant)')
+    url = models.URLField(verbose_name='URL', blank=True, null=True)
+    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Bilde')
 
     class Meta:
         verbose_name = 'Infoboks'
@@ -664,6 +767,7 @@ class KeyValue(FullCleanSaveMixin):
 
     All keys should be registered in 'samfundet.utils.key_values' for better overview and easy access backend.
     """
+
     key = models.CharField(max_length=60, blank=False, null=False, unique=True)
     value = models.CharField(max_length=60, default='', blank=True, null=False)
 
@@ -688,3 +792,71 @@ class KeyValue(FullCleanSaveMixin):
     def is_false(self) -> bool:
         """Check if value is falsy."""
         return self.value.lower() in self.FALSY
+
+
+# ----------------- #
+#     Merch         #
+# ----------------- #
+class Merch(FullCleanSaveMixin):
+    name_nb = models.CharField(max_length=60, blank=True, null=False, verbose_name='Navn (norsk)')
+    description_nb = models.CharField(max_length=255, blank=True, null=False, verbose_name='Beskrivelse (norsk)')
+
+    name_en = models.CharField(max_length=60, blank=True, null=False, verbose_name='Navn (engelsk)')
+    description_en = models.CharField(max_length=255, blank=True, null=False, verbose_name='Beskrivelse (engelsk)')
+
+    base_price = models.PositiveSmallIntegerField(blank=True, null=False)
+    released_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Produkt Bilde')
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    class Meta:
+        verbose_name = 'Merch'
+        verbose_name_plural = 'Merch'
+
+    def in_stock(self) -> int:
+        return sum(self.variations.values_list('stock', flat=True))
+
+    @property
+    def image_url(self) -> str:
+        return self.image.image.url
+
+    def __str__(self) -> str:
+        return self.name_nb
+
+
+class MerchVariation(FullCleanSaveMixin):
+    specification = models.CharField(max_length=16, blank=False, null=False, verbose_name='Variation specification')
+
+    merch = models.ForeignKey(Merch, blank=False, null=False, related_name='variations', on_delete=models.CASCADE, verbose_name='Merch')
+    price = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Price Variation')
+
+    stock = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='In stock')
+
+    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
+
+    def __str__(self) -> str:
+        return f'{self.merch.name_nb} ({self.specification})'
+
+
+# ----------------- #
+#     Feedback      #
+# ----------------- #
+
+
+class UserFeedbackModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    text = models.TextField(blank=False, null=False)
+    path = models.CharField(max_length=255, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+    user_agent = models.TextField(blank=True)
+    screen_resolution = models.CharField(max_length=13, blank=True)
+    contact_email = models.EmailField(null=True)
+
+    class Meta:
+        verbose_name = 'UserFeedback'
+
+    def __str__(self) -> str:
+        return ellipsize(self.text, length=10)

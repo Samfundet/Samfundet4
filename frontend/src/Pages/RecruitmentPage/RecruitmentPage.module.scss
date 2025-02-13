@@ -8,15 +8,19 @@
   align-items: center;
   justify-content: center;
   gap: 2em;
+  box-sizing: border-box;
+  margin: 2rem;
+}
 
-  @include for-desktop-up {
-    padding: 3em 6em 3em 6em;
+.cardContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:2rem;
+    width: 720px;
+  @include for-tablet-down{
+    width: 22rem;
   }
 }
 
-.video {
-  padding-bottom: 0;
-  aspect-ratio: 16/9;
-  border-width: 0;
-  width: 32em;
-}

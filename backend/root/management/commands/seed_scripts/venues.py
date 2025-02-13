@@ -1,10 +1,13 @@
+from __future__ import annotations
+
 import random
 
 from django.utils import timezone
 from django.utils.text import slugify
 
 from root.utils.samfundet_random import words
-from samfundet.models.general import Venue
+
+from samfundet.models.general import Venue, Reservation
 
 VENUES = [
     'Storsalen',
@@ -21,6 +24,7 @@ VENUES = [
 
 
 def seed():
+    Reservation.objects.all().delete()
     Venue.objects.all().delete()
     yield 0, 'Deleted old venues'
 
@@ -32,7 +36,7 @@ def seed():
             floor=random.randint(1, 4),
             last_renovated=timezone.now() + timezone.timedelta(days=-random.randint(30, 365 * 30)),
             handicapped_approved=random.randint(1, 3) != 1,
-            responsible_crew=words(1)
+            responsible_crew=words(1),
         )
         yield i / len(VENUES), 'Creating venues'
 

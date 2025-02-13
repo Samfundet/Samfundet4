@@ -1,10 +1,12 @@
 @import 'src/constants';
 
 .item {
+  border: none;
   border-bottom: 1px solid $grey-0;
   padding: 1em;
   width: 100%;
   cursor: pointer;
+  background: none;
 }
 
 .parent {

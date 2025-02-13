@@ -1,39 +1,44 @@
 import { useEffect, useState } from 'react';
-import { Page, SamfundetLogoSpinner, Video } from '~/Components';
-import { getActiveRecruitmentPositions, getGangList } from '~/api';
-import { GangTypeDto, RecruitmentPositionDto } from '~/dto';
-import { GangTypeContainer } from './Components';
+import { useTranslation } from 'react-i18next';
+import { Page, SamfundetLogoSpinner } from '~/Components';
+import { getActiveRecruitments } from '~/api';
+import type { RecruitmentDto } from '~/dto';
+import { useTitle } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import { NoPositions, RecruitmentCard } from './Components';
 import styles from './RecruitmentPage.module.scss';
-import { OccupiedFormModal } from '~/Components/OccupiedForm';
 
 export function RecruitmentPage() {
-  const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
+  const [recruitments, setRecruitments] = useState<RecruitmentDto[]>([]);
   const [loading, setLoading] = useState(true);
-  const [gangTypes, setGangs] = useState<GangTypeDto[]>();
+  const { t } = useTranslation();
+  useTitle(t(KEY.common_recruitment));
 
   useEffect(() => {
-    Promise.all([getActiveRecruitmentPositions(), getGangList()])
-      .then(([recruitmentRes, gangsRes]) => {
-        setRecruitmentPositions(recruitmentRes.data);
-        setGangs(gangsRes);
-        setLoading(false);
+    getActiveRecruitments()
+      .then((response) => {
+        setRecruitments(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
+        console.log('Error fetching data:', error);
       });
+    setLoading(false);
   }, []);
 
   return (
     <Page>
       <div className={styles.container}>
-        <Video embedId="-nYQb8_TvQ4" className={styles.video}></Video>
-        <OccupiedFormModal recruitmentId={1} />
-        {loading ? (
-          <SamfundetLogoSpinner />
-        ) : (
-          <GangTypeContainer gangTypes={gangTypes} recruitmentPositions={recruitmentPositions} />
-        )}
+        <div className={styles.cardContainer}>
+          {loading ? (
+            <SamfundetLogoSpinner />
+          ) : recruitments && recruitments.length > 0 ? (
+            recruitments.map((recruitment: RecruitmentDto) => (
+              <RecruitmentCard recruitment={recruitment} key={recruitment.id} />
+            ))
+          ) : (
+            <NoPositions />
+          )}
+        </div>
       </div>
     </Page>
   );

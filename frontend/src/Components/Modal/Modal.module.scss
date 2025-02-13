@@ -5,22 +5,24 @@
 .modal {
   position: absolute;
   margin: auto;
-  inset: 0.5em;
   overflow: auto;
   border-radius: 1em;
   outline: none;
-  padding: 20px;
+  padding: 28px;
   z-index: 13;
   background-color: $white;
   max-width: $content-max-size;
   color: black;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-height: 100%;
 
   @include theme-dark {
     color: $white;
-    border: 1px solid gray;
     background-color: $theme-dark-bg;
   }
-  width: 50%;
+
   @include for-mobile-only {
     width: 100%;
   }

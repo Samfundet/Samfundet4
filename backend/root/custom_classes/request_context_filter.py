@@ -18,7 +18,6 @@ class RequestContextFilter(logging.Filter):
     """
 
     def filter(self, record: logging.LogRecord) -> bool:
-
         # NOTE: Each field is added as an attribute to the record and will thus be
         # interpreted as an 'extra'-field in the JsonFormatter this filter is hooked to.
 
@@ -29,7 +28,7 @@ class RequestContextFilter(logging.Filter):
             # We are not currently in a request, so we cannot attach any request information to the log message.
             return True
 
-        user = getattr(request_obj, 'user', None)  # noqa: FKA01
+        user = getattr(request_obj, 'user', None)
         if user:
             record.username = user.username
 

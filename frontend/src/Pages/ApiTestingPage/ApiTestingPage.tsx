@@ -1,11 +1,12 @@
+import { Button } from '~/Components';
 import {
   assignUserToGroup,
   getApplicantsWithoutInterviews,
   getCsrfToken,
   getInformationPage,
   getInformationPages,
-  getRecruitmentAdmissionsForApplicant,
-  getRecruitmentAdmissionsForGang,
+  getRecruitmentApplicationsForApplicant,
+  getRecruitmentApplicationsForGang,
   getRecruitmentPosition,
   getRecruitmentPositions,
   getUser,
@@ -14,7 +15,6 @@ import {
   login,
   logout,
 } from '~/api';
-import { Button } from '~/Components';
 
 import styles from './ApiTestingPage.module.scss';
 
@@ -89,17 +89,17 @@ export function ApiTestingPage() {
       <Button
         theme="samf"
         className={styles.btn}
-        onClick={() => getRecruitmentAdmissionsForApplicant('1').then(console.log).catch(console.error)}
+        onClick={() => getRecruitmentApplicationsForApplicant('1').then(console.log).catch(console.error)}
       >
-        get Rec admissions for user
+        get Rec applications for user
       </Button>
 
       <Button
         theme="samf"
         className={styles.btn}
-        onClick={() => getRecruitmentAdmissionsForGang('1', '1').then(console.log).catch(console.error)}
+        onClick={() => getRecruitmentApplicationsForGang('1', '1').then(console.log).catch(console.error)}
       >
-        get Rec admissions for gang
+        get Rec applications for gang
       </Button>
       <Button
         theme="samf"

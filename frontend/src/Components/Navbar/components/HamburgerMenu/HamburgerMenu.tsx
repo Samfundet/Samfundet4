@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useGlobalContext } from '~/GlobalContextProvider';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
 import styles from './HamburgerMenu.module.scss';
 
 type HamburgerMenuProps = {
@@ -9,7 +9,8 @@ type HamburgerMenuProps = {
 export function HamburgerMenu({ transparentBackground, className }: HamburgerMenuProps) {
   const { isMobileNavigation, setIsMobileNavigation } = useGlobalContext();
   return (
-    <div
+    <button
+      type="button"
       id={styles.navbar_hamburger}
       onClick={() => setIsMobileNavigation(!isMobileNavigation)}
       className={classNames(
@@ -21,6 +22,6 @@ export function HamburgerMenu({ transparentBackground, className }: HamburgerMen
       <div className={classNames(styles.navbar_hamburger_line, styles.top)} />
       <div className={classNames(styles.navbar_hamburger_line, styles.middle)} />
       <div className={classNames(styles.navbar_hamburger_line, styles.bottom)} />
-    </div>
+    </button>
   );
 }

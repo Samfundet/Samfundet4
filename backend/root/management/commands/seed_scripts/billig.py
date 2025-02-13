@@ -6,17 +6,18 @@
 # database simulating the real billig in prod (cirkus).
 #
 #
+from __future__ import annotations
 
 import os
-from typing import Tuple, Iterable
+from collections.abc import Iterable
 
 import django
+from django import db
 from django.db import transaction
 from django.utils import timezone
-from django import db
 
-from samfundet.models.billig import BilligEvent, BilligTicketGroup, BilligPriceGroup
 from samfundet.models.event import Event, EventTicketType
+from samfundet.models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 
 from .seed_billig import util
 
@@ -36,22 +37,19 @@ SEED_DIRECTORY = os.path.join(os.path.dirname(__file__), 'seed_billig')
 def get_schema() -> str:
     # Generate schema (pass schema.sql to sqlite3)
     seed_schema = os.path.join(SEED_DIRECTORY, 'schema.sql')
-    with open(seed_schema, 'r') as f:
+    with open(seed_schema) as f:
         schema = f.read()
     return schema
 
 
-def create_db() -> Tuple[bool, str]:
-    """
-    Creates a new sqlite3 database with schema using shell scripts
-    """
+def create_db() -> tuple[bool, str]:
+    """Creates a new sqlite3 database with schema using shell scripts"""
 
     schema = get_schema()
     schema_queries = schema.split(';')
-    with django.db.connections['billig'].cursor() as cursor:
-        with transaction.atomic():
-            for query in schema_queries:
-                cursor.execute(query)
+    with django.db.connections['billig'].cursor() as cursor, transaction.atomic():
+        for query in schema_queries:
+            cursor.execute(query)
 
     return True, 'Created database and schema'
 
@@ -61,8 +59,7 @@ def create_db() -> Tuple[bool, str]:
 # ======================== #
 
 
-def seed_tables() -> Iterable[Tuple[int, str]]:
-
+def seed_tables() -> Iterable[tuple[int, str]]:
     events, tickets, prices = [], [], []
 
     # Create a few billig events that are not used
@@ -81,7 +78,7 @@ def seed_tables() -> Iterable[Tuple[int, str]]:
                 name=f'Billig - {event.title_nb}',
                 sale_from=event.start_dt - timezone.timedelta(days=90),
                 sale_to=event.start_dt + timezone.timedelta(minutes=30),
-                hidden=False
+                hidden=False,
             )
             events.append(billig_event)
 
@@ -117,8 +114,7 @@ def seed_tables() -> Iterable[Tuple[int, str]]:
 
 
 # Main seed script entry point
-def seed() -> Iterable[Tuple[int, str]]:
-
+def seed() -> Iterable[tuple[int, str]]:
     # Create database and schema
     yield 0, 'Creating billig_dev database...'
     ok, message = create_db()

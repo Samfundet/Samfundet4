@@ -1,16 +1,16 @@
 # imports
-import notifications.urls
+from __future__ import annotations
 
-from django.urls import path, include
 from django.conf import settings
+from django.urls import path, include
 from django.contrib import admin
 from django.conf.urls.static import static
+
 # End: imports -----------------------------------------------------------------
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('rest_framework/', include('rest_framework.urls')),
-    path('notifications/', include(notifications.urls, namespace='notifications')),
     path('', include('samfundet.urls')),  # Put last.
 ]
 

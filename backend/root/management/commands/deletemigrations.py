@@ -1,15 +1,17 @@
 # imports
+from __future__ import annotations
+
 import os
 import glob
 import shutil
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
+
 # End: imports -----------------------------------------------------------------
 
 
 class Command(BaseCommand):
-
     def add_arguments(self, parser):
         parser.add_argument(
             '--noinput',
@@ -34,12 +36,11 @@ class Command(BaseCommand):
         return answer in yes
 
     def handle(self, *args, **options):
-        """ Delete all migration files for each installed app """
+        """Delete all migration files for each installed app"""
 
-        if options['interactive']:
-            if not self.confirmation():
-                print('== ABORT ==')
-                return
+        if options['interactive'] and not self.confirmation():
+            print('== ABORT ==')
+            return
 
         for app in settings.INSTALLED_APPS:
             try:
@@ -55,6 +56,7 @@ class Command(BaseCommand):
                 shutil.rmtree(pycache)
                 print(f'Removed {pycache}')
 
-            except Exception as _e:
+            # Supress since performance is not an issue here
+            except Exception as _e:  # noqa: S110
                 pass
                 # print(f'{app} failed. {_e}')

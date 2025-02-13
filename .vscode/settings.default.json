@@ -10,70 +10,41 @@
   // ================================
   //              Backend
   // ================================
-  // yapf (formatter)
-  "yapf.importStrategy": "fromEnvironment",
-  "yapf.args": ["--style", "backend/.style.yapf"],
-  // mypy (type checker, linter)
-  "mypy-type-checker.importStrategy": "fromEnvironment",
-  "mypy-type-checker.args": ["--config-file", "backend/mypy.ini", "--no-pretty"],
-  // flake8 (linter)
-  "flake8.importStrategy": "fromEnvironment",
-  "flake8.args": ["--config", "backend/.flake8"],
-  // pytest
+  // mypy, lints for Python
+  "mypy.enabled": true,
+  "mypy.configFile": "backend/mypy.ini",
+  "mypy.runUsingActiveInterpreter": true,
+  // pylint, lints for Python
+  "pylint.interpreter": ["backend/.venv/bin/python"],
+  "pylint.path": ["backend/.venv/bin/pylint"],
+  "pylint.args": ["--django-settings-module", "backend.root.settings", "--rcfile", "./backend/.pylintrc"],
+  "pylint.importStrategy": "fromEnvironment",
+  //pytest
   "python.testing.pytestEnabled": true,
-  "python.testing.pytestArgs": ["-c", "backend/pytest.ini"],
-  // Other
-  "python.envFile": "backend/.env",
+  "python.testing.pytestArgs": ["-c", "./backend/pytest.ini"],
+  "python.testing.unittestEnabled": false,
+
   "[python]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll": false,
-      "source.organizeImports": false
+      "source.fixAll": "explicit",
+      "source.lintOnSave": "explicit",
+      "source.organizeImports": "never"
     },
-    "editor.defaultFormatter": "eeyore.yapf"
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true
   },
 
   // ================================
   //             Frontend
   // ================================
-  "eslint.enable": true,
-  "eslint.format.enable": true,
   "html.format.enable": false,
-  "prettier.configPath": "frontend/.prettierrc.js",
-  "prettier.ignorePath": "frontend/.prettierignore",
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "eslint.workingDirectories": ["frontend"],
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript][javascriptreact][typescript]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
+      "source.fixAll": "always",
+      "source.organizeImports": "always"
     }
   },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": false,
-      "source.organizeImports": true
-    }
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
-  },
-  "[scss]": {
-    "editor.defaultFormatter": "stylelint.vscode-stylelint"
-  },
-  "[css]": {
+  "[css][scss]": {
     "editor.defaultFormatter": "stylelint.vscode-stylelint"
   },
   "css.validate": true,
@@ -81,5 +52,51 @@
   "scss.validate": true,
   "stylelint.configFile": "frontend/.stylelintrc",
   "stylelint.enable": true,
-  "stylelint.validate": ["css", "scss"]
+  "stylelint.validate": ["css", "scss"],
+
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  },
+
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  },
+
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  },
+
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  },
+
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  },
+  "[javascript][javascriptreact][scss][typescript][typescriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  }
 }

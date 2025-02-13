@@ -1,0 +1,23 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.breadcrumb {
+  display: flex;
+  padding: 1rem 0;
+  margin: 0;
+}
+
+.separator {
+  margin: 0 0.3rem;
+  user-select: none;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  color: $red-samf;
+}

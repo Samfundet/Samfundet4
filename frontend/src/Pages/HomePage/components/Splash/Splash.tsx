@@ -1,16 +1,16 @@
+import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { BACKEND_DOMAIN } from '~/constants';
-import { EventDto } from '~/dto';
-import styles from '../../HomePage.module.scss';
-import { dbT, lowerCapitalize } from '~/utils';
-import { Button } from '~/Components';
 import { useTranslation } from 'react-i18next';
+import { Button, IconButton } from '~/Components';
+import { BACKEND_DOMAIN } from '~/constants';
+import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { Icon } from '@iconify/react';
-import { PAID_TICKET_TYPES } from '~/types';
-import { ROUTES } from '~/routes';
 import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
+import { COLORS, PAID_TICKET_TYPES } from '~/types';
+import { dbT, lowerCapitalize } from '~/utils';
+import styles from '../../HomePage.module.scss';
 
 type SplashProps = {
   events?: EventDto[];
@@ -23,12 +23,15 @@ const SLIDE_FREQUENCY = 5_000;
 export function Splash({ events, showInfo }: SplashProps) {
   const { t } = useTranslation();
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isBackwards, setIsBackwards] = useState(false);
 
   const [index, setIndex] = useState<number>(0);
   const nextIndex = events ? (index + 1) % events?.length : 0;
+  const prevIndex = events ? (index - 1 + events.length) % events.length : 0;
 
   const imageUrl = events ? BACKEND_DOMAIN + events[index].image_url : '';
   const nextImageUrl = events ? BACKEND_DOMAIN + events[nextIndex].image_url : '';
+  const prevImageUrl = events ? BACKEND_DOMAIN + events[prevIndex].image_url : '';
 
   const description = events ? dbT(events[index], 'description_short') : '';
 
@@ -59,7 +62,7 @@ export function Splash({ events, showInfo }: SplashProps) {
 
   const startSlideTimer = useCallback(() => {
     // Cancel previous if any
-    if (slideTimeout.current != undefined) {
+    if (slideTimeout.current !== undefined) {
       clearTimeout(slideTimeout.current);
     }
     // Start new timeout
@@ -68,15 +71,30 @@ export function Splash({ events, showInfo }: SplashProps) {
         setIsAnimating(true);
       }, SLIDE_FREQUENCY);
     }
-  }, [events, setIsAnimating]);
+  }, [events]);
 
   function nextSplash() {
     setIsAnimating(false);
-    setIndex((val) => (val + 1) % (events?.length ?? 0));
+    setIsBackwards(false);
+    if (isBackwards) {
+      setIndex(prevIndex);
+    } else {
+      setIndex(nextIndex);
+    }
     startSlideTimer();
   }
 
+  function onClickNext() {
+    setIsAnimating(true);
+  }
+
+  function onClickPrev() {
+    setIsBackwards(true);
+    setIsAnimating(true);
+  }
+
   // Start timer when events change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: if events change, the timer should reset
   useEffect(() => {
     startSlideTimer();
   }, [events, startSlideTimer]);
@@ -94,20 +112,45 @@ export function Splash({ events, showInfo }: SplashProps) {
           </div>
         </div>
       )}
-      <img
-        src={imageUrl}
-        className={classNames({ [styles.splash]: true, [styles.splash_slide_out]: isAnimating })}
-        onAnimationEnd={nextSplash}
+      <IconButton
+        icon="ooui:next-rtl"
+        title="prev"
+        color={COLORS.transparent}
+        height="5em"
+        onClick={onClickPrev}
+        className={styles.splash_change_button}
+      />
+      <IconButton
+        icon="ooui:next-ltr"
+        title="next"
+        height="5em"
+        color={COLORS.transparent}
+        onClick={onClickNext}
+        className={classNames({ [styles.splash_change_button]: true, [styles.next]: true })}
       />
       <img
-        src={nextImageUrl}
+        src={imageUrl}
+        className={classNames({
+          [styles.splash]: true,
+          [styles.splash_slide_out]: isAnimating && !isBackwards,
+          [styles.splash_slide_out_reverse]: isAnimating && isBackwards,
+        })}
+        onAnimationEnd={nextSplash}
+        alt=""
+      />
+      <img
+        src={isBackwards ? prevImageUrl : nextImageUrl}
         className={classNames({
           [styles.splash]: true,
           [styles.splash_second]: true,
-          [styles.splash_slide_in]: isAnimating,
+          [styles.splash_slide_in]: isAnimating && !isBackwards,
+          [styles.splash_slide_in_reverse]: isAnimating && isBackwards,
         })}
+        alt=""
+        aria-hidden="true"
       />
-      <div className={styles.splash_fade}></div>
+
+      <div className={styles.splash_fade} />
     </div>
   );
 }

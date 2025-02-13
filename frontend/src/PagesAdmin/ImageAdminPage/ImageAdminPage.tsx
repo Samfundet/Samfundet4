@@ -2,19 +2,21 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, ImageQuery } from '~/Components';
 import { getImages } from '~/api';
-import { ImageDto } from '~/dto';
+import type { ImageDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageAdminPage.module.scss';
 import { AdminImage } from './components';
-import { lowerCapitalize } from '~/utils';
 
 export function ImageAdminPage() {
   const [images, setImages] = useState<ImageDto[]>([]);
   const [allImages, setAllImages] = useState<ImageDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  useTitle(t(KEY.admin_images_title));
 
   // Stuff to do on first render.
   // TODO add permissions on render
@@ -46,9 +48,9 @@ export function ImageAdminPage() {
         <ImageQuery allImages={allImages} setImages={setImages} />
       </div>
       <div className={styles.imageContainer}>
-        {displayImages.map(function (element) {
-          return <AdminImage key={element.id} image={element} className={styles.imageBox} />;
-        })}
+        {displayImages.map((element) => (
+          <AdminImage key={element.id} image={element} className={styles.imageBox} />
+        ))}
         {/* TODO pagination or translation */}
         {images.length > displayImages.length && <i>And {images.length - displayImages.length} more...</i>}
       </div>

@@ -1,2 +1,3 @@
-export { GangPosition } from './GangPosition/GangPosition';
-export { GangTypeContainer } from './GangTypeContainer/GangTypeContainer';
+export { RecruitmentCard } from './RecruitmentCard/RecruitmentCard';
+export { NoPositions } from './NoPositions';
+export { PersonalRow } from './PersonalRow';

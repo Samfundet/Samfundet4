@@ -11,9 +11,10 @@ import {
   monthValueToString,
 } from '~/Components/ExpandableList/utils';
 import { getSaksdokumenter } from '~/api';
-import { SaksdokumentDto } from '~/dto';
+import type { SaksdokumentDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/utils';
+import { dbT, lowerCapitalize } from '~/utils';
 import styles from './SaksdokumenterPage.module.scss';
 
 export function SaksdokumenterPage() {
@@ -22,6 +23,9 @@ export function SaksdokumenterPage() {
   const [saksdokumenter, setSaksdokumenter] = useState<SaksdokumentDto[]>();
   const [categories, setCategories] = useState<Array<string | undefined>>();
 
+  useTitle(lowerCapitalize(t(KEY.common_documents)));
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getSaksdokumenter()
       .then((data) => {
@@ -33,7 +37,6 @@ export function SaksdokumenterPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function saksdokumentList(
@@ -76,13 +79,9 @@ export function SaksdokumenterPage() {
       categories &&
       saksdokumenter &&
       categories.map((category, index) => (
-        <>
-          {
-            <Parent content={category || 'category'} key={category || `category${index}`} nestedDepth={0}>
-              {yearMapping(category)}
-            </Parent>
-          }
-        </>
+        <Parent content={category || 'category'} key={category || `category${index}`} nestedDepth={0}>
+          {yearMapping(category)}
+        </Parent>
       ))
     );
   }

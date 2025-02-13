@@ -19,15 +19,9 @@
   // ================================
   //              Backend
   // ================================
-  // yapf (formatter)
-  "yapf.importStrategy": "fromEnvironment",
-  "yapf.args": ["--style", "backend/.style.yapf"],
   // mypy (type checker, linter)
   "mypy-type-checker.importStrategy": "fromEnvironment",
   "mypy-type-checker.args": ["--config-file", "backend/mypy.ini", "--no-pretty"],
-  // flake8 (linter)
-  "flake8.importStrategy": "fromEnvironment",
-  "flake8.args": ["--config", "backend/.flake8"],
   // pytest
   "python.testing.pytestEnabled": true,
   "python.testing.pytestArgs": ["-c", "backend/pytest.ini"],
@@ -35,54 +29,23 @@
   "python.envFile": "backend/.env",
   "[python]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll": false,
-      "source.organizeImports": false
+      "source.fixAll": "never",
+      "source.organizeImports": "never"
     },
-    "editor.defaultFormatter": "eeyore.yapf"
+    // ruff (formatter, linter)
+    "editor.defaultFormatter": "charliermarsh.ruff"
   },
-
   // ================================
   //             Frontend
   // ================================
-  "eslint.enable": true,
-  "eslint.format.enable": true,
   "html.format.enable": false,
-  "prettier.configPath": "frontend/.prettierrc.js",
-  "prettier.ignorePath": "frontend/.prettierignore",
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "eslint.workingDirectories": ["frontend"],
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript][javascriptreact][typescript]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
+      "source.fixAll": "always",
+      "source.organizeImports": "always"
     }
   },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": false,
-      "source.organizeImports": true
-    }
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
-  },
-  "[scss]": {
-    "editor.defaultFormatter": "stylelint.vscode-stylelint"
-  },
-  "[css]": {
+  "[css][scss]": {
     "editor.defaultFormatter": "stylelint.vscode-stylelint"
   },
   "css.validate": true,

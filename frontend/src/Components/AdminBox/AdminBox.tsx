@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { Options, TYPE } from '~/Components/AdminBox/types';
+import { type Options, TYPE } from '~/Components/AdminBox/types';
 import { Button } from '../Button';
 import styles from './AdminBox.module.scss';
 
@@ -30,33 +30,40 @@ export function AdminBox({ title, icon, options }: AdminBoxProps) {
     <div className={classNames(styles.applet)}>
       <div className={styles.top}>
         <h1 className={styles.header}>
-          {icon && <Icon icon={icon} inline={true}></Icon>}
+          {icon && <Icon icon={icon} inline={true} />}
           {title}
         </h1>
       </div>
       <div className={styles.options}>
-        {options.map(function (element, key) {
-          if (element.type == TYPE.ADD) {
+        {options.map((element, key) => {
+          if (element.type === TYPE.ADD) {
             return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
               <Button key={key} theme="success" link={element.url} className={styles.button}>
                 {' '}
                 {element.text}
               </Button>
             );
-          } else if (element.type == TYPE.MANAGE) {
+          }
+          if (element.type === TYPE.MANAGE) {
             return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
               <Button key={key} theme="outlined" link={element.url} className={styles.button}>
                 {element.text}
               </Button>
             );
-          } else if (element.type == TYPE.EDIT) {
+          }
+          if (element.type === TYPE.EDIT) {
             return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
               <Button key={key} theme="blue" link={element.url} className={styles.button}>
                 {element.text}
               </Button>
             );
-          } else if (element.type == TYPE.STEAL) {
+          }
+          if (element.type === TYPE.STEAL) {
             return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
               <form key={key} className={styles.search} action={element.url} method="post">
                 <div style={{ flex: 1 }}>
                   <input type="text" className={styles.searchInput} placeholder="Navn/ID/E-post" />
@@ -66,14 +73,18 @@ export function AdminBox({ title, icon, options }: AdminBoxProps) {
                 </Button>
               </form>
             );
-          } else if (element.type == TYPE.INFO) {
+          }
+          if (element.type === TYPE.INFO) {
             return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
               <p key={key} className={styles.text}>
                 {element.text}
               </p>
             );
-          } else if (element.type == TYPE.KILROY) {
-            return <div key={key} className={styles.KILROY}></div>;
+          }
+          if (element.type === TYPE.KILROY) {
+            // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
+            return <div key={key} className={styles.KILROY} />;
           }
         })}
       </div>

@@ -2,8 +2,8 @@ import { Icon } from '@iconify/react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, IconButton, InputField } from '~/Components';
-import { Table, TableRow } from '~/Components/Table';
-import { EventCustomTicketDto } from '~/dto';
+import { Table, type TableRow } from '~/Components/Table';
+import type { EventCustomTicketDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { COLORS } from '~/types';
 import styles from './CustomTicketEditor.module.scss';
@@ -33,7 +33,7 @@ export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: P
     const nextId = lastTicket.id + 1;
     onSetCustomTickets?.([
       ...customTickets,
-      { id: nextId, name_nb: `Ny billett`, name_en: `New ticket`, price: lastTicket.price },
+      { id: nextId, name_nb: 'Ny billett', name_en: 'New ticket', price: lastTicket.price },
     ]);
   }
 
@@ -66,40 +66,42 @@ export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: P
             ),
           }
         : {};
-    return [
-      {
-        content: (
-          <InputField<string>
-            inputClassName={styles.custom_ticket_input}
-            labelClassName={styles.custom_ticket_input_label}
-            value={custom_ticket.name_nb}
-            onChange={(name) => updateTicket(custom_ticket.id, { name_nb: name })}
-          />
-        ),
-      },
-      {
-        content: (
-          <InputField<string>
-            inputClassName={styles.custom_ticket_input}
-            labelClassName={styles.custom_ticket_input_label}
-            value={custom_ticket.name_en}
-            onChange={(name) => updateTicket(custom_ticket.id, { name_en: name })}
-          />
-        ),
-      },
-      {
-        content: (
-          <InputField<number>
-            inputClassName={styles.custom_ticket_input}
-            labelClassName={styles.custom_ticket_input_label}
-            value={custom_ticket.price?.toString()}
-            type="number"
-            onChange={(price) => updateTicket(custom_ticket.id, { price: price })}
-          />
-        ),
-      },
-      deleteButton,
-    ];
+    return {
+      cells: [
+        {
+          content: (
+            <InputField<string>
+              inputClassName={styles.custom_ticket_input}
+              labelClassName={styles.custom_ticket_input_label}
+              value={custom_ticket.name_nb}
+              onChange={(name) => updateTicket(custom_ticket.id, { name_nb: name })}
+            />
+          ),
+        },
+        {
+          content: (
+            <InputField<string>
+              inputClassName={styles.custom_ticket_input}
+              labelClassName={styles.custom_ticket_input_label}
+              value={custom_ticket.name_en}
+              onChange={(name) => updateTicket(custom_ticket.id, { name_en: name })}
+            />
+          ),
+        },
+        {
+          content: (
+            <InputField<number>
+              inputClassName={styles.custom_ticket_input}
+              labelClassName={styles.custom_ticket_input_label}
+              value={custom_ticket.price?.toString()}
+              type="number"
+              onChange={(price) => updateTicket(custom_ticket.id, { price: price })}
+            />
+          ),
+        },
+        deleteButton,
+      ],
+    };
   }
 
   const tableColumns = [
@@ -116,7 +118,7 @@ export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: P
         <div className={styles.add_custom_ticket}>
           <Button rounded={true} theme="green" preventDefault={true} onClick={newTicket}>
             Legg til billett
-            <Icon icon="mdi:plus"></Icon>
+            <Icon icon="mdi:plus" />
           </Button>
         </div>
       </div>

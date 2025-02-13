@@ -4,29 +4,28 @@ import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuthContext } from '~/AuthContext';
-import { Button, Link, NotificationBadge, ThemeSwitch } from '~/Components';
-import { NavbarItem } from '~/Components/Navbar/components';
-import { HamburgerMenu } from '~/Components/Navbar/components/HamburgerMenu';
-import { useGlobalContext } from '~/GlobalContextProvider';
-import { impersonateUser, logout } from '~/api';
-import { englishFlag, logoBlack, logoWhite, norwegianFlag } from '~/assets';
-import { useDesktop, useIsDarkTheme, useScrollY } from '~/hooks';
+import { Button, Link, ThemeSwitch } from '~/Components';
+import { getActiveRecruitments, logout, stopImpersonatingUser } from '~/api';
+import { logoWhite } from '~/assets';
+import { useAuthContext } from '~/context/AuthContext';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
+import type { RecruitmentDto } from '~/dto';
+import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
-import { KEY, LANGUAGES } from '~/i18n/constants';
+import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
+import { HamburgerMenu, LanguageButton, NavbarItem } from './components';
 
 const scrollDistanceForOpaque = 30;
 
 export function Navbar() {
-  const isDarkTheme = useIsDarkTheme();
-  const { isMobileNavigation, setIsMobileNavigation, notifications } = useGlobalContext();
+  const { isMobileNavigation, setIsMobileNavigation } = useGlobalContext();
   const { t, i18n } = useTranslation();
   const { user, setUser } = useAuthContext();
+  const [activeRecruitments, setActiveRecruitments] = useState<RecruitmentDto[]>();
   const navigate = useNavigate();
   const isDesktop = useDesktop();
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const [cookies, setCookie, removeCookie] = useCookies();
 
   // Each NavbarItem can have a dropdown menu.
@@ -35,12 +34,6 @@ export function Navbar() {
   // Store the label of the currently selected dropdown.
   const [expandedDropdown, setExpandedDropdown] = useState('');
 
-  // Language
-  const currentLanguage = i18n.language;
-  const isNorwegian = currentLanguage === LANGUAGES.NB;
-  const otherLanguage = isNorwegian ? LANGUAGES.EN : LANGUAGES.NB;
-  const otherFlag = isNorwegian ? englishFlag : norwegianFlag;
-
   // Scroll detection.
   const scrollY = useScrollY();
   const isScrolledNavbar = scrollY > scrollDistanceForOpaque;
@@ -48,7 +41,6 @@ export function Navbar() {
   // Navbar style.
   const isRootPath = useLocation().pathname === ROUTES.frontend.home;
   const isTransparentNavbar = isRootPath && !isScrolledNavbar && !isMobileNavigation;
-  const navbarLogo = isDarkTheme || isTransparentNavbar ? logoWhite : logoBlack;
 
   useEffect(() => {
     // Close expanded dropdown menu whenever mobile navbar is closed, or we switch from mobile to desktop, like when
@@ -58,16 +50,18 @@ export function Navbar() {
     }
   }, [isMobileNavigation, isDesktop]);
 
-  const languageButton = (
-    <button className={styles.language_flag_button} onClick={() => i18n.changeLanguage(otherLanguage)}>
-      <img src={otherFlag} className={styles.language_flag} />
-    </button>
-  );
+  useEffect(() => {
+    getActiveRecruitments().then((response) => {
+      setActiveRecruitments(response.data);
+    });
+  }, []);
+
+  const showActiveRecruitments = activeRecruitments !== undefined && activeRecruitments?.length > 0;
 
   // Return profile button for navbar if logged in.
   const mobileProfileButton = (
     <div className={styles.navbar_profile_button}>
-      <Icon icon="material-symbols:person"></Icon>
+      <Icon icon="material-symbols:person" />
       <Link url={ROUTES.frontend.admin} className={styles.profile_text}>
         {user?.username}
       </Link>
@@ -81,11 +75,16 @@ export function Navbar() {
         className={styles.navbar_dropdown_link}
         onAfterClick={() => setExpandedDropdown('')}
       >
-        {t(KEY.common_about_samfundet)}
+        {t(KEY.common_general)}
       </Link>
-      <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
+      <Link
+        url={ROUTES.frontend.membership}
+        className={styles.navbar_dropdown_link}
+        onAfterClick={() => setExpandedDropdown('')}
+      >
         {t(KEY.common_membership)}
-      </a>
+      </Link>
+      {/* biome-ignore lint/a11y/useValidAnchor: will point to actual route later */}
       <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
         {t(KEY.common_opening_hours)}
       </a>
@@ -103,6 +102,7 @@ export function Navbar() {
       >
         {t(KEY.navbar_photos)}
       </a>
+      {/* biome-ignore lint/a11y/useValidAnchor: will point to actual route later */}
       <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
         {t(KEY.navbar_nybygg)}
       </a>
@@ -135,11 +135,12 @@ export function Navbar() {
         expandedDropdown={expandedDropdown}
         route={ROUTES.frontend.recruitment}
         label={t(KEY.common_volunteer)}
+        labelClassName={showActiveRecruitments ? styles.active_recruitment : ''}
       />
     </div>
   );
 
-  /* eslint-disable-next-line no-prototype-builtins */
+  // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
   const isImpersonate = cookies.hasOwnProperty('impersonated_user_id');
 
   const userDropdownLinks = (
@@ -153,7 +154,7 @@ export function Navbar() {
           type="button"
           className={classNames(styles.navbar_dropdown_link, styles.navbar_logout_button)}
           onClick={() => {
-            impersonateUser(undefined)
+            stopImpersonatingUser()
               .then(() => {
                 window.location.reload();
               })
@@ -162,7 +163,7 @@ export function Navbar() {
           }}
         >
           <Icon icon="ri:spy-fill" />
-          Stop Agent Mode
+          {t(KEY.admin_stop_impersonate)}
         </button>
       )}
       <button
@@ -199,11 +200,9 @@ export function Navbar() {
     </div>
   );
 
-  const isLightLoginButton = isDarkTheme || (isTransparentNavbar && !isMobileNavigation);
-
   const loginButton = !user && (
     <Button
-      theme={isLightLoginButton ? 'white' : 'black'}
+      theme={'white'}
       rounded={true}
       className={isDesktop ? styles.login_button : styles.popup_internal_button}
       onClick={() => {
@@ -217,7 +216,7 @@ export function Navbar() {
 
   const logoutButton = user && (
     <Button
-      theme={isLightLoginButton ? 'white' : 'black'}
+      theme={'white'}
       rounded={true}
       className={isDesktop ? undefined : styles.popup_internal_button}
       onClick={() => {
@@ -241,14 +240,14 @@ export function Navbar() {
         {navbarHeaders}
 
         <div className={styles.mobile_widgets}>
-          {languageButton}
+          <LanguageButton />
           <div className={styles.mobile_user}>
             {loginButton}
             {logoutButton}
           </div>
           <ThemeSwitch />
         </div>
-        <br></br>
+        <br />
         {user && mobileProfileButton}
       </nav>
     </>
@@ -259,13 +258,12 @@ export function Navbar() {
       <nav id={styles.navbar_container} className={classNames(isTransparentNavbar && styles.transparent_navbar)}>
         <div className={styles.navbar_inner}>
           <Link url={ROUTES.frontend.home} className={styles.navbar_logo}>
-            <img src={navbarLogo} id={styles.navbar_logo_img} />
+            <img src={logoWhite} id={styles.navbar_logo_img} alt="Logo" />
           </Link>
           {isDesktop && navbarHeaders}
           <div className={styles.navbar_widgets}>
             <ThemeSwitch />
-            <NotificationBadge number={notifications.length || undefined} onClick={() => console.log(1)} />
-            {languageButton}
+            <LanguageButton />
             {loginButton}
             {profileButton}
           </div>

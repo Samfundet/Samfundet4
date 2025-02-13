@@ -1,0 +1,36 @@
+@import 'src/constants';
+
+@import 'src/mixins';
+
+.label {
+  margin-bottom: 0.25rem;
+  font-weight: 700;
+}
+
+.box {
+  background: $grey-4;
+  border-radius: 5px;
+  padding: 0.5rem;
+
+  @include theme-dark {
+    background: $black-2;
+  }
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  overflow-y: auto;
+  height: 14rem;
+
+  @include for-desktop-up {
+    height: 26rem;
+  }
+}
+
+.button {
+  display: block;
+  width: 100%;
+  text-align: left;
+}

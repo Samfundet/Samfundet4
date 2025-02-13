@@ -1,0 +1,117 @@
+@import 'src/constants';
+
+.dropdown {
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  background-color: $white;
+  border-radius: 0;
+  font-size: 0.7em;
+}
+
+.input {
+  font-size: 0.7em;
+  border-radius:0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+
+.text {
+  font-size: 0.8em;
+  padding: 0;
+}
+
+.interviewField {
+  display: flex;
+  justify-content: center;
+  background-color: $white;
+}
+
+.header {
+  font-size: 1.0em;
+  background-color: $red-samf;
+  padding: 0.5em 0.8em;
+  color: $white;
+  &:hover {
+    background-color: $red_samf_hover;
+    color: $white;
+  }
+}
+
+.rows {
+  padding: 0.2em 0.8em;
+}
+
+.pending {
+  background-color: $white;
+}
+
+.top_reserve {
+  background-color: $topreserve;
+}
+
+.top_wanted {
+  background-color: $topwanted;
+}
+
+.less_reserve {
+  background-color: $lessreserve;
+}
+
+.less_reserve_wanted {
+  background-color: $lessreservewanted;
+}
+
+.less_reserve_reserve {
+  background-color: $lessreservereserve;
+}
+
+.less_wanted {
+  background-color: $lesswanted;
+}
+
+.less_wanted_wanted {
+  background-color: $lesswantedwanted;
+}
+
+.less_wanted_reserve {
+  background-color: $lesswantedreserve;
+}
+
+.table {
+  border-color: $grey-0;
+  border-width: 2.2em;
+}
+
+.tableRow {
+  border-color: $grey-35;
+  border-width: 0.01em;
+}
+
+.crud {
+  display: flex;
+  justify-content: center;
+}
+
+
+.wrapper .text{
+  position:relative;
+  visibility: hidden;
+}
+
+.wrapper:hover .text{
+  visibility: visible;
+}
+
+.show_div{
+  display: inline-block;  
+  background-color: $red-samf;  
+  color: $white; 
+  padding: 7px 25px;  
+  border-radius: 4px; 
+  font-size: 0.8em;
+}
+
+
+.wrapper:hover .show_div{
+  display: none;
+}

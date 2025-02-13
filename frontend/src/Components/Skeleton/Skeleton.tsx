@@ -1,4 +1,4 @@
-import OriginalSkeleton, { SkeletonProps } from 'react-loading-skeleton';
+import OriginalSkeleton, { type SkeletonProps } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { useIsDarkTheme } from '~/hooks';
 import { COLORS } from '~/types';

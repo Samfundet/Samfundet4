@@ -1,12 +1,16 @@
 import { Icon } from '@iconify/react';
+import { useTranslation } from 'react-i18next';
 import { Link } from '~/Components/Link/Link';
 import { SultenPage } from '~/Components/SultenPage';
 import { TextItem } from '~/constants/TextItems';
-import { useTextItem } from '~/hooks';
+import { useTextItem, useTitle } from '~/hooks';
+import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './LycheContactPage.module.scss';
 
 export function LycheContactPage() {
+  const { t } = useTranslation();
+  useTitle(t(KEY.common_contact), t(KEY.common_sulten));
   return (
     <>
       <SultenPage>
@@ -34,7 +38,8 @@ export function LycheContactPage() {
               src={ROUTES.other.streetview_lyche}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
+              title="Google street view"
+            />
           </div>
         </div>
       </SultenPage>

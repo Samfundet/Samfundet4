@@ -1,48 +1,52 @@
-import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Button, Link, Navbar } from '~/Components';
-import { Applet } from '~/Components/AdminBox/types';
+import type { Applet } from '~/Components/AdminBox/types';
 import { appletCategories } from '~/Pages/AdminPage/applets';
+import { useAuthContext } from '~/context/AuthContext';
+import { useMobile } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { dbT } from '~/utils';
 import styles from './AdminLayout.module.scss';
-import { useMobile } from '~/hooks';
 
 /**
  * Wraps admin routes with the standard navbar and a side panel with common links
- * for editing events, groups, etc.
+ * for editing events, gangs, etc.
  * @returns Layout with outlet
  */
 export function AdminLayout() {
   const { t } = useTranslation();
   const [panelOpen, setPanelOpen] = useState(false);
   const isMobile = useMobile();
+  const location = useLocation();
+  const { loading: authLoading } = useAuthContext();
 
-  function makeAppletShortcut(applet: Applet, index: number) {
-    // No default url, dont show in navmenu
-    if (applet.url === undefined) return <></>;
+  const makeAppletShortcut = useCallback(
+    (applet: Applet, index: number) => {
+      // No default url, dont show in navmenu
+      if (applet.url === undefined) return <></>;
 
-    // Create panel item
-    const selected = window.location.href.toLowerCase().indexOf(applet.url) != -1;
-    return (
-      <Link
-        key={index}
-        className={classNames(styles.panel_item, selected && styles.selected)}
-        url={applet.url}
-        onAfterClick={() => isMobile && panelOpen && setPanelOpen(false)}
-        plain={true}
-      >
-        <Icon icon={applet.icon} />
-        {dbT(applet, 'title')}
-      </Link>
-    );
-  }
-
-  const selectedIndex = window.location.href.endsWith(ROUTES_FRONTEND.admin);
+      // Create panel item
+      const selected = location.pathname === applet.url;
+      return (
+        <Link
+          key={index}
+          className={classNames(styles.panel_item, selected && styles.selected)}
+          url={applet.url}
+          onAfterClick={() => isMobile && panelOpen && setPanelOpen(false)}
+          plain={true}
+        >
+          <Icon icon={applet.icon} />
+          {dbT(applet, 'title')}
+        </Link>
+      );
+    },
+    [location, isMobile, panelOpen],
+  );
 
   useEffect(() => {
     if (!isMobile) {
@@ -50,24 +54,27 @@ export function AdminLayout() {
     }
   }, [isMobile]);
 
+  const userApplets: Applet[] = [
+    { url: ROUTES_FRONTEND.admin, icon: 'mdi:person', title_nb: 'Profil', title_en: 'Profile' },
+    {
+      url: ROUTES_FRONTEND.user_change_password,
+      icon: 'mdi:password',
+      title_nb: 'Bytt passord',
+      title_en: 'Change password',
+    },
+  ];
+
   const panel = (
     <div className={classNames(styles.panel, !panelOpen && styles.mobile_panel_closed)}>
-      <button className={styles.mobile_panel_close_btn} onClick={() => setPanelOpen(false)}>
+      <button type="button" className={styles.mobile_panel_close_btn} onClick={() => setPanelOpen(false)}>
         <Icon icon="mdi:close" width={24} />
       </button>
 
       {/* Header */}
       <div className={styles.panel_header}>{t(KEY.control_panel_title)}</div>
       {/* Index */}
-      <Link
-        className={classNames(styles.panel_item, selectedIndex && styles.selected)}
-        url={ROUTES_FRONTEND.admin}
-        onAfterClick={() => panelOpen && setPanelOpen(false)}
-      >
-        <Icon icon="mdi:person" />
-        {t(KEY.common_profile)}
-      </Link>
-      <br></br>
+      {userApplets.map((applet, index) => makeAppletShortcut(applet, index))}
+      <br />
       {/* Applets */}
       {appletCategories.map((category) => {
         return (
@@ -77,7 +84,7 @@ export function AdminLayout() {
           </React.Fragment>
         );
       })}
-      <br></br>
+      <br />
       {/* TODO help/faq */}
       <Link className={classNames(styles.panel_item)} url={ROUTES_FRONTEND.admin}>
         <Icon icon="material-symbols:question-mark-rounded" />
@@ -97,22 +104,24 @@ export function AdminLayout() {
   );
 
   const desktopOpen = (
-    <div className={styles.open_panel_desktop} onClick={() => setPanelOpen(true)}>
+    <button type="button" className={styles.open_panel_desktop} onClick={() => setPanelOpen(true)}>
       <Icon icon="mdi:arrow-right-bold" width={16} className={styles.arrow} />
-    </div>
+    </button>
   );
 
   return (
     <div>
       <Navbar />
-      <div className={styles.wrapper}>
-        {panel}
-        {!panelOpen && (isMobile ? mobileOpen : desktopOpen)}
-        {/* Content */}
-        <div className={classNames(styles.content_wrapper, !panelOpen && styles.closed_panel_content_wrapper)}>
-          <Outlet />
+      {!authLoading && (
+        <div className={styles.wrapper}>
+          {panel}
+          {!panelOpen && (isMobile ? mobileOpen : desktopOpen)}
+          {/* Content */}
+          <div className={classNames(styles.content_wrapper, !panelOpen && styles.closed_panel_content_wrapper)}>
+            <Outlet />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
