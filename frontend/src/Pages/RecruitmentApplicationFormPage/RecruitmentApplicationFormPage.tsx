@@ -3,7 +3,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Link, Modal, OccupiedForm, Page, SamfundetLogoSpinner } from '~/Components';
+import { Button, Link, Modal, OccupiedForm, Page, SamfundetLogoSpinner, ToolTip } from '~/Components';
 import { Text } from '~/Components/Text/Text';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
@@ -248,8 +248,6 @@ export function RecruitmentApplicationFormPage() {
               </Link>
             </h2>
             <p className={styles.text}>{dbT(recruitmentPosition, 'long_description')}</p>
-            <h2 className={styles.sub_header}>{t(KEY.recruitment_applyfor)}</h2>
-            <p className={styles.text}>{t(KEY.recruitment_applyforhelp)}</p>
           </div>
           {similarPositionsBtns}
           {otherPositionsAtGang}
@@ -274,7 +272,12 @@ export function RecruitmentApplicationFormPage() {
             submitText={submitText}
             devMode={false}
           >
-            <h2 className={styles.label}>{t(KEY.recruitment_application)}:</h2>
+            <div className={styles.form_header}>
+              <h2 className={styles.label}>{t(KEY.recruitment_application)}</h2>
+              <ToolTip value={t(KEY.recruitment_applyforhelp)}>
+                <Icon icon="mingcute:question-fill" width="1.2em" height="1.2em" />
+              </ToolTip>
+            </div>
             <SamfFormField field="application_text" type="text_long" />{' '}
           </SamfForm>
         ) : (
