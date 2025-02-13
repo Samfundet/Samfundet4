@@ -1080,6 +1080,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
     recruitment_position = RecruitmentPositionForApplicantSerializer()
     recruiter_priority = serializers.CharField(source='get_recruiter_priority_display')
     interview_time = serializers.SerializerMethodField(method_name='get_interview_time', read_only=True)
+    interview = InterviewSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentApplication
@@ -1095,6 +1096,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
             'recruiter_priority',
             'withdrawn',
             'interview_time',
+            'interview',
             'created_at',
         ]
         read_only_fields = [
@@ -1109,6 +1111,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
             'applicant_state',
             'interview_time',
             'withdrawn',
+            'interview',
             'created_at',
         ]
 

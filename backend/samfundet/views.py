@@ -6,6 +6,7 @@ import hmac
 import hashlib
 import operator
 from typing import Any
+from datetime import datetime
 from functools import reduce
 from itertools import chain
 
@@ -41,6 +42,7 @@ from root.constants import (
     GITHUB_SIGNATURE_HEADER,
     REQUESTED_IMPERSONATE_USER,
 )
+from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM
 
 from .utils import user_query, event_query, generate_timeslots, get_occupied_timeslots_from_request
 from .homepage import homepage
@@ -959,6 +961,20 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
         return Response(serializer.data)
 
 
+class RecruitmentApplicationInterviewNotesView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = InterviewSerializer
+
+    def put(self, request: Request, interview_id: str) -> Response:
+        interview = get_object_or_404(Interview, pk=interview_id)
+        update_serializer = self.serializer_class(interview, data=request.data, partial=True)
+        if update_serializer.is_valid() and 'notes' in update_serializer.validated_data:
+            interview.notes = update_serializer.validated_data['notes']
+            interview.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class RecruitmentApplicationWithdrawApplicantView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -1308,12 +1324,22 @@ class InterviewRoomView(ModelViewSet):
     serializer_class = InterviewRoomSerializer
     queryset = InterviewRoom.objects.all()
 
+    # noinspection PyMethodOverriding
+    def retrieve(self, request: Request, pk: int) -> Response:
+        room = get_object_or_404(InterviewRoom, pk=pk)
+        if not request.user.has_perm(SAMFUNDET_VIEW_INTERVIEWROOM, room):
+            raise PermissionDenied
+        return super().retrieve(request=request, pk=pk)
+
+    # noinspection PyMethodOverriding
     def list(self, request: Request) -> Response:
         recruitment = request.query_params.get('recruitment')
         if not recruitment:
             return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        filtered_rooms = InterviewRoom.objects.filter(recruitment__id=recruitment)
+        filtered_rooms = [
+            room for room in InterviewRoom.objects.filter(recruitment__id=recruitment) if request.user.has_perm(SAMFUNDET_VIEW_INTERVIEWROOM, room)
+        ]
         serialized_rooms = self.get_serializer(filtered_rooms, many=True)
         return Response(serialized_rooms.data)
 
@@ -1337,6 +1363,19 @@ class InterviewView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = InterviewSerializer
     queryset = Interview.objects.all()
+
+    # noinspection PyMethodOverriding
+    def retrieve(self, request: Request, pk: int) -> Response:
+        interview = get_object_or_404(Interview, pk=pk)
+        if not request.user.has_perm(SAMFUNDET_VIEW_INTERVIEW, interview):
+            raise PermissionDenied
+        return super().retrieve(request=request, pk=pk)
+
+    # noinspection PyMethodOverriding
+    def list(self, request: Request) -> Response:
+        interviews = [interview for interview in self.get_queryset() if request.user.has_perm(SAMFUNDET_VIEW_INTERVIEW, interview)]
+        serializer = self.get_serializer(interviews, many=True)
+        return Response(serializer.data)
 
 
 class RecruitmentInterviewAvailabilityView(ListCreateAPIView):
@@ -1482,6 +1521,23 @@ class GangApplicationCountView(APIView):
                 'total_accepted': gang_stat.total_accepted,
                 'total_rejected': gang_stat.total_rejected,
             }
+        )
+
+
+class InterviewerAvailabilityForDate(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, recruitment_id: int) -> Response:
+        date = datetime.fromisoformat(request.query_params.get('date'))
+        interviewers = request.query_params.get('interviewers', [])
+
+        return Response(
+            OccupiedTimeslot.objects.filter(
+                recruitment__id=recruitment_id,
+                user__in=interviewers,
+                start_dt__date__lte=date,
+                end_dt__date__gte=date,
+            )
         )
 
 

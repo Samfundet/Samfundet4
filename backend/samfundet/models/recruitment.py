@@ -150,7 +150,7 @@ class RecruitmentPosition(CustomBaseModel):
 
     is_funksjonaer_position = models.BooleanField(help_text='Is this a funksjonær position?')
 
-    default_application_letter_nb = models.TextField(help_text='Default application letter for the position')
+    default_application_letter_nb = models.TextField(help_text='Default application letter for the position', null=True, blank=True)
     default_application_letter_en = models.TextField(help_text='Default application letter for the position', null=True, blank=True)
 
     norwegian_applicants_only = models.BooleanField(help_text='Is this position only for Norwegian applicants?', default=False)
