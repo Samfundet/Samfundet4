@@ -54,6 +54,7 @@ from .models.general import (
     UserFeedbackModel,
 )
 from .models.recruitment import (
+    ApplicationFileAttachment,
     Interview,
     Recruitment,
     InterviewRoom,
@@ -76,6 +77,21 @@ if TYPE_CHECKING:
 
 if TYPE_CHECKING:
     from typing import Any
+
+
+class ApplicationFileAttachmentSerializer(CustomBaseSerializer):
+    class Meta:
+        model = ApplicationFileAttachment
+
+    def validate(self, attrs: dict) -> dict:
+        admission_image = attrs.get('admission_image')
+
+        # if admission_image:
+        #     is_image_valid(admission_image)
+        # else:
+        #     msg = 'Image is invalid'
+        #     raise serializers.ValidationError(msg, code="authorization")
+        # if
 
 
 class TagSerializer(CustomBaseSerializer):
@@ -1163,6 +1179,7 @@ class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
     interview = InterviewSerializer(read_only=False)
     interviewers = InterviewerSerializer(many=True, read_only=True)
     recruitment_position = RecruitmentPositionSerializer(read_only=True)
+    application_attachment = ApplicationFileAttachmentSerializer(read_only=True)
     application_count = serializers.SerializerMethodField(method_name='get_application_count', read_only=True)
 
     class Meta:

@@ -168,6 +168,7 @@ class RecruitmentPosition(CustomBaseModel):
     # TODO: Implement interviewer functionality
     interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
 
+    #FIX: Add functionality for setting allowed attachments for application
     recruitment = models.ForeignKey(
         Recruitment,
         on_delete=models.CASCADE,
@@ -319,15 +320,32 @@ class Interview(CustomBaseModel):
     def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
         return self.room.resolve_gang(return_id=return_id)
 
+class ApplicationFileAttachment(CustomBaseModel):
+    application_image = models.ImageField(
+        help_text='Image attachment',
+        # upload_to=upload_file_recruitment_path,
+        blank=True,
+        null=True,
+        verbose_name='Image Attachment',
+    )
+
+    application_file = models.FileField(
+        help_text='file attachment',
+        blank=True,
+        # upload_to=upload_file_recruitment_path,
+        null=True,
+        verbose_name='file attachment',
+    )
 
 class RecruitmentApplication(CustomBaseModel):
     # UUID so that applicants cannot see recruitment info with their own id number
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     application_text = models.TextField(help_text='Application text')
+    application_attachment = models.ForeignKey(ApplicationFileAttachment, on_delete=models.CASCADE, help_text='file attached to application', null=True)
     recruitment_position = models.ForeignKey(
         RecruitmentPosition, on_delete=models.CASCADE, help_text='The position which is recruiting', related_name='applications'
     )
-    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='applications')
+    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, null=True, help_text='The recruitment that is recruiting', related_name='applications')
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='applications')
     applicant_priority = models.PositiveIntegerField(null=True, blank=True, help_text='The priority of the application')
 
@@ -490,7 +508,6 @@ class RecruitmentApplication(CustomBaseModel):
                 if application.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED:
                     application.applicant_state = RecruitmentApplicantStates.NOT_WANTED
                 application.save()
-
 
 class RecruitmentInterviewAvailability(CustomBaseModel):
     """This models all possible times for interviews for the given recruitment.
