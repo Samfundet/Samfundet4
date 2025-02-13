@@ -317,7 +317,7 @@ class ReservationFormView(APIView):
     def get(self, request: Request) -> Response:
         venue = self.request.query_params.get('venue', Venue.objects.get(slug='lyche').id)
         biggest_table = Table.objects.filter(venue=venue).order_by('-seating').first()
-        return Response({'occasion': ReservationOccasion.choices, 'biggest_table': biggest_table.seating if biggest_table else 0}, status=status.HTTP_200_OK)
+        return Response({'occasion': ReservationOccasion.choices, 'biggest_table': getattr(biggest_table, 'seating', 0)}, status=status.HTTP_200_OK)
 
 
 class ReservationCheckAvailabilityView(APIView):
