@@ -18,7 +18,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.password_validation import validate_password
 
 from root.constants import PHONE_NUMBER_REGEX
-from root.utils.mixins import CustomBaseSerializer
+from root.utils.mixins import FullCleanSerializer, CustomBaseSerializer
 
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
@@ -628,7 +628,7 @@ class TableSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
-class ReservationSerializer(CustomBaseSerializer):
+class ReservationSerializer(FullCleanSerializer):
     class Meta:
         model = Reservation
         fields = '__all__'
@@ -960,7 +960,9 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
             'short_description_en',
             'long_description_nb',
             'long_description_en',
+            'tags',
             'is_funksjonaer_position',
+            'norwegian_applicants_only',
             'default_application_letter_nb',
             'default_application_letter_en',
             'gang',

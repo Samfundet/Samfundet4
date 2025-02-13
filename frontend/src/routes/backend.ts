@@ -563,6 +563,8 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_applications_for_position_detail: '/api/recruitment-applications-for-position/:pk/',
   samfundet__interview_list: '/api/interview/',
   samfundet__interview_detail: '/api/interview/:pk/',
+  samfundet__create_reservation_list: '/api/create-reservation/',
+  samfundet__create_reservation_detail: '/api/create-reservation/:pk/',
   samfundet__schema: '/schema/',
   samfundet__swagger_ui: '/schema/swagger-ui/',
   samfundet__redoc: '/schema/redoc/',
@@ -611,6 +613,7 @@ export const ROUTES_BACKEND = {
   samfundet__feedback: '/feedback/',
   samfundet__purchase_feedback: '/purchase-feedback/',
   samfundet__gang_application_stats: '/recruitment/:recruitmentId/gang/:gangId/stats/',
+  samfundet__recruitment_positions_by_tags: '/recruitment/:id/positions-by-tags/',
   static__path: '/static/:path',
   media__path: '/media/:path',
 } as const;
