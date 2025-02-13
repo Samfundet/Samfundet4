@@ -250,14 +250,8 @@ class CustomBaseModel(FullCleanSaveMixin):
         return self.updated_at != self.created_at
 
 
-class FullCleanSerializer(serializers.ModelSerializer):
-    def validate(self, attrs: dict) -> dict:
-        instance: FullCleanSaveMixin = self.Meta.model(**attrs)
-        instance.full_clean()
-        return attrs
 
-
-class CustomBaseSerializer(FullCleanSerializer):
+class CustomBaseSerializer(serializers.ModelSerializer)
     """
     Base serializer, sets version fields to read_only
     Adds validation errors from models clean
