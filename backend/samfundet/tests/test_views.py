@@ -3,6 +3,7 @@ from __future__ import annotations
 import time
 from typing import TYPE_CHECKING
 
+import pytest
 from guardian.shortcuts import assign_perm
 
 from rest_framework import status
@@ -15,12 +16,14 @@ from root.utils import routes, permissions
 
 from samfundet.serializers import UserSerializer, RegisterSerializer
 from samfundet.models.general import (
+    Gang,
     User,
     Image,
     Merch,
     BlogPost,
     KeyValue,
     TextItem,
+    Organization,
     InformationPage,
 )
 from samfundet.models.recruitment import (
@@ -1277,3 +1280,147 @@ def test_recruitment_application_update_pri_down(
     assert response.data[0]['applicant_priority'] == 1
     assert response.data[1]['id'] == str(fixture_recruitment_application.pk)
     assert response.data[1]['applicant_priority'] == 2
+
+
+@pytest.mark.django_db
+class TestPositionByTagsView:
+    @pytest.fixture
+    def base_url(self, fixture_recruitment: Recruitment) -> str:
+        """Get base URL for the tags endpoint"""
+        return reverse('samfundet:recruitment_positions_by_tags', kwargs={'id': fixture_recruitment.id})
+
+    @pytest.fixture
+    def authenticated_client(self, fixture_rest_client: APIClient, fixture_user: User) -> APIClient:
+        """Get an authenticated client"""
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        return fixture_rest_client
+
+    def create_position(
+        self,
+        name: str,
+        tags: str,
+        recruitment: Recruitment,
+        gang: Gang,
+    ) -> RecruitmentPosition:
+        """Helper to create a recruitment position with default values"""
+        return RecruitmentPosition.objects.create(
+            name_nb=f'Position {name}',
+            name_en=f'Position {name}',
+            short_description_nb=f'Short desc {name}',
+            short_description_en=f'Short desc {name}',
+            long_description_nb=f'Long desc {name}',
+            long_description_en=f'Long desc {name}',
+            is_funksjonaer_position=False,
+            default_application_letter_nb=f'Default letter {name}',
+            default_application_letter_en=f'Default letter {name}',
+            tags=tags,
+            recruitment=recruitment,
+            gang=gang,
+        )
+
+    def test_no_tags_parameter(self, authenticated_client: APIClient, base_url: str):
+        """Test that requests without tags parameter return 400"""
+        response = authenticated_client.get(base_url)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data['message'] == 'No tags provided in query parameters'
+
+    def test_empty_tags_string(self, authenticated_client: APIClient, base_url: str):
+        """Test that empty tags string returns 400"""
+        response = authenticated_client.get(f'{base_url}?tags=')
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_matching_single_tag(
+        self,
+        authenticated_client: APIClient,
+        base_url: str,
+        fixture_recruitment: Recruitment,
+        fixture_gang: Gang,
+    ):
+        """Test finding positions with a single matching tag"""
+        pos1 = self.create_position('1', 'developer,python', fixture_recruitment, fixture_gang)
+        self.create_position('2', 'designer,ui', fixture_recruitment, fixture_gang)
+
+        response = authenticated_client.get(f'{base_url}?tags=python')
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['count'] == 1
+        assert response.data['positions'][0]['id'] == pos1.id
+
+    def test_matching_multiple_tags(
+        self,
+        authenticated_client: APIClient,
+        base_url: str,
+        fixture_recruitment: Recruitment,
+        fixture_gang: Gang,
+    ):
+        """Test finding positions with multiple matching tags (OR operation)"""
+        pos1 = self.create_position('1', 'developer,python', fixture_recruitment, fixture_gang)
+        pos2 = self.create_position('2', 'designer,python', fixture_recruitment, fixture_gang)
+
+        response = authenticated_client.get(f'{base_url}?tags=python,designer')
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['count'] == 2
+        assert {pos['id'] for pos in response.data['positions']} == {pos1.id, pos2.id}
+
+    def test_case_insensitive_tag_matching(
+        self,
+        authenticated_client: APIClient,
+        base_url: str,
+        fixture_recruitment: Recruitment,
+        fixture_gang: Gang,
+    ):
+        """Test that tag matching is case insensitive"""
+        pos = self.create_position('1', 'Developer,PYTHON', fixture_recruitment, fixture_gang)
+
+        response = authenticated_client.get(f'{base_url}?tags=developer,python')
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['count'] == 1
+        assert response.data['positions'][0]['id'] == pos.id
+
+    def test_recruitment_filtering(
+        self,
+        authenticated_client: APIClient,
+        base_url: str,
+        fixture_recruitment: Recruitment,
+        fixture_gang: Gang,
+        fixture_organization: Organization,
+    ):
+        """Test that positions are filtered by recruitment_id"""
+        pos1 = self.create_position('1', 'developer', fixture_recruitment, fixture_gang)
+
+        # Create another recruitment
+        other_recruitment = Recruitment.objects.create(
+            name_nb='Other Recruitment',
+            name_en='Other Recruitment',
+            visible_from=fixture_recruitment.visible_from,
+            actual_application_deadline=fixture_recruitment.actual_application_deadline,
+            shown_application_deadline=fixture_recruitment.shown_application_deadline,
+            reprioritization_deadline_for_applicant=fixture_recruitment.reprioritization_deadline_for_applicant,
+            reprioritization_deadline_for_gangs=fixture_recruitment.reprioritization_deadline_for_gangs,
+            organization=fixture_organization,
+        )
+        self.create_position('2', 'developer', other_recruitment, fixture_gang)
+
+        response = authenticated_client.get(f'{base_url}?tags=developer')
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['count'] == 1
+        assert response.data['positions'][0]['id'] == pos1.id
+
+    def test_whitespace_tag_handling(
+        self,
+        authenticated_client: APIClient,
+        base_url: str,
+        fixture_recruitment: Recruitment,
+        fixture_gang: Gang,
+    ):
+        """Test that whitespace in tags is handled correctly"""
+        pos = self.create_position('1', 'developer, python', fixture_recruitment, fixture_gang)
+
+        response = authenticated_client.get(f'{base_url}?tags= developer , python ')
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['count'] == 1
+        assert response.data['positions'][0]['id'] == pos.id
