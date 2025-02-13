@@ -1524,16 +1524,20 @@ class GangApplicationCountView(APIView):
 
 class InterviewerAvailabilityForDate(APIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = OccupiedTimeslotSerializer
 
     def get(self, request: Request, recruitment_id: int) -> Response:
         date = datetime.fromisoformat(request.query_params.get('date'))
-        interviewers = request.query_params.get('interviewers', [])
+        # interviewers = request.query_params.get('interviewers', [])
+        interviewers = list(map(int, request.query_params.getlist('interviewers', [])))  # chat foreslo dette istedenfor den over
 
-        return Response(
-            OccupiedTimeslot.objects.filter(
-                recruitment__id=recruitment_id,
-                user__in=interviewers,
-                start_dt__date__lte=date,
-                end_dt__date__gte=date,
-            )
+        occupied_timeslots = OccupiedTimeslot.objects.filter(
+            recruitment__id=recruitment_id,
+            user__in=interviewers,
+            start_dt__date__lte=date,
+            end_dt__date__gte=date,
         )
+
+        serialized_data = OccupiedTimeslotSerializer(occupied_timeslots, many=True).data
+
+        return Response(serialized_data)

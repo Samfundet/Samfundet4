@@ -13,6 +13,7 @@ import type {
   ImagePostDto,
   InformationPageDto,
   InterviewDto,
+  InterviewerAvailabilityDto,
   InterviewRoomDto,
   KeyValueDto,
   MenuDto,
@@ -1133,6 +1134,22 @@ export async function getRecruitmentGangStats(
       urlParams: {
         recruitmentId: recruitmentId,
         gangId: gangId,
+      },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function getInterviewerAvailabilityOnDate(
+  recruitmentId: number,
+  date: string,
+): Promise<AxiosResponse<InterviewerAvailabilityDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__interviewer_availability_for_date,
+      queryParams: {
+        recruitment: recruitmentId,
+        date: date,
       },
     });
   return await axios.get(url, { withCredentials: true });

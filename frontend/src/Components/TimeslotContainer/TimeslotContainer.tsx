@@ -5,8 +5,11 @@ import { KEY } from '~/i18n/constants';
 import { formatDateYMD, lowerCapitalize } from '~/utils';
 import styles from './TimeslotContainer.module.scss';
 import { TimeslotButton } from './components/TimeslotButton';
+import { RecruitmentApplicationDto } from '~/dto';
+import { getInterviewerAvailabilityOnDate } from '~/api';
+import { useQuery } from '@tanstack/react-query';
 
-type Props = {
+type TimeslotContainerProps = {
   selectedDate: Date | null;
   timeslots: string[];
   onChange?: (timeslots: Record<string, string[]>) => void;
@@ -15,6 +18,8 @@ type Props = {
   disabledTimeslots?: Record<string, string[]>; //De grå timeslotsene ( "disabled" )
   selectMultiple: boolean;
   hasDisabledTimeslots: boolean;
+  recruitmentId: number;
+  application: RecruitmentApplicationDto;
 };
 
 export function TimeslotContainer({
@@ -23,13 +28,31 @@ export function TimeslotContainer({
   onChange,
   selectMultiple,
   hasDisabledTimeslots,
+  recruitmentId,
+  application,
   ...props
-}: Props) {
+}: TimeslotContainerProps) {
   const { t } = useTranslation();
 
   const [activeTimeslots, setActiveTimeslots] = useState<Record<string, string[]>>(props.activeTimeslots || {});
   const [selectedTimeslot, setSelectedTimeslot] = useState<Record<string, string[]>>(props.selectedTimeslot || {});
   const disabledTimeslots = props.disabledTimeslots || {};
+
+  //FOR 1679 ISSUE
+  // const interviewers = application.recruitment_position.interviewers;
+  const formattedDate = selectedDate ? formatDateYMD(selectedDate) : '';
+  console.log('Recruitment ID:', recruitmentId);
+  console.log('Formatted Date:', formattedDate);
+  const interviewers = application.recruitment_position.interviewers?.map((interviewer) => interviewer.id); //henter intervjuer IDer
+
+  // Fetch occupied timeslots
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['interviewerAvailability', recruitmentId, formattedDate],
+    queryFn: () => getInterviewerAvailabilityOnDate(recruitmentId, formattedDate),
+    enabled: !!selectedDate && !!recruitmentId,
+  });
+
+  console.log('data', data);
 
   // Click & drag functionality
   const mouseDown = useMouseDown();
