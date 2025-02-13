@@ -14,6 +14,7 @@ from guardian.shortcuts import assign_perm
 
 from django.db import models
 from django.utils import timezone
+from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
@@ -441,7 +442,7 @@ class Table(CustomBaseModel):
         return f'{self.name_nb}'
 
 
-class Reservation(CustomBaseModel):
+class Reservation(FullCleanSaveMixin):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=64, blank=True, verbose_name='Navn')
     email = models.EmailField(max_length=64, blank=True, verbose_name='Epost')
@@ -460,6 +461,67 @@ class Reservation(CustomBaseModel):
 
     # TODO Maybe add method for reallocating reservations if tables are reserved, and prohibit if there is an existing
     table = models.ForeignKey(Table, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Bord')
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        self.full_clean()
+        if not self.table:
+            self.table = Reservation.find_available_table(self.venue, self.guest_count, self.reservation_date, self.start_time, self.end_time)
+        super().save(*args, **kwargs)
+
+    def clean(self, *args: tuple, **kwargs: dict) -> None:
+        super().clean()
+
+        errors: dict[str, ValidationError] = defaultdict()
+
+        if not self.end_time:
+            self.end_time = (datetime.combine(self.reservation_date, self.start_time) + timedelta(hours=1)).time()
+
+        if self.end_time < self.start_time:
+            errors.setdefault('end_time', []).append('Time should be in the future')
+
+        if not Reservation.check_time(self.venue, self.guest_count, self.reservation_date, self.start_time, self.end_time):
+            errors.setdefault('start_time', []).append('There are no available tables for this date')
+
+        raise ValidationError(errors)
+
+    @staticmethod
+    def check_time(
+        venue: int,
+        guest_count: int,
+        reservation_date: date,
+        start_time: time,
+        end_time: time,
+    ) -> bool:
+        """Checks if time has available tables"""
+        return (
+            Reservation.find_available_table(
+                venue,
+                guest_count,
+                reservation_date,
+                start_time,
+                end_time,
+            )
+            is not None
+        )
+
+    @staticmethod
+    def find_available_table(
+        venue: int,
+        guest_count: int,
+        reservation_date: date,
+        start_time: time,
+        end_time: time,
+    ) -> Table | None:
+        tables = Table.objects.filter(venue=venue, seating__gte=guest_count)
+        if tables.count() == 0:
+            return None
+
+        reserved_tables = Reservation.objects.filter(
+            Q(venue=venue, reservation_date=reservation_date, table__in=tables)
+            & (Q(start_time__lte=end_time, end_time__gt=start_time) | Q(start_time__lt=end_time, end_time__gte=end_time))
+        )
+
+        return tables.exclude(id__in=reserved_tables.values_list('table_id', flat=True)).order_by('seating').first()
 
     def fetch_available_times_for_date(*, venue: int, seating: int, date: date) -> list[str]:  # noqa: C901
         """

@@ -52,6 +52,9 @@ router.register('recruitment-applications-for-gang', views.RecruitmentApplicatio
 router.register('recruitment-applications-for-position', views.RecruitmentApplicationForRecruitmentPositionView, 'recruitment_applications_for_position')
 router.register('interview', views.InterviewView, 'interview')
 
+######## Lyche #########
+router.register('create-reservation', views.ReservationCreateView, 'create_reservation')
+
 app_name = 'samfundet'
 
 urlpatterns = [

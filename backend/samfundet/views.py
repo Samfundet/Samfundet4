@@ -73,6 +73,7 @@ from .serializers import (
     EventGroupSerializer,
     PermissionSerializer,
     RecruitmentSerializer,
+    ReservationSerializer,
     UserOrgRoleSerializer,
     ClosedPeriodSerializer,
     FoodCategorySerializer,
@@ -394,6 +395,12 @@ class TableView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = TableSerializer
     queryset = Table.objects.all()
+
+
+class ReservationCreateView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = ReservationSerializer
+    queryset = Reservation.objects.all()
 
 
 class ReservationCheckAvailabilityView(APIView):
