@@ -175,9 +175,10 @@ function makeAreaInput(args: SamfFormFieldArgs<string>) {
 // Checkbox
 function makeCheckboxInput(args: SamfFormFieldArgs<boolean>) {
   const safeVal = args.value === undefined ? false : (args.value as boolean);
+  const { defaultChecked, ...checkboxProps } = (args.props as CheckboxProps) || {};
   return (
     <Checkbox
-      {...(args.props as CheckboxProps)}
+      {...checkboxProps}
       checked={safeVal}
       className={styles.input_element}
       onChange={(e) => args.onChange((e as React.ChangeEvent<HTMLInputElement>).target.checked)}
