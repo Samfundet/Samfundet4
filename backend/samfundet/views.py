@@ -102,6 +102,7 @@ from .serializers import (
     RecruitmentApplicationUpdateForGangSerializer,
     RecruitmentShowUnprocessedApplicationsSerializer,
     RecruitmentPositionSharedInterviewGroupSerializer,
+    RecruitmentAllApplicationsPerRecruitmentSerializer,
 )
 from .models.event import (
     Event,
@@ -731,6 +732,21 @@ class RecruitmentApplicationView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentApplicationForGangSerializer
     queryset = RecruitmentApplication.objects.all()
+
+
+class RecruitmentAllApplicationsPerRecruitmentView(ListAPIView):
+    # TODO: IMPLEMENT HIGHEST LEVEL OF RECRUITMENT PERSMISSIONS. Something like GU_OPPTAKSANSVARLIG, MG_WEB, UKA_HR, ISFiT_RECRUITMENT
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentAllApplicationsPerRecruitmentSerializer
+
+    def get_queryset(self) -> QuerySet[RecruitmentApplication]:
+        """Get all applications for a specific recruitment."""
+        recruitment_id = self.request.query_params.get('recruitment')
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        return RecruitmentApplication.objects.filter(
+            recruitment=recruitment,  # Using the recruitment object directly
+        ).select_related('user', 'recruitment_position')
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
