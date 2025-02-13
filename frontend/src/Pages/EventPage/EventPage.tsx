@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Page, SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components';
 import { getEvent } from '~/api';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';

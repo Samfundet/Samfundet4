@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { Page } from '~/Components';
 import { EventCarousel, LargeCard } from '~/Pages/HomePage/components';
 import { getHomeData } from '~/api';
 import type { HomePageDto, HomePageElementDto } from '~/dto';
@@ -9,7 +10,6 @@ import { KEY } from '~/i18n/constants';
 import type { Children } from '~/types';
 import styles from './HomePage.module.scss';
 import { Splash } from './components/Splash/Splash';
-import { Page } from '~/Components';
 
 export function HomePage() {
   const [homePage, setHomePage] = useState<HomePageDto>();
