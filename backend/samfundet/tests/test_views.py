@@ -981,6 +981,8 @@ def test_reservation_end_before_start(
     }
     response: Response = fixture_rest_client.post(path=url, data=data)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
 def test_update_application_recruiter_priority_gang(
     fixture_rest_client: APIClient, fixture_user: User, fixture_user2: User, fixture_recruitment_application: RecruitmentApplication
 ):
