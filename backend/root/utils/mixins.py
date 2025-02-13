@@ -250,8 +250,7 @@ class CustomBaseModel(FullCleanSaveMixin):
         return self.updated_at != self.created_at
 
 
-
-class CustomBaseSerializer(serializers.ModelSerializer)
+class CustomBaseSerializer(serializers.ModelSerializer):
     """
     Base serializer, sets version fields to read_only
     Adds validation errors from models clean
