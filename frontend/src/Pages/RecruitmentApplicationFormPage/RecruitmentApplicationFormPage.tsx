@@ -122,17 +122,9 @@ export function RecruitmentApplicationFormPage() {
       });
   }
 
-  if (loading) {
-    return (
-      <div className={styles.spinner_container}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
   if (!positionId || Number.isNaN(Number(positionId))) {
     return (
-      <Page>
+      <Page loading={loading}>
         <div className={styles.container}>
           <h1>{t(KEY.recruitment_application)}</h1>
           <p>The position id is invalid, please enter another position id</p>
@@ -144,7 +136,7 @@ export function RecruitmentApplicationFormPage() {
   const submitText = `${t(KEY.common_send)} ${t(KEY.recruitment_application)}`;
 
   return (
-    <Page>
+    <Page loading={loading}>
       <div className={styles.container}>
         {openOccupiedForm && (
           <Modal isOpen={openOccupiedForm} className={styles.occupied_modal}>
