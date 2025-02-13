@@ -3,7 +3,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Link, Modal, OccupiedForm, Page, SamfundetLogoSpinner } from '~/Components';
+import { Button, Link, Modal, OccupiedForm, Page } from '~/Components';
 import { Text } from '~/Components/Text/Text';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
@@ -137,17 +137,9 @@ export function RecruitmentApplicationFormPage() {
       });
   }
 
-  if (loading) {
-    return (
-      <div className={styles.spinner_container}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
   if (!positionId || Number.isNaN(Number(positionId))) {
     return (
-      <Page>
+      <Page loading={loading}>
         <div className={styles.container}>
           <h1>{t(KEY.recruitment_application)}</h1>
           <p>The position id is invalid, please enter another position id</p>
@@ -204,7 +196,7 @@ export function RecruitmentApplicationFormPage() {
   );
 
   return (
-    <Page>
+    <Page loading={loading}>
       <div className={styles.container}>
         {openOccupiedForm && (
           <Modal isOpen={openOccupiedForm} className={styles.occupied_modal}>

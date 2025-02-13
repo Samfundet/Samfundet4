@@ -22,3 +22,9 @@ $side-padding: 1em;
     width: calc(100% - $side-padding * 2);
   }
 }
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20%;
+}

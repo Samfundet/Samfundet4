@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components';
 import { getEventsPerDay } from '~/api';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import styles from './EventsPage.module.scss';
 import { EventsList } from './components/EventsList';
 
 export function EventsPage() {
@@ -28,13 +27,9 @@ export function EventsPage() {
       });
   }, []);
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
-  return <EventsList events={events} />;
+  return (
+    <Page loading={showSpinner}>
+      <EventsList events={events} />
+    </Page>
+  );
 }
