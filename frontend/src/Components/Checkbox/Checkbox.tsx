@@ -1,56 +1,55 @@
 import classNames from 'classnames';
-import { useState } from 'react';
+import React from 'react';
 import styles from './Checkbox.module.scss';
 
-type Alignment = 'left' | 'right';
-
-export type CheckboxProps = {
-  name?: string;
-  label?: string;
-  disabled?: boolean;
-  checked?: boolean;
-  onClick?: () => void;
-  alignment?: Alignment;
+export type PrimitiveCheckboxProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'checked' | 'defaultChecked' | 'type'
+> & {
   className?: string;
-  onChange?: (value: boolean) => void;
-  error?: string | boolean;
-  value?: boolean;
 };
 
-// TODO: Add error handling, eg. display red text when error is set
-export function Checkbox({
-  name,
-  onClick,
-  disabled,
-  checked,
-  className,
-  alignment = 'left',
-  label,
-  onChange,
-}: CheckboxProps) {
-  const [isChecked, setIsChecked] = useState(checked ?? false);
-
-  function handleChange() {
-    setIsChecked(!isChecked);
-    if (onChange !== undefined) {
-      return onChange?.(isChecked);
-    }
-    return onClick;
-  }
-
-  return (
-    <label className={styles.checkbox}>
-      {alignment == 'left' && label}
-      <input
-        className={classNames(styles.checkbox__input, className)}
-        type="checkbox"
-        name={name}
-        onClick={handleChange}
-        disabled={disabled}
-        checked={isChecked}
-      />
-      <div className={styles.checkbox__box}></div>
-      {alignment == 'right' && label}
-    </label>
-  );
+/**
+ * Controlled props: requires `checked`, forbids `defaultChecked`.
+ */
+interface ControlledCheckboxProps extends PrimitiveCheckboxProps {
+  checked: boolean;
+  defaultChecked?: never;
 }
+
+/**
+ * Uncontrolled props: requires `defaultChecked`, forbids `checked`.
+ */
+interface UncontrolledCheckboxProps extends PrimitiveCheckboxProps {
+  checked?: never;
+  defaultChecked?: boolean;
+}
+
+/**
+ * Union type for either controlled or uncontrolled usage.
+ */
+export type CheckboxProps = ControlledCheckboxProps | UncontrolledCheckboxProps;
+
+export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
+  ({ className, checked, defaultChecked, onChange, disabled, ...props }, ref) => {
+    const isControlled = checked !== undefined;
+
+    return (
+      <label className={styles.checkbox}>
+        <input
+          ref={ref}
+          type="checkbox"
+          className={classNames(styles.checkbox__input, className)}
+          checked={isControlled ? checked : undefined}
+          defaultChecked={!isControlled ? defaultChecked : undefined}
+          onChange={onChange}
+          disabled={disabled}
+          {...props}
+        />
+        <div className={styles.checkbox__box} />
+      </label>
+    );
+  },
+);
+
+Checkbox.displayName = 'Checkbox';

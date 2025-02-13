@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Children } from '~/types';
+import type { Children } from '~/types';
 import styles from './Child.module.scss';
 
 type ChildProps = {

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, IconButton } from '~/Components';
 import { BACKEND_DOMAIN } from '~/constants';
-import { EventDto } from '~/dto';
+import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -62,7 +62,7 @@ export function Splash({ events, showInfo }: SplashProps) {
 
   const startSlideTimer = useCallback(() => {
     // Cancel previous if any
-    if (slideTimeout.current != undefined) {
+    if (slideTimeout.current !== undefined) {
       clearTimeout(slideTimeout.current);
     }
     // Start new timeout
@@ -71,7 +71,7 @@ export function Splash({ events, showInfo }: SplashProps) {
         setIsAnimating(true);
       }, SLIDE_FREQUENCY);
     }
-  }, [events, setIsAnimating]);
+  }, [events]);
 
   function nextSplash() {
     setIsAnimating(false);
@@ -94,6 +94,7 @@ export function Splash({ events, showInfo }: SplashProps) {
   }
 
   // Start timer when events change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: if events change, the timer should reset
   useEffect(() => {
     startSlideTimer();
   }, [events, startSlideTimer]);
@@ -135,6 +136,7 @@ export function Splash({ events, showInfo }: SplashProps) {
           [styles.splash_slide_out_reverse]: isAnimating && isBackwards,
         })}
         onAnimationEnd={nextSplash}
+        alt=""
       />
       <img
         src={isBackwards ? prevImageUrl : nextImageUrl}
@@ -144,9 +146,11 @@ export function Splash({ events, showInfo }: SplashProps) {
           [styles.splash_slide_in]: isAnimating && !isBackwards,
           [styles.splash_slide_in_reverse]: isAnimating && isBackwards,
         })}
+        alt=""
+        aria-hidden="true"
       />
 
-      <div className={styles.splash_fade}></div>
+      <div className={styles.splash_fade} />
     </div>
   );
 }

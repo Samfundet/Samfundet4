@@ -1,20 +1,22 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { type MutableRefObject, type RefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuthContext } from '~/AuthContext';
-import { useGlobalContext } from '~/GlobalContextProvider';
 import { getTextItem, putUserPreference } from '~/api';
-import { Key, SetState } from '~/types';
+import type { Key, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
-import { LinkTarget } from './Components/Link/Link';
-import { BACKEND_DOMAIN, THEME, THEME_KEY, ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
-import { TextItemDto } from './dto';
-import { LANGUAGES } from './i18n/constants';
+import type { LinkTarget } from './Components/Link/Link';
+import { BACKEND_DOMAIN, THEME, THEME_KEY, type ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
+import type { TextItemValue } from './constants/TextItems';
+import { useAuthContext } from './context/AuthContext';
+import { useGlobalContext } from './context/GlobalContextProvider';
+import type { TextItemDto } from './dto';
+import { STATUS } from './http_status_codes';
+import { LANGUAGES } from './i18n/types';
 
 // Make typescript happy.
 declare global {
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     goatcounter: any;
   }
 }
@@ -69,14 +71,24 @@ export function useMobile(): boolean {
 /**
  *  Hook that returns the correct translation for given key
  */
-export function useTextItem(key: string, language?: string): string | undefined {
+export function useTextItem(key: TextItemValue, language?: string): string | undefined {
   const [textItem, setTextItem] = useState<TextItemDto>();
   const { i18n } = useTranslation();
   const isNorwegian = (language || i18n.language) === LANGUAGES.NB;
   useEffect(() => {
-    getTextItem(key).then((data) => {
-      setTextItem(data);
-    });
+    getTextItem(key)
+      .then((data) => {
+        setTextItem(data);
+      })
+      .catch((error) => {
+        if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
+        }
+        setTextItem({
+          key: 'MISSING_TEXTITEM',
+          text_nb: 'ERROR ERROR Manglende tekst, kontakt redaksjon@samfundet.no ERROR ERROR',
+          text_en: 'ERROR ERROR Missing text, contact redaksjon@samfundet.no ERROR ERROR',
+        });
+      });
   }, [key]);
   return isNorwegian ? textItem?.text_nb : textItem?.text_en;
 }
@@ -181,6 +193,31 @@ export function useIsDarkTheme(): boolean {
 export function useIsLightTheme(): boolean {
   const { theme } = useGlobalContext();
   return theme === THEME.LIGHT;
+}
+
+/** Returns if primary mouse button is currently pressed down */
+export function useMouseDown(): boolean {
+  const [mouseDown, setMouseDown] = useState(false);
+
+  useEffect(() => {
+    function handleMouseDown() {
+      setMouseDown(true);
+    }
+
+    function handleMouseUp() {
+      setMouseDown(false);
+    }
+
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
+
+  return mouseDown;
 }
 
 export function useMousePosition(): { x: number; y: number } {
@@ -324,6 +361,7 @@ export function useClickOutside<T extends Node>(
   event: 'mousedown' | 'mouseup' = 'mousedown',
 ): MutableRefObject<T | null> {
   const ref = useRef<T>(null);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     function handleClickOutside(evt: MouseEvent) {
       if (evt.target instanceof Element) {
@@ -344,11 +382,12 @@ export function useClickOutside<T extends Node>(
 export type CustomNavigateProps = {
   isMetaDown?: boolean;
   event?: React.MouseEvent;
-  url: string;
+  url: string | number;
   linkTarget?: LinkTarget;
+  replace?: boolean;
 };
 
-export type CustomNavigateFn = (props: CustomNavigateProps) => void;
+export type CustomNavigateFn = (props: CustomNavigateProps, direction?: number) => void;
 
 /**
  * Custom navigation hook to correctly navigate in different environments.
@@ -358,9 +397,8 @@ export function useCustomNavigate(): CustomNavigateFn {
   const navigate = useNavigate();
   const { setIsMobileNavigation } = useGlobalContext();
 
-  function handleClick({ event, isMetaDown, url, linkTarget = 'frontend' }: CustomNavigateProps) {
+  function handleClick({ event, isMetaDown, url, replace = false, linkTarget = 'frontend' }: CustomNavigateProps) {
     const finalUrl = linkTarget === 'backend' ? BACKEND_DOMAIN + url : url;
-
     // Stop default <a> tag onClick handling. We want custom behaviour depending on the target.
     event?.preventDefault();
 
@@ -375,10 +413,9 @@ export function useCustomNavigate(): CustomNavigateFn {
      * True if ctrl or cmd click.
      */
     const isCmdClick = isMetaDown || (event && (event.ctrlKey || event.metaKey));
-
     // React navigation.
     if (linkTarget === 'frontend' && !isCmdClick) {
-      navigate(finalUrl);
+      navigate(typeof url === 'number' ? url : finalUrl, { replace });
     }
     // Normal change of href to trigger reload.
     else if (linkTarget === 'backend' && !isCmdClick) window.location.href = finalUrl;
@@ -418,4 +455,62 @@ export function useIsMetaKeyDown(): boolean {
   }, []);
 
   return isDown;
+}
+
+export function useTitle(title: string, suffix = 'Samfundet'): void {
+  const initialTitle = document.title;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: initialTitle does not need to be in deplist
+  useEffect(() => {
+    const delimitedSuffix = suffix ? ` - ${suffix}` : '';
+    document.title = title ? title + delimitedSuffix : suffix;
+
+    return () => {
+      document.title = initialTitle;
+    };
+  }, [title, suffix]);
+}
+
+export function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  useEffect(
+    () => {
+      // Update debounced value after delay
+      const handler = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
+      // Cancel the timeout if value changes (also on delay change or unmount)
+      // This is how we prevent debounced value from updating if value is changed
+      // within the delay period. Timeout gets cleared and restarted.
+      return () => {
+        clearTimeout(handler);
+      };
+    },
+    [value, delay], // Only re-call effect if value or delay changes
+  );
+  return debouncedValue;
+}
+
+export function useParentElementWidth(childRef: RefObject<HTMLElement>) {
+  const [parentWidth, setParentWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = (entries: ResizeObserverEntry[]) => {
+      if (entries[0].contentRect.width > 0) {
+        setParentWidth(entries[0].contentRect.width);
+      }
+    };
+
+    const observer = new ResizeObserver(handleResize);
+
+    if (childRef.current && childRef.current.parentNode instanceof HTMLElement) {
+      observer.observe(childRef.current.parentNode);
+    }
+
+    // Clean up
+    return () => {
+      observer.disconnect();
+    };
+  }, [childRef]);
+
+  return parentWidth;
 }

@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { useState } from 'react';
-import { Children } from '~/types';
-import { TimeDisplay } from '../TimeDisplay';
+import { Fragment, useState } from 'react';
+import { TimeDisplay } from '~/Components';
+import type { Children } from '~/types';
 import styles from './Table.module.scss';
 
 // Supported cell values for sorting
@@ -11,6 +11,7 @@ type TableCellValue = string | number | Date | boolean;
 // Table Column
 type TableColumn = {
   sortable?: boolean;
+  hideSortButton?: boolean;
   content: Children;
 };
 
@@ -20,24 +21,46 @@ type TableCell = {
   // Content in cell, eg <b>24 hours</b>
   // If missing, uses value instead.
   content?: Children;
+  style?: string;
 };
 
 // Type shorthands
-export type TableRow = Array<TableCell | TableCellValue | undefined>;
+export type TableRow = {
+  cells: Array<TableCell | TableCellValue | undefined>;
+  childTable?: TableProps;
+};
 type TableDataType = TableRow[];
 
 type TableProps = {
   className?: string;
+  headerColumnClassName?: string;
+  cellClassName?: string;
+  headerClassName?: string;
+  bodyRowClassName?: string;
+  bodyClassName?: string;
   columns?: (TableColumn | string | undefined)[];
   // Data can either be a table cell with separated value and content, or just the raw value
   // For instance ["a", "b"] or [ {value: "a", content: <div>a</div>}, {value: "b", content: <div>b</div>} ]
   data: TableDataType;
   defaultSortColumn?: number;
+  isChildTable?: boolean;
 };
 
-export function Table({ className, columns, data, defaultSortColumn = -1 }: TableProps) {
+export function Table({
+  className,
+  headerClassName,
+  headerColumnClassName,
+  bodyClassName,
+  bodyRowClassName,
+  cellClassName,
+  columns,
+  data,
+  defaultSortColumn = -1,
+  isChildTable,
+}: TableProps) {
   const [sortColumn, setSortColumn] = useState(defaultSortColumn);
   const [sortInverse, setSortInverse] = useState(false);
+  const [isOpen, setIsOpen] = useState<number | null>(null);
 
   function sort(column: number) {
     if (sortColumn === column) {
@@ -69,8 +92,8 @@ export function Table({ className, columns, data, defaultSortColumn = -1 }: Tabl
     }
 
     return [...data].sort((rowA, rowB) => {
-      const cellA = getCellValue(rowA[sortColumn] ?? '');
-      const cellB = getCellValue(rowB[sortColumn] ?? '');
+      const cellA = getCellValue(rowA.cells[sortColumn] ?? '');
+      const cellB = getCellValue(rowB.cells[sortColumn] ?? '');
 
       // Not same type, force sort as string type
       if (typeof cellA !== typeof cellB) {
@@ -104,13 +127,18 @@ export function Table({ className, columns, data, defaultSortColumn = -1 }: Tabl
     });
   }
 
+  function isHideSortButton(column: TableColumn | string | undefined): boolean {
+    const hideSortButton = (column as TableColumn)?.hideSortButton;
+    return hideSortButton === undefined ? false : hideSortButton;
+  }
+
   function getSortableIcon(column: number): string {
-    if (sortColumn != column) return 'carbon:chevron-sort';
+    if (sortColumn !== column) return 'carbon:chevron-sort';
     return sortInverse ? 'carbon:chevron-up' : 'carbon:chevron-down';
   }
 
   function getIconClass(column: number): string {
-    if (sortColumn != column) return styles.icon;
+    if (sortColumn !== column) return styles.icon;
     return classNames(styles.icon, styles.active_icon);
   }
 
@@ -128,6 +156,16 @@ export function Table({ className, columns, data, defaultSortColumn = -1 }: Tabl
     return cell.toString();
   }
 
+  function getCellStyle(cell: TableCell | TableCellValue) {
+    if (typeof cell === 'object') {
+      const style = (cell as TableCell).style;
+      if (style !== undefined) {
+        return style;
+      }
+    }
+    return null;
+  }
+
   function getColumnContent(col?: TableColumn | string) {
     if (col === undefined) {
       return '';
@@ -138,31 +176,87 @@ export function Table({ className, columns, data, defaultSortColumn = -1 }: Tabl
     return col;
   }
 
+  function hasChildTable(data: TableDataType): boolean {
+    return data.some((row) => row.childTable !== undefined);
+  }
+
   return (
     <>
       <table className={classNames(className ?? '', styles.table_samf)}>
-        <thead>
+        <thead className={headerClassName}>
           <tr>
-            {columns &&
-              columns?.map((col, index) => {
-                if (isColumnSortable(col)) {
-                  return (
-                    <th key={index} className={styles.sortable_th} onClick={() => sort(index)}>
-                      {getColumnContent(col)}
+            {(hasChildTable(data) || isChildTable) && <th />}
+
+            {columns?.map((col, index) => {
+              if (isColumnSortable(col)) {
+                return (
+                  <th
+                    // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
+                    key={index}
+                    className={classNames(headerColumnClassName, styles.sortable_th)}
+                    onClick={() => sort(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        sort(index);
+                      }
+                    }}
+                    // biome-ignore lint/a11y/noNoninteractiveTabindex: required for tab focus
+                    tabIndex={0}
+                  >
+                    {getColumnContent(col)}
+                    {!isHideSortButton(col) && (
                       <span className={styles.sort_icons}>
-                        <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18}></Icon>
+                        <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18} />
                       </span>
-                    </th>
-                  );
-                } else {
-                  return <th key={index}>{getColumnContent(col)}</th>;
-                }
-              })}
+                    )}
+                  </th>
+                );
+              }
+              return (
+                // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
+                <th className={headerColumnClassName} key={index}>
+                  {getColumnContent(col)}
+                </th>
+              );
+            })}
           </tr>
         </thead>
-        <tbody>
-          {sortedData(data).map((row, index1) => (
-            <tr key={index1}>{row && row.map((cell, index2) => <td key={index2}>{getCellContent(cell ?? '')}</td>)}</tr>
+        <tbody className={bodyClassName}>
+          {sortedData(data).map((row, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
+            <Fragment key={index}>
+              {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+              <tr
+                className={`${bodyRowClassName} ${row.childTable !== undefined ? styles.expandableRow : ''}`}
+                onClick={() => (isOpen === index ? setIsOpen(null) : setIsOpen(index))}
+              >
+                {row.childTable !== undefined && (
+                  <td
+                    className={classNames(cellClassName)}
+                    key={`arrow-${
+                      // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                      index
+                    }`}
+                  >
+                    <Icon icon={isOpen === index ? 'carbon:chevron-down' : 'carbon:chevron-right'} />
+                  </td>
+                )}
+                {row?.cells.map((cell, cellIndex) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                  <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={cellIndex}>
+                    {getCellContent(cell ?? '')}
+                  </td>
+                ))}
+              </tr>
+              {row.childTable !== undefined && isOpen === index && (
+                <tr className={styles.childTableContainer}>
+                  <td colSpan={row.cells.length + 1} className={`${styles.childTable} ${cellClassName} `}>
+                    <Table {...row.childTable} isChildTable />
+                  </td>
+                </tr>
+              )}
+            </Fragment>
           ))}
         </tbody>
       </table>

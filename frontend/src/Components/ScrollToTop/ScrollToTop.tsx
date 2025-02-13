@@ -6,6 +6,7 @@ export function useScrollToTop(): void {
   const { pathname } = useLocation();
 
   // Automatically scrolls to top whenever pathname changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: working as intended: we want to scroll up when path changes
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);

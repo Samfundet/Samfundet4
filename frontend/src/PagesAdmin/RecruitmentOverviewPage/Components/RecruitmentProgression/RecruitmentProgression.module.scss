@@ -1,0 +1,43 @@
+@import "src/constants";
+
+@import "src/mixins";
+
+.container{
+  margin-top: 2rem;
+  @include flex-column-center;
+  gap:2rem;
+}
+
+.progressBar{
+  width: 50vw;
+}
+
+.gangButton{
+  width: 100%;
+}
+
+.gridWrapper{
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  place-items: center;
+}
+
+.progressReport{
+  @include flex-column;
+  align-self: center;
+  gap: 1rem;
+  margin: 1rem;
+  padding: 0.5rem;
+}
+
+.avslagsepostContainer{
+  @include flex-column;
+  align-self: center;
+  gap: 1rem;
+  margin: 1rem;
+  padding: 0.5rem;
+}
+
+.lineDivider{
+  width: 100%;
+}

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { UserFeedback } from '~/Components/UserFeedback/UserFeedback';
 
 // Local component config.
@@ -8,7 +8,7 @@ export default {
 } as ComponentMeta<typeof UserFeedback>;
 
 const Template: ComponentStory<typeof UserFeedback> = () => {
-  return <UserFeedback enabled={true} />;
+  return <UserFeedback />;
 };
 
 export const Primary = Template.bind({});

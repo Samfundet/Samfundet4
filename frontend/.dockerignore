@@ -6,3 +6,4 @@ node_modules
 .git
 Dockerfile
 .dockerignore
+.history

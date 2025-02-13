@@ -3,7 +3,7 @@ export const ROUTES_FRONTEND = {
   //    General/Public    //
   // ==================== //
   home: '/',
-  groups: '/groups/',
+  gangs: '/gangs/',
   health: '/health/',
   about: '/about/',
   venues: '/venues/',
@@ -14,11 +14,18 @@ export const ROUTES_FRONTEND = {
   information_page_list: '/information/',
   information_page_detail: '/information/:slugField/',
   saksdokumenter: '/saksdokumenter/',
+  membership: '/membership',
+  luka: '/luka',
+  contributors: '/contributors',
   // Recruitment:
   recruitment: '/recruitment/',
-  recruitment_application: '/recruitment/position/:positionID/',
-  recruitment_application_overview: '/recruitment/:recruitmentID/my-applications/',
+  recruitment_application: '/recruitment/:recruitmentId/position/:positionId/',
+  recruitment_application_overview: '/recruitment/:recruitmentId/my-applications/',
+  organization_recruitment: '/recruitment/:recruitmentId/',
   contact: '/contact',
+  // Purchase callback:
+  purchase_callback: '/purchase-callback/:eventId',
+
   // ==================== //
   //        Sulten        //
   // ==================== //
@@ -28,15 +35,27 @@ export const ROUTES_FRONTEND = {
   sulten_reservation: '/lyche/reservation/',
   sulten_about: '/lyche/about/',
   sulten_contact: 'lyche/contact/',
+
+  // ==================== //
+  //  User control panel  //
+  // ==================== //
+  user_change_password: '/control-panel/password/',
+
   // ==================== //
   //      Admin pages     //
   // ==================== //
   admin: '/control-panel/',
-  admin_impersonate: '/impersonate/',
+  // Users
+  admin_users: '/control-panel/users/',
+  // Roles
+  admin_roles: '/control-panel/roles/',
+  admin_roles_view: '/control-panel/roles/:roleId/',
+  admin_roles_edit: '/control-panel/roles/:roleId/edit/',
+  admin_roles_create: '/control-panel/roles/create/',
   // Gangs:
   admin_gangs: '/control-panel/gangs/',
   admin_gangs_create: '/control-panel/gangs/create/',
-  admin_gangs_edit: '/control-panel/gangs/edit/:id/',
+  admin_gangs_edit: '/control-panel/gangs/edit/:gangId/',
   // Events:
   admin_events: '/control-panel/events/',
   admin_events_edit: '/control-panel/events/edit/:id/',
@@ -60,23 +79,43 @@ export const ROUTES_FRONTEND = {
   admin_saksdokumenter_edit: '/control-panel/saksdokument/edit/:id/',
   // Recruitment:
   admin_recruitment: '/control-panel/recruitment/',
-  admin_recruitment_edit: '/control-panel/recruitment/edit/:id',
+  admin_recruitment_edit: '/control-panel/recruitment/edit/:recruitmentId',
   admin_recruitment_create: '/control-panel/recruitment/create/',
-  admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-admissions/',
+  admin_recruitment_users_three_interview_criteria:
+    '/control-panel/recruitment/:recruitmentId/users-without-three-interviews/',
+  admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-interview/',
+  admin_recruitment_open_to_other_positions: '/control-panel/recruitment/:recruitmentId/users-open-to-other-positions/',
+  admin_recruitment_overview: '/control-panel/recruitment/:recruitmentId/recruitment-overview/',
   admin_recruitment_gang_overview: '/control-panel/recruitment/:recruitmentId/gang-overview/',
+  admin_recruitment_gang_overview_rejection_email:
+    '/control-panel/recruitment/:recruitmentId/gang-overview/rejection-email/',
   admin_recruitment_gang_position_overview: '/control-panel/recruitment/:recruitmentId/gang/:gangId',
   admin_recruitment_gang_position_create: '/control-panel/recruitment/:recruitmentId/gang/:gangId/create/',
   admin_recruitment_gang_position_edit: '/control-panel/recruitment/:recruitmentId/gang/:gangId/edit/:positionId',
+  admin_recruitment_gang_separateposition_create: '/control-panel/recruitment/:recruitmentId/separateposition/create',
+  admin_recruitment_gang_separateposition_edit:
+    '/control-panel/recruitment/:recruitmentId/separateposition/edit/:separatePositionId',
+  admin_recruitment_recruiter_dashboard: '/control-panel/recruitment/:recruitmentId/recruiter/dashboard/',
+  admin_recruitment_room_overview: '/control-panel/recruitment/:recruitmentId/room-overview/',
+  admin_recruitment_room_create: '/control-panel/recruitment/:recruitmentId/room/create/',
+  admin_recruitment_room_edit: '/control-panel/recruitment/:recruitmentId/room/edit/:roomId/',
+
   admin_recruitment_gang_position_applicants_overview:
     '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId',
-  admin_recruitment_gang_position_applicants_interview_notes:
-    '/control-panel/recruitment/:recruitmentId/gang/:gangId/position/:positionId/interview-notes/:interviewId',
+  admin_recruitment_gang_all_applications: '/control-panel/recruitment/:recruitmentId/:gangId/all-applications/',
+  admin_recruitment_gang_users_without_interview:
+    '/control-panel/recruitment/:recruitmentId/:gangId/users-without-interviews/',
+  admin_recruitment_show_unprocessed_applicants: '/control-panel/recruitment/:recruitmentId/unprocessed-applicants/',
   admin_sulten_menu: '/control-panel/lyche/menu',
+  admin_sulten_menuitem_create: '/control-panel/lyche/menuitems/create',
+  admin_sulten_menuitem_edit: '/control-panel/lyche/menuitems/edit/:id',
   admin_sulten_reservations: '/control-panel/lyche/reservations',
+  admin_recruitment_applicant: '/control-panel/recruitment/view-applicant/:applicationID/',
   // ==================== //
   //      Development     //
   // ==================== //
   api_testing: '/api-testing/',
   components: '/components/',
   route_overview: '/route/overview/',
+  not_found: '/not_found',
 } as const;

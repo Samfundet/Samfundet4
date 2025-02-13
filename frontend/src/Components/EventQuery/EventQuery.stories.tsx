@@ -1,6 +1,6 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useState } from 'react';
-import { EventDto } from '~/dto';
+import type { EventDto } from '~/dto';
 import { EventQuery } from './EventQuery';
 
 // Local component config.
@@ -12,7 +12,7 @@ export default {
   },
 } as ComponentMeta<typeof EventQuery>;
 
-const Template: ComponentStory<typeof EventQuery> = function () {
+const Template: ComponentStory<typeof EventQuery> = () => {
   const [events, setEvents] = useState<EventDto[]>([]);
   return <EventQuery allEvents={events} setEvents={setEvents} />;
 };

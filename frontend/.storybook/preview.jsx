@@ -3,9 +3,9 @@ import '~/global.scss';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthContextProvider } from '~/AuthContext';
-import { GlobalContextProvider } from '~/GlobalContextProvider';
 import { THEME } from '~/constants';
+import { AuthContextProvider } from '~/context/AuthContext';
+import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { updateBodyThemeClass } from '~/utils';
 
 import '~/i18n/i18n'; // Neccessary import for translations.

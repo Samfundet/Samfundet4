@@ -1,7 +1,7 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { AuthContextProvider } from '~/AuthContext';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { RadioButton } from '~/Components';
-import { GlobalContextProvider } from '~/GlobalContextProvider';
+import { AuthContextProvider } from '~/context/AuthContext';
+import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { PulseEffect } from './PulseEffect';
 
 // Local component config.
@@ -10,15 +10,13 @@ export default {
   component: PulseEffect,
 } as ComponentMeta<typeof PulseEffect>;
 
-const Template: ComponentStory<typeof PulseEffect> = function (args) {
-  return (
-    <AuthContextProvider>
-      <GlobalContextProvider>
-        <PulseEffect {...args} />
-      </GlobalContextProvider>
-    </AuthContextProvider>
-  );
-};
+const Template: ComponentStory<typeof PulseEffect> = (args) => (
+  <AuthContextProvider>
+    <GlobalContextProvider>
+      <PulseEffect {...args} />
+    </GlobalContextProvider>
+  </AuthContextProvider>
+);
 
 export const ShortChild = Template.bind({});
 ShortChild.args = {

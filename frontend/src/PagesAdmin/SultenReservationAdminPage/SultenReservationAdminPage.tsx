@@ -1,23 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '~/Components';
-import { SultenReservationDayDto } from '~/dto';
+import type { SultenReservationDayDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { TABLES_TEST_DATA } from './utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { ReservationTable } from './components/ReservationTable';
+import { TABLES_TEST_DATA } from './utils';
 
 export function SultenReservationAdminPage() {
   const [dayInfo, setDayInfo] = useState<SultenReservationDayDto>({} as SultenReservationDayDto);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  useTitle(t(KEY.recruitment_administrate_reservations));
 
   // Stuff to do on first render.
   // TODO add permissions on render
 
   const today = new Date();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setDayInfo({
       ...dayInfo,
@@ -27,7 +30,6 @@ export function SultenReservationAdminPage() {
       tables: TABLES_TEST_DATA,
     });
     setShowSpinner(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function dateIterator(days: number) {

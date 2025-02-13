@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Video } from './Video';
 
 // Local component config.
@@ -11,9 +11,7 @@ export default {
   },
 } as ComponentMeta<typeof Video>;
 
-const Template: ComponentStory<typeof Video> = function (args) {
-  return <Video {...args} />;
-};
+const Template: ComponentStory<typeof Video> = (args) => <Video {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = { embedId: '88kgbMcDIQ4' };

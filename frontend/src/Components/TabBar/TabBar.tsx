@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import styles from './TabBar.module.scss';
 
 export type Tab<T = void> = {
@@ -13,6 +13,7 @@ export type TabBarProps<T = void> = {
   selected?: Tab<T>;
   vertical?: boolean;
   spaceBetween?: boolean;
+  spaceAround?: boolean;
   disabled?: boolean;
   compact?: boolean;
   onSetTab?(tab: Tab<T>): void;
@@ -23,6 +24,7 @@ export function TabBar<T = void>({
   selected,
   vertical = false,
   spaceBetween = false,
+  spaceAround = false,
   compact = false,
   onSetTab,
   disabled = false,
@@ -35,12 +37,14 @@ export function TabBar<T = void>({
         vertical && styles.vertical,
         spaceBetween && styles.space_between,
         disabled && styles.disabled,
+        spaceAround && styles.space_around,
       )}
     >
       {tabs.map((tab: Tab<T>) => {
         const isSelected = selected !== undefined && tab.key === selected.key;
         return (
           <button
+            type="button"
             className={classNames(styles.tab_button, isSelected && styles.selected)}
             disabled={disabled}
             onClick={(e) => {

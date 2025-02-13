@@ -1,6 +1,6 @@
-[👈 back](/README.md)
+[**&larr; Back: Introduction to Samfundet4**](../introduction.md)
 
-# Technologies used on Samfundet4
+# Technologies used in Samfundet4
 
 This text aims to both sum up the main technologies used to develop on Samfundet4 and to get a person with minimal webdev experience up to speed on the most important concepts. There is a lot this text does not cover, which might be found in other docs linked to in the [README](/README.md).
 
@@ -78,7 +78,7 @@ We use a tool called [Docker](https://www.docker.com/), which allows for running
 
 If you are new to web development you might not have experience with dependencies. Dependencies are packages or modules that are required for a web development project to run properly and package managers are software that manage these packages and dependencies.
 
-For our Python-based development, we primarily use pyenv and pipenv. Pyenv allows us to manage multiple versions of Python on the same system, while pipenv helps us create and manage the backend virtual environment for our project.
+For our Python-based development, we primarily use pyenv and poetry. Pyenv allows us to manage multiple versions of Python on the same system, while poetry helps us create and manage the backend virtual environment for our project.
 
 For frontend development, we use Node.js as a JavaScript runtime, and we rely on tools like npm and Yarn for managing dependencies. To install Node.js in WSL🪟🐧 follow the [9-step Windows Learn guide](https://learn.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-wsl#install-wsl-2) and make sure you also follow prompts given by the terminal as you install Node.js this way.
 
@@ -93,16 +93,14 @@ To make the code we write on the project high quality, have a standardised forma
 #### Frontend 🎨🧭
 
 For frontend we use the formatter Prettier, which formats the code in a standardised way.
-Linters are software that analyses code to detect errors, bugs or stylistic inconsistency. Hence we use linter as tools to write better, more high quality code. In frontend we use ESlint for React and stylelint for CSS/SASS.
+Linters are software that analyses code to detect errors, bugs or stylistic inconsistency. Hence we use linter as tools to write better, more high quality code. In frontend we use Biome for React and stylelint for CSS/SASS.
 
 **This next paragraph is only applicable if you use VScode:**
 To use our code format and linting rules you have to configure a JSON file locally, and of course have the tools installed in your IDE. After installing the project and getting it to run, you need to copy [this JSON file](/.vscode/settings.emil.json), paste it into the same folder, and rename it to 'settings.json'.
 
-When installing the project for the first time you will have the option to install Prettier and ESlint in VSCode. Stylelint is easily found in VSCode extensions.
+When installing the project for the first time you will have the option to install Biome in VSCode. Stylelint is easily found in VSCode extensions.
 
 When you push code to the main branch it will be checked automatically (by [GitHub Actions](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions)) to chech if it follows the formatting and linting rules we use. It is also useful to know that these checks can be run locally by commands in the terminal, which are found in [Useful commands](/docs/useful-commands.md), but it it might be more convenient to run them inside the [frontend docker container in a Bash terminal.](/docs/docker-project-specific-commands.md)
-
-If you want you can also read the [prettier](https://prettier.io/), [eslint](https://eslint.org/) or [stylelint](https://stylelint.io/) documentation, but this might not be necessary. These tools will give you indication of why your code breaks the rules, and you can see how your code should be written by hovering over the indications.
 
 #### Backend ⚙️
 

@@ -1,9 +1,15 @@
+import { AxiosError } from 'axios';
+import { format } from 'date-fns';
 import i18next from 'i18next';
-import { CSSProperties } from 'react';
-import { CURSOR_TRAIL_CLASS, THEME_KEY, ThemeValue } from '~/constants';
-import { UserDto } from '~/dto';
-import { KEY, KeyValues } from './i18n/constants';
-import { Day, EventTicketType, EventTicketTypeValue } from './types';
+import type { CSSProperties } from 'react';
+import type { UseFormReturn } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import type { z } from 'zod';
+import { CURSOR_TRAIL_CLASS, THEME_KEY, type ThemeValue } from '~/constants';
+import type { UserDto } from '~/dto';
+import { KEY } from './i18n/constants';
+import type { TranslationKeys } from './i18n/types';
+import { type Day, EventTicketType, type EventTicketTypeValue } from './types';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -45,6 +51,23 @@ export function hasPerm({ user, permission, obj }: hasPerm): boolean {
   return false;
 }
 
+// Checks if user has ALL provided permissions
+export function hasPermissions(
+  user: UserDto | null | undefined,
+  permissions: string[] | undefined,
+  obj?: string | number,
+): boolean {
+  if (!user || !permissions) return false;
+
+  for (const permission of permissions) {
+    if (!hasPerm({ user, permission, obj })) {
+      return false;
+    }
+  }
+  // Because of how JS treats empty lists as truthy, if permissions is an empty list, we'll return true here
+  return true;
+}
+
 // ------------------------------
 
 export function getGlobalBackgroundColor(): string {
@@ -78,7 +101,7 @@ export function dbT(
 ): string | undefined {
   if (model === undefined) return undefined;
 
-  const fieldName = field + '_' + language;
+  const fieldName = `${field}_${language}`;
   const hasFieldName = Object.prototype.hasOwnProperty.call(model, fieldName);
   if (hasFieldName) {
     const value = model[fieldName];
@@ -107,6 +130,39 @@ export function dbT(
   return undefined;
 }
 
+/**
+ * Checks if a field is an object or a number
+ * Returns a number if the field is an object, or a specified object field
+ * Type of field if it is an object must be specified
+ * @param field The field to be checked
+ * @param objectFieldName The potential fieldname that the object has
+ * @returns value of object field or number
+ */
+export function getObjectFieldOrNumber<T>(
+  field: Record<string, unknown> | number | undefined,
+  objectFieldName: string,
+): number | undefined | T {
+  if (field === undefined) return undefined;
+  if (typeof field === 'number') return field;
+  const hasFieldName = Object.prototype.hasOwnProperty.call(field, objectFieldName);
+  if (hasFieldName) {
+    return field[objectFieldName] as T;
+  }
+  return undefined;
+}
+
+export function getFullName(u: UserDto): string {
+  return `${u.first_name} ${u.last_name}`.trim();
+}
+
+export function getFullDisplayName(u: UserDto): string {
+  const fullName = getFullName(u);
+  if (!fullName) {
+    return u.username;
+  }
+  return `${fullName} (${u.username})`;
+}
+
 /** Helper to determine if a KeyValue is truthy. */
 export function isTruthy(value = ''): boolean {
   const falsy = ['', 'no', 'zero', '0'];
@@ -116,7 +172,7 @@ export function isTruthy(value = ''): boolean {
 /**
  * Gets the translation key for a given day
  */
-export function getDayKey(day: Day): KeyValues {
+export function getDayKey(day: Day): TranslationKeys {
   switch (day) {
     case 'monday':
       return KEY.common_day_monday;
@@ -135,10 +191,20 @@ export function getDayKey(day: Day): KeyValues {
   }
 }
 
+export const SHORT_DAY_I18N_KEYS = [
+  KEY.common_day_monday_short,
+  KEY.common_day_tuesday_short,
+  KEY.common_day_wednesday_short,
+  KEY.common_day_thursday_short,
+  KEY.common_day_friday_short,
+  KEY.common_day_saturday_short,
+  KEY.common_day_sunday_short,
+];
+
 /**
  * Gets the translation key for a given price group
  */
-export function getTicketTypeKey(ticketType: EventTicketTypeValue): KeyValues {
+export function getTicketTypeKey(ticketType: EventTicketTypeValue): TranslationKeys {
   switch (ticketType) {
     case EventTicketType.FREE:
       return KEY.common_ticket_type_free;
@@ -157,19 +223,23 @@ export function getTicketTypeKey(ticketType: EventTicketTypeValue): KeyValues {
  * Converts a UTC timestring from django to
  * a local timestring suitable for html input elements
  * @param time timestring in django utc format, eg '2028-03-31T02:33:31.835Z'
+ * @param includeSeconds boolean flag to include seconds in the output
  * @returns timestamp in local format, eg. '2023-04-05T20:15'
  */
-export function utcTimestampToLocal(time: string | undefined): string {
-  return new Date(time ?? '')
-    .toLocaleString('sv-SE', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    })
-    .replace(' ', 'T');
+export function utcTimestampToLocal(time: string | undefined, includeSeconds = true): string {
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  };
+
+  if (includeSeconds) {
+    options.second = '2-digit';
+  }
+
+  return new Date(time ?? '').toLocaleString('sv-SE', options).replace(' ', 'T');
 }
 
 /**
@@ -180,11 +250,19 @@ export function utcTimestampToLocal(time: string | undefined): string {
  */
 export function niceDateTime(time: string | undefined): string | undefined {
   const date = new Date(time ?? '');
-  if (!isNaN(date.getTime())) {
+  if (!Number.isNaN(date.getTime())) {
     const dateString = date.toUTCString();
     return dateString.substring(0, dateString.length - 3);
   }
   return time;
+}
+
+export function formatDateYMD(d: Date): string {
+  return format(d, 'yyyy.LL.dd');
+}
+
+export function formatDateYMDWithTime(d: Date): string {
+  return format(d, 'yyyy.LL.dd HH:mm');
 }
 
 /**
@@ -253,8 +331,8 @@ export function createDot(e: MouseEvent): HTMLDivElement {
   //
   const dot = document.createElement('div');
   dot.classList.add(CURSOR_TRAIL_CLASS); // global.scss
-  dot.style.left = e.clientX + window.pageXOffset + 'px';
-  dot.style.top = e.clientY + window.pageYOffset + 'px';
+  dot.style.left = `${e.clientX + window.pageXOffset}px`;
+  dot.style.top = `${e.clientY + window.pageYOffset}px`;
   return dot;
 }
 
@@ -282,5 +360,81 @@ export function getRandomEntryFromList(entries: unknown[]): unknown {
  */
 export function getTimeObject(time: string): number {
   const timeSplit = time.split(':');
-  return new Date().setHours(parseInt(timeSplit[0]), parseInt(timeSplit[1]), 0, 0);
+  return new Date().setHours(Number.parseInt(timeSplit[0]), Number.parseInt(timeSplit[1]), 0, 0);
+}
+
+export const toPercentage = (floatNum: number | undefined): string => {
+  if (floatNum) {
+    const percentage = floatNum * 100;
+    return `${percentage.toString().slice(0, 4)}%`;
+  }
+  return 'N/A';
+};
+
+/*
+export function immutableSet(list: unknown[], oldValue: unknown, newValue: unknown) {
+  return list.map((element: unknown) => {
+    if (element?.id === oldValue?.id) {
+      return newValue;
+    } else {
+      return element;
+    }
+  });
+}
+*/
+
+export function IsNumber(value: unknown): value is number {
+  return typeof value === 'number';
+}
+
+/**
+ * Handles serializer errors from backend by attempting to set any errors for
+ * the given form. If none are found, display generic error toast.
+ *
+ * You can also include Norwegian translations for the English errors returned
+ * from Django by using the `nbTranslationMap` parameter. It is a key-value
+ * map, where only part of the key has to match (case-sensitive) with the
+ * original message.
+ *
+ * Example:
+ * ```js
+ * // Original message: "This password is too common."
+ *
+ * handleServerFormErrors(error, form, { 'too common': 'Dette passordet er for vanlig' })
+ * ```
+ */
+export function handleServerFormErrors<T extends z.ZodType>(
+  error: unknown,
+  form: UseFormReturn<z.infer<T>>,
+  nbTranslationMap?: Record<string, string>,
+) {
+  if (!(error instanceof AxiosError)) {
+    return;
+  }
+
+  let setFormErrors = false;
+  const serverErrors = (error.response?.data as Record<string, string[]>) || null;
+  if (serverErrors) {
+    const formValues = form.getValues();
+    for (const [field, messages] of Object.entries(serverErrors)) {
+      if (!(field in formValues)) {
+        continue;
+      }
+      let message = messages[0];
+      if (nbTranslationMap) {
+        for (const [from, to] of Object.entries(nbTranslationMap)) {
+          if (message.includes(from)) {
+            message = dbT({ msg_en: message, msg_nb: to }, 'msg') || message;
+            break;
+          }
+        }
+      }
+      form.setError(field as z.infer<T>, { message });
+      setFormErrors = true;
+    }
+  }
+
+  if (!setFormErrors) {
+    toast.error(i18next.t(KEY.error_generic_description));
+  }
 }

@@ -1,9 +1,12 @@
-import { Button, Countdown, InputField, ProgressBar, RadioButton, ToolTip } from '~/Components';
+import { useState } from 'react';
+import { Button, Countdown, H1, H2, H3, H4, H5, H6, InputField, ProgressBar, RadioButton, ToolTip } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
 import { MultiSelect } from '~/Components/MultiSelect';
+import { ShrimpFishing } from '~/Components/ShrimpFishing/ShrimpFishing';
 import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOverlay';
+import { ExampleForm } from '~/Pages/ComponentPage/ExampleForm';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
 import styles from './ComponentPage.module.scss';
@@ -13,48 +16,26 @@ import styles from './ComponentPage.module.scss';
  * Useful when styling global themes.
  */
 export function ComponentPage() {
+  const [showShrimpFishing, setShowShrimpFishing] = useState(false);
+
   return (
     <div className={styles.wrapper}>
-      <MultiSelect
-        options={[
-          {
-            label: '1',
-            value: 1,
-          },
-          {
-            label: '2',
-            value: 2,
-          },
-          {
-            label: '3',
-            value: 3,
-          },
-          {
-            label: '4',
-            value: 4,
-          },
-          {
-            label: '5',
-            value: 5,
-          },
-          {
-            label: '6',
-            value: 6,
-          },
-          {
-            label: '7',
-            value: 7,
-          },
-          {
-            label: '8',
-            value: 8,
-          },
-          {
-            label: '9',
-            value: 9,
-          },
-        ]}
-      />
+      <div>
+        <H1>Example form</H1>
+
+        <ExampleForm />
+      </div>
+
+      <H1>Heading 1</H1>
+      <H2>Heading 2</H2>
+      <H3>Heading 3</H3>
+      <H4>Heading 4</H4>
+      <H5>Heading 5</H5>
+      <H6>Heading 6</H6>
+
+      <br />
+
+      <MultiSelect options={Array.from({ length: 20 }).map((_, i) => ({ label: String(i), value: i }))} />
       <br />
       <br />
       <br />
@@ -72,11 +53,13 @@ export function ComponentPage() {
       </div>
       <div>
         <h2>Checkboxes:</h2>
-        <Checkbox label="Unchecked" />
+        <Checkbox />
         <br />
-        <Checkbox label="Checked" />
+        <Checkbox checked readOnly />
         <br />
-        <Checkbox label="Disabled" disabled />
+        <Checkbox disabled />
+        <br />
+        <Checkbox checked disabled />
       </div>
       <div>
         <h2>Radiobuttons:</h2>
@@ -126,10 +109,14 @@ export function ComponentPage() {
         <SnowflakesOverlay />
         <h2>
           <Countdown targetDate={new Date(new Date().getTime() + HOUR_MILLIS)}>
-            <img src={norwegianFlag}></img>
+            <img src={norwegianFlag} alt="Flag" />
           </Countdown>
         </h2>
       </div>
+      <Button type="button" onClick={() => setShowShrimpFishing(true)}>
+        Start rekefisking?
+      </Button>
+      {showShrimpFishing && <ShrimpFishing />}
     </div>
   );
 }

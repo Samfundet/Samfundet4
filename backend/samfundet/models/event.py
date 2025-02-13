@@ -161,10 +161,16 @@ class Event(CustomBaseModel):
     description_long_en = models.TextField(blank=False, null=False)
     description_short_nb = models.TextField(blank=False, null=False)
     description_short_en = models.TextField(blank=False, null=False)
-    location = models.CharField(max_length=140, blank=False, null=False)
     image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
     host = models.CharField(max_length=140, blank=False, null=False)
     editors = models.ManyToManyField(Gang, blank=True)
+
+    # ======================== #
+    #       Venue/Entrance     #
+    # ======================== #
+    location = models.CharField(max_length=140, blank=False, null=False)  # AKA venue
+    entrance_nb = models.CharField(max_length=140, blank=True, null=True)
+    entrance_en = models.CharField(max_length=140, blank=True, null=True)
 
     age_restriction = models.CharField(max_length=30, choices=EventAgeRestriction.choices, blank=False, null=False, default=None)
     category = models.CharField(max_length=30, choices=EventCategory.choices, blank=False, null=False, default=EventCategory.OTHER)
@@ -175,6 +181,7 @@ class Event(CustomBaseModel):
     start_dt = models.DateTimeField(blank=False, null=False)
     duration = models.PositiveIntegerField(blank=False, null=False)
     publish_dt = models.DateTimeField(blank=False, null=False)
+    doors_time = models.TimeField(blank=True, null=True)
 
     # ======================== #
     #      Ticket Related      #
@@ -302,3 +309,61 @@ class Event(CustomBaseModel):
             self.get_or_create_registration().registered_users.add(user)
             return True
         return False
+
+
+class PurchaseFeedbackModel(models.Model):
+    """
+    feedback after purchasing an event ticket.
+
+    Stores both the form itself and the feedback, by having
+    PurchaseFeedbackAlternative and PurchaseFeedbackQuestion
+    connect to it.
+
+    Events doesnt necesarily have the same feedbackform.
+    """
+
+    title = models.CharField(max_length=255, blank=True)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    event = models.ForeignKey(Event, on_delete=models.PROTECT)
+
+    class Meta:
+        verbose_name = 'PurchaseFeedback'
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class PurchaseFeedbackAlternative(models.Model):
+    """
+    Stores whether a checkbox alternative was selected or not. Is connected
+    to a single feedbackform.
+    """
+
+    alternative = models.CharField(max_length=255, blank=True)
+    # TODO: Change into BoolField When SamfForm is updated.
+    selected = models.CharField(max_length=255)
+
+    form = models.ForeignKey(PurchaseFeedbackModel, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['form', 'alternative']
+
+    def __str__(self) -> str:
+        return f'{self.alternative}: {self.selected}'
+
+
+class PurchaseFeedbackQuestion(CustomBaseModel):
+    """
+    Stores a question and response. Is connected to a single
+    feedbackform.
+    """
+
+    question = models.CharField(max_length=255)
+    answer = models.CharField(max_length=255, blank=True)
+    form = models.ForeignKey(PurchaseFeedbackModel, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['form', 'question']
+
+    def __str__(self) -> str:
+        return f'{self.question}: {self.answer}'

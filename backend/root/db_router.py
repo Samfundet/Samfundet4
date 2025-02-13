@@ -2,6 +2,7 @@
 Handles routing for databases (which database should be used for which model).
 All models use the default database except billig models.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -40,6 +41,4 @@ class SamfundetDatabaseRouter:
         model_name: str | None = None,
         **hints: dict[str, Any],
     ) -> bool:
-        if model_name in [m._meta.model_name for m in BILLIG_MODELS]:
-            return False
-        return True
+        return model_name not in [m._meta.model_name for m in BILLIG_MODELS]

@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { Button, Carousel } from '~/Components';
+import { Button, Carousel, Link } from '~/Components';
 import { Page } from '~/Components/Page';
 import { runderode, splash } from '~/assets';
 import { TextItem } from '~/constants';
-import { useTextItem } from '~/hooks';
+import { useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { backgroundImageFromUrl } from '~/utils';
@@ -13,6 +13,7 @@ import { VENUES } from './data';
 
 export function AboutPage() {
   const { t } = useTranslation();
+  useTitle(t(KEY.command_menu_shortcut_about_samfundet), '');
 
   return (
     <Page>
@@ -21,9 +22,11 @@ export function AboutPage() {
         <div className={styles.textBox}>
           <h2 className={styles.header}>{t(KEY.common_about_samfundet)}</h2>
           <p className={styles.text}>{useTextItem(TextItem.about_samfundet)}</p>
-          <Button theme="samf" className={styles.button}>
-            {t(KEY.common_membership).toUpperCase()}
-          </Button>
+          <Link url={ROUTES.frontend.membership}>
+            <Button theme="samf" className={styles.button}>
+              {t(KEY.common_membership).toUpperCase()}
+            </Button>
+          </Link>
           <Button theme="success" className={styles.button}>
             FAQ
           </Button>
@@ -51,10 +54,10 @@ export function AboutPage() {
       <h2 className={styles.header2}>{t(KEY.common_venues)}</h2>
 
       <Carousel spacing={1.5} header>
-        {VENUES.images.map((image, idx) => {
+        {VENUES.images.map((image) => {
           return (
-            <div key={idx}>
-              <div className={styles.venue_bubble} style={backgroundImageFromUrl(image.src)}></div>
+            <div key={image.name}>
+              <div className={styles.venue_bubble} style={backgroundImageFromUrl(image.src)} />
               <div className={styles.venue_name}>{image.name}</div>
             </div>
           );
@@ -76,8 +79,8 @@ export function AboutPage() {
             <h2 className={styles.header}>{t(KEY.common_volunteering)}</h2>
             <p className={styles.text}>{useTextItem(TextItem.volunteering)}</p>
             <div className={styles.buttonTable}>
-              <Button className={styles.tableButton} theme="basic" link={ROUTES.frontend.groups}>
-                {t(KEY.common_the_groups_at_samfundet).toUpperCase()}
+              <Button className={styles.tableButton} theme="basic" link={ROUTES.frontend.gangs}>
+                {t(KEY.common_the_gangs_at_samfundet).toUpperCase()}
               </Button>
               <Button className={styles.tableButton} theme="basic">
                 {t(KEY.common_volunteer).toUpperCase()}

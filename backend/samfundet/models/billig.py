@@ -85,8 +85,8 @@ class BilligEvent(models.Model):
 
     @property
     def is_almost_sold_out(self) -> bool:
-        total_tickets = sum([ticket.num for ticket in self.ticket_groups.all()])
-        total_sold = sum([ticket.num_sold for ticket in self.ticket_groups.all()])
+        total_tickets = sum(ticket.num for ticket in self.ticket_groups.all())
+        total_sold = sum(ticket.num_sold for ticket in self.ticket_groups.all())
         return total_sold / total_tickets >= LIMIT_FOR_ALMOST_SOLD_OUT
 
     @staticmethod

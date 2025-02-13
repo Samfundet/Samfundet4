@@ -101,22 +101,15 @@ label {
 // THEME.DARK
 [#{$theme-key}='#{$theme-dark}'] {
   color: $theme-dark-color;
-  /* stylelint-disable-next-line function-no-unknown */
-  background: linear-gradient(180deg, darken($red-samf, 21%) 0%, darken($red-samf, 35%) 100%);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-
-  form {
-    background-color: $form-bg-dark;
-    border: 1px solid $form-border-dark;
-  }
+  background: $theme-dark-bg;
 
   label {
     color: $white;
   }
 
   input,
-  textarea {
+  textarea,
+  select {
     background-color: $theme-dark-input-bg;
     color: inherit;
     &:focus {

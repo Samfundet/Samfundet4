@@ -1,5 +1,6 @@
-import { Dispatch, ReactNode, SetStateAction } from 'react';
-import { KV } from '~/constants';
+import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type { themeToStyleMap } from '~/Components/Button/utils';
+import type { KV } from '~/constants';
 /** Module for global generic types. */
 
 /** Type for home page element. */
@@ -28,14 +29,19 @@ export const COLORS = {
   blue_medium: '#88b3e0',
   blue_deep: '#1a3b80',
   blue_deeper: '#062356',
+  blue_uka: '#150b59',
+  blue_isfit: '#0099cc',
   turquoise_light: '#e2f8f5',
   turquoise_medium: '#9fe9dc',
   turquoise: '#5accb9',
   turquoise_deep: '#288474',
   white: '#ffffff',
   black: '#000000',
+  black_1: '#161616',
+  black_2: '#222222',
   grey_5: '#f4f4f4',
   grey_4: '#eeeeee',
+  grey_35: '#cccccc',
   grey_3: '#999999',
   grey_2: '#777777',
   grey_1: '#555555',
@@ -45,9 +51,12 @@ export const COLORS = {
   green_light: '#b7eb8f',
   orange_ligher: '#fffbe6',
   orange_light: '#ffe99e',
+  bisque_uka: '#ffe4c4',
   red_lighter: '#fff2f0',
   red_light: '#ffcfca',
   red: '#dc1010',
+  salmon: '#fa8072',
+  salmon_light: '#fab4ac',
   sulten_orange: '#fbb042',
 
   // Transparent colors
@@ -119,3 +128,62 @@ export const PAID_TICKET_TYPES: EventTicketTypeValue[] = [
   EventTicketType.REGISTRATION,
   EventTicketType.CUSTOM,
 ];
+
+export type CalendarMarker = {
+  date: Date;
+  className?: string;
+};
+
+/*Names must be equal to what is found in the database*/
+export const OrgNameType = {
+  SAMFUNDET_NAME: 'Samfundet',
+  ISFIT_NAME: 'ISFiT',
+  UKA_NAME: 'UKA',
+  FALLBACK: 'External organization',
+} as const;
+
+export type OrgNameTypeValue = (typeof OrgNameType)[keyof typeof OrgNameType];
+
+export type OrganizationTheme = {
+  organizationName: OrgNameTypeValue;
+  pagePrimaryColor: string;
+  pageSecondaryColor: string;
+  pageTertiaryColor?: string;
+  buttonTheme: keyof typeof themeToStyleMap;
+};
+
+// Recruitment mappings
+
+// Recruitment Status Choices Enum
+export const RecruitmentStatusChoices = {
+  NOT_SET: 'Not Set',
+  CALLED_AND_ACCEPTED: 'Called and Accepted',
+  CALLED_AND_REJECTED: 'Called and Rejected',
+  REJECTION: 'Rejection',
+  AUTOMATIC_REJECTION: 'Automatic Rejection',
+} as const;
+
+// Recruitment Status Choices Mapping
+export const RecruitmentStatusChoicesMapping: { [key: number]: string } = {
+  0: RecruitmentStatusChoices.NOT_SET,
+  1: RecruitmentStatusChoices.CALLED_AND_ACCEPTED,
+  2: RecruitmentStatusChoices.CALLED_AND_REJECTED,
+  3: RecruitmentStatusChoices.REJECTION,
+  4: RecruitmentStatusChoices.AUTOMATIC_REJECTION,
+} as const;
+
+// Recruitment Priority Choices Enum
+export const RecruitmentPriorityChoices = {
+  NOT_SET: 'Not Set',
+  RESERVE: 'Reserve',
+  WANTED: 'Wanted',
+  NOT_WANTED: 'Not Wanted',
+} as const;
+
+// Recruitment Priority Choices Mapping
+export const RecruitmentPriorityChoicesMapping: { [key: number]: string } = {
+  0: RecruitmentPriorityChoices.NOT_SET,
+  1: RecruitmentPriorityChoices.RESERVE,
+  2: RecruitmentPriorityChoices.WANTED,
+  3: RecruitmentPriorityChoices.NOT_WANTED,
+};

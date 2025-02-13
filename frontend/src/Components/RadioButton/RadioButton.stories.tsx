@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { RadioButton } from './RadioButton';
 
 // Local component config.
@@ -10,9 +10,7 @@ export default {
   },
 } as ComponentMeta<typeof RadioButton>;
 
-const Template: ComponentStory<typeof RadioButton> = function (args) {
-  return <RadioButton {...args}>Option</RadioButton>;
-};
+const Template: ComponentStory<typeof RadioButton> = (args) => <RadioButton {...args}>Option</RadioButton>;
 
 export const Basic = Template.bind({});
 Basic.args = {};

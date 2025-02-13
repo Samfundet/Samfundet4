@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getInformationPages } from '~/api';
 import { Link } from '~/Components';
-import { InformationPageDto } from '~/dto';
-import { reverse } from '~/named-urls';
 import { getTranslatedTitle } from '~/Pages/InformationListPage/utils';
+import { getInformationPages } from '~/api';
+import type { InformationPageDto } from '~/dto';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 
 import { toast } from 'react-toastify';
@@ -20,6 +20,7 @@ export function InformationListPage() {
   const { i18n, t } = useTranslation();
 
   // Stuff to do on first render.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     getInformationPages()
       .then((data) => setPages(data))
@@ -27,15 +28,14 @@ export function InformationListPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className={styles.wrapper}>
-      {pages.map((page, i) => {
+      {pages.map((page) => {
         return (
           <Link
-            key={i}
+            key={page.slug_field}
             url={reverse({
               pattern: ROUTES.frontend.information_page_detail,
               urlParams: { slugField: page.slug_field },

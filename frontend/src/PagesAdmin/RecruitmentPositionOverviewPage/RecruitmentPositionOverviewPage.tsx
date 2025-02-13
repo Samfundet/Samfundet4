@@ -1,149 +1,147 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-import { Button, Dropdown, InputField, Link } from '~/Components';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
-import { Table } from '~/Components/Table';
-import { getRecruitmentAdmissionsForGang, putRecruitmentAdmissionForGang } from '~/api';
-import { RecruitmentAdmissionDto } from '~/dto';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Button, RecruitmentApplicantsStatus } from '~/Components';
+import { Text } from '~/Components/Text/Text';
+import { getRecruitmentApplicationsForGang, updateRecruitmentApplicationStateForPosition } from '~/api';
+import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
+import { useTitle } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { utcTimestampToLocal } from '~/utils';
+import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-
-// TODO: Fetch from backend
-const priorityOptions: DropDownOption<number>[] = [
-  { label: 'Not Set', value: 0 },
-  { label: 'Not Wanted', value: 1 },
-  { label: 'Wanted', value: 2 },
-  { label: 'Reserve', value: 3 },
-];
-
-const statusOptions: DropDownOption<number>[] = [
-  { label: 'Nothing', value: 0 },
-  { label: 'Called and accepted', value: 1 },
-  { label: 'Called and rejected', value: 2 },
-  { label: 'Automatic rejection', value: 3 },
-];
-
-function immutableSet(
-  list: RecruitmentAdmissionDto[],
-  oldValue: RecruitmentAdmissionDto,
-  newValue: RecruitmentAdmissionDto,
-) {
-  return list.map((element: RecruitmentAdmissionDto) => {
-    if (element.id === oldValue.id) {
-      return newValue;
-    } else {
-      return element;
-    }
-  });
-}
+import styles from './RecruitmentPositionOverviewPage.module.scss';
+import { ProcessedApplicants } from './components';
 
 export function RecruitmentPositionOverviewPage() {
-  const recruitmentId = useParams().recruitmentId;
-  const gangId = useParams().gangId;
-  const positionId = useParams().positionId;
-  const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentAdmissionDto[]>([]);
+  const navigate = useNavigate();
+  const { recruitmentId, gangId, positionId } = useParams();
+  const [recruitmentApplicants, setRecruitmentApplicants] = useState<RecruitmentApplicationDto[]>([]);
+  const [withdrawnApplicants, setWithdrawnApplicants] = useState<RecruitmentApplicationDto[]>([]);
+  const [rejectedApplicants, setRejectedApplicants] = useState<RecruitmentApplicationDto[]>([]);
+  const [acceptedApplicants, setAcceptedApplicants] = useState<RecruitmentApplicationDto[]>([]);
+  const [hardtogetApplicants, setHardtogetApplicants] = useState<RecruitmentApplicationDto[]>([]); //Applicants that have been offered a position, but did not accept it
+
+  const [recruiterStatuses, setRecruiterStatuses] = useState<[][]>([]);
+
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
-  useEffect(() => {
-    recruitmentId &&
-      gangId &&
-      getRecruitmentAdmissionsForGang(gangId, recruitmentId).then((data) => {
+  const load = useCallback(() => {
+    if (!recruitmentId || !gangId || !positionId) {
+      return;
+    }
+    getRecruitmentApplicationsForGang(gangId, recruitmentId)
+      .then((data) => {
         setRecruitmentApplicants(
           data.data.filter(
-            (recruitmentApplicant) => recruitmentApplicant.recruitment_position?.toString() == positionId,
+            (recruitmentApplicant) =>
+              !recruitmentApplicant.withdrawn &&
+              recruitmentApplicant.recruiter_status === 0 &&
+              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+          ),
+        );
+        setWithdrawnApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              recruitmentApplicant.withdrawn &&
+              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+          ),
+        );
+        setHardtogetApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              !recruitmentApplicant.withdrawn &&
+              recruitmentApplicant.recruiter_status === 2 &&
+              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+          ),
+        );
+        setRejectedApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              !recruitmentApplicant.withdrawn &&
+              recruitmentApplicant.recruiter_status === 3 &&
+              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+          ),
+        );
+        setAcceptedApplicants(
+          data.data.filter(
+            (recruitmentApplicant) =>
+              !recruitmentApplicant.withdrawn &&
+              recruitmentApplicant.recruiter_status === 1 &&
+              recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
           ),
         );
         setShowSpinner(false);
+      })
+      .catch((data) => {
+        if (data.status === STATUS.HTTP_404_NOT_FOUND) {
+          navigate(ROUTES.frontend.not_found, { replace: true });
+        }
+        toast.error(t(KEY.common_something_went_wrong));
       });
-  }, [recruitmentId, gangId, positionId]);
+  }, [recruitmentId, gangId, positionId, navigate, t]);
 
-  const tableColumns = [
-    { content: t(KEY.recruitment_applicant), sortable: true },
-    { content: t(KEY.recruitment_priority), sortable: true },
-    { content: t(KEY.recruitment_interview_time), sortable: true },
-    { content: t(KEY.recruitment_interview_location), sortable: true },
-    { content: t(KEY.recruitment_recruiter_priority), sortable: true },
-    { content: t(KEY.recruitment_recruiter_status), sortable: true },
-  ];
-  const data = recruitmentApplicants.map(function (admission) {
-    return [
-      {
-        content: (
-          <Link
-            key={admission.user.id}
-            target={'backend'}
-            url={reverse({
-              pattern: ROUTES.backend.admin__samfundet_recruitmentadmission_change,
-              urlParams: {
-                objectId: admission.id,
-              },
-            })}
-          >
-            {`${admission.user.first_name} ${admission.user.last_name}`}
-          </Link>
-        ),
-      },
-      { content: admission.applicant_priority },
-      {
-        content: (
-          <InputField
-            value={admission.interview.interview_time ? utcTimestampToLocal(admission.interview.interview_time) : ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
-            onChange={(value: string) => {
-              const updatedInterview = { ...admission.interview, interview_time: value.toString() };
-              const newAdmission = { ...admission, interview: updatedInterview };
-              setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
-            }}
-            type="datetime-local"
-          />
-        ),
-      },
-      {
-        content: (
-          <InputField
-            value={admission.interview.interview_location ?? ''}
-            onBlur={() => putRecruitmentAdmissionForGang(admission.id.toString(), admission)}
-            onChange={(value: string) => {
-              const updatedInterview = { ...admission.interview, interview_location: value.toString() };
-              const newAdmission = { ...admission, interview: updatedInterview };
-              setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
-            }}
-          />
-        ),
-      },
-      {
-        content: (
-          <Dropdown
-            initialValue={admission.recruiter_priority}
-            options={priorityOptions}
-            onChange={(value) => {
-              const newAdmission = { ...admission, recruiter_priority: value };
-              setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
-              putRecruitmentAdmissionForGang(admission.id.toString(), newAdmission);
-            }}
-          />
-        ),
-      },
-      {
-        content: (
-          <Dropdown
-            initialValue={admission.recruiter_status}
-            options={statusOptions}
-            onChange={(value) => {
-              const newAdmission = { ...admission, recruiter_status: value };
-              setRecruitmentApplicants(immutableSet(recruitmentApplicants, admission, newAdmission));
-              putRecruitmentAdmissionForGang(admission.id.toString(), newAdmission);
-            }}
-          />
-        ),
-      },
-    ];
-  });
-  const title = t(KEY.admin_information_manage_title);
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const updateApplicationState = (id: string, data: RecruitmentApplicationStateDto) => {
+    positionId &&
+      updateRecruitmentApplicationStateForPosition(id, data)
+        .then((data) => {
+          setRecruitmentApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruiter_status === 0 &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setWithdrawnApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setHardtogetApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruiter_status === 2 &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setRejectedApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruiter_status === 3 &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setAcceptedApplicants(
+            data.data.filter(
+              (recruitmentApplicant) =>
+                !recruitmentApplicant.withdrawn &&
+                recruitmentApplicant.recruiter_status === 1 &&
+                recruitmentApplicant.recruitment_position?.id === Number.parseInt(positionId),
+            ),
+          );
+          setShowSpinner(false);
+        })
+        .catch((data) => {
+          toast.error(t(KEY.common_something_went_wrong));
+          console.error(data);
+        });
+  };
+
+  const title = t(KEY.recruitment_administrate_applications);
+  useTitle(title);
+
   const backendUrl = reverse({
     pattern: ROUTES.backend.admin__samfundet_recruitmentposition_change,
     urlParams: {
@@ -169,7 +167,76 @@ export function RecruitmentPositionOverviewPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
-      <Table columns={tableColumns} data={data} />
+      <Text size="l" as="strong" className={styles.subHeader}>
+        {lowerCapitalize(t(KEY.recruitment_applications))} ({recruitmentApplicants.length})
+      </Text>
+      <RecruitmentApplicantsStatus
+        applicants={recruitmentApplicants}
+        recruitmentId={recruitmentId}
+        gangId={gangId}
+        positionId={positionId}
+        updateStateFunction={updateApplicationState}
+        onInterviewChange={load}
+      />
+
+      <div className={styles.sub_container}>
+        <Text size="l" as="strong" className={styles.subHeader}>
+          {t(KEY.recruitment_accepted_applications)} ({acceptedApplicants.length})
+        </Text>
+        <Text className={styles.subText}>{t(KEY.recruitment_accepted_applications_help_text)}</Text>
+        {acceptedApplicants.length > 0 ? (
+          <ProcessedApplicants data={acceptedApplicants} type="accepted" revertStateFunction={updateApplicationState} />
+        ) : (
+          <Text as="i" className={styles.subText}>
+            {t(KEY.recruitment_accepted_applications_empty_text)}
+          </Text>
+        )}
+      </div>
+
+      <div className={styles.sub_container}>
+        <Text size="l" as="strong" className={styles.subHeader}>
+          {t(KEY.recruitment_rejected_applications)} ({rejectedApplicants.length})
+        </Text>
+        <Text className={styles.subText}>{t(KEY.recruitment_rejected_applications_help_text)}</Text>
+        {rejectedApplicants.length > 0 ? (
+          <ProcessedApplicants data={rejectedApplicants} type="rejected" revertStateFunction={updateApplicationState} />
+        ) : (
+          <Text as="i" className={styles.subText}>
+            {t(KEY.recruitment_rejected_applications_empty_text)}
+          </Text>
+        )}
+      </div>
+      <div className={styles.sub_container}>
+        <Text size="l" as="strong" className={styles.subHeader}>
+          {t(KEY.recruitment_hardtoget_applications)} ({hardtogetApplicants.length})
+        </Text>
+        <Text className={styles.subText}>{t(KEY.recruitment_hardtoget_applications_help_text)}</Text>
+        {hardtogetApplicants.length > 0 ? (
+          <ProcessedApplicants
+            data={hardtogetApplicants}
+            type="hardtoget"
+            revertStateFunction={updateApplicationState}
+          />
+        ) : (
+          <Text as="i" className={styles.subText}>
+            {t(KEY.recruitment_hardtoget_applications_empty_text)}
+          </Text>
+        )}
+      </div>
+
+      <div className={styles.sub_container}>
+        <Text size="l" as="strong" className={styles.subHeader}>
+          {t(KEY.recruitment_withdrawn_applications)} ({withdrawnApplicants.length})
+        </Text>
+        {withdrawnApplicants.length > 0 ? (
+          <ProcessedApplicants data={withdrawnApplicants} type="withdrawn" />
+        ) : (
+          <Text as="i" className={styles.subText}>
+            {' '}
+            {t(KEY.recruitment_withdrawn_applications_empty_text)}
+          </Text>
+        )}
+      </div>
     </AdminPageLayout>
   );
 }

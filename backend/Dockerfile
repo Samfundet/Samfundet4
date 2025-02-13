@@ -14,31 +14,34 @@ EXPOSE 5678
 #     Environment variables      #
 ##################################
 # Docker-compose should configure env vars in '.docker.env'.
-ENV PIPENV_DONT_LOAD_ENV=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-ENV PIPENV_VENV_IN_PROJECT=1
+ENV POETRY_VIRTUALENVS_IN_PROJECT=1
 
 ##################################
 #      System dependencies       #
 ##################################
 # sqlite3: dependency for billig development database.
-# gcc, libpq-dev: psycopg-dependencies.
-RUN apt-get update
-RUN apt-get install sqlite3 gcc libpq-dev -y
-RUN export PATH=/usr/lib/postgresql/X.Y/bin/:$PATH
+# gcc, libpq-dev, python3-dev: psycopg-dependencies.
+RUN set -eux && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends sqlite3 gcc libpq-dev python3-dev && \
+    python -m pip install poetry && \
+    rm -rf /var/lib/apt/lists/* && \
+    export PATH=/usr/lib/postgresql/X.Y/bin/:$PATH
 
 
 ##################################
 #             Alias              #
 ################################## 
-RUN echo 'alias la="ls -la"' >> ~/.bashrc
-# Useful alias shortcuts for django.
-RUN echo 'alias migrate="pipenv run python /app/manage.py migrate"' >> ~/.bashrc
-RUN echo 'alias makemigrations="pipenv run python /app/manage.py makemigrations"' >> ~/.bashrc
-RUN echo 'alias seed="pipenv run python /app/manage.py seed"' >> ~/.bashrc
-RUN echo 'alias collectstatic="pipenv run python /app/manage.py collectstatic --noinput"' >> ~/.bashrc
-RUN echo 'alias pipeline="pipenv run /app/run-pipeline.sh"' >> ~/.bashrc
+RUN echo 'alias la="ls -la"' >> ~/.bashrc && \
+    # Useful alias shortcuts for django.
+    echo 'alias migrate="poetry run python /app/manage.py migrate"' >> ~/.bashrc && \
+    echo 'alias makemigrations="poetry run python /app/manage.py makemigrations"' >> ~/.bashrc && \
+    echo 'alias seed="poetry run python /app/manage.py seed"' >> ~/.bashrc && \
+    echo 'alias collectstatic="poetry run python /app/manage.py collectstatic --noinput"' >> ~/.bashrc && \
+    echo 'alias pipeline="poetry run /app/run-pipeline.sh"' >> ~/.bashrc && \
+    echo 'source aliases.sh' >> ~/.bashrc
 
 
 # Make directories.
@@ -46,16 +49,12 @@ RUN mkdir /app
 WORKDIR /app
 
 # Prepare virtual environment.
-RUN mkdir .venv
-RUN python -m pip install pipenv
-
-# Install venv dependecies.
-COPY Pipfile Pipfile.lock ./
-RUN python -m pipenv install --dev --deploy
+COPY pyproject.toml poetry.lock* ./
+RUN mkdir .venv && poetry install --sync
 
 # Copy remaining.
 COPY . /app
 
 # Start.
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["pipenv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]

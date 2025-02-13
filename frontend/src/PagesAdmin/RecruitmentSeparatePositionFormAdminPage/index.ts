@@ -1,0 +1,1 @@
+export { RecruitmentSeparatePositionFormAdminPage } from './RecruitmentSeparatePositionFormAdminPage';

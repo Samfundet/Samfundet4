@@ -1,8 +1,14 @@
+import { useTranslation } from 'react-i18next';
 import { LycheFrame } from '~/Components/LycheFrame';
 import { MenuItem } from '~/Components/MenuItem';
 import { SultenPage } from '~/Components/SultenPage';
+import { useTitle } from '~/hooks';
+import { KEY } from '~/i18n/constants';
 
 export function LycheMenuPage() {
+  const { t } = useTranslation();
+  useTitle(t(KEY.common_menu), t(KEY.common_sulten));
+
   return (
     <SultenPage>
       <LycheFrame>

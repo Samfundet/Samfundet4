@@ -1,7 +1,6 @@
 /* stylelint-disable function-comma-space-after */
 /* stylelint-disable selector-max-compound-selectors */
 /* stylelint-disable selector-max-class */
-/* stylelint-disable max-nesting-depth */
 /* TODO: fix later */
 
 @import 'src/mixins';
@@ -250,24 +249,6 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   }
 }
 
-/* Pick language */
-.language_flag {
-  width: 28px;
-  height: 20px;
-  cursor: pointer;
-  border-radius: 3px;
-  box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.1);
-  transition: 0.1s;
-  &:hover {
-    transform: scale(1.1);
-  }
-}
-
-.language_flag_button {
-  background-color: transparent;
-  border-color: transparent;
-}
-
 /* Container for profile */
 .navbar_profile_button {
   display: flex;
@@ -401,9 +382,9 @@ offsets the text by 18px, the size of the chevron-icon */
 }
 
 .active_recruitment {
-  background-color: $green;
+  background-color: $red-samf;
   font-weight: 700;
   color: $white;
-  padding: 0.2em 0.4em 0.2em 0.4em;
-  border-radius: 0.4em;
+  border-radius: 0.25rem;
+  padding: 0.5rem 0.75rem;
 }

@@ -1,35 +1,43 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { SamfundetLogoSpinner } from '~/Components';
-import { DropDownOption } from '~/Components/Dropdown/Dropdown';
-import { SamfForm } from '~/Forms/SamfForm';
-import { SamfFormField } from '~/Forms/SamfFormField';
-import { getOrganizations, getRecruitment, postRecruitment, putRecruitment } from '~/api';
-import { OrganizationDto, RecruitmentDto } from '~/dto';
-import { STATUS } from '~/http_status_codes';
+import {
+  Button,
+  Dropdown,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  NumberInput,
+} from '~/Components';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
+import { FormDescription } from '~/Components/Forms/Form';
+import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
+import type { OrganizationDto, RecruitmentWriteDto } from '~/dto';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
-import { utcTimestampToLocal } from '~/utils';
+import { dbT, getObjectFieldOrNumber, lowerCapitalize, utcTimestampToLocal } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentFormAdminPage.module.scss';
+import { type recruitmentFormType, recruitmentSchema } from './recruitmentSchema';
 
 export function RecruitmentFormAdminPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const data = useRouteLoaderData('recruitment') as RecruitmentLoader | undefined;
 
-  // Form data
-  const { id } = useParams();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const [organizationOptions, setOrganizationOptions] = useState<DropDownOption<number>[]>([]);
-  const [externalErrors, setExternalErrors] = useState<object>({});
-  const [recruitment, setRecruitment] = useState<Partial<RecruitmentDto>>({
-    name_nb: 'Nytt opptak',
-    name_en: 'New recruitment',
-  });
+  const { recruitmentId } = useParams();
+  const [organizationOptions, setOrganizationOptions] = useState<DropdownOption<number>[]>([]);
 
   useEffect(() => {
-    // Fetch organizations.
     getOrganizations().then((data) => {
       const organizations = data.map((organization: OrganizationDto) => ({
         label: organization.name,
@@ -39,126 +47,212 @@ export function RecruitmentFormAdminPage() {
     });
   }, []);
 
-  // Fetch data if edit mode.
-  useEffect(() => {
-    if (id) {
-      getRecruitment(id)
-        .then((data) => {
-          setRecruitment(data.data);
-          setShowSpinner(false);
-        })
-        .catch((data) => {
-          // TODO add error pop up message?
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.admin_recruitment);
-          }
-          toast.error(t(KEY.common_something_went_wrong));
-          console.error(data);
-        });
-    } else {
-      setShowSpinner(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
-
-  const initialData: Partial<RecruitmentDto> = {
-    name_nb: recruitment?.name_nb,
-    name_en: recruitment?.name_en,
-    visible_from: utcTimestampToLocal(recruitment?.visible_from),
-    actual_application_deadline: utcTimestampToLocal(recruitment?.actual_application_deadline),
-    shown_application_deadline: utcTimestampToLocal(recruitment?.shown_application_deadline),
-    reprioritization_deadline_for_applicant: utcTimestampToLocal(recruitment?.reprioritization_deadline_for_applicant),
-    reprioritization_deadline_for_groups: utcTimestampToLocal(recruitment?.reprioritization_deadline_for_groups),
-    organization: recruitment?.organization,
+  const initialData: Partial<recruitmentFormType> = {
+    name_nb: data?.recruitment?.name_nb || '',
+    name_en: data?.recruitment?.name_en || '',
+    visible_from: utcTimestampToLocal(data?.recruitment?.visible_from, false) || '',
+    actual_application_deadline: utcTimestampToLocal(data?.recruitment?.actual_application_deadline, false) || '',
+    shown_application_deadline: utcTimestampToLocal(data?.recruitment?.shown_application_deadline, false) || '',
+    reprioritization_deadline_for_applicant:
+      utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_applicant, false) || '',
+    reprioritization_deadline_for_gangs:
+      utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_gangs, false) || '',
+    organization: getObjectFieldOrNumber<number>(data?.recruitment?.organization, 'id') || 1,
+    max_applications: data?.recruitment?.max_applications,
+    promo_media: data?.recruitment?.promo_media || '',
   };
 
-  const submitText = id ? t(KEY.common_save) : t(KEY.common_create);
+  const form = useForm<recruitmentFormType>({
+    resolver: zodResolver(recruitmentSchema),
+    defaultValues: initialData,
+  });
 
-  // Loading.
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
+  const title = recruitmentId
+    ? `${t(KEY.common_edit)} ${dbT(data?.recruitment, 'name')}`
+    : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_recruitment)}`);
 
-  function handleOnSubmit(data: RecruitmentDto) {
-    setExternalErrors({});
-    if (id) {
-      // Update page.
-      putRecruitment(id, data)
+  useTitle(title);
+
+  const submitText = recruitmentId ? t(KEY.common_save) : t(KEY.common_create);
+
+  function onSubmit(data: recruitmentFormType) {
+    if (recruitmentId) {
+      putRecruitment(recruitmentId, data as RecruitmentWriteDto)
         .then(() => {
           toast.success(t(KEY.common_update_successful));
-        })
-        .catch((error) => {
-          toast.error(t(KEY.common_something_went_wrong));
-          setExternalErrors(error.response.data);
-        });
-      navigate(ROUTES.frontend.admin_recruitment);
-    } else {
-      // Post new page.
-      postRecruitment(data)
-        .then(() => {
           navigate(ROUTES.frontend.admin_recruitment);
-          toast.success(t(KEY.common_creation_successful));
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(t(KEY.common_something_went_wrong));
-          setExternalErrors(error.response.data);
+        });
+    } else {
+      postRecruitment(data as RecruitmentWriteDto)
+        .then(() => {
+          toast.success(t(KEY.common_creation_successful));
+          navigate(ROUTES.frontend.admin_recruitment);
+        })
+        .catch(() => {
+          toast.error(t(KEY.common_something_went_wrong));
         });
     }
   }
 
-  // TODO: Add validation for the dates
   return (
-    <div className={styles.wrapper}>
-      <SamfForm<RecruitmentDto>
-        externalErrors={externalErrors}
-        onSubmit={handleOnSubmit}
-        initialData={initialData}
-        submitText={submitText}
-      >
-        <div className={styles.row}>
-          <SamfFormField field="name_nb" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_english)} />
-          <SamfFormField field="name_en" type="text" label={t(KEY.common_name) + ' ' + t(KEY.common_norwegian)} />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField field="visible_from" type="datetime" label={t(KEY.recruitment_visible_from) ?? ''} />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField
-            field="shown_application_deadline"
-            type="datetime"
-            label={t(KEY.shown_application_deadline) ?? ''}
-          />
-          <SamfFormField
-            field="actual_application_deadline"
-            type="datetime"
-            label={t(KEY.actual_application_deadlin) ?? ''}
-          />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField
-            field="reprioritization_deadline_for_applicant"
-            type="datetime"
-            label={t(KEY.reprioritization_deadline_for_applicant) ?? ''}
-          />
-          <SamfFormField
-            field="reprioritization_deadline_for_groups"
-            type="datetime"
-            label={t(KEY.reprioritization_deadline_for_groups) ?? ''}
-          />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField
-            field="organization"
-            type="options"
-            label={t(KEY.recruitment_organization) ?? ''}
-            options={organizationOptions}
-          />
-        </div>
-      </SamfForm>
-    </div>
+    <AdminPageLayout title={title} header={true}>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
+          <div className={styles.wrapper}>
+            <div className={styles.row}>
+              <FormField
+                control={form.control}
+                name="name_nb"
+                render={({ field }) => (
+                  <FormItem className={styles.item}>
+                    <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_norwegian)}`}</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="name_en"
+                render={({ field }) => (
+                  <FormItem className={styles.item}>
+                    <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_english)}`}</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className={styles.row}>
+              <FormField
+                control={form.control}
+                name="visible_from"
+                render={({ field }) => (
+                  <FormItem className={styles.item}>
+                    <FormLabel>{t(KEY.recruitment_visible_from)}</FormLabel>
+                    <FormControl>
+                      <Input type="datetime-local" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className={styles.row}>
+              <FormField
+                control={form.control}
+                name="shown_application_deadline"
+                render={({ field }) => (
+                  <FormItem className={styles.item}>
+                    <FormLabel>{t(KEY.shown_application_deadline)}</FormLabel>
+                    <FormControl>
+                      <Input type="datetime-local" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="actual_application_deadline"
+                render={({ field }) => (
+                  <FormItem className={styles.item}>
+                    <FormLabel>{t(KEY.actual_application_deadline)}</FormLabel>
+                    <FormControl>
+                      <Input type="datetime-local" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className={styles.row}>
+              <FormField
+                control={form.control}
+                name="reprioritization_deadline_for_applicant"
+                render={({ field }) => (
+                  <FormItem className={styles.item}>
+                    <FormLabel>{t(KEY.reprioritization_deadline_for_applicant)}</FormLabel>
+                    <FormControl>
+                      <Input type="datetime-local" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="reprioritization_deadline_for_gangs"
+                render={({ field }) => (
+                  <FormItem className={styles.item}>
+                    <FormLabel>{t(KEY.reprioritization_deadline_for_gangs)}</FormLabel>
+                    <FormControl>
+                      <Input type="datetime-local" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className={styles.row}>
+              <FormField
+                control={form.control}
+                name="max_applications"
+                render={({ field }) => (
+                  <FormItem className={styles.item}>
+                    <FormLabel>{t(KEY.max_applications)}</FormLabel>
+                    <FormControl>
+                      <NumberInput allowDecimal={false} {...field} value={field.value ?? 0} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Controller
+                name="organization"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className={styles.item}>
+                    <FormLabel>{t(KEY.recruitment_organization)}</FormLabel>
+                    <FormControl>
+                      <Dropdown
+                        options={organizationOptions}
+                        onChange={(value) => field.onChange(value)}
+                        value={field.value}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className={styles.row}>
+              <FormField
+                control={form.control}
+                name="promo_media"
+                render={({ field }) => (
+                  <FormItem className={styles.item}>
+                    <FormLabel>{t(KEY.recruitment_promo_media)}</FormLabel>
+                    <FormDescription>{t(KEY.promo_media_description)}</FormDescription>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <Button type="submit">{submitText}</Button>
+          </div>
+        </form>
+      </Form>
+    </AdminPageLayout>
   );
 }

@@ -1,5 +1,5 @@
-import { ThemeValue } from '~/constants';
-import { EventAgeRestrictionValue, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
+import type { ThemeValue } from '~/constants';
+import type { EventAgeRestrictionValue, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
 
 export type UserDto = {
   id: number;
@@ -7,11 +7,12 @@ export type UserDto = {
   first_name: string;
   last_name: string;
   email: string;
+  phone_number?: string;
   is_staff: boolean;
   is_active: boolean;
   is_superuser: boolean;
   date_joined: Date;
-  last_login: Date;
+  last_login: Date | null;
   user_preference: UserPreferenceDto;
   profile: ProfileDto;
   groups: GroupDto[];
@@ -19,12 +20,26 @@ export type UserDto = {
   object_permissions?: ObjectPermissionDto[];
 };
 
-export type OccupiedTimeSlotDto = {
-  id?: number;
-  user?: number;
+export type CampusDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  abbreviation?: string;
+};
+
+export type RecruitmentAvailabilityDto = {
+  start_date: string;
+  end_date: string;
+  timeslots: string[];
+};
+
+export type DateTimeslotDto = {
+  [date: string]: string[];
+};
+
+export type OccupiedTimeslotDto = {
   recruitment: number;
-  start_dt: string;
-  end_dt: string;
+  dates: DateTimeslotDto;
 };
 
 export type RecruitmentUserDto = {
@@ -33,7 +48,12 @@ export type RecruitmentUserDto = {
   first_name: string;
   last_name: string;
   email: string;
-  recruitment_admission_ids?: string[];
+  phone_number?: string;
+  campus?: CampusDto;
+  recruitment_application_ids?: string[];
+  applications: RecruitmentApplicationDto[];
+  applications_without_interview: RecruitmentApplicationDto[];
+  top_application: RecruitmentApplicationDto;
 };
 
 export type HomePageDto = {
@@ -134,6 +154,7 @@ export type EventDto = {
   duration: number;
   end_dt: string;
   publish_dt: string;
+  doors_time?: string;
 
   // Ticket type for event (billig, free, custom, registration etc.)
   ticket_type: EventTicketTypeValue;
@@ -144,6 +165,7 @@ export type EventDto = {
   // Write only:
   // Used to create new event with using id of existing imagedto
   image?: ImageDto;
+  capacity?: number;
 };
 
 export type EventGroupDto = {
@@ -192,6 +214,7 @@ export type TableDto = {
 };
 
 export type FoodPreferenceDto = {
+  id: number;
   name_nb?: string;
   name_en?: string;
 };
@@ -203,7 +226,13 @@ export type FoodCategoryDto = {
   order?: number;
 };
 
+export type MailDto = {
+  subject: string;
+  text: string;
+};
+
 export type MenuItemDto = {
+  id?: number;
   name_nb?: string;
   description_nb?: string;
 
@@ -214,8 +243,8 @@ export type MenuItemDto = {
   price_member?: number;
 
   order?: number;
-  food_preferences?: FoodPreferenceDto[];
-  food_category: FoodCategoryDto;
+  food_preferences?: FoodPreferenceDto[] | number[];
+  food_category: FoodCategoryDto | number;
 };
 
 export type MenuDto = {
@@ -283,8 +312,12 @@ export type GangDto = {
   abbreviation: string;
   webpage?: string;
   logo?: string;
-  gang_type?: number;
-  info_page?: number;
+  gang_type?: number | null;
+  info_page?: string | null;
+};
+
+export type RecruitmentGangDto = GangDto & {
+  recruitment_positions: number;
 };
 
 export type GangTypeDto = {
@@ -292,6 +325,14 @@ export type GangTypeDto = {
   title_nb: string;
   title_en: string;
   gangs: GangDto[];
+};
+
+export type GangSectionDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  logo?: string;
+  gang: GangDto;
 };
 
 export type ClosedPeriodDto = {
@@ -322,7 +363,7 @@ export type ImagePostDto = ImageDto & {
   file: File;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export type Tuple = [any, any];
 
 export type KeyValueDto = {
@@ -331,13 +372,42 @@ export type KeyValueDto = {
   value: string;
 };
 
-export type NotificationDto = {
+// ############################################################
+//                       Roles
+// ############################################################
+
+export type RoleDto = {
   id: number;
-  slug: string;
-  actor: string;
-  verb: string;
-  recipient: string;
-  // TODO: There are more fields than this.
+  name: string;
+  permissions: number[];
+  content_type?: string | null;
+};
+
+export type UserRole = {
+  id: number;
+  user: UserDto;
+  created_at: Date;
+  obj: OrganizationDto | GangDto | GangSectionDto;
+  created_by?: UserDto;
+};
+
+export type UserGangRoleDto = Omit<UserRole, 'obj'> & {
+  gang: GangDto;
+};
+
+export type UserGangSectionRoleDto = Omit<UserRole, 'obj'> & {
+  section: GangSectionDto;
+};
+
+export type UserOrganizationRoleDto = Omit<UserRole, 'obj'> & {
+  organization: OrganizationDto;
+};
+
+export type RoleUsersDto = {
+  user: UserDto;
+  org_role?: UserOrganizationRoleDto;
+  gang_role?: UserGangRoleDto;
+  section_role?: UserGangSectionRoleDto;
 };
 
 // ############################################################
@@ -345,19 +415,58 @@ export type NotificationDto = {
 // ############################################################
 
 export type RecruitmentDto = {
-  id: string | undefined;
+  id?: string;
   name_nb: string;
   name_en: string;
   visible_from: string;
   actual_application_deadline: string;
   shown_application_deadline: string;
   reprioritization_deadline_for_applicant: string;
-  reprioritization_deadline_for_groups: string;
-  organization: 'samfundet' | 'isfit' | 'uka';
+  reprioritization_deadline_for_gangs: string;
+  max_applications?: number;
+  organization: OrganizationDto;
+  separate_positions?: RecruitmentSeparatePositionDto[];
+  promo_media?: string;
+};
+
+export type RecruitmentForRecruiterDto = RecruitmentDto & {
+  statistics: RecruitmentStatsDto;
+  recruitment_progress: number;
+  total_applicants: number;
+  total_processed_applicants: number;
+  total_unprocessed_applicants: number;
+  total_processed_applications: number;
+  total_unprocessed_applications: number;
+};
+
+export type RecruitmentWriteDto = RecruitmentDto & {
+  organization: number;
+};
+
+export type RecruitmentSeparatePositionDto = {
+  id?: number;
+  name_nb: string;
+  name_en: string;
+  description_nb: string;
+  description_en: string;
+  url: string;
+  recruitment?: string;
+};
+
+export type RecruitmentSharedInterviewGroupDto = {
+  id?: number;
+  recruitment?: string;
+  name_nb: string;
+  name_en: string;
+  positions: RecruitmentPositionDto[];
+};
+
+export type UserPriorityDto = {
+  direction: number;
 };
 
 export type RecruitmentPositionDto = {
-  id: string;
+  id: number;
   name_nb: string;
   name_en: string;
 
@@ -371,8 +480,8 @@ export type RecruitmentPositionDto = {
 
   norwegian_applicants_only: boolean;
 
-  default_admission_letter_nb: string;
-  default_admission_letter_en: string;
+  default_application_letter_nb: string;
+  default_application_letter_en: string;
 
   gang: GangDto;
   recruitment: string;
@@ -380,28 +489,142 @@ export type RecruitmentPositionDto = {
   tags: string;
 
   interviewers?: UserDto[];
+
+  total_applicants?: number;
+  processed_applicants?: number;
+  accepted_applicants?: number;
+};
+
+export type RecruitmentPositionPostDto = Omit<RecruitmentPositionDto, 'gang' | 'id'> & {
+  gang: { id: number };
+  interviewer_ids?: number[];
+};
+
+export type RecruitmentPositionPutDto = Omit<RecruitmentPositionDto, 'gang'> & {
+  gang: { id: number };
+  interviewer_ids?: number[];
+};
+
+export type RecruitmentRecruitmentPositionDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+  gang: number;
 };
 
 export type InterviewDto = {
-  id: number;
+  id?: number;
   interview_time: string;
   interview_location: string;
-  room: string;
-  notes: string;
+  room?: string;
+  notes?: string;
+  interviewers?: UserDto[];
 };
 
-export type RecruitmentAdmissionDto = {
-  id: number;
-  interview: InterviewDto;
-  admission_text: string;
+export type RecruitmentApplicationDto = {
+  id: string;
+  interview?: InterviewDto;
+  interview_time?: Date;
+  application_text: string;
   recruitment_position: RecruitmentPositionDto;
   recruitment: number;
   user: UserDto;
   applicant_priority: number;
   recruiter_priority?: number;
   recruiter_status?: number;
+  applicant_state?: number;
   created_at: string;
   withdrawn: boolean;
+  application_count?: number;
+};
+
+export type RecruitmentApplicationRecruiterDto = {
+  user: RecruitmentUserDto;
+  application: RecruitmentApplicationDto;
+  other_applications: RecruitmentApplicationDto[];
+};
+
+export type RecruitmentUnprocessedApplicationsDto = {
+  id: number;
+  recruitment: number;
+  user: RecruitmentUserDto;
+  applicant_priority: number;
+  recruitment_position: RecruitmentRecruitmentPositionDto;
+  recruiter_status: number;
+  recruiter_priority: number;
+};
+
+export type RecruitmentApplicationStateDto = {
+  recruiter_priority?: number;
+  recruiter_status?: number;
+};
+
+export type RecruitmentApplicationStateChoicesDto = {
+  recruiter_priority: [number, string][];
+  recruiter_status: [number, string][];
+};
+
+export type RecruitmentTimeStatDto = {
+  hour: number;
+  count: number;
+};
+
+export type RecruitmentDateStatDto = {
+  date: string;
+  count: number;
+};
+
+export type RecruitmentCampusStatDto = {
+  campus: string;
+  count: number;
+  applicant_percentage: number;
+};
+
+export type RecruitmentGangStatDto = {
+  gang: GangDto;
+  application_count: number;
+  applicant_count: number;
+  average_priority: number;
+  total_accepted: number;
+  total_rejected: number;
+};
+
+export type RecruitmentStatsDto = {
+  id?: number;
+  recruitment?: number;
+  total_applicants: number;
+  total_applications: number;
+  total_withdrawn: number;
+  total_accepted: number;
+  total_rejected: number;
+  average_gangs_applied_to_per_applicant: number;
+  average_applications_per_applicant: number;
+  time_stats: RecruitmentTimeStatDto[];
+  date_stats: RecruitmentDateStatDto[];
+  gang_stats: RecruitmentGangStatDto[];
+  campus_stats: RecruitmentCampusStatDto[];
+};
+
+export type InterviewRoomDto = {
+  id: number;
+  name: string;
+  location: string;
+  start_time: string;
+  end_time: string;
+  recruitment: string;
+  gang?: number;
+};
+
+// ############################################################
+//                       Purchase Feedback
+// ############################################################
+
+export type PurchaseFeedbackDto = {
+  //TODO: Change alternatives to Record<string, boolean> when samfform supports boolean checkbox
+  eventId: number;
+  title: string;
+  responses: Record<string, string>;
+  alternatives: Record<string, string>;
 };
 
 export type FeedbackDto = {

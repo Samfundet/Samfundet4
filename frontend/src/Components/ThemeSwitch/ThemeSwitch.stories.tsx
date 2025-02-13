@@ -1,6 +1,6 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { AuthContextProvider } from '~/AuthContext';
-import { GlobalContextProvider } from '~/GlobalContextProvider';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import { AuthContextProvider } from '~/context/AuthContext';
+import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { ThemeSwitch } from './ThemeSwitch';
 
 // Local component config.
@@ -9,17 +9,15 @@ export default {
   component: ThemeSwitch,
 } as ComponentMeta<typeof ThemeSwitch>;
 
-const Template: ComponentStory<typeof ThemeSwitch> = function (args) {
-  return (
-    <>
-      <AuthContextProvider>
-        <GlobalContextProvider>
-          <ThemeSwitch {...args} />
-        </GlobalContextProvider>
-      </AuthContextProvider>
-    </>
-  );
-};
+const Template: ComponentStory<typeof ThemeSwitch> = (args) => (
+  <>
+    <AuthContextProvider>
+      <GlobalContextProvider>
+        <ThemeSwitch {...args} />
+      </GlobalContextProvider>
+    </AuthContextProvider>
+  </>
+);
 
 export const Basic = Template.bind({});
 Basic.args = {};
