@@ -4,7 +4,10 @@ import os
 import csv
 import hmac
 import hashlib
+import operator
 from typing import Any
+from datetime import datetime
+from functools import reduce
 from itertools import chain
 
 from guardian.shortcuts import get_objects_for_user
@@ -39,8 +42,11 @@ from root.constants import (
     GITHUB_SIGNATURE_HEADER,
     REQUESTED_IMPERSONATE_USER,
 )
+from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM
 
-from .utils import user_query, event_query, generate_timeslots, get_occupied_timeslots_from_request
+from samfundet.pagination import CustomPageNumberPagination
+
+from .utils import event_query, generate_timeslots, get_user_by_search, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .serializers import (
@@ -69,6 +75,7 @@ from .serializers import (
     EventGroupSerializer,
     PermissionSerializer,
     RecruitmentSerializer,
+    ReservationSerializer,
     UserOrgRoleSerializer,
     ClosedPeriodSerializer,
     FoodCategorySerializer,
@@ -392,6 +399,12 @@ class TableView(ModelViewSet):
     queryset = Table.objects.all()
 
 
+class ReservationCreateView(ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = ReservationSerializer
+    queryset = Reservation.objects.all()
+
+
 class ReservationCheckAvailabilityView(APIView):
     permission_classes = [AllowAny]
     serializer_class = ReservationCheckSerializer
@@ -519,8 +532,22 @@ class AllUsersView(ListAPIView):
     queryset = User.objects.all()
 
     def get(self, request: Request) -> Response:
-        users = user_query(query=request.query_params)
+        users = get_user_by_search(query=request.query_params)
         return Response(data=UserSerializer(users, many=True).data)
+
+
+class PaginatedSearchUsersView(ListAPIView):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = UserSerializer
+    pagination_class = CustomPageNumberPagination
+
+    def get_queryset(self) -> QuerySet[User]:
+        """
+        Get queryset of users with search functionality using the user_query helper.
+        Returns ordered queryset of users filtered by search parameters if provided.
+        """
+        # Pass the query parameters directly to user_query
+        return get_user_by_search(query=self.request.query_params).order_by('username')
 
 
 class ImpersonateView(APIView):
@@ -957,6 +984,20 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
         return Response(serializer.data)
 
 
+class RecruitmentApplicationInterviewNotesView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = InterviewSerializer
+
+    def put(self, request: Request, interview_id: str) -> Response:
+        interview = get_object_or_404(Interview, pk=interview_id)
+        update_serializer = self.serializer_class(interview, data=request.data, partial=True)
+        if update_serializer.is_valid() and 'notes' in update_serializer.validated_data:
+            interview.notes = update_serializer.validated_data['notes']
+            interview.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class RecruitmentApplicationWithdrawApplicantView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -1325,12 +1366,22 @@ class InterviewRoomView(ModelViewSet):
     serializer_class = InterviewRoomSerializer
     queryset = InterviewRoom.objects.all()
 
+    # noinspection PyMethodOverriding
+    def retrieve(self, request: Request, pk: int) -> Response:
+        room = get_object_or_404(InterviewRoom, pk=pk)
+        if not request.user.has_perm(SAMFUNDET_VIEW_INTERVIEWROOM, room):
+            raise PermissionDenied
+        return super().retrieve(request=request, pk=pk)
+
+    # noinspection PyMethodOverriding
     def list(self, request: Request) -> Response:
         recruitment = request.query_params.get('recruitment')
         if not recruitment:
             return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        filtered_rooms = InterviewRoom.objects.filter(recruitment__id=recruitment)
+        filtered_rooms = [
+            room for room in InterviewRoom.objects.filter(recruitment__id=recruitment) if request.user.has_perm(SAMFUNDET_VIEW_INTERVIEWROOM, room)
+        ]
         serialized_rooms = self.get_serializer(filtered_rooms, many=True)
         return Response(serialized_rooms.data)
 
@@ -1354,6 +1405,19 @@ class InterviewView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = InterviewSerializer
     queryset = Interview.objects.all()
+
+    # noinspection PyMethodOverriding
+    def retrieve(self, request: Request, pk: int) -> Response:
+        interview = get_object_or_404(Interview, pk=pk)
+        if not request.user.has_perm(SAMFUNDET_VIEW_INTERVIEW, interview):
+            raise PermissionDenied
+        return super().retrieve(request=request, pk=pk)
+
+    # noinspection PyMethodOverriding
+    def list(self, request: Request) -> Response:
+        interviews = [interview for interview in self.get_queryset() if request.user.has_perm(SAMFUNDET_VIEW_INTERVIEW, interview)]
+        serializer = self.get_serializer(interviews, many=True)
+        return Response(serializer.data)
 
 
 class RecruitmentInterviewAvailabilityView(ListCreateAPIView):
@@ -1500,3 +1564,70 @@ class GangApplicationCountView(APIView):
                 'total_rejected': gang_stat.total_rejected,
             }
         )
+
+
+class InterviewerAvailabilityForDate(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, recruitment_id: int) -> Response:
+        date = datetime.fromisoformat(request.query_params.get('date'))
+        interviewers = request.query_params.get('interviewers', [])
+
+        return Response(
+            OccupiedTimeslot.objects.filter(
+                recruitment__id=recruitment_id,
+                user__in=interviewers,
+                start_dt__date__lte=date,
+                end_dt__date__gte=date,
+            )
+        )
+
+
+class PositionByTagsView(ListAPIView):
+    """
+    Fetches recruitment positions by common tags for a specific recruitment.
+    Expects tags as query parameter in format: ?tags=tag1,tag2,tag3
+    Optionally accepts position_id parameter to exclude current position
+    This view expects a string which contains tags separated by comma from the client.
+    """
+
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionForApplicantSerializer
+
+    def get_queryset(self) -> QuerySet:
+        recruitment_id = self.kwargs.get('id')
+        tags_param = self.request.query_params.get('tags')
+        current_position_id = self.request.query_params.get('position_id')
+
+        if not tags_param:
+            return RecruitmentPosition.objects.none()
+
+        # Split and clean the tags
+        tags = [tag.strip() for tag in tags_param.split(',') if tag.strip()]
+
+        if not tags:
+            return RecruitmentPosition.objects.none()
+
+        # Create Q objects for each tag to search in the tags field
+        tag_queries = [Q(tags__icontains=tag) for tag in tags]
+
+        # Combine queries with OR operator
+        combined_query = reduce(operator.or_, tag_queries)
+
+        # Base queryset with recruitment and tag filtering
+        queryset = RecruitmentPosition.objects.filter(combined_query, recruitment_id=recruitment_id).select_related('gang')
+
+        # Exclude current position if position_id is provided
+        if current_position_id:
+            queryset = queryset.exclude(id=current_position_id)
+
+        return queryset
+
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        if not request.query_params.get('tags'):
+            return Response({'message': 'No tags provided in query parameters'}, status=status.HTTP_400_BAD_REQUEST)
+
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response({'count': len(serializer.data), 'positions': serializer.data})
