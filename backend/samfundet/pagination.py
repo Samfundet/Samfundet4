@@ -8,11 +8,17 @@ from rest_framework.pagination import CursorPagination, PageNumberPagination, Li
 
 # Page Number Pagination
 class CustomPageNumberPagination(PageNumberPagination):
+    """
+    Custom page number pagination.
+    Implementing this in some view will make the view return a limited amount of objects, defined by page_size.
+    """
+
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 50
 
     def get_paginated_response(self, data: Any) -> Response:
+        """These are the pagination properties of CustomPageNumberPagination."""
         return Response(
             {
                 'page_size': self.get_page_size(self.request),
@@ -43,6 +49,8 @@ class CustomCursorPagination(CursorPagination):
 
 
 class UserCursorPagination(CursorPagination):
+    """implementation of custom cursor pagination for users"""
+
     page_size = 10
     ordering = '-date_joined'  # Default ordering by newest first
     cursor_query_param = 'cursor'
