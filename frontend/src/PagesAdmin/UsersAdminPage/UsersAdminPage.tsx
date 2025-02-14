@@ -24,7 +24,6 @@ export function UsersAdminPage() {
     setCurrentPage,
     searchTerm,
     setSearchTerm,
-    isLoading,
   } = useSearchPaginatedQuery<UserDto>({
     queryKey: ['admin-users'],
     queryFn: getUsersSearchPaginated,
@@ -68,7 +67,7 @@ export function UsersAdminPage() {
   }
 
   return (
-    <AdminPageLayout title={title} loading={isLoading}>
+    <AdminPageLayout title={title}>
       <InputField
         icon="mdi:search"
         value={searchTerm}
