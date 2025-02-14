@@ -92,3 +92,23 @@ def organize_priorities_on_withdrawal(sender: RecruitmentApplication, instance: 
     # If the application is withdrawn, reorder active applications prioriity
     if not created and instance.withdrawn:
         instance.organize_priorities()
+
+
+@receiver(pre_save, sender=RecruitmentApplication)
+def handle_reactivation(sender: RecruitmentApplication, instance: RecruitmentApplication, **kwargs) -> None:
+    # Only perform reactivation logic if this is an update (i.e. the object is not new)
+    # For new objects, instance._state.adding is True, so we skip this block.
+    if not instance._state.adding:
+        try:
+            # Attempt to fetch the existing record from the database using its primary key.
+            old_instance = RecruitmentApplication.objects.get(pk=instance.pk)
+        except RecruitmentApplication.DoesNotExist:
+            # If the record does not exist in the database, set old_instance to None.
+            # This might occur if the record was deleted or not yet committed.
+            old_instance = None
+        # If we have an existing record, and it was previously withdrawn,
+        # but now the updated instance is not withdrawn, then the application is being reactivated.
+        if old_instance and old_instance.withdrawn and not instance.withdrawn:
+            # Call a helper method to set the reactivated application's priority
+            # (e.g., by assigning it the lowest active priority plus one).
+            RecruitmentApplication._set_reactivated_priority(instance)

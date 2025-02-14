@@ -483,6 +483,17 @@ class RecruitmentApplication(CustomBaseModel):
     def get_total_applications(self) -> int:
         return RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
 
+    def _set_reactivated_priority(instance) -> None:
+        "This is called in the handle_reactivation signal"
+        # Get all active (non-withdrawn) applications for this user and recruitment,
+        # excluding the instance being reactivated.
+        active_apps = RecruitmentApplication.objects.filter(user=instance.user, recruitment=instance.recruitment, withdrawn=False).exclude(pk=instance.pk)
+
+        # Determine the current highest (lowest ranking) priority.
+        max_priority = active_apps.order_by('-applicant_priority').first().applicant_priority if active_apps.exists() else 0
+        # Set the reactivated application's priority to one more than the current maximum.
+        instance.applicant_priority = max_priority + 1
+
     def update_applicant_state(self) -> None:
         # TODO: DO WE WANT TO CONSIDER WITHDRAWN APPLICATIONS HERE:
         applications = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment).order_by('applicant_priority')
