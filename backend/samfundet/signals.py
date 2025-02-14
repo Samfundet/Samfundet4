@@ -92,9 +92,3 @@ def organize_priorities_on_withdrawal(sender: RecruitmentApplication, instance: 
     # If the application is withdrawn, reorder active applications
     if not created and instance.withdrawn:
         instance.organize_priorities()
-
-
-# @receiver(post_save, sender=RecruitmentApplication)
-# def organize_priorities_on_creation(sender: RecruitmentApplication, instance: RecruitmentApplication, *, created: bool, **kwargs: Any) -> None:
-#    if created:
-#        instance.organize_priorities()

@@ -446,8 +446,10 @@ class RecruitmentApplication(CustomBaseModel):
             self.applicant_priority = current_non_withdrawn_applications_count + 1
         # If the application is saved without an interview, try to find an interview from a shared position.
         if self.withdrawn:
+            # when an application is witdrawn the organize_priorities_on_withdrawal signal is called, this must happen post save
             self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
             self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
+
         if not self.interview and self.recruitment_position.shared_interview_group:
             shared_interview = (
                 RecruitmentApplication.objects.filter(user=self.user, recruitment_position__in=self.recruitment_position.shared_interview_group.positions.all())
