@@ -589,6 +589,7 @@ interface UseSearchPaginatedQueryResult<T> {
 export function useSearchPaginatedQuery<T>({
   queryKey,
   queryFn,
+  pageSize = 10,
 }: UseSearchPaginatedQueryOptions<T>): UseSearchPaginatedQueryResult<T> {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
@@ -597,20 +598,25 @@ export function useSearchPaginatedQuery<T>({
   const { data, isLoading, error } = useQuery({
     queryKey: [...queryKey, currentPage, debouncedSearchTerm],
     queryFn: () => queryFn(currentPage, debouncedSearchTerm),
+    staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
+    refetchOnWindowFocus: false,
   });
+
+  // Reset to first page when search term changes
+  const handleSearchTermChange = (search: string) => {
+    setSearchTerm(search);
+    setCurrentPage(1); // Reset to first page when search changes
+  };
 
   return {
     data: data?.results ?? [],
     totalItems: data?.count ?? 0,
     currentPage: data?.current_page ?? currentPage,
     totalPages: data?.total_pages ?? 1,
-    pageSize: data?.page_size ?? 10,
+    pageSize: data?.page_size ?? pageSize,
     setCurrentPage,
     searchTerm,
-    setSearchTerm: (search: string) => {
-      setSearchTerm(search);
-      setCurrentPage(1); // Reset to first page when searching
-    },
+    setSearchTerm: handleSearchTermChange,
     isLoading,
     error,
   };
