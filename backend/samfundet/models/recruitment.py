@@ -483,7 +483,7 @@ class RecruitmentApplication(CustomBaseModel):
     def get_total_applications(self) -> int:
         return RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
 
-    def _set_reactivated_priority(instance) -> None:
+    def _set_reactivated_priority(instance) -> None:  # noqa: N805
         "This is called in the handle_reactivation signal"
         # Get all active (non-withdrawn) applications for this user and recruitment,
         # excluding the instance being reactivated.
