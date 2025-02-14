@@ -1,11 +1,20 @@
+import { useQuery } from '@tanstack/react-query';
 import { type MutableRefObject, type RefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getTextItem, putUserPreference } from '~/api';
-import type { Key, SetState } from '~/types';
+import type { Key, PageNumberPaginationType, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
 import type { LinkTarget } from './Components/Link/Link';
-import { BACKEND_DOMAIN, THEME, THEME_KEY, type ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
+import {
+  BACKEND_DOMAIN,
+  PAGE_SIZE,
+  THEME,
+  THEME_KEY,
+  type ThemeValue,
+  desktopBpLower,
+  mobileBpUpper,
+} from './constants';
 import type { TextItemValue } from './constants/TextItems';
 import { useAuthContext } from './context/AuthContext';
 import { useGlobalContext } from './context/GlobalContextProvider';
@@ -513,4 +522,102 @@ export function useParentElementWidth(childRef: RefObject<HTMLElement>) {
   }, [childRef]);
 
   return parentWidth;
+}
+
+interface UsePaginatedQueryOptions<T> {
+  queryKey: string[];
+  queryFn: (page: number) => Promise<PageNumberPaginationType<T>>;
+  pageSize?: number;
+  initialPage?: number;
+}
+
+interface UsePaginatedQueryResult<T> {
+  data: T[];
+  totalItems: number;
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+
+  setCurrentPage: (page: number) => void;
+  isLoading: boolean;
+  error: Error | null;
+}
+
+export function usePaginatedQuery<T>({
+  queryKey,
+  queryFn,
+  initialPage = 1,
+}: UsePaginatedQueryOptions<T>): UsePaginatedQueryResult<T> {
+  const [currentPage, setCurrentPage] = useState(initialPage);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: [...queryKey, currentPage],
+    queryFn: () => queryFn(currentPage),
+  });
+
+  return {
+    data: data?.results ?? [],
+    totalItems: data?.count ?? 0,
+    currentPage: data?.current_page ?? currentPage,
+    totalPages: data?.total_pages ?? 1,
+    pageSize: data?.page_size ?? PAGE_SIZE,
+    setCurrentPage,
+    isLoading,
+    error,
+  };
+}
+
+interface UseSearchPaginatedQueryOptions<T> {
+  queryKey: string[];
+  queryFn: (page: number, search: string) => Promise<PageNumberPaginationType<T>>;
+  pageSize?: number;
+}
+
+interface UseSearchPaginatedQueryResult<T> {
+  data: T[];
+  totalItems: number;
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+  setCurrentPage: (page: number) => void;
+  searchTerm: string;
+  setSearchTerm: (search: string) => void;
+  isLoading: boolean;
+  error: Error | null;
+}
+
+export function useSearchPaginatedQuery<T>({
+  queryKey,
+  queryFn,
+  pageSize = 10,
+}: UseSearchPaginatedQueryOptions<T>): UseSearchPaginatedQueryResult<T> {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: [...queryKey, currentPage, debouncedSearchTerm],
+    queryFn: () => queryFn(currentPage, debouncedSearchTerm),
+    staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
+    refetchOnWindowFocus: false,
+  });
+
+  // Reset to first page when search term changes
+  const handleSearchTermChange = (search: string) => {
+    setSearchTerm(search);
+    setCurrentPage(1); // Reset to first page when search changes
+  };
+
+  return {
+    data: data?.results ?? [],
+    totalItems: data?.count ?? 0,
+    currentPage: data?.current_page ?? currentPage,
+    totalPages: data?.total_pages ?? 1,
+    pageSize: data?.page_size ?? pageSize,
+    setCurrentPage,
+    searchTerm,
+    setSearchTerm: handleSearchTermChange,
+    isLoading,
+    error,
+  };
 }
