@@ -1036,7 +1036,7 @@ class RecruitmentWithdrawnApplicationsForApplicant(ModelViewSet):
 
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
 
-        applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user, application__withdrawn=False)
+        applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user, withdrawn=True)
 
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
