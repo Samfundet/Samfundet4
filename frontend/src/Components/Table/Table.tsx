@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { Fragment, useState } from 'react';
-import { TimeDisplay } from '~/Components';
+import { Skeleton, TimeDisplay } from '~/Components';
 import type { Children } from '~/types';
 import styles from './Table.module.scss';
 
@@ -44,6 +44,8 @@ type TableProps = {
   data: TableDataType;
   defaultSortColumn?: number;
   isChildTable?: boolean;
+  isLoading?:boolean;
+  skeletonRowCount?: number;
 };
 
 export function Table({
@@ -57,6 +59,8 @@ export function Table({
   data,
   defaultSortColumn = -1,
   isChildTable,
+  isLoading = false,
+  skeletonRowCount = 5,
 }: TableProps) {
   const [sortColumn, setSortColumn] = useState(defaultSortColumn);
   const [sortInverse, setSortInverse] = useState(false);
@@ -180,70 +184,90 @@ export function Table({
     return data.some((row) => row.childTable !== undefined);
   }
 
+  function renderSkeletonRows() {
+    return Array(skeletonRowCount).fill(null).map((_, rowIndex) => (
+      <tr key={`skeleton-${rowIndex}`} className={bodyRowClassName}>
+        {(isChildTable || data.some(row => row.childTable !== undefined)) && (
+          <td className={cellClassName}>
+            <Skeleton width="1em" height="1em" />
+          </td>
+        )}
+        {columns?.map((_, colIndex) => (
+          <td key={`skeleton-cell-${colIndex}`} className={cellClassName}>
+            <Skeleton width={`${Math.floor(Math.random() * 40 + 60)}%`} height="1.2em" />
+          </td>
+        ))}
+      </tr>
+    ));
+  }
+
+  // New function to render skeleton header
+  function renderSkeletonHeader() {
+    return (
+      <tr>
+        {(isChildTable || data.some(row => row.childTable !== undefined)) && <th />}
+        {columns?.map((_, index) => (
+          <th key={`skeleton-header-${index}`} className={headerColumnClassName}>
+            <Skeleton width={`${Math.floor(Math.random() * 30 + 70)}%`} height="1.2em" />
+          </th>
+        ))}
+      </tr>
+    );
+  }
+
   return (
     <>
       <table className={classNames(className ?? '', styles.table_samf)}>
         <thead className={headerClassName}>
-          <tr>
-            {(hasChildTable(data) || isChildTable) && <th />}
-
-            {columns?.map((col, index) => {
-              if (isColumnSortable(col)) {
+          {isLoading ? renderSkeletonHeader() : (
+            <tr>
+              {(hasChildTable(data) || isChildTable) && <th />}
+              {columns?.map((col, index) => {
+                if (isColumnSortable(col)) {
+                  return (
+                    <th
+                      key={index}
+                      className={classNames(headerColumnClassName, styles.sortable_th)}
+                      onClick={() => sort(index)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          sort(index);
+                        }
+                      }}
+                      tabIndex={0}
+                    >
+                      {getColumnContent(col)}
+                      {!isHideSortButton(col) && (
+                        <span className={styles.sort_icons}>
+                          <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18} />
+                        </span>
+                      )}
+                    </th>
+                  );
+                }
                 return (
-                  <th
-                    // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
-                    key={index}
-                    className={classNames(headerColumnClassName, styles.sortable_th)}
-                    onClick={() => sort(index)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        sort(index);
-                      }
-                    }}
-                    // biome-ignore lint/a11y/noNoninteractiveTabindex: required for tab focus
-                    tabIndex={0}
-                  >
+                  <th className={headerColumnClassName} key={index}>
                     {getColumnContent(col)}
-                    {!isHideSortButton(col) && (
-                      <span className={styles.sort_icons}>
-                        <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18} />
-                      </span>
-                    )}
                   </th>
                 );
-              }
-              return (
-                // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
-                <th className={headerColumnClassName} key={index}>
-                  {getColumnContent(col)}
-                </th>
-              );
-            })}
-          </tr>
+              })}
+            </tr>
+          )}
         </thead>
         <tbody className={bodyClassName}>
-          {sortedData(data).map((row, index) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
+          {isLoading ? renderSkeletonRows() : sortedData(data).map((row, index) => (
             <Fragment key={index}>
-              {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
               <tr
                 className={`${bodyRowClassName} ${row.childTable !== undefined ? styles.expandableRow : ''}`}
                 onClick={() => (isOpen === index ? setIsOpen(null) : setIsOpen(index))}
               >
                 {row.childTable !== undefined && (
-                  <td
-                    className={classNames(cellClassName)}
-                    key={`arrow-${
-                      // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                      index
-                    }`}
-                  >
+                  <td className={classNames(cellClassName)} key={`arrow-${index}`}>
                     <Icon icon={isOpen === index ? 'carbon:chevron-down' : 'carbon:chevron-right'} />
                   </td>
                 )}
                 {row?.cells.map((cell, cellIndex) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                   <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={cellIndex}>
                     {getCellContent(cell ?? '')}
                   </td>
@@ -251,7 +275,7 @@ export function Table({
               </tr>
               {row.childTable !== undefined && isOpen === index && (
                 <tr className={styles.childTableContainer}>
-                  <td colSpan={row.cells.length + 1} className={`${styles.childTable} ${cellClassName} `}>
+                  <td colSpan={row.cells.length + 1} className={`${styles.childTable} ${cellClassName}`}>
                     <Table {...row.childTable} isChildTable />
                   </td>
                 </tr>
