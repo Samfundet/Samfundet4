@@ -92,21 +92,3 @@ def organize_priorities_on_withdrawal(sender: RecruitmentApplication, instance: 
     # If the application is withdrawn, reorder active applications prioriity
     if not created and instance.withdrawn:
         instance.organize_priorities()
-
-
-@receiver(pre_save, sender=RecruitmentApplication)
-def recalc_priority_on_reactivation(sender, instance, **kwargs):
-    # If this is an update (instance.pk exists)...
-    if instance.pk:
-        old_instance = RecruitmentApplication.objects.get(pk=instance.pk)
-        # If the application was withdrawn and is now reactivated...
-        if old_instance.withdrawn and not instance.withdrawn:
-            # Clear the priority so that it can be recalculated later.
-            instance.applicant_priority = None
-
-
-@receiver(post_save, sender=RecruitmentApplication)
-def reorder_after_save(sender, instance, created, **kwargs):
-    # If the record is updated (not created) and is active, recalc the priorities.
-    if not created and not instance.withdrawn:
-        instance.organize_priorities()
