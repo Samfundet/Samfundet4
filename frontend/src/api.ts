@@ -1029,6 +1029,34 @@ export async function withdrawRecruitmentApplicationApplicant(positionId: number
   return response;
 }
 
+// export async function getRecruitmentApplicationsForApplicant(
+//   recruitmentId: string,
+// ): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
+//   const url =
+//     BACKEND_DOMAIN +
+//     reverse({
+//       pattern: ROUTES.backend.samfundet__recruitment_applications_for_applicant_list,
+//       queryParams: { recruitment: recruitmentId },
+//     });
+//   const response = await axios.get(url, { withCredentials: true });
+
+//   return response;
+// }
+
+export async function getWithdrawnRecruitmentApplicationsApplicant(
+  recruitmentId: number | string,
+): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_withdrawn_applications_for_applicant_list,
+      queryParams: { recruitment: recruitmentId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
 export async function withdrawRecruitmentApplicationRecruiter(id: string): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
