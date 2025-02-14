@@ -114,8 +114,8 @@ export async function impersonateUser(userId: number): Promise<boolean> {
   return response.status === 200;
 }
 
-export async function getUsers(): Promise<UserDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users;
+export async function getUsers(search?: string): Promise<UserDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users + (search ? `?search=${search}` : '');
   const response = await axios.get<UserDto[]>(url, { withCredentials: true });
   return response.data;
 }
@@ -984,6 +984,16 @@ export async function putRecruitmentApplication(
   const response = await axios.put(url, data, { withCredentials: true });
 
   return response;
+}
+
+export async function putRecrutmentInterviewNotes(notes: string, interviewId: number): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_application_interview_notes,
+      urlParams: { interviewId: interviewId },
+    });
+  return await axios.put(url, { notes: notes }, { withCredentials: true });
 }
 
 export async function getRecruitmentApplicationForPosition(
