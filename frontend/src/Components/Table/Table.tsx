@@ -26,7 +26,7 @@ type TableCell = {
   style?: string;
 };
 
-// type shorthands
+// Type shorthands
 export type TableRow = {
   cells: Array<TableCell | TableCellValue | undefined>;
   childTable?: TableProps;
@@ -192,7 +192,7 @@ export function Table({
       .map((_, rowIndex) => (
         <tr
           key={`skeleton-${
-            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+            // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
             rowIndex
           }`}
           className={bodyRowClassName}
@@ -205,7 +205,7 @@ export function Table({
           {columns?.map((_, colIndex) => (
             <td
               key={`skeleton-cell-${
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                // biome-ignore lint/suspicious/noArrayIndexKey: required for tab focus
                 colIndex
               }`}
               className={cellClassName}
@@ -227,7 +227,7 @@ export function Table({
               if (isColumnSortable(col)) {
                 return (
                   <th
-                    // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                    // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
                     key={index}
                     className={classNames(headerColumnClassName, styles.sortable_th)}
                     onClick={() => sort(index)}
@@ -237,7 +237,7 @@ export function Table({
                         sort(index);
                       }
                     }}
-                    // biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation>
+                    // biome-ignore lint/a11y/noNoninteractiveTabindex: Sortable header needs to be focusable for keyboard navigation
                     tabIndex={0}
                   >
                     {getColumnContent(col)}
@@ -250,7 +250,7 @@ export function Table({
                 );
               }
               return (
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
                 <th className={headerColumnClassName} key={index}>
                   {getColumnContent(col)}
                 </th>
@@ -262,9 +262,9 @@ export function Table({
           {isLoading
             ? renderSkeletonRows()
             : sortedData(data).map((row, index) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
                 <Fragment key={index}>
-                  {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+                  {/* biome-ignore lint/a11y/useKeyWithClickEvents: Click handling is handled by parent row element */}
                   <tr
                     className={`${bodyRowClassName} ${row.childTable !== undefined ? styles.expandableRow : ''}`}
                     onClick={() => (isOpen === index ? setIsOpen(null) : setIsOpen(index))}
@@ -273,7 +273,7 @@ export function Table({
                       <td
                         className={classNames(cellClassName)}
                         key={`arrow-${
-                          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                          // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
                           index
                         }`}
                       >
@@ -281,7 +281,7 @@ export function Table({
                       </td>
                     )}
                     {row?.cells.map((cell, cellIndex) => (
-                      // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                      // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
                       <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={cellIndex}>
                         {getCellContent(cell ?? '')}
                       </td>
