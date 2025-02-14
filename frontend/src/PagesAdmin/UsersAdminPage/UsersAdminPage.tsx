@@ -17,6 +17,7 @@ export function UsersAdminPage() {
 
   const {
     data: users,
+    isLoading,
     totalItems,
     currentPage,
     totalPages,
@@ -70,18 +71,23 @@ export function UsersAdminPage() {
     <AdminPageLayout title={title}>
       <InputField icon="mdi:search" value={searchTerm} onChange={setSearchTerm} placeholder={t(KEY.common_search)} />
       <div className={styles.table_container}>
-        <Table data={users.map((user) => ({ cells: userTableRow(user) }))} columns={userColumns} />
+        <Table
+          data={users.map((user) => ({ cells: userTableRow(user) }))}
+          columns={userColumns}
+          isLoading={isLoading}
+        />
       </div>
-      <div className={styles.pagination_container}>
-        {totalPages > 1 && (
+
+      {!isLoading && totalPages > 1 && (
+        <div className={styles.pagination_container}>
           <PagedPagination
             currentPage={currentPage}
             totalItems={totalItems}
             pageSize={pageSize}
             onPageChange={setCurrentPage}
           />
-        )}
-      </div>
+        </div>
+      )}
     </AdminPageLayout>
   );
 }

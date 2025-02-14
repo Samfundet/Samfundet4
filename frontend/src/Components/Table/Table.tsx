@@ -1,9 +1,11 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { Fragment, useState } from 'react';
-import { TimeDisplay } from '~/Components';
+import { Skeleton, TimeDisplay } from '~/Components';
 import type { Children } from '~/types';
 import styles from './Table.module.scss';
+
+const DEFAULT_PAGINATION_PAGESIZE = 10;
 
 // Supported cell values for sorting
 type TableCellValue = string | number | Date | boolean;
@@ -29,6 +31,7 @@ export type TableRow = {
   cells: Array<TableCell | TableCellValue | undefined>;
   childTable?: TableProps;
 };
+
 type TableDataType = TableRow[];
 
 type TableProps = {
@@ -44,6 +47,8 @@ type TableProps = {
   data: TableDataType;
   defaultSortColumn?: number;
   isChildTable?: boolean;
+  isLoading?: boolean;
+  skeletonRowCount?: number;
 };
 
 export function Table({
@@ -57,6 +62,8 @@ export function Table({
   data,
   defaultSortColumn = -1,
   isChildTable,
+  isLoading = false,
+  skeletonRowCount = DEFAULT_PAGINATION_PAGESIZE,
 }: TableProps) {
   const [sortColumn, setSortColumn] = useState(defaultSortColumn);
   const [sortInverse, setSortInverse] = useState(false);
@@ -121,7 +128,6 @@ export function Table({
           result = cellA === cellB ? 0 : cellA ? 1 : -1;
           break;
       }
-
       // Return inversed/normal
       return sortInverse ? -result : result;
     });
@@ -180,13 +186,43 @@ export function Table({
     return data.some((row) => row.childTable !== undefined);
   }
 
+  function renderSkeletonRows() {
+    return Array(skeletonRowCount)
+      .fill(null)
+      .map((_, rowIndex) => (
+        <tr
+          key={`skeleton-${
+            // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
+            rowIndex
+          }`}
+          className={bodyRowClassName}
+        >
+          {(isChildTable || data.some((row) => row.childTable !== undefined)) && (
+            <td className={cellClassName}>
+              <Skeleton width="1em" height="1em" />
+            </td>
+          )}
+          {columns?.map((_, colIndex) => (
+            <td
+              key={`skeleton-cell-${
+                // biome-ignore lint/suspicious/noArrayIndexKey: required for tab focus
+                colIndex
+              }`}
+              className={cellClassName}
+            >
+              <Skeleton width={`${Math.floor(Math.random() * 40 + 60)}%`} height="1.2em" />
+            </td>
+          ))}
+        </tr>
+      ));
+  }
+
   return (
     <>
       <table className={classNames(className ?? '', styles.table_samf)}>
         <thead className={headerClassName}>
           <tr>
             {(hasChildTable(data) || isChildTable) && <th />}
-
             {columns?.map((col, index) => {
               if (isColumnSortable(col)) {
                 return (
@@ -201,7 +237,7 @@ export function Table({
                         sort(index);
                       }
                     }}
-                    // biome-ignore lint/a11y/noNoninteractiveTabindex: required for tab focus
+                    // biome-ignore lint/a11y/noNoninteractiveTabindex: Sortable header needs to be focusable for keyboard navigation
                     tabIndex={0}
                   >
                     {getColumnContent(col)}
@@ -223,41 +259,43 @@ export function Table({
           </tr>
         </thead>
         <tbody className={bodyClassName}>
-          {sortedData(data).map((row, index) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
-            <Fragment key={index}>
-              {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-              <tr
-                className={`${bodyRowClassName} ${row.childTable !== undefined ? styles.expandableRow : ''}`}
-                onClick={() => (isOpen === index ? setIsOpen(null) : setIsOpen(index))}
-              >
-                {row.childTable !== undefined && (
-                  <td
-                    className={classNames(cellClassName)}
-                    key={`arrow-${
-                      // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                      index
-                    }`}
+          {isLoading
+            ? renderSkeletonRows()
+            : sortedData(data).map((row, index) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
+                <Fragment key={index}>
+                  {/* biome-ignore lint/a11y/useKeyWithClickEvents: Click handling is handled by parent row element */}
+                  <tr
+                    className={`${bodyRowClassName} ${row.childTable !== undefined ? styles.expandableRow : ''}`}
+                    onClick={() => (isOpen === index ? setIsOpen(null) : setIsOpen(index))}
                   >
-                    <Icon icon={isOpen === index ? 'carbon:chevron-down' : 'carbon:chevron-right'} />
-                  </td>
-                )}
-                {row?.cells.map((cell, cellIndex) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                  <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={cellIndex}>
-                    {getCellContent(cell ?? '')}
-                  </td>
-                ))}
-              </tr>
-              {row.childTable !== undefined && isOpen === index && (
-                <tr className={styles.childTableContainer}>
-                  <td colSpan={row.cells.length + 1} className={`${styles.childTable} ${cellClassName} `}>
-                    <Table {...row.childTable} isChildTable />
-                  </td>
-                </tr>
-              )}
-            </Fragment>
-          ))}
+                    {row.childTable !== undefined && (
+                      <td
+                        className={classNames(cellClassName)}
+                        key={`arrow-${
+                          // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
+                          index
+                        }`}
+                      >
+                        <Icon icon={isOpen === index ? 'carbon:chevron-down' : 'carbon:chevron-right'} />
+                      </td>
+                    )}
+                    {row?.cells.map((cell, cellIndex) => (
+                      // biome-ignore lint/suspicious/noArrayIndexKey: no guarantee for unique value except for index
+                      <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={cellIndex}>
+                        {getCellContent(cell ?? '')}
+                      </td>
+                    ))}
+                  </tr>
+                  {row.childTable !== undefined && isOpen === index && (
+                    <tr className={styles.childTableContainer}>
+                      <td colSpan={row.cells.length + 1} className={`${styles.childTable} ${cellClassName}`}>
+                        <Table {...row.childTable} isChildTable />
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
+              ))}
         </tbody>
       </table>
     </>
