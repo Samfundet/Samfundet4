@@ -95,7 +95,7 @@ def organize_priorities_on_withdrawal(sender: RecruitmentApplication, instance: 
 
 
 @receiver(pre_save, sender=RecruitmentApplication)
-def handle_reactivation(sender: RecruitmentApplication, instance: RecruitmentApplication, **kwargs) -> None:
+def handle_reactivation(sender: RecruitmentApplication, instance: RecruitmentApplication, **kwargs: Any) -> None:
     # Only perform reactivation logic if this is an update (i.e. the object is not new)
     # For new objects, instance._state.adding is True, so we skip this block.
     if not instance._state.adding:
