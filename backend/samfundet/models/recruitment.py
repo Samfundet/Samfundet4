@@ -358,12 +358,14 @@ class RecruitmentApplication(CustomBaseModel):
 
     def organize_priorities(self) -> None:
         """Organizes priorites from 1 to n, so that it is sequential with no gaps"""
-        applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user).order_by('applicant_priority')
-        for i in range(len(applications_for_user)):
+        non_withdrawn_applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user, withdrawn=False).order_by(
+            'applicant_priority'
+        )
+        for i in range(len(non_withdrawn_applications_for_user)):
             correct_position = i + 1
-            if applications_for_user[i].applicant_priority != correct_position:
-                applications_for_user[i].applicant_priority = correct_position
-                applications_for_user[i].save()
+            if non_withdrawn_applications_for_user[i].applicant_priority != correct_position:
+                non_withdrawn_applications_for_user[i].applicant_priority = correct_position
+                non_withdrawn_applications_for_user[i].save()
 
     def update_priority(self, direction: int) -> None:
         """
@@ -375,20 +377,22 @@ class RecruitmentApplication(CustomBaseModel):
         """
         # Use order for more simple an unified for direction
         ordering = f'{"" if direction < 0 else "-"}applicant_priority'
-        applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user).order_by(ordering)
+        non_withdrawn_applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user, withdrawn=False).order_by(
+            ordering
+        )
         direction = abs(direction)  # convert to absolute
-        for i in range(len(applications_for_user)):
-            if applications_for_user[i].id == self.id:  # find current
+        for i in range(len(non_withdrawn_applications_for_user)):
+            if non_withdrawn_applications_for_user[i].id == self.id:  # find current
                 # Find index of which to switch  priority with
-                switch = len(applications_for_user) - 1 if i + direction >= len(applications_for_user) else i + direction
-                new_priority = applications_for_user[switch].applicant_priority
+                switch = len(non_withdrawn_applications_for_user) - 1 if i + direction >= len(non_withdrawn_applications_for_user) else i + direction
+                new_priority = non_withdrawn_applications_for_user[switch].applicant_priority
                 # Move priorites down in direction
                 for ii in range(switch, i, -1):
-                    applications_for_user[ii].applicant_priority = applications_for_user[ii - 1].applicant_priority
-                    applications_for_user[ii].save()
+                    non_withdrawn_applications_for_user[ii].applicant_priority = non_withdrawn_applications_for_user[ii - 1].applicant_priority
+                    non_withdrawn_applications_for_user[ii].save()
                 # update priority
-                applications_for_user[i].applicant_priority = new_priority
-                applications_for_user[i].save()
+                non_withdrawn_applications_for_user[i].applicant_priority = new_priority
+                non_withdrawn_applications_for_user[i].save()
                 break
         self.organize_priorities()
 
@@ -435,9 +439,11 @@ class RecruitmentApplication(CustomBaseModel):
         # If the application is saved without an interview, try to find an interview from a shared position.
         if not self.applicant_priority:
             self.organize_priorities()
-            current_applications_count = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment).count()
+            current_non_withdrawn_applications_count = RecruitmentApplication.objects.filter(
+                user=self.user, recruitment=self.recruitment, withdrawn=False
+            ).count()
             # Set the applicant_priority to the number of applications + 1 (for the current application)
-            self.applicant_priority = current_applications_count + 1
+            self.applicant_priority = current_non_withdrawn_applications_count + 1
         # If the application is saved without an interview, try to find an interview from a shared position.
         if self.withdrawn:
             self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED

@@ -85,3 +85,16 @@ def application_applicant_rejected_or_accepted(sender: RecruitmentApplication, i
             ).exclude(id=obj.id):
                 other_application.recruiter_status = RecruitmentStatusChoices.NOT_SET
                 other_application.save()
+
+
+@receiver(post_save, sender=RecruitmentApplication)
+def organize_priorities_on_withdrawal(sender: RecruitmentApplication, instance: RecruitmentApplication, *, created: bool, **kwargs: Any) -> None:
+    # If the application is withdrawn, reorder active applications
+    if not created and instance.withdrawn:
+        instance.organize_priorities()
+
+
+# @receiver(post_save, sender=RecruitmentApplication)
+# def organize_priorities_on_creation(sender: RecruitmentApplication, instance: RecruitmentApplication, *, created: bool, **kwargs: Any) -> None:
+#    if created:
+#        instance.organize_priorities()
