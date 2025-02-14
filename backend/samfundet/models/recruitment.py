@@ -376,22 +376,11 @@ class RecruitmentApplication(CustomBaseModel):
     TOO_MANY_APPLICATIONS_ERROR = 'Exceeds max allowed applications for recruitment.'
 
     def __init__(self, *args: tuple, **kwargs: dict):
-        """
-        Initializes the RecruitmentApplication instance and tracks the original withdrawn state
-        for detecting status changes during save operations.
-        """
         super().__init__(*args, **kwargs)
         # Track original withdrawn state to detect changes
         self._original_withdrawn = self.withdrawn if self.pk else False
 
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
-        """
-        Returns the organization associated with this application's recruitment.
-        Args:
-            return_id: If True, returns the organization ID instead of the object
-        Returns:
-            Organization or int: The organization object or its ID
-        """
         return self.recruitment.resolve_org(return_id=return_id)
 
     def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
@@ -399,7 +388,9 @@ class RecruitmentApplication(CustomBaseModel):
 
     def organize_priorities(self) -> None:
         """Organizes priorites from 1 to n, so that it is sequential with no gaps"""
-        applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user).order_by('applicant_priority')
+        applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user, withdrawn=False).order_by(
+            'applicant_priority'
+        )
         for i in range(len(applications_for_user)):
             correct_position = i + 1
             if applications_for_user[i].applicant_priority != correct_position:
@@ -416,7 +407,7 @@ class RecruitmentApplication(CustomBaseModel):
         """
         # Use order for more simple an unified for direction
         ordering = f'{"" if direction < 0 else "-"}applicant_priority'
-        applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user).order_by(ordering)
+        applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user, withdrawn=False).order_by(ordering)
         direction = abs(direction)  # convert to absolute
         for i in range(len(applications_for_user)):
             if applications_for_user[i].id == self.id:  # find current

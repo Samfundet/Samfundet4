@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from random import choice, sample, randint
+from random import choice, randint
 from datetime import timedelta
 
 from django.db import transaction
@@ -72,7 +72,7 @@ def seed():  # noqa: C901
     yield 10, 'Deleted old applications'
 
     positions = RecruitmentPosition.objects.all()
-    users = list(list(User.objects.all())  # Convert to list to avoid multiple DB hits)
+    users = list(User.objects.all())  # Convert to list to avoid multiple DB hits)
     created_count = 0
 
     for position_index, position in enumerate(positions):
@@ -81,7 +81,7 @@ def seed():  # noqa: C901
             recruitment = ensure_valid_recruitment_dates(position)
 
             # Create between 0 and 5 applications for each position
-            num_applications = randint(0, 5)
+            num_applications = randint(5, 10)
 
             for _ in range(num_applications):
                 # Select a random user who hasn't exceeded application limit
