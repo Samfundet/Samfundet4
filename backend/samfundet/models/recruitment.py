@@ -449,7 +449,9 @@ class RecruitmentApplication(CustomBaseModel):
         if self.withdrawn:
             # when an application is witdrawn the organize_priorities_on_withdrawal signal is called, this must happen post save
             # this if-statement makes sure that the recruiter_status/priority is "resets" on withdrawal
+            # TODO: DO WE WANT TO SET IT TO NOT WANTED AND AUTOMATIC REJECTION? WOULD NOT_SET AND NOT_SET BE BETTER?
             self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
+
             self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
 
         if not self.interview and self.recruitment_position.shared_interview_group:
@@ -482,6 +484,7 @@ class RecruitmentApplication(CustomBaseModel):
         return RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
 
     def update_applicant_state(self) -> None:
+        # TODO: DO WE WANT TO CONSIDER WITHDRAWN APPLICATIONS HERE:
         applications = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment).order_by('applicant_priority')
         # Get top priority
         top_wanted = applications.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED).order_by('applicant_priority').first()

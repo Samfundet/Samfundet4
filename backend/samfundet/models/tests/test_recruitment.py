@@ -1093,3 +1093,119 @@ def test_position_must_have_single_owner(fixture_recruitment_position: Recruitme
     fixture_recruitment_position.gang = None
     fixture_recruitment_position.section = fixture_gang_section
     fixture_recruitment_position.save()
+
+
+def test_lowest_priority_equals_active_applications(
+    fixture_user: User,
+    fixture_recruitment: Recruitment,
+    fixture_recruitment_position: RecruitmentPosition,
+    fixture_recruitment_position2: RecruitmentPosition,
+):
+    # Create two applications for the same user.
+    app1 = RecruitmentApplication.objects.create(
+        user=fixture_user,
+        recruitment_position=fixture_recruitment_position,
+        recruitment=fixture_recruitment,
+        application_text='Application 1',
+    )
+    app2 = RecruitmentApplication.objects.create(
+        user=fixture_user,
+        recruitment_position=fixture_recruitment_position2,
+        recruitment=fixture_recruitment,
+        application_text='Application 2',
+    )
+
+    # Get all active (non-withdrawn) applications for the user.
+    active_apps = RecruitmentApplication.objects.filter(user=fixture_user, recruitment=fixture_recruitment, withdrawn=False)
+    active_count = active_apps.count()
+
+    # The highest applicant_priority among active applications should equal the active count.
+    max_priority = max(app.applicant_priority for app in active_apps)
+    assert max_priority == active_count, f'Expected highest priority to be {active_count}, but got {max_priority}'
+
+
+def test_priority_adjusts_on_withdrawal(
+    fixture_user: User,
+    fixture_recruitment: Recruitment,
+    fixture_recruitment_position: RecruitmentPosition,
+    fixture_recruitment_position2: RecruitmentPosition,
+):
+    # Create two applications.
+    app1 = RecruitmentApplication.objects.create(
+        user=fixture_user,
+        recruitment_position=fixture_recruitment_position,
+        recruitment=fixture_recruitment,
+        application_text='Application 1',
+    )
+    app2 = RecruitmentApplication.objects.create(
+        user=fixture_user,
+        recruitment_position=fixture_recruitment_position2,
+        recruitment=fixture_recruitment,
+        application_text='Application 2',
+    )
+
+    # Initially, there should be two active applications.
+    active_apps = RecruitmentApplication.objects.filter(user=fixture_user, recruitment=fixture_recruitment, withdrawn=False)
+    assert active_apps.count() == 2
+    max_priority = max(app.applicant_priority for app in active_apps)
+    assert max_priority == 2
+
+    # Withdraw the first application. The post-save signal should trigger reordering.
+    app1.withdrawn = True
+    app1.save()
+
+    # Re-fetch active applications.
+    active_apps = RecruitmentApplication.objects.filter(user=fixture_user, recruitment=fixture_recruitment, withdrawn=False)
+    active_count = active_apps.count()
+    max_priority = max(app.applicant_priority for app in active_apps)
+    # Now there should only be one active application and its applicant_priority should be 1.
+    assert active_count == 1
+    assert max_priority == 1, f'After withdrawal, expected highest priority to be 1, but got {max_priority}'
+
+
+def test_reapplication_updates_priority(
+    fixture_user: User,
+    fixture_recruitment: Recruitment,
+    fixture_recruitment_position: RecruitmentPosition,
+    fixture_recruitment_position2: RecruitmentPosition,
+):
+    # Create two applications on different positions
+    app1 = RecruitmentApplication.objects.create(
+        user=fixture_user,
+        recruitment_position=fixture_recruitment_position,
+        recruitment=fixture_recruitment,
+        application_text='Application 1',
+    )
+    app2 = RecruitmentApplication.objects.create(
+        user=fixture_user,
+        recruitment_position=fixture_recruitment_position2,
+        recruitment=fixture_recruitment,
+        application_text='Application 2',
+    )
+    # Initially, app1 should have priority 1 and app2 priority 2.
+    assert app1.applicant_priority == 1
+    assert app2.applicant_priority == 2
+
+    # Withdraw the first application.
+    app1.withdrawn = True
+    app1.save()
+
+    # Check that only one active application remains.
+    active_apps = RecruitmentApplication.objects.filter(user=fixture_user, recruitment=fixture_recruitment, withdrawn=False)
+    assert active_apps.count() == 1
+    # The highest (and only) applicant_priority should be 1.
+    max_priority = max(app.applicant_priority for app in active_apps)
+    assert max_priority == 1
+
+    # Simulate a reapplication by updating the withdrawn application to active.
+    # (Since the clean() method prevents creating a new application for the same recruitment position.)
+    app1.withdrawn = False
+    app1.application_text = 'Reapplied'
+    app1.save()
+
+    # Now, there should be two active applications, and the highest applicant_priority must equal 2.
+    active_apps = RecruitmentApplication.objects.filter(user=fixture_user, recruitment=fixture_recruitment, withdrawn=False)
+    active_count = active_apps.count()
+    max_priority = max(app.applicant_priority for app in active_apps)
+    assert active_count == 2
+    assert max_priority == active_count, f'Expected highest priority to be {active_count}, but got {max_priority}'
