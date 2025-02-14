@@ -16,15 +16,11 @@ type TableColumn = {
 };
 
 type TableCell = {
-  // Value used for sorting, eg number 24 or string "some string"
   value?: TableCellValue;
-  // Content in cell, eg <b>24 hours</b>
-  // If missing, uses value instead.
   content?: Children;
   style?: string;
 };
 
-// Type shorthands
 export type TableRow = {
   cells: Array<TableCell | TableCellValue | undefined>;
   childTable?: TableProps;
@@ -39,12 +35,10 @@ type TableProps = {
   bodyRowClassName?: string;
   bodyClassName?: string;
   columns?: (TableColumn | string | undefined)[];
-  // Data can either be a table cell with separated value and content, or just the raw value
-  // For instance ["a", "b"] or [ {value: "a", content: <div>a</div>}, {value: "b", content: <div>b</div>} ]
   data: TableDataType;
   defaultSortColumn?: number;
   isChildTable?: boolean;
-  isLoading?:boolean;
+  isLoading?: boolean;
   skeletonRowCount?: number;
 };
 
@@ -99,20 +93,17 @@ export function Table({
       const cellA = getCellValue(rowA.cells[sortColumn] ?? '');
       const cellB = getCellValue(rowB.cells[sortColumn] ?? '');
 
-      // Not same type, force sort as string type
       if (typeof cellA !== typeof cellB) {
         const diff = (cellA?.toString() ?? '').localeCompare(cellB?.toString() ?? '');
         return sortInverse ? -diff : diff;
       }
       const cellType = typeof cellA;
 
-      // Custom sort handling for dates
       if (cellA instanceof Date && cellB instanceof Date) {
         const diff = (cellA as Date).getTime() - (cellB as Date).getTime();
         return sortInverse ? -diff : diff;
       }
 
-      // Compare by primitive type
       let result = 0;
       switch (cellType) {
         case 'number':
@@ -126,7 +117,6 @@ export function Table({
           break;
       }
 
-      // Return inversed/normal
       return sortInverse ? -result : result;
     });
   }
@@ -185,103 +175,91 @@ export function Table({
   }
 
   function renderSkeletonRows() {
-    return Array(skeletonRowCount).fill(null).map((_, rowIndex) => (
-      <tr key={`skeleton-${rowIndex}`} className={bodyRowClassName}>
-        {(isChildTable || data.some(row => row.childTable !== undefined)) && (
-          <td className={cellClassName}>
-            <Skeleton width="1em" height="1em" />
-          </td>
-        )}
-        {columns?.map((_, colIndex) => (
-          <td key={`skeleton-cell-${colIndex}`} className={cellClassName}>
-            <Skeleton width={`${Math.floor(Math.random() * 40 + 60)}%`} height="1.2em" />
-          </td>
-        ))}
-      </tr>
-    ));
-  }
-
-  // New function to render skeleton header
-  function renderSkeletonHeader() {
-    return (
-      <tr>
-        {(isChildTable || data.some(row => row.childTable !== undefined)) && <th />}
-        {columns?.map((_, index) => (
-          <th key={`skeleton-header-${index}`} className={headerColumnClassName}>
-            <Skeleton width={`${Math.floor(Math.random() * 30 + 70)}%`} height="1.2em" />
-          </th>
-        ))}
-      </tr>
-    );
+    return Array(skeletonRowCount)
+      .fill(null)
+      .map((_, rowIndex) => (
+        <tr key={`skeleton-${rowIndex}`} className={bodyRowClassName}>
+          {(isChildTable || data.some((row) => row.childTable !== undefined)) && (
+            <td className={cellClassName}>
+              <Skeleton width="1em" height="1em" />
+            </td>
+          )}
+          {columns?.map((_, colIndex) => (
+            <td key={`skeleton-cell-${colIndex}`} className={cellClassName}>
+              <Skeleton width={`${Math.floor(Math.random() * 40 + 60)}%`} height="1.2em" />
+            </td>
+          ))}
+        </tr>
+      ));
   }
 
   return (
     <>
       <table className={classNames(className ?? '', styles.table_samf)}>
         <thead className={headerClassName}>
-          {isLoading ? renderSkeletonHeader() : (
-            <tr>
-              {(hasChildTable(data) || isChildTable) && <th />}
-              {columns?.map((col, index) => {
-                if (isColumnSortable(col)) {
-                  return (
-                    <th
-                      key={index}
-                      className={classNames(headerColumnClassName, styles.sortable_th)}
-                      onClick={() => sort(index)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          sort(index);
-                        }
-                      }}
-                      tabIndex={0}
-                    >
-                      {getColumnContent(col)}
-                      {!isHideSortButton(col) && (
-                        <span className={styles.sort_icons}>
-                          <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18} />
-                        </span>
-                      )}
-                    </th>
-                  );
-                }
+          <tr>
+            {(hasChildTable(data) || isChildTable) && <th />}
+            {columns?.map((col, index) => {
+              if (isColumnSortable(col)) {
                 return (
-                  <th className={headerColumnClassName} key={index}>
+                  <th
+                    key={index}
+                    className={classNames(headerColumnClassName, styles.sortable_th)}
+                    onClick={() => sort(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        sort(index);
+                      }
+                    }}
+                    tabIndex={0}
+                  >
                     {getColumnContent(col)}
+                    {!isHideSortButton(col) && (
+                      <span className={styles.sort_icons}>
+                        <Icon icon={getSortableIcon(index)} className={getIconClass(index)} width={18} />
+                      </span>
+                    )}
                   </th>
                 );
-              })}
-            </tr>
-          )}
+              }
+              return (
+                <th className={headerColumnClassName} key={index}>
+                  {getColumnContent(col)}
+                </th>
+              );
+            })}
+          </tr>
         </thead>
         <tbody className={bodyClassName}>
-          {isLoading ? renderSkeletonRows() : sortedData(data).map((row, index) => (
-            <Fragment key={index}>
-              <tr
-                className={`${bodyRowClassName} ${row.childTable !== undefined ? styles.expandableRow : ''}`}
-                onClick={() => (isOpen === index ? setIsOpen(null) : setIsOpen(index))}
-              >
-                {row.childTable !== undefined && (
-                  <td className={classNames(cellClassName)} key={`arrow-${index}`}>
-                    <Icon icon={isOpen === index ? 'carbon:chevron-down' : 'carbon:chevron-right'} />
-                  </td>
-                )}
-                {row?.cells.map((cell, cellIndex) => (
-                  <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={cellIndex}>
-                    {getCellContent(cell ?? '')}
-                  </td>
-                ))}
-              </tr>
-              {row.childTable !== undefined && isOpen === index && (
-                <tr className={styles.childTableContainer}>
-                  <td colSpan={row.cells.length + 1} className={`${styles.childTable} ${cellClassName}`}>
-                    <Table {...row.childTable} isChildTable />
-                  </td>
-                </tr>
-              )}
-            </Fragment>
-          ))}
+          {isLoading
+            ? renderSkeletonRows()
+            : sortedData(data).map((row, index) => (
+                <Fragment key={index}>
+                  <tr
+                    className={`${bodyRowClassName} ${row.childTable !== undefined ? styles.expandableRow : ''}`}
+                    onClick={() => (isOpen === index ? setIsOpen(null) : setIsOpen(index))}
+                  >
+                    {row.childTable !== undefined && (
+                      <td className={classNames(cellClassName)} key={`arrow-${index}`}>
+                        <Icon icon={isOpen === index ? 'carbon:chevron-down' : 'carbon:chevron-right'} />
+                      </td>
+                    )}
+                    {row?.cells.map((cell, cellIndex) => (
+                      <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={cellIndex}>
+                        {getCellContent(cell ?? '')}
+                      </td>
+                    ))}
+                  </tr>
+                  {row.childTable !== undefined && isOpen === index && (
+                    <tr className={styles.childTableContainer}>
+                      <td colSpan={row.cells.length + 1} className={`${styles.childTable} ${cellClassName}`}>
+                        <Table {...row.childTable} isChildTable />
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
+              ))}
         </tbody>
       </table>
     </>
