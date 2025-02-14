@@ -77,16 +77,17 @@ export function UsersAdminPage() {
           isLoading={isLoading}
         />
       </div>
-      <div className={styles.pagination_container}>
-        {totalPages > 1 && (
+
+      {!isLoading && totalPages > 1 && (
+        <div className={styles.pagination_container}>
           <PagedPagination
             currentPage={currentPage}
             totalItems={totalItems}
             pageSize={pageSize}
             onPageChange={setCurrentPage}
           />
-        )}
-      </div>
+        </div>
+      )}
     </AdminPageLayout>
   );
 }
