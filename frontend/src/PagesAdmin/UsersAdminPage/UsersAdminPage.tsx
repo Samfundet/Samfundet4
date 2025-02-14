@@ -1,12 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PagedPagination, Table, InputField } from '~/Components';
 import { formatDate } from '~/Components/OccupiedForm/utils';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
-import { getUsersPaginated } from '~/api';
+import { getUsersSearchPaginated } from '~/api';
 import type { UserDto } from '~/dto';
-import { usePaginatedQuery, useDebounce } from '~/hooks';
+import { useSearchPaginatedQuery, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { getFullName } from '~/utils';
 import styles from './UsersAdminPage.module.scss';
@@ -14,29 +12,9 @@ import { ImpersonateButton } from './components';
 
 export function UsersAdminPage() {
   const { t } = useTranslation();
-
-  const [users, setUsers] = useState<UserDto[]>();
-  const [loading, setLoading] = useState(true);
-  const title = t(KEY.common_users);
+  const title: string = t(KEY.common_users);
   useTitle(title);
 
-  const title: string = t(KEY.common_users);
-
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
-
-  const { data: users = [] } = useQuery({
-    queryKey: ['users', debouncedSearchTerm],
-    queryFn: () => getUsers(debouncedSearchTerm),
-    enabled: true,
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-  });
-
-  function handleSearchQuery(searchString: string) {
-    setSearchTerm(searchString);
-  }
-/*
   const {
     data: users,
     totalItems,
@@ -44,12 +22,14 @@ export function UsersAdminPage() {
     totalPages,
     pageSize,
     setCurrentPage,
+    searchTerm,
+    setSearchTerm,
     isLoading,
-  } = usePaginatedQuery<UserDto>({
+  } = useSearchPaginatedQuery<UserDto>({
     queryKey: ['admin-users'],
-    queryFn: (page: number) => getUsersPaginated(page),
+    queryFn: getUsersSearchPaginated,
   });
-*/
+
   const userColumns = [
     { content: t(KEY.common_username), sortable: true },
     { content: t(KEY.common_name), sortable: true },
@@ -89,6 +69,18 @@ export function UsersAdminPage() {
 
   return (
     <AdminPageLayout title={title} loading={isLoading}>
+      <InputField
+        icon="mdi:search"
+        value={searchTerm}
+        onChange={setSearchTerm}
+        placeholder={t(KEY.common_search)}
+      />
+      <div className={styles.table_container}>
+        <Table
+          data={users.map((user) => ({ cells: userTableRow(user) }))}
+          columns={userColumns}
+        />
+      </div>
       {totalPages > 1 && (
         <PagedPagination
           currentPage={currentPage}
@@ -97,10 +89,6 @@ export function UsersAdminPage() {
           onPageChange={setCurrentPage}
         />
       )}
-            <InputField icon="mdi:search" onChange={handleSearchQuery} />
-      <div className={styles.table_container}>
-        <Table data={users.map((user) => ({ cells: userTableRow(user) }))} columns={userColumns} />
-      </div>
     </AdminPageLayout>
   );
 }

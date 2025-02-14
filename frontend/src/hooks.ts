@@ -528,6 +528,7 @@ interface UsePaginatedQueryOptions<T> {
   queryKey: string[];
   queryFn: (page: number) => Promise<PageNumberPaginationType<T>>;
   pageSize?: number;
+  initialPage?: number;
 }
 
 interface UsePaginatedQueryResult<T> {
@@ -536,6 +537,7 @@ interface UsePaginatedQueryResult<T> {
   currentPage: number;
   totalPages: number;
   pageSize: number;
+
   setCurrentPage: (page: number) => void;
   isLoading: boolean;
   error: Error | null;
@@ -544,9 +546,9 @@ interface UsePaginatedQueryResult<T> {
 export function usePaginatedQuery<T>({
   queryKey,
   queryFn,
-  //initialPage = 1,
+  initialPage = 1,
 }: UsePaginatedQueryOptions<T>): UsePaginatedQueryResult<T> {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(initialPage);
 
   const { data, isLoading, error } = useQuery({
     queryKey: [...queryKey, currentPage],
@@ -560,6 +562,55 @@ export function usePaginatedQuery<T>({
     totalPages: data?.total_pages ?? 1,
     pageSize: data?.page_size ?? PAGE_SIZE,
     setCurrentPage,
+    isLoading,
+    error,
+  };
+}
+
+interface UseSearchPaginatedQueryOptions<T> {
+  queryKey: string[];
+  queryFn: (page: number, search: string) => Promise<PageNumberPaginationType<T>>;
+  pageSize?: number;
+}
+
+interface UseSearchPaginatedQueryResult<T> {
+  data: T[];
+  totalItems: number;
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+  setCurrentPage: (page: number) => void;
+  searchTerm: string;
+  setSearchTerm: (search: string) => void;
+  isLoading: boolean;
+  error: Error | null;
+}
+
+export function useSearchPaginatedQuery<T>({
+  queryKey,
+  queryFn,
+}: UseSearchPaginatedQueryOptions<T>): UseSearchPaginatedQueryResult<T> {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: [...queryKey, currentPage, debouncedSearchTerm],
+    queryFn: () => queryFn(currentPage, debouncedSearchTerm),
+  });
+
+  return {
+    data: data?.results ?? [],
+    totalItems: data?.count ?? 0,
+    currentPage: data?.current_page ?? currentPage,
+    totalPages: data?.total_pages ?? 1,
+    pageSize: data?.page_size ?? 10,
+    setCurrentPage,
+    searchTerm,
+    setSearchTerm: (search: string) => {
+      setSearchTerm(search);
+      setCurrentPage(1); // Reset to first page when searching
+    },
     isLoading,
     error,
   };

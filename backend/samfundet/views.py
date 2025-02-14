@@ -538,6 +538,20 @@ class PaginatedUsersView(ListAPIView):
         return queryset.order_by('username')
 
 
+class PaginatedSearchUsersView(ListAPIView):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = UserSerializer
+    pagination_class = CustomPageNumberPagination
+
+    def get_queryset(self) -> QuerySet[User]:
+        """
+        Get queryset of users with search functionality using the user_query helper.
+        Returns ordered queryset of users filtered by search parameters if provided.
+        """
+        # Pass the query parameters directly to user_query
+        return user_query(query=self.request.query_params).order_by('username')
+
+
 class ImpersonateView(APIView):
     permission_classes = [IsAuthenticated]  # TODO: Permission check.
 
