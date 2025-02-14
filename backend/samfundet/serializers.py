@@ -15,9 +15,10 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.password_validation import validate_password
 
 from root.constants import PHONE_NUMBER_REGEX
-from root.utils.mixins import CustomBaseSerializer
+from root.utils.mixins import FullCleanSerializer, CustomBaseSerializer
 
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
@@ -233,6 +234,22 @@ class ClosedPeriodSerializer(CustomBaseSerializer):
     class Meta:
         model = ClosedPeriod
         fields = '__all__'
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    current_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_current_password(self, value: str) -> str:
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError('Incorrect current password')
+        return value
+
+    def validate_new_password(self, value: str) -> str:
+        user = self.context['request'].user
+        validate_password(value, user)
+        return value
 
 
 class LoginSerializer(serializers.Serializer):
@@ -611,7 +628,7 @@ class TableSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
-class ReservationSerializer(CustomBaseSerializer):
+class ReservationSerializer(FullCleanSerializer):
     class Meta:
         model = Reservation
         fields = '__all__'
@@ -688,14 +705,11 @@ class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
 
 
 class RecruitmentGangStatSerializer(serializers.ModelSerializer):
-    gang = serializers.SerializerMethodField(method_name='gang_name', read_only=True)
+    gang = GangSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentGangStat
         exclude = ['id', 'recruitment_stats']
-
-    def gang_name(self, stat: RecruitmentGangStat) -> str:
-        return stat.gang.name_nb
 
 
 class RecruitmentStatisticsSerializer(serializers.ModelSerializer):
@@ -820,6 +834,12 @@ class RecruitmentSerializer(CustomBaseSerializer):
 class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
     separate_positions = RecruitmentSeparatePositionSerializer(many=True, read_only=True)
     recruitment_progress = serializers.SerializerMethodField(method_name='get_recruitment_progress', read_only=True)
+    total_applicants = serializers.SerializerMethodField(method_name='get_total_applicants', read_only=True)
+    total_processed_applicants = serializers.SerializerMethodField(method_name='get_total_processed_applicants', read_only=True)
+    total_unprocessed_applicants = serializers.SerializerMethodField(method_name='get_total_unprocessed_applicants', read_only=True)
+    total_processed_applications = serializers.SerializerMethodField(method_name='get_total_processed_applications', read_only=True)
+    total_unprocessed_applications = serializers.SerializerMethodField(method_name='get_total_unprocessed_applications', read_only=True)
+
     statistics = RecruitmentStatisticsSerializer(read_only=True)
 
     class Meta:
@@ -828,6 +848,21 @@ class RecruitmentForRecruiterSerializer(CustomBaseSerializer):
 
     def get_recruitment_progress(self, instance: Recruitment) -> float:
         return instance.recruitment_progress()
+
+    def get_total_applicants(self, instance: Recruitment) -> int:
+        return instance.get_applicants().count()
+
+    def get_total_processed_applicants(self, instance: Recruitment) -> int:
+        return instance.get_processed_applicants().count()
+
+    def get_total_unprocessed_applicants(self, instance: Recruitment) -> int:
+        return instance.get_unprocessed_applicants().count()
+
+    def get_total_processed_applications(self, instance: Recruitment) -> int:
+        return instance.get_processed_applications().count()
+
+    def get_total_unprocessed_applications(self, instance: Recruitment) -> int:
+        return instance.get_unprocessed_applications().count()
 
 
 class RecruitmentPositionSerializer(CustomBaseSerializer):
@@ -925,7 +960,9 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
             'short_description_en',
             'long_description_nb',
             'long_description_en',
+            'tags',
             'is_funksjonaer_position',
+            'norwegian_applicants_only',
             'default_application_letter_nb',
             'default_application_letter_en',
             'gang',
@@ -1043,6 +1080,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
     recruitment_position = RecruitmentPositionForApplicantSerializer()
     recruiter_priority = serializers.CharField(source='get_recruiter_priority_display')
     interview_time = serializers.SerializerMethodField(method_name='get_interview_time', read_only=True)
+    interview = InterviewSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentApplication
@@ -1058,6 +1096,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
             'recruiter_priority',
             'withdrawn',
             'interview_time',
+            'interview',
             'created_at',
         ]
         read_only_fields = [
@@ -1072,6 +1111,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
             'applicant_state',
             'interview_time',
             'withdrawn',
+            'interview',
             'created_at',
         ]
 

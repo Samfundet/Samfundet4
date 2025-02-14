@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from random import choice, randint
+from random import choice, sample, randint
 from datetime import timedelta
 
 from django.db import transaction
@@ -72,7 +72,7 @@ def seed():  # noqa: C901
     yield 10, 'Deleted old applications'
 
     positions = RecruitmentPosition.objects.all()
-    users = list(User.objects.all())  # Convert to list to avoid multiple DB hits
+    users = list(list(User.objects.all())  # Convert to list to avoid multiple DB hits)
     created_count = 0
 
     for position_index, position in enumerate(positions):

@@ -45,7 +45,7 @@ def seed():
         {
             'key': 'volunteering',
             'text_nb': 'Det meste av arbeid på Studentersamfundet i Trondhjem gjøres gjennom dugnad av studenter. Arbeidet er organisert i enheter som kalles gjenger. Potensielle nye medlemmer må søke den aktuelle gjengen om opptak, og gjengen vurderer hver enkelt søker. Med sine omtrent 1700 frivillige utgjør det indre miljøet i Studentersamfundet en betydelig del av det organiserte fritidstilbudet til studenter i Trondheim.',
-            'text_en': 'Most of the work at Samfundet is done on a voluntary basis by students. The work is organized into units called groups. Prospective new members must apply to the appropriate group for application and the group reviews each applicant. With around 1700 volunteers, the internal environment of Samfundet constitutes a significant part of organized leisure activities for students in Trondheim.',
+            'text_en': 'Most of the work at Samfundet is done on a voluntary basis by students. The work is organized into units called gangs. Prospective new members must apply to the appropriate group for application and the group reviews each applicant. With around 1700 volunteers, the internal environment of Samfundet constitutes a significant part of organized leisure activities for students in Trondheim.',
         },
         {
             'key': 'the_society_meeting',
@@ -56,6 +56,11 @@ def seed():
             'key': 'about_samfundet',
             'text_nb': 'Studentersamfundet i Trondhjem er en organisasjon for studenter i Trondheim som eies og drives av sine rundt 16 100 medlemmer. Formålsparagrafen vår sier at ”Studentersamfundet skal være det naturlige samlingsstedet for studenter i Trondhjem”. Vårt røde runde huser konserter, ulike kulturarrangementer, utallige barer, en kafé og en restaurant. Mest sagnomsust er Samfundsmøtene, viet til debatt om politikk og aktuelle spørsmål, eller til underholdning og moro. Samfundet har også tre av Trondheims beste konsertscener.',
             'text_en': "Samfundet is an organization for students in Trondheim that is owned and run by its approximately 16100 members. Our mission statement is Samfundet will be the natural meeting place for students in Trondheim. In our red, round building we regularly host concerts and various cultural events, and have countless bars, a café and a restaurant. The Society Meetings are perhaps our most famous events. These meetings serve as a place for debating politics and current events, and but also for entertainment and fun. Samfundet also has three of Trondheim's best music venues.",
+        },
+        {
+            'key': 'samf_recruitment_description',
+            'text_nb': 'Studentersamfundet i Trondhjem har opptak ved starten av hvert semester. Vi ønsker at du søker til oss som frivillig! Studentersamfundet i Trondhjem er Norges største studentersamfund og vi har et tilbud andre byer bare kan drømme om.',
+            'text_en': 'Studentersamfundet in Trondheim has recruitments at the start of each semester. We would like you to apply to us as a volunteer! Studentersamfundet in Trondheim is Norways largest student society and we have an offer that other cities can only dream of.',
         },
         {
             'key': 'no_recruitment_samf_header',
@@ -73,6 +78,11 @@ def seed():
             'text_en': 'Studentersamfundet in Trondhjem is Norways largest student society and we have an offer that other cities can only dream of.',
         },
         {
+            'key': 'isfit_recruitment_description',
+            'text_nb': 'ISFIT har opptak ved starten av hvert semester. Vi ønsker at du søker til oss som frivillig! Som frivillig i ISFIT får du muligheten til å være med på å arrangere verdens største studentfestival.',
+            'text_en': 'ISFIT has recruitments at the start of each semester. We would like you to apply to us as a volunteer! As a volunteer in ISFIT, you get the opportunity to help organize the worlds largest student festival.',
+        },
+        {
             'key': 'no_recruitment_isfit_header',
             'text_nb': 'Det er for tiden ingen opptak på Samfundet',
             'text_en': 'There are currently no recruitments at Samfundet',
@@ -86,6 +96,11 @@ def seed():
             'key': 'no_recruitment_isfit_about',
             'text_nb': 'Studentersamfundet i Trondhjem er Norges største studentersamfund og vi har et tilbud andre byer bare kan drømme om.',
             'text_en': 'Studentersamfundet in Trondhjem is Norways largest student society and we have an offer that other cities can only dream of.',
+        },
+        {
+            'key': 'uka_recruitment_description',
+            'text_nb': 'UKA har opptak ved starten av hvert semester. Vi ønsker at du søker til oss som frivillig! Som frivillig i UKA får du muligheten til å være med på å arrangere Norges største kulturfestival.',
+            'text_en': "UKA has recruitments at the start of each semester. We would like you to apply to us as a volunteer! As a volunteer in UKA, you get the opportunity to help organize Norway's largest cultural festival.",
         },
         {
             'key': 'no_recruitment_uka_header',
@@ -166,7 +181,7 @@ def seed():
         {
             'key': 'why_member_list_7',
             'text_nb': 'Mulighet til å bli med i en av Studentersamfundets gjenger, UKAs og ISFITs gjenger, og å stille til valg i Storsalen.',
-            'text_en': "Opportunity to become a part of one of Samfundet's internal groups, UKA's and ISFIT's groups, and run for election at Storsalen.",
+            'text_en': "Opportunity to become a part of one of Samfundet's internal gangs, UKA's and ISFIT's gangs, and run for election at Storsalen.",
         },
         {
             'key': 'membership_prices_header',
@@ -347,6 +362,11 @@ def seed():
             'key': 'purchase_feedback_question_2',
             'text_nb': 'Har du noen øvrige kommentarer til arrangementet?',
             'text_en': 'Do you have any other feedback in regards to the event?',
+        },
+        {
+            'key': 'gangspage_text',
+            'text_nb': 'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
+            'text_en': 'Samfundet consists of more than 20 gangs (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
         },
     ]
 

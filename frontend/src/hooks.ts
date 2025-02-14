@@ -1,15 +1,25 @@
+import { useQuery } from '@tanstack/react-query';
 import { type MutableRefObject, type RefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getTextItem, putUserPreference } from '~/api';
-import type { Key, SetState } from '~/types';
+import type { Key, PageNumberPaginationType, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
 import type { LinkTarget } from './Components/Link/Link';
-import { BACKEND_DOMAIN, THEME, THEME_KEY, type ThemeValue, desktopBpLower, mobileBpUpper } from './constants';
+import {
+  BACKEND_DOMAIN,
+  PAGE_SIZE,
+  THEME,
+  THEME_KEY,
+  type ThemeValue,
+  desktopBpLower,
+  mobileBpUpper,
+} from './constants';
 import type { TextItemValue } from './constants/TextItems';
 import { useAuthContext } from './context/AuthContext';
 import { useGlobalContext } from './context/GlobalContextProvider';
 import type { TextItemDto } from './dto';
+import { STATUS } from './http_status_codes';
 import { LANGUAGES } from './i18n/types';
 
 // Make typescript happy.
@@ -70,16 +80,26 @@ export function useMobile(): boolean {
 /**
  *  Hook that returns the correct translation for given key
  */
-export function useTextItem(key: TextItemValue, language?: string): string | undefined {
+export function useTextItem(key: TextItemValue, language?: string): string {
   const [textItem, setTextItem] = useState<TextItemDto>();
   const { i18n } = useTranslation();
   const isNorwegian = (language || i18n.language) === LANGUAGES.NB;
   useEffect(() => {
-    getTextItem(key).then((data) => {
-      setTextItem(data);
-    });
+    getTextItem(key)
+      .then((data) => {
+        setTextItem(data);
+      })
+      .catch((error) => {
+        if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
+        }
+        setTextItem({
+          key: 'MISSING_TEXTITEM',
+          text_nb: 'ERROR ERROR Manglende tekst, kontakt redaksjon@samfundet.no ERROR ERROR',
+          text_en: 'ERROR ERROR Missing text, contact redaksjon@samfundet.no ERROR ERROR',
+        });
+      });
   }, [key]);
-  return isNorwegian ? textItem?.text_nb : textItem?.text_en;
+  return isNorwegian ? textItem?.text_nb || '' : textItem?.text_en || '';
 }
 
 /**
@@ -502,4 +522,102 @@ export function useParentElementWidth(childRef: RefObject<HTMLElement>) {
   }, [childRef]);
 
   return parentWidth;
+}
+
+interface UsePaginatedQueryOptions<T> {
+  queryKey: string[];
+  queryFn: (page: number) => Promise<PageNumberPaginationType<T>>;
+  pageSize?: number;
+  initialPage?: number;
+}
+
+interface UsePaginatedQueryResult<T> {
+  data: T[];
+  totalItems: number;
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+
+  setCurrentPage: (page: number) => void;
+  isLoading: boolean;
+  error: Error | null;
+}
+
+export function usePaginatedQuery<T>({
+  queryKey,
+  queryFn,
+  initialPage = 1,
+}: UsePaginatedQueryOptions<T>): UsePaginatedQueryResult<T> {
+  const [currentPage, setCurrentPage] = useState(initialPage);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: [...queryKey, currentPage],
+    queryFn: () => queryFn(currentPage),
+  });
+
+  return {
+    data: data?.results ?? [],
+    totalItems: data?.count ?? 0,
+    currentPage: data?.current_page ?? currentPage,
+    totalPages: data?.total_pages ?? 1,
+    pageSize: data?.page_size ?? PAGE_SIZE,
+    setCurrentPage,
+    isLoading,
+    error,
+  };
+}
+
+interface UseSearchPaginatedQueryOptions<T> {
+  queryKey: string[];
+  queryFn: (page: number, search: string) => Promise<PageNumberPaginationType<T>>;
+  pageSize?: number;
+}
+
+interface UseSearchPaginatedQueryResult<T> {
+  data: T[];
+  totalItems: number;
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+  setCurrentPage: (page: number) => void;
+  searchTerm: string;
+  setSearchTerm: (search: string) => void;
+  isLoading: boolean;
+  error: Error | null;
+}
+
+export function useSearchPaginatedQuery<T>({
+  queryKey,
+  queryFn,
+  pageSize = 10,
+}: UseSearchPaginatedQueryOptions<T>): UseSearchPaginatedQueryResult<T> {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: [...queryKey, currentPage, debouncedSearchTerm],
+    queryFn: () => queryFn(currentPage, debouncedSearchTerm),
+    staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
+    refetchOnWindowFocus: false,
+  });
+
+  // Reset to first page when search term changes
+  const handleSearchTermChange = (search: string) => {
+    setSearchTerm(search);
+    setCurrentPage(1); // Reset to first page when search changes
+  };
+
+  return {
+    data: data?.results ?? [],
+    totalItems: data?.count ?? 0,
+    currentPage: data?.current_page ?? currentPage,
+    totalPages: data?.total_pages ?? 1,
+    pageSize: data?.page_size ?? pageSize,
+    setCurrentPage,
+    searchTerm,
+    setSearchTerm: handleSearchTermChange,
+    isLoading,
+    error,
+  };
 }

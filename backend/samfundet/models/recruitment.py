@@ -9,6 +9,7 @@ from collections import defaultdict
 from django.db import models, transaction
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import UserManager
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
@@ -27,7 +28,7 @@ class Recruitment(CustomBaseModel):
     )
     shown_application_deadline = models.DateTimeField(null=False, blank=False, help_text='The deadline that is shown to applicants')
     reprioritization_deadline_for_applicant = models.DateTimeField(null=False, blank=False, help_text='Before allocation meeting')
-    reprioritization_deadline_for_groups = models.DateTimeField(null=False, blank=False, help_text='Reprioritization deadline for groups')
+    reprioritization_deadline_for_gangs = models.DateTimeField(null=False, blank=False, help_text='Reprioritization deadline for groups')
     organization = models.ForeignKey(null=False, blank=False, to=Organization, on_delete=models.CASCADE, help_text='The organization that is recruiting')
 
     max_applications = models.PositiveIntegerField(null=True, blank=True, verbose_name='Max applications per applicant')
@@ -39,11 +40,25 @@ class Recruitment(CustomBaseModel):
             return self.organization_id
         return self.organization
 
+    def get_applicants(self) -> UserManager[User]:
+        return User.objects.filter(id__in=self.applications.values_list('user__id'))
+
+    def get_unprocessed_applications(self) -> models.BaseManager[RecruitmentApplication]:
+        return self.applications.filter(recruiter_status=RecruitmentStatusChoices.NOT_SET)
+
+    def get_processed_applications(self) -> models.BaseManager[RecruitmentApplication]:
+        return self.applications.exclude(recruiter_status=RecruitmentStatusChoices.NOT_SET)
+
+    def get_unprocessed_applicants(self) -> UserManager[User]:
+        return self.get_applicants().filter(id__in=self.get_unprocessed_applications().values_list('user__id'))
+
+    def get_processed_applicants(self) -> UserManager[User]:
+        return self.get_applicants().exclude(id__in=self.get_unprocessed_applications().values_list('user__id'))
+
     def recruitment_progress(self) -> float:
-        applications = RecruitmentApplication.objects.filter(recruitment=self)
-        if applications.count() == 0:
+        if self.applications.count() == 0:
             return 1
-        return applications.exclude(recruiter_status=RecruitmentStatusChoices.NOT_SET).count() / applications.count()
+        return self.get_processed_applications().count() / self.applications.count()
 
     def is_active(self) -> bool:
         return self.visible_from < timezone.now() < self.actual_application_deadline
@@ -63,7 +78,7 @@ class Recruitment(CustomBaseModel):
             'actual_application_deadline',
             'shown_application_deadline',
             'reprioritization_deadline_for_applicant',
-            'reprioritization_deadline_for_groups',
+            'reprioritization_deadline_for_gangs',
         ]:
             if getattr(self, field) < now:
                 errors[field].append(self.NOT_IN_FUTURE_ERROR)
@@ -80,8 +95,8 @@ class Recruitment(CustomBaseModel):
             errors['reprioritization_deadline_for_applicant'].append(self.REPRIORITIZATION_BEFORE_ACTUAL)
             errors['actual_application_deadline'].append(self.ACTUAL_AFTER_REPRIORITIZATION)
 
-        if self.reprioritization_deadline_for_groups < self.reprioritization_deadline_for_applicant:
-            errors['reprioritization_deadline_for_groups'].append(self.REPRIORITIZATION_GROUP_BEFORE_APPLICANT)
+        if self.reprioritization_deadline_for_gangs < self.reprioritization_deadline_for_applicant:
+            errors['reprioritization_deadline_for_gangs'].append(self.REPRIORITIZATION_GROUP_BEFORE_APPLICANT)
             errors['reprioritization_deadline_for_applicant'].append(self.REPRIORITIZATION_APPLICANT_AFTER_GROUP)
 
         raise ValidationError(errors)
@@ -135,13 +150,22 @@ class RecruitmentPosition(CustomBaseModel):
 
     is_funksjonaer_position = models.BooleanField(help_text='Is this a funksjonær position?')
 
-    default_application_letter_nb = models.TextField(help_text='Default application letter for the position')
+    default_application_letter_nb = models.TextField(help_text='Default application letter for the position', null=True, blank=True)
     default_application_letter_en = models.TextField(help_text='Default application letter for the position', null=True, blank=True)
 
     norwegian_applicants_only = models.BooleanField(help_text='Is this position only for Norwegian applicants?', default=False)
 
     gang = models.ForeignKey(to=Gang, on_delete=models.CASCADE, help_text='The gang that is recruiting', null=True, blank=True)
     section = models.ForeignKey(GangSection, on_delete=models.CASCADE, help_text='The section that is recruiting', null=True, blank=True)
+
+    has_file_upload = models.BooleanField(help_text='Does position have file upload', default=False)
+    file_description_nb = models.TextField(help_text='Description of file needed (NB)', null=True, blank=True)
+    file_description_en = models.TextField(help_text='Description of file needed (EN)', null=True, blank=True)
+
+    tags = models.CharField(max_length=100, help_text='Tags for the position')
+
+    # TODO: Implement interviewer functionality
+    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
 
     recruitment = models.ForeignKey(
         Recruitment,
@@ -161,11 +185,10 @@ class RecruitmentPosition(CustomBaseModel):
         help_text='Shared interviewgroup for position',
     )
 
-    # TODO: Implement tag functionality
-    tags = models.CharField(max_length=100, help_text='Tags for the position')
-
-    # TODO: Implement interviewer functionality
-    interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
+    def get_section_name(self, language: str = 'nb') -> str | None:
+        if not self.section:
+            return None
+        return self.section.name_nb if language == 'nb' else self.section.name_en
 
     def resolve_section(self, *, return_id: bool = False) -> GangSection | int:
         if return_id:
@@ -185,11 +208,31 @@ class RecruitmentPosition(CustomBaseModel):
     def __str__(self) -> str:
         return f'Position: {self.name_en} in {self.recruitment}'
 
-    def clean(self) -> None:
-        super().clean()
+    # Error messages
+    ONLY_ONE_OWNER_ERROR = 'Position must be owned by either gang or section, not both'
+    NO_OWNER_ERROR = 'Position must have an owner, either a gang or a gang section'
+    FILE_DESCRIPTION_REQUIRED_ERROR = 'Description of file is needed, if position has file upload'
 
-        if (self.gang and self.section) or not (self.gang or self.section):
-            raise ValidationError('Position must be owned by either gang or section, not both')
+    def clean(self) -> None:  # noqa: C901
+        super().clean()
+        errors: dict[str, list[ValidationError]] = defaultdict(list)
+
+        if self.gang and self.section:
+            # Both gang and section provide
+            errors['gang'].append(self.ONLY_ONE_OWNER_ERROR)
+            errors['section'].append(self.ONLY_ONE_OWNER_ERROR)
+        elif not (self.gang or self.section):
+            # neither gang nor section provided
+            errors['gang'].append(self.NO_OWNER_ERROR)
+            errors['section'].append(self.NO_OWNER_ERROR)
+        if self.has_file_upload:
+            # Check Norwegian file description
+            if not self.file_description_nb or len(self.file_description_nb) == 0:
+                errors['file_description_nb'].append(self.FILE_DESCRIPTION_REQUIRED_ERROR)
+            # Check English file description
+            if not self.file_description_en or len(self.file_description_en) == 0:
+                errors['file_description_en'].append(self.FILE_DESCRIPTION_REQUIRED_ERROR)
+        raise ValidationError(errors)
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         if self.norwegian_applicants_only:
@@ -352,31 +395,73 @@ class RecruitmentApplication(CustomBaseModel):
         return self.recruitment.resolve_org(return_id=return_id)
 
     def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
-        """
-        Returns the gang associated with this application's recruitment position.
-        Args:
-            return_id: If True, returns the gang ID instead of the object
-        Returns:
-            Gang or int: The gang object or its ID
-        """
         return self.recruitment_position.resolve_gang(return_id=return_id)
 
-    def save(self, *args: tuple, **kwargs: dict) -> None:
+    def organize_priorities(self) -> None:
+        """Organizes priorites from 1 to n, so that it is sequential with no gaps"""
+        applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user).order_by('applicant_priority')
+        for i in range(len(applications_for_user)):
+            correct_position = i + 1
+            if applications_for_user[i].applicant_priority != correct_position:
+                applications_for_user[i].applicant_priority = correct_position
+                applications_for_user[i].save()
+
+    def update_priority(self, direction: int) -> None:
         """
-        Handles the complete save process for an application, including:
-        - Ensuring recruitment assignment
-        - Processing withdrawal status changes
-        - Managing shared interviews
-        - Reordering priorities after withdrawals
-        All operations are performed within a transaction to maintain data integrity.
+        Method for moving priorites up or down,
+        positive direction indicates moving it to higher priority,
+        negative direction indicates moving it to lower priority,
+        can move n positions up or down
+
         """
-        with transaction.atomic():
-            self._ensure_recruitment_assignment()
-            self._handle_withdrawal()
-            self._assign_interview_if_shared()
-            super().save(*args, **kwargs)
-            if self._is_withdrawal():
-                self._reorder_remaining_priorities()
+        # Use order for more simple an unified for direction
+        ordering = f'{"" if direction < 0 else "-"}applicant_priority'
+        applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user).order_by(ordering)
+        direction = abs(direction)  # convert to absolute
+        for i in range(len(applications_for_user)):
+            if applications_for_user[i].id == self.id:  # find current
+                # Find index of which to switch  priority with
+                switch = len(applications_for_user) - 1 if i + direction >= len(applications_for_user) else i + direction
+                new_priority = applications_for_user[switch].applicant_priority
+                # Move priorites down in direction
+                for ii in range(switch, i, -1):
+                    applications_for_user[ii].applicant_priority = applications_for_user[ii - 1].applicant_priority
+                    applications_for_user[ii].save()
+                # update priority
+                applications_for_user[i].applicant_priority = new_priority
+                applications_for_user[i].save()
+                break
+        self.organize_priorities()
+
+    ALREADY_APPLIED_ERROR = 'Already created an application for this recruitment'
+
+    REAPPLY_TOO_MANY_APPLICATIONS_ERROR = 'Can not reapply application, too many active application'
+    TOO_MANY_APPLICATIONS_ERROR = 'Too many applications for recruitment'
+
+    def clean(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
+        super().clean()
+        errors: dict[str, list[ValidationError]] = defaultdict(list)
+
+        # Cant use not self.pk, due to UUID generating it before save
+        current_application = RecruitmentApplication.objects.filter(pk=self.pk).first()
+        # validates if there are not two applications for same user and same recruitmentposition
+        if (
+            not current_application
+            and RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, recruitment_position=self.recruitment_position).first()
+        ):
+            errors['recruitment_position'].append(self.ALREADY_APPLIED_ERROR)
+        # If there is max applications, check if applicant have applied to not to many
+        if self.recruitment.max_applications:
+            user_applications_count = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
+            current_application = RecruitmentApplication.objects.filter(pk=self.pk).first()
+            if user_applications_count >= self.recruitment.max_applications:
+                if not current_application:
+                    # attempts to create new application when too many applications
+                    errors['recruitment'].append(self.TOO_MANY_APPLICATIONS_ERROR)
+                elif current_application.withdrawn and not self.withdrawn:
+                    # If it attempts to withdraw, when to many active applications
+                    errors['recruitment'].append(self.REAPPLY_TOO_MANY_APPLICATIONS_ERROR)
+        raise ValidationError(errors)
 
     def _ensure_recruitment_assignment(self) -> None:
         """Ensures the application is linked to the correct recruitment if not already set."""
@@ -429,89 +514,25 @@ class RecruitmentApplication(CustomBaseModel):
             if shared_interview:
                 self.interview = shared_interview.interview
 
-    def _is_withdrawal(self) -> bool:
-        """
-        Determines if this save operation represents a new withdrawal.
-        Returns:
-            bool: True if this is a new withdrawal, False otherwise
-        """
-        return self.pk and self.withdrawn and not self._original_withdrawn
+        super().save(*args, **kwargs)
 
-    def _reorder_remaining_priorities(self) -> None:
-        """
-        Reorders priorities for remaining active applications after a withdrawal
-        to maintain sequential ordering without gaps.
-        """
-        active_applications = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).order_by(
-            'applicant_priority'
+    def get_total_interviews_for_gang(self) -> int:
+        return (
+            RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, recruitment_position__gang=self.resolve_gang(), withdrawn=False)
+            .exclude(interview=None)
+            .count()
         )
 
-        for index, application in enumerate(active_applications, start=1):
-            if application.applicant_priority != index:
-                application.applicant_priority = index
-                application.save(update_fields=['applicant_priority'])
+    def get_total_applications_for_gang(self) -> int:
+        return RecruitmentApplication.objects.filter(
+            user=self.user, recruitment=self.recruitment, withdrawn=False, recruitment_position__gang=self.resolve_gang()
+        ).count()
 
-    def update_priority(self, direction: int) -> None:
-        """
-        Updates the priority of the application by moving it up or down in the priority list.
-        Args:
-            direction: Positive number moves priority up, negative moves it down.
-                     The absolute value determines how many positions to move.
-        """
-        if timezone.now() > self.recruitment.reprioritization_deadline_for_applicant:
-            raise ValidationError('Cannot reprioritize applications after the reprioritization deadline')
-        with transaction.atomic():
-            applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user, withdrawn=False).order_by(
-                f"{'' if direction < 0 else '-'}applicant_priority"
-            )
-            self._reorder_priorities_by_direction(applications_for_user, abs(direction))
+    def get_total_interviews(self) -> int:
+        return RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).exclude(interview=None).count()
 
-    def _reorder_priorities_by_direction(self, applications: list[RecruitmentApplication], steps: int) -> None:
-        """
-        Helper method that handles the actual priority reordering logic.
-        Args:
-            applications: List of applications to reorder
-            steps: Number of positions to move the application
-        """
-        for i, app in enumerate(applications):
-            if app.id == self.id:
-                swap_index = max(0, min(len(applications) - 1, i + steps))
-                self._swap_priorities(applications, i, swap_index)
-                break
-
-    def _swap_priorities(self, applications: list[RecruitmentApplication], i: int, swap_index: int) -> None:
-        """
-        Performs the priority swap operation between two applications.
-        Args:
-            applications: List of applications being reordered
-            i: Index of the current application
-            swap_index: Index of the application to swap with
-        """
-        new_priority = applications[swap_index].applicant_priority
-        for j in range(swap_index, i, -1):
-            applications[j].applicant_priority = applications[j - 1].applicant_priority
-            applications[j].save(update_fields=['applicant_priority'])  # type: ignore
-        applications[i].applicant_priority = new_priority
-        applications[i].save(update_fields=['applicant_priority'])  # type: ignore
-
-    def update_recruiter_priority(self, new_priority: int) -> None:
-        """
-        Updates the recruiter's priority for this application.
-        Validates that the group reprioritization deadline hasn't passed.
-        Args:
-            new_priority: New priority value from RecruitmentPriorityChoices
-        Raises:
-            ValidationError: If deadline has passed
-        """
-
-        # Validate not past group reprioritization deadline
-        if timezone.now() > self.recruitment.reprioritization_deadline_for_groups:
-            raise ValidationError('Cannot change recruiter priority after the group reprioritization deadline')
-
-        # Update priority and trigger state recalculation
-        self.recruiter_priority = new_priority
-        self.save()
-        self.update_applicant_state()
+    def get_total_applications(self) -> int:
+        return RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
 
     def update_applicant_state(self) -> None:
         """
@@ -704,6 +725,9 @@ class RecruitmentStatistics(FullCleanSaveMixin):
     # Total accepted applicants
     total_accepted = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total accepted applicants')
 
+    # Total rejected applicants
+    total_rejected = models.PositiveIntegerField(null=True, blank=True, verbose_name='Total rejected applicants')
+
     # Average amount of different gangs an applicant applies for
     average_gangs_applied_to_per_applicant = models.FloatField(null=True, blank=True, verbose_name='Gang diversity')
 
@@ -712,10 +736,19 @@ class RecruitmentStatistics(FullCleanSaveMixin):
 
     def save(self, *args: tuple, **kwargs: dict) -> None:
         self.total_applications = self.recruitment.applications.count()
-        self.total_applicants = self.recruitment.applications.values('user').distinct().count()
+        self.total_applicants = self.recruitment.get_applicants().count()
         self.total_withdrawn = self.recruitment.applications.filter(withdrawn=True).count()
         self.total_accepted = (
             self.recruitment.applications.filter(recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED).values('user').distinct().count()
+        )
+        self.total_rejected = (
+            self.recruitment.get_applicants()
+            .exclude(
+                id__in=self.recruitment.applications.filter(
+                    recruiter_status__in=[RecruitmentStatusChoices.CALLED_AND_ACCEPTED, RecruitmentStatusChoices.NOT_SET]
+                ).values_list('user__id')
+            )
+            .count()
         )
         if self.total_applicants > 0:
             self.average_gangs_applied_to_per_applicant = (

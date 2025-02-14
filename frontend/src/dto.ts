@@ -383,19 +383,31 @@ export type RoleDto = {
   content_type?: string | null;
 };
 
-export type UserGangRoleDto = {
+export type UserRole = {
   id: number;
-  obj: GangDto;
+  user: UserDto;
+  created_at: Date;
+  obj: OrganizationDto | GangDto | GangSectionDto;
+  created_by?: UserDto;
 };
 
-export type UserGangSectionRoleDto = {
-  id: number;
-  obj: GangSectionDto;
+export type UserGangRoleDto = Omit<UserRole, 'obj'> & {
+  gang: GangDto;
 };
 
-export type UserOrganizationRoleDto = {
-  id: number;
-  obj: OrganizationDto;
+export type UserGangSectionRoleDto = Omit<UserRole, 'obj'> & {
+  section: GangSectionDto;
+};
+
+export type UserOrganizationRoleDto = Omit<UserRole, 'obj'> & {
+  organization: OrganizationDto;
+};
+
+export type RoleUsersDto = {
+  user: UserDto;
+  org_role?: UserOrganizationRoleDto;
+  gang_role?: UserGangRoleDto;
+  section_role?: UserGangSectionRoleDto;
 };
 
 // ############################################################
@@ -410,12 +422,25 @@ export type RecruitmentDto = {
   actual_application_deadline: string;
   shown_application_deadline: string;
   reprioritization_deadline_for_applicant: string;
-  reprioritization_deadline_for_groups: string;
+  reprioritization_deadline_for_gangs: string;
   max_applications?: number;
-  organization: number | OrganizationDto;
+  organization: OrganizationDto;
   separate_positions?: RecruitmentSeparatePositionDto[];
-  recruitment_progress?: number;
   promo_media?: string;
+};
+
+export type RecruitmentForRecruiterDto = RecruitmentDto & {
+  statistics: RecruitmentStatsDto;
+  recruitment_progress: number;
+  total_applicants: number;
+  total_processed_applicants: number;
+  total_unprocessed_applicants: number;
+  total_processed_applications: number;
+  total_unprocessed_applications: number;
+};
+
+export type RecruitmentWriteDto = RecruitmentDto & {
+  organization: number;
 };
 
 export type RecruitmentSeparatePositionDto = {
@@ -468,6 +493,35 @@ export type RecruitmentPositionDto = {
   total_applicants?: number;
   processed_applicants?: number;
   accepted_applicants?: number;
+};
+
+export type RecruitmentPositionForApplicantDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+
+  short_description_nb: string;
+  short_description_en: string;
+
+  long_description_nb: string;
+  long_description_en: string;
+
+  tags: string;
+
+  is_funksjonaer_position: boolean;
+
+  norwegian_applicants_only: boolean;
+
+  default_application_letter_nb: string;
+  default_application_letter_en: string;
+
+  gang: GangDto;
+  recruitment: string;
+};
+
+export type PositionsByTagResponse = {
+  count: number;
+  positions: RecruitmentPositionForApplicantDto[];
 };
 
 export type RecruitmentPositionPostDto = Omit<RecruitmentPositionDto, 'gang' | 'id'> & {
@@ -556,8 +610,9 @@ export type RecruitmentCampusStatDto = {
 };
 
 export type RecruitmentGangStatDto = {
-  total_applications: number;
-  total_applicants: number;
+  gang: GangDto;
+  application_count: number;
+  applicant_count: number;
   average_priority: number;
   total_accepted: number;
   total_rejected: number;
@@ -570,11 +625,12 @@ export type RecruitmentStatsDto = {
   total_applications: number;
   total_withdrawn: number;
   total_accepted: number;
+  total_rejected: number;
   average_gangs_applied_to_per_applicant: number;
   average_applications_per_applicant: number;
   time_stats: RecruitmentTimeStatDto[];
   date_stats: RecruitmentDateStatDto[];
-  gang_stats: RecruitmentGangDto[];
+  gang_stats: RecruitmentGangStatDto[];
   campus_stats: RecruitmentCampusStatDto[];
 };
 
