@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { PagedPagination, Table, InputField } from '~/Components';
+import { InputField, PagedPagination, Table } from '~/Components';
 import { formatDate } from '~/Components/OccupiedForm/utils';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getUsersSearchPaginated } from '~/api';
@@ -68,27 +68,19 @@ export function UsersAdminPage() {
 
   return (
     <AdminPageLayout title={title}>
-      <InputField
-        icon="mdi:search"
-        value={searchTerm}
-        onChange={setSearchTerm}
-        placeholder={t(KEY.common_search)}
-      />
+      <InputField icon="mdi:search" value={searchTerm} onChange={setSearchTerm} placeholder={t(KEY.common_search)} />
       <div className={styles.table_container}>
-        <Table
-          data={users.map((user) => ({ cells: userTableRow(user) }))}
-          columns={userColumns}
-        />
+        <Table data={users.map((user) => ({ cells: userTableRow(user) }))} columns={userColumns} />
       </div>
       <div className={styles.pagination_container}>
-      {totalPages > 1 && (
-        <PagedPagination
-          currentPage={currentPage}
-          totalItems={totalItems}
-          pageSize={pageSize}
-          onPageChange={setCurrentPage}
-        />
-      )}
+        {totalPages > 1 && (
+          <PagedPagination
+            currentPage={currentPage}
+            totalItems={totalItems}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+          />
+        )}
       </div>
     </AdminPageLayout>
   );

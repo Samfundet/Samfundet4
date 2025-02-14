@@ -123,12 +123,12 @@ export async function getUsers(search?: string): Promise<UserDto[]> {
 
 export async function getUsersSearchPaginated(
   page: number,
-  search?: string
+  search?: string,
 ): Promise<PageNumberPaginationType<UserDto>> {
   const searchParam = search ? `&search=${encodeURIComponent(search)}` : '';
   const url = `${BACKEND_DOMAIN}${ROUTES.backend.samfundet__users_search_paginated}?page=${page}${searchParam}`;
   const response = await axios.get<PageNumberPaginationType<UserDto>>(url, {
-    withCredentials: true
+    withCredentials: true,
   });
   return response.data;
 }
