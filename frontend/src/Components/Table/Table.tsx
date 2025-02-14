@@ -18,15 +18,20 @@ type TableColumn = {
 };
 
 type TableCell = {
+  // Value used for sorting, eg number 24 or string "some string"
   value?: TableCellValue;
+  // Content in cell, eg <b>24 hours</b>
+  // If missing, uses value instead.
   content?: Children;
   style?: string;
 };
 
+// type shorthands
 export type TableRow = {
   cells: Array<TableCell | TableCellValue | undefined>;
   childTable?: TableProps;
 };
+
 type TableDataType = TableRow[];
 
 type TableProps = {
@@ -37,6 +42,8 @@ type TableProps = {
   bodyRowClassName?: string;
   bodyClassName?: string;
   columns?: (TableColumn | string | undefined)[];
+  // Data can either be a table cell with separated value and content, or just the raw value
+  // For instance ["a", "b"] or [ {value: "a", content: <div>a</div>}, {value: "b", content: <div>b</div>} ]
   data: TableDataType;
   defaultSortColumn?: number;
   isChildTable?: boolean;
@@ -95,17 +102,20 @@ export function Table({
       const cellA = getCellValue(rowA.cells[sortColumn] ?? '');
       const cellB = getCellValue(rowB.cells[sortColumn] ?? '');
 
+      // Not same type, force sort as string type
       if (typeof cellA !== typeof cellB) {
         const diff = (cellA?.toString() ?? '').localeCompare(cellB?.toString() ?? '');
         return sortInverse ? -diff : diff;
       }
       const cellType = typeof cellA;
 
+      // Custom sort handling for dates
       if (cellA instanceof Date && cellB instanceof Date) {
         const diff = (cellA as Date).getTime() - (cellB as Date).getTime();
         return sortInverse ? -diff : diff;
       }
 
+      // Compare by primitive type
       let result = 0;
       switch (cellType) {
         case 'number':
@@ -118,7 +128,7 @@ export function Table({
           result = cellA === cellB ? 0 : cellA ? 1 : -1;
           break;
       }
-
+      // Return inversed/normal
       return sortInverse ? -result : result;
     });
   }
@@ -180,14 +190,26 @@ export function Table({
     return Array(skeletonRowCount)
       .fill(null)
       .map((_, rowIndex) => (
-        <tr key={`skeleton-${rowIndex}`} className={bodyRowClassName}>
+        <tr
+          key={`skeleton-${
+            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+            rowIndex
+          }`}
+          className={bodyRowClassName}
+        >
           {(isChildTable || data.some((row) => row.childTable !== undefined)) && (
             <td className={cellClassName}>
               <Skeleton width="1em" height="1em" />
             </td>
           )}
           {columns?.map((_, colIndex) => (
-            <td key={`skeleton-cell-${colIndex}`} className={cellClassName}>
+            <td
+              key={`skeleton-cell-${
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                colIndex
+              }`}
+              className={cellClassName}
+            >
               <Skeleton width={`${Math.floor(Math.random() * 40 + 60)}%`} height="1.2em" />
             </td>
           ))}
@@ -205,6 +227,7 @@ export function Table({
               if (isColumnSortable(col)) {
                 return (
                   <th
+                    // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                     key={index}
                     className={classNames(headerColumnClassName, styles.sortable_th)}
                     onClick={() => sort(index)}
@@ -214,6 +237,7 @@ export function Table({
                         sort(index);
                       }
                     }}
+                    // biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation>
                     tabIndex={0}
                   >
                     {getColumnContent(col)}
@@ -226,6 +250,7 @@ export function Table({
                 );
               }
               return (
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 <th className={headerColumnClassName} key={index}>
                   {getColumnContent(col)}
                 </th>
@@ -237,17 +262,26 @@ export function Table({
           {isLoading
             ? renderSkeletonRows()
             : sortedData(data).map((row, index) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 <Fragment key={index}>
+                  {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
                   <tr
                     className={`${bodyRowClassName} ${row.childTable !== undefined ? styles.expandableRow : ''}`}
                     onClick={() => (isOpen === index ? setIsOpen(null) : setIsOpen(index))}
                   >
                     {row.childTable !== undefined && (
-                      <td className={classNames(cellClassName)} key={`arrow-${index}`}>
+                      <td
+                        className={classNames(cellClassName)}
+                        key={`arrow-${
+                          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                          index
+                        }`}
+                      >
                         <Icon icon={isOpen === index ? 'carbon:chevron-down' : 'carbon:chevron-right'} />
                       </td>
                     )}
                     {row?.cells.map((cell, cellIndex) => (
+                      // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                       <td className={classNames(cellClassName, getCellStyle(cell ?? ''))} key={cellIndex}>
                         {getCellContent(cell ?? '')}
                       </td>
