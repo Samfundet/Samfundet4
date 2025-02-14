@@ -565,6 +565,7 @@ export const ROUTES_BACKEND = {
   samfundet__interview_detail: '/api/interview/:pk/',
   samfundet__create_reservation_list: '/api/create-reservation/',
   samfundet__create_reservation_detail: '/api/create-reservation/:pk/',
+  samfundet__api_root: '/api/',
   samfundet__schema: '/schema/',
   samfundet__swagger_ui: '/schema/swagger-ui/',
   samfundet__redoc: '/schema/redoc/',
