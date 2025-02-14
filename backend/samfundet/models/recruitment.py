@@ -434,6 +434,7 @@ class RecruitmentApplication(CustomBaseModel):
         If the application is saved without an interview,
         try to find an interview from a shared position.
         """
+
         if not self.recruitment:
             self.recruitment = self.recruitment_position.recruitment
         # If the application is saved without an interview, try to find an interview from a shared position.
@@ -447,6 +448,7 @@ class RecruitmentApplication(CustomBaseModel):
         # If the application is saved without an interview, try to find an interview from a shared position.
         if self.withdrawn:
             # when an application is witdrawn the organize_priorities_on_withdrawal signal is called, this must happen post save
+            # this if-statement makes sure that the recruiter_status/priority is "resets" on withdrawal
             self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
             self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
 
