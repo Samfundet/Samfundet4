@@ -3,14 +3,20 @@
 @import 'src/mixins';
 
 .recruitmentPage {
-  @include flex-column-center;
+  @include flex-column;
+  padding: 2rem;
+
+  @include for-tablet-down {
+    padding: 1rem 0.5rem;
+  }
+  gap: 1rem;
 }
 
 .container {
-  @include flex-column-center;
-  width: 85%;
+  @include flex-column;
+  align-items: flex-start;
+  width: 100%;
   gap: 2rem;
-  margin: 1rem;
 }
 
 .organizationHeader {
@@ -24,11 +30,11 @@
 }
 
 .video {
-  width: 50%;
+  width: 70%;
   aspect-ratio: 16 / 9;
   border: none;
   @include for-tablet-down {
-    width: 80%;
+    width: 100%;
   }
 }
 
@@ -47,7 +53,9 @@
 }
 
 .optionsContainer {
-  @include flex-row-center;
+  @include flex-row;
+  justify-content: space-between;
+  align-self: stretch;
   gap: 1rem;
 }
 
@@ -74,9 +82,7 @@
 
 .viewModeControll {
   display: flex;
-  width: 100%;
-  gap: 2rem;
-  background-color: $grey-4;
+  gap: 1rem;
   padding: 0.25rem;
   border-radius: 0.25rem;
 }
