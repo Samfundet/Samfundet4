@@ -80,6 +80,7 @@ export function UsersAdminPage() {
           columns={userColumns}
         />
       </div>
+      <div className={styles.pagination_container}>
       {totalPages > 1 && (
         <PagedPagination
           currentPage={currentPage}
@@ -88,6 +89,7 @@ export function UsersAdminPage() {
           onPageChange={setCurrentPage}
         />
       )}
+      </div>
     </AdminPageLayout>
   );
 }
