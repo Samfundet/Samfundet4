@@ -5,6 +5,8 @@ import { Skeleton, TimeDisplay } from '~/Components';
 import type { Children } from '~/types';
 import styles from './Table.module.scss';
 
+const DEFAULT_PAGINATION_PAGESIZE = 10;
+
 // Supported cell values for sorting
 type TableCellValue = string | number | Date | boolean;
 
@@ -54,7 +56,7 @@ export function Table({
   defaultSortColumn = -1,
   isChildTable,
   isLoading = false,
-  skeletonRowCount = 5,
+  skeletonRowCount = DEFAULT_PAGINATION_PAGESIZE,
 }: TableProps) {
   const [sortColumn, setSortColumn] = useState(defaultSortColumn);
   const [sortInverse, setSortInverse] = useState(false);
