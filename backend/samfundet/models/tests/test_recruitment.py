@@ -1102,13 +1102,13 @@ def test_lowest_priority_equals_active_applications(
     fixture_recruitment_position2: RecruitmentPosition,
 ):
     # Create two applications for the same user.
-    app1 = RecruitmentApplication.objects.create(
+    _app1 = RecruitmentApplication.objects.create(
         user=fixture_user,
         recruitment_position=fixture_recruitment_position,
         recruitment=fixture_recruitment,
         application_text='Application 1',
     )
-    app2 = RecruitmentApplication.objects.create(
+    _app2 = RecruitmentApplication.objects.create(
         user=fixture_user,
         recruitment_position=fixture_recruitment_position2,
         recruitment=fixture_recruitment,
@@ -1137,7 +1137,7 @@ def test_priority_adjusts_on_withdrawal(
         recruitment=fixture_recruitment,
         application_text='Application 1',
     )
-    app2 = RecruitmentApplication.objects.create(
+    _app2 = RecruitmentApplication.objects.create(
         user=fixture_user,
         recruitment_position=fixture_recruitment_position2,
         recruitment=fixture_recruitment,
