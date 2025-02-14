@@ -44,7 +44,9 @@ from root.constants import (
 )
 from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM
 
-from .utils import user_query, event_query, generate_timeslots, get_occupied_timeslots_from_request
+from samfundet.pagination import CustomPageNumberPagination
+
+from .utils import event_query, generate_timeslots, get_user_by_search, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .serializers import (
@@ -530,8 +532,22 @@ class AllUsersView(ListAPIView):
     queryset = User.objects.all()
 
     def get(self, request: Request) -> Response:
-        users = user_query(query=request.query_params)
+        users = get_user_by_search(query=request.query_params)
         return Response(data=UserSerializer(users, many=True).data)
+
+
+class PaginatedSearchUsersView(ListAPIView):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = UserSerializer
+    pagination_class = CustomPageNumberPagination
+
+    def get_queryset(self) -> QuerySet[User]:
+        """
+        Get queryset of users with search functionality using the user_query helper.
+        Returns ordered queryset of users filtered by search parameters if provided.
+        """
+        # Pass the query parameters directly to user_query
+        return get_user_by_search(query=self.request.query_params).order_by('username')
 
 
 class ImpersonateView(APIView):
