@@ -3,6 +3,7 @@ import type {
   ClosedPeriodDto,
   EventDto,
   EventGroupDto,
+  FetchAvailableTimesDto,
   FeedbackDto,
   FoodCategoryDto,
   FoodPreferenceDto,
@@ -32,6 +33,7 @@ import type {
   RecruitmentGangDto,
   RecruitmentGangStatDto,
   RecruitmentPositionDto,
+  ReservationFormDto,
   RecruitmentPositionPostDto,
   RecruitmentPositionPutDto,
   RecruitmentSeparatePositionDto,
@@ -279,6 +281,20 @@ export async function getEvent(pk: string | number): Promise<EventDto> {
 export async function getEventGroups(): Promise<EventGroupDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventgroups_list;
   const response = await axios.get<EventGroupDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getAvailableTimes(data: FetchAvailableTimesDto, pk?: number): Promise<string[]> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__check_reservation, urlParams: { pk: pk } });
+  const response = await axios.post<string[]>(url, data, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getReservationForm(): Promise<ReservationFormDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__reservation_form;
+  const response = await axios.get<ReservationFormDto>(url, { withCredentials: true });
 
   return response.data;
 }

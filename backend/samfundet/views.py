@@ -108,6 +108,7 @@ from .serializers import (
     RecruitmentShowUnprocessedApplicationsSerializer,
     RecruitmentPositionSharedInterviewGroupSerializer,
 )
+from .utils import event_query
 from .models.event import (
     Event,
     EventGroup,
@@ -154,7 +155,7 @@ from .models.recruitment import (
     RecruitmentInterviewAvailability,
     RecruitmentPositionSharedInterviewGroup,
 )
-from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices, ReservationOccasion
 
 # =============================== #
 #          Home Page              #
@@ -399,10 +400,19 @@ class TableView(ModelViewSet):
     queryset = Table.objects.all()
 
 
+class ReservationFormView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> Response:
+        venue = self.request.query_params.get('venue', Venue.objects.get(slug='lyche').id)
+        biggest_table = Table.objects.filter(venue=venue).order_by('-seating').first()
+        return Response({'occasion': ReservationOccasion.choices, 'biggest_table': getattr(biggest_table, 'seating', 0)}, status=status.HTTP_200_OK)
+
 class ReservationCreateView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = ReservationSerializer
     queryset = Reservation.objects.all()
+
 
 
 class ReservationCheckAvailabilityView(APIView):
