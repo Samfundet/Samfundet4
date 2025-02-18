@@ -162,7 +162,6 @@ class RecruitmentPosition(CustomBaseModel):
     file_description_nb = models.TextField(help_text='Description of file needed (NB)', null=True, blank=True)
     file_description_en = models.TextField(help_text='Description of file needed (EN)', null=True, blank=True)
 
-    # TODO: Implement tag functionality
     tags = models.CharField(max_length=100, help_text='Tags for the position')
 
     # TODO: Implement interviewer functionality
@@ -375,7 +374,7 @@ class RecruitmentApplication(CustomBaseModel):
 
         """
         # Use order for more simple an unified for direction
-        ordering = f"{'' if direction < 0 else '-' }applicant_priority"
+        ordering = f'{"" if direction < 0 else "-"}applicant_priority'
         applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user).order_by(ordering)
         direction = abs(direction)  # convert to absolute
         for i in range(len(applications_for_user)):

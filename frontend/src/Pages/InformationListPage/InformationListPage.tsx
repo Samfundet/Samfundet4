@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from '~/Components';
+import { Link, Page } from '~/Components';
 import { getTranslatedTitle } from '~/Pages/InformationListPage/utils';
 import { getInformationPages } from '~/api';
 import type { InformationPageDto } from '~/dto';
@@ -31,7 +31,7 @@ export function InformationListPage() {
   }, []);
 
   return (
-    <div className={styles.wrapper}>
+    <Page className={styles.wrapper}>
       {pages.map((page) => {
         return (
           <Link
@@ -46,6 +46,6 @@ export function InformationListPage() {
           </Link>
         );
       })}
-    </div>
+    </Page>
   );
 }

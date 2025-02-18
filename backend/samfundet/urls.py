@@ -52,6 +52,9 @@ router.register('recruitment-applications-for-gang', views.RecruitmentApplicatio
 router.register('recruitment-applications-for-position', views.RecruitmentApplicationForRecruitmentPositionView, 'recruitment_applications_for_position')
 router.register('interview', views.InterviewView, 'interview')
 
+######## Lyche #########
+router.register('create-reservation', views.ReservationCreateView, 'create_reservation')
+
 app_name = 'samfundet'
 
 urlpatterns = [
@@ -67,6 +70,7 @@ urlpatterns = [
     path('user/', views.UserView.as_view(), name='user'),
     path('groups/', views.AllGroupsView.as_view(), name='groups'),
     path('users/', views.AllUsersView.as_view(), name='users'),
+    path('users-search-paginated/', views.PaginatedSearchUsersView.as_view(), name='users_search_paginated'),
     path('impersonate/', views.ImpersonateView.as_view(), name='impersonate'),
     path('events-per-day/', views.EventPerDayView.as_view(), name='eventsperday'),
     path('events-upcomming/', views.EventsUpcomingView.as_view(), name='eventsupcomming'),
@@ -161,4 +165,5 @@ urlpatterns = [
     path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
     path('purchase-feedback/', views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
     path('recruitment/<int:recruitment_id>/gang/<int:gang_id>/stats/', views.GangApplicationCountView.as_view(), name='gang-application-stats'),
+    path('recruitment/<int:id>/positions-by-tags/', views.PositionByTagsView.as_view(), name='recruitment_positions_by_tags'),
 ]
