@@ -2,17 +2,20 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { SamfundetLogoSpinner } from '~/Components';
+import { Button, SamfundetLogoSpinner } from '~/Components';
 import { getEvent } from '~/api';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
+import { dbT, lowerCapitalize } from '~/utils';
 import { Splash } from '../HomePage/components/Splash/Splash';
 import styles from './EventPage.module.scss';
 import { EventTable } from './components/EventTable';
+import { Icon } from '@iconify/react';
+import { PAID_TICKET_TYPES } from '~/types';
+import { BuyTicketModal } from '~/Components/BuyTicketModal';
 
 export function EventPage() {
   const { id } = useParams();
@@ -49,6 +52,19 @@ export function EventPage() {
     );
   }
 
+  const isPaid = event && PAID_TICKET_TYPES.includes(event.ticket_type);
+
+  const ticketButton = isPaid ? (
+    <Button theme={'samf'} className={styles.ticket_button}>
+      <Icon icon="ph:ticket-bold" />
+      {lowerCapitalize(`${t(KEY.common_buy)} ${t(KEY.common_ticket_type)}`)}
+    </Button>
+  ) : (
+    <></>
+  );
+
+  console.log("isPaid?:", isPaid);
+  console.log("Data:", event);
   return (
     <div className={styles.container}>
       {/* TODO splash should be its own component rather than homepage subcomponent */}
@@ -57,7 +73,7 @@ export function EventPage() {
       <div className={styles.content_row}>
         {/* Info table */}
         <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
-
+        {isPaid && <BuyTicketModal event={event} />}
         {/* Text */}
         <div className={styles.text_container}>
           <div className={styles.description}>

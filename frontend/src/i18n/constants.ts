@@ -194,6 +194,9 @@ export const KEY = {
   common_unprocessed: 'common_unprocessed',
   common_list_view: 'common_list_view',
   common_tab_view: 'common_tab_view',
+  common_membership_number: 'common_membership_number',
+  common_to_payment: 'common_to_payment',
+
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',

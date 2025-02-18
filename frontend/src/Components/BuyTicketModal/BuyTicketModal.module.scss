@@ -1,0 +1,84 @@
+@import "src/constants";
+
+@import "src/mixins";
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+}
+
+.modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 32rem;
+  max-width: 90%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.ticket_selection {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.ticket_type {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.total_price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: right;
+  margin: 1rem 0;
+}
+
+.pay_button {
+  width: 100%;
+  padding: 0.8rem;
+  background: $red-samf;
+  border-radius: 5px;
+  font-size: 1rem;
+  text-align: center;
+  cursor: pointer;
+
+  &:disabled {
+    background: grey;
+    cursor: not-allowed;
+  }
+}
+
+.close_btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+@include for-mobile-down {
+  .ticket_selection {
+    grid-template-columns: 1fr;
+  }
+
+  .modal {
+    width: 90%;
+  }
+}
