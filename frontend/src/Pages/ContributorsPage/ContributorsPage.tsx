@@ -47,6 +47,7 @@ const CONTRIBUTORS: Contributor[] = [
   // H24
   { name: 'Anders Meyer Hegre', github: 'andsamfu', from: 'H24'},
   { name: 'Lida Victoria Johnsen', github: 'lidavic', from: 'H24' },
+  { name: 'Eilif Hjermann Lindblad', github: 'eilifhl', from: 'V25'}
 ];
 
 export function ContributorsPage() {
