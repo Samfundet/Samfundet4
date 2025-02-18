@@ -484,7 +484,7 @@ class TableAdmin(CustomBaseAdmin):
 
 
 @admin.register(Reservation)
-class ReservationAdmin(CustomBaseAdmin):
+class ReservationAdmin(CustomGuardedModelAdmin):
     # ordering = []
     sortable_by = ['id', 'name', 'email', 'phonenumber']
     # list_filter = []
@@ -636,7 +636,7 @@ class RecruitmentAdmin(CustomBaseAdmin):
         'visible_from',
         'shown_application_deadline',
         'reprioritization_deadline_for_applicant',
-        'reprioritization_deadline_for_groups',
+        'reprioritization_deadline_for_gangs',
     ]
     search_fields = [
         'name_nb',

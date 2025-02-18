@@ -14,6 +14,8 @@ recruitments = [
         'actual_application_deadline': timezone.now() + timezone.timedelta(days=10),
         'reprioritization_deadline_for_applicant': timezone.now() + timezone.timedelta(days=11),
         'reprioritization_deadline_for_groups': timezone.now() + timezone.timedelta(days=12),
+        'promo_media': 'x4dzJ8z1j5M',
+        'reprioritization_deadline_for_gangs': timezone.now() + timezone.timedelta(days=12),
     },
     {
         'name_nb': 'Tidligere opptak',
@@ -23,6 +25,8 @@ recruitments = [
         'actual_application_deadline': timezone.now() - timezone.timedelta(days=50),
         'reprioritization_deadline_for_applicant': timezone.now() - timezone.timedelta(days=52),
         'reprioritization_deadline_for_groups': timezone.now() - timezone.timedelta(days=53),
+        'promo_media': 'x4dzJ8z1j5M',
+        'reprioritization_deadline_for_gangs': timezone.now() - timezone.timedelta(days=53),
     },
     {
         'name_nb': 'Framtidig opptak',
@@ -32,6 +36,8 @@ recruitments = [
         'actual_application_deadline': timezone.now() - timezone.timedelta(days=50),
         'reprioritization_deadline_for_applicant': timezone.now() - timezone.timedelta(days=52),
         'reprioritization_deadline_for_groups': timezone.now() - timezone.timedelta(days=53),
+        'promo_media': 'x4dzJ8z1j5M',
+        'reprioritization_deadline_for_gangs': timezone.now() - timezone.timedelta(days=53),
     },
 ]
 
@@ -56,7 +62,7 @@ def seed():
                 shown_application_deadline=recruitment_data['shown_application_deadline'],
                 actual_application_deadline=recruitment_data['actual_application_deadline'],
                 reprioritization_deadline_for_applicant=recruitment_data['reprioritization_deadline_for_applicant'],
-                reprioritization_deadline_for_groups=recruitment_data['reprioritization_deadline_for_groups'],
+                reprioritization_deadline_for_gangs=recruitment_data['reprioritization_deadline_for_gangs'],
             )
             recruitment_objects.append(recruitment_instance)
 
