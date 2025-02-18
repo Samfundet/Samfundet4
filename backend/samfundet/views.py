@@ -1527,17 +1527,31 @@ class InterviewerAvailabilityForDate(APIView):
     serializer_class = OccupiedTimeslotSerializer
 
     def get(self, request: Request, recruitment_id: int) -> Response:
-        date = datetime.fromisoformat(request.query_params.get('date'))
-        # interviewers = request.query_params.get('interviewers', [])
-        interviewers = list(map(int, request.query_params.getlist('interviewers', [])))  # chat foreslo dette istedenfor den over
+        try:
+            date_str = request.query_params.get('date')
+            if not date_str:
+                return Response({'error': 'Date parameter is required'}, status=400)
 
-        occupied_timeslots = OccupiedTimeslot.objects.filter(
-            recruitment__id=recruitment_id,
-            user__in=interviewers,
-            start_dt__date__lte=date,
-            end_dt__date__gte=date,
-        )
+            # Convert from YYYY.MM.DD to YYYY-MM-DD format
+            date = datetime.strptime(date_str, '%Y.%m.%d').date()
 
-        serialized_data = OccupiedTimeslotSerializer(occupied_timeslots, many=True).data
+            interviewer_str = request.query_params.get('interviewers', '')
+            interviewers = [int(id_) for id_ in interviewer_str.split(',')] if interviewer_str else []
 
-        return Response(serialized_data)
+            occupied_timeslots = OccupiedTimeslot.objects.filter(
+                recruitment__id=recruitment_id,
+                start_dt__date__lte=date,
+                end_dt__date__gte=date,
+            )
+
+            if interviewers:
+                occupied_timeslots = occupied_timeslots.filter(user__in=interviewers)
+
+            serialized_data = OccupiedTimeslotSerializer(occupied_timeslots, many=True).data
+            return Response(serialized_data)
+
+        except ValueError as e:
+            return Response(
+                {'error': f'Invalid parameter format: {str(e)}', 'detail': 'Make sure date is in YYYY.MM.DD format and interviewer IDs are valid integers'},
+                status=400,
+            )

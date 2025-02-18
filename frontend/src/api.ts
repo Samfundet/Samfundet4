@@ -1142,14 +1142,18 @@ export async function getRecruitmentGangStats(
 export async function getInterviewerAvailabilityOnDate(
   recruitmentId: number,
   date: string,
+  interviewers: number[],
 ): Promise<AxiosResponse<InterviewerAvailabilityDto[]>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__interviewer_availability_for_date,
+      urlParams: {
+        recruitmentId: recruitmentId,
+      },
       queryParams: {
-        recruitment: recruitmentId,
         date: date,
+        interviewers: interviewers.join(','),
       },
     });
   return await axios.get(url, { withCredentials: true });
