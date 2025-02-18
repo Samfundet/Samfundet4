@@ -100,6 +100,7 @@ from .serializers import (
     RecruitmentSeparatePositionSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
+    RecruitmentPositionOrganizedApplications,
     RecruitmentPositionForApplicantSerializer,
     RecruitmentInterviewAvailabilitySerializer,
     RecruitmentApplicationForApplicantSerializer,
@@ -1148,13 +1149,22 @@ class RecruitmentApplicationForGangUpdateStateView(APIView):
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class RecruitmentPositionOrganizedApplicationsView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentPositionOrganizedApplications
+
+    def get(self, request: Request, pk: int) -> Response:
+        position = get_object_or_404(RecruitmentPosition, pk=pk)
+        serializer = self.serializer_class(position)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class RecruitmentApplicationForPositionUpdateStateView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationUpdateForGangSerializer
 
     def put(self, request: Request, pk: int) -> Response:
         application = get_object_or_404(RecruitmentApplication, pk=pk)
-
         # TODO add check if user has permission to update for GANG
         update_serializer = self.serializer_class(data=request.data)
         if update_serializer.is_valid():
@@ -1165,12 +1175,9 @@ class RecruitmentApplicationForPositionUpdateStateView(APIView):
                 application.recruiter_status = update_serializer.data['recruiter_status']
             application.save()
             application.update_applicant_state()
-            applications = RecruitmentApplication.objects.filter(
-                recruitment_position=application.recruitment_position,  # Only change from above
-                recruitment=application.recruitment,
-            )
-            serializer = RecruitmentApplicationForGangSerializer(applications, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            position = get_object_or_404(RecruitmentPosition, pk=application.recruitment_position.id)
+            organized_serializer = RecruitmentPositionOrganizedApplications(position)
+            return Response(organized_serializer.data, status=status.HTTP_200_OK)
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
