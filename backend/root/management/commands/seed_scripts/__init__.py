@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from root.management.commands.seed_scripts import roles
+
 from . import (
     menu,
     gangs,
@@ -57,6 +59,7 @@ SEED_SCRIPTS = [
     ('recruitment_applications', recruitment_applications.seed),
     ('recruitment_occupied_time', recruitment_occupied_time.seed),
     ('recruitment_position_interviewers', recruitment_position_interviewers.seed),
+    ('roles', roles.seed),
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),
 ]
