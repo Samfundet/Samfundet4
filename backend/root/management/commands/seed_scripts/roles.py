@@ -10,7 +10,7 @@ from samfundet.models.general import Gang, GangSection
 
 # Define the base roles that will be used across all gangs
 BASE_GANG_ROLES = {
-    'gjengsjef': {
+    'gang_leader': {
         'permissions': [
             perm.SAMFUNDET_VIEW_GANG,
             perm.SAMFUNDET_CHANGE_GANG,
@@ -38,7 +38,7 @@ BASE_GANG_ROLES = {
             perm.SAMFUNDET_VIEW_ROLE,
         ]
     },
-    'nestleder': {
+    'vice_gang_leader': {
         'permissions': [
             perm.SAMFUNDET_VIEW_GANG,
             perm.SAMFUNDET_VIEW_GANGSECTION,
@@ -53,7 +53,7 @@ BASE_GANG_ROLES = {
             perm.SAMFUNDET_VIEW_ROLE,
         ]
     },
-    'seksjonssjef': {
+    'section_leader': {
         'permissions': [
             perm.SAMFUNDET_VIEW_GANGSECTION,
             perm.SAMFUNDET_CHANGE_GANGSECTION,
@@ -64,7 +64,7 @@ BASE_GANG_ROLES = {
             perm.SAMFUNDET_DELETE_USERGANGSECTIONROLE,
         ]
     },
-    'gjengmedlem': {
+    'gangmember': {
         'permissions': [
             perm.SAMFUNDET_VIEW_GANG,
             perm.SAMFUNDET_VIEW_GANGSECTION,
@@ -74,7 +74,7 @@ BASE_GANG_ROLES = {
 
 # Special roles for recruitment
 RECRUITMENT_ROLES = {
-    'org_opptaksansvarlig': {
+    'org_recruitment_manager': {
         'permissions': [
             # recruitment
             perm.SAMFUNDET_VIEW_RECRUITMENT,
@@ -99,7 +99,7 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_VIEW_RECRUITMENTTIMESTAT,
         ]
     },
-    'gang_opptaksansvarlig': {
+    'gang_recruitment_manager': {
         'permissions': [
             # view permissions
             perm.SAMFUNDET_VIEW_RECRUITMENT,
@@ -121,7 +121,7 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_VIEW_INTERVIEWROOM,
         ]
     },
-    'section_opptaksansvarlig': {
+    'section_recruitment_manager': {
         'permissions': [
             perm.SAMFUNDET_VIEW_RECRUITMENT,
             # position
@@ -161,7 +161,7 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_VIEW_INTERVIEWROOM,
         ]
     },
-    'gang_intervjuer': {
+    'gang_recruitment_interviewer': {
         'permissions': [
             perm.SAMFUNDET_VIEW_INTERVIEW,
             perm.SAMFUNDET_CHANGE_INTERVIEW,
@@ -176,7 +176,7 @@ RECRUITMENT_ROLES = {
 
 # Special roles for specific gangs
 SPECIAL_ROLES = {
-    'mg_redaksjonen': {
+    'redaksjonen': {
         'gang': 'Markedsføringsgjengen',
         'section': 'Redaksjonen',
         'permissions': [
