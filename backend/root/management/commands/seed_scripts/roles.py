@@ -7,6 +7,7 @@ from root.utils import permissions as perm
 
 from samfundet.models.role import Role
 from samfundet.models.general import Gang, GangSection
+from samfundet.models.recruitment import Recruitment
 
 # Define the base roles that will be used across all gangs
 BASE_GANG_ROLES = {
@@ -390,6 +391,7 @@ def seed():
     Role.objects.all().delete()
     yield (current_step / total_steps) * 100, 'Cleared existing roles'
 
+    # TODO how should content types work?
     # Create base gang roles
     gang_content_type = ContentType.objects.get_for_model(Gang)
     for role_name, role_data in BASE_GANG_ROLES.items():
@@ -398,7 +400,7 @@ def seed():
         yield (current_step / total_steps) * 100, f'Created base gang role: {role_name}'
 
     # Create recruitment roles
-    recruitment_content_type = ContentType.objects.get_for_model(Gang)
+    recruitment_content_type = ContentType.objects.get_for_model(Recruitment)
     for role_name, role_data in RECRUITMENT_ROLES.items():
         create_role(name=role_name, permissions=role_data['permissions'], content_type=recruitment_content_type)
         current_step += 1
