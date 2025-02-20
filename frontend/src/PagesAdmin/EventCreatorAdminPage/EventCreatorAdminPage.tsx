@@ -182,7 +182,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Tittel (norsk)</FormLabel>
                   <FormControl>
-                    <Input {...field} key=/>
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -195,7 +195,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Tittel (engelsk)</FormLabel>
                   <FormControl>
-                    <Input {...field} key=/>
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -210,7 +210,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Kort beskrivelse (norsk)</FormLabel>
                   <FormControl>
-                    <Input {...field} key=/>
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -223,7 +223,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Kort beskrivelse (engelsk)</FormLabel>
                   <FormControl>
-                    <Input {...field} key=/>
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -279,7 +279,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Dato & tid</FormLabel>
                   <FormControl>
-                    <Input type="datetime-local" {...field} key=/>
+                    <Input type="datetime-local" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -292,7 +292,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Varighet (minutter)</FormLabel>
                   <FormControl>
-                    <Inpkey=ut
+                    <Input
                       type="number"
                       {...field}
                       onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
@@ -324,7 +324,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Arrangør</FormLabel>
                   <FormControl>
-                    <Input {...field} key=/>
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -339,7 +339,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Lokale</FormLabel>
                   <FormControl>
-                    <Input {...field} key=/>
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -352,7 +352,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Kapasitet</FormLabel>
                   <FormControl>
-                    <Inpkey=ut
+                    <Input
                       type="number"
                       {...field}
                       onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
@@ -459,7 +459,7 @@ export function EventCreatorAdminPage() {
             <FormItem className={styles.form_item}>
               <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
               <FormControl>
-                <Input type="datetime-local" {...field} key=/>
+                <Input type="datetime-local" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -619,7 +619,7 @@ export function EventCreatorAdminPage() {
           {t(KEY.common_next)}
         </Button>
       ) : (
-        <Button theme="green" rounded={true} onClick={form.handleSubmit(onSubmit)}>
+        <Button theme="green" rounded={true} onClick={form.handleSubmit(onSubmit)} disabled={!allStepsComplete}>
           {t(KEY.common_save)}
         </Button>
       )}
