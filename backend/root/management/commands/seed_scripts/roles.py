@@ -9,9 +9,22 @@ from samfundet.models.role import Role
 from samfundet.models.general import Gang, GangSection
 from samfundet.models.recruitment import Recruitment
 
+GANG_LEADER = 'gang_leader'
+VICE_GANG_LEADER = 'vice_gang_leader'
+SECTION_LEADER = 'section_leader'
+GANG_MEMBER = 'gang_member'
+ORG_RECRUITMENT_MANAGER = 'org_recruitment_manager'
+GANG_RECRUITMENT_MANAGER = 'gang_recruitment_manager'
+SECTION_RECRUITMENT_MANAGER = 'section_recruitment_manager'
+GANG_RECRUITMENT_INTERVIEWER = 'gang_recruitment_interviewer'
+REDAKSJONEN = 'redaksjonen'
+STYRET = 'styret'
+RAADET = 'raadet'
+EVENT_MANAGER = 'event_manager'
+VENUE_MANAGER = 'venue_manager'
 # Define the base roles that will be used across all gangs
 BASE_GANG_ROLES = {
-    'gang_leader': {
+    GANG_LEADER: {
         'permissions': [
             perm.SAMFUNDET_VIEW_GANG,
             perm.SAMFUNDET_CHANGE_GANG,
@@ -39,7 +52,7 @@ BASE_GANG_ROLES = {
             perm.SAMFUNDET_VIEW_ROLE,
         ]
     },
-    'vice_gang_leader': {
+    VICE_GANG_LEADER: {
         'permissions': [
             perm.SAMFUNDET_VIEW_GANG,
             perm.SAMFUNDET_VIEW_GANGSECTION,
@@ -54,7 +67,7 @@ BASE_GANG_ROLES = {
             perm.SAMFUNDET_VIEW_ROLE,
         ]
     },
-    'section_leader': {
+    SECTION_LEADER: {
         'permissions': [
             perm.SAMFUNDET_VIEW_GANGSECTION,
             perm.SAMFUNDET_CHANGE_GANGSECTION,
@@ -65,7 +78,7 @@ BASE_GANG_ROLES = {
             perm.SAMFUNDET_DELETE_USERGANGSECTIONROLE,
         ]
     },
-    'gangmember': {
+    GANG_MEMBER: {
         'permissions': [
             perm.SAMFUNDET_VIEW_GANG,
             perm.SAMFUNDET_VIEW_GANGSECTION,
@@ -75,7 +88,7 @@ BASE_GANG_ROLES = {
 
 # Special roles for recruitment
 RECRUITMENT_ROLES = {
-    'org_recruitment_manager': {
+    ORG_RECRUITMENT_MANAGER: {
         'permissions': [
             # recruitment
             perm.SAMFUNDET_VIEW_RECRUITMENT,
@@ -100,7 +113,7 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_VIEW_RECRUITMENTTIMESTAT,
         ]
     },
-    'gang_recruitment_manager': {
+    GANG_RECRUITMENT_MANAGER: {
         'permissions': [
             # view permissions
             perm.SAMFUNDET_VIEW_RECRUITMENT,
@@ -122,7 +135,7 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_VIEW_INTERVIEWROOM,
         ]
     },
-    'section_recruitment_manager': {
+    SECTION_RECRUITMENT_MANAGER: {
         'permissions': [
             perm.SAMFUNDET_VIEW_RECRUITMENT,
             # position
@@ -162,7 +175,7 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_VIEW_INTERVIEWROOM,
         ]
     },
-    'gang_recruitment_interviewer': {
+    GANG_RECRUITMENT_INTERVIEWER: {
         'permissions': [
             perm.SAMFUNDET_VIEW_INTERVIEW,
             perm.SAMFUNDET_CHANGE_INTERVIEW,
@@ -177,7 +190,7 @@ RECRUITMENT_ROLES = {
 
 # Special roles for specific gangs
 SPECIAL_ROLES = {
-    'redaksjonen': {
+    REDAKSJONEN: {
         'gang': 'Markedsføringsgjengen',
         'section': 'Redaksjonen',
         'permissions': [
@@ -237,7 +250,7 @@ SPECIAL_ROLES = {
             perm.SAMFUNDET_CHANGE_GANG,
         ],
     },
-    'styret': {
+    STYRET: {
         'permissions': [
             # blogg
             perm.SAMFUNDET_VIEW_BLOGPOST,
@@ -290,7 +303,7 @@ SPECIAL_ROLES = {
             perm.SAMFUNDET_VIEW_SAKSDOKUMENT,
         ],
     },
-    'raadet': {
+    RAADET: {
         'permissions': [
             # blogg
             perm.SAMFUNDET_VIEW_BLOGPOST,
@@ -309,7 +322,7 @@ SPECIAL_ROLES = {
             perm.SAMFUNDET_VIEW_SAKSDOKUMENT,
         ],
     },
-    'event_manager': {
+    EVENT_MANAGER: {
         'permissions': [
             # event
             perm.SAMFUNDET_ADD_EVENT,
@@ -342,7 +355,7 @@ SPECIAL_ROLES = {
             perm.SAMFUNDET_VIEW_TAG,
         ],
     },
-    'venue_manager': {
+    VENUE_MANAGER: {
         'permissions': [
             # menu
             perm.SAMFUNDET_ADD_MENU,
