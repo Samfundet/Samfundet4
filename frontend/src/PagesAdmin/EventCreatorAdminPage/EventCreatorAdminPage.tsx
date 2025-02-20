@@ -176,6 +176,7 @@ export function EventCreatorAdminPage() {
         <>
           <div className={styles.input_row}>
             <FormField
+              key="title_nb"
               control={form.control}
               name="title_nb"
               render={({ field }) => (
@@ -191,6 +192,7 @@ export function EventCreatorAdminPage() {
             <FormField
               control={form.control}
               name="title_en"
+              key={'title_en'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>Tittel (engelsk)</FormLabel>
@@ -206,6 +208,7 @@ export function EventCreatorAdminPage() {
             <FormField
               control={form.control}
               name="description_short_nb"
+              key={'description_short_nb'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>Kort beskrivelse (norsk)</FormLabel>
@@ -219,6 +222,7 @@ export function EventCreatorAdminPage() {
             <FormField
               control={form.control}
               name="description_short_en"
+              key={'description_short_en'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>Kort beskrivelse (engelsk)</FormLabel>
@@ -234,6 +238,7 @@ export function EventCreatorAdminPage() {
             <FormField
               control={form.control}
               name="description_long_nb"
+              key={'description_long_nb'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>Lang beskrivelse (norsk)</FormLabel>
@@ -247,6 +252,7 @@ export function EventCreatorAdminPage() {
             <FormField
               control={form.control}
               name="description_long_en"
+              key={'description_long_en'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>Lang beskrivelse (engelsk)</FormLabel>
@@ -275,6 +281,7 @@ export function EventCreatorAdminPage() {
             <FormField
               control={form.control}
               name="start_dt"
+              key={'start_dt'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>Dato & tid</FormLabel>
@@ -288,6 +295,7 @@ export function EventCreatorAdminPage() {
             <FormField
               control={form.control}
               name="duration"
+              key={'duration'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>Varighet (minutter)</FormLabel>
@@ -307,6 +315,7 @@ export function EventCreatorAdminPage() {
             <FormField
               control={form.control}
               name="category"
+              key={'category'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>Kategori</FormLabel>
@@ -320,6 +329,7 @@ export function EventCreatorAdminPage() {
             <FormField
               control={form.control}
               name="host"
+              key={'host'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>Arrangør</FormLabel>
@@ -335,6 +345,7 @@ export function EventCreatorAdminPage() {
             <FormField
               control={form.control}
               name="location"
+              key={'location'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>Lokale</FormLabel>
@@ -348,6 +359,7 @@ export function EventCreatorAdminPage() {
             <FormField
               control={form.control}
               name="capacity"
+              key={'capacity'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>Kapasitet</FormLabel>
@@ -379,6 +391,7 @@ export function EventCreatorAdminPage() {
           <FormField
             control={form.control}
             name="age_restriction"
+            key={'age_restriction'}
             render={({ field }) => (
               <FormItem className={styles.form_item}>
                 <FormLabel>Aldersgrense</FormLabel>
@@ -392,6 +405,7 @@ export function EventCreatorAdminPage() {
           <FormField
             control={form.control}
             name="ticket_type"
+            key={'ticket_type'}
             render={({ field }) => (
               <FormItem className={styles.form_item}>
                 <FormLabel>Billettype</FormLabel>
@@ -425,6 +439,7 @@ export function EventCreatorAdminPage() {
         <FormField
           control={form.control}
           name="image"
+          key={'image'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
               <FormLabel>Bilde</FormLabel>
@@ -455,6 +470,7 @@ export function EventCreatorAdminPage() {
         <FormField
           control={form.control}
           name="publish_dt"
+          key={'publish_dt'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
               <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
