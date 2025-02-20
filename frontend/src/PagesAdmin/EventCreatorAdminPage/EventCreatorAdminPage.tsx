@@ -146,10 +146,6 @@ export function EventCreatorAdminPage() {
     }
   }, [id, t, form]);
 
-  useEffect(() => {
-    console.log(form.getValues());
-  }, [form, form.formState]);
-
   // ================================== //
   //          Creation Steps            //
   // ================================== //
