@@ -28,7 +28,7 @@
 #        _setup:         #
 ##########################
 # Enable aliases in CI/CD environments, only available in bash. https://github.com/actions/toolkit/issues/766#issuecomment-928305811
-shopt -s expand_aliases
+[ "$SHELL" = "/bin/bash" ] && shopt -s expand_aliases
 
 
 ##########################
