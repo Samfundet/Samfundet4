@@ -437,7 +437,6 @@ class RecruitmentApplication(CustomBaseModel):
 
         if not self.recruitment:
             self.recruitment = self.recruitment_position.recruitment
-        # If the application is saved without an interview, try to find an interview from a shared position.
         if not self.applicant_priority:
             self.organize_priorities()
             current_non_withdrawn_applications_count = RecruitmentApplication.objects.filter(
@@ -445,15 +444,12 @@ class RecruitmentApplication(CustomBaseModel):
             ).count()
             # Set the applicant_priority to the number of applications + 1 (for the current application)
             self.applicant_priority = current_non_withdrawn_applications_count + 1
-        # If the application is saved without an interview, try to find an interview from a shared position.
+
         if self.withdrawn:
-            # when an application is witdrawn the organize_priorities_on_withdrawal signal is called, this must happen post save
-            # this if-statement makes sure that the recruiter_status/priority is "resets" on withdrawal
-            # TODO: DO WE WANT TO SET IT TO NOT WANTED AND AUTOMATIC REJECTION? WOULD NOT_SET AND NOT_SET BE BETTER?
-            self.recruiter_priority = RecruitmentPriorityChoices.NOT_WANTED
-
-            self.recruiter_status = RecruitmentStatusChoices.AUTOMATIC_REJECTION
-
+            self.applicant_priority = None  # priority is set if the applicant "re-activates" the application
+            self.recruiter_priority = RecruitmentPriorityChoices.NOT_SET
+            self.recruiter_status = RecruitmentStatusChoices.NOT_SET
+        # If the application is saved without an interview, try to find an interview from a shared position.
         if not self.interview and self.recruitment_position.shared_interview_group:
             shared_interview = (
                 RecruitmentApplication.objects.filter(user=self.user, recruitment_position__in=self.recruitment_position.shared_interview_group.positions.all())
@@ -464,6 +460,7 @@ class RecruitmentApplication(CustomBaseModel):
                 self.interview = shared_interview.interview
 
         super().save(*args, **kwargs)
+        self.organize_priorities()
 
     def get_total_interviews_for_gang(self) -> int:
         return (
