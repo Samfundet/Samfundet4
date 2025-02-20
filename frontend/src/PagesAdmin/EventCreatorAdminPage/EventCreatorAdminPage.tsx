@@ -1,26 +1,80 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { type ReactElement, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, ImageCard } from '~/Components';
+import { z } from 'zod';
+import {
+  Button,
+  Dropdown,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  ImageCard,
+  Input,
+  Textarea,
+} from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
+import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { SamfForm } from '~/Forms/SamfForm';
-import { SamfFormField } from '~/Forms/SamfFormField';
 import { getEvent, postEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
-import type { EventDto, ImageDto } from '~/dto';
+import type { EventDto } from '~/dto';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
-import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import type { Children, EventAgeRestrictionValue, EventTicketTypeValue } from '~/types';
-import { dbT, lowerCapitalize } from '~/utils';
+import {
+  type Children,
+  EventAgeRestriction,
+  type EventAgeRestrictionValue,
+  EventCategory,
+  type EventCategoryValue,
+  EventTicketType,
+  type EventTicketTypeValue,
+} from '~/types';
+import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
-import { PaymentForm } from './components/PaymentForm';
+
+// Define the Zod schema for event validation
+const eventSchema = z.object({
+  // text and description
+  title_nb: z.string().min(1, { message: 'Norsk tittel er påkrevd' }),
+  title_en: z.string().min(1, { message: 'Engelsk tittel er påkrevd' }),
+  description_long_nb: z.string().min(1, { message: 'Lang norsk beskrivelse er påkrevd' }),
+  description_long_en: z.string().min(1, { message: 'Lang engelsk beskrivelse er påkrevd' }),
+  description_short_nb: z.string().min(1, { message: 'Kort norsk beskrivelse er påkrevd' }),
+  description_short_en: z.string().min(1, { message: 'Kort engelsk beskrivelse er påkrevd' }),
+  // Date and information
+  start_dt: z.string().min(1, { message: 'Dato og tid er påkrevd' }),
+  duration: z.number().min(1, { message: 'Varighet må være større enn 0' }),
+  category: z.string().min(1, { message: 'Kategori er påkrevd' }),
+  host: z.string().min(1, { message: 'Arrangør er påkrevd' }),
+  location: z.string().min(1, { message: 'Lokale er påkrevd' }),
+  capacity: z.number().min(1, { message: 'Kapasitet må være større enn 0' }),
+  // Payment/registration
+  age_restriction: z.enum(['none', 'eighteen', 'twenty', 'mixed']),
+  ticket_type: z.enum(['free', 'included', 'billig', 'registration', 'prepaid', 'custom']),
+  // Graphics
+  image: z
+    .object({
+      url: z.string(),
+      id: z.number(),
+      title: z.string(),
+      tags: z.array(z.object({ name: z.string(), color: z.string(), id: z.number() })),
+    })
+    .optional(),
+  // Summary/Publication date
+  publish_dt: z.string().min(1, { message: 'Publikasjonsdato er påkrevd' }),
+});
+
+type FormType = z.infer<typeof eventSchema>;
 
 type EventCreatorStep = {
   key: string; // Unique key.
@@ -28,31 +82,9 @@ type EventCreatorStep = {
   title_en: string; // Tab title english.
   customIcon?: string; // Custom icon in tab bar.
   template: ReactElement;
+  validate: (data: FormType) => boolean;
 };
 
-type FormType = {
-  // text and description
-  title_nb: string;
-  title_en: string;
-  description_long_nb: string;
-  description_long_en: string;
-  description_short_nb: string;
-  description_short_en: string;
-  // Date and information
-  start_dt: string;
-  duration: number;
-  category: string;
-  host: string;
-  location: string;
-  capacity: number;
-  // Payment/registration
-  age_restriction: EventAgeRestrictionValue;
-  ticket_type: EventTicketTypeValue;
-  // Graphics
-  image: ImageDto;
-  // Summary/Publication date
-  publish_dt: string;
-};
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
@@ -61,36 +93,86 @@ export function EventCreatorAdminPage() {
   const { id } = useParams();
 
   // TODO these are temporary and must be fetched from API when implemented.
-  const eventCategoryOptions: DropdownOption<string>[] = [
-    { value: 'concert', label: 'Konsert' },
-    { value: 'debate', label: 'Debatt' },
-  ];
-  const ageLimitOptions: DropdownOption<EventAgeRestrictionValue>[] = [
-    { value: 'none', label: 'Ingen' },
-    { value: 'eighteen', label: '18 år' },
-    { value: 'twenty', label: '20 år' },
-    { value: 'mixed', label: '18 år (student), 20 år (ikke student)' },
+  const eventCategoryOptions: DropdownOption<EventCategoryValue>[] = [
+    { value: EventCategory.SAMFUNDET_MEETING, label: 'Samfundsmøte' },
+    { value: EventCategory.CONCERT, label: 'Konsert' },
+    { value: EventCategory.DEBATE, label: 'Debatt' },
+    { value: EventCategory.QUIZ, label: 'Quiz' },
+    { value: EventCategory.LECTURE, label: 'Foredrag' },
+    { value: EventCategory.OTHER, label: 'Annet' },
   ];
 
-  //Fetch event data using the event ID
-  // biome-ignore lint/correctness/useExhaustiveDependencies: navigate does not need to be in deplist
+  const ageLimitOptions: DropdownOption<EventAgeRestrictionValue>[] = [
+    { value: EventAgeRestriction.NONE, label: 'Ingen' },
+    { value: EventAgeRestriction.EIGHTEEN, label: '18 år' },
+    { value: EventAgeRestriction.TWENTY, label: '20 år' },
+    { value: EventAgeRestriction.MIXED, label: '18 år (student), 20 år (ikke student)' },
+  ];
+
+  const ticketTypeOptions: DropdownOption<EventTicketTypeValue>[] = [
+    { value: EventTicketType.FREE, label: 'Gratis' },
+    { value: EventTicketType.INCLUDED, label: 'Inkludert' },
+    { value: EventTicketType.BILLIG, label: 'Billig' },
+    { value: EventTicketType.REGISTRATION, label: 'Registrering' },
+    { value: EventTicketType.CUSTOM, label: 'Custom' },
+  ];
+
+  // Setup React Hook Form
+  const form = useForm<FormType>({
+    resolver: zodResolver(eventSchema),
+    defaultValues: {
+      title_nb: '',
+      title_en: '',
+      description_long_nb: '',
+      description_long_en: '',
+      description_short_nb: '',
+      description_short_en: '',
+      start_dt: '',
+      duration: 0,
+      category: eventCategoryOptions[0].value,
+      host: '',
+      location: '',
+      capacity: 0,
+      age_restriction: 'none',
+      ticket_type: 'free',
+      image: undefined,
+      publish_dt: '',
+    },
+  });
+
+  // Fetch event data using the event ID
   useEffect(() => {
     if (id) {
       getEvent(id)
         .then((eventData) => {
           setEvent(eventData);
+          form.reset({
+            title_nb: eventData.title_nb || '',
+            title_en: eventData.title_en || '',
+            description_long_nb: eventData.description_long_nb || '',
+            description_long_en: eventData.description_long_en || '',
+            description_short_nb: eventData.description_short_nb || '',
+            description_short_en: eventData.description_short_en || '',
+            start_dt: eventData.start_dt ? utcTimestampToLocal(eventData.start_dt, false) : '',
+            duration: eventData.duration || 0,
+            category: eventData.category || '',
+            host: eventData.host || '',
+            location: eventData.location || '',
+            capacity: eventData.capacity || 0,
+            age_restriction: eventData.age_restriction || 'none',
+            ticket_type: eventData.ticket_type || 'free',
+            image: eventData.image,
+            publish_dt: eventData.publish_dt ? utcTimestampToLocal(eventData.publish_dt, false) : '',
+          });
           setShowSpinner(false);
         })
         .catch((error) => {
-          if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.admin_events, replace: true });
-          }
           toast.error(t(KEY.common_something_went_wrong));
         });
     } else {
       setShowSpinner(false);
     }
-  }, [id]);
+  }, [id, t, form]);
 
   // ================================== //
   //          Creation Steps            //
@@ -104,38 +186,100 @@ export function EventCreatorAdminPage() {
       key: 'text',
       title_nb: 'Tittel/beskrivelse',
       title_en: 'Text & description',
+      validate: (data) => {
+        return !!(
+          data.title_nb &&
+          data.title_en &&
+          data.description_short_nb &&
+          data.description_short_en &&
+          data.description_long_nb &&
+          data.description_long_en
+        );
+      },
       template: (
         <>
           <div className={styles.input_row}>
-            <SamfFormField<string, FormType> field="title_nb" type="text" label="Tittel (norsk)" required={true} />
-            <SamfFormField<string, FormType> field="title_en" type="text" label="Tittel (engelsk)" required={true} />
+            <FormField
+              control={form.control}
+              name="title_nb"
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Tittel (norsk)</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="title_en"
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Tittel (engelsk)</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <div className={styles.input_row}>
-            <SamfFormField<string, FormType>
-              field="description_short_nb"
-              type="text"
-              label="Kort beskrivelse (norsk)"
-              required={true}
+            <FormField
+              control={form.control}
+              name="description_short_nb"
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Kort beskrivelse (norsk)</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <SamfFormField<string, FormType>
-              field="description_short_en"
-              type="text"
-              label="Kort beskrivelse (engelsk)"
-              required={true}
+            <FormField
+              control={form.control}
+              name="description_short_en"
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Kort beskrivelse (engelsk)</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div className={styles.input_row}>
-            <SamfFormField<string, FormType>
-              field="description_long_nb"
-              type="text_long"
-              label="Lang beskrivelse (norsk)"
-              required={true}
+            <FormField
+              control={form.control}
+              name="description_long_nb"
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Lang beskrivelse (norsk)</FormLabel>
+                  <FormControl>
+                    <Textarea className="textarea" {...field} rows={8} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <SamfFormField<string, FormType>
-              field="description_long_en"
-              type="text_long"
-              label="Lang beskrivelse (engelsk)"
-              required={true}
+            <FormField
+              control={form.control}
+              name="description_long_en"
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Lang beskrivelse (engelsk)</FormLabel>
+                  <FormControl>
+                    <Textarea className="textarea" {...field} rows={8} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
         </>
@@ -146,47 +290,150 @@ export function EventCreatorAdminPage() {
       key: 'info',
       title_nb: 'Dato og informasjon',
       title_en: 'Date & info',
+      validate: (data) => {
+        return !!(data.start_dt && data.duration && data.category && data.host && data.location && data.capacity);
+      },
       template: (
         <>
           <div className={styles.input_row}>
-            <SamfFormField<string, FormType> field="start_dt" type="date_time" label="Dato & tid" required={true} />
-            <SamfFormField<number, FormType>
-              field="duration"
-              type="number"
-              label="Varighet (minutter)"
-              required={true}
+            <FormField
+              control={form.control}
+              name="start_dt"
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Dato & tid</FormLabel>
+                  <FormControl>
+                    <Input type="datetime-local" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="duration"
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Varighet (minutter)</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      {...field}
+                      onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div className={styles.input_row}>
-            <SamfFormField<string, FormType>
-              field="category"
-              type="options"
-              label="Kategori"
-              options={eventCategoryOptions}
-              required={true}
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Kategori</FormLabel>
+                  <FormControl>
+                    <Dropdown options={eventCategoryOptions} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <SamfFormField<string, FormType> field="host" type="text" label="Arrangør" required={true} />
-            <SamfFormField<string, FormType> field="location" type="text" label="Lokale" required={true} />
-            <SamfFormField<number, FormType> field="capacity" type="number" label="Kapasitet" required={true} />
+            <FormField
+              control={form.control}
+              name="host"
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Arrangør</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className={styles.input_row}>
+            <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Lokale</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="capacity"
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Kapasitet</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      {...field}
+                      onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         </>
       ),
     },
-    // Payment options (WIP)
+    // Payment options
     {
       key: 'payment',
       title_nb: 'Betaling/påmelding',
       title_en: 'Payment/registration',
+      validate: (data) => {
+        return !!data.age_restriction && !!data.ticket_type;
+      },
       template: (
         <>
-          <SamfFormField<string, FormType>
-            field="age_restriction"
-            type="options"
-            label="Aldersgrense"
-            options={ageLimitOptions}
-            required={true}
+          <FormField
+            control={form.control}
+            name="age_restriction"
+            render={({ field }) => (
+              <FormItem className={styles.form_item}>
+                <FormLabel>Aldersgrense</FormLabel>
+                <FormControl>
+                  <Dropdown options={ageLimitOptions} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <PaymentForm event={event ?? {}} onChange={(partial) => setEvent({ ...event, ...partial })} />
+          <FormField
+            control={form.control}
+            name="ticket_type"
+            render={({ field }) => (
+              <FormItem className={styles.form_item}>
+                <FormLabel>Billettype</FormLabel>
+                <FormControl>
+                  <Dropdown options={ticketTypeOptions} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* <PaymentForm
+            event={form.getValues()}
+            onChange={(partial) => {
+              // Update form values with payment data
+              const updatedValues = { ...form.getValues(), ...partial };
+              form.reset(updatedValues);
+            }}
+          /> */}
         </>
       ),
     },
@@ -195,7 +442,29 @@ export function EventCreatorAdminPage() {
       key: 'graphics',
       title_nb: 'Grafikk',
       title_en: 'Graphics',
-      template: <SamfFormField field="image" type="image" required={true} />,
+      validate: (data) => {
+        return !!data.image;
+      },
+      template: (
+        <FormField
+          control={form.control}
+          name="image"
+          render={({ field }) => (
+            <FormItem className={styles.form_item}>
+              <FormLabel>Bilde</FormLabel>
+              <FormControl>
+                <ImagePicker
+                  onSelected={(image) => {
+                    field.onChange(image);
+                  }}
+                  selectedImage={field.value}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      ),
     },
     // Summary.
     {
@@ -203,12 +472,22 @@ export function EventCreatorAdminPage() {
       title_nb: 'Oppsummering',
       title_en: 'Summary',
       customIcon: 'ic:outline-remove-red-eye',
+      validate: (data) => {
+        return !!data.publish_dt;
+      },
       template: (
-        <SamfFormField
-          field="publish_dt"
-          type="date_time"
-          label={t(KEY.saksdokumentpage_publication_date) ?? ''}
-          required={true}
+        <FormField
+          control={form.control}
+          name="publish_dt"
+          render={({ field }) => (
+            <FormItem className={styles.form_item}>
+              <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
+              <FormControl>
+                <Input type="datetime-local" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
       ),
     },
@@ -217,17 +496,12 @@ export function EventCreatorAdminPage() {
   // Editor state.
   const [visitedTabs, setVisitedTabs] = useState<Record<string, boolean>>({});
 
-  // Ready to save?
-  const allStepsComplete = createSteps.reduce((others, step) => {
-    return others && completedSteps[step.key];
-  }, true);
-
   // ================================== //
   //             Save Logic             //
   // ================================== //
 
-  function trySave() {
-    postEvent(event as EventDto)
+  function onSubmit(values: FormType) {
+    postEvent(values as unknown as EventDto)
       .then(() => {
         navigate({ url: ROUTES.frontend.admin_events });
         toast.success(t(KEY.common_creation_successful));
@@ -247,9 +521,19 @@ export function EventCreatorAdminPage() {
     // Check step status to get icon and colors
     const custom = step.customIcon !== undefined;
     let icon = step.customIcon || 'material-symbols:circle-outline';
-    const valid = completedSteps[step.key] === true && !custom;
+    const stepData = form.getValues();
+    const valid = step.validate(stepData) && !custom;
     const visited = visitedTabs[step.key] === true && !custom;
     const error = !valid && visited && !custom;
+
+    // Update completed steps
+    if (completedSteps[step.key] !== valid) {
+      setCompletedSteps((prev) => ({
+        ...prev,
+        [step.key]: valid,
+      }));
+    }
+
     if (valid) {
       icon = 'material-symbols:check-circle';
     } else if (error) {
@@ -284,35 +568,45 @@ export function EventCreatorAdminPage() {
   }
 
   // ================================== //
-  //               Forms                //
+  //            Event Preview           //
   // ================================== //
+
+  // Ready to save?
+  const allStepsComplete = createSteps.every((step) => completedSteps[step.key]);
+
+  // Get current form values for preview
+  const formValues = form.getValues();
 
   // Event preview on final step
   const eventPreview: Children = (
     <div className={styles.preview}>
       <ImageCard
-        title={dbT(event, 'title') ?? ''}
-        description={dbT(event, 'description_short') ?? ''}
-        imageUrl={BACKEND_DOMAIN + event?.image?.url}
-        date={event?.start_dt ?? ''}
+        title={dbT(formValues, 'title') ?? ''}
+        description={dbT(formValues, 'description_short') ?? ''}
+        imageUrl={formValues.image?.url ? BACKEND_DOMAIN + formValues.image.url : ''}
+        date={formValues.start_dt ?? ''}
       />
       {/* Preview Info */}
       <div className={styles.previewText}>
         <span>
-          <b>{t(KEY.category)}:</b> {event?.category ?? t(KEY.common_missing)}
+          <b>{t(KEY.category)}:</b> {formValues.category ?? t(KEY.common_missing)}
         </span>
         <span>
-          <strong>Varighet:</strong> {event?.duration ? `${event?.duration} min` : t(KEY.common_missing)}
+          <strong>Varighet:</strong> {formValues.duration ? `${formValues.duration} min` : t(KEY.common_missing)}
         </span>
         <span>
-          <b>{t(KEY.admin_organizer)}:</b> {event?.host ?? t(KEY.common_missing)}
+          <b>{t(KEY.admin_organizer)}:</b> {formValues.host ?? t(KEY.common_missing)}
         </span>
         <span>
-          <b>{t(KEY.common_venue)}:</b> {event?.location ?? t(KEY.common_missing)}
+          <b>{t(KEY.common_venue)}:</b> {formValues.location ?? t(KEY.common_missing)}
         </span>
       </div>
     </div>
   );
+
+  // ================================== //
+  //          Navigation Logic          //
+  // ================================== //
 
   // Move to next/previous tab
   function navigateTabs(delta: number): () => void {
@@ -325,62 +619,40 @@ export function EventCreatorAdminPage() {
     };
   }
 
-  // The form is valid, set step as completed
-  function setStepCompleted(step: EventCreatorStep, completed: boolean) {
-    setCompletedSteps({
-      ...completedSteps,
-      [step.key]: completed,
-    });
-  }
-
   // Render all forms (some are hidden but not removed to keep values)
-  const allForms: Children = createSteps.map((step: EventCreatorStep) => {
-    const hidden = currentFormTab.key !== step.key;
-    const visited = visitedTabs[step.key];
-    return (
-      <div key={step.key} style={{ display: hidden ? 'none' : 'block' }}>
-        <SamfForm
-          onChange={(part) => setEvent({ ...event, ...part })} // TODO: BURDE VÆRE 'ny/oppdatert' event data ?
-          onValidityChanged={(valid) => {
-            setStepCompleted(step, valid);
-          }}
-          validateOnInit={visited}
-          devMode={false}
-          initialData={event as FormType} //TODO: BURDE VÆRE INITIAL EVENT ?
-        >
-          {step.key === 'summary' ? eventPreview : <></>}
-          {step.template}
-        </SamfForm>
-      </div>
-    );
-  });
+  const currentStep = createSteps.find((step) => step.key === currentFormTab.key);
+  const currentStepContent = currentStep ? (
+    <>
+      {currentStep.key === 'summary' && eventPreview}
+      {currentStep.template}
+    </>
+  ) : null;
 
   // Navigation buttons
   const navigationButtons: Children = (
-    <>
-      <div className={styles.button_row}>
-        {currentFormTab.key !== createSteps[0].key ? (
-          <Button theme="blue" rounded={true} onClick={navigateTabs(-1)}>
-            {t(KEY.common_previous)}
-          </Button>
-        ) : (
-          <div />
-        )}
-        {currentFormTab.key !== createSteps.slice(-1)[0].key ? (
-          <Button theme="blue" rounded={true} onClick={navigateTabs(1)}>
-            {t(KEY.common_next)}
-          </Button>
-        ) : (
-          <Button theme="green" rounded={true} onClick={trySave} disabled={!allStepsComplete}>
-            {t(KEY.common_save)}
-          </Button>
-        )}
-      </div>
-    </>
+    <div className={styles.button_row}>
+      {currentFormTab.key !== createSteps[0].key ? (
+        <Button theme="blue" rounded={true} onClick={navigateTabs(-1)}>
+          {t(KEY.common_previous)}
+        </Button>
+      ) : (
+        <div />
+      )}
+      {currentFormTab.key !== createSteps.slice(-1)[0].key ? (
+        <Button theme="blue" rounded={true} onClick={navigateTabs(1)}>
+          {t(KEY.common_next)}
+        </Button>
+      ) : (
+        <Button theme="green" rounded={true} onClick={form.handleSubmit(onSubmit)}>
+          {t(KEY.common_save)}
+        </Button>
+      )}
+    </div>
   );
 
   const title = lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`);
   useTitle(title);
+
   return (
     <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <TabBar
@@ -392,9 +664,12 @@ export function EventCreatorAdminPage() {
       />
       <br />
       <div className={styles.form_container}>
-        {/* Render form */}
-        {allForms}
-        {navigationButtons}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            {currentStepContent}
+            {navigationButtons}
+          </form>
+        </Form>
       </div>
     </AdminPageLayout>
   );
