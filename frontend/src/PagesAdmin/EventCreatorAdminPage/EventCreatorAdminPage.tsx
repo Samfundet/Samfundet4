@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { z } from 'zod';
+import type { z } from 'zod';
 import {
   Button,
   Dropdown,
@@ -41,38 +41,9 @@ import {
 import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
+import { eventSchema } from './EventCreatorSchema';
 
 // Define the Zod schema for event validation
-const eventSchema = z.object({
-  // text and description
-  title_nb: z.string().min(1, { message: 'Norsk tittel er påkrevd' }),
-  title_en: z.string().min(1, { message: 'Engelsk tittel er påkrevd' }),
-  description_long_nb: z.string().min(1, { message: 'Lang norsk beskrivelse er påkrevd' }),
-  description_long_en: z.string().min(1, { message: 'Lang engelsk beskrivelse er påkrevd' }),
-  description_short_nb: z.string().min(1, { message: 'Kort norsk beskrivelse er påkrevd' }),
-  description_short_en: z.string().min(1, { message: 'Kort engelsk beskrivelse er påkrevd' }),
-  // Date and information
-  start_dt: z.string().min(1, { message: 'Dato og tid er påkrevd' }),
-  duration: z.number().min(1, { message: 'Varighet må være større enn 0' }),
-  category: z.string().min(1, { message: 'Kategori er påkrevd' }),
-  host: z.string().min(1, { message: 'Arrangør er påkrevd' }),
-  location: z.string().min(1, { message: 'Lokale er påkrevd' }),
-  capacity: z.number().min(1, { message: 'Kapasitet må være større enn 0' }),
-  // Payment/registration
-  age_restriction: z.enum(['none', 'eighteen', 'twenty', 'mixed']),
-  ticket_type: z.enum(['free', 'included', 'billig', 'registration', 'prepaid', 'custom']),
-  // Graphics
-  image: z
-    .object({
-      url: z.string(),
-      id: z.number(),
-      title: z.string(),
-      tags: z.array(z.object({ name: z.string(), color: z.string(), id: z.number() })),
-    })
-    .optional(),
-  // Summary/Publication date
-  publish_dt: z.string().min(1, { message: 'Publikasjonsdato er påkrevd' }),
-});
 
 type FormType = z.infer<typeof eventSchema>;
 
@@ -142,6 +113,7 @@ export function EventCreatorAdminPage() {
 
   // Fetch event data using the event ID
   useEffect(() => {
+    console.log(form.formState);
     if (id) {
       getEvent(id)
         .then((eventData) => {
@@ -173,6 +145,10 @@ export function EventCreatorAdminPage() {
       setShowSpinner(false);
     }
   }, [id, t, form]);
+
+  useEffect(() => {
+    console.log(form.getValues());
+  }, [form, form.formState]);
 
   // ================================== //
   //          Creation Steps            //
@@ -206,7 +182,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Tittel (norsk)</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} key=/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -219,7 +195,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Tittel (engelsk)</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} key=/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -234,7 +210,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Kort beskrivelse (norsk)</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} key=/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -247,7 +223,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Kort beskrivelse (engelsk)</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} key=/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -303,7 +279,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Dato & tid</FormLabel>
                   <FormControl>
-                    <Input type="datetime-local" {...field} />
+                    <Input type="datetime-local" {...field} key=/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -316,7 +292,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Varighet (minutter)</FormLabel>
                   <FormControl>
-                    <Input
+                    <Inpkey=ut
                       type="number"
                       {...field}
                       onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
@@ -348,7 +324,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Arrangør</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} key=/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -363,7 +339,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Lokale</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} key=/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -376,7 +352,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>Kapasitet</FormLabel>
                   <FormControl>
-                    <Input
+                    <Inpkey=ut
                       type="number"
                       {...field}
                       onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
@@ -483,7 +459,7 @@ export function EventCreatorAdminPage() {
             <FormItem className={styles.form_item}>
               <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
               <FormControl>
-                <Input type="datetime-local" {...field} />
+                <Input type="datetime-local" {...field} key=/>
               </FormControl>
               <FormMessage />
             </FormItem>

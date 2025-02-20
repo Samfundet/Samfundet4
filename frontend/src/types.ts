@@ -140,15 +140,6 @@ export const EventCategory = {
 
 export type EventCategoryValue = (typeof EventCategory)[keyof typeof EventCategory];
 
-export const ALL_EVENT_CATEGORIES: EventCategoryValue[] = [
-  EventCategory.SAMFUNDET_MEETING,
-  EventCategory.CONCERT,
-  EventCategory.DEBATE,
-  EventCategory.QUIZ,
-  EventCategory.LECTURE,
-  EventCategory.OTHER,
-];
-
 export type CalendarMarker = {
   date: Date;
   className?: string;
