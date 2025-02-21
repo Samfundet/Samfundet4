@@ -389,10 +389,10 @@ class RecruitmentApplication(CustomBaseModel):
                 # Move priorites down in direction
                 for ii in range(switch, i, -1):
                     non_withdrawn_applications_for_user[ii].applicant_priority = non_withdrawn_applications_for_user[ii - 1].applicant_priority
-                    non_withdrawn_applications_for_user[ii].save()
+                    non_withdrawn_applications_for_user[ii].save(skip_organize=True)
                 # update priority
                 non_withdrawn_applications_for_user[i].applicant_priority = new_priority
-                non_withdrawn_applications_for_user[i].save()
+                non_withdrawn_applications_for_user[i].save(skip_organize=True)
                 break
         self.organize_priorities()
 
@@ -429,7 +429,7 @@ class RecruitmentApplication(CustomBaseModel):
     def __str__(self) -> str:
         return f'Application: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
-    def save(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
+    def save(self, *args: tuple,skip_organize:bool = False, **kwargs: dict) -> None:  # noqa: C901
         """
         If the application is saved without an interview,
         try to find an interview from a shared position.
@@ -461,7 +461,8 @@ class RecruitmentApplication(CustomBaseModel):
                 self.interview = shared_interview.interview
 
         super().save(*args, **kwargs)
-        self.organize_priorities()
+        if not skip_organize:
+         self.organize_priorities()
 
     def get_total_interviews_for_gang(self) -> int:
         return (

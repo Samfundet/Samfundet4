@@ -859,10 +859,7 @@ class TestRecruitmentApplicationStatus:
         assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.LESS_WANT_WANTED
 
         # Test flipped, swap priority
-        fixture_recruitment_application.applicant_priority = 2
-        fixture_recruitment_application.save()
-        fixture_recruitment_application2.applicant_priority = 1
-        fixture_recruitment_application2.save()
+        fixture_recruitment_application.update_priority(-1)  # Move down one position (from 1 to 2)
         fixture_recruitment_application.update_applicant_state()
 
         fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
@@ -939,20 +936,17 @@ class TestRecruitmentApplicationStatus:
         assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.LESS_RESERVE_WANTED
 
         # Test flipped, swap priority
-        fixture_recruitment_application.applicant_priority = 2
-        fixture_recruitment_application.save()
-        fixture_recruitment_application2.applicant_priority = 1
         fixture_recruitment_application2.recruiter_priority = RecruitmentPriorityChoices.RESERVE
         fixture_recruitment_application2.save()
+        fixture_recruitment_application.update_priority(-1)  # Move first application down
         fixture_recruitment_application.update_applicant_state()
 
         fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
         fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
 
         assert fixture_recruitment_application.applicant_priority > fixture_recruitment_application2.applicant_priority
-        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.LESS_RESERVE_RESERVED
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.LESS_RESERVE_RESERVED  
         assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.TOP_RESERVED
-
         # One is at top but not set, but other has top, but has less priority
         fixture_recruitment_application2.recruiter_priority = RecruitmentPriorityChoices.NOT_SET
         fixture_recruitment_application2.save()
