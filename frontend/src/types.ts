@@ -129,6 +129,17 @@ export const PAID_TICKET_TYPES: EventTicketTypeValue[] = [
   EventTicketType.CUSTOM,
 ];
 
+export const EventCategory = {
+  SAMFUNDET_MEETING: 'samfundsmote',
+  CONCERT: 'concert',
+  DEBATE: 'debate',
+  QUIZ: 'quiz',
+  LECTURE: 'lecture',
+  OTHER: 'other',
+} as const;
+
+export type EventCategoryValue = (typeof EventCategory)[keyof typeof EventCategory];
+
 export type CalendarMarker = {
   date: Date;
   className?: string;

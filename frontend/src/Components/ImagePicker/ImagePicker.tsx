@@ -10,10 +10,11 @@ import styles from './ImagePicker.module.scss';
 
 export type ImagePickerProps = {
   onSelected?(image: ImageDto): void;
+  selectedImage?: ImageDto;
 };
 
-export function ImagePicker({ onSelected }: ImagePickerProps) {
-  const [selected, setSelected] = useState<ImageDto>();
+export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
+  const [selected, setSelected] = useState<ImageDto | undefined>(selectedImage);
   const [images, setImages] = useState<ImageDto[]>([]);
 
   useEffect(() => {
@@ -43,11 +44,7 @@ export function ImagePicker({ onSelected }: ImagePickerProps) {
   return (
     <div className={styles.container}>
       <div className={styles.selected_container}>
-        {selected && (
-          <>
-            <h1 className={styles.image_title}>{selected.title}</h1>
-          </>
-        )}
+        {selected && <h1 className={styles.image_title}>{selected.title}</h1>}
         <div className={styles.selected} style={backgroundImageFromUrl(BACKEND_DOMAIN + selected?.url)}>
           {selected === undefined && (
             <>
