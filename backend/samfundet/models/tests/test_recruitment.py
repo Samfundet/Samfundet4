@@ -475,7 +475,7 @@ class TestRecruitmentApplication:
         fixture_recruitment_application.save()
 
         fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
-        assert fixture_recruitment_application.withdrawn == True
+        assert fixture_recruitment_application.withdrawn is True
         assert fixture_recruitment_application.recruiter_status == initial_status  # Status shouldn't change
 
     def test_recruitmentapplication_total_applications_two_gangs(
@@ -776,7 +776,7 @@ class TestRecruitmentApplicationStatus:
         fixture_recruitment_application2.save()
 
         # Verify withdrawal worked but didn't affect recruiter status
-        assert fixture_recruitment_application2.withdrawn == True
+        assert fixture_recruitment_application2.withdrawn is True
         assert fixture_recruitment_application2.recruiter_status == initial_recruiter_status
 
     def test_check_applicant_state_all_not_set(
@@ -945,7 +945,7 @@ class TestRecruitmentApplicationStatus:
         fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
 
         assert fixture_recruitment_application.applicant_priority > fixture_recruitment_application2.applicant_priority
-        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.LESS_RESERVE_RESERVED  
+        assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.LESS_RESERVE_RESERVED
         assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.TOP_RESERVED
         # One is at top but not set, but other has top, but has less priority
         fixture_recruitment_application2.recruiter_priority = RecruitmentPriorityChoices.NOT_SET
