@@ -447,9 +447,6 @@ class RecruitmentApplication(CustomBaseModel):
 
         if self.withdrawn:
             self.applicant_priority = None  # priority is set if the applicant "re-activates" the application
-        # WE DONT WANT AN ACTION THE USER MAKES TO EFFECT THE STATE OF RECRUITER PRIORITY AND STATUS CHOICES
-        #    self.recruiter_priority = RecruitmentPriorityChoices.NOT_SET
-        #    self.recruiter_status = RecruitmentStatusChoices.NOT_SET
         # If the application is saved without an interview, try to find an interview from a shared position.
         if not self.interview and self.recruitment_position.shared_interview_group:
             shared_interview = (
