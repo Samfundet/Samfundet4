@@ -514,11 +514,14 @@ export function EventCreatorAdminPage() {
     const visited = visitedTabs[step.key] === true && !custom;
     const error = !valid && visited && !custom;
 
+    console.log('validation:', step.key, step.validate(stepData));
+    console.log('if check', completedSteps[step.key] !== valid);
+
     // Update completed steps
     if (completedSteps[step.key] !== valid) {
       setCompletedSteps((prev) => ({
         ...prev,
-        [step.key]: valid,
+        [step.key]: step.validate(stepData),
       }));
     }
 
@@ -560,7 +563,11 @@ export function EventCreatorAdminPage() {
   // ================================== //
 
   // Ready to save?
-  const allStepsComplete = createSteps.every((step) => completedSteps[step.key]);
+  const allStepsComplete = createSteps.every((step) => step.validate(form.getValues()));
+
+  useEffect(() => {
+    console.log(completedSteps);
+  }, [completedSteps]);
 
   // Get current form values for preview
   const formValues = form.getValues();
