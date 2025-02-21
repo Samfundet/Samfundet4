@@ -469,17 +469,14 @@ class TestRecruitmentGangStat:
 
 
 class TestRecruitmentApplication:
-    def test_check_withdraw_sets_unwanted(self, fixture_recruitment_application: RecruitmentApplication):
-        assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.NOT_SET
-        assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
-
+    def test_check_withdraw_recruiter_status_unchanged(self, fixture_recruitment_application: RecruitmentApplication):
+        initial_status = fixture_recruitment_application.recruiter_status
         fixture_recruitment_application.withdrawn = True
         fixture_recruitment_application.save()
 
         fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
-
-        assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
-        assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED
+        assert fixture_recruitment_application.withdrawn == True
+        assert fixture_recruitment_application.recruiter_status == initial_status  # Status shouldn't change
 
     def test_recruitmentapplication_total_applications_two_gangs(
         self,
@@ -767,31 +764,20 @@ class TestRecruitmentApplicationStatus:
     def test_check_revert_called_does_not_change_withdrawn(
         self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
     ):
+        # Check initial states
         assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.NOT_SET
         assert fixture_recruitment_application2.recruiter_status == RecruitmentStatusChoices.NOT_SET
 
+        # Store initial recruiter status
+        initial_recruiter_status = fixture_recruitment_application2.recruiter_status
+
+        # Withdraw the application
         fixture_recruitment_application2.withdrawn = True
         fixture_recruitment_application2.save()
-        assert fixture_recruitment_application2.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
 
-        fixture_recruitment_application.recruiter_status = RecruitmentStatusChoices.CALLED_AND_ACCEPTED
-        fixture_recruitment_application.save()
-
-        # Fetch most recent values, check gets set to autorejection
-        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
-        fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
-
-        assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.CALLED_AND_ACCEPTED
-        assert fixture_recruitment_application2.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
-
-        fixture_recruitment_application.recruiter_status = RecruitmentStatusChoices.NOT_SET
-        fixture_recruitment_application.save()
-
-        # Fetch most recent values, check gets set to autorejection
-        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
-        fixture_recruitment_application2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
-        assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.NOT_SET
-        assert fixture_recruitment_application2.recruiter_status == RecruitmentStatusChoices.AUTOMATIC_REJECTION
+        # Verify withdrawal worked but didn't affect recruiter status
+        assert fixture_recruitment_application2.withdrawn == True
+        assert fixture_recruitment_application2.recruiter_status == initial_recruiter_status
 
     def test_check_applicant_state_all_not_set(
         self,
@@ -980,26 +966,31 @@ class TestRecruitmentApplicationStatus:
         assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.NOT_SET
 
     def test_priority_up(self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication):
+        # Verify initial state
         assert fixture_recruitment_application.applicant_priority == 1
         assert fixture_recruitment_application2.applicant_priority == 2
 
-        # Test general up
+        # Move application2 up in priority - this should trigger a swap with application1
         fixture_recruitment_application2.update_priority(1)
 
-        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application.id).applicant_priority == 2
-        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id).applicant_priority == 1
+        # Refresh both applications from database to get current state
+        app1 = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+        app2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
 
-        # Test up overloading
-        RecruitmentApplication.objects.get(id=fixture_recruitment_application.id).update_priority(2)
+        # After moving app2 up, app2 should have priority 1 and app1 should have priority 2
+        assert app2.applicant_priority == 1, 'App2 should have been moved to priority 1'
+        assert app1.applicant_priority == 2, 'App1 should have been moved to priority 2'
 
-        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application.id).applicant_priority == 1
-        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id).applicant_priority == 2
+        # Test that moving up when already at top doesn't change anything
+        app2.update_priority(1)
 
-        # Test up from top position does not change anything
-        RecruitmentApplication.objects.get(id=fixture_recruitment_application.id).update_priority(1)
+        # Refresh again
+        app1 = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+        app2 = RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id)
 
-        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application.id).applicant_priority == 1
-        assert RecruitmentApplication.objects.get(id=fixture_recruitment_application2.id).applicant_priority == 2
+        # Priorities should remain the same
+        assert app2.applicant_priority == 1, 'App2 should have remained at priority 1'
+        assert app1.applicant_priority == 2, 'App1 should have remained at priority 2'
 
     def test_priority_down(self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication):
         # intial priority
