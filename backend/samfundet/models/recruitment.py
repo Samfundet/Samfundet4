@@ -429,7 +429,7 @@ class RecruitmentApplication(CustomBaseModel):
     def __str__(self) -> str:
         return f'Application: {self.user} for {self.recruitment_position} in {self.recruitment}'
 
-    def save(self, *args: tuple,skip_organize:bool = False, **kwargs: dict) -> None:  # noqa: C901
+    def save(self, *args: tuple, skip_organize: bool = False, **kwargs: dict) -> None:  # noqa: C901
         """
         If the application is saved without an interview,
         try to find an interview from a shared position.
@@ -459,7 +459,7 @@ class RecruitmentApplication(CustomBaseModel):
 
         super().save(*args, **kwargs)
         if not skip_organize:
-         self.organize_priorities()
+            self.organize_priorities()
 
     def get_total_interviews_for_gang(self) -> int:
         return (
