@@ -469,14 +469,30 @@ class TestRecruitmentGangStat:
 
 
 class TestRecruitmentApplication:
-    def test_check_withdraw_recruiter_status_unchanged(self, fixture_recruitment_application: RecruitmentApplication):
+    def test_check_withdraw_does_not_change_applicant_state(self, fixture_recruitment_application: RecruitmentApplication):
+        """tests that withdrawing an application does not change recruiter priority and recruiter status (priority and status of applicant)"""
         initial_status = fixture_recruitment_application.recruiter_status
+        initial_priority = fixture_recruitment_application.recruiter_priority
         fixture_recruitment_application.withdrawn = True
         fixture_recruitment_application.save()
 
         fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
         assert fixture_recruitment_application.withdrawn is True
         assert fixture_recruitment_application.recruiter_status == initial_status  # Status shouldn't change
+        assert fixture_recruitment_application.recruiter_priority == initial_priority # Priority should not change
+    def test_check_reactivate_does_not_change_applicant_state(self, fixture_recruitment_application: RecruitmentApplication):
+        """tests that reactivating an application does not change recruiter priority and recruiter status (priority and status of applicant)"""
+        initial_status = fixture_recruitment_application.recruiter_status
+        initial_priority = fixture_recruitment_application.recruiter_priority
+        fixture_recruitment_application.withdrawn = True
+        fixture_recruitment_application.save()
+        fixture_recruitment_application.withdrawn = False
+        fixture_recruitment_application.save()
+
+        fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
+        assert fixture_recruitment_application.withdrawn is False
+        assert fixture_recruitment_application.recruiter_status == initial_status  # Status shouldn't change
+        assert fixture_recruitment_application.recruiter_priority == initial_priority # Priority should not change
 
     def test_recruitmentapplication_total_applications_two_gangs(
         self,
@@ -764,6 +780,7 @@ class TestRecruitmentApplicationStatus:
     def test_check_revert_called_does_not_change_withdrawn(
         self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication
     ):
+        """this tests that changing recruiter status does not effect the withdrawn state of the application"""
         # Check initial states
         assert fixture_recruitment_application.recruiter_status == RecruitmentStatusChoices.NOT_SET
         assert fixture_recruitment_application2.recruiter_status == RecruitmentStatusChoices.NOT_SET
@@ -786,6 +803,7 @@ class TestRecruitmentApplicationStatus:
         fixture_recruitment_application: RecruitmentApplication,
         fixture_recruitment_application2: RecruitmentApplication,
     ):
+        """this tests check that update_applicant_state works as expected"""
         assert fixture_recruitment_application.recruiter_priority == RecruitmentPriorityChoices.NOT_SET
         assert fixture_recruitment_application.applicant_state == RecruitmentApplicantStates.NOT_SET
 
@@ -960,6 +978,7 @@ class TestRecruitmentApplicationStatus:
         assert fixture_recruitment_application2.applicant_state == RecruitmentApplicantStates.NOT_SET
 
     def test_priority_up(self, fixture_recruitment_application: RecruitmentApplication, fixture_recruitment_application2: RecruitmentApplication):
+        """tests that applicant changig priorty has the expected outcome"""
         # Verify initial state
         assert fixture_recruitment_application.applicant_priority == 1
         assert fixture_recruitment_application2.applicant_priority == 2
@@ -1086,6 +1105,7 @@ def test_lowest_priority_equals_active_applications(
     fixture_recruitment_position: RecruitmentPosition,
     fixture_recruitment_position2: RecruitmentPosition,
 ):
+    """tests that the lowest priority (a number) is the same as the count of active applications of an applicant"""
     # Create two applications for the same user.
     _app1 = RecruitmentApplication.objects.create(
         user=fixture_user,
@@ -1115,6 +1135,7 @@ def test_priority_adjusts_on_withdrawal(
     fixture_recruitment_position: RecruitmentPosition,
     fixture_recruitment_position2: RecruitmentPosition,
 ):
+    """Tests that witdrawal updates priority correctly"""
     # Create two applications.
     app1 = RecruitmentApplication.objects.create(
         user=fixture_user,
@@ -1135,7 +1156,7 @@ def test_priority_adjusts_on_withdrawal(
     max_priority = max(app.applicant_priority for app in active_apps)
     assert max_priority == 2
 
-    # Withdraw the first application. The post-save signal should trigger reordering.
+    # Withdraw the first application. Save should trigger reordering.
     app1.withdrawn = True
     app1.save()
 
@@ -1154,6 +1175,7 @@ def test_reapplication_updates_priority(
     fixture_recruitment_position: RecruitmentPosition,
     fixture_recruitment_position2: RecruitmentPosition,
 ):
+    """tests that reactivating an application updates priority correctly"""
     # Create two applications on different positions
     app1 = RecruitmentApplication.objects.create(
         user=fixture_user,
