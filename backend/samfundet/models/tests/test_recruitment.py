@@ -479,7 +479,8 @@ class TestRecruitmentApplication:
         fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
         assert fixture_recruitment_application.withdrawn is True
         assert fixture_recruitment_application.recruiter_status == initial_status  # Status shouldn't change
-        assert fixture_recruitment_application.recruiter_priority == initial_priority # Priority should not change
+        assert fixture_recruitment_application.recruiter_priority == initial_priority  # Priority should not change
+
     def test_check_reactivate_does_not_change_applicant_state(self, fixture_recruitment_application: RecruitmentApplication):
         """tests that reactivating an application does not change recruiter priority and recruiter status (priority and status of applicant)"""
         initial_status = fixture_recruitment_application.recruiter_status
@@ -492,7 +493,7 @@ class TestRecruitmentApplication:
         fixture_recruitment_application = RecruitmentApplication.objects.get(id=fixture_recruitment_application.id)
         assert fixture_recruitment_application.withdrawn is False
         assert fixture_recruitment_application.recruiter_status == initial_status  # Status shouldn't change
-        assert fixture_recruitment_application.recruiter_priority == initial_priority # Priority should not change
+        assert fixture_recruitment_application.recruiter_priority == initial_priority  # Priority should not change
 
     def test_recruitmentapplication_total_applications_two_gangs(
         self,
