@@ -1,0 +1,46 @@
+@import 'src/constants';
+@import 'src/mixins';
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid;
+    padding: 2px 20px;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    outline: none;
+    box-shadow: none;
+    font-family:inherit;
+    gap: 0.5rem;
+    font-size: 0.8em;
+  }
+
+.default{
+  background-color: $grey-35;
+  color: $black;
+}
+
+.reserve{
+  background-color: orange;
+  color: $black; 
+}
+
+.wanted{
+  background-color: $green;
+  color: $black;
+}
+
+.light-wanted{
+  background-color: lightgreen;
+  color: $black;
+}
+
+.not-wanted{
+  background-color: red;
+  color: $black;
+}
+
+
+
+

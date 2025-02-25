@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { TimeDisplay } from '~/Components';
+import { TimeDisplay, ToolTip } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
@@ -9,6 +9,8 @@ import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import type { BadgeType } from '~/types';
+import { Badge } from '../Badge/Badge';
 import { Link } from '../Link';
 import { SetInterviewManuallyModal } from '../SetInterviewManually';
 import styles from './RecruitmentApplicantsStatus.module.scss';
@@ -37,12 +39,27 @@ const statusOptions: DropdownOption<number>[] = [
   { label: 'Automatic rejection', value: 3 },
 ];
 
+const statusAndPriorityOptions: { label: string; value: number } = [
+  { label: 'Ikke satt', value: 0 },
+  { label: 'Kan gi tilbud', value: 1 },
+  { label: 'Gi tilbud', value: 2 },
+  { label: 'Ikke gi tilbud', value: 3 },
+];
+
 const editChoices = {
   update_time: 'update_time',
   update_location: 'update_location',
   update_recruitment_priority: 'update_recruitment_priority',
   update_recruitment_status: 'update_recruitment_status',
 };
+
+const badgeStatus: { label: BadgeType; value: number }[] = [
+  { label: 'default', value: 0 },
+  { label: 'reserve', value: 1 },
+  { label: 'wanted', value: 2 },
+  { label: 'not-wanted', value: 3 },
+  { label: 'light-wanted', value: 4 },
+];
 
 export function RecruitmentApplicantsStatus({
   applicants,
@@ -62,7 +79,8 @@ export function RecruitmentApplicantsStatus({
     { content: t(KEY.recruitment_interview_time), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_interview_location), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_recruiter_priority), sortable: true, hideSortButton: false },
-    { content: t(KEY.recruitment_recruiter_status), sortable: true, hideSortButton: false },
+    { content: t(KEY.recruitment_recruiter_guide), sortable: true, hideSortButton: false },
+    { content: t(KEY.recruitment_recruiter_status), sortable: false, hideSortButton: false },
     { content: t(KEY.recruitment_interview_notes), sortable: false, hideSortButton: true },
   ];
 
@@ -79,24 +97,14 @@ export function RecruitmentApplicantsStatus({
 
   function getStatusStyle(status: number | undefined) {
     if (typeof status !== 'undefined') {
-      return [
-        styles.pending,
-        styles.top_reserve,
-        styles.top_wanted,
-        styles.less_reserve,
-        styles.less_reserve_wanted,
-        styles.less_reserve_reserve,
-        styles.less_wanted,
-        styles.less_wanted_wanted,
-        styles.less_wanted_reserve,
-        styles.pending,
-        styles.pending,
-      ][status];
+      return typeof status !== 'undefined' ? badgeStatus[status].label : 'default';
     }
   }
 
   const data = applicants.map((application) => {
-    const applicationStatusStyle = getStatusStyle(application?.applicant_state);
+    const applicationStatusStyle = styles.pending;
+    const guideStyle = getStatusStyle(application.recruiter_priority);
+    const guideText = statusAndPriorityOptions[application.recruiter_priority].label;
     return {
       cells: [
         {
@@ -173,6 +181,15 @@ export function RecruitmentApplicantsStatus({
               options={priorityOptions}
               onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_priority, value)}
             />
+          ),
+        },
+        {
+          value: application.recruiter_status,
+          style: applicationStatusStyle,
+          content: (
+            <ToolTip value="her skal det stå noe informativt">
+              <Badge type={guideStyle}>{guideText}</Badge>
+            </ToolTip>
           ),
         },
         {
