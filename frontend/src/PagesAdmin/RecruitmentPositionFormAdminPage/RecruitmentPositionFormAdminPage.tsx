@@ -1,8 +1,8 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getRecruitmentPosition, getUsers, searchUsers } from '~/api';
+import { getRecruitmentPosition, searchUsers } from '~/api';
 import type { RecruitmentPositionDto, UserDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -18,38 +18,41 @@ export function RecruitmentPositionFormAdminPage() {
   const [position, setPosition] = useState<Partial<RecruitmentPositionDto>>();
   const [users, setUsers] = useState<UserDto[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-  
+
   // Reference to store timeout ID for debouncing
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Function to handle user search with inline debounce
-  const handleUserSearch = useCallback((term: string) => {
-    // Clear any existing timeout
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
-    
-    if (!term.trim()) {
-      setUsers([]);
-      setIsSearching(false);
-      return;
-    }
-    
-    setIsSearching(true);
-    
-    // Set a new timeout
-    searchTimeoutRef.current = setTimeout(async () => {
-      try {
-        const results = await searchUsers(term);
-        setUsers(results);
-      } catch (error) {
-        console.error('Error searching users:', error);
-        toast.error(t(KEY.common_something_went_wrong));
-      } finally {
-        setIsSearching(false);
+  const handleUserSearch = useCallback(
+    (term: string) => {
+      // Clear any existing timeout
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
       }
-    }, 300); // 300ms debounce delay
-  }, [t]);
+
+      if (!term.trim()) {
+        setUsers([]);
+        setIsSearching(false);
+        return;
+      }
+
+      setIsSearching(true);
+
+      // Set a new timeout
+      searchTimeoutRef.current = setTimeout(async () => {
+        try {
+          const results = await searchUsers(term);
+          setUsers(results);
+        } catch (error) {
+          console.error('Error searching users:', error);
+          toast.error(t(KEY.common_something_went_wrong));
+        } finally {
+          setIsSearching(false);
+        }
+      }, 300); // 300ms debounce delay
+    },
+    [t],
+  );
 
   // Clean up timeout on component unmount
   useEffect(() => {
@@ -69,8 +72,8 @@ export function RecruitmentPositionFormAdminPage() {
           // If we have interviewers, fetch their data
           if (data.data.interviewers?.length) {
             // We need to make sure we have the interviewer data even without search
-            const interviewerIds = data.data.interviewers.map(i => i.id);
-            searchUsers(interviewerIds.join(' ')).then(results => setUsers(results));
+            const interviewerIds = data.data.interviewers.map((i) => i.id);
+            searchUsers(interviewerIds.join(' ')).then((results) => setUsers(results));
           }
         })
         .catch(() => {

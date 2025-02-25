@@ -74,14 +74,14 @@ function getDefaultValues(data: Partial<RecruitmentPositionDto>): SchemaType {
   };
 }
 
-export function RecruitmentPositionForm({ 
-  initialData, 
-  positionId, 
-  recruitmentId, 
-  gangId, 
-  users = [], 
+export function RecruitmentPositionForm({
+  initialData,
+  positionId,
+  recruitmentId,
+  gangId,
+  users = [],
   onUserSearch,
-  isSearchingUsers = false
+  isSearchingUsers = false,
 }: FormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -319,7 +319,7 @@ export function RecruitmentPositionForm({
                     selectedLabel="Selected Interviewers"
                     onSearch={handleInterviewerSearch}
                     loading={isSearchingUsers}
-                    emptyMessage={isSearchingUsers ? "Searching..." : "Type to search for users"}
+                    emptyMessage={isSearchingUsers ? 'Searching...' : 'Type to search for users'}
                     {...field}
                   />
                 </FormControl>

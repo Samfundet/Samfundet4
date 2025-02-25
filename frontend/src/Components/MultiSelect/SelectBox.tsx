@@ -12,13 +12,13 @@ type Props<T> = {
   emptyMessage?: string;
 };
 
-export function SelectBox<T>({ 
-  items, 
-  label, 
-  onItemClick, 
+export function SelectBox<T>({
+  items,
+  label,
+  onItemClick,
   itemButtonTheme = 'samf',
   loading = false,
-  emptyMessage
+  emptyMessage,
 }: Props<T>) {
   return (
     <div className={styles.container}>

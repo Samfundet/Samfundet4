@@ -28,16 +28,16 @@ type MultiSelectProps<T> = {
  * `selected`: Selected values if state is managed outside this component.
  */
 function MultiSelectInner<T>(
-  { 
-    optionsLabel, 
-    selectedLabel, 
-    className, 
-    selected: initialValues = [], 
-    options = [], 
+  {
+    optionsLabel,
+    selectedLabel,
+    className,
+    selected: initialValues = [],
+    options = [],
     onChange,
     onSearch,
     loading = false,
-    emptyMessage = "No options available"
+    emptyMessage = 'No options available',
   }: MultiSelectProps<T>,
   ref: React.Ref<HTMLDivElement>,
 ) {
@@ -48,13 +48,16 @@ function MultiSelectInner<T>(
   const [selected, setSelected] = useState<DropdownOption<T>[]>(initialValues);
 
   const filteredOptions = useMemo(
-    () => onSearch ? options : options.filter((item) => searchFilter(item, search)).filter((item) => !exists(item, selected)),
+    () =>
+      onSearch
+        ? options
+        : options.filter((item) => searchFilter(item, search)).filter((item) => !exists(item, selected)),
     [options, search, selected, onSearch],
   );
 
-  const filteredSelected = useMemo(() => 
-    search && !onSearch ? selected.filter((item) => searchFilter(item, search)) : selected, 
-    [search, selected, onSearch]
+  const filteredSelected = useMemo(
+    () => (search && !onSearch ? selected.filter((item) => searchFilter(item, search)) : selected),
+    [search, selected, onSearch],
   );
 
   useEffect(() => {
@@ -71,7 +74,7 @@ function MultiSelectInner<T>(
 
   function selectItem(item: DropdownOption<T>) {
     setSelected((selected) => [...selected, item]);
-    
+
     setSearch('');
     if (onSearch) {
       onSearch('');
@@ -101,12 +104,12 @@ function MultiSelectInner<T>(
       />
       <div className={styles.box_container}>
         <div className={styles.box_wrapper}>
-          <SelectBox 
-            items={filteredOptions} 
-            onItemClick={selectItem} 
-            label={optionsLabel} 
+          <SelectBox
+            items={filteredOptions}
+            onItemClick={selectItem}
+            label={optionsLabel}
             loading={loading}
-            emptyMessage={options.length === 0 && !loading ? emptyMessage : undefined}
+            emptyMessage={emptyMessage}
           />
         </div>
 
@@ -123,11 +126,11 @@ function MultiSelectInner<T>(
         </div>
 
         <div className={styles.box_wrapper}>
-          <SelectBox 
-            items={filteredSelected} 
-            onItemClick={unselectItem} 
-            itemButtonTheme="white" 
-            label={selectedLabel} 
+          <SelectBox
+            items={filteredSelected}
+            onItemClick={unselectItem}
+            itemButtonTheme="white"
+            label={selectedLabel}
           />
         </div>
       </div>
