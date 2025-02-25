@@ -49,6 +49,8 @@ interface FormProps {
   recruitmentId?: string;
   gangId?: string;
   users?: UserDto[];
+  onUserSearch?: (term: string) => void;
+  isSearchingUsers?: boolean;
 }
 
 /* ----------------------------------------------------- *
@@ -72,7 +74,15 @@ function getDefaultValues(data: Partial<RecruitmentPositionDto>): SchemaType {
   };
 }
 
-export function RecruitmentPositionForm({ initialData, positionId, recruitmentId, gangId, users }: FormProps) {
+export function RecruitmentPositionForm({ 
+  initialData, 
+  positionId, 
+  recruitmentId, 
+  gangId, 
+  users = [], 
+  onUserSearch,
+  isSearchingUsers = false
+}: FormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -125,6 +135,11 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
 
   // Watch for the current array of interviewer IDs
   const selectedInterviewers = form.watch('interviewer_ids') ?? [];
+
+  // Function to handle search in MultiSelect
+  const handleInterviewerSearch = (term: string) => {
+    onUserSearch?.(term);
+  };
 
   return (
     <Form {...form}>
@@ -302,6 +317,9 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
                     )}
                     optionsLabel="Available Interviewers"
                     selectedLabel="Selected Interviewers"
+                    onSearch={handleInterviewerSearch}
+                    loading={isSearchingUsers}
+                    emptyMessage={isSearchingUsers ? "Searching..." : "Type to search for users"}
                     {...field}
                   />
                 </FormControl>
