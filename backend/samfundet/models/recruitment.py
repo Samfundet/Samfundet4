@@ -162,7 +162,6 @@ class RecruitmentPosition(CustomBaseModel):
     file_description_nb = models.TextField(help_text='Description of file needed (NB)', null=True, blank=True)
     file_description_en = models.TextField(help_text='Description of file needed (EN)', null=True, blank=True)
 
-    # TODO: Implement tag functionality
     tags = models.CharField(max_length=100, help_text='Tags for the position')
 
     # TODO: Implement interviewer functionality
@@ -375,7 +374,7 @@ class RecruitmentApplication(CustomBaseModel):
 
         """
         # Use order for more simple an unified for direction
-        ordering = f"{'' if direction < 0 else '-' }applicant_priority"
+        ordering = f'{"" if direction < 0 else "-"}applicant_priority'
         applications_for_user = RecruitmentApplication.objects.filter(recruitment=self.recruitment, user=self.user).order_by(ordering)
         direction = abs(direction)  # convert to absolute
         for i in range(len(applications_for_user)):
@@ -584,6 +583,7 @@ class RecruitmentStatistics(FullCleanSaveMixin):
         self.generate_time_stats()
         self.generate_date_stats()
         self.generate_campus_stats()
+        self.generate_position_stats()
         self.generate_gang_stats()
 
     def __str__(self) -> str:
@@ -591,6 +591,12 @@ class RecruitmentStatistics(FullCleanSaveMixin):
 
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
         return self.recruitment.resolve_org(return_id=return_id)
+
+    def generate_position_stats(self) -> None:
+        for position in RecruitmentPosition.objects.all():
+            position_stat, created = RecruitmentPositionStat.objects.get_or_create(recruitment_stats=self, recruitment_position=position)
+            if not created:
+                position_stat.save()
 
     def generate_time_stats(self) -> None:
         for h in range(0, 24):
@@ -617,6 +623,38 @@ class RecruitmentStatistics(FullCleanSaveMixin):
             gang_stat, created = RecruitmentGangStat.objects.get_or_create(recruitment_stats=self, gang=gang)
             if not created:
                 gang_stat.save()
+
+
+class RecruitmentPositionStat(models.Model):
+    recruitment_stats = models.ForeignKey(RecruitmentStatistics, on_delete=models.CASCADE, blank=False, null=False, related_name='position_stats')
+    recruitment_position = models.ForeignKey(RecruitmentPosition, on_delete=models.CASCADE, blank=False, null=False, related_name='position_stats')
+
+    # Takes two values to get a normalized value, should only be updated after interview
+    # Will give an estimate of quality of interview
+    repriorization_value = models.IntegerField(default=0, blank=True, null=True, verbose_name='Collected value of repriorization (after interview)')
+    repriorization_count = models.PositiveIntegerField(default=0, blank=True, null=True, verbose_name='Amount of repriorizations (after interview)')
+
+    # Withdrawn rate of total applicants, due to some positions having higher applicant count
+    withdrawn_rate = models.FloatField(default=0, blank=True, null=True, verbose_name='Collected value of repriorization (after interview)')
+
+    def __str__(self) -> str:
+        return f'{self.recruitment_stats} {self.recruitment_position}'
+
+    def save(self, *args: tuple, **kwargs: dict) -> None:
+        if self.recruitment_position.applications.count():
+            self.withdrawn_rate = self.recruitment_position.applications.filter(withdrawn=True).count() / self.recruitment_position.applications.count()
+        else:
+            self.withdrawn_rate = 0
+        super().save(*args, **kwargs)
+
+    def normalized_repriorization_value(self) -> float:
+        return self.repriorization_value / self.repriorization_count
+
+    def update_repriorization_stats(self, value: int) -> None:
+        with transaction.atomic():
+            self.repriorization_value += value
+            self.repriorization_count += 1
+            self.save()
 
 
 class RecruitmentTimeStat(models.Model):

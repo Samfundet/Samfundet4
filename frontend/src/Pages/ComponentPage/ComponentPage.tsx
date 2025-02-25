@@ -1,5 +1,19 @@
 import { useState } from 'react';
-import { Button, Countdown, H1, H2, H3, H4, H5, H6, InputField, ProgressBar, RadioButton, ToolTip } from '~/Components';
+import {
+  Button,
+  Countdown,
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  H6,
+  InputField,
+  Page,
+  ProgressBar,
+  RadioButton,
+  ToolTip,
+} from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
@@ -19,7 +33,7 @@ export function ComponentPage() {
   const [showShrimpFishing, setShowShrimpFishing] = useState(false);
 
   return (
-    <div className={styles.wrapper}>
+    <Page className={styles.wrapper}>
       <div>
         <H1>Example form</H1>
 
@@ -117,6 +131,6 @@ export function ComponentPage() {
         Start rekefisking?
       </Button>
       {showShrimpFishing && <ShrimpFishing />}
-    </div>
+    </Page>
   );
 }
