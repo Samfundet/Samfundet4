@@ -52,7 +52,10 @@ function MultiSelectInner<T>(
     [options, search, selected, onSearch],
   );
 
-  const filteredSelected = useMemo(() => selected.filter((item) => searchFilter(item, search)), [search, selected]);
+  const filteredSelected = useMemo(() => 
+    search && !onSearch ? selected.filter((item) => searchFilter(item, search)) : selected, 
+    [search, selected, onSearch]
+  );
 
   useEffect(() => {
     onChange?.(selected.map((item) => item.value));
@@ -68,6 +71,11 @@ function MultiSelectInner<T>(
 
   function selectItem(item: DropdownOption<T>) {
     setSelected((selected) => [...selected, item]);
+    
+    setSearch('');
+    if (onSearch) {
+      onSearch('');
+    }
   }
 
   function unselectItem(item: DropdownOption<T>) {
