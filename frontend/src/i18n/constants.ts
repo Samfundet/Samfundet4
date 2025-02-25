@@ -313,6 +313,8 @@ export const KEY = {
   recruitment_applyforhelp: 'recruitment_applyforhelp',
   recruitment_volunteerfor: 'recruitment_volunteerfor',
   recruitment_otherpositions: 'recruitment_otherpositions',
+  recruitment_no_other_positions: 'recruitment_no_other_positions',
+  recruitment_similar_positions: 'recruitment_similar_positions',
   recruitment_visible_from: 'recruitment_visible_from',
   recruitment_administrate: 'recruitment_administrate',
   recruitment_administrate_positions: 'recruitment_administrate_positions',

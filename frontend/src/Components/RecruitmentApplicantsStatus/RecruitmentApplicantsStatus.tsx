@@ -205,32 +205,6 @@ export function RecruitmentApplicantsStatus({
             />
           ),
         },
-        {
-          style: applicationStatusStyle,
-          content: (
-            <div className={styles.crud}>
-              <CrudButtons
-                onView={
-                  application.interview?.interview_time != null
-                    ? () => {
-                        navigate({
-                          url: reverse({
-                            pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes,
-                            urlParams: {
-                              recruitmentId: recruitmentId,
-                              gangId: gangId,
-                              positionId: positionId,
-                              interviewId: application.interview?.id,
-                            },
-                          }),
-                        });
-                      }
-                    : undefined
-                }
-              />
-            </div>
-          ),
-        },
       ],
     };
   });
