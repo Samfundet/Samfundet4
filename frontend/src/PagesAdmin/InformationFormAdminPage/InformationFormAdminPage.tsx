@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import { type ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, SamfundetLogoSpinner } from '~/Components';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
