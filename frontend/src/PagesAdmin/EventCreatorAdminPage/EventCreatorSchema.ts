@@ -1,5 +1,12 @@
 import { z } from 'zod';
-import { EVENT_CATEGORY, EVENT_DESCRIPTION_LONG, EVENT_DESCRIPTION_SHORT, EVENT_DURATION, EVENT_START_DT, EVENT_TITLE } from '~/schema/event';
+import {
+  EVENT_CATEGORY,
+  EVENT_DESCRIPTION_LONG,
+  EVENT_DESCRIPTION_SHORT,
+  EVENT_DURATION,
+  EVENT_START_DT,
+  EVENT_TITLE,
+} from '~/schema/event';
 import { OPTIONAL_IMAGE } from '~/schema/samfImage';
 
 export const eventSchema = z.object({
