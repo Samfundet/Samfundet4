@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+#from root.management.commands.seed_scripts import roles, applicant_users, users_with_roles
 from . import (
     menu,
     gangs,
     merch,
+    roles,
     samf3,
     users,
     billig,
@@ -17,6 +19,8 @@ from . import (
     textitems,
     recruitment,
     organizations,
+    applicant_users,
+    users_with_roles,
     information_pages,
     recruitment_position,
     recruitment_applications,
@@ -37,6 +41,9 @@ from . import (
 SEED_SCRIPTS = [
     ('campus', campus.seed),
     ('users', users.seed),
+    ('roles', roles.seed),
+    ('users_with_roles', users_with_roles.seed),
+    ('applicant_users', applicant_users.seed),
     ('images', images.seed),
     ('organization', organizations.seed),
     ('gang', gangs.seed),
@@ -57,6 +64,7 @@ SEED_SCRIPTS = [
     ('recruitment_applications', recruitment_applications.seed),
     ('recruitment_occupied_time', recruitment_occupied_time.seed),
     ('recruitment_position_interviewers', recruitment_position_interviewers.seed),
+
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),
 ]
