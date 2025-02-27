@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -24,6 +24,8 @@ interface RecruitmentInterviewNotesFormProps {
 export function RecruitmentInterviewNotesForm({ initialData, interviewId }: RecruitmentInterviewNotesFormProps) {
   const { t } = useTranslation();
   const [currentNotes, setCurrentNotes] = useState(initialData.notes || '');
+  // boolean isSaving is used to ... idk
+  const [isSaving, setIsSaving] = useState(false);
   const form = useForm<RecruitmentInterviewNotesFormType>({
     resolver: zodResolver(recruitmentNotesSchema),
     defaultValues: {
@@ -49,6 +51,19 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
       handleUpdateNotes.mutate({ notes: newNotes, interviewId });
     }
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.stopImmediatePropagation();
+      if (!isSaving && interviewId) {
+        putRecrutmentInterviewNotes(currentNotes, interviewId); //Ensure data is saved before leaving
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [currentNotes, isSaving, interviewId]);
 
   return (
     <Form {...form}>
