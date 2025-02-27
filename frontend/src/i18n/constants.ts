@@ -304,6 +304,8 @@ export const KEY = {
   recruitment_recruiter_priority: 'recruitment_recruiter_priority',
   recruitment_recruiter_status: 'recruitment_recruiter_status',
   recruitment_recruiter_guide: 'recruitment_recruiter_guide',
+  recruitment_guide_offer: 'recruitment_guide_offer',
+  recruitment_guide_no_offer: 'recruitment_guide_no_offer',
   recruitment_duration: 'recruitment_duration',
   recruitment_funksjonaer: 'recruitment_funksjonaer',
   recruitment_jobtype: 'recruitment_jobtype',

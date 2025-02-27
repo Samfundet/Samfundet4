@@ -8,7 +8,7 @@ import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import type { BadgeType } from '~/types';
+import { RecruitmentPriorityChoices, RecruitmentPriorityChoicesMapping } from '~/types';
 import { Badge } from '../Badge/Badge';
 import { Link } from '../Link';
 import { SetInterviewManuallyModal } from '../SetInterviewManually';
@@ -38,27 +38,12 @@ const statusOptions: DropdownOption<number>[] = [
   { label: 'Automatic rejection', value: 3 },
 ];
 
-const statusAndPriorityOptions: { label: string; value: number } = [
-  { label: 'Ikke satt', value: 0 },
-  { label: 'Kan gi tilbud', value: 1 },
-  { label: 'Gi tilbud', value: 2 },
-  { label: 'Ikke gi tilbud', value: 3 },
-];
-
 const editChoices = {
   update_time: 'update_time',
   update_location: 'update_location',
   update_recruitment_priority: 'update_recruitment_priority',
   update_recruitment_status: 'update_recruitment_status',
 };
-
-const badgeStatus: { label: BadgeType; value: number }[] = [
-  { label: 'default', value: 0 },
-  { label: 'reserve', value: 1 },
-  { label: 'wanted', value: 2 },
-  { label: 'not-wanted', value: 3 },
-  { label: 'light-wanted', value: 4 },
-];
 
 export function RecruitmentApplicantsStatus({
   applicants,
@@ -96,19 +81,43 @@ export function RecruitmentApplicantsStatus({
 
   function getStatusStyle(status: number | undefined) {
     if (typeof status !== 'undefined') {
-      return typeof status !== 'undefined' ? badgeStatus[status].label : 'default';
+      return [
+        styles.pending,
+        styles.top_reserve,
+        styles.top_wanted,
+        styles.less_reserve,
+        styles.less_reserve_wanted,
+        styles.less_reserve_reserve,
+        styles.less_wanted,
+        styles.less_wanted_wanted,
+        styles.less_wanted_reserve,
+        styles.pending,
+        styles.pending,
+      ][status];
     }
   }
 
+  function getStatusText(applicantstatus: number | undefined){
+    const priority = RecruitmentPriorityChoicesMapping[applicantstatus]
+    if (typeof applicantstatus !== 'undefined'){
+      if(priority == RecruitmentPriorityChoices.WANTED){
+        return t(KEY.recruitment_guide_offer)
+      }
+      else{
+        return t(KEY.recruitment_guide_no_offer)
+      }
+    }
+  }
+  
   const data = applicants.map((application) => {
-    const applicationStatusStyle = styles.pending;
-    const guideStyle = getStatusStyle(application.recruiter_priority);
-    const guideText = statusAndPriorityOptions[application.recruiter_priority].label;
+
+    const applicationStatusStyle = getStatusStyle(application?.applicant_state);
+    const guideText = getStatusText(application?.recruiter_priority);
     return {
       cells: [
         {
           value: application.user.first_name,
-          style: applicationStatusStyle,
+          style: styles.pending,
           content: (
             <div className={styles.wrapper}>
               <div className={styles.show_div}>{t(KEY.common_show)}</div>
@@ -128,7 +137,7 @@ export function RecruitmentApplicantsStatus({
         },
         {
           value: application.applicant_priority,
-          style: applicationStatusStyle,
+          style: styles.pending,
           content: (
             <div className={styles.wrapper}>
               <div className={styles.show_div}>{t(KEY.common_show)}</div>
@@ -151,7 +160,7 @@ export function RecruitmentApplicantsStatus({
         },
         {
           value: application.interview?.interview_time,
-          style: applicationStatusStyle,
+          style: styles.pending,
           content: application.interview?.interview_time ? (
             <TimeDisplay timestamp={application.interview.interview_time} displayType="nice-date-time" />
           ) : (
@@ -160,7 +169,7 @@ export function RecruitmentApplicantsStatus({
         },
         {
           value: application.interview?.interview_location,
-          style: applicationStatusStyle,
+          style: styles.pending,
           content: (
             <Text>
               {application.interview?.interview_location
@@ -171,7 +180,7 @@ export function RecruitmentApplicantsStatus({
         },
         {
           value: application.recruiter_priority,
-          style: applicationStatusStyle,
+          style: styles.pending,
           content: (
             <Dropdown
               value={application.recruiter_priority}
@@ -184,16 +193,16 @@ export function RecruitmentApplicantsStatus({
         },
         {
           value: application.recruiter_status,
-          style: applicationStatusStyle,
+          style: styles.pending,
           content: (
             <ToolTip value="her skal det stå noe informativt">
-              <Badge type={guideStyle}>{guideText}</Badge>
+              <Badge className={applicationStatusStyle}>{guideText}</Badge>
             </ToolTip>
           ),
         },
         {
           value: application.recruiter_status,
-          style: applicationStatusStyle,
+          style: styles.pending,
           content: (
             <Dropdown
               value={application.recruiter_status}

@@ -9,9 +9,6 @@ export type HomePageElementVariation = 'carousel' | 'large-card';
 /** Type for html button types. */
 export type ButtonType = 'submit' | 'reset' | 'button';
 
-/** Type for html badge types. */
-export type BadgeType = 'default' | 'reserve' | 'light-wanted' | 'wanted' | 'not-wanted';
-
 /** Map of KeyValues from backend. */
 export type KeyValueMap = Map<string, string>;
 
