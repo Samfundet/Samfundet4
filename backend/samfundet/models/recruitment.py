@@ -12,6 +12,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import UserManager
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
+from samfundet.utils import upload_to_app
 
 from .general import Gang, User, Campus, GangSection, Organization
 from .model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
@@ -167,7 +168,7 @@ class RecruitmentPosition(CustomBaseModel):
     # TODO: Implement interviewer functionality
     interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
 
-    #FIX: Add functionality for setting allowed attachments for application
+    # FIX: Add functionality for setting allowed attachments for application
     recruitment = models.ForeignKey(
         Recruitment,
         on_delete=models.CASCADE,
@@ -320,7 +321,6 @@ class Interview(CustomBaseModel):
         return self.room.resolve_gang(return_id=return_id)
 
 
-
 class RecruitmentApplication(CustomBaseModel):
     # UUID so that applicants cannot see recruitment info with their own id number
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -328,7 +328,9 @@ class RecruitmentApplication(CustomBaseModel):
     recruitment_position = models.ForeignKey(
         RecruitmentPosition, on_delete=models.CASCADE, help_text='The position which is recruiting', related_name='applications'
     )
-    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, null=True, help_text='The recruitment that is recruiting', related_name='applications')
+    recruitment = models.ForeignKey(
+        Recruitment, on_delete=models.CASCADE, null=True, help_text='The recruitment that is recruiting', related_name='applications'
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='applications')
     applicant_priority = models.PositiveIntegerField(null=True, blank=True, help_text='The priority of the application')
 
@@ -509,22 +511,24 @@ class RecruitmentApplication(CustomBaseModel):
                     application.applicant_state = RecruitmentApplicantStates.NOT_WANTED
                 application.save()
 
+
 class ApplicationFileAttachment(CustomBaseModel):
-    application = models.ForeignKey(RecruitmentApplication, 
-                                    on_delete=models.CASCADE, 
-                                    related_name="attachments", 
-                                    help_text="The recruitment application this file is attached to")
-    application_file = models.FileField(upload_to="some/path")
+    application = models.ForeignKey(
+        RecruitmentApplication, on_delete=models.CASCADE, related_name='attachments', help_text='The recruitment application this file is attached to'
+    )
+    application_file = models.FileField(upload_to='recruitment/application_attachments/')
     application_file_type = models.CharField(max_length=50, blank=True)
 
     def clean(self) -> None:
         super().clean()
-        if self.file:
-            file_type = self.file.content_type
-            self.file_type = file_type
+        if self.application_file:
+            file_type = self.application_file.content_type
+            self.application_file_type = file_type or ''
             allowed_types = [
-                'image/jpeg', 'image/png',  # Images
-                'video/mp4' # Video
+                'image/jpeg',
+                'image/png',  # Images
+                'video/mp4',  # Video
+                'application/pdf',
             ]
             if file_type not in allowed_types:
                 raise ValidationError('Wrong filetype')
@@ -533,6 +537,7 @@ class ApplicationFileAttachment(CustomBaseModel):
 
     def __str__(self):
         return f'Attachment for {self.application} - {self.file.name}'
+
 
 class RecruitmentInterviewAvailability(CustomBaseModel):
     """This models all possible times for interviews for the given recruitment.

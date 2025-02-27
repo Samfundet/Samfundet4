@@ -62,6 +62,7 @@ from .models.general import (
     User,
 )
 from .models.recruitment import (
+    ApplicationFileAttachment,
     Interview,
     Recruitment,
     InterviewRoom,
@@ -117,6 +118,16 @@ class WebhookView(APIView):
 # =============================== #
 #            Recruitment          #
 # =============================== #
+
+
+class ApplicationFileAttachmentViewSet(ModelViewSet):
+    serializer_class = ApplicationFileAttachmentSerializer
+    queryset = ApplicationFileAttachment.objects.all()
+
+    # Typically, you might want extra permission logic here:
+    #   - Only the applicant or a recruiter with certain perms can read attachments
+    #   - Only the applicant can create attachments for *their own* application
+    # etc.
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
