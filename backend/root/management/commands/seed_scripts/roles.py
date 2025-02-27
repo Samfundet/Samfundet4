@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from root.utils import permissions as perm
 
 from samfundet.models.role import Role
-from samfundet.models.general import Gang, GangSection
+from samfundet.models.general import Gang, GangSection, Organization
 from samfundet.models.recruitment import Recruitment
 
 GANG_LEADER = 'gang_leader'
@@ -405,14 +405,14 @@ def seed():
     yield (current_step / total_steps) * 100, 'Cleared existing roles'
 
     # Create base gang roles
-    gang_content_type = ContentType.objects.get_for_model(Gang)
+    gang_content_type = ContentType.objects.get_for_model(Organization)
     for role_name, role_data in BASE_GANG_ROLES.items():
         create_role(name=role_name, permissions=role_data['permissions'], content_type=gang_content_type)
         current_step += 1
         yield (current_step / total_steps) * 100, f'Created base gang role: {role_name}'
 
     # Create recruitment roles
-    recruitment_content_type = ContentType.objects.get_for_model(Recruitment)
+    recruitment_content_type = ContentType.objects.get_for_model(Gang)
     for role_name, role_data in RECRUITMENT_ROLES.items():
         create_role(name=role_name, permissions=role_data['permissions'], content_type=recruitment_content_type)
         current_step += 1
