@@ -50,6 +50,7 @@ from .utils import event_query, generate_timeslots, get_user_by_search, get_occu
 from .homepage import homepage
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .serializers import (
+    ApplicationFileAttachmentSerializer,
     TagSerializer,
     GangSerializer,
     MenuSerializer,
@@ -143,6 +144,7 @@ from .models.general import (
     UserFeedbackModel,
 )
 from .models.recruitment import (
+    ApplicationFileAttachment,
     Interview,
     Recruitment,
     InterviewRoom,
@@ -688,6 +690,16 @@ class AssignGroupView(APIView):
 # =============================== #
 #            Recruitment          #
 # =============================== #
+
+
+class ApplicationFileAttachmentViewSet(ModelViewSet):
+    serializer_class = ApplicationFileAttachmentSerializer
+    queryset = ApplicationFileAttachment.objects.all()
+
+    # Typically, you might want extra permission logic here:
+    #   - Only the applicant or a recruiter with certain perms can read attachments
+    #   - Only the applicant can create attachments for *their own* application
+    # etc.
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
