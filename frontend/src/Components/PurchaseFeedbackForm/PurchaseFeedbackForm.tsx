@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { postPurchaseFeedback } from '~/api';
