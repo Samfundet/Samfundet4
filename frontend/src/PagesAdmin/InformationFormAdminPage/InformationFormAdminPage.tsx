@@ -1,23 +1,24 @@
-import { Icon } from '@iconify/react';
 import { type ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { Button, SamfundetLogoSpinner } from '~/Components';
+import { Button } from '~/Components';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getInformationPage, postInformationPage, putInformationPage } from '~/api';
 import type { InformationPageDto } from '~/dto';
-import { useCustomNavigate, useTitle } from '~/hooks';
+import { useCustomNavigate, useDesktop, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { lowerCapitalize } from '~/utils';
+import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './InformationFormAdminPage.module.scss';
 
 export function InformationFormAdminPage() {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
+  const isDesktop = useDesktop();
 
   const languageTabs: Tab[] = [
     { key: 'nb', label: 'Norsk' },
@@ -34,10 +35,13 @@ export function InformationFormAdminPage() {
     text_en: 'Write your text on the left side.',
   });
   const [languageTab, setLanguageTab] = useState<Tab>(languageTabs[0]);
+  const [showMobilePreview, setShowMobilePreview] = useState<boolean>(false);
+  const showPreview = isDesktop || showMobilePreview;
+  const showEditer = isDesktop || !showMobilePreview;
 
   //Title setup
   const title = slugField
-    ? t(KEY.common_edit)
+    ? `${t(KEY.common_edit)} ${t(KEY.information_page)}`
     : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.information_page_short)}`);
   useTitle(title);
 
@@ -61,15 +65,6 @@ export function InformationFormAdminPage() {
       setShowSpinner(false);
     }
   }, [slugField]);
-
-  // Loading.
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
 
   // Handles changes of text area.
   function handleTextAreaChange(field: string) {
@@ -131,52 +126,49 @@ export function InformationFormAdminPage() {
   const title_value = languageTab.key === 'nb' ? infoPage.title_nb : infoPage.title_en;
 
   return (
-    <div className={styles.wrapper}>
-      {/* Header tools */}
-      <div className={styles.header_container}>
-        <div className={styles.logo_container}>{title}</div>
-        <Button
-          rounded={true}
-          theme="white"
-          onClick={() => {
-            if (window.confirm(`${t(KEY.admin_information_confirm_cancel)}`)) {
-              navigate({ url: ROUTES.frontend.admin_information });
-            }
-          }}
-        >
-          <Icon icon="mdi:close" />
-        </Button>
-      </div>
-
-      {/* Language tab */}
-      <div className={styles.tab_container}>
-        <TabBar tabs={languageTabs} selected={languageTab} onSetTab={setLanguageTab} compact={true} />
-      </div>
-
-      {/* Edit fields */}
-      <div className={styles.edit_container}>
-        <div className={styles.left_side}>
-          <input className={styles.title_input} onChange={handleTextFieldChange(title_field)} value={title_value} />
-          <textarea className={styles.text_area} onChange={handleTextAreaChange(text_field)} value={text_value} />
+    <AdminPageLayout title={title} loading={showSpinner}>
+      <div className={styles.wrapper}>
+        {/* Language tab */}
+        <div className={styles.tab_container}>
+          <TabBar tabs={languageTabs} selected={languageTab} onSetTab={setLanguageTab} compact={true} />
         </div>
-        <div className={styles.preview}>
-          <SamfMarkdown>{`# ${title_value} \n ${text_value}`}</SamfMarkdown>
-        </div>
-      </div>
 
-      {/* Footer */}
-      <div className={styles.footer}>
-        {/* URL preview */}
-        <div className={styles.url_preview}>
-          samfundet.no/information-pages/
-          {slugField && slugField}
-          {!slugField && <input placeholder="samf-url" onChange={handleTextFieldChange('slug_field')} />}
+        {/* Edit fields */}
+        <div className={styles.edit_container}>
+          {showEditer && (
+            <div className={styles.left_side}>
+              <input className={styles.title_input} onChange={handleTextFieldChange(title_field)} value={title_value} />
+              <textarea className={styles.text_area} onChange={handleTextAreaChange(text_field)} value={text_value} />
+            </div>
+          )}
+
+          {/* Preview */}
+          {showPreview && (
+            <div className={styles.preview}>
+              <SamfMarkdown>{`# ${title_value} \n ${text_value}`}</SamfMarkdown>
+            </div>
+          )}
         </div>
-        {/* Save button */}
-        <Button theme="green" rounded={true} onClick={handleOnSubmit} disabled={disableSubmit}>
-          <div style={{ padding: '0 1em' }}>{t(KEY.common_save)}</div>
-        </Button>
+
+        {/* Footer */}
+        <div className={styles.footer}>
+          {/* URL preview */}
+          <span className={styles.url_preview}>
+            samfundet.no/information-pages/
+            {slugField && slugField}
+            {!slugField && <input placeholder="samf-url" onChange={handleTextFieldChange('slug_field')} />}
+          </span>
+          {/* Save button */}
+          {!isDesktop && (
+            <Button theme="samf" rounded={true} onClick={() => setShowMobilePreview(!showMobilePreview)}>
+              Toggle preview
+            </Button>
+          )}
+          <Button theme="green" rounded={true} onClick={handleOnSubmit} disabled={disableSubmit}>
+            <div style={{ padding: '0 1em' }}>{t(KEY.common_save)}</div>
+          </Button>
+        </div>
       </div>
-    </div>
+    </AdminPageLayout>
   );
 }
