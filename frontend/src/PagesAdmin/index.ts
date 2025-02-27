@@ -10,7 +10,6 @@ export { ImageAdminPage } from './ImageAdminPage';
 export { ImageFormAdminPage } from './ImageFormAdminPage';
 export { InformationAdminPage } from './InformationAdminPage';
 export { InformationFormAdminPage } from './InformationFormAdminPage';
-export { InterviewNotesPage } from './InterviewNotesAdminPage';
 export { OpeningHoursAdminPage } from './OpeningHoursAdminPage';
 export { RecruitmentAdminPage } from './RecruitmentAdminPage';
 export { RecruitmentApplicantAdminPage } from './RecruitmentApplicantAdminPage';

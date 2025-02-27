@@ -8,7 +8,7 @@ import {
   ContributorsPage,
   EventPage,
   EventsPage,
-  GroupsPage,
+  GangsPage,
   HealthPage,
   HomePage,
   InformationListPage,
@@ -28,6 +28,7 @@ import {
   RouteOverviewPage,
   SaksdokumenterPage,
   SignUpPage,
+  UserChangePasswordPage,
   VenuePage,
 } from '~/Pages';
 import {
@@ -43,7 +44,6 @@ import {
   ImageFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
-  InterviewNotesPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
   RecruitmentApplicantAdminPage,
@@ -115,7 +115,7 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
           <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
           <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
-          <Route path={ROUTES.frontend.groups} element={<GroupsPage />} />
+          <Route path={ROUTES.frontend.gangs} element={<GangsPage />} />
           <Route path={ROUTES.frontend.events} element={<EventsPage />} />
           <Route path={ROUTES.frontend.event} element={<EventPage />} />
           <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
@@ -148,6 +148,12 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin}
             element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_GANG]} element={<AdminPage />} />}
+          />
+          {/* User pages */}
+          <Route
+            path={ROUTES.frontend.user_change_password}
+            element={<UserChangePasswordPage />}
+            handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.change_password)}</Link> }}
           />
           {/* Gangs */}
           <Route
@@ -371,29 +377,11 @@ export const router = createBrowserRouter(
               }
             />
             <Route
-              path={ROUTES.frontend.admin_recruitment_overview}
-              element={
-                <PermissionRoute required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} element={<RecruitmentOverviewPage />} />
-              }
-            />
-            <Route
               path={ROUTES.frontend.admin_recruitment_create}
               element={
                 <PermissionRoute required={[PERM.SAMFUNDET_ADD_RECRUITMENT]} element={<RecruitmentFormAdminPage />} />
               }
               handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
-            />
-            <Route
-              path={ROUTES.frontend.admin_recruitment_gang_all_applications}
-              element={<RecruitmentGangAllApplicantsAdminPage />}
-            />
-            <Route
-              path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
-              element={<RecruitmentUsersWithoutInterviewGangPage />}
-            />
-            <Route
-              path={ROUTES.frontend.admin_recruitment_users_three_interview_criteria}
-              element={<RecruitmentUsersWithoutThreeInterviewCriteriaPage />}
             />
             <Route
               path={ROUTES.frontend.admin_recruitment_applicant}
@@ -403,10 +391,6 @@ export const router = createBrowserRouter(
                   element={<RecruitmentApplicantAdminPage />}
                 />
               }
-            />
-            <Route
-              path={ROUTES.frontend.admin_recruitment_gang_position_applicants_interview_notes}
-              element={<InterviewNotesPage />}
             />
             {/* Specific recruitment */}
             {/* TODO ADD PERMISSIONS */}
@@ -427,6 +411,15 @@ export const router = createBrowserRouter(
                 ),
               }}
             >
+              <Route
+                path={ROUTES.frontend.admin_recruitment_overview}
+                element={
+                  <PermissionRoute required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} element={<RecruitmentOverviewPage />} />
+                }
+                handle={{
+                  crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_overview)}</Link>,
+                }}
+              />
               <Route
                 path={ROUTES.frontend.admin_recruitment_edit}
                 element={
@@ -466,7 +459,7 @@ export const router = createBrowserRouter(
                 handle={{
                   crumb: ({ pathname }: UIMatch) => (
                     <Link url={pathname}>
-                      {t(KEY.common_create)} {t(KEY.recruitment_gangs_with_separate_positions)}
+                      {t(KEY.common_create)} {t(KEY.recruitment_positions_with_separate_recruitment)}
                     </Link>
                   ),
                 }}
@@ -483,7 +476,7 @@ export const router = createBrowserRouter(
                 handle={{
                   crumb: ({ pathname }: UIMatch, { separatePosition }: SeparatePositionLoader) => (
                     <Link url={pathname}>
-                      {t(KEY.common_edit)} {t(KEY.recruitment_gangs_with_separate_positions)} -{' '}
+                      {t(KEY.common_edit)} {t(KEY.recruitment_positions_with_separate_recruitment)} -{' '}
                       {separatePosition ? dbT(separatePosition, 'name') : t(KEY.common_unknown)}
                     </Link>
                   ),
@@ -499,7 +492,6 @@ export const router = createBrowserRouter(
                   ),
                 }}
               />
-
               <Route
                 path={ROUTES.frontend.admin_recruitment_users_without_interview}
                 element={<RecruitmentUsersWithoutInterviewGangPage />}
@@ -507,6 +499,16 @@ export const router = createBrowserRouter(
                 handle={{
                   crumb: ({ pathname }: UIMatch) => (
                     <Link url={pathname}>{t(KEY.recruitment_show_applicants_without_interview)}</Link>
+                  ),
+                }}
+              />
+              <Route
+                path={ROUTES.frontend.admin_recruitment_users_three_interview_criteria}
+                element={<RecruitmentUsersWithoutThreeInterviewCriteriaPage />}
+                loader={recruitmentLoader}
+                handle={{
+                  crumb: ({ pathname }: UIMatch) => (
+                    <Link url={pathname}>{t(KEY.recruitment_applet_three_interview_title)}</Link>
                   ),
                 }}
               />
@@ -579,6 +581,13 @@ export const router = createBrowserRouter(
                         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
                       </Link>
                     ),
+                  }}
+                />
+                <Route
+                  path={ROUTES.frontend.admin_recruitment_gang_all_applications}
+                  element={<RecruitmentGangAllApplicantsAdminPage />}
+                  handle={{
+                    crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_all_applications)}</Link>,
                   }}
                 />
                 {/* Position */}

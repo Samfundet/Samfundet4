@@ -11,19 +11,15 @@
   }
 }
 
-.spinner_container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 4em
-}
-
 .row {
   display: flex;
   @include for-mobile-down {
     flex-direction: column;
   }
+}
+
+.occupied_modal {
+  min-width: auto;
 }
 
 .text_container {

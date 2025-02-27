@@ -19,7 +19,7 @@ import {
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { FormDescription } from '~/Components/Forms/Form';
 import { getOrganizations, postRecruitment, putRecruitment } from '~/api';
-import type { OrganizationDto, RecruitmentDto } from '~/dto';
+import type { OrganizationDto, RecruitmentWriteDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import type { RecruitmentLoader } from '~/router/loaders';
@@ -55,8 +55,8 @@ export function RecruitmentFormAdminPage() {
     shown_application_deadline: utcTimestampToLocal(data?.recruitment?.shown_application_deadline, false) || '',
     reprioritization_deadline_for_applicant:
       utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_applicant, false) || '',
-    reprioritization_deadline_for_groups:
-      utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_groups, false) || '',
+    reprioritization_deadline_for_gangs:
+      utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_gangs, false) || '',
     organization: getObjectFieldOrNumber<number>(data?.recruitment?.organization, 'id') || 1,
     max_applications: data?.recruitment?.max_applications,
     promo_media: data?.recruitment?.promo_media || '',
@@ -77,7 +77,7 @@ export function RecruitmentFormAdminPage() {
 
   function onSubmit(data: recruitmentFormType) {
     if (recruitmentId) {
-      putRecruitment(recruitmentId, data as RecruitmentDto)
+      putRecruitment(recruitmentId, data as RecruitmentWriteDto)
         .then(() => {
           toast.success(t(KEY.common_update_successful));
           navigate(ROUTES.frontend.admin_recruitment);
@@ -86,7 +86,7 @@ export function RecruitmentFormAdminPage() {
           toast.error(t(KEY.common_something_went_wrong));
         });
     } else {
-      postRecruitment(data as RecruitmentDto)
+      postRecruitment(data as RecruitmentWriteDto)
         .then(() => {
           toast.success(t(KEY.common_creation_successful));
           navigate(ROUTES.frontend.admin_recruitment);
@@ -189,10 +189,10 @@ export function RecruitmentFormAdminPage() {
               />
               <FormField
                 control={form.control}
-                name="reprioritization_deadline_for_groups"
+                name="reprioritization_deadline_for_gangs"
                 render={({ field }) => (
                   <FormItem className={styles.item}>
-                    <FormLabel>{t(KEY.reprioritization_deadline_for_groups)}</FormLabel>
+                    <FormLabel>{t(KEY.reprioritization_deadline_for_gangs)}</FormLabel>
                     <FormControl>
                       <Input type="datetime-local" {...field} />
                     </FormControl>
@@ -209,7 +209,7 @@ export function RecruitmentFormAdminPage() {
                   <FormItem className={styles.item}>
                     <FormLabel>{t(KEY.max_applications)}</FormLabel>
                     <FormControl>
-                      <NumberInput allowDecimal={false} {...field} />
+                      <NumberInput allowDecimal={false} {...field} value={field.value ?? 0} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

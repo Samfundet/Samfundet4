@@ -16,7 +16,7 @@
 }
 
 .text {
-  font-size: 0.7em;
+  font-size: 0.8em;
   padding: 0;
 }
 
@@ -90,4 +90,28 @@
 .crud {
   display: flex;
   justify-content: center;
+}
+
+
+.wrapper .text{
+  position:relative;
+  visibility: hidden;
+}
+
+.wrapper:hover .text{
+  visibility: visible;
+}
+
+.show_div{
+  display: inline-block;  
+  background-color: $red-samf;  
+  color: $white; 
+  padding: 7px 25px;  
+  border-radius: 4px; 
+  font-size: 0.8em;
+}
+
+
+.wrapper:hover .show_div{
+  display: none;
 }

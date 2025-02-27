@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Input, type InputProps } from '~/Components';
 
-export interface NumberInputProps extends Omit<InputProps, 'onChange'> {
+type ControlledInputProps = Extract<InputProps, { value: string | number | readonly string[] }>;
+
+export interface NumberInputProps extends Omit<ControlledInputProps, 'onChange'> {
   onChange?: (...event: unknown[]) => void;
   allowDecimal?: boolean;
   clamp?: boolean;
@@ -97,7 +99,9 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
         event.preventDefault();
         const add = event.key === 'ArrowUp' ? 1 : -1;
-        const newVal = clampValue((Number(inputValue) || 0) + add);
+        const multiplier = event.shiftKey ? 10 : 1;
+
+        const newVal = clampValue((Number(inputValue) || 0) + add * multiplier);
         if (!Number.isNaN(newVal)) {
           setInputValue(newVal);
           onChange?.(newVal);
