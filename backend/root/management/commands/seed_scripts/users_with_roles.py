@@ -29,6 +29,7 @@ from .roles import (
 # Create a logger for this module
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class UserTypeData:
     """Data class for user type definitions."""
@@ -177,10 +178,7 @@ def generate_username(pattern: str, **kwargs) -> str:
 
 
 def prepare_username_params(
-    org: Organization | None = None,
-    gang: Gang | None = None,
-    section: GangSection | None = None,
-    number: int | None = None
+    org: Organization | None = None, gang: Gang | None = None, section: GangSection | None = None, number: int | None = None
 ) -> dict[str, str]:
     """
     Prepare parameters for username generation.
@@ -377,7 +375,7 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
                                 email=f'{username}@samfundet.no',
                                 password='!',  # Temporary unusable password
                                 first_name=type_data.title_nb,
-                                last_name=f"{gang.name_nb} - {section.name_nb}",
+                                last_name=f'{gang.name_nb} - {section.name_nb}',
                                 is_superuser=False,
                                 campus=random.choice(all_campuses),
                             )
@@ -422,12 +420,7 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
                         redaksjonen = next((s for s in gang_to_sections.get(mg.id, []) if s.name_nb == 'Redaksjonen'), None)
                         if redaksjonen:
                             for i in range(1, 4):  # Create 3 members
-                                username_params = prepare_username_params(
-                                    org=samfundet_org,
-                                    gang=mg,
-                                    section=redaksjonen,
-                                    number=i
-                                )
+                                username_params = prepare_username_params(org=samfundet_org, gang=mg, section=redaksjonen, number=i)
                                 username = generate_username(redaksjonen_type_data.name_pattern, **username_params)
 
                                 # Create user
@@ -436,7 +429,7 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
                                     email=f'{username}@samfundet.no',
                                     password='!',  # Temporary unusable password
                                     first_name=redaksjonen_type_data.title_nb,
-                                    last_name=f"{mg.name_nb} - {redaksjonen.name_nb}",
+                                    last_name=f'{mg.name_nb} - {redaksjonen.name_nb}',
                                     is_superuser=False,
                                     campus=random.choice(all_campuses),
                                 )
@@ -445,7 +438,7 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
                                 # Store for later role assignment
                                 section_roles_to_create.extend((username, role_name, redaksjonen.id) for role_name in redaksjonen_type_data.roles)
                 except Exception as e:
-                    logger.warning(f"Could not create Redaksjonen users: {str(e)}")
+                    logger.warning(f'Could not create Redaksjonen users: {str(e)}')
 
         yield 60, 'Bulk creating users'
 
@@ -482,13 +475,9 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
 
         # Process roles in batches to avoid memory pressure
         for i in range(0, len(org_roles_to_create), batch_size):
-            batch = org_roles_to_create[i:i+batch_size]
+            batch = org_roles_to_create[i : i + batch_size]
             final_org_roles = [
-                UserOrgRole(
-                    user=username_to_user.get(username),
-                    role=role_cache.get(role_name),
-                    obj_id=org_id
-                )
+                UserOrgRole(user=username_to_user.get(username), role=role_cache.get(role_name), obj_id=org_id)
                 for username, role_name, org_id in batch
                 if username_to_user.get(username) and role_cache.get(role_name)
             ]
@@ -504,13 +493,9 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
 
         # Process gang roles in batches
         for i in range(0, len(gang_roles_to_create), batch_size):
-            batch = gang_roles_to_create[i:i+batch_size]
+            batch = gang_roles_to_create[i : i + batch_size]
             final_gang_roles = [
-                UserGangRole(
-                    user=username_to_user.get(username),
-                    role=role_cache.get(role_name),
-                    obj_id=gang_id
-                )
+                UserGangRole(user=username_to_user.get(username), role=role_cache.get(role_name), obj_id=gang_id)
                 for username, role_name, gang_id in batch
                 if username_to_user.get(username) and role_cache.get(role_name)
             ]
@@ -526,13 +511,9 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
 
         # Process section roles in batches
         for i in range(0, len(section_roles_to_create), batch_size):
-            batch = section_roles_to_create[i:i+batch_size]
+            batch = section_roles_to_create[i : i + batch_size]
             final_section_roles = [
-                UserGangSectionRole(
-                    user=username_to_user.get(username),
-                    role=role_cache.get(role_name),
-                    obj_id=section_id
-                )
+                UserGangSectionRole(user=username_to_user.get(username), role=role_cache.get(role_name), obj_id=section_id)
                 for username, role_name, section_id in batch
                 if username_to_user.get(username) and role_cache.get(role_name)
             ]
