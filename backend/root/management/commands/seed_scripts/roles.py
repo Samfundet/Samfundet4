@@ -151,7 +151,7 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_VIEW_RECRUITMENTAPPLICATION,
             perm.SAMFUNDET_ADD_RECRUITMENTAPPLICATION,
             perm.SAMFUNDET_CHANGE_RECRUITMENTAPPLICATION,
-             # availability
+            # availability
             perm.SAMFUNDET_VIEW_RECRUITMENTINTERVIEWAVAILABILITY,
             # shared invterviews
             perm.SAMFUNDET_ADD_RECRUITMENTINTERVIEWAVAILABILITY,
