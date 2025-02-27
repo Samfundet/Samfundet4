@@ -404,7 +404,6 @@ def seed():
     Role.objects.all().delete()
     yield (current_step / total_steps) * 100, 'Cleared existing roles'
 
-    # TODO how should content types work?
     # Create base gang roles
     gang_content_type = ContentType.objects.get_for_model(Gang)
     for role_name, role_data in BASE_GANG_ROLES.items():
