@@ -69,7 +69,7 @@ import {
   SultenMenuAdminPage,
   SultenMenuItemFormAdminPage,
   SultenReservationAdminPage,
-  UsersAdminPage
+  UsersAdminPage,
 } from '~/PagesAdmin';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
@@ -435,9 +435,16 @@ export const router = createBrowserRouter(
               <Route
                 path={ROUTES.frontend.admin_recruitment_gang_overview_rejection_email}
                 element={
-                  <PermissionRoute required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]} element={<RecruitmentRejectionMailPage />} />
+                  <PermissionRoute
+                    required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                    element={<RecruitmentRejectionMailPage />}
+                  />
                 }
-                handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{lowerCapitalize(t(KEY.recruitment_rejection_email))}</Link> }}
+                handle={{
+                  crumb: ({ pathname }: UIMatch) => (
+                    <Link url={pathname}>{lowerCapitalize(t(KEY.recruitment_rejection_email))}</Link>
+                  ),
+                }}
               />
               <Route
                 path={ROUTES.frontend.admin_recruitment_recruiter_dashboard}
