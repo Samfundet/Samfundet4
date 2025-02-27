@@ -193,7 +193,7 @@ export function RecruitmentApplicantsStatus({
           style: styles.pending,
           content: (
             <ToolTip value="her skal det stå noe informativt">
-              <Badge className={applicationStatusStyle} text={guideText}/>
+              <Badge className={applicationStatusStyle} text={guideText} />
             </ToolTip>
           ),
         },

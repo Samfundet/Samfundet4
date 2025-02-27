@@ -7,5 +7,9 @@ type BadgeProps = {
 };
 
 export function Badge({ text, className, ...props }: BadgeProps) {
-  return <div className={classnames(styles.badge, className)} {...props}>{text}</div>;
+  return (
+    <div className={classnames(styles.badge, className)} {...props}>
+      {text}
+    </div>
+  );
 }
