@@ -43,6 +43,7 @@ export const nb = prepareTranslations({
   [KEY.pick_a_date]: 'Velg en dato',
 
   // Other common
+  [KEY.common_content]: 'Innhold',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Håndter',
   [KEY.common_yes]: 'Ja',
@@ -255,6 +256,9 @@ export const nb = prepareTranslations({
   [KEY.footer_developed_by]: 'Utviklet av MG::Web',
 
   // Recruitment:
+  [KEY.recruitment_look_at_recipients]: 'Gå videre og se gjennom mottakere',
+  [KEY.recruitment_preview]: 'Forhåndsvisning',
+  [KEY.recruitment_text_before_name]: 'Tekst før navn',
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Stilling',
   [KEY.recruitment_positions]: 'Stillinger',
@@ -533,6 +537,7 @@ export const en = prepareTranslations({
   [KEY.pick_a_date]: 'Pick a date',
 
   // No category:
+  [KEY.common_content]: 'Content',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Manage',
   [KEY.common_yes]: 'Yes',
@@ -744,6 +749,9 @@ export const en = prepareTranslations({
   [KEY.footer_developed_by]: 'Developed by MG::Web',
 
   // Recruitment:
+  [KEY.recruitment_look_at_recipients]: 'Go ahead and look through recipients',
+  [KEY.recruitment_preview]: 'Preview',
+  [KEY.recruitment_text_before_name]: 'Text before name',
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Position',
   [KEY.recruitment_positions]: 'Positions',

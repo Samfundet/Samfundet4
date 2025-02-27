@@ -1,0 +1,32 @@
+@import 'src/mixins';
+
+@import 'src/constants';
+
+.subheader {
+  padding: 0.2em;
+  font-size: 1.5em;
+  font-weight: 700;
+}
+
+.subject {
+  font-size: 1.2em;
+  font-weight: 700;
+}
+
+.preview>* {
+  padding-top: 1em;
+}
+
+.textarea {
+  min-height: 14rem;
+}
+
+.flex_row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.flex_item {
+  flex-basis: 50%;
+}
