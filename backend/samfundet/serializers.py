@@ -77,16 +77,15 @@ from rest_framework.utils.serializer_helpers import ReturnList
 class ApplicationFileAttachmentSerializer(CustomBaseSerializer):
     class Meta:
         model = ApplicationFileAttachment
+        fields = (
+            'id',
+            'application',
+            'application_file',
+            'application_file_type',
+        )
 
     def validate(self, attrs: dict) -> dict:
-        admission_image = attrs.get('admission_image')
-
-        # if admission_image:
-        #     is_image_valid(admission_image)
-        # else:
-        #     msg = 'Image is invalid'
-        #     raise serializers.ValidationError(msg, code="authorization")
-        # if
+        return attrs
 
 
 class TagSerializer(CustomBaseSerializer):
