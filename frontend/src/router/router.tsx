@@ -1,4 +1,4 @@
-import { Outlet, Route, type UIMatch, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import { Outlet, Route, type UIMatch, createBrowserRouter, createRoutesFromElements } from 'react-router';
 import { Link, PermissionRoute, ProtectedRoute, RootErrorBoundary, SamfOutlet, SultenOutlet } from '~/Components';
 import {
   AboutPage,
@@ -676,4 +676,14 @@ export const router = createBrowserRouter(
       <Route path="*" element={<NotFoundPage />} />
     </Route>,
   ),
+  {
+    future: {
+      v7_relativeSplatPath: true,
+      v7_startTransition: true,
+      v7_fetcherPersist: true,
+      v7_normalizeFormMethod: true,
+      v7_partialHydration: true,
+      v7_skipActionErrorRevalidation: true,
+    },
+  },
 );

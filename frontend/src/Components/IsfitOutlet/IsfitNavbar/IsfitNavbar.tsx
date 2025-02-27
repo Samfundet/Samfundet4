@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { ROUTES } from '~/routes';
 import { IsfitLogo } from '../../Logo/components';
 import styles from './IsfitNavbar.module.scss';

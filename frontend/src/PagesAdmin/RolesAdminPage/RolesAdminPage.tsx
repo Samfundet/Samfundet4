@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
