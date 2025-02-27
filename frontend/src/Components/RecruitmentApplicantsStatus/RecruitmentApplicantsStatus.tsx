@@ -98,8 +98,8 @@ export function RecruitmentApplicantsStatus({
   }
 
   function getStatusText(applicantstatus: number | undefined) {
-    const priority = RecruitmentPriorityChoicesMapping[applicantstatus];
     if (typeof applicantstatus !== 'undefined') {
+      const priority = RecruitmentPriorityChoicesMapping[applicantstatus];
       if (priority === RecruitmentPriorityChoices.WANTED) {
         return t(KEY.recruitment_guide_offer);
       }
@@ -193,7 +193,7 @@ export function RecruitmentApplicantsStatus({
           style: styles.pending,
           content: (
             <ToolTip value="her skal det stå noe informativt">
-              <Badge className={applicationStatusStyle}>{guideText}</Badge>
+              <Badge className={applicationStatusStyle} text={guideText}/>
             </ToolTip>
           ),
         },
