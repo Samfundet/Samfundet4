@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { Button, SamfundetLogoSpinner } from '~/Components';
+import { Button, Page } from '~/Components';
 import { getEvent } from '~/api';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
@@ -44,14 +44,6 @@ export function EventPage() {
     }
   }, [id]);
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
   const isPaid = event && PAID_TICKET_TYPES.includes(event.ticket_type);
 
   const ticketButton = isPaid ? (
@@ -66,7 +58,7 @@ export function EventPage() {
   console.log("isPaid?:", isPaid);
   console.log("Data:", event);
   return (
-    <div className={styles.container}>
+    <Page className={styles.container} loading={showSpinner}>
       {/* TODO splash should be its own component rather than homepage subcomponent */}
       <Splash events={event && [event]} />
       <div className={styles.text_title}>{dbT(event, 'title')}</div>
@@ -86,6 +78,6 @@ export function EventPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Page>
   );
 }

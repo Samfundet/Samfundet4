@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import {
@@ -51,15 +51,40 @@ interface FormProps {
   users?: UserDto[];
 }
 
+/* ----------------------------------------------------- *
+ * HELPER TO MERGE INITIAL DATA WITH DEFAULTS
+ * ----------------------------------------------------- */
+function getDefaultValues(data: Partial<RecruitmentPositionDto>): SchemaType {
+  return {
+    name_nb: data.name_nb ?? '',
+    name_en: data.name_en ?? '',
+    norwegian_applicants_only: data.norwegian_applicants_only ?? false,
+    short_description_nb: data.short_description_nb ?? '',
+    short_description_en: data.short_description_en ?? '',
+    long_description_nb: data.long_description_nb ?? '',
+    long_description_en: data.long_description_en ?? '',
+    is_funksjonaer_position: data.is_funksjonaer_position ?? false,
+    default_application_letter_nb: data.default_application_letter_nb ?? '',
+    default_application_letter_en: data.default_application_letter_en ?? '',
+    tags: data.tags ?? '',
+    // Convert 'interviewers' array to an array of IDs or fallback to empty array
+    interviewer_ids: data.interviewers?.map((i) => i.id) ?? [],
+  };
+}
+
 export function RecruitmentPositionForm({ initialData, positionId, recruitmentId, gangId, users }: FormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
+    defaultValues: getDefaultValues(initialData),
   });
 
-  const submitText = positionId ? t(KEY.common_save) : t(KEY.common_create);
+  // If 'initialData' changes (e.g. from async fetch), re-sync form values
+  useEffect(() => {
+    form.reset(getDefaultValues(initialData));
+  }, [initialData, form]);
 
   const onSubmit = (data: SchemaType) => {
     const updatedPosition = {
@@ -91,13 +116,6 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
       });
   };
 
-  useEffect(() => {
-    form.reset({
-      ...initialData,
-      interviewer_ids: initialData.interviewers?.map((interviewer) => interviewer.id) || [],
-    });
-  }, [initialData, form]);
-
   // Convert users array to dropdown options
   const interviewerOptions =
     users?.map((user) => ({
@@ -105,8 +123,8 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
       label: user?.username || `${user?.first_name} ${user?.last_name}`,
     })) || [];
 
-  // Get currently selected interviewers
-  const selectedInterviewers = form.watch('interviewer_ids') || [];
+  // Watch for the current array of interviewer IDs
+  const selectedInterviewers = form.watch('interviewer_ids') ?? [];
 
   return (
     <Form {...form}>
@@ -292,8 +310,8 @@ export function RecruitmentPositionForm({ initialData, positionId, recruitmentId
             )}
           />
 
-          <Button type="submit" rounded={true} theme="green">
-            {submitText}
+          <Button type="submit" rounded theme="green">
+            {positionId ? t(KEY.common_save) : t(KEY.common_create)}
           </Button>
         </div>
       </form>

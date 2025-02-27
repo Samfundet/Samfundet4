@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { SultenFooter } from '~/Components/SultenFooter';
 import { SultenNavbar } from '~/Components/SultenNavbar';
 
