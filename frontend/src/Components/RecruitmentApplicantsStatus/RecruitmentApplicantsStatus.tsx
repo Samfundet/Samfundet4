@@ -97,20 +97,17 @@ export function RecruitmentApplicantsStatus({
     }
   }
 
-  function getStatusText(applicantstatus: number | undefined){
-    const priority = RecruitmentPriorityChoicesMapping[applicantstatus]
-    if (typeof applicantstatus !== 'undefined'){
-      if(priority == RecruitmentPriorityChoices.WANTED){
-        return t(KEY.recruitment_guide_offer)
+  function getStatusText(applicantstatus: number | undefined) {
+    const priority = RecruitmentPriorityChoicesMapping[applicantstatus];
+    if (typeof applicantstatus !== 'undefined') {
+      if (priority === RecruitmentPriorityChoices.WANTED) {
+        return t(KEY.recruitment_guide_offer);
       }
-      else{
-        return t(KEY.recruitment_guide_no_offer)
-      }
+      return t(KEY.recruitment_guide_no_offer);
     }
   }
-  
-  const data = applicants.map((application) => {
 
+  const data = applicants.map((application) => {
     const applicationStatusStyle = getStatusStyle(application?.applicant_state);
     const guideText = getStatusText(application?.recruiter_priority);
     return {
