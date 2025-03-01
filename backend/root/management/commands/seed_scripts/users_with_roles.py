@@ -122,7 +122,7 @@ UNIVERSAL_USER_TYPES = {
 # These roles are only created for specific parts of Samfundet
 SAMFUNDET_USER_TYPES = {
     'redaksjonen_org': UserTypeData(
-        roles=[REDAKSJONEN],  # Original REDAKSJONEN role (org level)
+        roles=[REDAKSJONEN + "_ORG"],  # Original REDAKSJONEN role (org level)
         name_pattern='mg_red_org_{number}',
         title_nb='Redaksjonsmedlem (Org)',
         title_en='Editorial Staff (Org)',
