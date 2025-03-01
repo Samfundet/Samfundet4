@@ -23,7 +23,7 @@ from .roles import (
     ORG_RECRUITMENT_MANAGER,
     GANG_RECRUITMENT_MANAGER,
     SECTION_RECRUITMENT_MANAGER,
-    GANG_RECRUITMENT_INTERVIEWER,
+    SECTION_RECRUITMENT_INTERVIEWER,
 )
 
 # Create a logger for this module
@@ -54,7 +54,7 @@ UNIVERSAL_USER_TYPES = {
         level='org',
     ),
     'gang_recruitment': UserTypeData(
-        roles=[GANG_RECRUITMENT_MANAGER, GANG_RECRUITMENT_INTERVIEWER],
+        roles=[GANG_RECRUITMENT_MANAGER, SECTION_RECRUITMENT_INTERVIEWER],
         name_pattern='{org}_{gang}_opptak',  # Include org for uniqueness
         title_nb='Opptaksansvarlig',
         title_en='Recruitment Manager',
@@ -103,7 +103,7 @@ UNIVERSAL_USER_TYPES = {
         level='section',
     ),
     'gang_recruitment_interviewer': UserTypeData(
-        roles=[GANG_RECRUITMENT_INTERVIEWER, GANG_MEMBER],
+        roles=[SECTION_RECRUITMENT_INTERVIEWER, GANG_MEMBER],
         name_pattern='{org}_{gang}_interviewer',
         title_nb='Intervjuer',
         title_en='Interviewer',
@@ -126,8 +126,8 @@ SAMFUNDET_USER_TYPES = {
         name_pattern='mg_red_{number}',
         title_nb='Redaksjonsmedlem',
         title_en='Editorial Staff',
-        level='section',
-        specific_section='Redaksjonen',  # Only for MG's Redaksjonen section
+        level='org',
+        specific_section='Redaksjonen',  # You can keep this to filter which users get this role
     ),
     'styret': UserTypeData(
         roles=[STYRET],
@@ -436,7 +436,7 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
                                 users_to_create.append(user)
 
                                 # Store for later role assignment
-                                section_roles_to_create.extend((username, role_name, redaksjonen.id) for role_name in redaksjonen_type_data.roles)
+                                org_roles_to_create.extend((username, role_name, samfundet_org.id) for role_name in redaksjonen_type_data.roles)
                 except Exception as e:
                     logger.warning(f'Could not create Redaksjonen users: {str(e)}')
 

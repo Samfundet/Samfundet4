@@ -7,7 +7,8 @@ from root.utils import permissions as perm
 
 from samfundet.models.role import Role
 from samfundet.models.general import Gang, GangSection, Organization
-from samfundet.models.recruitment import Recruitment
+
+# from samfundet.models.recruitment import Recruitment
 
 GANG_LEADER = 'gang_leader'
 VICE_GANG_LEADER = 'vice_gang_leader'
@@ -16,7 +17,7 @@ GANG_MEMBER = 'gang_member'
 ORG_RECRUITMENT_MANAGER = 'org_recruitment_manager'
 GANG_RECRUITMENT_MANAGER = 'gang_recruitment_manager'
 SECTION_RECRUITMENT_MANAGER = 'section_recruitment_manager'
-GANG_RECRUITMENT_INTERVIEWER = 'gang_recruitment_interviewer'
+SECTION_RECRUITMENT_INTERVIEWER = 'gang_recruitment_interviewer'
 REDAKSJONEN = 'redaksjonen'
 STYRET = 'styret'
 RAADET = 'raadet'
@@ -175,7 +176,7 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_VIEW_INTERVIEWROOM,
         ]
     },
-    GANG_RECRUITMENT_INTERVIEWER: {
+    SECTION_RECRUITMENT_INTERVIEWER: {
         'permissions': [
             perm.SAMFUNDET_VIEW_INTERVIEW,
             perm.SAMFUNDET_CHANGE_INTERVIEW,
@@ -191,8 +192,8 @@ RECRUITMENT_ROLES = {
 # Special roles for specific gangs
 SPECIAL_ROLES = {
     REDAKSJONEN: {
-        'gang': 'Markedsføringsgjengen',
-        'section': 'Redaksjonen',
+  #      'gang': 'Markedsføringsgjengen',
+ #       'section': 'Redaksjonen',
         'permissions': [
             # blogg
             perm.SAMFUNDET_VIEW_BLOGPOST,
@@ -393,7 +394,7 @@ def create_role(*, name: str, permissions: list[str], content_type=None) -> Role
     return role
 
 
-def seed():
+def seed():  # noqa: C901
     """Main seeding function for roles."""
     total_steps = len(BASE_GANG_ROLES) + len(RECRUITMENT_ROLES) + len(SPECIAL_ROLES)
     current_step = 0
@@ -404,26 +405,39 @@ def seed():
     Role.objects.all().delete()
     yield (current_step / total_steps) * 100, 'Cleared existing roles'
 
-    # Create base gang roles
-    gang_content_type = ContentType.objects.get_for_model(Organization)
+    # Get content types for different levels
+    org_content_type = ContentType.objects.get_for_model(Organization)
+    gang_content_type = ContentType.objects.get_for_model(Gang)
+    section_content_type = ContentType.objects.get_for_model(GangSection)
+
+    # Create base gang roles - at Gang level
     for role_name, role_data in BASE_GANG_ROLES.items():
         create_role(name=role_name, permissions=role_data['permissions'], content_type=gang_content_type)
         current_step += 1
         yield (current_step / total_steps) * 100, f'Created base gang role: {role_name}'
 
-    # Create recruitment roles
-    recruitment_content_type = ContentType.objects.get_for_model(Gang)
-    for role_name, role_data in RECRUITMENT_ROLES.items():
-        create_role(name=role_name, permissions=role_data['permissions'], content_type=recruitment_content_type)
+    # Create recruitment roles - at appropriate levels
+        for role_name, role_data in RECRUITMENT_ROLES.items():
+            content_type = None  # Default to None to catch unassigned cases
+
+            if role_name == ORG_RECRUITMENT_MANAGER:
+                content_type = org_content_type
+            elif role_name == GANG_RECRUITMENT_MANAGER:
+                content_type = gang_content_type
+            elif role_name in [SECTION_RECRUITMENT_MANAGER, SECTION_RECRUITMENT_INTERVIEWER]:
+                content_type = section_content_type
+
+            if content_type is None:
+                raise ValueError(f"Missing content type for role: {role_name}")
+
+            create_role(name=role_name, permissions=role_data['permissions'], content_type=content_type)
+
         current_step += 1
         yield (current_step / total_steps) * 100, f'Created recruitment role: {role_name}'
 
-    # Create special roles
+    # Create special roles - all at Organization level
     for role_name, role_data in SPECIAL_ROLES.items():
-        # Determine the correct content type based on whether it's gang or section specific
-        content_type = ContentType.objects.get_for_model(GangSection) if 'section' in role_data else ContentType.objects.get_for_model(Gang)
-
-        create_role(name=role_name, permissions=role_data['permissions'], content_type=content_type)
+        create_role(name=role_name, permissions=role_data['permissions'], content_type=org_content_type)
         current_step += 1
         yield (current_step / total_steps) * 100, f'Created special role: {role_name}'
 
