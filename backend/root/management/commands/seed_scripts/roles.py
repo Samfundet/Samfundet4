@@ -192,8 +192,8 @@ RECRUITMENT_ROLES = {
 # Special roles for specific gangs
 SPECIAL_ROLES = {
     REDAKSJONEN: {
-  #      'gang': 'Markedsføringsgjengen',
- #       'section': 'Redaksjonen',
+        #      'gang': 'Markedsføringsgjengen',
+        #       'section': 'Redaksjonen',
         'permissions': [
             # blogg
             perm.SAMFUNDET_VIEW_BLOGPOST,
@@ -416,7 +416,7 @@ def seed():  # noqa: C901
         current_step += 1
         yield (current_step / total_steps) * 100, f'Created base gang role: {role_name}'
 
-    # Create recruitment roles - at appropriate levels
+        # Create recruitment roles - at appropriate levels
         for role_name, role_data in RECRUITMENT_ROLES.items():
             content_type = None  # Default to None to catch unassigned cases
 
@@ -428,17 +428,35 @@ def seed():  # noqa: C901
                 content_type = section_content_type
 
             if content_type is None:
-                raise ValueError(f"Missing content type for role: {role_name}")
+                raise ValueError(f'Missing content type for role: {role_name}')
 
             create_role(name=role_name, permissions=role_data['permissions'], content_type=content_type)
 
         current_step += 1
         yield (current_step / total_steps) * 100, f'Created recruitment role: {role_name}'
 
-    # Create special roles - all at Organization level
+    # Special roles - with variants for different levels
     for role_name, role_data in SPECIAL_ROLES.items():
-        create_role(name=role_name, permissions=role_data['permissions'], content_type=org_content_type)
-        current_step += 1
-        yield (current_step / total_steps) * 100, f'Created special role: {role_name}'
+        # Create specific organization-level version for REDAKSJONEN
+        if role_name == REDAKSJONEN:
+            # Create the original REDAKSJONEN role at org level
+            create_role(name=role_name + '_ORG', permissions=role_data['permissions'], content_type=org_content_type)
+
+            # Create a flexible, level-agnostic version with null content_type
+            create_role(name=role_name + '_ANY', permissions=role_data['permissions'], content_type=None)
+
+            # Create a gang-specific version
+            create_role(name=role_name + '_GANG', permissions=role_data['permissions'], content_type=gang_content_type)
+
+            # Create a section-specific version
+            create_role(name=role_name + '_SECTION', permissions=role_data['permissions'], content_type=section_content_type)
+
+            current_step += 1
+            yield (current_step / total_steps) * 100, f'Created {role_name} role variants for all levels'
+        else:
+            # Keep other special roles at org level as before
+            create_role(name=role_name, permissions=role_data['permissions'], content_type=org_content_type)
+            current_step += 1
+            yield (current_step / total_steps) * 100, f'Created special role: {role_name}'
 
     yield 100, f'Created {Role.objects.count()} roles successfully'
