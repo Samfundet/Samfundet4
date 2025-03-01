@@ -24,7 +24,7 @@ RAADET = 'raadet'
 EVENT_MANAGER = 'event_manager'
 VENUE_MANAGER = 'venue_manager'
 # Define the base roles that will be used across all gangs
-BASE_GANG_ROLES = {
+BASIC_GANG_ROLES = {
     GANG_LEADER: {
         'permissions': [
             perm.SAMFUNDET_VIEW_GANG,
@@ -394,13 +394,29 @@ def create_role(*, name: str, permissions: list[str], content_type=None) -> Role
     return role
 
 
-def create_base_gang_roles(gang_content_type, org_content_type, section_content_type):
+def create_basic_gang_roles(gang_content_type):
     """
-    Create the base gang roles and recruitment roles.
+    This helper function creates: standard roles applied at gang level (GANG_LEADER, VICE_GANG_LEADER, etc.)
 
-    This helper function creates:
-    1. Standard roles applied at gang level (GANG_LEADER, VICE_GANG_LEADER, etc.)
-    2. Recruitment-specific roles at the appropriate levels
+    Args:
+        gang_content_type: ContentType for Gang model
+
+    Returns:
+        int: Number of created roles
+    """
+    created_count = 0
+
+    # Create base gang roles
+    for role_name, role_data in BASIC_GANG_ROLES.items():
+        create_role(name=role_name, permissions=role_data['permissions'], content_type=gang_content_type)
+        created_count += 1
+
+    return created_count
+
+
+def create_recruitment_roles(gang_content_type, org_content_type, section_content_type):
+    """
+    This helper function creates: recruitment-specific roles at the appropriate levels
 
     Args:
         gang_content_type: ContentType for Gang model
@@ -411,16 +427,9 @@ def create_base_gang_roles(gang_content_type, org_content_type, section_content_
         int: Number of created roles
     """
     created_count = 0
-
-    # Create base gang roles
-    for role_name, role_data in BASE_GANG_ROLES.items():
-        create_role(name=role_name, permissions=role_data['permissions'], content_type=gang_content_type)
-        created_count += 1
-
     # Create recruitment roles at appropriate levels
     for role_name, role_data in RECRUITMENT_ROLES.items():
         content_type = None  # Default to None to catch unassigned cases
-
         if role_name == ORG_RECRUITMENT_MANAGER:
             content_type = org_content_type
         elif role_name == GANG_RECRUITMENT_MANAGER:
@@ -433,7 +442,6 @@ def create_base_gang_roles(gang_content_type, org_content_type, section_content_
 
         create_role(name=role_name, permissions=role_data['permissions'], content_type=content_type)
         created_count += 1
-
     return created_count
 
 
@@ -485,7 +493,7 @@ def seed():
     Main seeding function for roles.
 
     This function creates all roles in the system:
-    1. Base Gang Roles - Fundamental permissions for different gang roles
+    1. Basic Gang Roles - Fundamental permissions for different gang roles
     2. Recruitment Roles - Various levels of recruitment management
     3. Special Roles - Organization-specific functional roles
 
@@ -495,7 +503,7 @@ def seed():
     Yields:
         Tuples of (progress_percentage, status_message)
     """
-    total_steps = len(BASE_GANG_ROLES) + len(RECRUITMENT_ROLES) + len(SPECIAL_ROLES)
+    total_steps = len(BASIC_GANG_ROLES) + len(RECRUITMENT_ROLES) + len(SPECIAL_ROLES)
     current_step = 0
 
     yield 0, 'Starting role creation'
@@ -510,16 +518,24 @@ def seed():
     section_content_type = ContentType.objects.get_for_model(GangSection)
 
     # Create base gang roles - at Gang level
-    yield 20, 'Creating base gang roles and recruitment roles'
-    base_roles_count = create_base_gang_roles(
+    yield 20, 'Creating basic gang roles'
+    basic_roles_count = create_basic_gang_roles(
+        gang_content_type=gang_content_type,
+    )
+    current_step += basic_roles_count
+    yield (current_step / total_steps) * 100, f'Created {basic_roles_count} basic gang roles'
+
+    # Create recruitment roles
+    yield 40, 'Creating recruitment roles'
+    recruitment_roles_count = create_recruitment_roles(
         gang_content_type=gang_content_type,
         org_content_type=org_content_type,
         section_content_type=section_content_type,
     )
-    current_step += base_roles_count
-    yield (current_step / total_steps) * 100, f'Created {base_roles_count} base gang roles and recruitment roles'
+    current_step += recruitment_roles_count
+    yield (current_step / total_steps) * 100, f'Created {recruitment_roles_count} recruitment roles'
 
-    # Special roles - with variants for different levels
+    # Create special roles - with variants for different levels
     yield 70, 'Creating special roles'
     special_roles_count = create_special_roles(
         org_content_type=org_content_type,
