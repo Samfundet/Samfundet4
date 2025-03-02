@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import type { GangLoader } from '~/router/loaders';

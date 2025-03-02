@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 //import { postRejectionMail } from '~/api';
 import { KEY } from '~/i18n/constants';

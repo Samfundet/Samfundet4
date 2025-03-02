@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { SamfundetLogoSpinner } from '~/Components';
 import { getOrganizedGangList, getRecruitmentPositions } from '~/api';
 import type { GangTypeDto, RecruitmentPositionDto } from '~/dto';

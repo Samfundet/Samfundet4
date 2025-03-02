@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-#from root.management.commands.seed_scripts import roles, applicant_users, users_with_roles
+from root.management.commands.seed_scripts import roles, users_with_roles
+
+
 from . import (
     menu,
     gangs,

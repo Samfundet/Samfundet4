@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
+import { isRouteErrorResponse, useRouteError } from 'react-router';
 import { ErrorDisplay } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import styles from './RootErrorBoundary.module.scss';

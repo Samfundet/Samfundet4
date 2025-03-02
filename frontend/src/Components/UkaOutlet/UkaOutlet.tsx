@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { UkaNavbar } from './UkaNavbar';
 import styles from './UkaOutlet.module.scss';
 

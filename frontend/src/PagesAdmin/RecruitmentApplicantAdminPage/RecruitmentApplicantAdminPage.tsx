@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { BackButton, SamfundetLogoSpinner } from '~/Components';
 import { Text } from '~/Components/Text/Text';
