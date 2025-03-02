@@ -509,11 +509,11 @@ def prepare_redaksjonen_users(  # noqa: C901
                     users_to_create.append(user)
 
                     # Assign role based on its level
-                    if type_data.level == 'org':
+                    if type_data.level == ORG_LEVEL:
                         org_roles_to_create.extend((username, role_name, samfundet_org.id) for role_name in type_data.roles)
-                    elif type_data.level == 'gang':
+                    elif type_data.level == GANG_LEVEL:
                         gang_roles_to_create.extend((username, role_name, mg.id) for role_name in type_data.roles)
-                    elif type_data.level == 'section':
+                    elif type_data.level == GANGSECTION_LEVEL:
                         section_roles_to_create.extend((username, role_name, redaksjonen.id) for role_name in type_data.roles)
     except Exception as e:
         print(f'Could not create Redaksjonen users: {str(e)}')
