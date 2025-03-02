@@ -375,6 +375,7 @@ def prepare_gang_level_users(organizations, universal_user_types, all_campuses):
 def prepare_section_level_users(organizations, universal_user_types, gang_to_sections, all_campuses):  # noqa: C901
     """
     Prepare section-level users for all organizations.
+    Additionally creates 10 interviewer users for each section.
 
     Args:
         organizations: List of Organization objects
@@ -391,6 +392,7 @@ def prepare_section_level_users(organizations, universal_user_types, gang_to_sec
     for org in organizations:
         for gang in list(org.gangs.all()):
             for section in gang_to_sections.get(gang.id, []):
+                # First, create all the regular section-level users from universal_user_types
                 for type_data in universal_user_types.values():
                     if type_data.level == GANGSECTION_LEVEL:
                         username_params = prepare_username_params(org=org, gang=gang, section=section)
@@ -407,6 +409,28 @@ def prepare_section_level_users(organizations, universal_user_types, gang_to_sec
 
                         # Store for later role assignment
                         section_roles_to_create.extend((username, role_name, section.id) for role_name in type_data.roles)
+
+                # Now, create 10 dedicated interviewer users for this section
+                for i in range(1, 11):  # Create 10 users numbered 1-10
+                    username_params = prepare_username_params(org=org, gang=gang, section=section, number=i)
+                    interviewer_username = generate_username('{org}_{gang}_{section}_interviewer', **username_params)
+
+                    # Create the interviewer user
+                    interviewer = User(
+                        username=interviewer_username,
+                        email=f'{interviewer_username}@samfundet.no',
+                        password='!',  # Temporary unusable password
+                        first_name=f'Intervjuer {i}',
+                        last_name=f'{gang.name_nb} - {section.name_nb}',
+                        is_superuser=False,
+                        campus=random.choice(all_campuses),
+                    )
+                    users_to_create.append(interviewer)
+
+                    # Add the SECTION_INTERVIEWER role and make sure that they all have gang_member roles
+
+                    section_roles_to_create.append((interviewer_username, SECTION_INTERVIEWER, section.id))
+                    section_roles_to_create.append((interviewer_username, GANG_MEMBER, section.id))
 
     return users_to_create, section_roles_to_create
 
