@@ -108,7 +108,6 @@ UNIVERSAL_USER_TYPES = {
         title_en='Sectionleader',
         level=GANGSECTION_LEVEL,
     ),
-
     'gang_member': UserTypeData(
         roles=[GANG_MEMBER],
         name_pattern='{org}_{gang}_intern',
@@ -348,7 +347,7 @@ def prepare_gang_level_users(organizations, universal_user_types, all_campuses):
     return users_to_create, gang_roles_to_create
 
 
-def prepare_section_level_users(organizations, universal_user_types, gang_to_sections, all_campuses):
+def prepare_section_level_users(organizations, universal_user_types, gang_to_sections, all_campuses):  # noqa: C901
     """
     Prepare section-level users for all organizations.
 
@@ -430,10 +429,10 @@ def prepare_samfundet_specific_users(
         Tuple of (users_to_create, org_roles_to_create)
     """
     users_to_create = []
-    org_roles_to_create = []
+    org_roles_to_create: list[tuple[str, str, int]] = []
 
     # Handle roles for specific gangs (Styret, Rådet)
-    for type_key, type_data in samfundet_user_types.items():
+    for type_data in samfundet_user_types.values():
         if type_data.specific_gang:
             for i in range(1, 6):  # Create 5 members for each
                 username_params = prepare_username_params(org=samfundet_org, number=i)
@@ -457,7 +456,7 @@ def prepare_samfundet_specific_users(
     return users_to_create, org_roles_to_create
 
 
-def prepare_redaksjonen_users(
+def prepare_redaksjonen_users(  # noqa: C901
     samfundet_org: Organization, samfundet_user_types: dict, gang_to_sections: dict[int, list[GangSection]], all_campuses: list[Campus]
 ) -> tuple[list[User], list[tuple[str, str, int]], list[tuple[str, str, int]], list[tuple[str, str, int]]]:
     """
@@ -472,10 +471,11 @@ def prepare_redaksjonen_users(
     Returns:
         Tuple of (users_to_create, org_roles_to_create, gang_roles_to_create, section_roles_to_create)
     """
-    users_to_create = []
-    org_roles_to_create = []
-    gang_roles_to_create = []
-    section_roles_to_create = []
+
+    users_to_create: list[User] = []
+    org_roles_to_create: list[tuple[str, str, int]] = []
+    gang_roles_to_create: list[tuple[str, str, int]] = []
+    section_roles_to_create: list[tuple[str, str, int]] = []
 
     try:
         # Find the marketing gang
