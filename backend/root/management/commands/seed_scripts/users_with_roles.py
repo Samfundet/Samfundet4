@@ -118,7 +118,7 @@ UNIVERSAL_USER_TYPES = {
 # These roles are only created for specific parts of Samfundet
 SAMFUNDET_USER_TYPES = {
     'redaksjonen_org': UserTypeData(
-        roles=[REDAKSJONEN + "_ORG"],  # Original REDAKSJONEN role (org level)
+        roles=[REDAKSJONEN + '_ORG'],  # Original REDAKSJONEN role (org level)
         name_pattern='mg_red_org_{number}',
         title_nb='Redaksjonsmedlem (Org)',
         title_en='Editorial Staff (Org)',
@@ -126,7 +126,7 @@ SAMFUNDET_USER_TYPES = {
         specific_section='Redaksjonen',
     ),
     'redaksjonen_any': UserTypeData(
-        roles=[REDAKSJONEN + "_ANY"],  # Level-agnostic version
+        roles=[REDAKSJONEN + '_ANY'],  # Level-agnostic version
         name_pattern='mg_red_any_{number}',
         title_nb='Redaksjonsmedlem (Any)',
         title_en='Editorial Staff (Any)',
@@ -134,7 +134,7 @@ SAMFUNDET_USER_TYPES = {
         specific_section='Redaksjonen',
     ),
     'redaksjonen_gang': UserTypeData(
-        roles=[REDAKSJONEN + "_GANG"],  # Gang-specific version
+        roles=[REDAKSJONEN + '_GANG'],  # Gang-specific version
         name_pattern='mg_red_gang_{number}',
         title_nb='Redaksjonsmedlem (Gang)',
         title_en='Editorial Staff (Gang)',
@@ -142,7 +142,7 @@ SAMFUNDET_USER_TYPES = {
         specific_section='Redaksjonen',
     ),
     'redaksjonen_section': UserTypeData(
-        roles=[REDAKSJONEN + "_SECTION"],  # Section-specific version
+        roles=[REDAKSJONEN + '_SECTION'],  # Section-specific version
         name_pattern='mg_red_section_{number}',
         title_nb='Redaksjonsmedlem (Section)',
         title_en='Editorial Staff (Section)',
@@ -254,6 +254,163 @@ def clean_existing_users() -> int:
     return deleted_count
 
 
+def create_user_from_type_data(type_data, username, first_name, last_name, all_campuses):
+    """
+    Create a User object with standardized fields based on type data.
+
+    Args:
+        type_data: UserTypeData object containing role information
+        username: Generated username
+        first_name: First name for the user
+        last_name: Last name for the user
+        all_campuses: List of available Campus objects
+
+    Returns:
+        User object ready for creation
+    """
+    return User(
+        username=username,
+        email=f'{username}@samfundet.no',
+        password='!',  # Temporary unusable password
+        first_name=first_name,
+        last_name=last_name,
+        is_superuser=False,
+        campus=random.choice(all_campuses),
+    )
+
+
+def prepare_org_level_users(organizations, universal_user_types, all_campuses):
+    """
+    Prepare organization-level users for all organizations.
+
+    Args:
+        organizations: List of Organization objects
+        universal_user_types: Dictionary of UserTypeData objects
+        all_campuses: List of Campus objects
+
+    Returns:
+        Tuple of (users_to_create, org_roles_to_create)
+    """
+    users_to_create = []
+    org_roles_to_create = []
+
+    for org in organizations:
+        for type_data in universal_user_types.values():
+            if type_data.level == 'org':
+                username_params = prepare_username_params(org=org)
+                username = generate_username(type_data.name_pattern, **username_params)
+
+                user = create_user_from_type_data(
+                    type_data=type_data, username=username, first_name=type_data.title_nb, last_name=org.name, all_campuses=all_campuses
+                )
+                users_to_create.append(user)
+
+                # Store for later role assignment
+                org_roles_to_create.extend((username, role_name, org.id) for role_name in type_data.roles)
+
+    return users_to_create, org_roles_to_create
+
+
+def prepare_gang_level_users(organizations, universal_user_types, all_campuses):
+    """
+    Prepare gang-level users for all organizations.
+
+    Args:
+        organizations: List of Organization objects
+        universal_user_types: Dictionary of UserTypeData objects
+        all_campuses: List of Campus objects
+
+    Returns:
+        Tuple of (users_to_create, gang_roles_to_create)
+    """
+    users_to_create = []
+    gang_roles_to_create = []
+
+    for org in organizations:
+        for gang in list(org.gangs.all()):
+            for type_data in universal_user_types.values():
+                if type_data.level == 'gang':
+                    username_params = prepare_username_params(org=org, gang=gang)
+                    username = generate_username(type_data.name_pattern, **username_params)
+
+                    user = create_user_from_type_data(
+                        type_data=type_data, username=username, first_name=type_data.title_nb, last_name=gang.name_nb, all_campuses=all_campuses
+                    )
+                    users_to_create.append(user)
+
+                    # Store for later role assignment
+                    gang_roles_to_create.extend((username, role_name, gang.id) for role_name in type_data.roles)
+
+    return users_to_create, gang_roles_to_create
+
+
+def prepare_section_level_users(organizations, universal_user_types, gang_to_sections, all_campuses):
+    """
+    Prepare section-level users for all organizations.
+
+    Args:
+        organizations: List of Organization objects
+        universal_user_types: Dictionary of UserTypeData objects
+        gang_to_sections: Dictionary mapping gang IDs to lists of GangSection objects
+        all_campuses: List of Campus objects
+
+    Returns:
+        Tuple of (users_to_create, section_roles_to_create)
+    """
+    users_to_create = []
+    section_roles_to_create = []
+
+    for org in organizations:
+        for gang in list(org.gangs.all()):
+            for section in gang_to_sections.get(gang.id, []):
+                for type_data in universal_user_types.values():
+                    if type_data.level == 'section':
+                        username_params = prepare_username_params(org=org, gang=gang, section=section)
+                        username = generate_username(type_data.name_pattern, **username_params)
+
+                        user = create_user_from_type_data(
+                            type_data=type_data,
+                            username=username,
+                            first_name=type_data.title_nb,
+                            last_name=f'{gang.name_nb} - {section.name_nb}',
+                            all_campuses=all_campuses,
+                        )
+                        users_to_create.append(user)
+
+                        # Store for later role assignment
+                        section_roles_to_create.extend((username, role_name, section.id) for role_name in type_data.roles)
+
+    return users_to_create, section_roles_to_create
+
+
+def prepare_all_universal_users(organizations, universal_user_types, gang_to_sections, all_campuses):
+    """
+    Prepare all universal users across all organizations, gangs, and sections.
+
+    Args:
+        organizations: List of Organization objects
+        universal_user_types: Dictionary of UserTypeData objects
+        gang_to_sections: Dictionary mapping gang IDs to lists of GangSection objects
+        all_campuses: List of Campus objects
+
+    Returns:
+        Tuple of (users_to_create, org_roles_to_create, gang_roles_to_create, section_roles_to_create)
+    """
+    # Get org-level users and roles
+    org_users, org_roles = prepare_org_level_users(organizations, universal_user_types, all_campuses)
+
+    # Get gang-level users and roles
+    gang_users, gang_roles = prepare_gang_level_users(organizations, universal_user_types, all_campuses)
+
+    # Get section-level users and roles
+    section_users, section_roles = prepare_section_level_users(organizations, universal_user_types, gang_to_sections, all_campuses)
+
+    # Combine users from all levels
+    all_users = org_users + gang_users + section_users
+
+    return all_users, org_roles, gang_roles, section_roles
+
+
 def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
     """
     Create users with roles for all organizations and Samfundet-specific roles.
@@ -311,81 +468,18 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
         yield 30, 'Preparing data for batch creation'
 
         # Prepare universal users for all organizations
-        for org in organizations:
-            # Organization-level roles
-            for type_data in UNIVERSAL_USER_TYPES.values():
-                if type_data.level == 'org':
-                    username_params = prepare_username_params(org=org)
-                    username = generate_username(type_data.name_pattern, **username_params)
-
-                    # Create user
-                    user = User(
-                        username=username,
-                        email=f'{username}@samfundet.no',
-                        password='!',  # Temporary unusable password
-                        first_name=type_data.title_nb,
-                        last_name=org.name,
-                        is_superuser=False,
-                        campus=random.choice(all_campuses),
-                    )
-                    users_to_create.append(user)
-
-                    # Store for later role assignment (after bulk creation)
-                    # We need to track the user and role together
-                    org_roles_to_create.extend((username, role_name, org.id) for role_name in type_data.roles)
-
-            # Process gangs for this organization
-            for gang in list(org.gangs.all()):
-                # Gang-level roles
-                for type_data in UNIVERSAL_USER_TYPES.values():
-                    if type_data.level == 'gang':
-                        username_params = prepare_username_params(org=org, gang=gang)
-                        username = generate_username(type_data.name_pattern, **username_params)
-
-                        # Create user
-                        user = User(
-                            username=username,
-                            email=f'{username}@samfundet.no',
-                            password='!',  # Temporary unusable password
-                            first_name=type_data.title_nb,
-                            last_name=gang.name_nb,
-                            is_superuser=False,
-                            campus=random.choice(all_campuses),
-                        )
-                        users_to_create.append(user)
-
-                        # Store for later role assignment
-                        gang_roles_to_create.extend((username, role_name, gang.id) for role_name in type_data.roles)
-
-                # Section-level roles
-                # Use our pre-fetched sections instead of querying the database
-                for section in gang_to_sections.get(gang.id, []):
-                    for type_data in UNIVERSAL_USER_TYPES.values():
-                        if type_data.level == 'section':
-                            username_params = prepare_username_params(org=org, gang=gang, section=section)
-                            username = generate_username(type_data.name_pattern, **username_params)
-
-                            # Create user
-                            user = User(
-                                username=username,
-                                email=f'{username}@samfundet.no',
-                                password='!',  # Temporary unusable password
-                                first_name=type_data.title_nb,
-                                last_name=f'{gang.name_nb} - {section.name_nb}',
-                                is_superuser=False,
-                                campus=random.choice(all_campuses),
-                            )
-                            users_to_create.append(user)
-
-                            # Store for later role assignment
-                            section_roles_to_create.extend((username, role_name, section.id) for role_name in type_data.roles)
+        users_to_create, org_roles_to_create, gang_roles_to_create, section_roles_to_create = prepare_all_universal_users(
+            organizations=organizations, universal_user_types=UNIVERSAL_USER_TYPES, gang_to_sections=gang_to_sections, all_campuses=all_campuses
+        )
 
         yield 50, f'Preparing {len(users_to_create)} users'
+
+
 
         # Samfundet-specific roles
         samfundet_org = next((org for org in organizations if org.name == 'Samfundet'), None)
         if samfundet_org:
-            # Styret and Rådet roles - keep the existing code for these
+            # Styret and Rådet roles
             for type_key, type_data in SAMFUNDET_USER_TYPES.items():
                 if type_data.specific_gang:
                     for i in range(1, 6):  # Create 5 members for each
