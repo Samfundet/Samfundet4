@@ -29,8 +29,7 @@ def validate_interviewer_seeding():
     positions_with_interviewers = RecruitmentPosition.objects.filter(interviewers__isnull=False).distinct().count()
     if positions_with_interviewers == 0:
         raise ValidationError(
-            'No positions with interviewers found! Please run the recruitment_interviewers seed script first:\n'
-            'python manage.py seed recruitment_interviewers'
+            'No positions with interviewers found! Please run the recruitment_interviewers seed script first:\npython manage.py seed recruitment_interviewers'
         )
 
 
@@ -70,7 +69,7 @@ def generate_base_daily_slots(tz) -> list[tuple[datetime.time, datetime.time]]:
     return slots
 
 
-def generate_block_pattern(total_slots: int, used_slots: set[int] = None) -> list[int]:
+def generate_block_pattern(total_slots: int, used_slots: set[int] | None = None) -> list[int]:  # noqa: C901
     """Generate a single block of consecutive slots, avoiding used slots."""
     if used_slots is None:
         used_slots = set()
@@ -100,7 +99,7 @@ def generate_block_pattern(total_slots: int, used_slots: set[int] = None) -> lis
     return list(range(start_pos, start_pos + block_size))
 
 
-def get_relevant_users() -> tuple[dict[int, str], dict[str, int]]:
+def get_relevant_users() -> tuple[dict[int, str], dict[str, int]]:  # noqa: C901
     """Get all users who are either applicants or interviewers with their role and count by role."""
     user_roles = {}
     role_counts = {'applicant': 0, 'interviewer': 0, 'both': 0}
@@ -125,7 +124,7 @@ def get_relevant_users() -> tuple[dict[int, str], dict[str, int]]:
     return user_roles, role_counts
 
 
-def generate_recruitment_slots(
+def generate_recruitment_slots(  # noqa: C901
     recruitment_id: int,
     user_id: int,
     user_role: str,
@@ -168,7 +167,7 @@ def generate_recruitment_slots(
     return slots
 
 
-def seed():
+def seed():  # noqa: C901
     yield 0, 'occupied_timeslot'
 
     try:
@@ -216,5 +215,5 @@ def seed():
             OccupiedTimeslot.objects.bulk_create(timeslots_to_create)
             created_count += len(timeslots_to_create)
 
-    user_summary = f"(Applicants: {role_counts['applicant']}, " f"Interviewers: {role_counts['interviewer']}, " f"Both: {role_counts['both']})"
+    user_summary = f'(Applicants: {role_counts["applicant"]}, Interviewers: {role_counts["interviewer"]}, Both: {role_counts["both"]})'
     yield 100, f'Created {created_count} occupied timeslots {user_summary}'
