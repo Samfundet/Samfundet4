@@ -8,8 +8,7 @@ from root.utils import permissions as perm
 from samfundet.models.role import Role
 from samfundet.models.general import Gang, GangSection, Organization
 
-# from samfundet.models.recruitment import Recruitment
-
+# role name constants
 GANG_LEADER = 'gang_leader'
 VICE_GANG_LEADER = 'vice_gang_leader'
 SECTION_LEADER = 'section_leader'
@@ -23,6 +22,13 @@ STYRET = 'styret'
 RAADET = 'raadet'
 EVENT_MANAGER = 'event_manager'
 VENUE_MANAGER = 'venue_manager'
+
+# role level constans
+ORG_LEVEL = 'org'
+GANG_LEVEL = 'gang'
+GANGSECTION_LEVEL = 'section'
+
+
 # Define the base roles that will be used across all gangs
 BASIC_GANG_ROLES = {
     GANG_LEADER: {
@@ -99,6 +105,7 @@ BASIC_GANG_ROLES = {
 RECRUITMENT_ROLES = {
     # This perms combo would probably work for Samfundet, but not for UKA/ISFiT
     ORG_RECRUITMENT_MANAGER: {
+        'level': ORG_LEVEL,
         'permissions': [
             # recruitment
             perm.SAMFUNDET_VIEW_RECRUITMENT,
@@ -120,9 +127,10 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_VIEW_RECRUITMENTSEPARATEPOSITION,
             perm.SAMFUNDET_VIEW_RECRUITMENTSTATISTICS,
             perm.SAMFUNDET_VIEW_RECRUITMENTTIMESTAT,
-        ]
+        ],
     },
     GANG_RECRUITMENT_MANAGER: {
+        'level': GANG_LEVEL,
         'permissions': [
             # view permissions
             perm.SAMFUNDET_VIEW_RECRUITMENT,
@@ -141,9 +149,10 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_ADD_INTERVIEWROOM,
             perm.SAMFUNDET_CHANGE_INTERVIEWROOM,
             perm.SAMFUNDET_VIEW_INTERVIEWROOM,
-        ]
+        ],
     },
     SECTION_RECRUITMENT_MANAGER: {
+        'level': GANGSECTION_LEVEL,
         'permissions': [
             # recruitment
             perm.SAMFUNDET_VIEW_RECRUITMENT,
@@ -180,9 +189,10 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_DELETE_INTERVIEWROOM,
             perm.SAMFUNDET_CHANGE_INTERVIEWROOM,
             perm.SAMFUNDET_VIEW_INTERVIEWROOM,
-        ]
+        ],
     },
     SECTION_RECRUITMENT_INTERVIEWER: {
+        'level': 'section',
         'permissions': [
             # recruitment
             perm.SAMFUNDET_VIEW_RECRUITMENT,
@@ -197,7 +207,7 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_ADD_RECRUITMENTINTERVIEWAVAILABILITY,
             # interview room
             perm.SAMFUNDET_VIEW_INTERVIEWROOM,
-        ]
+        ],
     },
 }
 
@@ -402,33 +412,19 @@ def create_basic_gang_roles(gang_content_type):
 
 
 def create_recruitment_roles(gang_content_type, org_content_type, section_content_type):
-    """
-    This helper function creates: recruitment-specific roles at the appropriate levels
+    """Creates recruitment-specific roles at the appropriate levels"""
+    level_to_content_type = {ORG_LEVEL: org_content_type, GANG_LEVEL: gang_content_type, GANGSECTION_LEVEL: section_content_type}
 
-    Args:
-        gang_content_type: ContentType for Gang model
-        org_content_type: ContentType for Organization model
-        section_content_type: ContentType for GangSection model
-
-    Returns:
-        int: Number of created roles
-    """
     created_count = 0
-    # Create recruitment roles at appropriate levels
     for role_name, role_data in RECRUITMENT_ROLES.items():
-        content_type = None  # Default to None to catch unassigned cases
-        if role_name == ORG_RECRUITMENT_MANAGER:
-            content_type = org_content_type
-        elif role_name == GANG_RECRUITMENT_MANAGER:
-            content_type = gang_content_type
-        elif role_name in [SECTION_RECRUITMENT_MANAGER, SECTION_RECRUITMENT_INTERVIEWER]:
-            content_type = section_content_type
-
-        if content_type is None:
-            raise ValueError(f'Missing content type for role: {role_name}')
+        level = role_data.get('level')
+        content_type = level_to_content_type.get(level)
+        if not content_type:
+            raise ValueError(f'Invalid level for role {role_name}: {level}')
 
         create_role(name=role_name, permissions=role_data['permissions'], content_type=content_type)
         created_count += 1
+
     return created_count
 
 
@@ -456,7 +452,7 @@ def create_special_roles(org_content_type, gang_content_type, section_content_ty
             # Create the original REDAKSJONEN role at org level
             create_role(name=role_name + '_ORG', permissions=role_data['permissions'], content_type=org_content_type)
 
-            # Create a flexible, level-agnostic version with null content_type
+            # Create a flexible, level-agnostic version with content type equals null
             create_role(name=role_name + '_ANY', permissions=role_data['permissions'], content_type=None)
 
             # Create a gang-specific version
