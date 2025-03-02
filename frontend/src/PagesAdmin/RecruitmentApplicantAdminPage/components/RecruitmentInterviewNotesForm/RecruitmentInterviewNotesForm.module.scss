@@ -1,0 +1,11 @@
+.markdown {
+  background-color: white;
+}
+
+.textbox {
+  min-height: 100px; /* Set a minimum height */
+  width: 100%; /* Full width */
+  resize: vertical; /* Allow vertical resizing only */
+  box-sizing: border-box;
+  background-color: white;
+}
