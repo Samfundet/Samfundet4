@@ -633,7 +633,7 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
 
         # Instead of processing one by one, use list comprehensions to build role lists more efficiently
         # Prepare and create org roles in smaller batches to avoid memory issues
-        batch_size = 500
+        batch_size = 50
         total_org_roles_created = 0
         total_gang_roles_created = 0
         total_section_roles_created = 0
