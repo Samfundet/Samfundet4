@@ -44,7 +44,7 @@ class UserTypeData:
 
 
 # Define user types that are available for all organizations
-# These roles handle recruitment, events, and venues across all organizations
+# Roles across all organizations which handle recruitment, events, and venues
 UNIVERSAL_USER_TYPES = {
     'org_recruitment': UserTypeData(
         roles=[ORG_RECRUITMENT_MANAGER],
@@ -55,14 +55,14 @@ UNIVERSAL_USER_TYPES = {
     ),
     'gang_recruitment': UserTypeData(
         roles=[GANG_RECRUITMENT_MANAGER, SECTION_RECRUITMENT_INTERVIEWER],
-        name_pattern='{org}_{gang}_opptak',  # Include org for uniqueness
+        name_pattern='{org}_{gang}_opptak',
         title_nb='Opptaksansvarlig',
         title_en='Recruitment Manager',
         level='gang',
     ),
     'section_recruitment': UserTypeData(
         roles=[SECTION_RECRUITMENT_MANAGER],
-        name_pattern='{org}_{gang}_{section}_opptak',  # Full hierarchy in name
+        name_pattern='{org}_{gang}_{section}_opptak',
         title_nb='Opptaksansvarlig',
         title_en='Recruitment Manager',
         level='section',
@@ -230,30 +230,6 @@ def prepare_username_params(
     }
 
 
-class RoleCache:
-    """Cache for role objects to minimize database queries."""
-
-    def __init__(self):
-        self._roles = {}
-        self._initialized = False
-
-    def initialize(self):
-        """Load all roles into cache."""
-        if not self._initialized:
-            for role in Role.objects.all():
-                self._roles[role.name] = role
-            self._initialized = True
-
-    def get(self, role_name: str) -> Role | None:
-        """Get a role by name."""
-        self.initialize()
-        return self._roles.get(role_name)
-
-
-# Create a singleton role cache
-role_cache = RoleCache()
-
-
 def check_prerequisites() -> str | None:
     """
     Check if all prerequisites for seeding are met.
@@ -299,9 +275,9 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
         yield 0, prerequisite_error
         return
 
-    # Initialize role cache
-    role_cache.initialize()
-    yield 0, 'Role cache initialized'
+    # Preload all roles for efficient lookup
+    roles = {role.name: role for role in Role.objects.all()}
+    yield 0, f'Preloaded {len(roles)} roles'
 
     # Main transaction wrapper to speed up the entire process
     with transaction.atomic():
@@ -508,9 +484,9 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
         for i in range(0, len(org_roles_to_create), batch_size):
             batch = org_roles_to_create[i : i + batch_size]
             final_org_roles = [
-                UserOrgRole(user=username_to_user.get(username), role=role_cache.get(role_name), obj_id=org_id)
+                UserOrgRole(user=username_to_user.get(username), role=roles.get(role_name), obj_id=org_id)
                 for username, role_name, org_id in batch
-                if username_to_user.get(username) and role_cache.get(role_name)
+                if username_to_user.get(username) and roles.get(role_name)
             ]
 
             if final_org_roles:
@@ -526,9 +502,9 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
         for i in range(0, len(gang_roles_to_create), batch_size):
             batch = gang_roles_to_create[i : i + batch_size]
             final_gang_roles = [
-                UserGangRole(user=username_to_user.get(username), role=role_cache.get(role_name), obj_id=gang_id)
+                UserGangRole(user=username_to_user.get(username), role=roles.get(role_name), obj_id=gang_id)
                 for username, role_name, gang_id in batch
-                if username_to_user.get(username) and role_cache.get(role_name)
+                if username_to_user.get(username) and roles.get(role_name)
             ]
 
             if final_gang_roles:
@@ -544,9 +520,9 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
         for i in range(0, len(section_roles_to_create), batch_size):
             batch = section_roles_to_create[i : i + batch_size]
             final_section_roles = [
-                UserGangSectionRole(user=username_to_user.get(username), role=role_cache.get(role_name), obj_id=section_id)
+                UserGangSectionRole(user=username_to_user.get(username), role=roles.get(role_name), obj_id=section_id)
                 for username, role_name, section_id in batch
-                if username_to_user.get(username) and role_cache.get(role_name)
+                if username_to_user.get(username) and roles.get(role_name)
             ]
 
             if final_section_roles:
