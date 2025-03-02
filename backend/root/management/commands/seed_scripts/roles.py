@@ -27,52 +27,52 @@ VENUE_MANAGER = 'venue_manager'
 BASIC_GANG_ROLES = {
     GANG_LEADER: {
         'permissions': [
+            # permissions on the gang object
             perm.SAMFUNDET_VIEW_GANG,
             perm.SAMFUNDET_CHANGE_GANG,
+            # permissions on the gang section object
             perm.SAMFUNDET_VIEW_GANGSECTION,
             perm.SAMFUNDET_CHANGE_GANGSECTION,
             perm.SAMFUNDET_ADD_GANGSECTION,
-            perm.SAMFUNDET_DELETE_GANGSECTION,
-            perm.SAMFUNDET_VIEW_USER,
-            # org
+            # permission to manipulate a users organization role
             perm.SAMFUNDET_VIEW_USERORGROLE,
-            perm.SAMFUNDET_ADD_USERORGROLE,
-            perm.SAMFUNDET_CHANGE_USERORGROLE,
-            perm.SAMFUNDET_DELETE_USERORGROLE,
-            # gang
+            # permission to manipulate a users gang role
             perm.SAMFUNDET_VIEW_USERGANGROLE,
             perm.SAMFUNDET_ADD_USERGANGROLE,
             perm.SAMFUNDET_CHANGE_USERGANGROLE,
             perm.SAMFUNDET_DELETE_USERGANGROLE,
-            # section
+            # permission to view a section gang role
             perm.SAMFUNDET_VIEW_USERGANGSECTIONROLE,
-            perm.SAMFUNDET_ADD_USERGANGSECTIONROLE,
-            perm.SAMFUNDET_CHANGE_USERGANGSECTIONROLE,
-            perm.SAMFUNDET_DELETE_USERGANGSECTIONROLE,
-            # role
+            # permissions to view roles
             perm.SAMFUNDET_VIEW_ROLE,
         ]
     },
     VICE_GANG_LEADER: {
         'permissions': [
+            # permissions on the gang object
             perm.SAMFUNDET_VIEW_GANG,
+            # permissions on the gang section object
             perm.SAMFUNDET_VIEW_GANGSECTION,
             perm.SAMFUNDET_CHANGE_GANGSECTION,
             perm.SAMFUNDET_ADD_GANGSECTION,
-            perm.SAMFUNDET_DELETE_GANGSECTION,
-            perm.SAMFUNDET_VIEW_USER,
+            # permissions on the org
             perm.SAMFUNDET_VIEW_USERORGROLE,
+            # permissions on the gang role
             perm.SAMFUNDET_VIEW_USERGANGROLE,
+            # permissions on the section role
             perm.SAMFUNDET_VIEW_USERGANGSECTIONROLE,
-            # role
+            perm.SAMFUNDET_ADD_USERGANGSECTIONROLE,
+            perm.SAMFUNDET_CHANGE_USERGANGSECTIONROLE,
+            # permissions to view roles
             perm.SAMFUNDET_VIEW_ROLE,
         ]
     },
     SECTION_LEADER: {
         'permissions': [
+            # permissions for the gang section object
             perm.SAMFUNDET_VIEW_GANGSECTION,
             perm.SAMFUNDET_CHANGE_GANGSECTION,
-            perm.SAMFUNDET_VIEW_USER,
+            # permission to manipulate a users section role
             perm.SAMFUNDET_VIEW_USERGANGSECTIONROLE,
             perm.SAMFUNDET_ADD_USERGANGSECTIONROLE,
             perm.SAMFUNDET_CHANGE_USERGANGSECTIONROLE,
@@ -81,14 +81,23 @@ BASIC_GANG_ROLES = {
     },
     GANG_MEMBER: {
         'permissions': [
+            # permissions on the gang object
             perm.SAMFUNDET_VIEW_GANG,
+            # permissions on the gang section object
             perm.SAMFUNDET_VIEW_GANGSECTION,
+            # permissions on the org/gang/section role
+            perm.SAMFUNDET_VIEW_USERORGROLE,
+            perm.SAMFUNDET_VIEW_USERGANGROLE,
+            perm.SAMFUNDET_VIEW_USERGANGSECTIONROLE,
+            # permissions to view roles
+            perm.SAMFUNDET_VIEW_ROLE,
         ]
     },
 }
 
 # Special roles for recruitment
 RECRUITMENT_ROLES = {
+    # This perms combo would probably work for Samfundet, but not for UKA/ISFiT
     ORG_RECRUITMENT_MANAGER: {
         'permissions': [
             # recruitment
@@ -99,7 +108,6 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_VIEW_OCCUPIEDTIMESLOT,
             perm.SAMFUNDET_ADD_OCCUPIEDTIMESLOT,
             perm.SAMFUNDET_CHANGE_OCCUPIEDTIMESLOT,
-            perm.SAMFUNDET_DELETE_OCCUPIEDTIMESLOT,
             # view permissions
             perm.SAMFUNDET_VIEW_RECRUITMENTPOSITION,
             perm.SAMFUNDET_VIEW_INTERVIEW,
@@ -131,19 +139,22 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_VIEW_RECRUITMENTTIMESTAT,
             # interview room
             perm.SAMFUNDET_ADD_INTERVIEWROOM,
-            perm.SAMFUNDET_DELETE_INTERVIEWROOM,
             perm.SAMFUNDET_CHANGE_INTERVIEWROOM,
             perm.SAMFUNDET_VIEW_INTERVIEWROOM,
         ]
     },
     SECTION_RECRUITMENT_MANAGER: {
         'permissions': [
+            # recruitment
             perm.SAMFUNDET_VIEW_RECRUITMENT,
             # position
             perm.SAMFUNDET_VIEW_RECRUITMENTPOSITION,
             perm.SAMFUNDET_ADD_RECRUITMENTPOSITION,
             perm.SAMFUNDET_CHANGE_RECRUITMENTPOSITION,
-            perm.SAMFUNDET_DELETE_RECRUITMENTPOSITION,
+            # separate position
+            perm.SAMFUNDET_VIEW_RECRUITMENTSEPARATEPOSITION,
+            perm.SAMFUNDET_ADD_RECRUITMENTSEPARATEPOSITION,
+            perm.SAMFUNDET_CHANGE_RECRUITMENTSEPARATEPOSITION,
             # interview
             perm.SAMFUNDET_VIEW_INTERVIEW,
             perm.SAMFUNDET_ADD_INTERVIEW,
@@ -153,18 +164,13 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_ADD_RECRUITMENTAPPLICATION,
             perm.SAMFUNDET_CHANGE_RECRUITMENTAPPLICATION,
             # availability
-            perm.SAMFUNDET_VIEW_RECRUITMENTINTERVIEWAVAILABILITY,
+            ## perm.SAMFUNDET_ADD_RECRUITMENTINTERVIEWAVAILABILITY,
+            ## perm.SAMFUNDET_VIEW_RECRUITMENTINTERVIEWAVAILABILITY,
             # shared invterviews
-            perm.SAMFUNDET_ADD_RECRUITMENTINTERVIEWAVAILABILITY,
             perm.SAMFUNDET_VIEW_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP,
             perm.SAMFUNDET_ADD_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP,
             perm.SAMFUNDET_CHANGE_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP,
             perm.SAMFUNDET_DELETE_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP,
-            # separate position
-            perm.SAMFUNDET_VIEW_RECRUITMENTSEPARATEPOSITION,
-            perm.SAMFUNDET_ADD_RECRUITMENTSEPARATEPOSITION,
-            perm.SAMFUNDET_CHANGE_RECRUITMENTSEPARATEPOSITION,
-            perm.SAMFUNDET_DELETE_RECRUITMENTSEPARATEPOSITION,
             # stats
             perm.SAMFUNDET_VIEW_RECRUITMENTCAMPUSSTAT,
             perm.SAMFUNDET_VIEW_RECRUITMENTDATESTAT,
@@ -178,12 +184,18 @@ RECRUITMENT_ROLES = {
     },
     SECTION_RECRUITMENT_INTERVIEWER: {
         'permissions': [
+            # recruitment
+            perm.SAMFUNDET_VIEW_RECRUITMENT,
+            # position
+            perm.SAMFUNDET_VIEW_RECRUITMENTPOSITION,
+            # interview
             perm.SAMFUNDET_VIEW_INTERVIEW,
             perm.SAMFUNDET_CHANGE_INTERVIEW,
+            # availability
             perm.SAMFUNDET_VIEW_RECRUITMENTINTERVIEWAVAILABILITY,
             perm.SAMFUNDET_CHANGE_RECRUITMENTINTERVIEWAVAILABILITY,
             perm.SAMFUNDET_ADD_RECRUITMENTINTERVIEWAVAILABILITY,
-            perm.SAMFUNDET_DELETE_RECRUITMENTINTERVIEWAVAILABILITY,
+            # interview room
             perm.SAMFUNDET_VIEW_INTERVIEWROOM,
         ]
     },
@@ -192,8 +204,6 @@ RECRUITMENT_ROLES = {
 # Special roles for specific gangs
 SPECIAL_ROLES = {
     REDAKSJONEN: {
-        #      'gang': 'Markedsføringsgjengen',
-        #       'section': 'Redaksjonen',
         'permissions': [
             # blogg
             perm.SAMFUNDET_VIEW_BLOGPOST,
@@ -214,41 +224,30 @@ SPECIAL_ROLES = {
             perm.SAMFUNDET_ADD_EVENT,
             perm.SAMFUNDET_CHANGE_EVENT,
             perm.SAMFUNDET_VIEW_EVENT,
-            perm.SAMFUNDET_DELETE_EVENT,
             # event custom ticket
             perm.SAMFUNDET_ADD_EVENTCUSTOMTICKET,
             perm.SAMFUNDET_CHANGE_EVENTCUSTOMTICKET,
             perm.SAMFUNDET_VIEW_EVENTCUSTOMTICKET,
-            perm.SAMFUNDET_DELETE_EVENTCUSTOMTICKET,
-            # event group
+            # event-group
             perm.SAMFUNDET_ADD_EVENTGROUP,
             perm.SAMFUNDET_CHANGE_EVENTGROUP,
             perm.SAMFUNDET_VIEW_EVENTGROUP,
-            perm.SAMFUNDET_DELETE_EVENTGROUP,
             # event registration
             perm.SAMFUNDET_ADD_EVENTREGISTRATION,
             perm.SAMFUNDET_CHANGE_EVENTREGISTRATION,
             perm.SAMFUNDET_VIEW_EVENTREGISTRATION,
-            perm.SAMFUNDET_DELETE_EVENTREGISTRATION,
             # closed-period
             perm.SAMFUNDET_ADD_CLOSEDPERIOD,
             perm.SAMFUNDET_CHANGE_CLOSEDPERIOD,
             perm.SAMFUNDET_VIEW_CLOSEDPERIOD,
-            perm.SAMFUNDET_DELETE_CLOSEDPERIOD,
             # image
             perm.SAMFUNDET_ADD_IMAGE,
             perm.SAMFUNDET_CHANGE_IMAGE,
             perm.SAMFUNDET_VIEW_IMAGE,
-            perm.SAMFUNDET_DELETE_IMAGE,
             # tag
+            perm.SAMFUNDET_VIEW_TAG,
             perm.SAMFUNDET_ADD_TAG,
             perm.SAMFUNDET_CHANGE_TAG,
-            perm.SAMFUNDET_VIEW_TAG,
-            # gang
-            perm.SAMFUNDET_VIEW_GANG,
-            perm.SAMFUNDET_ADD_GANG,
-            perm.SAMFUNDET_DELETE_GANG,
-            perm.SAMFUNDET_CHANGE_GANG,
         ],
     },
     STYRET: {
@@ -272,27 +271,22 @@ SPECIAL_ROLES = {
             perm.SAMFUNDET_ADD_EVENT,
             perm.SAMFUNDET_CHANGE_EVENT,
             perm.SAMFUNDET_VIEW_EVENT,
-            perm.SAMFUNDET_DELETE_EVENT,
             # event custom ticket
             perm.SAMFUNDET_ADD_EVENTCUSTOMTICKET,
             perm.SAMFUNDET_CHANGE_EVENTCUSTOMTICKET,
             perm.SAMFUNDET_VIEW_EVENTCUSTOMTICKET,
-            perm.SAMFUNDET_DELETE_EVENTCUSTOMTICKET,
             # event group
             perm.SAMFUNDET_ADD_EVENTGROUP,
             perm.SAMFUNDET_CHANGE_EVENTGROUP,
             perm.SAMFUNDET_VIEW_EVENTGROUP,
-            perm.SAMFUNDET_DELETE_EVENTGROUP,
             # event registration
             perm.SAMFUNDET_ADD_EVENTREGISTRATION,
             perm.SAMFUNDET_CHANGE_EVENTREGISTRATION,
             perm.SAMFUNDET_VIEW_EVENTREGISTRATION,
-            perm.SAMFUNDET_DELETE_EVENTREGISTRATION,
             # image
             perm.SAMFUNDET_ADD_IMAGE,
             perm.SAMFUNDET_CHANGE_IMAGE,
             perm.SAMFUNDET_VIEW_IMAGE,
-            perm.SAMFUNDET_DELETE_IMAGE,
             # tag
             perm.SAMFUNDET_ADD_TAG,
             perm.SAMFUNDET_CHANGE_TAG,
@@ -300,7 +294,6 @@ SPECIAL_ROLES = {
             # saksdokument
             perm.SAMFUNDET_ADD_SAKSDOKUMENT,
             perm.SAMFUNDET_CHANGE_SAKSDOKUMENT,
-            perm.SAMFUNDET_DELETE_SAKSDOKUMENT,
             perm.SAMFUNDET_VIEW_SAKSDOKUMENT,
         ],
     },
@@ -319,7 +312,6 @@ SPECIAL_ROLES = {
             # saksdokument
             perm.SAMFUNDET_ADD_SAKSDOKUMENT,
             perm.SAMFUNDET_CHANGE_SAKSDOKUMENT,
-            perm.SAMFUNDET_DELETE_SAKSDOKUMENT,
             perm.SAMFUNDET_VIEW_SAKSDOKUMENT,
         ],
     },
@@ -334,22 +326,18 @@ SPECIAL_ROLES = {
             perm.SAMFUNDET_ADD_EVENTCUSTOMTICKET,
             perm.SAMFUNDET_CHANGE_EVENTCUSTOMTICKET,
             perm.SAMFUNDET_VIEW_EVENTCUSTOMTICKET,
-            perm.SAMFUNDET_DELETE_EVENTCUSTOMTICKET,
             # event group
             perm.SAMFUNDET_ADD_EVENTGROUP,
             perm.SAMFUNDET_CHANGE_EVENTGROUP,
             perm.SAMFUNDET_VIEW_EVENTGROUP,
-            perm.SAMFUNDET_DELETE_EVENTGROUP,
             # event registration
             perm.SAMFUNDET_ADD_EVENTREGISTRATION,
             perm.SAMFUNDET_CHANGE_EVENTREGISTRATION,
             perm.SAMFUNDET_VIEW_EVENTREGISTRATION,
-            perm.SAMFUNDET_DELETE_EVENTREGISTRATION,
             # image
             perm.SAMFUNDET_ADD_IMAGE,
             perm.SAMFUNDET_CHANGE_IMAGE,
             perm.SAMFUNDET_VIEW_IMAGE,
-            perm.SAMFUNDET_DELETE_IMAGE,
             # tag
             perm.SAMFUNDET_ADD_TAG,
             perm.SAMFUNDET_CHANGE_TAG,
@@ -361,7 +349,6 @@ SPECIAL_ROLES = {
             # menu
             perm.SAMFUNDET_ADD_MENU,
             perm.SAMFUNDET_CHANGE_MENU,
-            perm.SAMFUNDET_DELETE_MENU,
             perm.SAMFUNDET_VIEW_MENU,
             # menu item
             perm.SAMFUNDET_ADD_MENUITEM,
