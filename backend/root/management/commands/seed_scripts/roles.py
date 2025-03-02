@@ -208,7 +208,7 @@ RECRUITMENT_ROLES = {
     },
 }
 
-# Special roles for specific gangs
+# Special roles
 SPECIAL_ROLES = {
     REDAKSJONEN: {
         'permissions': [

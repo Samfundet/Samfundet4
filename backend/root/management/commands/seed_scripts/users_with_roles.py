@@ -171,6 +171,10 @@ SAMFUNDET_USER_TYPES = {
 }
 
 
+# This dictionary will track sequential numbers for each unique naminpattern
+sequential_counters = {}
+
+
 def generate_username(pattern: str, **kwargs) -> str:
     """
     Generate a unique username based on a pattern and parameters.
@@ -180,7 +184,7 @@ def generate_username(pattern: str, **kwargs) -> str:
         **kwargs: Values to substitute into the pattern
 
     Returns:
-        A formatted, sanitized username with added uniqueness
+        A formatted, sanitized username with added sequential number
     """
     # Format the username pattern with our parameters
     username = pattern.format(**kwargs).lower()
@@ -195,9 +199,24 @@ def generate_username(pattern: str, **kwargs) -> str:
     # Remove leading/trailing underscores
     username = username.strip('_')
 
-    # Add random number for uniqueness
-    random_number = random.randint(1, 999)
-    return f'{username}_{random_number}'
+    # Create a base pattern key for our counter (without the {number} part)
+    base_pattern = pattern.replace('{number}', '') if '{number}' in pattern else pattern
+
+    # Increment counter for this pattern
+    if base_pattern not in sequential_counters:
+        sequential_counters[base_pattern] = 1
+    else:
+        sequential_counters[base_pattern] += 1
+
+    # Use the sequential counter instead of random number
+    sequential_number = sequential_counters[base_pattern]
+
+    # For patterns with {number} placeholder, use that directly
+    if '{number}' in pattern and 'number' not in kwargs:
+        return username  # The {number} was already formatted into the username
+
+    # Otherwise append the sequential number
+    return f'{username}_{sequential_number}'
 
 
 def prepare_username_params(
@@ -221,12 +240,17 @@ def prepare_username_params(
         gang_identifier = gang.abbreviation if gang.abbreviation else gang.name_nb
 
     # Create username parameters and ensure all values are strings
-    return {
+    params = {
         'org': org.name.lower() if org else '',
         'gang': gang_identifier.lower() if gang_identifier else '',
         'section': section.name_nb.lower() if section else '',
-        'number': str(number if number is not None else random.randint(1, 999)),
     }
+
+    # Only add number if it was explicitly provided
+    if number is not None:
+        params['number'] = str(number)
+
+    return params
 
 
 def check_prerequisites() -> str | None:
