@@ -411,6 +411,112 @@ def prepare_all_universal_users(organizations, universal_user_types, gang_to_sec
     return all_users, org_roles, gang_roles, section_roles
 
 
+def prepare_samfundet_specific_users(
+    samfundet_org: Organization, samfundet_user_types: dict, all_campuses: list[Campus]
+) -> tuple[list[User], list[tuple[str, str, int]]]:
+    """
+    Prepare Samfundet-specific users with gang-specific roles like Styret and Rådet.
+
+    Args:
+        samfundet_org: The Samfundet organization object
+        samfundet_user_types: Dictionary of UserTypeData objects for Samfundet-specific roles
+        all_campuses: List of available Campus objects
+
+    Returns:
+        Tuple of (users_to_create, org_roles_to_create)
+    """
+    users_to_create = []
+    org_roles_to_create = []
+
+    # Handle roles for specific gangs (Styret, Rådet)
+    for type_key, type_data in samfundet_user_types.items():
+        if type_data.specific_gang:
+            for i in range(1, 6):  # Create 5 members for each
+                username_params = prepare_username_params(org=samfundet_org, number=i)
+                username = generate_username(type_data.name_pattern, **username_params)
+
+                # Create user
+                user = User(
+                    username=username,
+                    email=f'{username}@samfundet.no',
+                    password='!',  # Temporary unusable password
+                    first_name=type_data.title_nb,
+                    last_name=samfundet_org.name,
+                    is_superuser=False,
+                    campus=random.choice(all_campuses),
+                )
+                users_to_create.append(user)
+
+                # Store for later role assignment
+                org_roles_to_create.extend((username, role_name, samfundet_org.id) for role_name in type_data.roles)
+
+    return users_to_create, org_roles_to_create
+
+
+def prepare_redaksjonen_users(
+    samfundet_org: Organization, samfundet_user_types: dict, gang_to_sections: dict[int, list[GangSection]], all_campuses: list[Campus]
+) -> tuple[list[User], list[tuple[str, str, int]], list[tuple[str, str, int]], list[tuple[str, str, int]]]:
+    """
+    Prepare Redaksjonen-specific users with different level variant roles.
+
+    Args:
+        samfundet_org: The Samfundet organization object
+        samfundet_user_types: Dictionary of UserTypeData objects for Samfundet-specific roles
+        gang_to_sections: Dictionary mapping gang IDs to lists of GangSection objects
+        all_campuses: List of available Campus objects
+
+    Returns:
+        Tuple of (users_to_create, org_roles_to_create, gang_roles_to_create, section_roles_to_create)
+    """
+    users_to_create = []
+    org_roles_to_create = []
+    gang_roles_to_create = []
+    section_roles_to_create = []
+
+    try:
+        # Find the marketing gang
+        mg = next((g for g in samfundet_org.gangs.all() if g.name_nb == 'Markedsføringsgjengen'), None)
+        if not mg:
+            return users_to_create, org_roles_to_create, gang_roles_to_create, section_roles_to_create
+
+        # Find the editorial section
+        redaksjonen = next((s for s in gang_to_sections.get(mg.id, []) if s.name_nb == 'Redaksjonen'), None)
+        if not redaksjonen:
+            return users_to_create, org_roles_to_create, gang_roles_to_create, section_roles_to_create
+
+        # Process all redaksjonen role variants
+        for type_key, type_data in samfundet_user_types.items():
+            if type_key.startswith('redaksjonen_') and type_data.specific_section:
+                # Create users (2 per variant)
+                for i in range(1, 3):  # Create 2 members for each variant
+                    username_params = prepare_username_params(org=samfundet_org, gang=mg, section=redaksjonen, number=i)
+                    username = generate_username(type_data.name_pattern, **username_params)
+
+                    # Create user
+                    user = User(
+                        username=username,
+                        email=f'{username}@samfundet.no',
+                        password='!',  # Temporary unusable password
+                        first_name=type_data.title_nb,
+                        last_name=f'{mg.name_nb} - {redaksjonen.name_nb}',
+                        is_superuser=False,
+                        campus=random.choice(all_campuses),
+                    )
+                    users_to_create.append(user)
+
+                    # Assign role based on its level
+                    if type_data.level == 'org':
+                        org_roles_to_create.extend((username, role_name, samfundet_org.id) for role_name in type_data.roles)
+                    elif type_data.level == 'gang':
+                        gang_roles_to_create.extend((username, role_name, mg.id) for role_name in type_data.roles)
+                    elif type_data.level == 'section':
+                        section_roles_to_create.extend((username, role_name, redaksjonen.id) for role_name in type_data.roles)
+    except Exception as e:
+        print(f'Could not create Redaksjonen users: {str(e)}')
+
+    return users_to_create, org_roles_to_create, gang_roles_to_create, section_roles_to_create
+
+
 def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
     """
     Create users with roles for all organizations and Samfundet-specific roles.
@@ -474,69 +580,29 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
 
         yield 50, f'Preparing {len(users_to_create)} users'
 
-
-
         # Samfundet-specific roles
         samfundet_org = next((org for org in organizations if org.name == 'Samfundet'), None)
         if samfundet_org:
-            # Styret and Rådet roles
-            for type_key, type_data in SAMFUNDET_USER_TYPES.items():
-                if type_data.specific_gang:
-                    for i in range(1, 6):  # Create 5 members for each
-                        username_params = prepare_username_params(org=samfundet_org, number=i)
-                        username = generate_username(type_data.name_pattern, **username_params)
+            # Create Styret and Rådet roles
+            samfundet_users, samfundet_org_roles = prepare_samfundet_specific_users(
+                samfundet_org=samfundet_org, samfundet_user_types=SAMFUNDET_USER_TYPES, all_campuses=all_campuses
+            )
 
-                        # Create user
-                        user = User(
-                            username=username,
-                            email=f'{username}@samfundet.no',
-                            password='!',  # Temporary unusable password
-                            first_name=type_data.title_nb,
-                            last_name=samfundet_org.name,
-                            is_superuser=False,
-                            campus=random.choice(all_campuses),
-                        )
-                        users_to_create.append(user)
+            users_to_create.extend(samfundet_users)
+            org_roles_to_create.extend(samfundet_org_roles)
 
-                        # Store for later role assignment
-                        org_roles_to_create.extend((username, role_name, samfundet_org.id) for role_name in type_data.roles)
+            # Handle Redaksjonen variants
+            redaksjonen_users, redaksjonen_org_roles, redaksjonen_gang_roles, redaksjonen_section_roles = prepare_redaksjonen_users(
+                samfundet_org=samfundet_org,
+                samfundet_user_types=SAMFUNDET_USER_TYPES,
+                gang_to_sections=gang_to_sections,
+                all_campuses=all_campuses
+            )
 
-            # Handle all Redaksjonen variants
-            try:
-                mg = next((g for g in samfundet_org.gangs.all() if g.name_nb == 'Markedsføringsgjengen'), None)
-                if mg:
-                    redaksjonen = next((s for s in gang_to_sections.get(mg.id, []) if s.name_nb == 'Redaksjonen'), None)
-                    if redaksjonen:
-                        # Process all redaksjonen role variants
-                        for type_key, type_data in SAMFUNDET_USER_TYPES.items():
-                            if type_key.startswith('redaksjonen_') and type_data.specific_section:
-                                # Create users (2 per variant)
-                                for i in range(1, 3):  # Create 2 members for each variant
-                                    username_params = prepare_username_params(org=samfundet_org, gang=mg, section=redaksjonen, number=i)
-                                    username = generate_username(type_data.name_pattern, **username_params)
-
-                                    # Create user
-                                    user = User(
-                                        username=username,
-                                        email=f'{username}@samfundet.no',
-                                        password='!',  # Temporary unusable password
-                                        first_name=type_data.title_nb,
-                                        last_name=f'{mg.name_nb} - {redaksjonen.name_nb}',
-                                        is_superuser=False,
-                                        campus=random.choice(all_campuses),
-                                    )
-                                    users_to_create.append(user)
-
-                                    # Assign role based on its level
-                                    if type_data.level == 'org':
-                                        org_roles_to_create.extend((username, role_name, samfundet_org.id) for role_name in type_data.roles)
-                                    elif type_data.level == 'gang':
-                                        gang_roles_to_create.extend((username, role_name, mg.id) for role_name in type_data.roles)
-                                    elif type_data.level == 'section':
-                                        section_roles_to_create.extend((username, role_name, redaksjonen.id) for role_name in type_data.roles)
-            except Exception as e:
-                # Just print the error instead of logging it
-                print(f'Could not create Redaksjonen users: {str(e)}')
+            users_to_create.extend(redaksjonen_users)
+            org_roles_to_create.extend(redaksjonen_org_roles)
+            gang_roles_to_create.extend(redaksjonen_gang_roles)
+            section_roles_to_create.extend(redaksjonen_section_roles)
 
         yield 60, 'Bulk creating users'
 
