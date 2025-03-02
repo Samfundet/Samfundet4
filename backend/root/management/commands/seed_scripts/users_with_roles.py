@@ -12,6 +12,8 @@ from samfundet.models.general import Gang, User, Campus, GangSection, Organizati
 from .roles import (
     RAADET,
     STYRET,
+    ORG_LEVEL,
+    GANG_LEVEL,
     GANG_LEADER,
     GANG_MEMBER,
     REDAKSJONEN,
@@ -19,10 +21,11 @@ from .roles import (
     VENUE_MANAGER,
     SECTION_LEADER,
     VICE_GANG_LEADER,
+    GANGSECTION_LEVEL,
+    SECTION_INTERVIEWER,
     ORG_RECRUITMENT_MANAGER,
     GANG_RECRUITMENT_MANAGER,
     SECTION_RECRUITMENT_MANAGER,
-    SECTION_RECRUITMENT_INTERVIEWER,
 )
 
 
@@ -47,70 +50,71 @@ UNIVERSAL_USER_TYPES = {
         name_pattern='{org}_opptak',
         title_nb='Opptaksansvarlig',
         title_en='Recruitment Manager',
-        level='org',
+        level=ORG_LEVEL,
     ),
     'gang_recruitment': UserTypeData(
-        roles=[GANG_RECRUITMENT_MANAGER, SECTION_RECRUITMENT_INTERVIEWER],
+        roles=[GANG_RECRUITMENT_MANAGER],
         name_pattern='{org}_{gang}_opptak',
         title_nb='Opptaksansvarlig',
         title_en='Recruitment Manager',
-        level='gang',
+        level=GANG_LEVEL,
     ),
     'section_recruitment': UserTypeData(
-        roles=[SECTION_RECRUITMENT_MANAGER],
+        roles=[SECTION_RECRUITMENT_MANAGER, SECTION_INTERVIEWER],
         name_pattern='{org}_{gang}_{section}_opptak',
         title_nb='Opptaksansvarlig',
-        title_en='Recruitment Manager',
-        level='section',
+        title_en='Recruitment-Manager',
+        level=GANGSECTION_LEVEL,
+    ),
+    'section_recruitment_interviewer': UserTypeData(
+        roles=[SECTION_INTERVIEWER, GANG_MEMBER],
+        name_pattern='{org}_{gang}_{section}_interviewer',
+        title_nb='Intervjuer',
+        title_en='Interviewer',
+        level=GANGSECTION_LEVEL,
     ),
     'event_manager': UserTypeData(
         roles=[EVENT_MANAGER],
         name_pattern='{org}_{gang}_event',
         title_nb='Arrangementsansvarlig',
-        title_en='Event Manager',
-        level='gang',
+        title_en='Event-Manager',
+        level=GANG_LEVEL,
     ),
     'venue_manager': UserTypeData(
         roles=[VENUE_MANAGER],
         name_pattern='{org}_{gang}_venue',
         title_nb='Lokaleansvarlig',
-        title_en='Venue Manager',
-        level='gang',
+        title_en='Venue-Manager',
+        level=GANG_LEVEL,
     ),
     'gang_leader': UserTypeData(
         roles=[GANG_LEADER],
         name_pattern='{org}_{gang}_leader',
         title_nb='Gjengsjef',
-        title_en='Gang leader',
-        level='gang',
+        title_en='Gangleader',
+        level=GANG_LEVEL,
     ),
     'vice_gang_leader': UserTypeData(
         roles=[VICE_GANG_LEADER],
         name_pattern='{org}_{gang}_vice_leader',
         title_nb='Nestleder',
-        title_en='Vice gang leader',
-        level='gang',
+        title_en='Vice-gangleader',
+        level=GANG_LEVEL,
     ),
     'section_leader': UserTypeData(
         roles=[SECTION_LEADER],
         name_pattern='{org}_{gang}_{section}_section_leader',
         title_nb='Seksjonssjef',
-        title_en='Section leader',
-        level='section',
+        title_en='Sectionleader',
+        level=GANGSECTION_LEVEL,
     ),
-    'gang_recruitment_interviewer': UserTypeData(
-        roles=[SECTION_RECRUITMENT_INTERVIEWER, GANG_MEMBER],
-        name_pattern='{org}_{gang}_interviewer',
-        title_nb='Intervjuer',
-        title_en='Interviewer',
-        level='gang',
-    ),
+
     'gang_member': UserTypeData(
         roles=[GANG_MEMBER],
         name_pattern='{org}_{gang}_intern',
         title_nb='intern',
         title_en='intern',
-        level='gang',
+        level=GANG_LEVEL,
     ),
 }
 
@@ -296,7 +300,7 @@ def prepare_org_level_users(organizations, universal_user_types, all_campuses):
 
     for org in organizations:
         for type_data in universal_user_types.values():
-            if type_data.level == 'org':
+            if type_data.level == ORG_LEVEL:
                 username_params = prepare_username_params(org=org)
                 username = generate_username(type_data.name_pattern, **username_params)
 
@@ -329,7 +333,7 @@ def prepare_gang_level_users(organizations, universal_user_types, all_campuses):
     for org in organizations:
         for gang in list(org.gangs.all()):
             for type_data in universal_user_types.values():
-                if type_data.level == 'gang':
+                if type_data.level == GANG_LEVEL:
                     username_params = prepare_username_params(org=org, gang=gang)
                     username = generate_username(type_data.name_pattern, **username_params)
 
@@ -364,7 +368,7 @@ def prepare_section_level_users(organizations, universal_user_types, gang_to_sec
         for gang in list(org.gangs.all()):
             for section in gang_to_sections.get(gang.id, []):
                 for type_data in universal_user_types.values():
-                    if type_data.level == 'section':
+                    if type_data.level == GANGSECTION_LEVEL:
                         username_params = prepare_username_params(org=org, gang=gang, section=section)
                         username = generate_username(type_data.name_pattern, **username_params)
 
@@ -593,10 +597,7 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
 
             # Handle Redaksjonen variants
             redaksjonen_users, redaksjonen_org_roles, redaksjonen_gang_roles, redaksjonen_section_roles = prepare_redaksjonen_users(
-                samfundet_org=samfundet_org,
-                samfundet_user_types=SAMFUNDET_USER_TYPES,
-                gang_to_sections=gang_to_sections,
-                all_campuses=all_campuses
+                samfundet_org=samfundet_org, samfundet_user_types=SAMFUNDET_USER_TYPES, gang_to_sections=gang_to_sections, all_campuses=all_campuses
             )
 
             users_to_create.extend(redaksjonen_users)

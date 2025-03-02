@@ -16,7 +16,7 @@ GANG_MEMBER = 'gang_member'
 ORG_RECRUITMENT_MANAGER = 'org_recruitment_manager'
 GANG_RECRUITMENT_MANAGER = 'gang_recruitment_manager'
 SECTION_RECRUITMENT_MANAGER = 'section_recruitment_manager'
-SECTION_RECRUITMENT_INTERVIEWER = 'gang_recruitment_interviewer'
+SECTION_INTERVIEWER = 'section_interviewer'
 REDAKSJONEN = 'redaksjonen'
 STYRET = 'styret'
 RAADET = 'raadet'
@@ -172,9 +172,6 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_VIEW_RECRUITMENTAPPLICATION,
             perm.SAMFUNDET_ADD_RECRUITMENTAPPLICATION,
             perm.SAMFUNDET_CHANGE_RECRUITMENTAPPLICATION,
-            # availability
-            ## perm.SAMFUNDET_ADD_RECRUITMENTINTERVIEWAVAILABILITY,
-            ## perm.SAMFUNDET_VIEW_RECRUITMENTINTERVIEWAVAILABILITY,
             # shared invterviews
             perm.SAMFUNDET_VIEW_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP,
             perm.SAMFUNDET_ADD_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP,
@@ -191,8 +188,8 @@ RECRUITMENT_ROLES = {
             perm.SAMFUNDET_VIEW_INTERVIEWROOM,
         ],
     },
-    SECTION_RECRUITMENT_INTERVIEWER: {
-        'level': 'section',
+    SECTION_INTERVIEWER: {
+        'level': GANGSECTION_LEVEL,
         'permissions': [
             # recruitment
             perm.SAMFUNDET_VIEW_RECRUITMENT,
