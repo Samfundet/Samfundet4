@@ -517,7 +517,7 @@ def prepare_redaksjonen_users(  # noqa: C901
         for type_key, type_data in samfundet_user_types.items():
             if type_key.startswith('redaksjonen_') and type_data.specific_section:
                 # Create users (2 per variant)
-                for i in range(1, 3):  # Create 2 members for each variant
+                for i in range(1, 3):  # Create 2 members for each variant for editing and comparing
                     username_params = prepare_username_params(org=samfundet_org, gang=mg, section=redaksjonen, number=i)
                     username = generate_username(type_data.name_pattern, **username_params)
 
