@@ -410,8 +410,8 @@ def prepare_section_level_users(organizations, universal_user_types, gang_to_sec
                         # Store for later role assignment
                         section_roles_to_create.extend((username, role_name, section.id) for role_name in type_data.roles)
 
-                # Now, create 10 dedicated interviewer users for this section
-                for i in range(1, 11):  # Create 10 users numbered 1-10
+                # Now, create 9 dedicated interviewer users for this section
+                for i in range(1, 9):  # Create 9 users numbered 1-9 ( one will be added because section recruitment manager is an interviwer)
                     username_params = prepare_username_params(org=org, gang=gang, section=section, number=i)
                     interviewer_username = generate_username('{org}_{gang}_{section}_interviewer', **username_params)
 

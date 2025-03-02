@@ -56,7 +56,6 @@ Where:
 - {gang} - Gang abbreviation or name (e.g., "mg" for Markedsføringsgjengen)
 - {section} - Section name (e.g., "web")
 - {role} - Role identifier (e.g., "leader", "recruitmentmanager", "interviewer")
-- {random_number} - Random number (1-999) for uniqueness
 
 #### Organization level
 
@@ -75,6 +74,8 @@ Contains organization, gang, and role components
 Contains organization, gang, section, and role components
 
 `{org}_{gang}_{section}_sectionleader_1`
+
+There is generated 10 interviewer users for each section.
 
 
 ### User creation process
