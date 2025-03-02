@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import random
-import logging
 from dataclasses import dataclass
 from collections.abc import Generator
 
@@ -25,9 +24,6 @@ from .roles import (
     SECTION_RECRUITMENT_MANAGER,
     SECTION_RECRUITMENT_INTERVIEWER,
 )
-
-# Create a logger for this module
-logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -445,7 +441,8 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
                                     elif type_data.level == 'section':
                                         section_roles_to_create.extend((username, role_name, redaksjonen.id) for role_name in type_data.roles)
             except Exception as e:
-                logger.warning(f'Could not create Redaksjonen users: {str(e)}')
+                # Just print the error instead of logging it
+                print(f'Could not create Redaksjonen users: {str(e)}')
 
         yield 60, 'Bulk creating users'
 
