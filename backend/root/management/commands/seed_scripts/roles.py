@@ -449,11 +449,12 @@ def create_special_roles(org_content_type, gang_content_type, section_content_ty
     for role_name, role_data in SPECIAL_ROLES.items():
         # Create specific organization-level version for REDAKSJONEN
         if role_name == REDAKSJONEN:
-            # Create the original REDAKSJONEN role at org level
-            create_role(name=role_name + '_ORG', permissions=role_data['permissions'], content_type=org_content_type)
-
+            # TODO: figure out level-agnostic roles
             # Create a flexible, level-agnostic version with content type equals null
             create_role(name=role_name + '_ANY', permissions=role_data['permissions'], content_type=None)
+
+            # Create the original REDAKSJONEN role at org level
+            create_role(name=role_name + '_ORG', permissions=role_data['permissions'], content_type=org_content_type)
 
             # Create a gang-specific version
             create_role(name=role_name + '_GANG', permissions=role_data['permissions'], content_type=gang_content_type)
