@@ -1,6 +1,6 @@
 import { type ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { CrudButtons, Link, type Tab, TabView } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteRecruitmentSeparatePosition, getRecruitment, getRecruitmentGangs } from '~/api';
