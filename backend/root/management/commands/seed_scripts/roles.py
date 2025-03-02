@@ -10,18 +10,18 @@ from samfundet.models.general import Gang, GangSection, Organization
 
 # role name constants
 GANG_LEADER = 'gang_leader'
-VICE_GANG_LEADER = 'vice_gang_leader'
+VICE_GANG_LEADER = 'vice_gangleader'
 SECTION_LEADER = 'section_leader'
 GANG_MEMBER = 'gang_member'
-ORG_RECRUITMENT_MANAGER = 'org_recruitment_manager'
-GANG_RECRUITMENT_MANAGER = 'gang_recruitment_manager'
-SECTION_RECRUITMENT_MANAGER = 'section_recruitment_manager'
+ORG_RECRUITMENT_MANAGER = 'org_recruitmentmanager'
+GANG_RECRUITMENT_MANAGER = 'gang_recruitmentmanager'
+SECTION_RECRUITMENT_MANAGER = 'section_recruitmentmanager'
 SECTION_INTERVIEWER = 'section_interviewer'
 REDAKSJONEN = 'redaksjonen'
 STYRET = 'styret'
 RAADET = 'raadet'
-EVENT_MANAGER = 'event_manager'
-VENUE_MANAGER = 'venue_manager'
+EVENT_MANAGER = 'eventmanager'
+VENUE_MANAGER = 'venuemanager'
 
 # role level constans
 ORG_LEVEL = 'org'
