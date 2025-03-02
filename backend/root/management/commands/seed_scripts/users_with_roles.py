@@ -122,7 +122,7 @@ UNIVERSAL_USER_TYPES = {
 SAMFUNDET_USER_TYPES = {
     'redaksjonen_org': UserTypeData(
         roles=[REDAKSJONEN + '_ORG'],  # Original REDAKSJONEN role (org level)
-        name_pattern='mg_red_org_{number}',
+        name_pattern='mg_red_org',
         title_nb='Redaksjonsmedlem (Org)',
         title_en='Editorial Staff (Org)',
         level='org',
@@ -130,7 +130,7 @@ SAMFUNDET_USER_TYPES = {
     ),
     'redaksjonen_any': UserTypeData(
         roles=[REDAKSJONEN + '_ANY'],  # Level-agnostic version
-        name_pattern='mg_red_any_{number}',
+        name_pattern='mg_red_any',
         title_nb='Redaksjonsmedlem (Any)',
         title_en='Editorial Staff (Any)',
         level='org',  # Initial assignment at org level, but can be reassigned anywhere
@@ -138,7 +138,7 @@ SAMFUNDET_USER_TYPES = {
     ),
     'redaksjonen_gang': UserTypeData(
         roles=[REDAKSJONEN + '_GANG'],  # Gang-specific version
-        name_pattern='mg_red_gang_{number}',
+        name_pattern='mg_red_gang',
         title_nb='Redaksjonsmedlem (Gang)',
         title_en='Editorial Staff (Gang)',
         level='gang',
@@ -146,7 +146,7 @@ SAMFUNDET_USER_TYPES = {
     ),
     'redaksjonen_section': UserTypeData(
         roles=[REDAKSJONEN + '_SECTION'],  # Section-specific version
-        name_pattern='mg_red_section_{number}',
+        name_pattern='mg_red_section',
         title_nb='Redaksjonsmedlem (Section)',
         title_en='Editorial Staff (Section)',
         level='section',
@@ -154,7 +154,7 @@ SAMFUNDET_USER_TYPES = {
     ),
     'styret': UserTypeData(
         roles=[STYRET],
-        name_pattern='styret_{number}',
+        name_pattern='styret',
         title_nb='Styremedlem',
         title_en='Board Member',
         level='org',
@@ -162,7 +162,7 @@ SAMFUNDET_USER_TYPES = {
     ),
     'raadet': UserTypeData(
         roles=[RAADET],
-        name_pattern='raadet_{number}',
+        name_pattern='raadet',
         title_nb='Rådsmedlem',
         title_en='Council Member',
         level='org',
@@ -199,23 +199,24 @@ def generate_username(pattern: str, **kwargs) -> str:
     # Remove leading/trailing underscores
     username = username.strip('_')
 
-    # Create a base pattern key for our counter (without the {number} part)
-    base_pattern = pattern.replace('{number}', '') if '{number}' in pattern else pattern
+    # Create a more specific counter key that includes org, gang, and section info
+    # This makes the counter specific to each unique combination
+    org = kwargs.get('org', '')
+    gang = kwargs.get('gang', '')
+    section = kwargs.get('section', '')
 
-    # Increment counter for this pattern
-    if base_pattern not in sequential_counters:
-        sequential_counters[base_pattern] = 1
+    # Create a unique counter key based on the full context
+    counter_key = f'{pattern}_{org}_{gang}_{section}'
+
+    # Increment counter for this specific counter key
+    if counter_key not in sequential_counters:
+        sequential_counters[counter_key] = 1
     else:
-        sequential_counters[base_pattern] += 1
+        sequential_counters[counter_key] += 1
 
-    # Use the sequential counter instead of random number
-    sequential_number = sequential_counters[base_pattern]
+    # Use the sequential counter
+    sequential_number = sequential_counters[counter_key]
 
-    # For patterns with {number} placeholder, use that directly
-    if '{number}' in pattern and 'number' not in kwargs:
-        return username  # The {number} was already formatted into the username
-
-    # Otherwise append the sequential number
     return f'{username}_{sequential_number}'
 
 
