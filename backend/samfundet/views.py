@@ -43,7 +43,7 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 from root.utils.mixins import IsApplicationOwner, IsCreatorOnly
-from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM, SAMFUNDET_VIEW_RECRUITMENTAPPLICATION
+from root.utils.permissions import SAMFUNDET_CHANGE_RECRUITMENTAPPLICATION, SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM, SAMFUNDET_VIEW_RECRUITMENTAPPLICATION
 
 from samfundet.pagination import CustomPageNumberPagination
 
@@ -746,7 +746,7 @@ class RecruitmentAppicationViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationForApplicantSerializer
     queryset = RecruitmentApplication.objects.all()
-    
+
     def get_serializer_class(self):
         """Return different serializers based on the action."""
         if self.action == 'gang_applications':
@@ -842,6 +842,8 @@ class RecruitmentAppicationViewSet(ModelViewSet):
     @action(detail=True, methods=['put', 'get'], url_path='recruiter-withdraw', permission_classes=[IsAdminUser])
     def recruiter_withdraw(self, request: Request, pk: str) -> Response:
         application = get_object_or_404(RecruitmentApplication, pk=pk)
+        if not request.user.has_perm(SAMFUNDET_CHANGE_RECRUITMENTAPPLICATION, application):
+            raise PermissionDenied
         # Withdraw if user has application for position
         application.withdrawn = True
         application.save()
@@ -865,16 +867,19 @@ class RecruitmentAppicationViewSet(ModelViewSet):
         gang = get_object_or_404(Gang, id=gang_id)
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
 
-        applications = RecruitmentApplication.objects.filter(
-            recruitment_position__gang=gang,
-            recruitment=recruitment,
-        )
+        permitted_applications = [
+            applications
+            for applications in RecruitmentApplication.objects.filter(
+                recruitment_position__gang=gang,
+                recruitment=recruitment,
+            )
+            if request.user.has_perm(SAMFUNDET_VIEW_RECRUITMENTAPPLICATION, applications)
+        ]
 
-        # Check permissions for each application # TODO: figure this out
-        # applications = get_objects_for_user(user=request.user, perms=['view_recruitmentapplication'], klass=applications)
-
-        serializer = RecruitmentApplicationForGangSerializer(applications, many=True)
+        serializer = RecruitmentApplicationForGangSerializer(permitted_applications, many=True)
         return Response(serializer.data)
+    
+    
 
     # RecruitmentApplicationInterviewNotesView
     # RecruitmentApplicationForRecruitmentPositionView
