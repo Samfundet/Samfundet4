@@ -3,11 +3,31 @@ from __future__ import annotations
 from random import sample, randint, shuffle
 from collections import defaultdict
 
-from django.db import transaction
+from django.db import transaction  # type: ignore
 
 from samfundet.models.role import UserOrgRole, UserGangRole, UserGangSectionRole
 from samfundet.models.general import User
 from samfundet.models.recruitment import RecruitmentPosition, RecruitmentApplication
+
+
+def get_applicant_users():
+    """
+    getts users with no roles, and which are not superusers or staff
+
+    Returns: list of applicant users
+    """
+    # Get all users with roles (use separate queries and combine results)
+    users_with_org_roles = set(UserOrgRole.objects.values_list('user_id', flat=True))
+    users_with_gang_roles = set(UserGangRole.objects.values_list('user_id', flat=True))
+    users_with_section_roles = set(UserGangSectionRole.objects.values_list('user_id', flat=True))
+
+    # Combine all users with roles. These will be excluded.
+    users_with_roles = users_with_org_roles | users_with_gang_roles | users_with_section_roles
+
+    # Get all applicant users (created by applicant_users.py)
+    # We can identify them by checking if they're not staff, not superuser, and don't have roles
+    eligible_users = list(User.objects.filter(is_staff=False, is_superuser=False).exclude(id__in=users_with_roles))
+    return eligible_users
 
 
 def seed():  # noqa: C901
@@ -26,23 +46,13 @@ def seed():  # noqa: C901
     for position in positions:
         positions_by_recruitment[position.recruitment.id].append(position)
 
-    # Get all users with roles (use separate queries and combine results)
-    users_with_org_roles = set(UserOrgRole.objects.values_list('user_id', flat=True))
-    users_with_gang_roles = set(UserGangRole.objects.values_list('user_id', flat=True))
-    users_with_section_roles = set(UserGangSectionRole.objects.values_list('user_id', flat=True))
+    applicant_users = get_applicant_users()
 
-    # Combine all users with roles
-    users_with_roles = users_with_org_roles | users_with_gang_roles | users_with_section_roles
-
-    # Get all applicant users (created by applicant_users.py)
-    # We can identify them by checking if they're not staff, not superuser, and don't have roles
-    eligible_users = list(User.objects.filter(is_staff=False, is_superuser=False).exclude(id__in=users_with_roles))
-
-    if not eligible_users:
+    if not applicant_users:
         yield 100, 'No eligible users found, nothing to seed'
         return
 
-    yield 10, f'Found {len(eligible_users)} eligible users and {len(positions)} positions'
+    yield 10, f'Found {len(applicant_users)} eligible users and {len(positions)} positions'
 
     # Prepare applications in bulk
     applications_to_create = []
@@ -59,7 +69,7 @@ def seed():  # noqa: C901
         recruitment_count = len(positions_by_recruitment)
 
         # First pass: ensure each user has applications for at least one recruitment
-        for user_idx, user in enumerate(eligible_users):
+        for user_idx, user in enumerate(applicant_users):
             # Choose a random recruitment for this user
             if positions_by_recruitment:
                 recruitment_id = sample(list(positions_by_recruitment.keys()), 1)[0]
@@ -103,11 +113,11 @@ def seed():  # noqa: C901
 
             # User progress update (every 20 users)
             if user_idx % 20 == 0:
-                user_progress = user_idx / len(eligible_users)
-                yield 10 + (user_progress * 40), f'Processed {user_idx}/{len(eligible_users)} users (initial pass)'
+                user_progress = user_idx / len(applicant_users)
+                yield 10 + (user_progress * 40), f'Processed {user_idx}/{len(applicant_users)} users (initial pass)'
 
         # Second pass: add more applications for users who have fewer than 3
-        for user_idx, user in enumerate(eligible_users):
+        for user_idx, user in enumerate(applicant_users):
             # If user doesn't have at least 3 applications, add more
             while total_applications_per_user[user.id] < 3:
                 # Choose a random recruitment
@@ -157,11 +167,11 @@ def seed():  # noqa: C901
 
             # User progress update (every 20 users)
             if user_idx % 20 == 0:
-                user_progress = user_idx / len(eligible_users)
-                yield 50 + (user_progress * 20), f'Processed {user_idx}/{len(eligible_users)} users (second pass)'
+                user_progress = user_idx / len(applicant_users)
+                yield 50 + (user_progress * 20), f'Processed {user_idx}/{len(applicant_users)} users (second pass)'
 
         # Make sure priorities are consistent
-        for user_id, recruitments in user_applications_by_recruitment.items():
+        for recruitments in user_applications_by_recruitment.values():
             for recruitment_id, applications in recruitments.items():
                 # Sort applications by priority
                 applications.sort(key=lambda app: app.applicant_priority)
@@ -175,7 +185,7 @@ def seed():  # noqa: C901
 
         # Count users by application count for stats
         app_count_stats = defaultdict(int)
-        for user_id, count in total_applications_per_user.items():
+        for count in total_applications_per_user.values():
             app_count_stats[count] += 1
 
         stats_str = ', '.join([f'{count} apps: {users} users' for count, users in sorted(app_count_stats.items())])
