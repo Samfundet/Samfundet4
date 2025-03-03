@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from random import sample, randint
 from collections import defaultdict
-from collections.abc import Callable, Generator
-from typing import Any
+from collections.abc import Generator
 
 from django.db import transaction  # type: ignore
 
@@ -78,13 +77,13 @@ def create_application(position: RecruitmentPosition, user: User, recruitment_id
 
 
 def ensure_initial_applications(  # noqa: C901
-    applicant_users: list[User], positions_by_recruitment: dict[int, list[RecruitmentPosition]], yield_func: Callable[[float, str], Any]
-) -> tuple[list[RecruitmentApplication], dict[int, dict[int, list[RecruitmentApplication]]], dict[int, int]]:
+    applicant_users: list[User], positions_by_recruitment: dict[int, list[RecruitmentPosition]], *, track_progress: bool = False
+) -> tuple[list[RecruitmentApplication], dict[int, dict[int, list[RecruitmentApplication]]], dict[int, int], list[tuple[int, float, str]]]:
     """
     First pass: ensure each user has applications for at least one recruitment
 
     Returns:
-        Tuple of (applications_to_create, user_applications_by_recruitment, total_applications_per_user)
+        Tuple of (applications_to_create, user_applications_by_recruitment, total_applications_per_user, progress_points)
     """
     applications_to_create: list[RecruitmentApplication] = []
     # Track applications per user for each recruitment
@@ -92,6 +91,9 @@ def ensure_initial_applications(  # noqa: C901
     # Track total applications per user across all recruitments
     total_applications_per_user: defaultdict[int, int] = defaultdict(int)
     created_count = 0
+
+    # Instead of yielding, collect progress points that the seed function can yield
+    progress_points: list[tuple[int, float, str]] = []
 
     for user_idx, user in enumerate(applicant_users):
         # Choose a random recruitment for this user
@@ -123,11 +125,11 @@ def ensure_initial_applications(  # noqa: C901
                     created_count += 1
 
         # User progress update (every 20 users)
-        if user_idx % 20 == 0:
+        if track_progress and user_idx % 20 == 0:
             user_progress = user_idx / len(applicant_users)
-            yield_func(10 + (user_progress * 40), f'Processed {user_idx}/{len(applicant_users)} users (initial pass)')
+            progress_points.append((user_idx, 10 + (user_progress * 40), f'Processed {user_idx}/{len(applicant_users)} users (initial pass)'))
 
-    return applications_to_create, dict(user_applications_by_recruitment), dict(total_applications_per_user)
+    return applications_to_create, dict(user_applications_by_recruitment), dict(total_applications_per_user), progress_points
 
 
 def get_available_positions(
@@ -155,14 +157,18 @@ def ensure_minimum_applications(  # noqa: C901
     user_applications_by_recruitment: dict[int, dict[int, list[RecruitmentApplication]]],
     total_applications_per_user: dict[int, int],
     applications_to_create: list[RecruitmentApplication],
-    yield_func: Callable[[float, str], Any],
-) -> tuple[list[RecruitmentApplication], dict[int, int]]:
+    *,
+    track_progress: bool = False,
+) -> tuple[list[RecruitmentApplication], dict[int, int], list[tuple[int, float, str]]]:
     """
     Second pass: add more applications for users who have fewer than 3
 
     Returns:
-        Updated applications_to_create and total_applications_per_user
+        (applications_to_create, total_applications_per_user, progress_points)
     """
+    # Track progress points for the seed function to yield
+    progress_points: list[tuple[int, float, str]] = []
+
     for user_idx, user in enumerate(applicant_users):
         # If user doesn't have at least 3 applications, add more
         while total_applications_per_user[user.id] < 3:
@@ -202,12 +208,11 @@ def ensure_minimum_applications(  # noqa: C901
                 break
 
         # User progress update (every 20 users)
-        if user_idx % 20 == 0:
+        if track_progress and user_idx % 20 == 0:
             user_progress = user_idx / len(applicant_users)
-            # Changed: Use the yield_func callback instead of yielding directly
-            yield_func(50 + (user_progress * 20), f'Processed {user_idx}/{len(applicant_users)} users (second pass)')
+            progress_points.append((user_idx, 50 + (user_progress * 20), f'Processed {user_idx}/{len(applicant_users)} users (second pass)'))
 
-    return applications_to_create, total_applications_per_user
+    return applications_to_create, total_applications_per_user, progress_points
 
 
 def get_application_distribution(total_applications_per_user: dict[int, int]) -> str:
@@ -224,10 +229,17 @@ def get_application_distribution(total_applications_per_user: dict[int, int]) ->
     return ', '.join([f'{count} apps: {users} users' for count, users in sorted(app_count_stats.items())])
 
 
-def create_applications_in_batches(applications_to_create: list[RecruitmentApplication], yield_func: Generator) -> Generator[tuple[float, str], None, None]:
-    """Create applications in batches for better performance"""
+def create_applications_in_batches(applications_to_create: list[RecruitmentApplication]) -> list[tuple[int, float, str]]:
+    """
+    Create applications in batches for better performance
+
+    Returns:
+        List of progress points for the seed function to yield
+    """
+    progress_points: list[tuple[int, float, str]] = []
+
     if not applications_to_create:
-        return
+        return progress_points
 
     # Split into batches if there are many applications
     batch_size = 500
@@ -236,8 +248,9 @@ def create_applications_in_batches(applications_to_create: list[RecruitmentAppli
         RecruitmentApplication.objects.bulk_create(batch)
 
         progress = 75 + ((i + len(batch)) / len(applications_to_create) * 25)
-        next(yield_func)  # Call the generator to yield progress
-        yield progress, f'Created {i + len(batch)} of {len(applications_to_create)} applications'
+        progress_points.append((i, progress, f'Created {i + len(batch)} of {len(applications_to_create)} applications'))
+
+    return progress_points
 
 
 def calculate_success_stats(total_applications_per_user: dict[int, int]) -> tuple[int, int, float]:
@@ -254,7 +267,7 @@ def calculate_success_stats(total_applications_per_user: dict[int, int]) -> tupl
     return users_with_3_to_5, total_users, success_rate
 
 
-def seed() -> Generator[tuple[float, str], None, None]:
+def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
     """
     Seed recruitment applications
 
@@ -284,34 +297,39 @@ def seed() -> Generator[tuple[float, str], None, None]:
 
     # Use transaction for better performance
     with transaction.atomic():
-        # Create a generator to yield progress
-        def progress_generator():
-            while True:
-                yield
-
-        yield_func = progress_generator()
-
         # First pass: ensure each user has applications for at least one recruitment
-        applications_to_create, user_applications_by_recruitment, total_applications_per_user = ensure_initial_applications(
-            applicant_users=applicant_users, positions_by_recruitment=positions_by_recruitment, yield_func=yield_func
+        applications_to_create, user_applications_by_recruitment, total_applications_per_user, progress_points1 = ensure_initial_applications(
+            applicant_users=applicant_users, positions_by_recruitment=positions_by_recruitment, track_progress=True
         )
 
+        # Yield progress points from first pass
+        for _, progress, message in progress_points1:
+            yield progress, message
+
         # Second pass: add more applications for users who have fewer than 3
-        applications_to_create, total_applications_per_user = ensure_minimum_applications(
+        applications_to_create, total_applications_per_user, progress_points2 = ensure_minimum_applications(
             applicant_users=applicant_users,
             positions_by_recruitment=positions_by_recruitment,
             user_applications_by_recruitment=user_applications_by_recruitment,
             total_applications_per_user=total_applications_per_user,
             applications_to_create=applications_to_create,
-            yield_func=yield_func,
+            track_progress=True,
         )
+
+        # Yield progress points from second pass
+        for _, progress, message in progress_points2:
+            yield progress, message
 
         # Display application distribution stats
         stats_str = get_application_distribution(total_applications_per_user)
         yield 75, f'Application distribution: {stats_str}'
 
         # Create applications in batches
-        create_applications_in_batches(applications_to_create=applications_to_create, yield_func=yield_func)
+        progress_points3 = create_applications_in_batches(applications_to_create=applications_to_create)
+
+        # Yield progress points from batch creation
+        for _, progress, message in progress_points3:
+            yield progress, message
 
     # Calculate and display final statistics
     users_with_3_to_5, total_users, success_rate = calculate_success_stats(total_applications_per_user)
@@ -319,5 +337,5 @@ def seed() -> Generator[tuple[float, str], None, None]:
     created_count = len(applications_to_create)
     yield (
         100,
-        f'Created {created_count} recruitment_applications. {users_with_3_to_5}/{total_users} users ({success_rate:.1f}%) have 3-5 applications. All priorities are sequential (1, 2, 3...).',
+        f'Created {created_count} recruitment_applications. {users_with_3_to_5}/{total_users} users ({success_rate:.1f}%) have 3-5 applications.',
     )
