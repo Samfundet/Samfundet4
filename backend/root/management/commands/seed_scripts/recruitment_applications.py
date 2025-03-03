@@ -149,13 +149,13 @@ def get_available_positions(
     return [p for p in positions if p.id not in existing_position_ids]
 
 
-def ensure_minimum_applications(
+def ensure_minimum_applications(  # noqa: C901
     applicant_users: list[User],
     positions_by_recruitment: dict[int, list[RecruitmentPosition]],
     user_applications_by_recruitment: dict[int, dict[int, list[RecruitmentApplication]]],
     total_applications_per_user: dict[int, int],
     applications_to_create: list[RecruitmentApplication],
-    yield_func: Generator,
+    yield_func: Callable[[float, str], Any],
 ) -> tuple[list[RecruitmentApplication], dict[int, int]]:
     """
     Second pass: add more applications for users who have fewer than 3
@@ -204,8 +204,8 @@ def ensure_minimum_applications(
         # User progress update (every 20 users)
         if user_idx % 20 == 0:
             user_progress = user_idx / len(applicant_users)
-            next(yield_func)  # Call the generator to yield progress
-            yield 50 + (user_progress * 20), f'Processed {user_idx}/{len(applicant_users)} users (second pass)'
+            # Changed: Use the yield_func callback instead of yielding directly
+            yield_func(50 + (user_progress * 20), f'Processed {user_idx}/{len(applicant_users)} users (second pass)')
 
     return applications_to_create, total_applications_per_user
 
