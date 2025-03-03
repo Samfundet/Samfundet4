@@ -43,7 +43,7 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 from root.utils.mixins import IsApplicationOwner, IsCreatorOnly
-from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM
+from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM, SAMFUNDET_VIEW_RECRUITMENTAPPLICATION
 
 from samfundet.pagination import CustomPageNumberPagination
 
@@ -746,9 +746,16 @@ class RecruitmentAppicationViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationForApplicantSerializer
     queryset = RecruitmentApplication.objects.all()
+    
+    def get_serializer_class(self):
+        """Return different serializers based on the action."""
+        if self.action == 'gang_applications':
+            return RecruitmentApplicationForGangSerializer
+        return self.serializer_class
 
     # consolidate application views into one viewset with @actions
-
+    # [x] RecruitmentApplicationView
+    # [x] RecruitmentApplicationForApplicantView
     # ----------------------#
     #  Applicant logic      #
     # ----------------------#
@@ -820,8 +827,9 @@ class RecruitmentAppicationViewSet(ModelViewSet):
     def create(self, request: Request, *args, **kwargs) -> Response:
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    @action(detail=True, methods=['put', 'get'])
-    def applicant_withdraw(self, request:Request, pk:int) -> Response:
+    # [x] RecruitmentApplicationWithdrawApplicantView
+    @action(detail=True, methods=['put', 'get'], url_path='applicant-withdraw')
+    def applicant_withdraw(self, request: Request, pk: int) -> Response:
         # Checks if user has applied for position
         application = get_object_or_404(RecruitmentApplication, recruitment_position=pk, user=request.user)
         # Withdraw if applied
@@ -830,23 +838,48 @@ class RecruitmentAppicationViewSet(ModelViewSet):
         serializer = RecruitmentApplicationForApplicantSerializer(application)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=True, methods=['put', 'get'], permission_classes=[IsAdminUser])
-    def recruiter_withdraw(self, request: Request, pk:str) -> Response:
+    # [x] RecruitmentApplicationWithdrawRecruiterView
+    @action(detail=True, methods=['put', 'get'], url_path='recruiter-withdraw', permission_classes=[IsAdminUser])
+    def recruiter_withdraw(self, request: Request, pk: str) -> Response:
         application = get_object_or_404(RecruitmentApplication, pk=pk)
         # Withdraw if user has application for position
         application.withdrawn = True
         application.save()
         serializer = RecruitmentApplicationForApplicantSerializer(application)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    # [x] RecruitmentApplicationView
-    # [x] RecruitmentApplicationForApplicantView
-    # [x] RecruitmentApplicationWithdrawApplicantView
-    # [x] RecruitmentApplicationWithdrawRecruiterView
+
+    # [x] RecruitmentApplicationForGangView
+
+    @action(detail=False, methods=['get'], url_path='gang', permission_classes=[IsAuthenticated])
+    def gang_applications(self, request: Request) -> Response:
+        """Returns a list of all the applications for the specified gang."""
+        gang_id = request.query_params.get('gang')
+        recruitment_id = request.query_params.get('recruitment')
+
+        if not gang_id:
+            return Response({'error': 'A gang parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        gang = get_object_or_404(Gang, id=gang_id)
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        applications = RecruitmentApplication.objects.filter(
+            recruitment_position__gang=gang,
+            recruitment=recruitment,
+        )
+
+        # Check permissions for each application # TODO: figure this out
+        # applications = get_objects_for_user(user=request.user, perms=['view_recruitmentapplication'], klass=applications)
+
+        serializer = RecruitmentApplicationForGangSerializer(applications, many=True)
+        return Response(serializer.data)
 
     # RecruitmentApplicationInterviewNotesView
     # RecruitmentApplicationForRecruitmentPositionView
     # RecruitmentApplicationApplicantPriorityView
-    # RecruitmentApplicationForGangView
+
     # RecruitmentApplicationStateChoicesView
     # RecruitmentApplicationForGangUpdateStateView
     # RecruitmentApplicationForRecruitersView

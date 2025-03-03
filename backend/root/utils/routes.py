@@ -565,6 +565,7 @@ samfundet__recruitment_applications_for_position_detail = 'samfundet:recruitment
 samfundet__interview_list = 'samfundet:interview-list'
 samfundet__interview_detail = 'samfundet:interview-detail'
 samfundet__recruitment_application_list = 'samfundet:recruitment_application-list'
+samfundet__recruitment_application_gang_applications = 'samfundet:recruitment_application-gang-applications'
 samfundet__recruitment_application_detail = 'samfundet:recruitment_application-detail'
 samfundet__recruitment_application_applicant_withdraw = 'samfundet:recruitment_application-applicant-withdraw'
 samfundet__recruitment_application_recruiter_withdraw = 'samfundet:recruitment_application-recruiter-withdraw'
