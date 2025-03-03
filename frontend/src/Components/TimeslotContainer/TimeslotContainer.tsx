@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMouseDown } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -23,6 +23,17 @@ type TimeslotContainerProps = {
   application?: RecruitmentApplicationDto;
 };
 
+// Helper function to parse HH:MM string to minutes since midnight
+const parseTimeToMinutes = (timeStr: string): number => {
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  return hours * 60 + minutes;
+};
+
+// Helper function to check if two time ranges overlap
+const doTimeRangesOverlap = (startTime1: number, endTime1: number, startTime2: number, endTime2: number): boolean => {
+  return startTime1 < endTime2 && endTime1 > startTime2;
+};
+
 export function TimeslotContainer({
   selectedDate,
   timeslots,
@@ -39,122 +50,80 @@ export function TimeslotContainer({
   const [selectedTimeslot, setSelectedTimeslot] = useState<Record<string, string[]>>(props.selectedTimeslot || {});
   const disabledTimeslots = props.disabledTimeslots || {};
 
-  //FOR 1679 ISSUE
   const formattedDate = useMemo(() => (selectedDate ? formatDateYMD(selectedDate) : ''), [selectedDate]);
 
-  const interviewers_objects = application?.recruitment_position.interviewers;
-  const interviewers = application?.recruitment_position.interviewers?.map((interviewer) => interviewer.id); //henter intervjuer IDer
+  // Get interviewers from application data
+  const interviewers_objects = application?.recruitment_position.interviewers || [];
+  const interviewers = interviewers_objects.map((interviewer) => interviewer.id);
 
-  // console.log('Interviewers:', interviewers_objects);
-
-  // Fetch occupied timeslots
-  const { data, isLoading, isError } = useQuery({
+  // Fetch occupied timeslots for interviewers on the selected date
+  const { data: occupiedTimeslots, isLoading } = useQuery({
     queryKey: ['interviewerAvailability', recruitmentId, formattedDate, interviewers],
     queryFn: async () => {
-      const response = await getInterviewerAvailabilityOnDate(recruitmentId || 0, formattedDate, interviewers || []);
+      if (!recruitmentId || !formattedDate || !interviewers.length) {
+        return [];
+      }
+      const response = await getInterviewerAvailabilityOnDate(recruitmentId, formattedDate, interviewers);
       return response.data;
     },
-    enabled: !!(selectedDate && recruitmentId && (interviewers?.length ?? 0) > 0),
+    enabled: !!(selectedDate && recruitmentId && interviewers.length > 0),
   });
 
-  console.log('data', data);
+  // Map of available interviewers for each timeslot
+  const timeslotAvailabilityMap = useMemo(() => {
+    if (!timeslots || !interviewers_objects || !selectedDate || !occupiedTimeslots) {
+      return new Map();
+    }
 
-  // Helper function to check if a timeslot overlaps with an occupied period
+    const availabilityMap = new Map();
 
-  //working for all exept 23:00 and 23:30
-  const isTimeSlotOccupied = (timeslot: string, occupiedSlot: any) => {
-    // Convert timeslot string to Date objects for the selected date
-    const [hours, minutes] = timeslot.split(':').map(Number);
-    const slotStart = new Date(selectedDate!);
-    slotStart.setHours(hours + 1, minutes, 0, 0);
-    const slotEnd = new Date(slotStart);
-    slotEnd.setMinutes(slotEnd.getMinutes() + 30); // Assuming 30-minute slots
+    // For each timeslot, determine which interviewers are available
+    timeslots.forEach((timeslot) => {
+      const timeslotMinutes = parseTimeToMinutes(timeslot);
+      const timeslotEndMinutes = timeslotMinutes + 30; // Antar 30 min slots, kan og bør kanskje endres? om annet er mulig?
 
-    const occupiedStart = new Date(occupiedSlot.start_dt);
-    const occupiedEnd = new Date(occupiedSlot.end_dt);
+      // Find available interviewers for this timeslot by filtering out occupied interviewers
+      const availableInterviewers = interviewers_objects.filter((interviewer) => {
+        const isOccupied = occupiedTimeslots.some((slot) => {
+          if (slot.user !== interviewer.id) {
+            return false;
+          }
 
-    console.log();
+          const occupiedTimeMinutes = parseTimeToMinutes(slot.time);
 
-    return (
-      (slotStart >= occupiedStart && slotStart < occupiedEnd) || (slotEnd > occupiedStart && slotEnd <= occupiedEnd)
-    );
-  };
+          const occupiedEndMinutes = occupiedTimeMinutes + 30; // Antar 30 min slots på occupiedslots også
 
-  //MUST LOOK MORE AT THIS NEXT TIME! IF 23:00 AND 23:30 IS SET AS OCCUPIED TIMESLOTS, IT WILL NOT WORK
-  //Forsøk 1
-  // const isTimeSlotOccupied = (timeslot: string, occupiedSlot: any) => {
-  //   // Convert timeslot string to Date objects for the selected date
-  //   const [hours, minutes] = timeslot.split(':').map(Number);
-  //   const slotStart = new Date(selectedDate!);
-  //   slotStart.setHours(hours, minutes, 0, 0);
-  //   const slotEnd = new Date(slotStart);
-  //   slotEnd.setMinutes(slotEnd.getMinutes() + 30);
+          // Check for overlap
+          return doTimeRangesOverlap(timeslotMinutes, timeslotEndMinutes, occupiedTimeMinutes, occupiedEndMinutes);
+        });
 
-  //   // Parse the ISO strings while preserving the timezone offset
-  //   const occupiedStartLocal = new Date(occupiedSlot.start_dt.replace('+01:00', ''));
-  //   const occupiedEndLocal = new Date(occupiedSlot.end_dt.replace('+01:00', ''));
+        // Interviewer is available if not occupied
+        return !isOccupied;
+      });
 
-  //   console.log('Timeslot:', timeslot);
-  //   console.log('SlotStart:', slotStart.toISOString());
-  //   console.log('SlotEnd:', slotEnd.toISOString());
-  //   console.log('OccupiedStart:', occupiedStartLocal.toISOString());
-  //   console.log('OccupiedEnd:', occupiedEndLocal.toISOString());
-
-  //   const isOccupied =
-  //     (slotStart >= occupiedStartLocal && slotStart < occupiedEndLocal) ||
-  //     (slotEnd > occupiedStartLocal && slotEnd <= occupiedEndLocal);
-
-  //   console.log('Is Occupied:', isOccupied);
-  //   console.log('-------------------');
-
-  //   return isOccupied;
-  // };
-
-  //Forsøk 2
-  // const isTimeSlotOccupied = (timeslot: string, occupiedSlot: any) => {
-  //   // Convert timeslot string to Date objects for the selected date
-  //   const [hours, minutes] = timeslot.split(':').map(Number);
-  //   const slotStart = new Date(selectedDate!);
-  //   // Convert the local time to UTC+1 by adding 1 hour
-  //   slotStart.setHours(hours + 1, minutes, 0, 0);
-  //   const slotEnd = new Date(slotStart);
-  //   slotEnd.setMinutes(slotEnd.getMinutes() + 30);
-
-  //   // Parse the occupied slot times as they are (they're already in UTC+1)
-  //   const occupiedStart = new Date(occupiedSlot.start_dt);
-  //   const occupiedEnd = new Date(occupiedSlot.end_dt);
-
-  //   console.log('Timeslot:', timeslot);
-  //   console.log('SlotStart:', slotStart.toISOString());
-  //   console.log('SlotEnd:', slotEnd.toISOString());
-  //   console.log('OccupiedStart:', occupiedStart.toISOString());
-  //   console.log('OccupiedEnd:', occupiedEnd.toISOString());
-
-  //   const isOccupied =
-  //     (slotStart >= occupiedStart && slotStart < occupiedEnd) || (slotEnd > occupiedStart && slotEnd <= occupiedEnd);
-
-  //   console.log('Is Occupied:', isOccupied);
-  //   console.log('-------------------');
-
-  //   return isOccupied;
-  // };
-
-  // Get available interviewers for a specific timeslot
-  const getAvailableInterviewersForTimeslot = (timeslot: string) => {
-    if (!data || !interviewers_objects) return 'No interviewers available';
-
-    const availableInterviewers = interviewers_objects.filter((interviewer) => {
-      // Check if the interviewer has any conflicts for this specific timeslot
-      const hasConflict = data.some(
-        (occupiedSlot) => occupiedSlot.user === interviewer.id && isTimeSlotOccupied(timeslot, occupiedSlot),
-      );
-      return !hasConflict;
+      availabilityMap.set(timeslot, availableInterviewers);
     });
 
-    return availableInterviewers.length > 0
-      ? availableInterviewers.map((i) => `${i.first_name} ${i.last_name}`).join(', ')
-      : 'No interviewers available';
-  };
+    return availabilityMap;
+  }, [timeslots, interviewers_objects, selectedDate, occupiedTimeslots]);
+
+  // Format available interviewers for display in tooltip
+  const getAvailableInterviewersForTimeslot = useCallback(
+    (timeslot: string) => {
+      if (!selectedDate) return 'Select a date first';
+      if (isLoading) return 'Loading...';
+
+      const availableInterviewers = timeslotAvailabilityMap.get(timeslot);
+      if (!availableInterviewers) return 'No data available';
+
+      return availableInterviewers.length > 0
+        ? `Available: ${availableInterviewers
+            .map((i: { first_name: string; last_name: string }) => `${i.first_name} ${i.last_name}`)
+            .join(', ')}`
+        : 'No interviewers available';
+    },
+    [selectedDate, isLoading, timeslotAvailabilityMap],
+  );
 
   // Click & drag functionality
   const mouseDown = useMouseDown();
@@ -266,11 +235,6 @@ export function TimeslotContainer({
   if (!selectedDate) {
     return <div className={styles.container}>{lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_date)}`)}</div>;
   }
-
-  const occupiedInterviewerIds = data?.map((timeslot) => timeslot.user);
-  const availableInterviewers = application?.recruitment_position.interviewers?.filter(
-    (interviewer) => !(occupiedInterviewerIds ?? []).includes(interviewer.id),
-  );
 
   return (
     <div className={styles.container}>
