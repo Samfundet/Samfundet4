@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-from random import sample, randint
-from collections import defaultdict
 from collections.abc import Generator
-
 from django.db import transaction  # type: ignore
 
 from samfundet.models.role import UserOrgRole, UserGangRole, UserGangSectionRole
@@ -28,20 +25,10 @@ def get_applicant_users() -> list[User]:
     # Get all applicant users (created by applicant_users.py)
     # We can identify them by checking if they're not staff, not superuser, and don't have roles
     eligible_users = list(User.objects.filter(is_staff=False, is_superuser=False).exclude(id__in=users_with_roles))
+
+    # Sort users by ID to ensure consistent order
+    eligible_users.sort(key=lambda u: u.id)
     return eligible_users
-
-
-def group_positions_by_recruitment(positions: list[RecruitmentPosition]) -> dict[int, list[RecruitmentPosition]]:
-    """
-    Group positions by their recruitment ID for more realistic application behavior
-
-    Returns:
-        Dictionary mapping recruitment IDs to lists of positions
-    """
-    positions_by_recruitment = defaultdict(list)
-    for position in positions:
-        positions_by_recruitment[position.recruitment.id].append(position)
-    return positions_by_recruitment
 
 
 def generate_application_text(position: RecruitmentPosition) -> str:
@@ -52,7 +39,8 @@ def generate_application_text(position: RecruitmentPosition) -> str:
         Application text string
     """
     if position.tags:
-        return f"I'm interested in the {position.name_en} position because of my experience with {position.tags.split(',')[0]}"
+        tags = position.tags.split(',')
+        return f"I'm interested in the {position.name_en} position because of my experience with {tags[0]}"
     return "I'm interested in this position."
 
 
@@ -70,206 +58,15 @@ def create_application(position: RecruitmentPosition, user: User, recruitment_id
         recruitment_id=recruitment_id,
         user=user,
         application_text=application_text,
-        applicant_priority=priority,  # Priority starts from 1, not 0
+        applicant_priority=priority,
         recruiter_priority=0,
         recruiter_status=0,
     )
 
 
-def ensure_initial_applications(  # noqa: C901
-    applicant_users: list[User], positions_by_recruitment: dict[int, list[RecruitmentPosition]], *, track_progress: bool = False
-) -> tuple[list[RecruitmentApplication], dict[int, dict[int, list[RecruitmentApplication]]], dict[int, int], list[tuple[int, float, str]]]:
+def seed() -> Generator[tuple[float, str], None, None]:
     """
-    First pass: ensure each user has applications for at least one recruitment
-
-    Returns:
-        Tuple of (applications_to_create, user_applications_by_recruitment, total_applications_per_user, progress_points)
-    """
-    applications_to_create: list[RecruitmentApplication] = []
-    # Track applications per user for each recruitment
-    user_applications_by_recruitment: defaultdict[int, defaultdict[int, list[RecruitmentApplication]]] = defaultdict(lambda: defaultdict(list))
-    # Track total applications per user across all recruitments
-    total_applications_per_user: defaultdict[int, int] = defaultdict(int)
-    created_count = 0
-
-    # Instead of yielding, collect progress points that the seed function can yield
-    progress_points: list[tuple[int, float, str]] = []
-
-    for user_idx, user in enumerate(applicant_users):
-        # Choose a random recruitment for this user
-        if positions_by_recruitment:
-            recruitment_id = sample(list(positions_by_recruitment.keys()), 1)[0]
-            recruitment_positions = positions_by_recruitment[recruitment_id]
-
-            # Ensure user gets 3-5 positions for this recruitment
-            # (or all positions if fewer are available)
-            num_applications = min(randint(3, 5), len(recruitment_positions))
-
-            if num_applications > 0:
-                # Select random positions for this user
-                selected_positions = sample(recruitment_positions, num_applications)
-
-                # Create application objects with sequential priority (1, 2, 3...)
-                for i, position in enumerate(selected_positions):
-                    application = create_application(
-                        position=position,
-                        user=user,
-                        recruitment_id=recruitment_id,
-                        priority=i + 1,  # Start from 1, not 0
-                    )
-
-                    # Store for bulk creation and priority checking
-                    applications_to_create.append(application)
-                    user_applications_by_recruitment[user.id][recruitment_id].append(application)
-                    total_applications_per_user[user.id] += 1
-                    created_count += 1
-
-        # User progress update (every 20 users)
-        if track_progress and user_idx % 20 == 0:
-            user_progress = user_idx / len(applicant_users)
-            progress_points.append((user_idx, 10 + (user_progress * 40), f'Processed {user_idx}/{len(applicant_users)} users (initial pass)'))
-
-    return applications_to_create, dict(user_applications_by_recruitment), dict(total_applications_per_user), progress_points
-
-
-def get_available_positions(
-    user_id: int,
-    recruitment_id: int,
-    positions: list[RecruitmentPosition],
-    user_applications_by_recruitment: dict[int, dict[int, list[RecruitmentApplication]]],
-) -> list[RecruitmentPosition]:
-    """
-    Get positions that a user hasn't applied to yet in a specific recruitment
-
-    Returns:
-        List of available positions
-    """
-    # Get all position IDs this user has already applied to (across all recruitments)
-    existing_position_ids = {app.recruitment_position_id for apps in user_applications_by_recruitment[user_id].values() for app in apps}
-
-    # Filter out positions the user has already applied to
-    return [p for p in positions if p.id not in existing_position_ids]
-
-
-def ensure_minimum_applications(  # noqa: C901
-    applicant_users: list[User],
-    positions_by_recruitment: dict[int, list[RecruitmentPosition]],
-    user_applications_by_recruitment: dict[int, dict[int, list[RecruitmentApplication]]],
-    total_applications_per_user: dict[int, int],
-    applications_to_create: list[RecruitmentApplication],
-    *,
-    track_progress: bool = False,
-) -> tuple[list[RecruitmentApplication], dict[int, int], list[tuple[int, float, str]]]:
-    """
-    Second pass: add more applications for users who have fewer than 3
-
-    Returns:
-        (applications_to_create, total_applications_per_user, progress_points)
-    """
-    # Track progress points for the seed function to yield
-    progress_points: list[tuple[int, float, str]] = []
-
-    for user_idx, user in enumerate(applicant_users):
-        # If user doesn't have at least 3 applications, add more
-        while total_applications_per_user[user.id] < 3:
-            # Choose a random recruitment
-            if positions_by_recruitment:
-                recruitment_id = sample(list(positions_by_recruitment.keys()), 1)[0]
-                recruitment_positions = positions_by_recruitment[recruitment_id]
-
-                # Only consider positions the user hasn't applied to yet
-                available_positions = get_available_positions(
-                    user_id=user.id,
-                    recruitment_id=recruitment_id,
-                    positions=recruitment_positions,
-                    user_applications_by_recruitment=user_applications_by_recruitment,
-                )
-
-                if not available_positions:
-                    # If no positions left in this recruitment, try another one
-                    continue
-
-                # Add one more application
-                position = sample(available_positions, 1)[0]
-
-                # Get the next priority number for this user in this recruitment
-                # We want to continue the sequence (1, 2, 3...)
-                current_apps = user_applications_by_recruitment[user.id][recruitment_id]
-                next_priority = len(current_apps) + 1  # Start from 1
-
-                application = create_application(position=position, user=user, recruitment_id=recruitment_id, priority=next_priority)
-
-                # Store for bulk creation and tracking
-                applications_to_create.append(application)
-                user_applications_by_recruitment[user.id][recruitment_id].append(application)
-                total_applications_per_user[user.id] += 1
-            else:
-                # No recruitments available
-                break
-
-        # User progress update (every 20 users)
-        if track_progress and user_idx % 20 == 0:
-            user_progress = user_idx / len(applicant_users)
-            progress_points.append((user_idx, 50 + (user_progress * 20), f'Processed {user_idx}/{len(applicant_users)} users (second pass)'))
-
-    return applications_to_create, total_applications_per_user, progress_points
-
-
-def get_application_distribution(total_applications_per_user: dict[int, int]) -> str:
-    """
-    Generate a statistics string showing application distribution
-
-    Returns:
-        Formatted statistics string
-    """
-    app_count_stats: defaultdict[int, int] = defaultdict(int)
-    for count in total_applications_per_user.values():
-        app_count_stats[count] += 1
-
-    return ', '.join([f'{count} apps: {users} users' for count, users in sorted(app_count_stats.items())])
-
-
-def create_applications_in_batches(applications_to_create: list[RecruitmentApplication]) -> list[tuple[int, float, str]]:
-    """
-    Create applications in batches for better performance
-
-    Returns:
-        List of progress points for the seed function to yield
-    """
-    progress_points: list[tuple[int, float, str]] = []
-
-    if not applications_to_create:
-        return progress_points
-
-    # Split into batches if there are many applications
-    batch_size = 500
-    for i in range(0, len(applications_to_create), batch_size):
-        batch = applications_to_create[i : i + batch_size]
-        RecruitmentApplication.objects.bulk_create(batch)
-
-        progress = 75 + ((i + len(batch)) / len(applications_to_create) * 25)
-        progress_points.append((i, progress, f'Created {i + len(batch)} of {len(applications_to_create)} applications'))
-
-    return progress_points
-
-
-def calculate_success_stats(total_applications_per_user: dict[int, int]) -> tuple[int, int, float]:
-    """
-    Calculate statistics for the seeding process
-
-    Returns:
-        Tuple of (users_with_3_to_5, total_users, success_rate)
-    """
-    users_with_3_to_5 = sum(1 for count in total_applications_per_user.values() if 3 <= count <= 5)
-    total_users = len(total_applications_per_user)
-    success_rate = (users_with_3_to_5 / total_users * 100) if total_users > 0 else 0
-
-    return users_with_3_to_5, total_users, success_rate
-
-
-def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
-    """
-    Seed recruitment applications
+    Seed recruitment applications with deterministic behavior
 
     Yields:
         Tuples of (progress percentage, status message)
@@ -278,16 +75,27 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
     RecruitmentApplication.objects.all().delete()
     yield 0, 'Deleted old applications'
 
-    # Fetch all positions at once
+    # Fetch all positions and sort them by ID for consistency
     positions = list(RecruitmentPosition.objects.select_related('recruitment', 'gang').all())
     if not positions:
         yield 100, 'No positions found, nothing to seed'
         return
 
-    # Group positions by recruitment for more realistic application behavior
-    positions_by_recruitment = group_positions_by_recruitment(positions)
+    # Sort positions by ID for consistency
+    positions.sort(key=lambda p: p.id)
 
-    # Get eligible applicant users
+    # Organize positions by recruitment
+    positions_by_recruitment = {}
+    for position in positions:
+        recruitment_id = position.recruitment.id
+        if recruitment_id not in positions_by_recruitment:
+            positions_by_recruitment[recruitment_id] = []
+        positions_by_recruitment[recruitment_id].append(position)
+
+    # Sort recruitment IDs for consistency
+    recruitment_ids = sorted(positions_by_recruitment.keys())
+
+    # Get eligible applicant users (already sorted by ID)
     applicant_users = get_applicant_users()
     if not applicant_users:
         yield 100, 'No eligible users found, nothing to seed'
@@ -295,47 +103,61 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
 
     yield 10, f'Found {len(applicant_users)} eligible users and {len(positions)} positions'
 
+    applications_to_create = []
+    users_processed = 0
+
+    # Calculate total applications we'll create
+    # Each user will apply to exactly 3 positions
+    total_applications = len(applicant_users) * 3
+
     # Use transaction for better performance
     with transaction.atomic():
-        # First pass: ensure each user has applications for at least one recruitment
-        applications_to_create, user_applications_by_recruitment, total_applications_per_user, progress_points1 = ensure_initial_applications(
-            applicant_users=applicant_users, positions_by_recruitment=positions_by_recruitment, track_progress=True
-        )
+        # Distribute users evenly across recruitments
+        for i, user in enumerate(applicant_users):
+            # Determine which recruitment this user applies to (cycle through them)
+            recruitment_index = i % len(recruitment_ids)
+            recruitment_id = recruitment_ids[recruitment_index]
 
-        # Yield progress points from first pass
-        for _, progress, message in progress_points1:
-            yield progress, message
+            # Get positions for this recruitment
+            recruitment_positions = positions_by_recruitment[recruitment_id]
 
-        # Second pass: add more applications for users who have fewer than 3
-        applications_to_create, total_applications_per_user, progress_points2 = ensure_minimum_applications(
-            applicant_users=applicant_users,
-            positions_by_recruitment=positions_by_recruitment,
-            user_applications_by_recruitment=user_applications_by_recruitment,
-            total_applications_per_user=total_applications_per_user,
-            applications_to_create=applications_to_create,
-            track_progress=True,
-        )
+            # Each user applies to exactly 3 positions (or fewer if not enough positions)
+            num_applications = min(3, len(recruitment_positions))
 
-        # Yield progress points from second pass
-        for _, progress, message in progress_points2:
-            yield progress, message
+            # Choose positions deterministically based on user ID
+            for j in range(num_applications):
+                # Select position based on user ID (cycle through positions)
+                position_index = (i + j) % len(recruitment_positions)
+                position = recruitment_positions[position_index]
 
-        # Display application distribution stats
-        stats_str = get_application_distribution(total_applications_per_user)
-        yield 75, f'Application distribution: {stats_str}'
+                # Create application with sequential priority (1, 2, 3)
+                application = create_application(
+                    position=position,
+                    user=user,
+                    recruitment_id=recruitment_id,
+                    priority=j + 1,
+                )
 
-        # Create applications in batches
-        progress_points3 = create_applications_in_batches(applications_to_create=applications_to_create)
+                applications_to_create.append(application)
 
-        # Yield progress points from batch creation
-        for _, progress, message in progress_points3:
-            yield progress, message
+            users_processed += 1
+            if users_processed % 20 == 0:
+                progress = 10 + (users_processed / len(applicant_users) * 70)
+                yield progress, f'Processed {users_processed}/{len(applicant_users)} users'
 
-    # Calculate and display final statistics
-    users_with_3_to_5, total_users, success_rate = calculate_success_stats(total_applications_per_user)
+        # Create applications in batches for better performance
+        if applications_to_create:
+            # Split into batches if there are many applications
+            batch_size = 500
+            total_created = 0
 
-    created_count = len(applications_to_create)
-    yield (
-        100,
-        f'Created {created_count} recruitment_applications. {users_with_3_to_5}/{total_users} users ({success_rate:.1f}%) have 3-5 applications.',
-    )
+            for i in range(0, len(applications_to_create), batch_size):
+                batch = applications_to_create[i : i + batch_size]
+                RecruitmentApplication.objects.bulk_create(batch)
+
+                total_created += len(batch)
+                progress = 80 + (total_created / len(applications_to_create) * 20)
+                yield progress, f'Created {total_created} of {len(applications_to_create)} applications'
+
+    actual_created = RecruitmentApplication.objects.count()
+    yield 100, f'Created {actual_created} recruitment applications. Every user has exactly 3 applications (or fewer if not enough positions).'
