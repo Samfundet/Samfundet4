@@ -296,9 +296,10 @@ def create_user_from_type_data(type_data, username, first_name, last_name, all_c
     Returns:
         User object ready for creation
     """
+    number = random.randint(1, 9999)
     return User(
         username=username,
-        email=f'{username}@samfundet.no',
+        email=f'{username}{number}@samfundet.no',
         password='!',  # Temporary unusable password
         first_name=first_name,
         last_name=last_name,
