@@ -212,19 +212,19 @@ def ensure_minimum_applications(  # noqa: C901
 
 def get_application_distribution(total_applications_per_user: dict[int, int]) -> str:
     """
-    Generate a statistics string showing application distributio
+    Generate a statistics string showing application distribution
 
     Returns:
         Formatted statistics string
     """
-    app_count_stats = defaultdict(int)
+    app_count_stats: defaultdict[int, int] = defaultdict(int)
     for count in total_applications_per_user.values():
         app_count_stats[count] += 1
 
     return ', '.join([f'{count} apps: {users} users' for count, users in sorted(app_count_stats.items())])
 
 
-def create_applications_in_batches(applications_to_create: list[RecruitmentApplication], yield_func: Generator) -> None:
+def create_applications_in_batches(applications_to_create: list[RecruitmentApplication], yield_func: Generator) -> Generator[tuple[float, str], None, None]:
     """Create applications in batches for better performance"""
     if not applications_to_create:
         return
