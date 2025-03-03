@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Generator
+
 from django.db import transaction  # type: ignore
 
 from samfundet.models.role import UserOrgRole, UserGangRole, UserGangSectionRole
@@ -64,7 +65,7 @@ def create_application(position: RecruitmentPosition, user: User, recruitment_id
     )
 
 
-def seed() -> Generator[tuple[float, str], None, None]:
+def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
     """
     Seed recruitment applications with deterministic behavior
 
@@ -85,7 +86,7 @@ def seed() -> Generator[tuple[float, str], None, None]:
     positions.sort(key=lambda p: p.id)
 
     # Organize positions by recruitment
-    positions_by_recruitment = {}
+    positions_by_recruitment: dict[int, list[RecruitmentPosition]] = {}
     for position in positions:
         recruitment_id = position.recruitment.id
         if recruitment_id not in positions_by_recruitment:
@@ -106,9 +107,6 @@ def seed() -> Generator[tuple[float, str], None, None]:
     applications_to_create = []
     users_processed = 0
 
-    # Calculate total applications we'll create
-    # Each user will apply to exactly 3 positions
-    total_applications = len(applicant_users) * 3
 
     # Use transaction for better performance
     with transaction.atomic():
