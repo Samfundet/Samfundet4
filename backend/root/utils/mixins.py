@@ -6,6 +6,7 @@ import logging
 from typing import Any
 
 from rest_framework import serializers
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 from django.db import models
 from django.utils import timezone
@@ -282,3 +283,36 @@ class CustomBaseSerializer(FullCleanSerializer):
 
     def get_updated_by(self, obj: CustomBaseModel) -> str | None:
         return obj.updated_by.__str__() if obj.updated_by else None
+
+
+class IsCreatorOrReadOnly(BasePermission):
+    """
+    Object-level permission to only allow creators of an object to edit it.
+    Assumes the model instance has a `created_by` attribute from CustomBaseModel.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        if request.method in SAFE_METHODS:
+            return True
+        
+        # Instance must have an attribute named `created_by`.
+        return obj.created_by == request.user
+
+class IsCreatorOnly(BasePermission):
+    """
+    Object-level permission to only allow creators of an object to view or edit it.
+    Assumes the model instance has a `created_by` attribute from CustomBaseModel.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # Check if the user is authenticated and is the creator
+        return request.user.is_authenticated and obj.created_by == request.user
+
+class IsApplicationOwner(BasePermission):
+    """Permission to only allow the owner of an application to view or edit it."""
+    
+    def has_object_permission(self, request, view, obj):
+        # Compare IDs instead of the objects themselves
+        return request.user.is_authenticated and obj.user.id == request.user.id
