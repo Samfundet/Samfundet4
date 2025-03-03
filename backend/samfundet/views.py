@@ -42,6 +42,7 @@ from root.constants import (
     GITHUB_SIGNATURE_HEADER,
     REQUESTED_IMPERSONATE_USER,
 )
+from root.utils.mixins import IsApplicationOwner, IsCreatorOnly
 from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM
 
 from samfundet.pagination import CustomPageNumberPagination
@@ -742,20 +743,112 @@ class RecruitmentPositionView(ModelViewSet):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentAppicationViewSet(ModelViewSet):
-    # consolidate application
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentApplicationForApplicantSerializer
+    queryset = RecruitmentApplication.objects.all()
+
+    # consolidate application views into one viewset with @actions
+
+    # ----------------------#
+    #  Applicant logic      #
+    # ----------------------#
+    def update(self, request: Request, pk: int) -> Response:
+        data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
+        recruitment_position = get_object_or_404(RecruitmentPosition, pk=pk)
+        existing_application = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
+        # If update
+        if existing_application:
+            try:
+                existing_application.withdrawn = False
+                existing_application.application_text = data['application_text']
+                existing_application.save()
+                serializer = self.serializer_class(existing_application)
+                return Response(serializer.data, status.HTTP_200_OK)
+            except ValidationError as e:
+                return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
+
+        # If create
+        data['recruitment_position'] = recruitment_position.pk
+        data['recruitment'] = recruitment_position.recruitment.pk
+        data['user'] = request.user.pk
+        serializer = self.get_serializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request: Request, pk: int) -> Response:
+        application = get_object_or_404(RecruitmentApplication, user=request.user, recruitment_position=pk)
+
+        user_id = request.query_params.get('user_id')
+        if user_id:
+            # TODO: Add permissions
+            application = RecruitmentApplication.objects.filter(recruitment_position=pk, user_id=user_id).first()
+        serializer = self.get_serializer(application)
+        return Response(serializer.data)
+
+    def list(self, request: Request) -> Response:
+        """Returns a list of all the applications for a user for a specified recruitment"""
+        recruitment_id = request.query_params.get('recruitment')
+        user_id = request.query_params.get('user_id')
+
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        applications = RecruitmentApplication.objects.filter(
+            recruitment=recruitment,
+            user=request.user,
+        )
+
+        if user_id:
+            # TODO: Add permissions
+            applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user_id=user_id)
+        else:
+            applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user)
+
+        serializer = self.get_serializer(applications, many=True)
+        return Response(serializer.data)
+
+    def destroy(self, request: Request, *args, **kwargs) -> Response:
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def partial_update(self, request: Request, *args, **kwargs) -> Response:
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def create(self, request: Request, *args, **kwargs) -> Response:
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    @action(detail=True, methods=['put', 'get'])
+    def applicant_withdraw(self, request:Request, pk:int) -> Response:
+        # Checks if user has applied for position
+        application = get_object_or_404(RecruitmentApplication, recruitment_position=pk, user=request.user)
+        # Withdraw if applied
+        application.withdrawn = True
+        application.save()
+        serializer = RecruitmentApplicationForApplicantSerializer(application)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    # [x] RecruitmentApplicationForApplicantView
+    # [x] RecruitmentApplicationWithdrawApplicantView
     # RecruitmentApplicationView
     # RecruitmentApplicationInterviewNotesView
-    # RecruitmentApplicationWithdrawApplicantView
     # RecruitmentApplicationForRecruitmentPositionView
-    # RecruitmentApplicationWithdrawRecruiterView
     # RecruitmentApplicationWithdrawRecruiterView
     # RecruitmentApplicationApplicantPriorityView
     # RecruitmentApplicationForGangView
     # RecruitmentApplicationStateChoicesView
     # RecruitmentApplicationForGangUpdateStateView
-    # RecruitmentApplicationForRecruitmentPositionView
     # RecruitmentApplicationForRecruitersView
-    pass
+    # RecruitmentUnprocessedApplicationsPerRecruitment
+    # ApplicantsWithoutThreeInterviewsCriteriaView
+    # ApplicantsWithoutInterviewsView
+
+    # DownloadAllRecruitmentApplicationCSV
+    # DownloadRecruitmentApplicationGangCSV
+    # RecruitmentApplicationSetInterviewView --- might want this in a InterviewViewSet
+    # pass
+
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionForApplicantView(ModelViewSet):
@@ -770,13 +863,6 @@ class RecruitmentSeparatePositionView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentSeparatePositionSerializer
     queryset = RecruitmentSeparatePosition.objects.all()
-
-
-class RecruitmentApplicationView(ModelViewSet):
-    # consolidate application
-    permission_classes = [AllowAny]
-    serializer_class = RecruitmentApplicationForGangSerializer
-    queryset = RecruitmentApplication.objects.all()
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
@@ -1414,7 +1500,7 @@ class RecruitmentApplicationForRecruitersView(APIView):
 
     def get(self, request: Request, application_id: str) -> Response:
         application = get_object_or_404(RecruitmentApplication, id=application_id)
-       other_applications = RecruitmentApplication.objects.filter(user=application.user, recruitment=application.recruitment).order_by('applicant_priority')
+        other_applications = RecruitmentApplication.objects.filter(user=application.user, recruitment=application.recruitment).order_by('applicant_priority')
         return Response(
             data={
                 'application': RecruitmentApplicationForRecruiterSerializer(instance=application).data,
