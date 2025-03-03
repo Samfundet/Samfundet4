@@ -20,7 +20,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly, IsAdminUser
 
 from django.conf import settings
 from django.http import QueryDict, HttpResponse
@@ -829,12 +829,22 @@ class RecruitmentAppicationViewSet(ModelViewSet):
         application.save()
         serializer = RecruitmentApplicationForApplicantSerializer(application)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['put', 'get'], permission_classes=[IsAdminUser])
+    def recruiter_withdraw(self, request: Request, pk:str) -> Response:
+        application = get_object_or_404(RecruitmentApplication, pk=pk)
+        # Withdraw if user has application for position
+        application.withdrawn = True
+        application.save()
+        serializer = RecruitmentApplicationForApplicantSerializer(application)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    # [x] RecruitmentApplicationView
     # [x] RecruitmentApplicationForApplicantView
     # [x] RecruitmentApplicationWithdrawApplicantView
-    # RecruitmentApplicationView
+    # [x] RecruitmentApplicationWithdrawRecruiterView
+
     # RecruitmentApplicationInterviewNotesView
     # RecruitmentApplicationForRecruitmentPositionView
-    # RecruitmentApplicationWithdrawRecruiterView
     # RecruitmentApplicationApplicantPriorityView
     # RecruitmentApplicationForGangView
     # RecruitmentApplicationStateChoicesView
