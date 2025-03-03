@@ -107,7 +107,6 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
     applications_to_create = []
     users_processed = 0
 
-
     # Use transaction for better performance
     with transaction.atomic():
         # Distribute users evenly across recruitments
