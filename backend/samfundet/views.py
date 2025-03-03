@@ -734,13 +734,32 @@ class RecruitmentStatisticsView(ModelViewSet):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionView(ModelViewSet):
+    # consolidate position
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentPositionSerializer
     queryset = RecruitmentPosition.objects.all()
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentAppicationViewSet(ModelViewSet):
+    # consolidate application
+    # RecruitmentApplicationView
+    # RecruitmentApplicationInterviewNotesView
+    # RecruitmentApplicationWithdrawApplicantView
+    # RecruitmentApplicationForRecruitmentPositionView
+    # RecruitmentApplicationWithdrawRecruiterView
+    # RecruitmentApplicationWithdrawRecruiterView
+    # RecruitmentApplicationApplicantPriorityView
+    # RecruitmentApplicationForGangView
+    # RecruitmentApplicationStateChoicesView
+    # RecruitmentApplicationForGangUpdateStateView
+    # RecruitmentApplicationForRecruitmentPositionView
+    # RecruitmentApplicationForRecruitersView
+    pass
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionForApplicantView(ModelViewSet):
+    # consolidate position
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionForApplicantSerializer
     queryset = RecruitmentPosition.objects.all()
@@ -754,6 +773,7 @@ class RecruitmentSeparatePositionView(ModelViewSet):
 
 
 class RecruitmentApplicationView(ModelViewSet):
+    # consolidate application
     permission_classes = [AllowAny]
     serializer_class = RecruitmentApplicationForGangSerializer
     queryset = RecruitmentApplication.objects.all()
@@ -761,6 +781,7 @@ class RecruitmentApplicationView(ModelViewSet):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionsPerRecruitmentView(ListAPIView):
+    # consolidate position
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionSerializer
 
@@ -777,6 +798,7 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionsPerGangForApplicantView(ListAPIView):
+    # consoldate position
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionForApplicantSerializer
 
@@ -794,6 +816,7 @@ class RecruitmentPositionsPerGangForApplicantView(ListAPIView):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionsPerGangForGangView(ListAPIView):
+    # consolidate position
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentPositionSerializer
 
@@ -921,6 +944,7 @@ class ApplicantsWithoutInterviewsView(APIView):
 
 
 class RecruitmentApplicationForApplicantView(ModelViewSet):
+    # consolidate applcation
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationForApplicantSerializer
     queryset = RecruitmentApplication.objects.all()
@@ -986,6 +1010,7 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
 
 
 class RecruitmentApplicationInterviewNotesView(APIView):
+    # consolidate application
     permission_classes = [IsAuthenticated]
     serializer_class = InterviewSerializer
 
@@ -1000,6 +1025,7 @@ class RecruitmentApplicationInterviewNotesView(APIView):
 
 
 class RecruitmentApplicationWithdrawApplicantView(APIView):
+    # consolidate application
     permission_classes = [IsAuthenticated]
 
     def put(self, request: Request, pk: int) -> Response:
@@ -1013,6 +1039,7 @@ class RecruitmentApplicationWithdrawApplicantView(APIView):
 
 
 class RecruitmentApplicationWithdrawRecruiterView(APIView):
+    # consolidate application
     permission_classes = [IsAuthenticated]
 
     def put(self, request: Request, pk: str) -> Response:
@@ -1025,6 +1052,7 @@ class RecruitmentApplicationWithdrawRecruiterView(APIView):
 
 
 class RecruitmentApplicationApplicantPriorityView(APIView):
+    # consolidate application
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentUpdateUserPrioritySerializer
 
@@ -1082,6 +1110,7 @@ class RecruitmentApplicationSetInterviewView(APIView):
 
 
 class RecruitmentApplicationForGangView(ModelViewSet):
+    # consolidate application
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationForGangSerializer
     queryset = RecruitmentApplication.objects.all()
@@ -1115,6 +1144,7 @@ class RecruitmentApplicationForGangView(ModelViewSet):
 
 
 class RecruitmentApplicationStateChoicesView(APIView):
+    # consolidate application
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
@@ -1124,6 +1154,7 @@ class RecruitmentApplicationStateChoicesView(APIView):
 
 
 class RecruitmentApplicationForGangUpdateStateView(APIView):
+    # consolidate application
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationUpdateForGangSerializer
 
@@ -1160,6 +1191,7 @@ class RecruitmentPositionOrganizedApplicationsView(APIView):
 
 
 class RecruitmentApplicationForPositionUpdateStateView(APIView):
+    # consolidate position
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationUpdateForGangSerializer
 
@@ -1182,6 +1214,7 @@ class RecruitmentApplicationForPositionUpdateStateView(APIView):
 
 
 class RecruitmentApplicationForRecruitmentPositionView(ModelViewSet):
+    # consolidate application
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationForGangSerializer
     queryset = RecruitmentApplication.objects.all()
@@ -1205,6 +1238,7 @@ class RecruitmentApplicationForRecruitmentPositionView(ModelViewSet):
 
 
 class ActiveRecruitmentPositionsView(ListAPIView):
+    # consolidate position
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionForApplicantSerializer
 
@@ -1375,11 +1409,12 @@ class InterviewRoomView(ModelViewSet):
 
 
 class RecruitmentApplicationForRecruitersView(APIView):
+    # consolidate application
     permission_classes = [IsAuthenticated]  # TODO correct perms
 
     def get(self, request: Request, application_id: str) -> Response:
         application = get_object_or_404(RecruitmentApplication, id=application_id)
-        other_applications = RecruitmentApplication.objects.filter(user=application.user, recruitment=application.recruitment).order_by('applicant_priority')
+       other_applications = RecruitmentApplication.objects.filter(user=application.user, recruitment=application.recruitment).order_by('applicant_priority')
         return Response(
             data={
                 'application': RecruitmentApplicationForRecruiterSerializer(instance=application).data,
