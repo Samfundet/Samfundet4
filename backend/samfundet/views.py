@@ -43,7 +43,13 @@ from root.constants import (
     REQUESTED_IMPERSONATE_USER,
 )
 from root.utils.mixins import IsApplicationOwner, IsCreatorOnly
-from root.utils.permissions import SAMFUNDET_CHANGE_RECRUITMENTAPPLICATION, SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM, SAMFUNDET_VIEW_RECRUITMENTAPPLICATION
+from root.utils.permissions import (
+    SAMFUNDET_CHANGE_RECRUITMENTAPPLICATION,
+    SAMFUNDET_DELETE_RECRUITMENTAPPLICATION,
+    SAMFUNDET_VIEW_INTERVIEW,
+    SAMFUNDET_VIEW_INTERVIEWROOM,
+    SAMFUNDET_VIEW_RECRUITMENTAPPLICATION,
+)
 
 from samfundet.pagination import CustomPageNumberPagination
 
@@ -117,6 +123,7 @@ from .models.event import (
     PurchaseFeedbackAlternative,
 )
 from .models.general import (
+    GangSection,
     Tag,
     Gang,
     Menu,
@@ -839,20 +846,37 @@ class RecruitmentAppicationViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # [x] RecruitmentApplicationWithdrawRecruiterView
-    @action(detail=True, methods=['put', 'get'], url_path='recruiter-withdraw', permission_classes=[IsAdminUser])
-    def recruiter_withdraw(self, request: Request, pk: str) -> Response:
-        application = get_object_or_404(RecruitmentApplication, pk=pk)
-        if not request.user.has_perm(SAMFUNDET_CHANGE_RECRUITMENTAPPLICATION, application):
+
+
+    @action(detail=False, methods=['put', 'get'], url_path='recruiter-withdraw', permission_classes=[IsAuthenticated])
+    def recruiter_withdraw(self, request: Request) -> Response:
+        """
+        Withdraw an application as a recruiter.
+        Only accessible to users with the proper permission to change the application.
+
+        Takes application ID as a query parameter: ?application=<uuid>
+        """
+        application_id = request.query_params.get('application')
+        if not application_id:
+            return Response({'error': 'Application ID is required as a query parameter'}, status=status.HTTP_400_BAD_REQUEST)
+
+        application = get_object_or_404(RecruitmentApplication, pk=application_id)
+
+        # Check if user has permission to delete
+        if not request.user.has_perm(SAMFUNDET_DELETE_RECRUITMENTAPPLICATION, application):
             raise PermissionDenied
-        # Withdraw if user has application for position
+
+        # Withdraw the application
         application.withdrawn = True
         application.save()
-        serializer = RecruitmentApplicationForApplicantSerializer(application)
+
+        # Return the updated application
+        serializer = RecruitmentApplicationForGangSerializer(application)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # [x] RecruitmentApplicationForGangView
 
-    @action(detail=False, methods=['get'], url_path='gang', permission_classes=[IsAuthenticated])
+    @action(detail=False, methods=['get'], url_path='for-gang', permission_classes=[IsAuthenticated])
     def gang_applications(self, request: Request) -> Response:
         """Returns a list of all the applications for the specified gang."""
         gang_id = request.query_params.get('gang')
@@ -867,34 +891,69 @@ class RecruitmentAppicationViewSet(ModelViewSet):
         gang = get_object_or_404(Gang, id=gang_id)
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
 
-        permitted_applications = [
-            applications
-            for applications in RecruitmentApplication.objects.filter(
-                recruitment_position__gang=gang,
-                recruitment=recruitment,
-            )
-            if request.user.has_perm(SAMFUNDET_VIEW_RECRUITMENTAPPLICATION, applications)
-        ]
+        # permitted_applications = [
+        #    applications
+        #    for applications in RecruitmentApplication.objects.filter(
+        #        recruitment_position__gang=gang,
+        #        recruitment=recruitment,
+        #    )
+        #    if request.user.has_perm(SAMFUNDET_VIEW_RECRUITMENTAPPLICATION, applications)
+        #
+        # ]
+
+        applications = RecruitmentApplication.objects.filter(
+            recruitment_position__gang=gang,
+            recruitment=recruitment,
+        )
+
+        permitted_applications = get_objects_for_user(user=request.user, perms=[SAMFUNDET_VIEW_RECRUITMENTAPPLICATION], klass=applications)
 
         serializer = RecruitmentApplicationForGangSerializer(permitted_applications, many=True)
         return Response(serializer.data)
-    
-    
 
-    # RecruitmentApplicationInterviewNotesView
-    # RecruitmentApplicationForRecruitmentPositionView
-    # RecruitmentApplicationApplicantPriorityView
+    # [ ] RecruitmentApplicationForRecruitmentPositionView -- NEVER USED --> make for section
+    @action(detail=False, methods=['get'], url_path='for-section', permission_classes=[IsAuthenticated])
+    def for_section(self, request: Request) -> Response:
+        """Returns a list of all the applications for the specified section."""
+        recruitment_id = request.query_params.get('recruitment')
+        section_id = request.query_params.get('section')
 
-    # RecruitmentApplicationStateChoicesView
-    # RecruitmentApplicationForGangUpdateStateView
-    # RecruitmentApplicationForRecruitersView
-    # RecruitmentUnprocessedApplicationsPerRecruitment
-    # ApplicantsWithoutThreeInterviewsCriteriaView
-    # ApplicantsWithoutInterviewsView
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-    # DownloadAllRecruitmentApplicationCSV
-    # DownloadRecruitmentApplicationGangCSV
-    # RecruitmentApplicationSetInterviewView --- might want this in a InterviewViewSet
+        if not section_id:
+            return Response({'error': 'A section parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        section = get_object_or_404(GangSection, id=section_id)
+
+        # Here we're assuming there's a GangSection model that the recruitment_position references
+        applications = RecruitmentApplication.objects.filter(
+            recruitment=recruitment,
+            recruitment_position__section=section,
+        )
+
+        # Check permissions for each application
+        applications = get_objects_for_user(user=request.user, perms=[SAMFUNDET_VIEW_RECRUITMENTAPPLICATION], klass=applications)
+
+        serializer = self.get_serializer(applications, many=True)
+        return Response(serializer.data)
+
+    # [ ] RecruitmentApplicationForGangUpdateStateView
+    # [ ] RecruitmentApplicationForRecruitersView
+    # [ ] RecruitmentApplicationStateChoicesView
+
+    # [ ] RecruitmentApplicationInterviewNotesView
+    # [ ] RecruitmentApplicationApplicantPriorityView
+
+    # [ ] RecruitmentUnprocessedApplicationsPerRecruitment
+    # [ ] ApplicantsWithoutThreeInterviewsCriteriaView
+    # [ ] ApplicantsWithoutInterviewsView
+
+    # [ ] DownloadAllRecruitmentApplicationCSV
+    # [ ] DownloadRecruitmentApplicationGangCSV
+
+    # [ ] RecruitmentApplicationSetInterviewView --- might want this in a InterviewViewSet
     # pass
 
 
