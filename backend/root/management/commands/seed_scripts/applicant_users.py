@@ -146,7 +146,7 @@ def generate_applicant_username(first_name: str, last_name: str) -> str:
     return f'{first_part}{last_part}{number}'
 
 
-def generate_applicant_data() -> Tuple[str, str, str]:
+def generate_applicant_data() -> tuple[str, str, str]:
     """
     Generate random applicant data.
 
@@ -160,7 +160,7 @@ def generate_applicant_data() -> Tuple[str, str, str]:
     return username, first_name, last_name
 
 
-def create_batch_of_applicants(count: int, campuses: List[Campus]) -> List[User]:
+def create_batch_of_applicants(count: int, campuses: list[Campus]) -> list[User]:
     """
     Create a batch of applicant users.
 
