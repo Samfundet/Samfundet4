@@ -42,12 +42,13 @@ from root.constants import (
     GITHUB_SIGNATURE_HEADER,
     REQUESTED_IMPERSONATE_USER,
 )
-from root.utils.mixins import IsApplicationOwner, IsCreatorOnly
+from root.utils.permission_mixins import IsApplicationOwner, IsCreatorOnly, IsIntern
 from root.utils.permissions import (
     SAMFUNDET_CHANGE_RECRUITMENTAPPLICATION,
     SAMFUNDET_DELETE_RECRUITMENTAPPLICATION,
     SAMFUNDET_VIEW_INTERVIEW,
     SAMFUNDET_VIEW_INTERVIEWROOM,
+    SAMFUNDET_VIEW_RECRUITMENT,
     SAMFUNDET_VIEW_RECRUITMENTAPPLICATION,
 )
 
@@ -163,7 +164,7 @@ from .models.recruitment import (
     RecruitmentInterviewAvailability,
     RecruitmentPositionSharedInterviewGroup,
 )
-from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+from .models.model_choices import RecruitmentApplicantStates, RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 # =============================== #
 #          Home Page              #
@@ -754,6 +755,14 @@ class RecruitmentAppicationViewSet(ModelViewSet):
     serializer_class = RecruitmentApplicationForApplicantSerializer
     queryset = RecruitmentApplication.objects.all()
 
+    def _user_has_orgrole(self, user: User, permission_codename: str) -> bool:
+        org_roles = UserOrgRole.objects.filter(user=user).select_related('role')
+        return any(org_role.role.permissions.filter(codename=permission_codename.split('.')[-1]).exists() for org_role in org_roles)
+
+    def _user_has_gangrole(self, user: User, permission_code: str) -> bool:
+        gang_roles = UserGangRole.objects.filter(user=user).select_related('role')
+        return any(gang_role.role.permissions.filter(codename=permission_code.split('.')[-1]).exists() for gang_role in gang_roles)
+
     def get_serializer_class(self):
         """Return different serializers based on the action."""
         if self.action == 'gang_applications':
@@ -847,7 +856,6 @@ class RecruitmentAppicationViewSet(ModelViewSet):
 
     # [x] RecruitmentApplicationWithdrawRecruiterView
 
-
     @action(detail=False, methods=['put', 'get'], url_path='recruiter-withdraw', permission_classes=[IsAuthenticated])
     def recruiter_withdraw(self, request: Request) -> Response:
         """
@@ -911,7 +919,7 @@ class RecruitmentAppicationViewSet(ModelViewSet):
         serializer = RecruitmentApplicationForGangSerializer(permitted_applications, many=True)
         return Response(serializer.data)
 
-    # [ ] RecruitmentApplicationForRecruitmentPositionView -- NEVER USED --> make for section
+    # [x] RecruitmentApplicationForRecruitmentPositionView -- NEVER USED --> make for section
     @action(detail=False, methods=['get'], url_path='for-section', permission_classes=[IsAuthenticated])
     def for_section(self, request: Request) -> Response:
         """Returns a list of all the applications for the specified section."""
@@ -934,14 +942,39 @@ class RecruitmentAppicationViewSet(ModelViewSet):
         )
 
         # Check permissions for each application
-        applications = get_objects_for_user(user=request.user, perms=[SAMFUNDET_VIEW_RECRUITMENTAPPLICATION], klass=applications)
+        permitted_applications = get_objects_for_user(user=request.user, perms=[SAMFUNDET_VIEW_RECRUITMENTAPPLICATION], klass=applications)
 
-        serializer = self.get_serializer(applications, many=True)
+        serializer = self.get_serializer(permitted_applications, many=True)
         return Response(serializer.data)
 
+    # [x] RecruitmentApplicationStateChoicesView + state
+    @action(detail=False, methods=['get'], url_path='application-state', permission_classes=[IsAuthenticated])
+    def application_state(self, request: Request) -> Response:
+        user = request.user
+
+        # Check user's organization roles
+        if self._user_has_orgrole(user, SAMFUNDET_VIEW_RECRUITMENT):
+            return self._get_application_state_response()
+
+        # Check user's gang roles
+        if self._user_has_gangrole(user, SAMFUNDET_VIEW_RECRUITMENT):
+            return self._get_application_state_response()
+        raise PermissionDenied("You don't have permission to view recruitment states")
+    def _get_application_state_response(self) -> Response:
+        """Helper method to return the application state response"""
+        return Response(
+            {
+                'state_description': RecruitmentApplicantStates.choices,
+                'status_description': RecruitmentStatusChoices.choices,
+                'recruiter_priority_description': RecruitmentPriorityChoices.choices,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
     # [ ] RecruitmentApplicationForGangUpdateStateView
+
     # [ ] RecruitmentApplicationForRecruitersView
-    # [ ] RecruitmentApplicationStateChoicesView
 
     # [ ] RecruitmentApplicationInterviewNotesView
     # [ ] RecruitmentApplicationApplicantPriorityView
@@ -950,8 +983,8 @@ class RecruitmentAppicationViewSet(ModelViewSet):
     # [ ] ApplicantsWithoutThreeInterviewsCriteriaView
     # [ ] ApplicantsWithoutInterviewsView
 
-    # [ ] DownloadAllRecruitmentApplicationCSV
     # [ ] DownloadRecruitmentApplicationGangCSV
+    # [ ] DownloadAllRecruitmentApplicationCSV
 
     # [ ] RecruitmentApplicationSetInterviewView --- might want this in a InterviewViewSet
     # pass
