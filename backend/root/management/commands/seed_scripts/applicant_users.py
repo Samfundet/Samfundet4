@@ -141,7 +141,7 @@ def generate_applicant_username(first_name: str, last_name: str) -> str:
     last_part = last_name.lower()[: random.randint(3, 5)]
 
     # Add a random number for uniqueness
-    number = random.randint(1, 999)
+    number = random.randint(1, 9999)
 
     return f'{first_part}{last_part}{number}'
 
@@ -227,7 +227,7 @@ def seed() -> Generator[tuple[float, str], None, None]:
         batch_size = 200
         total_created = 0
 
-        for i in range(0, APPLICANT_COUNT, batch_size):
+        for _i in range(0, APPLICANT_COUNT, batch_size):
             # Calculate the current batch size (last batch might be smaller)
             current_batch_size = min(batch_size, APPLICANT_COUNT - total_created)
 
