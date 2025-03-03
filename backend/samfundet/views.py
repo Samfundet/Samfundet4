@@ -5,7 +5,7 @@ import csv
 import hmac
 import hashlib
 from typing import Any
-from datetime import datetime
+from datetime import datetime, time
 from itertools import chain
 
 from guardian.shortcuts import get_objects_for_user
@@ -1532,26 +1532,35 @@ class InterviewerAvailabilityForDate(APIView):
             if not date_str:
                 return Response({'error': 'Date parameter is required'}, status=400)
 
-            # Convert from YYYY.MM.DD to YYYY-MM-DD format
-            date = datetime.strptime(date_str, '%Y.%m.%d').date()
+            # Parse date in both formats (YYYY-MM-DD or YYYY.MM.DD)
+            try:
+                date_format = '%Y-%m-%d' if '-' in date_str else '%Y.%m.%d'
+                date = datetime.strptime(date_str, date_format).date()
+            except ValueError:
+                return Response({'error': 'Invalid date format. Use YYYY-MM-DD or YYYY.MM.DD'}, status=400)
 
             interviewer_str = request.query_params.get('interviewers', '')
             interviewers = [int(id_) for id_ in interviewer_str.split(',')] if interviewer_str else []
 
-            occupied_timeslots = OccupiedTimeslot.objects.filter(
-                recruitment__id=recruitment_id,
-                start_dt__date__lte=date,
-                end_dt__date__gte=date,
-            )
-
+            query = OccupiedTimeslot.objects.filter(recruitment__id=recruitment_id)
             if interviewers:
-                occupied_timeslots = occupied_timeslots.filter(user__in=interviewers)
+                query = query.filter(user__in=interviewers)
 
-            serialized_data = OccupiedTimeslotSerializer(occupied_timeslots, many=True).data
-            return Response(serialized_data)
+            # Filter by date manually
+            result = [
+                {
+                    'id': slot.id,
+                    'user': slot.user.id,
+                    'recruitment': slot.recruitment.id,
+                    'time': slot.start_dt.strftime('%H:%M'),
+                    'start_dt': slot.start_dt.isoformat(),
+                    'end_dt': slot.end_dt.isoformat(),
+                }
+                for slot in query
+                if slot.start_dt.date() == date
+            ]
 
-        except ValueError as e:
-            return Response(
-                {'error': f'Invalid parameter format: {str(e)}', 'detail': 'Make sure date is in YYYY.MM.DD format and interviewer IDs are valid integers'},
-                status=400,
-            )
+            return Response(result)
+
+        except Exception as e:
+            return Response({'error': f'Error processing request: {str(e)}'}, status=500)
