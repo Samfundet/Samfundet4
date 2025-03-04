@@ -960,6 +960,7 @@ class RecruitmentAppicationViewSet(ModelViewSet):
         if self._user_has_gangrole(user, SAMFUNDET_VIEW_RECRUITMENT):
             return self._get_application_state_response()
         raise PermissionDenied("You don't have permission to view recruitment states")
+
     def _get_application_state_response(self) -> Response:
         """Helper method to return the application state response"""
         return Response(
@@ -971,8 +972,51 @@ class RecruitmentAppicationViewSet(ModelViewSet):
             status=status.HTTP_200_OK,
         )
 
+    # [x] RecruitmentApplicationForGangUpdateStateView
+    @action(detail=True, methods=['put', 'get'], url_path='update-state', permission_classes=[IsAuthenticated])
+    def update_state(self, request: Request, pk: str) -> Response:  # noqa: C901
+        # Find the recruitment application
+        application = get_object_or_404(RecruitmentApplication, pk=pk)
 
-    # [ ] RecruitmentApplicationForGangUpdateStateView
+        # Check if user has permission to change this specific application
+        permission_code = 'samfundet.change_recruitmentapplication'
+
+        # First check if the user has direct object permission using Django Guardian
+        if not request.user.has_perm(permission_code, application):
+            # If not, check if they have the permission via organization roles
+            if not self._user_has_orgrole(request.user, permission_code):
+                # Finally, check if they have permission via gang roles,
+                # but specifically for the gang associated with this application
+                gang = application.recruitment_position.gang
+                gang_roles = UserGangRole.objects.filter(user=request.user, obj=gang).select_related('role')
+
+                # Check if any of these specific gang roles has the right permission
+                has_permission = any(gang_role.role.permissions.filter(codename=permission_code.split('.')[-1]).exists() for gang_role in gang_roles)
+
+                if not has_permission:
+                    raise PermissionDenied("You don't have permission to update this application's state")
+
+        # Continue with the serializer validation and update
+        update_serializer = RecruitmentApplicationUpdateForGangSerializer(data=request.data)
+        if update_serializer.is_valid():
+            # Update the application fields
+            if 'recruiter_priority' in update_serializer.validated_data:
+                application.recruiter_priority = update_serializer.validated_data['recruiter_priority']
+            if 'recruiter_status' in update_serializer.validated_data:
+                application.recruiter_status = update_serializer.validated_data['recruiter_status']
+            application.save()
+
+            # Update all applications for this gang and recruitment
+            applications = RecruitmentApplication.objects.filter(
+                recruitment_position__gang=application.recruitment_position.gang,
+                recruitment=application.recruitment,
+            )
+            application.update_applicant_state()
+
+            serializer = RecruitmentApplicationForGangSerializer(applications, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # [ ] RecruitmentApplicationForRecruitersView
 
