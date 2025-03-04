@@ -658,6 +658,15 @@ export type InterviewRoomDto = {
   gang?: number;
 };
 
+export interface InterviewerAvailabilityDto {
+  id: number;
+  user: number;
+  recruitment: number;
+  time: string; // HH:MM format ("08:00")
+  start_dt: string; // ISO datetime format ("2024-02-12T09:00:00Z")
+  end_dt: string;
+}
+
 // ############################################################
 //                       Purchase Feedback
 // ############################################################
