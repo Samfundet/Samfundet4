@@ -1,14 +1,14 @@
+import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getInterviewerAvailabilityOnDate } from '~/api';
+import type { RecruitmentApplicationDto } from '~/dto';
 import { useMouseDown } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { formatDateYMD, lowerCapitalize } from '~/utils';
+import { ToolTip } from '../ToolTip';
 import styles from './TimeslotContainer.module.scss';
 import { TimeslotButton } from './components/TimeslotButton';
-import { RecruitmentApplicationDto } from '~/dto';
-import { getInterviewerAvailabilityOnDate } from '~/api';
-import { useQuery } from '@tanstack/react-query';
-import { ToolTip } from '../ToolTip';
 
 type TimeslotContainerProps = {
   selectedDate: Date | null;
