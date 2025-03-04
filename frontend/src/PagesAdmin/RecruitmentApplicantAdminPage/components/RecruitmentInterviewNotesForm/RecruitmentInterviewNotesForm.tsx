@@ -24,7 +24,6 @@ interface RecruitmentInterviewNotesFormProps {
 export function RecruitmentInterviewNotesForm({ initialData, interviewId }: RecruitmentInterviewNotesFormProps) {
   const { t } = useTranslation();
   const [currentNotes, setCurrentNotes] = useState(initialData.notes || '');
-  const [isSaving, setIsSaving] = useState(false);
   const form = useForm<RecruitmentInterviewNotesFormType>({
     resolver: zodResolver(recruitmentNotesSchema),
     defaultValues: {
@@ -54,7 +53,7 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.stopImmediatePropagation();
-      if (!isSaving && interviewId) {
+      if (interviewId) {
         // Ensure data is saved before leaving (e.g. on refresh)
         putRecrutmentInterviewNotes(currentNotes, interviewId);
         // preventDefault() triggers the confirmation box.
@@ -66,7 +65,7 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
 
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [currentNotes, isSaving, interviewId]);
+  }, [currentNotes, interviewId]);
 
   return (
     <Form {...form}>
