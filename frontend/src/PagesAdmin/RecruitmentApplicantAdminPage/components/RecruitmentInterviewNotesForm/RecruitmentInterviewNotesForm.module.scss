@@ -1,11 +1,39 @@
+.textbox,
 .markdown {
-  background-color: white;
+  min-height: 550px;
+  margin: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 8px 12px;
+  display: block;
+  font-family: inherit;
+  color: #333333;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  overflow: auto;
+  resize: vertical;
+  box-sizing: border-box; /* Ensure padding is included in width calculation */
+  width: 100%; /* Force both to take full width of their container */
 }
 
-.textbox {
-  min-height: 100px; /* Set a minimum height */
-  width: 100%; /* Full width */
-  resize: vertical; /* Allow vertical resizing only */
+.markdownContent {
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  ul,
+  ol,
+  blockquote,
+  pre {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Remove any horizontal padding/margin that might affect width */
+  width: 100%;
   box-sizing: border-box;
-  background-color: white;
 }
