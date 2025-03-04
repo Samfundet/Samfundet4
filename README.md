@@ -25,6 +25,7 @@ Samfundet4 is the latest and greatest iteration of samfundet.no. It's built usin
 - [🌐 API documentation](./docs/api-docs.md)
 - [Billig (payment system)](./docs/technical/backend/billig.md)
 - [Seed scripts](./docs/technical/backend/seed.md)
+  - [Role seed scripts](./docs/technical/backend/seed_roles.md)
 - [Role system](./docs/technical/backend/rolesystem.md)
 
 ### Other
