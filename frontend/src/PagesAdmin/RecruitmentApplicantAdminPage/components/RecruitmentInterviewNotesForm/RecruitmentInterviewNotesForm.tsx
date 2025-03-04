@@ -24,7 +24,6 @@ interface RecruitmentInterviewNotesFormProps {
 export function RecruitmentInterviewNotesForm({ initialData, interviewId }: RecruitmentInterviewNotesFormProps) {
   const { t } = useTranslation();
   const [currentNotes, setCurrentNotes] = useState(initialData.notes || '');
-  // boolean isSaving is used to ... idk
   const [isSaving, setIsSaving] = useState(false);
   const form = useForm<RecruitmentInterviewNotesFormType>({
     resolver: zodResolver(recruitmentNotesSchema),
@@ -56,7 +55,11 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.stopImmediatePropagation();
       if (!isSaving && interviewId) {
-        putRecrutmentInterviewNotes(currentNotes, interviewId); //Ensure data is saved before leaving
+        // Ensure data is saved before leaving (e.g. on refresh)
+        putRecrutmentInterviewNotes(currentNotes, interviewId);
+        // preventDefault() triggers the confirmation box.
+        // preventDefault() is only needed to allow time for the save operation to complete.
+        // (as it will save regardless of if the user leaves page or not)
         event.preventDefault();
       }
     };
