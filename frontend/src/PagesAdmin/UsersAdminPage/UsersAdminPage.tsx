@@ -1,13 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { InputField } from '~/Components';
+import { InputField, PagedPagination, Table } from '~/Components';
 import { formatDate } from '~/Components/OccupiedForm/utils';
-import { Table } from '~/Components/Table';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
-import { getUsers } from '~/api';
+import { getUsersSearchPaginated } from '~/api';
 import type { UserDto } from '~/dto';
-import { useDebounce } from '~/hooks';
+import { useSearchPaginatedQuery, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { getFullName } from '~/utils';
 import styles from './UsersAdminPage.module.scss';
@@ -16,21 +13,22 @@ import { ImpersonateButton } from './components';
 export function UsersAdminPage() {
   const { t } = useTranslation();
   const title: string = t(KEY.common_users);
+  useTitle(title);
 
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
-
-  const { data: users = [] } = useQuery({
-    queryKey: ['users', debouncedSearchTerm],
-    queryFn: () => getUsers(debouncedSearchTerm),
-    enabled: true,
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
+  const {
+    data: users,
+    isLoading,
+    totalItems,
+    currentPage,
+    totalPages,
+    pageSize,
+    setCurrentPage,
+    searchTerm,
+    setSearchTerm,
+  } = useSearchPaginatedQuery<UserDto>({
+    queryKey: ['admin-users'],
+    queryFn: getUsersSearchPaginated,
   });
-
-  function handleSearchQuery(searchString: string) {
-    setSearchTerm(searchString);
-  }
 
   const userColumns = [
     { content: t(KEY.common_username), sortable: true },
@@ -71,10 +69,25 @@ export function UsersAdminPage() {
 
   return (
     <AdminPageLayout title={title}>
-      <InputField icon="mdi:search" onChange={handleSearchQuery} />
+      <InputField icon="mdi:search" value={searchTerm} onChange={setSearchTerm} placeholder={t(KEY.common_search)} />
       <div className={styles.table_container}>
-        <Table data={users.map((user) => ({ cells: userTableRow(user) }))} columns={userColumns} />
+        <Table
+          data={users.map((user) => ({ cells: userTableRow(user) }))}
+          columns={userColumns}
+          isLoading={isLoading}
+        />
       </div>
+
+      {!isLoading && totalPages > 1 && (
+        <div className={styles.pagination_container}>
+          <PagedPagination
+            currentPage={currentPage}
+            totalItems={totalItems}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+          />
+        </div>
+      )}
     </AdminPageLayout>
   );
 }
