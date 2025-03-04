@@ -261,6 +261,11 @@ class VenueView(ModelViewSet):
     queryset = Venue.objects.all()
     lookup_field = 'slug'
 
+class TestVenueView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = VenueSerializer
+    queryset = Venue.objects.all()
+
 
 class ClosedPeriodView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)

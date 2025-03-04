@@ -23,7 +23,7 @@ export const appletCategories: AppletCategory[] = [
       },
       {
         title_nb: 'Åpningstider',
-        title_en: 'Open hours',
+        title_en: 'Opening hours',
         perm: PERM.SAMFUNDET_CHANGE_VENUE,
         icon: 'mdi:clock-time-eight-outline',
         url: ROUTES.frontend.admin_opening_hours,
