@@ -57,8 +57,6 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
         // Ensure data is saved before leaving (e.g. on refresh)
         putRecrutmentInterviewNotes(currentNotes, interviewId);
         // preventDefault() triggers the confirmation box.
-        // preventDefault() is only needed to allow time for the save operation to complete.
-        // (as it will save regardless of if the user leaves page or not)
         event.preventDefault();
       }
     };
