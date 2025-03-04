@@ -1597,15 +1597,6 @@ class InterviewerAvailabilityForDate(APIView):
         except Exception as e:
             return Response({'error': f'Error processing request: {str(e)}'}, status=500)
 
-        return Response(
-            OccupiedTimeslot.objects.filter(
-                recruitment__id=recruitment_id,
-                user__in=interviewers,
-                start_dt__date__lte=date,
-                end_dt__date__gte=date,
-            )
-        )
-
 
 class PositionByTagsView(ListAPIView):
     """
