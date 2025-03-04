@@ -19,6 +19,8 @@ import { validEmail } from "~/Forms/util";
 import { KEY } from "~/i18n/constants";
 import styles from "./BuyTicketModal.module.scss";
 import type { EventDto } from "~/dto";
+import { TextItem } from "~/constants";
+import { useTextItem } from "~/hooks";
 
 // Validation schema
 const buyTicketFormSchema = z
@@ -43,6 +45,8 @@ interface BuyTicketFormProps {
 export function BuyTicketForm({ event }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const [totalPrice, setTotalPrice] = useState(0);
+  const [ticketType, setTicketType] = useState("membershipNumber");
+  const [ticketTypeEmail, setTicketTypeEmail] = useState<boolean>(false);
 
   const form = useForm<BuyTicketFormType>({
     resolver: zodResolver(buyTicketFormSchema),
@@ -70,8 +74,14 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
   useEffect(() => {
     setTotalPrice(tickets * price + membershipTickets * price_member);
   }, [tickets, membershipTickets, price, price_member]);
-  
-  
+
+  // useEffect(() => {
+  //   if (ticketType === "email") {
+  //     form.setValue("email", "");
+  //   } else if (ticketType === "membershipNumber") {
+  //     form.setValue("membershipNumber", "");
+  //   }
+  // }, [ticketType]);
 
   return (
     <div className={styles.container}>
@@ -130,51 +140,78 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
 
           {/* Email / Membership Number Toggle */}
           <div className={styles.ticket_type}>
-            <div className={styles.ticket_type_field}>
-              <div className={styles.radio_box}>
-                <RadioButton
-                  name="ticketType"
-                  onChange={() => form.setValue("membershipNumber", "")}
-                />{" "}
-                <label>{t(KEY.common_membership_number)}</label>
+            <div className={styles.ticket_type_fields}>
+              <div className={styles.ticket_type_field}>
+                <div className={styles.radio_box}>
+                  <RadioButton
+                    name="ticketType"
+                    // onChange={() => form.setValue("ticketType", "membershipNumber")}
+                    onChange={() => { setTicketType("membershipNumber"); setTicketTypeEmail(false); }}
+                    defaultChecked={true}
+                  />{" "}
+                  <label>{t(KEY.common_membership_number)}</label>
+                </div>
+                {/* Membership Number Field */}
+                <FormField
+                  control={form.control}
+                  name="membershipNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      {/* <FormLabel>{t(KEY.common_membership_number)}</FormLabel> */}
+                      <FormControl>
+                        <Input 
+                          type="text" 
+                          className={styles.membership_number_field}
+                          disabled={ticketTypeEmail}
+                          style={{
+                            backgroundColor: ticketTypeEmail ? "lightgray" : "white",
+                          }} 
+                          placeholder="Enter membership number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-              {/* Membership Number Field */}
-              <FormField
-                control={form.control}
-                name="membershipNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    {/* <FormLabel>{t(KEY.common_membership_number)}</FormLabel> */}
-                    <FormControl>
-                      <Input type="text" placeholder="Enter membership number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className={styles.ticket_type_field}>
+                <div className={styles.radio_box}>
+                  <RadioButton
+                    name="ticketType"
+                    // onChange={() => form.setValue("ticketType", "email")}
+                    onChange={() => {setTicketType("email"); setTicketTypeEmail(true); }}
+                  />{" "}
+                  <label className={styles.email_label}>{t(KEY.common_email)}</label>
+                </div>
+                {/* Email Field */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className={styles.email_field}>
+                      {/* <FormLabel>{t(KEY.common_email)}</FormLabel> */}
+                      <FormControl>
+                        <Input 
+                          type="email"
+                          disabled={!ticketTypeEmail}
+                          style={{
+                            backgroundColor: ticketTypeEmail ? "white" : "lightgray",
+                          }} 
+                          placeholder="Enter your email" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
-            <div className={styles.ticket_type_field}>
-              <div className={styles.radio_box}>
-                <RadioButton
-                  name="ticketType"
-                  onChange={() => form.setValue("email", "")}
-                />{" "}
-                <label>{t(KEY.common_email)}</label>
-              </div>
-              {/* Email Field */}
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    {/* <FormLabel>{t(KEY.common_email)}</FormLabel> */}
-                    <FormControl>
-                      <Input type="email" placeholder="Enter your email" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <div className="ticket_type_description">
+              <p style={{display: ticketTypeEmail ? "none" : "inline"}}>
+                {useTextItem(TextItem.ticketless_description)}
+              </p>
+              <p style={{display: ticketTypeEmail ? "inline" : "none"}}>
+                Billetten(e) blir sendt på epost, og må vises fram i døren når du kommer til Samfundet. Billettene kan 
+                vises på mobil eller tas med som utskrift.
+              </p>
             </div>
           </div>
 
