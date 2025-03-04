@@ -31,7 +31,7 @@ export function BuyTicketModal({ event }: BuyTicketModalProps) {
     <>
       {ticketButton}
 
-      <Modal isOpen={open}>
+      <Modal isOpen={open} className={styles.modal}>
         <h2 className={styles.modal_title}>{dbT(event, 'title')}</h2>
           <button type="button" className={styles.close_btn} title="Close" onClick={() => setOpen(false)}>
             <Icon icon="octicon:x-24" width={24} />

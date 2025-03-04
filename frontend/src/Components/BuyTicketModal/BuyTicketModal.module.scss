@@ -2,6 +2,10 @@
 
 @import "src/mixins";
 
+.modal {
+  width: 60%;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -37,6 +41,21 @@
   padding: 1rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
+  display: flex;
+}
+
+.ticket_type_field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 0.5;
+  padding: 1rem;
+}
+
+.radio_box {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
 }
 
 .total_price {
@@ -61,3 +80,7 @@
     filter: brightness(110%);
   }
 }
+
+
+
+

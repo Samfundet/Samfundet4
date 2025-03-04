@@ -12,6 +12,7 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  RadioButton,
   Select,
 } from "~/Components";
 import { validEmail } from "~/Forms/util";
@@ -129,53 +130,53 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
 
           {/* Email / Membership Number Toggle */}
           <div className={styles.ticket_type}>
-            <label>
-              <input
-                type="radio"
-                name="ticketType"
-                onClick={() => form.setValue("membershipNumber", "")}
-              />{" "}
-              {t(KEY.common_membership_number)}
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="ticketType"
-                onClick={() => form.setValue("email", "")}
-              />{" "}
-              {t(KEY.common_email)}
-            </label>
+            <div className={styles.ticket_type_field}>
+              <div className={styles.radio_box}>
+                <RadioButton
+                  name="ticketType"
+                  onChange={() => form.setValue("membershipNumber", "")}
+                />{" "}
+                <label>{t(KEY.common_membership_number)}</label>
+              </div>
+              {/* Membership Number Field */}
+              <FormField
+                control={form.control}
+                name="membershipNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    {/* <FormLabel>{t(KEY.common_membership_number)}</FormLabel> */}
+                    <FormControl>
+                      <Input type="text" placeholder="Enter membership number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className={styles.ticket_type_field}>
+              <div className={styles.radio_box}>
+                <RadioButton
+                  name="ticketType"
+                  onChange={() => form.setValue("email", "")}
+                />{" "}
+                <label>{t(KEY.common_email)}</label>
+              </div>
+              {/* Email Field */}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    {/* <FormLabel>{t(KEY.common_email)}</FormLabel> */}
+                    <FormControl>
+                      <Input type="email" placeholder="Enter your email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
-
-          {/* Membership Number Field */}
-          <FormField
-            control={form.control}
-            name="membershipNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t(KEY.common_membership_number)}</FormLabel>
-                <FormControl>
-                  <Input type="text" placeholder="Enter membership number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Email Field */}
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t(KEY.common_email)}</FormLabel>
-                <FormControl>
-                  <Input type="email" placeholder="Enter your email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
           {/* Total Price */}
           <div className={styles.total_price}>
