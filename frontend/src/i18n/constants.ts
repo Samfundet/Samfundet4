@@ -57,6 +57,7 @@ export const KEY = {
   pick_a_date: 'pick_a_date',
 
   // No category:
+  common_content: 'common_content',
   common_url: 'common_url',
   common_manage: 'common_manage',
   common_yes: 'common_yes',
@@ -280,6 +281,9 @@ export const KEY = {
   sulten_reservation_form_find_times: 'sulten_reservation_form_find_times',
 
   // Recruitment:
+  recruitment_look_at_recipients: 'recruitment_look_at_recipients',
+  recruitment_preview: 'recruitment_preview',
+  recruitment_text_before_name: 'recruitment_text_before_name',
   recruitment_tags: 'recruitment_tags',
   recruitment_position: 'recruitment_position',
   recruitment_positions: 'recruitment_positions',
