@@ -1,4 +1,4 @@
-import { ErrorDisplay, ExpandableHeader, Link } from '~/Components';
+import { ExpandableHeader, Link } from '~/Components';
 import type { GangTypeDto, RecruitmentPositionDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
