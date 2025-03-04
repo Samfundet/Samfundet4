@@ -6,7 +6,7 @@ import hmac
 import hashlib
 import operator
 from typing import Any
-from datetime import datetime, time
+from datetime import datetime
 from functools import reduce
 from itertools import chain
 
@@ -1596,7 +1596,7 @@ class InterviewerAvailabilityForDate(APIView):
 
         except Exception as e:
             return Response({'error': f'Error processing request: {str(e)}'}, status=500)
-          
+
         return Response(
             OccupiedTimeslot.objects.filter(
                 recruitment__id=recruitment_id,
