@@ -88,7 +88,6 @@ from .serializers import (
     FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
-    RecruitmentGangSerializer,
     OccupiedTimeslotSerializer,
     PurchaseFeedbackSerializer,
     ReservationCheckSerializer,
@@ -96,7 +95,6 @@ from .serializers import (
     RecruitmentPositionSerializer,
     UserGangSectionRoleSerializer,
     RecruitmentStatisticsSerializer,
-    RecruitmentForRecruiterSerializer,
     RecruitmentSeparatePositionSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
@@ -688,34 +686,6 @@ class AssignGroupView(APIView):
 # =============================== #
 #            Recruitment          #
 # =============================== #
-
-
-@method_decorator(ensure_csrf_cookie, 'dispatch')
-class RecruitmentView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = RecruitmentSerializer
-    queryset = Recruitment.objects.all()
-
-    @action(detail=True, methods=['get'])
-    def gangs(self, request: Request, **kwargs: Any) -> Response:
-        recruitment = self.get_object()
-        gangs = Gang.objects.filter(organization__id=recruitment.organization_id)
-        serializer = RecruitmentGangSerializer(gangs, recruitment=recruitment, many=True)
-        return Response(serializer.data)
-
-
-@method_decorator(ensure_csrf_cookie, 'dispatch')
-class RecruitmentForRecruiterView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = RecruitmentForRecruiterSerializer
-    queryset = Recruitment.objects.all()
-
-    def retrieve(self, request: Request, pk: int) -> Response:
-        recruitment = get_object_or_404(self.queryset, pk=pk)
-        recruitment.statistics.save()
-        stats = get_object_or_404(self.queryset, pk=pk)
-        serializer = self.serializer_class(stats)
-        return Response(serializer.data)
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
