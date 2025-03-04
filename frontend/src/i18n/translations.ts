@@ -178,6 +178,8 @@ export const nb = prepareTranslations({
   [KEY.common_administration]: 'Administrasjon',
   [KEY.common_list_view]: 'Liste visning',
   [KEY.common_tab_view]: 'Fane visning',
+  [KEY.common_available]: 'Tilgjengelig',
+
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
   [KEY.common_press]: 'presse',
@@ -275,6 +277,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_interviewer]: 'Intervjuer',
   [KEY.recruitment_interviewers]: 'Intervjuere',
   [KEY.recruitment_no_interviews]: 'Ingen intervjuer',
+  [KEY.recruitment_no_interviewers_available]: 'Ingen intervjuere tilgjengelig',
   [KEY.recruitment_interview_set]: 'Sett intervju',
   [KEY.recruitment_interview_groups]: 'Intervjugrupper',
   [KEY.recruitment_interview_group]: 'Intervjugrupper',
@@ -678,6 +681,7 @@ export const en = prepareTranslations({
   [KEY.common_unprocessed]: 'Unprocessed',
   [KEY.common_list_view]: 'List view',
   [KEY.common_tab_view]: 'Tab view',
+  [KEY.common_available]: 'Available',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -778,6 +782,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_interviewer]: 'Interviewer',
   [KEY.recruitment_interviewers]: 'Interviewers',
   [KEY.recruitment_no_interviews]: 'No interviews',
+  [KEY.recruitment_no_interviewers_available]: 'No interviewers available',
   [KEY.recruitment_interview_set]: 'Set Interview',
   [KEY.recruitment_interview_groups]: 'Interview groups',
   [KEY.recruitment_interview_group]: 'Interview group',

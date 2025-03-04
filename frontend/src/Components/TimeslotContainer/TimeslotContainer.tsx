@@ -115,10 +115,10 @@ export function TimeslotContainer({
       if (!availableInterviewers) return 'No data available';
 
       return availableInterviewers.length > 0
-        ? `Available: ${availableInterviewers
+        ? `${t(KEY.common_available) + ':'} ${availableInterviewers
             .map((i: { first_name: string; last_name: string }) => `${i.first_name} ${i.last_name}`)
             .join(', ')}`
-        : 'No interviewers available';
+        : t(KEY.recruitment_no_interviewers_available);
     },
     [selectedDate, isLoading, timeslotAvailabilityMap],
   );
