@@ -1,4 +1,4 @@
-import { ExpandableHeader, Link } from '~/Components';
+import { ErrorDisplay, ExpandableHeader, Link } from '~/Components';
 import type { GangTypeDto, RecruitmentPositionDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -16,7 +16,7 @@ type GangItemProps = {
 export function GangPositionDropdown({ type, recruitmentPositions, recruitmentId }: GangItemProps) {
   const filteredGangs = type.gangs
     .map((gang) => {
-      const filteredPositions = recruitmentPositions?.filter((pos) => pos.gang.id === gang.id);
+      const filteredPositions = recruitmentPositions?.filter((pos) => pos.gang && pos.gang.id === gang.id);
       if (filteredPositions && filteredPositions.length > 0) {
         return (
           <ExpandableHeader
