@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -49,6 +49,21 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
       handleUpdateNotes.mutate({ notes: newNotes, interviewId });
     }
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.stopImmediatePropagation();
+      if (interviewId) {
+        // Ensure data is saved before leaving (e.g. on refresh)
+        putRecrutmentInterviewNotes(currentNotes, interviewId);
+        // preventDefault() triggers the confirmation box.
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [currentNotes, interviewId]);
 
   return (
     <Form {...form}>
