@@ -1186,6 +1186,7 @@ export async function getInterviewerAvailabilityOnDate(
       },
     });
   return await axios.get(url, { withCredentials: true });
+}
 
 export async function getPositionsByTag(
   recruitmentId: string,

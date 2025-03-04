@@ -78,7 +78,7 @@ export function TimeslotContainer({
     const availabilityMap = new Map();
 
     // For each timeslot, determine which interviewers are available
-    timeslots.forEach((timeslot) => {
+    for (const timeslot of timeslots) {
       const timeslotMinutes = parseTimeToMinutes(timeslot);
       const timeslotEndMinutes = timeslotMinutes + 30; // Antar 30 min slots, kan og bør kanskje endres? om annet er mulig?
 
@@ -88,9 +88,7 @@ export function TimeslotContainer({
           if (slot.user !== interviewer.id) {
             return false;
           }
-
           const occupiedTimeMinutes = parseTimeToMinutes(slot.time);
-
           const occupiedEndMinutes = occupiedTimeMinutes + 30; // Antar 30 min slots på occupiedslots også
 
           // Check for overlap
@@ -102,7 +100,7 @@ export function TimeslotContainer({
       });
 
       availabilityMap.set(timeslot, availableInterviewers);
-    });
+    }
 
     return availabilityMap;
   }, [timeslots, interviewers_objects, selectedDate, occupiedTimeslots]);
