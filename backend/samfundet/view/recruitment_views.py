@@ -12,7 +12,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from root.custom_classes.permission_classes import CustomDjangoRolePermissions
+from root.custom_classes.permission_classes import RoleProtectedObjectPermissions
 
 from samfundet.serializers import RecruitmentSerializer, RecruitmentGangSerializer, RecruitmentForRecruiterSerializer
 from samfundet.models.general import Gang
@@ -46,7 +46,7 @@ class RecruitmentView(ModelViewSet):
 # =============================== #
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentForRecruiterView(ModelViewSet):
-    permission_classes = (CustomDjangoRolePermissions,)
+    permission_classes = (RoleProtectedObjectPermissions,)
     serializer_class = RecruitmentForRecruiterSerializer
     queryset = Recruitment.objects.all()
 

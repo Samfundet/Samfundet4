@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from rest_framework.permissions import BasePermission, DjangoModelPermissions, DjangoObjectPermissions
+from rest_framework.permissions import SAFE_METHODS, BasePermission, DjangoModelPermissions, DjangoObjectPermissions
+
+from django.http import Http404
 
 from samfundet.models.role import UserOrgRole, UserGangRole, UserGangSectionRole
 
@@ -15,6 +17,19 @@ if TYPE_CHECKING:
     from samfundet.models.general import User
 
 
+# Constant used to define the permissions required for each method
+# This is used to check if the user has the required permissions directly
+FULLY_PROTECTED_PERMS_MAP = {
+    'GET': ['%(app_label)s.view_%(model_name)s'],
+    'OPTIONS': ['%(app_label)s.view_%(model_name)s'],
+    'HEAD': ['%(app_label)s.view_%(model_name)s'],
+    'POST': ['%(app_label)s.add_%(model_name)s'],
+    'PUT': ['%(app_label)s.change_%(model_name)s'],
+    'PATCH': ['%(app_label)s.change_%(model_name)s'],
+    'DELETE': ['%(app_label)s.delete_%(model_name)s'],
+}
+
+
 class SuperUserPermission(BasePermission):
     def has_permission(self, request: Request, view: APIView) -> bool:
         user: User = request.user
@@ -25,31 +40,15 @@ class SuperUserPermission(BasePermission):
 
 
 class CustomDjangoModelPermissions(DjangoModelPermissions):
-    """Add django permissions to read methods."""
+    """Requires permissions for all actions performed."""
 
-    perms_map = {
-        'GET': ['%(app_label)s.view_%(model_name)s'],
-        'OPTIONS': [],
-        'HEAD': [],
-        'POST': ['%(app_label)s.add_%(model_name)s'],
-        'PUT': ['%(app_label)s.change_%(model_name)s'],
-        'PATCH': ['%(app_label)s.change_%(model_name)s'],
-        'DELETE': ['%(app_label)s.delete_%(model_name)s'],
-    }
+    perms_map = FULLY_PROTECTED_PERMS_MAP
 
 
 class CustomDjangoObjectPermissions(DjangoObjectPermissions):
     """Add django permissions to read methods."""
 
-    perms_map = {
-        'GET': ['%(app_label)s.view_%(model_name)s'],
-        'OPTIONS': [],
-        'HEAD': [],
-        'POST': ['%(app_label)s.add_%(model_name)s'],
-        'PUT': ['%(app_label)s.change_%(model_name)s'],
-        'PATCH': ['%(app_label)s.change_%(model_name)s'],
-        'DELETE': ['%(app_label)s.delete_%(model_name)s'],
-    }
+    perms_map = FULLY_PROTECTED_PERMS_MAP
 
     def has_permission(self, request: Request, view: APIView) -> bool:
         queryset: QuerySet = self._queryset(view)
@@ -81,9 +80,9 @@ def has_required_permissions(request, perms):
     return False
 
 
-class CustomDjangoRolePermissions(CustomDjangoModelPermissions):
+class FullyProtectedRolePermissions(CustomDjangoModelPermissions):
     """
-    Django system that allows users with relevant roles permissions.
+    Permission class that allows users with relevant roles permissions.
     Note that this does not limit the queryset to only show objects that the user has permissions to.
     """
 
@@ -105,3 +104,60 @@ class CustomDjangoRolePermissions(CustomDjangoModelPermissions):
 
         # Check if the user has a role that grants the required permissions
         return bool(has_required_permissions(request, perms))
+
+
+class RoleProtectedObjectPermissions(DjangoObjectPermissions):
+    """
+    Django system that allows users with relevant roles permissions.
+    Note that this does not limit the queryset to only show objects that the user has permissions to.
+    Returns 404 if user does not have read permissions for an object, 
+    so that the user cannot see that the object exists.
+    """
+
+    perms_map = FULLY_PROTECTED_PERMS_MAP
+
+    def has_permission(self, request: Request, view: APIView) -> bool:
+        if not request.user or (not request.user.is_authenticated and self.authenticated_users_only):
+            return False
+
+        # Workaround to ensure DjangoModelPermissions are not applied
+        # to the root view when using DefaultRouter.
+        if getattr(view, '_ignore_model_permissions', False):
+            return True
+
+        queryset = self._queryset(view)
+        perms = self.get_required_permissions(request.method, queryset.model)
+
+        # Check if the user has the required permissions directly
+        if request.user.has_perms(perms):
+            return True
+
+        # Check if the user has a role that grants the required permissions
+        return bool(has_required_permissions(request, perms))
+
+    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
+        # authentication checks have already executed via has_permission
+        queryset = self._queryset(view)
+        model_cls = queryset.model
+        user = request.user
+
+        perms = self.get_required_object_permissions(request.method, model_cls)
+
+        if not user.has_perms(perms, obj):
+            # If the user does not have permissions we need to determine if
+            # they have read permissions to see 403, or not, and simply see
+            # a 404 response.
+
+            if request.method in SAFE_METHODS:
+                # Read permissions already checked and failed, no need
+                # to make another lookup.
+                raise Http404
+
+            read_perms = self.get_required_object_permissions('GET', model_cls)
+            if not user.has_perms(read_perms, obj):
+                raise Http404
+
+            # Has read permissions.
+            return False
+
+        return True
