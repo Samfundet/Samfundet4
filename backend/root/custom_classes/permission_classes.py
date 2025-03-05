@@ -110,7 +110,7 @@ class RoleProtectedObjectPermissions(DjangoObjectPermissions):
     """
     Django system that allows users with relevant roles permissions.
     Note that this does not limit the queryset to only show objects that the user has permissions to.
-    Returns 404 if user does not have read permissions for an object, 
+    Returns 404 if user does not have read permissions for an object,
     so that the user cannot see that the object exists.
     """
 
@@ -161,3 +161,64 @@ class RoleProtectedObjectPermissions(DjangoObjectPermissions):
             return False
 
         return True
+
+
+def filter_queryset_by_permissions(queryset, user, view_permission=None):
+    """
+    Filters a queryset based on user's permissions.
+
+    :param queryset: The original queryset to filter
+    :param user: The user to check permissions for
+    :param view_permission: Optional specific permission to check.
+                            If None, will attempt to derive from the queryset's model
+    :return: Filtered queryset with only objects the user can view
+    """
+    # If no user is provided or user is not authenticated, return empty queryset
+    if not user or not user.is_authenticated:
+        return queryset.none()
+
+    # Determine the model and app label
+    model = queryset.model
+    app_label = model._meta.app_label
+    model_name = model._meta.model_name
+
+    # If view_permission is not explicitly provided, try to derive it
+    if view_permission is None:
+        view_permission = f'{app_label}.view_{model_name}'
+
+    # Check if user has model-level permission
+    if user.has_perm(view_permission):
+        return queryset
+
+    # If no model-level permission, filter by object-level permissions
+    permitted_ids = []
+    for obj in queryset:
+        if user.has_perm(view_permission, obj):
+            permitted_ids.append(obj.id)
+
+    return queryset.filter(id__in=permitted_ids)
+
+
+# Optional: Decorator for function-based views
+def require_permission(permission=None):
+    """
+    Decorator to filter queryset in function-based views
+
+    :param permission: Optional specific permission to check
+    :return: Decorated view function
+    """
+
+    def decorator(view_func):
+        def wrapper(request, *args, **kwargs):
+            # Get the queryset from the view function arguments
+            queryset = kwargs.get('queryset')
+
+            if queryset is not None:
+                # Apply permission filtering
+                kwargs['queryset'] = filter_queryset_by_permissions(queryset, request.user, permission)
+
+            return view_func(request, *args, **kwargs)
+
+        return wrapper
+
+    return decorator
