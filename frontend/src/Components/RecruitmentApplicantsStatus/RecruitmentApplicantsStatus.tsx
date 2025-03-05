@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { TimeDisplay } from '~/Components';
+import { TimeDisplay, ToolTip } from '~/Components';
 import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
@@ -8,6 +8,8 @@ import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { RecruitmentPriorityChoices, RecruitmentPriorityChoicesMapping } from '~/types';
+import { Badge } from '../Badge/Badge';
 import { Link } from '../Link';
 import { SetInterviewManuallyModal } from '../SetInterviewManually';
 import styles from './RecruitmentApplicantsStatus.module.scss';
@@ -61,7 +63,9 @@ export function RecruitmentApplicantsStatus({
     { content: t(KEY.recruitment_interview_time), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_interview_location), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_recruiter_priority), sortable: true, hideSortButton: false },
-    { content: t(KEY.recruitment_recruiter_status), sortable: true, hideSortButton: false },
+    { content: t(KEY.recruitment_recruiter_guide), sortable: true, hideSortButton: false },
+    { content: t(KEY.recruitment_recruiter_status), sortable: false, hideSortButton: false },
+    { content: t(KEY.recruitment_interview_notes), sortable: false, hideSortButton: true },
   ];
 
   function updateApplications(id: string, field: string, value: string | number | undefined) {
@@ -93,13 +97,24 @@ export function RecruitmentApplicantsStatus({
     }
   }
 
+  function getStatusText(applicantstatus: number | undefined) {
+    if (typeof applicantstatus !== 'undefined') {
+      const priority = RecruitmentPriorityChoicesMapping[applicantstatus];
+      if (priority === RecruitmentPriorityChoices.WANTED) {
+        return t(KEY.recruitment_guide_offer);
+      }
+      return t(KEY.recruitment_guide_no_offer);
+    }
+  }
+
   const data = applicants.map((application) => {
     const applicationStatusStyle = getStatusStyle(application?.applicant_state);
+    const guideText = getStatusText(application?.recruiter_priority);
     return {
       cells: [
         {
           value: application.user.first_name,
-          style: applicationStatusStyle,
+          style: styles.pending,
           content: (
             <div className={styles.wrapper}>
               <div className={styles.show_div}>{t(KEY.common_show)}</div>
@@ -119,7 +134,7 @@ export function RecruitmentApplicantsStatus({
         },
         {
           value: application.applicant_priority,
-          style: applicationStatusStyle,
+          style: styles.pending,
           content: (
             <div className={styles.wrapper}>
               <div className={styles.show_div}>{t(KEY.common_show)}</div>
@@ -142,7 +157,7 @@ export function RecruitmentApplicantsStatus({
         },
         {
           value: application.interview?.interview_time,
-          style: applicationStatusStyle,
+          style: styles.pending,
           content: application.interview?.interview_time ? (
             <TimeDisplay timestamp={application.interview.interview_time} displayType="nice-date-time" />
           ) : (
@@ -151,7 +166,7 @@ export function RecruitmentApplicantsStatus({
         },
         {
           value: application.interview?.interview_location,
-          style: applicationStatusStyle,
+          style: styles.pending,
           content: (
             <Text>
               {application.interview?.interview_location
@@ -162,7 +177,7 @@ export function RecruitmentApplicantsStatus({
         },
         {
           value: application.recruiter_priority,
-          style: applicationStatusStyle,
+          style: styles.pending,
           content: (
             <Dropdown
               value={application.recruiter_priority}
@@ -175,7 +190,16 @@ export function RecruitmentApplicantsStatus({
         },
         {
           value: application.recruiter_status,
-          style: applicationStatusStyle,
+          style: styles.pending,
+          content: (
+            <ToolTip value="her skal det stå noe informativt">
+              <Badge className={applicationStatusStyle} text={guideText} />
+            </ToolTip>
+          ),
+        },
+        {
+          value: application.recruiter_status,
+          style: styles.pending,
           content: (
             <Dropdown
               value={application.recruiter_status}
