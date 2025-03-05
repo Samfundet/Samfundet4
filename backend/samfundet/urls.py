@@ -8,6 +8,7 @@ from rest_framework import routers
 from django.urls import path, include
 
 from . import views
+from .view import recruitment_views
 
 # End: imports -----------------------------------------------------------------
 router = routers.DefaultRouter()
@@ -40,8 +41,8 @@ router.register('merch', views.MerchView, 'merch')
 router.register('role', views.RoleView, 'role')
 
 ########## Recruitment ##########
-router.register('recruitment', views.RecruitmentView, 'recruitment')
-router.register('recruitment-for-recruiter', views.RecruitmentForRecruiterView, 'recruitment_for_recruiter')
+router.register('recruitment', recruitment_views.RecruitmentView, 'recruitment')
+router.register('recruitment-for-recruiter', recruitment_views.RecruitmentForRecruiterView, 'recruitment_for_recruiter')
 router.register('recruitment-stats', views.RecruitmentStatisticsView, 'recruitment_stats')
 router.register('recruitment-separateposition', views.RecruitmentSeparatePositionView, 'recruitment_separateposition')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
