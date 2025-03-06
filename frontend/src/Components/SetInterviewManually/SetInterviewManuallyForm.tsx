@@ -179,6 +179,8 @@ export function SetInterviewManuallyForm({
               disabledTimeslots={occupiedTimeslots}
               hasDisabledTimeslots={true}
               selectMultiple={false}
+              recruitmentId={recruitmentId}
+              application={application}
             />
           </div>
           <span className={styles.choose_location_text}>{`${t(KEY.recruitment_choose_interview_location)}:`}</span>
