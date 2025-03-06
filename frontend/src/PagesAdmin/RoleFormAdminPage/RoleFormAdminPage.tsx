@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useRouteLoaderData } from 'react-router-dom';
+import { useRouteLoaderData } from 'react-router';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { RoleForm } from '~/PagesAdmin/RoleFormAdminPage/components';
 import { KEY } from '~/i18n/constants';

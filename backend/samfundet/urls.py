@@ -70,6 +70,7 @@ urlpatterns = [
     path('user/', views.UserView.as_view(), name='user'),
     path('groups/', views.AllGroupsView.as_view(), name='groups'),
     path('users/', views.AllUsersView.as_view(), name='users'),
+    path('users-search-paginated/', views.PaginatedSearchUsersView.as_view(), name='users_search_paginated'),
     path('impersonate/', views.ImpersonateView.as_view(), name='impersonate'),
     path('events-per-day/', views.EventPerDayView.as_view(), name='eventsperday'),
     path('events-upcomming/', views.EventsUpcomingView.as_view(), name='eventsupcomming'),
@@ -109,6 +110,11 @@ urlpatterns = [
         'recruitment-application-update-state-gang/<slug:pk>/',
         views.RecruitmentApplicationForGangUpdateStateView.as_view(),
         name='recruitment_application_update_state_gang',
+    ),
+    path(
+        'recruitment-position-organized-applications/<int:pk>/',
+        views.RecruitmentPositionOrganizedApplicationsView.as_view(),
+        name='recruitment_position_organized_applications',
     ),
     path(
         'recruitment-application-update-state-position/<slug:pk>/',

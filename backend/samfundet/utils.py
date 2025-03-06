@@ -42,7 +42,7 @@ def event_query(*, query: QueryDict, events: QuerySet[Event] = None) -> QuerySet
     return events
 
 
-def user_query(*, query: QueryDict, users: QuerySet[User] = None) -> QuerySet[User]:
+def get_user_by_search(*, query: QueryDict, users: QuerySet[User] = None) -> QuerySet[User]:
     if not users:
         users = User.objects.all()
     search = query.get('search', None)

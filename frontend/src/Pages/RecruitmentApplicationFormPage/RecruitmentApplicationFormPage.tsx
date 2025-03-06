@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import {
@@ -17,7 +17,6 @@ import {
   Modal,
   OccupiedForm,
   Page,
-  SamfundetLogoSpinner,
   Textarea,
   ToolTip,
 } from '~/Components';
@@ -171,17 +170,9 @@ export function RecruitmentApplicationFormPage() {
     },
   });
 
-  if (loading) {
-    return (
-      <div className={styles.spinner_container}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
   if (!positionId || Number.isNaN(Number(positionId))) {
     return (
-      <Page>
+      <Page loading={loading}>
         <div className={styles.container}>
           <h1>{t(KEY.recruitment_application)}</h1>
           <p>The position id is invalid, please enter another position id</p>
@@ -242,7 +233,7 @@ export function RecruitmentApplicationFormPage() {
   );
 
   return (
-    <Page>
+    <Page loading={loading}>
       <div className={styles.container}>
         {openOccupiedForm && (
           <Modal isOpen={openOccupiedForm} className={styles.occupied_modal}>

@@ -129,6 +129,17 @@ export const PAID_TICKET_TYPES: EventTicketTypeValue[] = [
   EventTicketType.CUSTOM,
 ];
 
+export const EventCategory = {
+  SAMFUNDET_MEETING: 'samfundsmote',
+  CONCERT: 'concert',
+  DEBATE: 'debate',
+  QUIZ: 'quiz',
+  LECTURE: 'lecture',
+  OTHER: 'other',
+} as const;
+
+export type EventCategoryValue = (typeof EventCategory)[keyof typeof EventCategory];
+
 export type CalendarMarker = {
   date: Date;
   className?: string;
@@ -187,3 +198,21 @@ export const RecruitmentPriorityChoicesMapping: { [key: number]: string } = {
   2: RecruitmentPriorityChoices.WANTED,
   3: RecruitmentPriorityChoices.NOT_WANTED,
 };
+
+/* For DRF pagination, see pagination.py */
+export interface PageNumberPaginationType<T> {
+  page_size: number;
+  count: number;
+  next: string | null;
+  previous: string | null;
+  current_page: number;
+  total_pages: number;
+  results: T[];
+}
+
+/* For DRF pagination, see pagination.py */
+export interface CursorPaginatedResponse<T> {
+  next: string | null; // URL or cursor for next page
+  previous: string | null; // URL or cursor for previous page
+  results: T[]; // Current page results
+}

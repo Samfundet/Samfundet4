@@ -3,7 +3,7 @@ import { default as classNames } from 'classnames';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { Button, Link, ThemeSwitch } from '~/Components';
 import { getActiveRecruitments, logout, stopImpersonatingUser } from '~/api';
 import { logoWhite } from '~/assets';

@@ -58,6 +58,11 @@ def seed():
             'text_en': "Samfundet is an organization for students in Trondheim that is owned and run by its approximately 16100 members. Our mission statement is Samfundet will be the natural meeting place for students in Trondheim. In our red, round building we regularly host concerts and various cultural events, and have countless bars, a café and a restaurant. The Society Meetings are perhaps our most famous events. These meetings serve as a place for debating politics and current events, and but also for entertainment and fun. Samfundet also has three of Trondheim's best music venues.",
         },
         {
+            'key': 'samf_recruitment_description',
+            'text_nb': 'Studentersamfundet i Trondhjem har opptak ved starten av hvert semester. Vi ønsker at du søker til oss som frivillig! Studentersamfundet i Trondhjem er Norges største studentersamfund og vi har et tilbud andre byer bare kan drømme om.',
+            'text_en': 'Studentersamfundet in Trondheim has recruitments at the start of each semester. We would like you to apply to us as a volunteer! Studentersamfundet in Trondheim is Norways largest student society and we have an offer that other cities can only dream of.',
+        },
+        {
             'key': 'no_recruitment_samf_header',
             'text_nb': 'Det er for tiden ingen opptak på Samfundet',
             'text_en': 'There are currently no recruitments at Samfundet',
@@ -73,6 +78,11 @@ def seed():
             'text_en': 'Studentersamfundet in Trondhjem is Norways largest student society and we have an offer that other cities can only dream of.',
         },
         {
+            'key': 'isfit_recruitment_description',
+            'text_nb': 'ISFIT har opptak ved starten av hvert semester. Vi ønsker at du søker til oss som frivillig! Som frivillig i ISFIT får du muligheten til å være med på å arrangere verdens største studentfestival.',
+            'text_en': 'ISFIT has recruitments at the start of each semester. We would like you to apply to us as a volunteer! As a volunteer in ISFIT, you get the opportunity to help organize the worlds largest student festival.',
+        },
+        {
             'key': 'no_recruitment_isfit_header',
             'text_nb': 'Det er for tiden ingen opptak på Samfundet',
             'text_en': 'There are currently no recruitments at Samfundet',
@@ -86,6 +96,11 @@ def seed():
             'key': 'no_recruitment_isfit_about',
             'text_nb': 'Studentersamfundet i Trondhjem er Norges største studentersamfund og vi har et tilbud andre byer bare kan drømme om.',
             'text_en': 'Studentersamfundet in Trondhjem is Norways largest student society and we have an offer that other cities can only dream of.',
+        },
+        {
+            'key': 'uka_recruitment_description',
+            'text_nb': 'UKA har opptak ved starten av hvert semester. Vi ønsker at du søker til oss som frivillig! Som frivillig i UKA får du muligheten til å være med på å arrangere Norges største kulturfestival.',
+            'text_en': "UKA has recruitments at the start of each semester. We would like you to apply to us as a volunteer! As a volunteer in UKA, you get the opportunity to help organize Norway's largest cultural festival.",
         },
         {
             'key': 'no_recruitment_uka_header',

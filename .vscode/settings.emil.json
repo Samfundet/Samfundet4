@@ -16,9 +16,16 @@
   "workbench.colorTheme": "Atom One Dark",
   "workbench.tree.indent": 20,
 
+  
   // ================================
   //              Backend
   // ================================
+  "python.autoComplete.extraPaths": [
+      "${workspaceFolder}/backend"
+  ],
+  "python.analysis.extraPaths": [
+      "${workspaceFolder}/backend"
+  ],
   // mypy (type checker, linter)
   "mypy-type-checker.importStrategy": "fromEnvironment",
   "mypy-type-checker.args": ["--config-file", "backend/mypy.ini", "--no-pretty"],
@@ -26,7 +33,7 @@
   "python.testing.pytestEnabled": true,
   "python.testing.pytestArgs": ["-c", "backend/pytest.ini"],
   // Other
-  "python.envFile": "backend/.env",
+  "python.envFile": "${workspaceFolder}/backend/.env",
   "[python]": {
     "editor.codeActionsOnSave": {
       "source.fixAll": "never",
