@@ -3,7 +3,13 @@
 @import "src/mixins";
 
 .modal {
-  width: 60%;
+  width: 50%;
+  @include for-tablet-down {
+    width: 70%;
+  }
+  @include for-mobile-only {
+    width: 90%;
+  }
 }
 
 .container {
@@ -29,13 +35,37 @@
   cursor: pointer;
 }
 
-.ticket_selection {
+.ticket_selection_container {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  flex-direction: column;
+  padding-bottom: 1rem;
 }
 
+.ticket_select {
+  display: flex;
+  border-bottom: 1px solid lightgrey;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  flex: 0.5;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.select_label {
+  padding-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.price_label {
+  padding-bottom: 0.5rem;
+}
+
+.slect_item {
+  float: right
+}
 .ticket_type {
   background: #f0f0f0;
   padding: 1rem;
@@ -45,6 +75,9 @@
 
 .ticket_type_fields {
   display: flex;
+  @include for-tablet-down {
+    flex-direction: column;
+  }
 }
 
 .ticket_type_field {
@@ -82,6 +115,7 @@
   font-weight: 700;
   cursor: pointer;
   transition: 0.2s;
+  margin-top: 1rem;
 
   &:hover {
     filter: brightness(110%);

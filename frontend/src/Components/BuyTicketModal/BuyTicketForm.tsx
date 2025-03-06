@@ -89,54 +89,64 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(PostTicketForm)}>
           {/* Ticket Selection */}
-          <div className={styles.ticket_selection}>
+          <div className={styles.ticket_selection_container}>
             {/* Non-Member Tickets */}
-            <FormField
-              control={form.control}
-              name="tickets"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{`${t(KEY.common_not)}-${t(KEY.common_member)}`}</FormLabel>
-                  <FormControl>
-                  <Select
-                    {...field}
-                    options={[...Array(9).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))} // Convert value to string
-                    onChange={(e) => {
-                      if (e) {
-                        form.setValue("tickets", Number(e.target.value)); // Convert string back to number
-                      }
-                    }}
-                    value={field.value.toString()} // Ensure value is a string
-                  />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className={styles.ticket_select}>
+              <div className={styles.select_info}>
+                <p className={styles.select_label}>{`${t(KEY.common_not)}-${t(KEY.common_member)}`}</p>
+                <p className={styles.price_label}>0,00 kr per billett</p>
+              </div>
+              <FormField
+                control={form.control}
+                name="tickets"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                    <Select
+                      {...field}
+                      options={[...Array(9).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))} // Convert value to string
+                      onChange={(e) => {
+                        if (e) {
+                          form.setValue("tickets", Number(e.target.value)); // Convert string back to number
+                        }
+                      }}
+                      value={field.value.toString()} // Ensure value is a string
+                    />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             {/* Member Tickets */}
-            <FormField
-              control={form.control}
-              name="membershipTickets"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t(KEY.common_member)}</FormLabel>
-                  <FormControl>
-                  <Select
-                    {...field}
-                    options={[...Array(9).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))} // Convert value to string
-                    onChange={(e) => {
-                      if (e) {
-                        form.setValue("membershipTickets", Number(e.target.value)); // Convert string back to number
-                      }
-                    }}
-                    value={field.value.toString()} // Ensure value is a string
-                  />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className={styles.ticket_select}>
+              <div className={styles.select_info}>
+                <p className={styles.select_label}>{`${t(KEY.common_member)}`}</p>
+                <p className={styles.price_label}>0,00 kr per billett</p>
+              </div>
+              <FormField
+                control={form.control}
+                name="membershipTickets"
+                render={({ field }) => (
+                  <FormItem className={styles.select_item}>
+                    <FormControl>
+                    <Select
+                      {...field}
+                      options={[...Array(9).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))} // Convert value to string
+                      onChange={(e) => {
+                        if (e) {
+                          form.setValue("membershipTickets", Number(e.target.value)); // Convert string back to number
+                        }
+                      }}
+                      value={field.value.toString()} // Ensure value is a string
+                    />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
 
           {/* Email / Membership Number Toggle */}
