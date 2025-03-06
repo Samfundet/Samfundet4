@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getRecruitmentPosition, searchUsers } from '~/api';
+import { getRecruitmentPosition, getUsers } from '~/api';
 import type { RecruitmentPositionDto, UserDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -41,7 +41,7 @@ export function RecruitmentPositionFormAdminPage() {
       // Set a new timeout
       searchTimeoutRef.current = setTimeout(async () => {
         try {
-          const results = await searchUsers(term);
+          const results = await getUsers(term);
           setUsers(results);
         } catch (error) {
           console.error('Error searching users:', error);
@@ -73,7 +73,7 @@ export function RecruitmentPositionFormAdminPage() {
           if (data.data.interviewers?.length) {
             // We need to make sure we have the interviewer data even without search
             const interviewerIds = data.data.interviewers.map((i) => i.id);
-            searchUsers(interviewerIds.join(' ')).then((results) => setUsers(results));
+            getUsers(interviewerIds.join(' ')).then((results: UserDto[]) => setUsers(results));
           }
         })
         .catch(() => {

@@ -1167,26 +1167,6 @@ export async function getRecruitmentGangStats(
   return await axios.get(url, { withCredentials: true });
 }
 
-export async function searchUsers(searchTerm: string): Promise<UserDto[]> {
-  if (!searchTerm.trim()) {
-    return []; // Return empty array if search term is empty
-  }
-
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users;
-
-  try {
-    const response = await axios.get<UserDto[]>(url, {
-      params: { search: searchTerm },
-      withCredentials: true,
-    });
-
-    return response.data;
-  } catch (error) {
-    console.error('Error searching users:', error);
-    return [];
-  }
-}
-
 export async function getPositionsByTag(
   recruitmentId: string,
   tags: string,
