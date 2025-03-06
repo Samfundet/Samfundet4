@@ -1,16 +1,16 @@
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { ToastContainer } from 'react-toastify';
 import { useGoatCounter, useIsDarkTheme } from '~/hooks';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 
 // Neccessary import for translations.
-import { CommandMenu, UserFeedback, useScrollToTop } from './Components';
-import './i18n/i18n';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { makeZodI18nMap } from 'zod-i18n-map';
+import { CommandMenu, UserFeedback, useScrollToTop } from './Components';
+import './i18n/i18n';
 
 export function App() {
   const goatCounterCode = import.meta.env.VITE_GOATCOUNTER_CODE;
