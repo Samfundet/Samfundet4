@@ -1,6 +1,7 @@
 .textbox,
-.markdown {
+.markdownbox {
   min-height: 550px;
+  max-height: 550px; /* Add max-height to enable scrolling */
   margin: 10px;
   font-size: 16px;
   line-height: 1.5;
@@ -11,29 +12,25 @@
   background-color: #ffffff;
   border: 1px solid #cccccc;
   border-radius: 4px;
-  overflow: auto;
   resize: vertical;
-  box-sizing: border-box; /* Ensure padding is included in width calculation */
-  width: 100%; /* Force both to take full width of their container */
+  box-sizing: border-box;
+  width: 100%;
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.markdownbox {
+  cursor: pointer; /* Add cursor pointer to indicate it's clickable */
 }
 
 .markdownContent {
   p,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  ul,
-  ol,
-  blockquote,
   pre {
     margin: 0;
-    padding: 0;
   }
 
-  /* Remove any horizontal padding/margin that might affect width */
+  /* Make sure content doesn't overflow horizontally */
   width: 100%;
   box-sizing: border-box;
+  overflow-wrap: break-word; /* Ensure long words don't overflow */
+  word-wrap: break-word;
 }
