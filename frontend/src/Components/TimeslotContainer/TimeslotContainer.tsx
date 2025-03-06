@@ -117,7 +117,7 @@ export function TimeslotContainer({
     }
 
     return availabilityMap;
-  }, [timeslots, interviewers_objects, selectedDate, occupiedTimeslots]);
+  }, [timeslots, interviewers_objects, selectedDate, occupiedTimeslots, timeslotInterval]);
 
   // Format available interviewers for display in tooltip
   const getAvailableInterviewersForTimeslot = useCallback(
@@ -129,12 +129,12 @@ export function TimeslotContainer({
       if (!availableInterviewers) return 'No data available';
 
       return availableInterviewers.length > 0
-        ? `${t(KEY.common_available) + ':'} ${availableInterviewers
+        ? `${`${t(KEY.common_available)}: `}${availableInterviewers
             .map((i: { first_name: string; last_name: string }) => `${i.first_name} ${i.last_name}`)
             .join(', ')}`
         : t(KEY.recruitment_no_interviewers_available);
     },
-    [selectedDate, isLoading, timeslotAvailabilityMap],
+    [selectedDate, isLoading, timeslotAvailabilityMap, t],
   );
 
   // Click & drag functionality
