@@ -1,0 +1,36 @@
+.textBox,
+.markdownBox {
+  min-height: 550px;
+  max-height: 550px; /* Add max-height to enable scrolling */
+  margin: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 8px 12px;
+  display: block;
+  font-family: inherit;
+  color: #333333;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  resize: vertical;
+  box-sizing: border-box;
+  width: 100%;
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.markdownBox {
+  cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+}
+
+.markdownContent {
+  /* stylelint-disable-next-line selector-max-type */
+  p,
+  pre {
+    margin: 0;
+  }
+
+  /* Make sure content doesn't overflow horizontally */
+  width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word; /* Ensure long words don't overflow */
+}
