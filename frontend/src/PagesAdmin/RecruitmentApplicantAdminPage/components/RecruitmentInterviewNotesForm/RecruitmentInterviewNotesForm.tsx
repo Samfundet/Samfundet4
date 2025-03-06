@@ -108,8 +108,18 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
                         }}
                       />
                     ) : (
-                      // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-                      <div onClick={handleFocus} className={styles.markdown}>
+                      <div
+                        onClick={handleFocus}
+                        className={styles.markdownbox}
+                        // biome-ignore lint/a11y/useSemanticElements: <explanation>
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            handleFocus();
+                          }
+                        }}
+                      >
                         <div className={styles.markdownContent}>
                           <SamfMarkdown>{currentNotes}</SamfMarkdown>
                         </div>
