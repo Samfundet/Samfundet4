@@ -179,6 +179,9 @@ export const nb = prepareTranslations({
   [KEY.common_administration]: 'Administrasjon',
   [KEY.common_list_view]: 'Liste visning',
   [KEY.common_tab_view]: 'Fane visning',
+  [KEY.common_membership_number]: 'Medlemsnummer',
+  [KEY.common_to_payment]: 'Til betaling',
+
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
   [KEY.common_press]: 'presse',
@@ -683,6 +686,8 @@ export const en = prepareTranslations({
   [KEY.common_unprocessed]: 'Unprocessed',
   [KEY.common_list_view]: 'List view',
   [KEY.common_tab_view]: 'Tab view',
+  [KEY.common_membership_number]: 'Membership number',
+  [KEY.common_to_payment]: 'To payment',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
