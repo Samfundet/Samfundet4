@@ -1433,6 +1433,7 @@ class RecruitmentAvailabilityView(APIView):
                 'start_date': availability.start_date,
                 'end_date': availability.end_date,
                 'timeslots': timeslots,
+                'interval': interval,
             }
         )
 

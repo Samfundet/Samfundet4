@@ -37,6 +37,7 @@ export type RecruitmentAvailabilityDto = {
   start_date: string;
   end_date: string;
   timeslots: string[];
+  interval: number;
 };
 
 export type DateTimeslotDto = {

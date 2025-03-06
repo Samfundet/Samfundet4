@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getInterviewerAvailabilityOnDate } from '~/api';
+import { getInterviewerAvailabilityOnDate, getRecruitmentAvailability } from '~/api';
 import type { RecruitmentApplicationDto } from '~/dto';
 import { useMouseDown } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -69,6 +69,20 @@ export function TimeslotContainer({
     enabled: !!(selectedDate && recruitmentId && interviewers.length > 0),
   });
 
+  const { data: recruitmentTimeslots } = useQuery({
+    queryKey: ['recruitmentTimeslots', recruitmentId],
+    queryFn: async () => {
+      if (!recruitmentId) {
+        return null;
+      }
+      const response = await getRecruitmentAvailability(recruitmentId);
+      return response.data;
+    },
+    enabled: !!recruitmentId,
+  });
+
+  const timeslotInterval = recruitmentTimeslots?.interval || 30;
+
   // Map of available interviewers for each timeslot
   const timeslotAvailabilityMap = useMemo(() => {
     if (!timeslots || !interviewers_objects || !selectedDate || !occupiedTimeslots) {
@@ -80,7 +94,7 @@ export function TimeslotContainer({
     // For each timeslot, determine which interviewers are available
     for (const timeslot of timeslots) {
       const timeslotMinutes = parseTimeToMinutes(timeslot);
-      const timeslotEndMinutes = timeslotMinutes + 30; // Antar 30 min slots, kan og bør kanskje endres? om annet er mulig?
+      const timeslotEndMinutes = timeslotMinutes + timeslotInterval;
 
       // Find available interviewers for this timeslot by filtering out occupied interviewers
       const availableInterviewers = interviewers_objects.filter((interviewer) => {
@@ -89,7 +103,7 @@ export function TimeslotContainer({
             return false;
           }
           const occupiedTimeMinutes = parseTimeToMinutes(slot.time);
-          const occupiedEndMinutes = occupiedTimeMinutes + 30; // Antar 30 min slots på occupiedslots også
+          const occupiedEndMinutes = occupiedTimeMinutes + timeslotInterval;
 
           // Check for overlap
           return doTimeRangesOverlap(timeslotMinutes, timeslotEndMinutes, occupiedTimeMinutes, occupiedEndMinutes);
