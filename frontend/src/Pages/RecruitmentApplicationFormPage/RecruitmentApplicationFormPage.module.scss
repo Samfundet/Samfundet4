@@ -36,7 +36,13 @@
 
 .other_positions {
   flex: 1;
-  margin-bottom: 1em;
+  margin: 0 0 1em 1em;
+}
+
+.other_positions_buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
 }
 
 .header {
@@ -74,5 +80,11 @@
 
 .form_header {
   display: flex;
+  gap: 0.5em;
+}
+
+.form_buttons {
+  display: flex;
+  flex-direction: row;
   gap: 0.5em;
 }

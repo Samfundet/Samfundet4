@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
 import { useMutation } from '@tanstack/react-query';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -32,7 +32,7 @@ import {
 } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
 import type { PositionsByTagResponse, RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
-import { useCustomNavigate, useTitle } from '~/hooks';
+import { useCustomNavigate, useMobile, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -67,6 +67,7 @@ export function RecruitmentApplicationFormPage() {
   const [loading, setLoading] = useState(true);
 
   const { positionId } = useParams();
+  const isMobile = useMobile();
 
   const form = useForm<RecruitmentApplicationFormType>({
     resolver: zodResolver(recruitmentApplicationSchema),
@@ -208,30 +209,34 @@ export function RecruitmentApplicationFormPage() {
       <h2 className={styles.sub_header}>
         {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
       </h2>
-      {recruitmentPositionsForGang?.map((pos) => (
-        <Button key={pos.id} display="pill" theme="outlined" onClick={() => handlePosNavigate(pos)}>
-          {dbT(pos, 'name')}
-        </Button>
-      ))}
+      <div className={styles.other_positions_buttons}>
+        {recruitmentPositionsForGang?.map((pos) => (
+          <Button key={pos.id} display="pill" theme="outlined" onClick={() => handlePosNavigate(pos)}>
+            {dbT(pos, 'name')}
+          </Button>
+        ))}
+      </div>
     </div>
   );
 
   const similarPositionsBtns = (
     <div className={styles.other_positions}>
       {similarPositions?.positions && (
-        <Fragment>
+        <>
           <h2 className={styles.sub_header}>{t(KEY.recruitment_similar_positions)}</h2>
-          {similarPositions.positions.map((similarPosition) => (
-            <Button
-              key={similarPosition.id}
-              display="pill"
-              theme="outlined"
-              onClick={() => handlePosNavigate(similarPosition)}
-            >
-              {dbT(similarPosition, 'name')}
-            </Button>
-          ))}
-        </Fragment>
+          <div className={styles.other_positions_buttons}>
+            {similarPositions.positions.map((similarPosition) => (
+              <Button
+                key={similarPosition.id}
+                display="pill"
+                theme="outlined"
+                onClick={() => handlePosNavigate(similarPosition)}
+              >
+                {dbT(similarPosition, 'name')}
+              </Button>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
@@ -284,20 +289,19 @@ export function RecruitmentApplicationFormPage() {
             </h2>
             <p className={styles.text}>{dbT(recruitmentPosition, 'long_description')}</p>
           </div>
-          {similarPositionsBtns}
-          {otherPositionsAtGang}
+
+          {!isMobile && (
+            <div className={styles.other_positions}>
+              {similarPositionsBtns}
+              {otherPositionsAtGang}
+            </div>
+          )}
         </div>
-        {recruitmentApplication && (
+        {recruitmentApplication?.withdrawn && (
           <div className={styles.withdrawn_container}>
-            {recruitmentApplication?.withdrawn ? (
-              <Text size="l" as="i" className={styles.withdrawn_text}>
-                {t(KEY.recruitment_withdrawn_message)}:
-              </Text>
-            ) : (
-              <Button theme="samf" display="basic" onClick={() => withdrawApplication()}>
-                {t(KEY.recruitment_withdraw_application)}
-              </Button>
-            )}
+            <Text size="l" as="i" className={styles.withdrawn_text}>
+              {t(KEY.recruitment_withdrawn_message)}
+            </Text>
           </div>
         )}
         {user ? (
@@ -326,9 +330,16 @@ export function RecruitmentApplicationFormPage() {
                     );
                   }}
                 />
-                <Button type="submit" rounded={true} theme="green" display="basic">
-                  {submitText}
-                </Button>
+                <div className={styles.form_buttons}>
+                  <Button type="submit" theme="green" display="basic">
+                    {submitText}
+                  </Button>
+                  {!recruitmentApplication?.withdrawn && (
+                    <Button type="button" theme="samf" display="basic" onClick={() => withdrawApplication()}>
+                      {t(KEY.recruitment_withdraw_application)}
+                    </Button>
+                  )}
+                </div>
               </form>
             </Form>
           </>
@@ -345,6 +356,13 @@ export function RecruitmentApplicationFormPage() {
               {t(KEY.common_login)}
             </Button>
           </div>
+        )}
+
+        {isMobile && (
+          <>
+            {similarPositionsBtns}
+            {otherPositionsAtGang}
+          </>
         )}
       </div>
     </Page>
