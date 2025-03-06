@@ -45,18 +45,19 @@ interface BuyTicketFormProps {
 export function BuyTicketForm({ event }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const [totalPrice, setTotalPrice] = useState(0);
-  const [ticketType, setTicketType] = useState("membershipNumber");
-  const [ticketTypeEmail, setTicketTypeEmail] = useState<boolean>(false);
 
-  const form = useForm<BuyTicketFormType>({
+  const form = useForm<BuyTicketFormType & { ticketType: string }>({
     resolver: zodResolver(buyTicketFormSchema),
     defaultValues: {
       tickets: 0,
       membershipTickets: 0,
       membershipNumber: "",
       email: "",
+      ticketType: "membershipNumber"
     },
   });
+
+  const ticketType = useWatch({ control: form.control, name: "ticketType" });
 
   const PostTicketForm = (data: BuyTicketFormType) => {
     console.log("Submitted Ticket Form Data:", data);
@@ -75,13 +76,13 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
     setTotalPrice(tickets * price + membershipTickets * price_member);
   }, [tickets, membershipTickets, price, price_member]);
 
-  // useEffect(() => {
-  //   if (ticketType === "email") {
-  //     form.setValue("email", "");
-  //   } else if (ticketType === "membershipNumber") {
-  //     form.setValue("membershipNumber", "");
-  //   }
-  // }, [ticketType]);
+  useEffect(() => {
+    if (ticketType === "email") {
+      form.setValue("email", "");
+    } else if (ticketType === "membershipNumber") {
+      form.setValue("membershipNumber", "");
+    }
+  }, [ticketType, form]);
 
   return (
     <div className={styles.container}>
@@ -145,9 +146,9 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 <div className={styles.radio_box}>
                   <RadioButton
                     name="ticketType"
-                    // onChange={() => form.setValue("ticketType", "membershipNumber")}
-                    onChange={() => { setTicketType("membershipNumber"); setTicketTypeEmail(false); }}
-                    defaultChecked={true}
+                    onChange={() => form.setValue("ticketType", "membershipNumber")}
+                    // defaultChecked={true}
+                    checked={ticketType === "membershipNumber"}
                   />{" "}
                   <label>{t(KEY.common_membership_number)}</label>
                 </div>
@@ -162,9 +163,9 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                         <Input 
                           type="text" 
                           className={styles.membership_number_field}
-                          disabled={ticketTypeEmail}
+                          disabled={ticketType !== "membershipNumber"}
                           style={{
-                            backgroundColor: ticketTypeEmail ? "lightgray" : "white",
+                            backgroundColor: ticketType === "membershipNumber" ? "white" : "lightgrey",
                           }} 
                           placeholder="Enter membership number" {...field} />
                       </FormControl>
@@ -177,8 +178,8 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 <div className={styles.radio_box}>
                   <RadioButton
                     name="ticketType"
-                    // onChange={() => form.setValue("ticketType", "email")}
-                    onChange={() => {setTicketType("email"); setTicketTypeEmail(true); }}
+                    onChange={() => form.setValue("ticketType", "email")}
+                    checked={ticketType === "email"}
                   />{" "}
                   <label className={styles.email_label}>{t(KEY.common_email)}</label>
                 </div>
@@ -192,9 +193,9 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                       <FormControl>
                         <Input 
                           type="email"
-                          disabled={!ticketTypeEmail}
+                          disabled={ticketType !== "email"}
                           style={{
-                            backgroundColor: ticketTypeEmail ? "white" : "lightgray",
+                            backgroundColor: ticketType === "email" ? "white" : "lightgray",
                           }} 
                           placeholder="Enter your email" {...field} />
                       </FormControl>
@@ -205,10 +206,10 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
               </div>
             </div>
             <div className="ticket_type_description">
-              <p style={{display: ticketTypeEmail ? "none" : "inline"}}>
+              <p style={{display: ticketType === "membershipNumber" ? "inline" : "none"}}>
                 {useTextItem(TextItem.ticketless_description)}
               </p>
-              <p style={{display: ticketTypeEmail ? "inline" : "none"}}>
+              <p style={{display: ticketType === "email" ? "inline" : "none"}}>
                 Billetten(e) blir sendt på epost, og må vises fram i døren når du kommer til Samfundet. Billettene kan 
                 vises på mobil eller tas med som utskrift.
               </p>
