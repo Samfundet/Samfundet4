@@ -33,6 +33,10 @@ const buyTicketFormSchema = z
   .refine((data) => data.email || data.membershipNumber, {
     message: "You must provide either an email or a membership number",
     path: ["email"],
+  })
+  .refine((data) => data.tickets > 1 || data.membershipTickets > 1, {
+    message: "You must select at least one ticket",
+    path: ["tickets"],
   });
 
 type BuyTicketFormType = z.infer<typeof buyTicketFormSchema>;
@@ -94,7 +98,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
             <div className={styles.ticket_select}>
               <div className={styles.select_info}>
                 <p className={styles.select_label}>{`${t(KEY.common_not)}-${t(KEY.common_member)}`}</p>
-                <p className={styles.price_label}>0,00 kr per billett</p>
+                <p className={styles.price_label}>{price} kr per billett</p>
               </div>
               <FormField
                 control={form.control}
@@ -123,7 +127,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
             <div className={styles.ticket_select}>
               <div className={styles.select_info}>
                 <p className={styles.select_label}>{`${t(KEY.common_member)}`}</p>
-                <p className={styles.price_label}>0,00 kr per billett</p>
+                <p className={styles.price_label}>{price_member} kr per billett</p>
               </div>
               <FormField
                 control={form.control}
@@ -215,7 +219,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 />
               </div>
             </div>
-            <div className="ticket_type_description">
+            <div className={styles.ticket_type_description}>
               <p style={{display: ticketType === "membershipNumber" ? "inline" : "none"}}>
                 {useTextItem(TextItem.ticketless_description)}
               </p>
