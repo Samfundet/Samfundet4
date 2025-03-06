@@ -1,12 +1,27 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
+import { useMutation } from '@tanstack/react-query';
 import { Fragment, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Link, Modal, OccupiedForm, Page, SamfundetLogoSpinner, ToolTip } from '~/Components';
+import { z } from 'zod';
+import {
+  Button,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  Link,
+  Modal,
+  OccupiedForm,
+  Page,
+  SamfundetLogoSpinner,
+  Textarea,
+  ToolTip,
+} from '~/Components';
 import { Text } from '~/Components/Text/Text';
-import { SamfForm } from '~/Forms/SamfForm';
-import { SamfFormField } from '~/Forms/SamfFormField';
 import {
   getPositionsByTag,
   getRecruitmentApplicationForPosition,
@@ -29,6 +44,12 @@ type FormProps = {
   application_text: string;
 };
 
+const recruitmentApplicationSchema = z.object({
+  application_text: z.string(),
+});
+
+type RecruitmentApplicationFormType = z.infer<typeof recruitmentApplicationSchema>;
+
 export function RecruitmentApplicationFormPage() {
   const { user } = useAuthContext();
   const navigate = useCustomNavigate();
@@ -47,7 +68,17 @@ export function RecruitmentApplicationFormPage() {
 
   const { positionId } = useParams();
 
+  const form = useForm<RecruitmentApplicationFormType>({
+    resolver: zodResolver(recruitmentApplicationSchema),
+  });
+
   useTitle(recruitmentPosition ? (dbT(recruitmentPosition, 'name') as string) : '');
+
+  useEffect(() => {
+    if (recruitmentApplication?.application_text) {
+      form.setValue('application_text', recruitmentApplication.application_text);
+    }
+  }, [recruitmentApplication, form]);
 
   useEffect(() => {
     Promise.allSettled([
@@ -119,23 +150,25 @@ export function RecruitmentApplicationFormPage() {
     setOpenOccupiedForm(true);
   }
 
-  function submitData(data: FormProps) {
-    putRecruitmentApplication(data as Partial<RecruitmentApplicationDto>, positionId ? +positionId : 1)
-      .then(() => {
-        navigate({
-          url: reverse({
-            pattern: ROUTES.frontend.recruitment_application_overview,
-            urlParams: {
-              recruitmentId: recruitmentPosition?.recruitment,
-            },
-          }),
-        });
-        toast.success(t(KEY.common_creation_successful));
-      })
-      .catch(() => {
-        toast.error(t(KEY.common_something_went_wrong));
+  const submitData = useMutation({
+    mutationFn: ({ data, positionId }: { data: Partial<RecruitmentApplicationDto>; positionId: number }) => {
+      return putRecruitmentApplication(data, positionId);
+    },
+    onSuccess: () => {
+      navigate({
+        url: reverse({
+          pattern: ROUTES.frontend.recruitment_application_overview,
+          urlParams: {
+            recruitmentId: recruitmentPosition?.recruitment,
+          },
+        }),
       });
-  }
+      toast.success(t(KEY.common_creation_successful));
+    },
+    onError: () => {
+      toast.error(t(KEY.common_something_went_wrong));
+    },
+  });
 
   if (loading) {
     return (
@@ -220,7 +253,9 @@ export function RecruitmentApplicationFormPage() {
               <OccupiedForm
                 recruitmentId={recruitmentId}
                 onCancel={() => setOpenOccupiedForm(false)}
-                onConfirm={() => formData && submitData(formData)}
+                onConfirm={() =>
+                  formData && submitData.mutate({ data: formData, positionId: positionId ? +positionId : 1 })
+                }
                 header="confirm_occupied_time"
                 subHeader="confirm_occupied_time_text"
                 saveButtonText="confirm_occupied_time_send_application"
@@ -266,20 +301,37 @@ export function RecruitmentApplicationFormPage() {
           </div>
         )}
         {user ? (
-          <SamfForm
-            initialData={recruitmentApplication as FormProps}
-            onSubmit={handleOnSubmit}
-            submitText={submitText}
-            devMode={false}
-          >
-            <div className={styles.form_header}>
-              <h2 className={styles.label}>{t(KEY.recruitment_application)}</h2>
-              <ToolTip value={t(KEY.recruitment_applyforhelp)}>
-                <Icon icon="mingcute:question-fill" width="1.2em" height="1.2em" />
-              </ToolTip>
-            </div>
-            <SamfFormField field="application_text" type="text_long" />{' '}
-          </SamfForm>
+          <>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(handleOnSubmit)}>
+                <div className={styles.form_header}>
+                  <h2 className={styles.label}>{t(KEY.recruitment_application)}</h2>
+                  <ToolTip value={t(KEY.recruitment_applyforhelp)}>
+                    <Icon icon="mingcute:question-fill" width="1.2em" height="1.2em" />
+                  </ToolTip>
+                </div>
+                <FormField
+                  control={form.control}
+                  name="application_text"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormControl>
+                          <Textarea
+                            {...field}
+                            value={field.value} // Ensure the Textarea is controlled
+                          />
+                        </FormControl>
+                      </FormItem>
+                    );
+                  }}
+                />
+                <Button type="submit" rounded={true} theme="green" display="basic">
+                  {submitText}
+                </Button>
+              </form>
+            </Form>
+          </>
         ) : (
           <div>
             <Button
