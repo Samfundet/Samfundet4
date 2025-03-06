@@ -1,5 +1,5 @@
-.textbox,
-.markdownbox {
+.textBox,
+.markdownBox {
   min-height: 550px;
   max-height: 550px; /* Add max-height to enable scrolling */
   margin: 10px;
@@ -18,11 +18,12 @@
   overflow-y: auto; /* Enable vertical scrolling */
 }
 
-.markdownbox {
+.markdownBox {
   cursor: pointer; /* Add cursor pointer to indicate it's clickable */
 }
 
 .markdownContent {
+  /* stylelint-disable-next-line selector-max-type */
   p,
   pre {
     margin: 0;
@@ -32,5 +33,4 @@
   width: 100%;
   box-sizing: border-box;
   overflow-wrap: break-word; /* Ensure long words don't overflow */
-  word-wrap: break-word;
 }

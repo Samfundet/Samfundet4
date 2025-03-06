@@ -100,7 +100,7 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
                       <Textarea
                         {...field}
                         ref={textareaRef}
-                        className={styles.textbox}
+                        className={styles.textBox}
                         onBlur={(newNotes) => {
                           field.onBlur(); // Call the default onBlur handler from react-hook-form
                           handleNotesChange(newNotes.target.value); // Call your custom function on blur
@@ -110,7 +110,7 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
                     ) : (
                       <div
                         onClick={handleFocus}
-                        className={styles.markdownbox}
+                        className={styles.markdownBox}
                         // biome-ignore lint/a11y/useSemanticElements: <explanation>
                         role="button"
                         tabIndex={0}
