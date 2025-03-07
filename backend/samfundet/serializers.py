@@ -18,7 +18,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.password_validation import validate_password
 
 from root.constants import PHONE_NUMBER_REGEX
-from root.utils.mixins import FullCleanSerializer, CustomBaseSerializer
+from root.utils.mixins import CustomBaseSerializer
 
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
@@ -26,28 +26,21 @@ from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
     Tag,
     Gang,
-    Menu,
     User,
     Image,
     Merch,
-    Table,
     Venue,
     Campus,
-    Booking,
     Infobox,
     Profile,
     BlogPost,
     GangType,
     KeyValue,
-    MenuItem,
     TextItem,
     GangSection,
-    Reservation,
     ClosedPeriod,
-    FoodCategory,
     Organization,
     Saksdokument,
-    FoodPreference,
     MerchVariation,
     UserPreference,
     InformationPage,
@@ -490,35 +483,6 @@ class BlogPostSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
-class FoodPreferenceSerializer(CustomBaseSerializer):
-    class Meta:
-        model = FoodPreference
-        fields = '__all__'
-
-
-class FoodCategorySerializer(CustomBaseSerializer):
-    class Meta:
-        model = FoodCategory
-        fields = ['id', 'name_nb', 'name_en']
-
-
-class MenuItemSerializer(CustomBaseSerializer):
-    food_preferences = FoodPreferenceSerializer(many=True, read_only=True)  # Todo make this work with post
-    food_category = FoodCategorySerializer(read_only=True)
-
-    class Meta:
-        model = MenuItem
-        fields = '__all__'
-
-
-class MenuSerializer(CustomBaseSerializer):
-    menu_items = MenuItemSerializer(many=True)
-
-    class Meta:
-        model = Menu
-        fields = '__all__'
-
-
 class RoleSerializer(CustomBaseSerializer):
     class Meta:
         model = Role
@@ -616,38 +580,6 @@ class InfoboxSerializer(CustomBaseSerializer):
 class KeyValueSerializer(serializers.ModelSerializer):
     class Meta:
         model = KeyValue
-        fields = '__all__'
-
-
-# =============================== #
-#            Sulten               #
-# =============================== #
-
-
-class TableSerializer(CustomBaseSerializer):
-    class Meta:
-        model = Table
-        fields = '__all__'
-
-
-class ReservationSerializer(FullCleanSerializer):
-    class Meta:
-        model = Reservation
-        fields = '__all__'
-
-
-class ReservationCheckSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Reservation
-        fields = ['guest_count', 'occasion', 'reservation_date']
-
-
-class BookingSerializer(serializers.ModelSerializer):
-    tables = TableSerializer(many=True)
-    user = UserSerializer(many=True)
-
-    class Meta:
-        model = Booking
         fields = '__all__'
 
 
