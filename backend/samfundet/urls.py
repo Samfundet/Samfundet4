@@ -1,12 +1,13 @@
 # imports
 from __future__ import annotations
 
-import samfundet.sulten_views.sulten_views
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from rest_framework import routers
 
 from django.urls import path, include
+
+import samfundet.sulten_views.sulten_views
 
 from . import views
 
@@ -30,7 +31,7 @@ router.register('menu', samfundet.sulten_views.sulten_views.MenuView, 'menu')
 router.register('menu-items', samfundet.sulten_views.sulten_views.MenuItemView, 'menu_items')
 router.register('food-preference', samfundet.sulten_views.sulten_views.FoodPreferenceView, 'food_preference')
 router.register('food-category', samfundet.sulten_views.sulten_views.FoodCategoryView, 'food_category')
-router.register('booking', views.BookingView, 'booking')
+router.register('booking', samfundet.sulten_views.sulten_views.BookingView, 'booking')
 router.register('table', samfundet.sulten_views.sulten_views.TableView, 'table')
 router.register('textitem', views.TextItemView, 'text_item')
 router.register('interview-rooms', views.InterviewRoomView, 'interview_rooms')

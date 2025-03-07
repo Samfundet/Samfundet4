@@ -60,7 +60,6 @@ from .serializers import (
     LoginSerializer,
     MerchSerializer,
     VenueSerializer,
-    BookingSerializer,
     InfoboxSerializer,
     ProfileSerializer,
     BlogPostSerializer,
@@ -115,7 +114,6 @@ from .models.general import (
     Image,
     Merch,
     Venue,
-    Booking,
     Infobox,
     Profile,
     BlogPost,
@@ -264,12 +262,6 @@ class IsClosedView(ListAPIView):
             start_dt__lte=timezone.now(),
             end_dt__gte=timezone.now(),
         )
-
-
-class BookingView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = BookingSerializer
-    queryset = Booking.objects.all()
 
 
 class SaksdokumentView(ModelViewSet):

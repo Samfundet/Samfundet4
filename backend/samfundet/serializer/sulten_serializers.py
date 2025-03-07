@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from backend.root.utils.mixins import FullCleanSerializer, CustomBaseSerializer
-
 from rest_framework import serializers
 
-from samfundet.serializers import UserSerializer, MenuItemSerializer, FoodCategorySerializer, FoodPreferenceSerializer
+from root.utils.mixins import FullCleanSerializer, CustomBaseSerializer
+
+from samfundet.serializers import UserSerializer
 from samfundet.models.general import Menu, Table, Booking, MenuItem, Reservation, FoodCategory, FoodPreference
 
 
@@ -35,11 +35,15 @@ class BookingSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class MenuSerializer(CustomBaseSerializer):
-    menu_items = MenuItemSerializer(many=True)
-
+class FoodCategorySerializer(CustomBaseSerializer):
     class Meta:
-        model = Menu
+        model = FoodCategory
+        fields = ['id', 'name_nb', 'name_en']
+
+
+class FoodPreferenceSerializer(CustomBaseSerializer):
+    class Meta:
+        model = FoodPreference
         fields = '__all__'
 
 
@@ -52,13 +56,9 @@ class MenuItemSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
-class FoodCategorySerializer(CustomBaseSerializer):
-    class Meta:
-        model = FoodCategory
-        fields = ['id', 'name_nb', 'name_en']
+class MenuSerializer(CustomBaseSerializer):
+    menu_items = MenuItemSerializer(many=True)
 
-
-class FoodPreferenceSerializer(CustomBaseSerializer):
     class Meta:
-        model = FoodPreference
+        model = Menu
         fields = '__all__'

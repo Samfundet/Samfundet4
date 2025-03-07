@@ -9,10 +9,11 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissionsOrAnonRea
 
 from django.utils import timezone
 
-from samfundet.models.general import Menu, Table, Venue, MenuItem, Reservation, FoodCategory, FoodPreference
+from samfundet.models.general import Menu, Table, Venue, Booking, MenuItem, Reservation, FoodCategory, FoodPreference
 from samfundet.serializer.sulten_serializers import (
     MenuSerializer,
     TableSerializer,
+    BookingSerializer,
     MenuItemSerializer,
     ReservationSerializer,
     FoodCategorySerializer,
@@ -80,3 +81,9 @@ class ReservationCheckAvailabilityView(APIView):
             )
             return Response(available_tables, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BookingView(ModelViewSet):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = BookingSerializer
+    queryset = Booking.objects.all()
