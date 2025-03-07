@@ -596,6 +596,7 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_set_interview: '/recruitment-set-interview/:pk/',
   samfundet__recruitment_application_states_choices: '/recruitment-application-states-choices',
   samfundet__recruitment_application_update_state_gang: '/recruitment-application-update-state-gang/:pk/',
+  samfundet__recruitment_position_organized_applications: '/recruitment-position-organized-applications/:pk/',
   samfundet__recruitment_application_update_state_position: '/recruitment-application-update-state-position/:pk/',
   samfundet__recruitment_applications_recruiter: '/recruitment-application-recruiter/:applicationId/',
   samfundet__recruitment_application_interview_notes: '/recruitment-application-interview-notes/:interviewId/',

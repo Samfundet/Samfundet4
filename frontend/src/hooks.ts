@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { type MutableRefObject, type RefObject, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { getTextItem, putUserPreference } from '~/api';
 import type { Key, PageNumberPaginationType, SetState } from '~/types';
 import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';

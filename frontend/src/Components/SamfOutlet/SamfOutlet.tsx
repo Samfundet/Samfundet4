@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { Navbar } from '~/Components/Navbar';
 import { Footer } from '../Footer';
 import styles from './SamfOutlet.module.scss';
