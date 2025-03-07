@@ -52,7 +52,6 @@ from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .serializers import (
     TagSerializer,
     GangSerializer,
-    MenuSerializer,
     RoleSerializer,
     UserSerializer,
     EventSerializer,
@@ -60,7 +59,6 @@ from .serializers import (
     ImageSerializer,
     LoginSerializer,
     MerchSerializer,
-    TableSerializer,
     VenueSerializer,
     BookingSerializer,
     InfoboxSerializer,
@@ -68,30 +66,25 @@ from .serializers import (
     BlogPostSerializer,
     GangTypeSerializer,
     KeyValueSerializer,
-    MenuItemSerializer,
     RegisterSerializer,
     TextItemSerializer,
     InterviewSerializer,
     EventGroupSerializer,
     PermissionSerializer,
     RecruitmentSerializer,
-    ReservationSerializer,
     UserOrgRoleSerializer,
     ClosedPeriodSerializer,
-    FoodCategorySerializer,
     OrganizationSerializer,
     SaksdokumentSerializer,
     UserFeedbackSerializer,
     UserGangRoleSerializer,
     InterviewRoomSerializer,
     ChangePasswordSerializer,
-    FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
     RecruitmentGangSerializer,
     OccupiedTimeslotSerializer,
     PurchaseFeedbackSerializer,
-    ReservationCheckSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     UserGangSectionRoleSerializer,
@@ -118,11 +111,9 @@ from .models.event import (
 from .models.general import (
     Tag,
     Gang,
-    Menu,
     User,
     Image,
     Merch,
-    Table,
     Venue,
     Booking,
     Infobox,
@@ -130,14 +121,10 @@ from .models.general import (
     BlogPost,
     GangType,
     KeyValue,
-    MenuItem,
     TextItem,
-    Reservation,
     ClosedPeriod,
-    FoodCategory,
     Organization,
     Saksdokument,
-    FoodPreference,
     UserPreference,
     InformationPage,
     UserFeedbackModel,
@@ -363,72 +350,6 @@ class RoleView(ModelViewSet):
         combined = list(chain(org_data, gang_data, section_data))
 
         return Response(combined)
-
-
-# =============================== #
-#            Sulten               #
-# =============================== #
-
-
-class MenuView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = MenuSerializer
-    queryset = Menu.objects.all()
-
-
-class MenuItemView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = MenuItemSerializer
-    queryset = MenuItem.objects.all()
-
-
-class FoodCategoryView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = FoodCategorySerializer
-    queryset = FoodCategory.objects.all()
-
-
-class FoodPreferenceView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = FoodPreferenceSerializer
-    queryset = FoodPreference.objects.all()
-
-
-class TableView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = TableSerializer
-    queryset = Table.objects.all()
-
-
-class ReservationCreateView(ModelViewSet):
-    permission_classes = [AllowAny]
-    serializer_class = ReservationSerializer
-    queryset = Reservation.objects.all()
-
-
-class ReservationCheckAvailabilityView(APIView):
-    permission_classes = [AllowAny]
-    serializer_class = ReservationCheckSerializer
-
-    def post(self, request: Request) -> Response:
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            if serializer.validated_data['reservation_date'] <= timezone.now().date():
-                return Response(
-                    {
-                        'error_nb': 'Reservasjoner må dessverre opprettes minst én dag i forveien.',
-                        'error_en': 'Unfortunately, reservations must be made at least one day in advance.',
-                    },
-                    status=status.HTTP_406_NOT_ACCEPTABLE,
-                )
-            venue = self.request.query_params.get('venue', Venue.objects.get(slug='lyche').id)
-            available_tables = Reservation.fetch_available_times_for_date(
-                venue=venue,
-                seating=serializer.validated_data['guest_count'],
-                date=serializer.validated_data['reservation_date'],
-            )
-            return Response(available_tables, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # =============================== #
