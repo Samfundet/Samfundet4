@@ -31,7 +31,7 @@ export function FindAvailableTablesForm({ onSubmit }: { onSubmit: (data: z.infer
     defaultValues: {
       occasion: ReservationOccation.EAT,
       guest_count: 1,
-      reservation_date: new Date(),
+      reservation_date: new Date(new Date().setDate(new Date().getDate() + 1)),
     },
   });
 
