@@ -279,6 +279,8 @@ export const KEY = {
   sulten_reservation_form_more_than_8_help: 'sulten_reservation_form_more_than_8_help',
   sulten_reservation_form_remember_closing: 'sulten_reservation_form_remember_closing',
   sulten_reservation_form_find_times: 'sulten_reservation_form_find_times',
+  sulten_occation_drinks: 'sulten_occation_drinks',
+  sulten_occation_eat: 'sulten_occation_eat',
 
   // Recruitment:
   recruitment_look_at_recipients: 'recruitment_look_at_recipients',
