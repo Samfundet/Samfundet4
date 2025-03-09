@@ -374,7 +374,7 @@ export const router = createBrowserRouter(
               handle={{
                 crumb: ({ pathname }: UIMatch) => (
                   <Link url={pathname}>
-                    {t(KEY.common_create)} {t(KEY.common_menu)}
+                    {t(KEY.common_edit)} {t(KEY.sulten_dishes)}
                   </Link>
                 ),
               }}
