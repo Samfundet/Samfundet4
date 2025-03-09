@@ -1,25 +1,31 @@
+@import 'src/constants.scss';
+
 .textBox,
-.markdownBox {
+.markdownWrapper {
   min-height: 550px;
-  max-height: 550px; /* Add max-height to enable scrolling */
+  max-height: 550px;
   margin: 10px;
-  font-size: 16px;
   line-height: 1.5;
-  padding: 8px 12px;
-  display: block;
-  font-family: inherit;
-  color: #333333;
-  background-color: #ffffff;
-  border: 1px solid #cccccc;
+  background-color: $white;
+  border: 1px solid $grey-35;
   border-radius: 4px;
-  resize: vertical;
   box-sizing: border-box;
   width: 100%;
-  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-y: auto;
 }
 
-.markdownBox {
-  cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+.markdownButton {
+  width: 100%;
+  height: 100%;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  display: block;
 }
 
 .markdownContent {
@@ -28,9 +34,6 @@
   pre {
     margin: 0;
   }
-
-  /* Make sure content doesn't overflow horizontally */
   width: 100%;
-  box-sizing: border-box;
-  overflow-wrap: break-word; /* Ensure long words don't overflow */
+  overflow-wrap: break-word;
 }

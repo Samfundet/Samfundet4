@@ -71,14 +71,15 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
       handleUpdateNotes.mutate({ notes: newNotes, interviewId });
     }
   };
-
   const MarkdownPreview = () => {
     return (
-      <button type="button" onClick={handleFocus} className={styles.markdownBox}>
-        <div className={styles.markdownContent}>
-          <SamfMarkdown>{currentNotes}</SamfMarkdown>
-        </div>
-      </button>
+      <div className={styles.markdownWrapper}>
+        <button type="button" onClick={handleFocus} className={styles.markdownButton}>
+          <div className={styles.markdownContent}>
+            <SamfMarkdown>{currentNotes}</SamfMarkdown>
+          </div>
+        </button>
+      </div>
     );
   };
 
