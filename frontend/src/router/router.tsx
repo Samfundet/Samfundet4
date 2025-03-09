@@ -1,4 +1,4 @@
-import { Outlet, Route, type UIMatch, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import { Outlet, Route, type UIMatch, createBrowserRouter, createRoutesFromElements } from 'react-router';
 import { Link, PermissionRoute, ProtectedRoute, RootErrorBoundary, SamfOutlet, SultenOutlet } from '~/Components';
 import {
   AboutPage,
@@ -55,6 +55,7 @@ import {
   RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
+  RecruitmentRejectionMailPage,
   RecruitmentSeparatePositionFormAdminPage,
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
@@ -432,6 +433,20 @@ export const router = createBrowserRouter(
                 }}
               />
               <Route
+                path={ROUTES.frontend.admin_recruitment_gang_overview_rejection_email}
+                element={
+                  <PermissionRoute
+                    required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                    element={<RecruitmentRejectionMailPage />}
+                  />
+                }
+                handle={{
+                  crumb: ({ pathname }: UIMatch) => (
+                    <Link url={pathname}>{lowerCapitalize(t(KEY.recruitment_rejection_email))}</Link>
+                  ),
+                }}
+              />
+              <Route
                 path={ROUTES.frontend.admin_recruitment_recruiter_dashboard}
                 element={<RecruitmentRecruiterDashboardPage />}
                 handle={{
@@ -661,4 +676,14 @@ export const router = createBrowserRouter(
       <Route path="*" element={<NotFoundPage />} />
     </Route>,
   ),
+  {
+    future: {
+      v7_relativeSplatPath: true,
+      v7_startTransition: true,
+      v7_fetcherPersist: true,
+      v7_normalizeFormMethod: true,
+      v7_partialHydration: true,
+      v7_skipActionErrorRevalidation: true,
+    },
+  },
 );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { Button, SamfundetLogoSpinner, Table, Text } from '~/Components';
 import { getRecruitmentPositionsGangForApplicant } from '~/api';
 import { useOrganizationContext } from '~/context/OrgContextProvider';

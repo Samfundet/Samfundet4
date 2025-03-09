@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { SamfundetLogo } from '~/Components';
 import { englishFlag, lycheLogo, norwegianFlag } from '~/assets';
 import { useDesktop, useScrollY } from '~/hooks';
