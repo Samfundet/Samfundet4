@@ -27,6 +27,8 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
   const { t } = useTranslation();
   const [currentNotes, setCurrentNotes] = useState(initialData.notes || '');
   const [markdownState, setMarkdownState] = useState<boolean>(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   const form = useForm<RecruitmentInterviewNotesFormType>({
     resolver: zodResolver(recruitmentNotesSchema),
     defaultValues: {
@@ -34,6 +36,8 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
       interviewId: interviewId || 0,
     },
   });
+
+  const formNotes = form.watch('notes');
 
   const handleUpdateNotes = useMutation({
     mutationFn: ({ notes, interviewId }: { notes: string; interviewId: number }) =>
@@ -45,8 +49,6 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
       toast.error(t(KEY.common_something_went_wrong));
     },
   });
-
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (markdownState && textareaRef.current) {
@@ -62,11 +64,22 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
   };
 
   const handleNotesChange = (newNotes: string) => {
+    console.log(currentNotes);
     if (newNotes !== currentNotes && interviewId) {
       setCurrentNotes(newNotes);
 
       handleUpdateNotes.mutate({ notes: newNotes, interviewId });
     }
+  };
+
+  const MarkdownPreview = () => {
+    return (
+      <button type="button" onClick={handleFocus} className={styles.markdownBox}>
+        <div className={styles.markdownContent}>
+          <SamfMarkdown>{currentNotes}</SamfMarkdown>
+        </div>
+      </button>
+    );
   };
 
   useEffect(() => {
@@ -108,22 +121,7 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
                         }}
                       />
                     ) : (
-                      <div
-                        onClick={handleFocus}
-                        className={styles.markdownBox}
-                        // biome-ignore lint/a11y/useSemanticElements: <explanation>
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            handleFocus();
-                          }
-                        }}
-                      >
-                        <div className={styles.markdownContent}>
-                          <SamfMarkdown>{currentNotes}</SamfMarkdown>
-                        </div>
-                      </div>
+                      <MarkdownPreview />
                     )}
                   </div>
                 </FormControl>
