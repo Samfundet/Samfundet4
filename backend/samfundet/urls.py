@@ -53,6 +53,7 @@ router.register('recruitment-applications-for-group', views.RecruitmentApplicati
 router.register('recruitment-applications-for-gang', views.RecruitmentApplicationForGangView, 'recruitment_applications_for_gang')
 router.register('recruitment-applications-for-position', views.RecruitmentApplicationForRecruitmentPositionView, 'recruitment_applications_for_position')
 router.register('interview', views.InterviewView, 'interview')
+router.register('recruitment-application', views.RecruitmentAppicationViewSet, 'recruitment_application')
 
 ######## Lyche #########
 router.register('create-reservation', samfundet.sulten_views.sulten_views.ReservationCreateView, 'create_reservation')
