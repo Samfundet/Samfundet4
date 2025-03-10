@@ -195,6 +195,7 @@ export const KEY = {
   common_unprocessed: 'common_unprocessed',
   common_list_view: 'common_list_view',
   common_tab_view: 'common_tab_view',
+  common_available: 'common_available',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -295,6 +296,7 @@ export const KEY = {
   recruitment_interviews: 'recruitment_interviews',
   recruitment_interview_planned: 'recruitment_interview_planned',
   recruitment_no_interviews: 'recruitment_no_interviews',
+  recruitment_no_interviewers_available: 'recruitment_no_interviewers_available',
   recruitment_interview_set: 'recruitment_interview_set',
   recruitment_interview_groups: 'recruitment_interview_groups',
   recruitment_interview_group: 'recruitment_interview_group',
