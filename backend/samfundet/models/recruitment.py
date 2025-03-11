@@ -12,7 +12,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import UserManager
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
-from samfundet.utils import upload_to_app
+from samfundet.utils import upload_to_application_filepath
 
 from .general import Gang, User, Campus, GangSection, Organization
 from .model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
@@ -499,10 +499,11 @@ class ApplicationFileAttachment(CustomBaseModel):
     application = models.ForeignKey(
         RecruitmentApplication, on_delete=models.CASCADE, related_name='attachments', help_text='The recruitment application this file is attached to'
     )
-    application_file = models.FileField(upload_to='recruitment/application_attachments/')
+    application_file = models.FileField(upload_to=upload_to_application_filepath)
     application_file_type = models.CharField(max_length=50, blank=True)
 
     def clean(self) -> None:
+        # FIX: this should probably be set by the recruitment position
         super().clean()
         if self.application_file:
             file_type = self.application_file.content_type
