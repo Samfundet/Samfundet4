@@ -12,7 +12,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import UserManager
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
-from samfundet.utils import upload_to_app
+from samfundet.utils import upload_to_application_filepath
 
 from .general import Gang, User, Campus, GangSection, Organization
 from .model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
@@ -516,10 +516,11 @@ class ApplicationFileAttachment(CustomBaseModel):
     application = models.ForeignKey(
         RecruitmentApplication, on_delete=models.CASCADE, related_name='attachments', help_text='The recruitment application this file is attached to'
     )
-    application_file = models.FileField(upload_to='recruitment/application_attachments/')
+    application_file = models.FileField(upload_to=upload_to_application_filepath)
     application_file_type = models.CharField(max_length=50, blank=True)
 
     def clean(self) -> None:
+        # FIX: this should probably be set by the recruitment position
         super().clean()
         if self.application_file:
             file_type = self.application_file.content_type
@@ -532,11 +533,16 @@ class ApplicationFileAttachment(CustomBaseModel):
             ]
             if file_type not in allowed_types:
                 raise ValidationError('Wrong filetype')
-            if self.file.size > 10 * 1024 * 1024:  # 10MB limit
+            if self.application_file.size > 10 * 1024 * 1024:  # 10MB limit
                 raise ValidationError('File size must be less than 10MB.')
 
     def __str__(self):
-        return f'Attachment for {self.application} - {self.file.name}'
+        return f'Attachment for {self.application} - {self.application_file.name}'
+
+    def delete(self, *args, **kwargs) -> None:
+        storage, path = self.application_file.storage, self.application_file.path
+        super().delete(*args, **kwargs)
+        storage.delete(path)
 
 
 class RecruitmentInterviewAvailability(CustomBaseModel):

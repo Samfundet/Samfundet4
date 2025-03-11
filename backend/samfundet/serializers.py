@@ -14,6 +14,7 @@ from django.core.files import File
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
+from django.core.files.uploadedfile import UploadedFile
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.password_validation import validate_password
 
@@ -77,15 +78,20 @@ from rest_framework.utils.serializer_helpers import ReturnList
 class ApplicationFileAttachmentSerializer(CustomBaseSerializer):
     class Meta:
         model = ApplicationFileAttachment
-        fields = (
-            'id',
-            'application',
-            'application_file',
-            'application_file_type',
-        )
+        fields = ['id', 'application', 'application_file', 'application_file_type', 'created_at']
+        read_only_fields = ['id', 'application_file_type', 'created_at']
 
-    def validate(self, attrs: dict) -> dict:
-        return attrs
+    def validate_application_file(self, value: UploadedFile) -> UploadedFile:
+        if not value:
+            raise serializers.ValidationError('A file must be provided.')
+        return value
+
+    def create(self, validated_data: dict[str, Any]) -> ApplicationFileAttachment:
+        application = validated_data.get('application') or self.context.get('application')
+        if not application:
+            raise serializers.ValidationError('Application is required to attach a file.')
+        validated_data['application'] = application
+        return super().create(validated_data)
 
 
 class TagSerializer(CustomBaseSerializer):

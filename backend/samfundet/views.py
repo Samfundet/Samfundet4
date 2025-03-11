@@ -38,6 +38,7 @@ from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTE
 
 from .utils import generate_timeslots, get_occupied_timeslots_from_request
 from .serializers import (
+    ApplicationFileAttachmentSerializer,
     InterviewSerializer,
     RecruitmentSerializer,
     InterviewRoomSerializer,
@@ -121,13 +122,38 @@ class WebhookView(APIView):
 
 
 class ApplicationFileAttachmentViewSet(ModelViewSet):
-    serializer_class = ApplicationFileAttachmentSerializer
     queryset = ApplicationFileAttachment.objects.all()
+    serializer_class = ApplicationFileAttachmentSerializer
+    permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)
 
-    # Typically, you might want extra permission logic here:
-    #   - Only the applicant or a recruiter with certain perms can read attachments
-    #   - Only the applicant can create attachments for *their own* application
-    # etc.
+    def get_queryset(self) -> Response | None:
+        # Restrict to the user's applications or recruiter permissions
+        # FIX: Consider permissions
+        user = self.request.user
+        if user.is_staff:
+            return self.queryset
+        return self.queryset.filter(application__user=user)
+
+    def create(self, request: Request) -> Response | None:
+        application_id = request.data.get('application_id')
+        try:
+            application = RecruitmentApplication.objects.get(id=application_id, user=request.user)
+        except RecruitmentApplication.DoesNotExist:
+            return Response({'error': 'Application not found or not authorized'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(data=request.data, context={'application': application})
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def destroy(self, request: Request) -> Response | None:
+        instance = self.get_object()
+        # FIX: Consider permissions
+        if instance.application.user != request.user and not request.user.is_staff:
+            return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
