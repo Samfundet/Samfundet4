@@ -1,23 +1,33 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { InputFile } from './InputFile';
 
-export default {
+const meta: Meta<typeof InputFile> = {
   title: 'Components/InputFile',
   component: InputFile,
-} as ComponentMeta<typeof InputFile>;
-
-const Template: ComponentStory<typeof InputFile> = (args) => (
-  <form>
-    <InputFile {...args} />
-  </form>
-);
-
-export const ImageSelect = Template.bind({});
-ImageSelect.args = {
-  fileType: 'image',
 };
 
-export const PdfSelect = Template.bind({});
-PdfSelect.args = {
-  fileType: 'pdf',
+export default meta;
+
+type Story = StoryObj<typeof InputFile>;
+
+export const ImageSelect: Story = {
+  args: {
+    fileType: 'image',
+  },
+  render: (args) => (
+    <form>
+      <InputFile {...args} />
+    </form>
+  ),
+};
+
+export const PdfSelect: Story = {
+  args: {
+    fileType: 'pdf',
+  },
+  render: (args) => (
+    <form>
+      <InputFile {...args} />
+    </form>
+  ),
 };

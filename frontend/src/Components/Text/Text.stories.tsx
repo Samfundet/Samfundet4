@@ -1,14 +1,18 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { Text } from '~/Components/Text/Text';
 
 // Local component config.
-export default {
+const meta: Meta<typeof Text> = {
   title: 'Components/Text',
   component: Text,
-} as ComponentMeta<typeof Text>;
+};
 
-const Template: ComponentStory<typeof Text> = () => {
-  return (
+export default meta;
+
+type Story = StoryObj<typeof Text>;
+
+export const Primary: Story = {
+  render: () => (
     <div>
       <Text>Standard text</Text>
       <Text>
@@ -36,7 +40,5 @@ const Template: ComponentStory<typeof Text> = () => {
       <Text size={'xl'}>Extra Large text</Text>
       <Text size={'2xl'}>Extra Extra Large text</Text>
     </div>
-  );
+  ),
 };
-
-export const Primary = Template.bind({});
