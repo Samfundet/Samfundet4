@@ -292,6 +292,9 @@ export const nb = prepareTranslations({
   [KEY.recruitment_priority]: 'Sokers prioritet',
   [KEY.recruitment_recruiter_priority]: 'Prioritet',
   [KEY.recruitment_recruiter_status]: 'Status',
+  [KEY.recruitment_recruiter_guide]: 'Føring',
+  [KEY.recruitment_guide_offer]: 'Kan gi tilbud',
+  [KEY.recruitment_guide_no_offer]: 'Ikke gi tillbud',
   [KEY.common_not_set]: 'Ikke satt',
   [KEY.common_campus]: 'Campus',
   [KEY.recruitment_duration]: 'Varighet',
@@ -457,6 +460,8 @@ export const nb = prepareTranslations({
   [KEY.sulten_reservation_form_remember_closing]: 'Husk at Lyche stenger',
   [KEY.sulten_reservation_form_find_times]: 'Finn Ledige Tidspunkt',
   [KEY.sulten_dishes]: 'Retter',
+  [KEY.sulten_occation_drinks]: 'Drikke',
+  [KEY.sulten_occation_eat]: 'Spise',
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Tilgjenglighet',
@@ -795,6 +800,9 @@ export const en = prepareTranslations({
   [KEY.recruitment_priority]: 'Applicants priority',
   [KEY.recruitment_recruiter_priority]: 'Priority',
   [KEY.recruitment_recruiter_status]: 'Status',
+  [KEY.recruitment_recruiter_guide]: 'Guide',
+  [KEY.recruitment_guide_offer]: 'Can give offer',
+  [KEY.recruitment_guide_no_offer]: 'Do not give offer',
   [KEY.common_not_set]: 'Not set',
   [KEY.common_campus]: 'Campus',
   [KEY.recruitment_duration]: 'Duration',
@@ -973,6 +981,8 @@ export const en = prepareTranslations({
   [KEY.sulten_reservation_form_more_than_8_help]: 'More than 8 people? send us an',
   [KEY.sulten_reservation_form_remember_closing]: 'Remember that Lyche closes at',
   [KEY.sulten_reservation_form_find_times]: 'Find Available Times',
+  [KEY.sulten_occation_drinks]: 'Drinks',
+  [KEY.sulten_occation_eat]: 'Eating',
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Availability',

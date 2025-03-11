@@ -279,6 +279,8 @@ export const KEY = {
   sulten_reservation_form_more_than_8_help: 'sulten_reservation_form_more_than_8_help',
   sulten_reservation_form_remember_closing: 'sulten_reservation_form_remember_closing',
   sulten_reservation_form_find_times: 'sulten_reservation_form_find_times',
+  sulten_occation_drinks: 'sulten_occation_drinks',
+  sulten_occation_eat: 'sulten_occation_eat',
 
   // Recruitment:
   recruitment_look_at_recipients: 'recruitment_look_at_recipients',
@@ -307,6 +309,9 @@ export const KEY = {
   recruitment_priority: 'recruitment_priority',
   recruitment_recruiter_priority: 'recruitment_recruiter_priority',
   recruitment_recruiter_status: 'recruitment_recruiter_status',
+  recruitment_recruiter_guide: 'recruitment_recruiter_guide',
+  recruitment_guide_offer: 'recruitment_guide_offer',
+  recruitment_guide_no_offer: 'recruitment_guide_no_offer',
   recruitment_duration: 'recruitment_duration',
   recruitment_funksjonaer: 'recruitment_funksjonaer',
   recruitment_jobtype: 'recruitment_jobtype',
