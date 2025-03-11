@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Link, Page } from '~/Components';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';

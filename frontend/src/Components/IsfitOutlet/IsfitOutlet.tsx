@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { IsfitNavbar } from './IsfitNavbar/IsfitNavbar';
 import styles from './IsfitOutlet.module.scss';
 
