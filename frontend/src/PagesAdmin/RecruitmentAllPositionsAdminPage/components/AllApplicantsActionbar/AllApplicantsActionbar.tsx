@@ -21,7 +21,7 @@ export function AllApplicantsActionbar({ onFilterChange, onSearchChange }: AllAp
     { type: 'specific', label: t(KEY.recruitment_all_applicants_filter_specific) }
   ];
 
-  const handleActionClick = (filterType: FilterType) => {
+  const handleFilterClick = (filterType: FilterType) => {
     const newFilterType = filterType === activeFilter ? null : filterType;
     setActiveFilter(newFilterType);
     onFilterChange(newFilterType);
@@ -41,7 +41,7 @@ export function AllApplicantsActionbar({ onFilterChange, onSearchChange }: AllAp
             theme={activeFilter === type ? 'samf' : 'outlined'}
             display="pill"
             className={styles.filter_button}
-            onClick={() => handleActionClick(type)}
+            onClick={() => handleFilterClick(type)}
           >
             {label}
           </Button>
