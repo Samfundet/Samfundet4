@@ -1,36 +1,33 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Link, Table, ToggleSwitch } from '~/Components';
-import { getAllRecruitmentApplications, getRecruitment, getRecruitmentGangs } from '~/api';
-import type { GangDto, RecruitmentApplicationDto, UserDto } from '~/dto';
+import { getAllRecruitmentApplications, getRecruitment } from '~/api';
+import type { RecruitmentApplicationDto, UserDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
-import { applicationKeys, recruitmentGangKeys, recruitmentKeys } from '~/queryKeys';
+import { applicationKeys, recruitmentKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { RecruitmentStatusChoicesMapping } from '~/types';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { AllApplicantsFilterBar, AllApplicationsExpandableHeader, type FilterType } from './components';
 
 // Interface for the grouped data received from the backend
-interface GroupedDataItem {
-  user: UserDto;
+interface GroupedDataItem extends UserDto {
   applications: RecruitmentApplicationDto[];
 }
 
-// Interface for the API response from the backend
-interface GroupedApplicationsResponse {
-  data: GroupedDataItem[];
+interface GangDetails {
+  id: number;
+  name_en: string;
+  name_nb: string;
+  abbreviation: string | null;
 }
 
 interface GangMapping {
-  [key: number]: {
-    name_en: string;
-    name_nb: string;
-    abbreviation: string;
-  };
+  [key: number]: GangDetails;
 }
 
 const browserTabTitle = 'All applicants';
@@ -38,6 +35,8 @@ const browserTabTitle = 'All applicants';
 export function RecruitmentAllPositionsAdminPage() {
   const [activeFilter, setActiveFilter] = useState<FilterType>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [parsedApplicantData, setParsedApplicantData] = useState<GroupedDataItem[] | null>(null);
+  const [gangMapping, setGangMapping] = useState<GangMapping>({});
 
   const { recruitmentId } = useParams();
   const { t } = useTranslation();
@@ -73,8 +72,8 @@ export function RecruitmentAllPositionsAdminPage() {
     enabled: Boolean(recruitmentId),
   });
 
-  // Getting the grouped applications data from the API
-  const { data: groupedApplicationsResponse, isLoading: isLoadingApplications } = useQuery<GroupedApplicationsResponse>({
+  // Getting the applicants data from the API
+  const { data: apiResponse, isLoading: isLoadingApplications } = useQuery({
     queryKey: applicationKeys.all,
     queryFn: () => {
       if (!recruitmentId) {
@@ -85,18 +84,41 @@ export function RecruitmentAllPositionsAdminPage() {
     enabled: Boolean(recruitmentId),
   });
 
-  const { data: recruitmentGangs, isLoading: isLoadingRecruitmentGangs } = useQuery({
-    queryKey: recruitmentGangKeys.all,
-    queryFn: () => {
-      if (!recruitmentId) {
-        throw new Error('Recruitment ID is required');
-      }
-      return getRecruitmentGangs(recruitmentId);
-    },
-    enabled: Boolean(recruitmentId),
-  });
-
-  const gangMapping = createGangMapping(recruitmentGangs);
+  // Extract applicant data from API response and build gang mapping
+  useEffect(() => {
+    if (apiResponse?.data?.data && Array.isArray(apiResponse.data.data)) {
+      const applicantData = apiResponse.data.data;
+      setParsedApplicantData(applicantData);
+      
+      // Build gang mapping from the applications
+      const gangs: GangMapping = {};
+      
+      applicantData.forEach(applicant => {
+        if (applicant.applications) {
+          applicant.applications.forEach(app => {
+            // Extract the gang object from the application
+            const gang = app.recruitment_position?.gang;
+            
+            if (gang && typeof gang === 'object' && 'id' in gang) {
+              const gangId = gang.id;
+              
+              // Add to our mapping if not already there
+              if (!gangs[gangId]) {
+                gangs[gangId] = {
+                  id: gangId,
+                  name_en: gang.name_en,
+                  name_nb: gang.name_nb,
+                  abbreviation: gang.abbreviation,
+                };
+              }
+            }
+          });
+        }
+      });
+      
+      setGangMapping(gangs);
+    }
+  }, [apiResponse]);
 
   // Table columns definition
   const tableColumns = [
@@ -109,21 +131,30 @@ export function RecruitmentAllPositionsAdminPage() {
     { content: t(KEY.recruitment_recruiter_status), sortable: false },
   ];
 
-  const applicationsToTableRows = (applications: RecruitmentApplicationDto[]) =>
-    applications.map((app) => {
-      const gangId = app.recruitment_position.gang as unknown as number;
-      const gangDetails = gangMapping?.[gangId];
+  const applicationsToTableRows = (applications: RecruitmentApplicationDto[]) => {
+    return applications.map((app) => {
+      // Extract the gang object directly from the application
+      const gang = app.recruitment_position?.gang;
+      
+      // Get gang details directly from the application
+      const gangId = typeof gang === 'object' && 'id' in gang ? gang.id : (gang as unknown as number);
+      const gangDetails = typeof gang === 'object' && 'name_en' in gang 
+        ? gang as GangDetails 
+        : gangMapping[gangId];
 
       const positionPageUrl = reverse({
         pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
         urlParams: { recruitmentId: recruitmentId, gangId: gangId, positionId: app.recruitment_position.id },
       });
 
+      // Use the gang details directly from the application
+      const gangName = gangDetails?.abbreviation || gangDetails?.name_en || 'N/A';
+
       return {
         cells: [
           {
-            value: gangDetails?.abbreviation || gangDetails?.name_en || 'N/A',
-            content: <strong>{gangDetails?.abbreviation || gangDetails?.name_en || 'N/A'}</strong>,
+            value: gangName,
+            content: <strong>{gangName}</strong>,
           },
           {
             value: app.recruitment_position.name_nb,
@@ -156,61 +187,57 @@ export function RecruitmentAllPositionsAdminPage() {
         ],
       };
     });
-
-  // Render applicant list using the grouped data from the backend
-  const applicantList = 
-    recruitment && groupedApplicationsResponse
-      ? groupedApplicationsResponse.data.map((group: GroupedDataItem) => {
-          const { user, applications } = group;
-          if (!user) return null;
-
-          const tableData = applicationsToTableRows(applications);
-
-          return (
-            <AllApplicationsExpandableHeader
-              recruitment={recruitment.data}
-              user={user}
-              key={user.id}
-              table={<Table columns={tableColumns} data={tableData} defaultSortColumn={1} />}
-              onSetInterviewClick={handleSetInterviewsForApplicant}
-            />
-          );
-        })
-      : null;
-
-  const pageHeader = (
-    <Button theme={'green'} onClick={() => alert('TODO: add automatic interview distribution')}>
-      {t(KEY.recruitment_interview_set_all)}
-    </Button>
-  );
+  };
 
   // Display loading state when fetching data
-  const isLoading = isLoadingRecruitment || isLoadingApplications || isLoadingRecruitmentGangs;
+  const isLoading = isLoadingRecruitment || isLoadingApplications;
+
+  // Render applicant list
+  const renderApplicantList = () => {
+    if (isLoading) {
+      return <div>Loading applicants...</div>;
+    }
+
+    if (!recruitment) {
+      return <div>Recruitment data not available</div>;
+    }
+
+    // Use our state variable that was set from the API response
+    if (!parsedApplicantData || !Array.isArray(parsedApplicantData) || parsedApplicantData.length === 0) {
+      return <div>No applicants found for this recruitment.</div>;
+    }
+
+    return parsedApplicantData.map((item: GroupedDataItem) => {
+      if (!item) {
+        return null;
+      }
+      
+      const tableData = applicationsToTableRows(item.applications || []);
+
+      return (
+        <AllApplicationsExpandableHeader
+          recruitment={recruitment.data}
+          user={item}
+          key={item.id}
+          table={<Table columns={tableColumns} data={tableData} defaultSortColumn={1} />}
+          onSetInterviewClick={handleSetInterviewsForApplicant}
+        />
+      );
+    });
+  };
 
   return (
     <AdminPageLayout
       title={`${recruitment?.data.name_en} ${t(KEY.common_at)} ${recruitment?.data.organization.name}`}
-      header={pageHeader}
+      header={
+        <Button theme="green" onClick={() => alert('TODO: add automatic interview distribution')}>
+          {t(KEY.recruitment_interview_set_all)}
+        </Button>
+      }
       loading={isLoading}
     >
       <AllApplicantsFilterBar onFilterChange={handleFilterChange} onSearchChange={handleSearchChange} />
-      {applicantList}
+      {renderApplicantList()}
     </AdminPageLayout>
   );
 }
-
-/**
- * Helper function for mapping gang information
- */
-const createGangMapping = (gangs: GangDto[] | undefined): GangMapping => {
-  return (
-    gangs?.reduce<GangMapping>((acc, gang) => {
-      acc[gang.id] = {
-        name_en: gang.name_en,
-        name_nb: gang.name_nb,
-        abbreviation: gang.abbreviation,
-      };
-      return acc;
-    }, {}) ?? {}
-  );
-};

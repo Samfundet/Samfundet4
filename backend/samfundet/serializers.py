@@ -1094,34 +1094,6 @@ class RecruitmentShowUnprocessedApplicationsSerializer(serializers.ModelSerializ
         return instance.recruitment_position.name_nb
 
 
-class RecruitmentAllApplicationsPerRecruitmentSerializer(serializers.ModelSerializer):
-    user = RecruitmentBasicUserSerializer(read_only=True)
-    recruitment_position = RecruitmentRecruitmentPositionSerializer(read_only=True)
-
-    class Meta:
-        model = RecruitmentApplication
-        fields = [
-            'id',
-            'recruitment',
-            'user',
-            'applicant_priority',
-            'recruitment_position',
-            'recruiter_status',
-            'recruiter_priority',
-        ]
-        read_only_fields = [
-            'id',
-            'recruitment',
-            'user',
-            'applicant_priority',
-            'recruitment_position',
-            'recruiter_priority',
-        ]
-
-    def get_recruitment_position(self, instance: RecruitmentApplication) -> str:
-        return instance.recruitment_position.name_nb
-
-
 class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
     user = ApplicantInfoSerializer(read_only=True)
     interview = InterviewSerializer(read_only=False)
@@ -1244,75 +1216,44 @@ class PurchaseFeedbackSerializer(serializers.ModelSerializer):
         return purchase_feedback
 
 
-class RecruitmentAllApplicationsPerRecruitmentSerializer(serializers.ModelSerializer):
-    user = RecruitmentBasicUserSerializer(read_only=True)
-    recruitment_position = RecruitmentRecruitmentPositionSerializer(read_only=True)
-    interview = ApplicantInterviewSerializer(read_only=True)
+class UserApplicationsListSerializer(serializers.ListSerializer):
+    """List serializer that sorts users by their applications' position overlap."""
 
-    class Meta:
-        model = RecruitmentApplication
-        fields = [
-            'id',
-            'recruitment',
-            'user',
-            'applicant_priority',
-            'recruitment_position',
-            'recruiter_status',
-            'recruiter_priority',
-            'interview',
-        ]
-        read_only_fields = [
-            'id',
-            'recruitment',
-            'user',
-            'applicant_priority',
-            'recruitment_position',
-            'recruiter_priority',
-            'interview',
-        ]
+    def to_representation(self, users):
+        """Sort users by their applications' position overlap."""
+        # Get the recruitment context that's passed from the view
+        recruitment = self.context.get('recruitment')
+        if not recruitment:
+            raise serializers.ValidationError('Recruitment context is required')
 
+        # First, build data about each user and their applications
+        user_data = []
+        for user in users:
+            # Get the applications for this user for the specific recruitment
+            applications = RecruitmentApplication.objects.filter(user=user, recruitment=recruitment).select_related('recruitment_position', 'interview')
 
-class GroupedApplicationsByUserSerializer(serializers.Serializer):
-    """Serializer to group applications by user"""
+            # Skip users with no applications
+            if not applications.exists():
+                continue
 
-    user = RecruitmentBasicUserSerializer(read_only=True)
-    applications = RecruitmentAllApplicationsPerRecruitmentSerializer(many=True, read_only=True)
+            # Include user info and calculate position set for overlap sorting
+            user_data.append({'user': user, 'applications': applications, 'positionSet': set(app.recruitment_position.id for app in applications)})
 
-    class Meta:
-        fields = ['user', 'applications']
+        # Sort users by application position overlap
+        sorted_users = self.reorder_applicants_by_overlap(user_data)
 
+        # Use the child serializer (UserForRecruitmentGroupedSerializer) to generate the final output
+        return [self.child.to_representation(user_data['user'], applications=user_data['applications']) for user_data in sorted_users]
 
-class GroupedApplicationsListSerializer(serializers.ListSerializer):
-    """Serializer that groups applications by user and sorts them by overlap."""
-
-    def to_representation(self, data):
-        """Group applications by user and sort by position overlap."""
-        # Group applications by user
-        users_dict = {}
-        for application in data:
-            user_id = application.user.id
-            if user_id not in users_dict:
-                users_dict[user_id] = {'user': application.user, 'applications': []}
-            users_dict[user_id]['applications'].append(application)
-
-        # Convert to list of groups
-        grouped_data = list(users_dict.values())
-
-        # Sort the grouped data by overlap
-        grouped_data = self.reorder_applicants_by_overlap(grouped_data)
-
-        # Serialize each group
-        return [GroupedApplicationsByUserSerializer({'user': group['user'], 'applications': group['applications']}).data for group in grouped_data]
-
-    def build_position_sets(self, grouped_data):
-        """Helper method to build position sets for each user's applications."""
-        return [
-            {'user': group['user'], 'applications': group['applications'], 'positionSet': set(app.recruitment_position.id for app in group['applications'])}
-            for group in grouped_data
-        ]
+    def build_position_sets(self, user_data):
+        """
+        This is a placeholder method - we don't need it since we've already
+        built the position sets in to_representation.
+        """
+        return user_data
 
     def overlap(self, set_a, set_b):
-        """Helper method to calculate overlap between two sets."""
+        """Calculate overlap between two sets."""
         smaller, bigger = (set_a, set_b) if len(set_a) < len(set_b) else (set_b, set_a)
         count = 0
         for pos in smaller:
@@ -1320,75 +1261,78 @@ class GroupedApplicationsListSerializer(serializers.ListSerializer):
                 count += 1
         return count
 
-    def reorder_applicants_by_overlap(self, grouped_data):
+    def reorder_applicants_by_overlap(self, user_data):
         """
-        Reorder applicants by overlapping positions similar to frontend logic.
+        Reorder users by overlapping positions in their applications.
         """
-        if len(grouped_data) <= 1:
-            return grouped_data
+        if len(user_data) <= 1:
+            return user_data
 
-        with_sets = self.build_position_sets(grouped_data)
+        # Data already has position sets built in to_representation
 
         # Pick an initial user (one with most applications)
         sorted_list = []
         max_index = 0
         max_size = 0
-        for i, item in enumerate(with_sets):
+        for i, item in enumerate(user_data):
             size = len(item['positionSet'])
             if size > max_size:
                 max_size = size
                 max_index = i
 
-        sorted_list.append(with_sets[max_index])
-        del with_sets[max_index]
+        sorted_list.append(user_data[max_index])
+        user_data.pop(max_index)
 
         # Greedily pick next user with maximum overlap with the last user
-        while with_sets:
+        while user_data:
             last = sorted_list[-1]
             best_index = 0
             best_overlap = -1
-            for i, item in enumerate(with_sets):
+            for i, item in enumerate(user_data):
                 o = self.overlap(last['positionSet'], item['positionSet'])
                 if o > best_overlap:
                     best_overlap = o
                     best_index = i
 
-            sorted_list.append(with_sets[best_index])
-            del with_sets[best_index]
+            sorted_list.append(user_data[best_index])
+            user_data.pop(best_index)
 
-        # Remove positionSet before returning
-        return [{'user': item['user'], 'applications': item['applications']} for item in sorted_list]
+        return sorted_list
 
 
-class RecruitmentAllApplicationsPerRecruitmentGroupedSerializer(serializers.ModelSerializer):
-    """
-    Main serializer for the endpoint that returns applications grouped by user.
-    This serializer uses the GroupedApplicationsListSerializer to group and sort.
-    """
+class UserForRecruitmentGroupedSerializer(UserForRecruitmentSerializer):
+    """Extends UserForRecruitmentSerializer to add the sorting by application overlap."""
 
-    user = RecruitmentBasicUserSerializer(read_only=True)
-    recruitment_position = RecruitmentRecruitmentPositionSerializer(read_only=True)
-    interview = ApplicantInterviewSerializer(read_only=True)
-
-    class Meta:
-        model = RecruitmentApplication
+    class Meta(UserForRecruitmentSerializer.Meta):
+        model = User
+        list_serializer_class = UserApplicationsListSerializer
         fields = [
             'id',
-            'recruitment',
-            'user',
-            'applicant_priority',
-            'recruitment_position',
-            'recruiter_status',
-            'recruiter_priority',
-            'interview',
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'phone_number',
+            'applications',
+            'campus',
         ]
-        read_only_fields = [
-            'id',
-            'recruitment',
-            'user',
-            'applicant_priority',
-            'recruitment_position',
-            'recruiter_priority',
-            'interview',
-        ]
-        list_serializer_class = GroupedApplicationsListSerializer
+
+    def to_representation(self, instance, applications=None):
+        """
+        Override to_representation to accept pre-fetched applications
+        from the list serializer.
+        """
+        # Get basic user data using the parent serializer's fields
+        data = super(UserForRecruitmentSerializer, self).to_representation(instance)
+
+        # Add campus data
+        data['campus'] = CampusSerializer(instance.campus).data if instance.campus else None
+
+        # If applications were passed in from the list serializer, use those
+        if applications is not None:
+            data['applications'] = RecruitmentApplicationForApplicantSerializer(applications, many=True).data
+        else:
+            # Otherwise use the parent's method to get applications
+            data['applications'] = self.get_applications(instance)
+
+        return data

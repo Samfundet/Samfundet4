@@ -50,7 +50,6 @@ from .utils import event_query, generate_timeslots, get_user_by_search, get_occu
 from .homepage import homepage
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .serializers import (
-    RecruitmentAllApplicationsPerRecruitmentGroupedSerializer,
     TagSerializer,
     GangSerializer,
     RoleSerializer,
@@ -90,6 +89,7 @@ from .serializers import (
     UserGangSectionRoleSerializer,
     RecruitmentStatisticsSerializer,
     RecruitmentForRecruiterSerializer,
+    UserForRecruitmentGroupedSerializer,
     RecruitmentSeparatePositionSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
@@ -101,7 +101,6 @@ from .serializers import (
     RecruitmentApplicationUpdateForGangSerializer,
     RecruitmentShowUnprocessedApplicationsSerializer,
     RecruitmentPositionSharedInterviewGroupSerializer,
-    RecruitmentAllApplicationsPerRecruitmentSerializer,
 )
 from .models.event import (
     Event,
@@ -675,18 +674,45 @@ class RecruitmentApplicationView(ModelViewSet):
 
 
 class RecruitmentAllApplicationsPerRecruitmentView(ListAPIView):
-    # TODO: IMPLEMENT HIGHEST LEVEL OF RECRUITMENT PERMISSIONS. Something like GU_OPPTAKSANSVARLIG, MG_WEB, UKA_HR, ISFiT_RECRUITMENT
     permission_classes = [IsAuthenticated]
-    serializer_class = RecruitmentAllApplicationsPerRecruitmentGroupedSerializer
+    serializer_class = UserForRecruitmentGroupedSerializer
 
-    def get_queryset(self) -> QuerySet[RecruitmentApplication]:
-        """Get all applications for a specific recruitment."""
+    def get_serializer_context(self):
+        """Add recruitment object to context for the serializer to use."""
+        context = super().get_serializer_context()
         recruitment_id = self.request.query_params.get('recruitment')
-        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        # if not recruitment_id:
+        #    raise NotFound('Recruitment ID is required')
 
-        return RecruitmentApplication.objects.filter(
-            recruitment=recruitment,  # Using the recruitment object directly
-        ).select_related('user', 'recruitment_position', 'interview')
+        context['recruitment'] = get_object_or_404(Recruitment, id=recruitment_id)
+        return context
+
+    def get_queryset(self):
+        """Get all users who have applied to this recruitment."""
+        recruitment_id = self.request.query_params.get('recruitment')
+        # if not recruitment_id:
+        #    raise NotFound('Recruitment ID is required')
+
+        # Get users who have applications for this recruitment
+        return User.objects.filter(applications__recruitment__id=recruitment_id).distinct().select_related('campus')
+
+    def list(self, request, *args, **kwargs):
+        """Override list method to structure response as expected by frontend."""
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Ensure we're dealing with a non-empty queryset
+        if not queryset.exists():
+            return Response({'data': []})
+
+        serializer = self.get_serializer(queryset, many=True)
+
+        # Ensure the serialized data is a list (not a single item)
+        serialized_data = serializer.data
+        if not isinstance(serialized_data, list):
+            serialized_data = [serialized_data]
+
+        # Return data in the format expected by the frontend
+        return Response({'data': serialized_data})
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
