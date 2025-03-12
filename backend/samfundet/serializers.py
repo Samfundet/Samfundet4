@@ -1217,7 +1217,9 @@ class PurchaseFeedbackSerializer(serializers.ModelSerializer):
 
 
 class UserApplicationsListSerializer(serializers.ListSerializer):
-    """List serializer that returns users without any special sorting."""
+    """List serializer that returns users"""
+
+    # TODO: remove fields not needed
 
     def to_representation(self, users):
         """Return users with their applications."""
@@ -1246,6 +1248,7 @@ class UserApplicationsListSerializer(serializers.ListSerializer):
 class UserForRecruitmentGroupedSerializer(UserForRecruitmentSerializer):
     """Extends UserForRecruitmentSerializer without custom sorting."""
 
+    # TODO: remove fields not needed
     class Meta(UserForRecruitmentSerializer.Meta):
         model = User
         list_serializer_class = UserApplicationsListSerializer

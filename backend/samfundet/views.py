@@ -712,6 +712,24 @@ class RecruitmentAllApplicationsPerRecruitmentView(ListAPIView):
         return Response({'data': serialized_data})
 
 
+# TODO:
+# @action(detail=True, methods=['put'])
+# def allow_to_contact(self):
+#     pass
+
+# @action(detail=True, methods=['put'])
+# def revoke_allow_to_contact(self):
+#    pass
+
+# @action(detail=False, methods=['get'])
+# def no_conflict_applicants(self):
+#    pass
+
+# @action(detail=False, methods=['get'])
+# def conflict_applicants(self):
+#    pass
+
+
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionsPerRecruitmentView(ListAPIView):
     permission_classes = [AllowAny]
