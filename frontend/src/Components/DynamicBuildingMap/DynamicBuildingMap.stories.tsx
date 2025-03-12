@@ -1,15 +1,16 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { DynamicBuildingMap } from './DynamicBuildingMap';
 
 // Local component config.
-export default {
+const meta: Meta<typeof DynamicBuildingMap> = {
   title: 'Components/DynamicBuildingMap',
   component: DynamicBuildingMap,
-  args: {
-    name: 'name',
-  },
-} as ComponentMeta<typeof DynamicBuildingMap>;
+};
 
-const Template: ComponentStory<typeof DynamicBuildingMap> = () => <DynamicBuildingMap />;
+export default meta;
 
-export const Basic = Template.bind({});
+type Story = StoryObj<typeof DynamicBuildingMap>;
+
+export const Basic: Story = {
+  render: (args) => <DynamicBuildingMap {...args} />,
+};

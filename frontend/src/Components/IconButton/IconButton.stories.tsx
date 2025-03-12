@@ -1,22 +1,26 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { IconButton } from './IconButton';
 
 // Local component config.
-export default {
+const meta: Meta<typeof IconButton> = {
   title: 'Components/IconButton',
   component: IconButton,
-} as ComponentMeta<typeof IconButton>;
-
-const Template: ComponentStory<typeof IconButton> = (args) => {
-  function onClick() {
-    alert('Hello!');
-  }
-  return <IconButton {...args} onClick={onClick} />;
 };
 
-export const Basic = Template.bind({});
-Basic.args = {
-  color: 'red',
-  icon: 'mdi-pen',
-  title: 'Edit',
+export default meta;
+
+type Story = StoryObj<typeof IconButton>;
+
+export const Basic: Story = {
+  args: {
+    color: 'red',
+    icon: 'mdi-pen',
+    title: 'Edit',
+  },
+  render: (args) => {
+    function onClick() {
+      alert('Hello!');
+    }
+    return <IconButton {...args} onClick={onClick} />;
+  },
 };

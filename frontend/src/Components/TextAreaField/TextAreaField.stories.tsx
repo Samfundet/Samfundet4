@@ -1,21 +1,34 @@
 import { action } from '@storybook/addon-actions';
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { TextAreaField } from './TextAreaField';
 
-export default {
+const meta: Meta<typeof TextAreaField> = {
   title: 'Components/TextAreaField',
   component: TextAreaField,
-} as ComponentMeta<typeof TextAreaField>;
+};
 
-const Template: ComponentStory<typeof TextAreaField> = (args) => <TextAreaField {...args} />;
+export default meta;
 
-export const Basic = Template.bind({});
+type Story = StoryObj<typeof TextAreaField>;
 
-export const WithLabel = Template.bind({});
-WithLabel.args = { children: 'Label' };
+export const Basic: Story = {
+  args: {},
+};
 
-export const WithComplexLabel = Template.bind({});
-WithComplexLabel.args = { children: <span style={{ color: 'red' }}>Complex label</span> };
+export const WithLabel: Story = {
+  args: {
+    children: 'Label',
+  },
+};
 
-export const OnChange = Template.bind({});
-OnChange.args = { onChange: action('OnChange') };
+export const WithComplexLabel: Story = {
+  args: {
+    children: <span style={{ color: 'red' }}>Complex label</span>,
+  },
+};
+
+export const OnChange: Story = {
+  args: {
+    onChange: action('OnChange'),
+  },
+};

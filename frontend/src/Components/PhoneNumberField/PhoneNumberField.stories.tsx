@@ -1,17 +1,21 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { PhoneNumberField } from './PhoneNumberField';
 
-export default {
+const meta: Meta<typeof PhoneNumberField> = {
   title: 'Components/PhoneNumberField',
   component: PhoneNumberField,
-} as ComponentMeta<typeof PhoneNumberField>;
+};
 
-const Template: ComponentStory<typeof PhoneNumberField> = (args) => (
-  <form>
-    <fieldset>
-      <PhoneNumberField {...args} />
-    </fieldset>
-  </form>
-);
+export default meta;
 
-export const Basic = Template.bind({});
+type Story = StoryObj<typeof PhoneNumberField>;
+
+export const Basic: Story = {
+  render: (args) => (
+    <form>
+      <fieldset>
+        <PhoneNumberField {...args} />
+      </fieldset>
+    </form>
+  ),
+};
