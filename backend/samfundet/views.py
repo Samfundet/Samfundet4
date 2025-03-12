@@ -677,26 +677,23 @@ class RecruitmentAllApplicationsPerRecruitmentView(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserForRecruitmentGroupedSerializer
 
-    def get_serializer_context(self):
+    def get_recruitment_id(self) -> dict[str, Any]:
+        """Get recruitment ID from query params."""
+        return self.request.query_params.get('recruitment')
+
+    def get_serializer_context(self) -> dict[str, Any]:
         """Add recruitment object to context for the serializer to use."""
         context = super().get_serializer_context()
-        recruitment_id = self.request.query_params.get('recruitment')
-        # if not recruitment_id:
-        #    raise NotFound('Recruitment ID is required')
-
+        recruitment_id = self.get_recruitment_id()
         context['recruitment'] = get_object_or_404(Recruitment, id=recruitment_id)
         return context
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[User]:
         """Get all users who have applied to this recruitment."""
-        recruitment_id = self.request.query_params.get('recruitment')
-        # if not recruitment_id:
-        #    raise NotFound('Recruitment ID is required')
-
-        # Get users who have applications for this recruitment
+        recruitment_id = self.get_recruitment_id()
         return User.objects.filter(applications__recruitment__id=recruitment_id).distinct().select_related('campus')
 
-    def list(self, request, *args, **kwargs):
+    def list(self, request: Request, *args, **kwargs) -> Response:
         """Override list method to structure response as expected by frontend."""
         queryset = self.filter_queryset(self.get_queryset())
 
@@ -706,7 +703,7 @@ class RecruitmentAllApplicationsPerRecruitmentView(ListAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
 
-        # Ensure the serialized data is a list (not a single item)
+        # When using many=True, serializer.data should always be a list
         serialized_data = serializer.data
         if not isinstance(serialized_data, list):
             serialized_data = [serialized_data]

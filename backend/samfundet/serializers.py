@@ -1217,10 +1217,10 @@ class PurchaseFeedbackSerializer(serializers.ModelSerializer):
 
 
 class UserApplicationsListSerializer(serializers.ListSerializer):
-    """List serializer that sorts users by their applications' position overlap."""
+    """List serializer that returns users without any special sorting."""
 
     def to_representation(self, users):
-        """Sort users by their applications' position overlap."""
+        """Return users with their applications."""
         # Get the recruitment context that's passed from the view
         recruitment = self.context.get('recruitment')
         if not recruitment:
@@ -1236,72 +1236,15 @@ class UserApplicationsListSerializer(serializers.ListSerializer):
             if not applications.exists():
                 continue
 
-            # Include user info and calculate position set for overlap sorting
-            user_data.append({'user': user, 'applications': applications, 'positionSet': set(app.recruitment_position.id for app in applications)})
-
-        # Sort users by application position overlap
-        sorted_users = self.reorder_applicants_by_overlap(user_data)
+            # Include user info and applications
+            user_data.append({'user': user, 'applications': applications})
 
         # Use the child serializer (UserForRecruitmentGroupedSerializer) to generate the final output
-        return [self.child.to_representation(user_data['user'], applications=user_data['applications']) for user_data in sorted_users]
-
-    def build_position_sets(self, user_data):
-        """
-        This is a placeholder method - we don't need it since we've already
-        built the position sets in to_representation.
-        """
-        return user_data
-
-    def overlap(self, set_a, set_b):
-        """Calculate overlap between two sets."""
-        smaller, bigger = (set_a, set_b) if len(set_a) < len(set_b) else (set_b, set_a)
-        count = 0
-        for pos in smaller:
-            if pos in bigger:
-                count += 1
-        return count
-
-    def reorder_applicants_by_overlap(self, user_data):
-        """
-        Reorder users by overlapping positions in their applications.
-        """
-        if len(user_data) <= 1:
-            return user_data
-
-        # Data already has position sets built in to_representation
-
-        # Pick an initial user (one with most applications)
-        sorted_list = []
-        max_index = 0
-        max_size = 0
-        for i, item in enumerate(user_data):
-            size = len(item['positionSet'])
-            if size > max_size:
-                max_size = size
-                max_index = i
-
-        sorted_list.append(user_data[max_index])
-        user_data.pop(max_index)
-
-        # Greedily pick next user with maximum overlap with the last user
-        while user_data:
-            last = sorted_list[-1]
-            best_index = 0
-            best_overlap = -1
-            for i, item in enumerate(user_data):
-                o = self.overlap(last['positionSet'], item['positionSet'])
-                if o > best_overlap:
-                    best_overlap = o
-                    best_index = i
-
-            sorted_list.append(user_data[best_index])
-            user_data.pop(best_index)
-
-        return sorted_list
+        return [self.child.to_representation(user_data['user'], applications=user_data['applications']) for user_data in user_data]
 
 
 class UserForRecruitmentGroupedSerializer(UserForRecruitmentSerializer):
-    """Extends UserForRecruitmentSerializer to add the sorting by application overlap."""
+    """Extends UserForRecruitmentSerializer without custom sorting."""
 
     class Meta(UserForRecruitmentSerializer.Meta):
         model = User
