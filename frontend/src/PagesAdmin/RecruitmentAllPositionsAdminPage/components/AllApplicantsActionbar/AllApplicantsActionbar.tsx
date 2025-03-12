@@ -2,28 +2,26 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, InputField } from '~/Components';
 import { KEY } from '~/i18n/constants';
-import styles from './AllApplicantsFilterBar.module.scss';
-export type FilterType = 'name' | 'noRejections' | 'similar' | 'conflicts' | 'noConflicts' | 'specific' | null;
+import styles from './AllApplicantsActionbar.module.scss';
 
-type AllApplicantsFilterBarProps = {
+export type FilterType = 'conflicts' | 'no_conflicts' | 'specific' | null;
+
+type AllApplicantsActionbarProps = {
   onFilterChange: (filterType: FilterType) => void;
   onSearchChange: () => void;
 };
 
-export function AllApplicantsFilterBar({ onFilterChange, onSearchChange }: AllApplicantsFilterBarProps) {
+export function AllApplicantsActionbar({ onFilterChange, onSearchChange }: AllApplicantsActionbarProps) {
   const [activeFilter, setActiveFilter] = useState<FilterType>(null);
   const { t } = useTranslation();
 
   const filters: Array<{ type: FilterType; label: string }> = [
-    { type: 'name', label: t(KEY.recruitment_all_applicants_filter_name) },
-    { type: 'noRejections', label: t(KEY.recruitment_all_applicants_filter_no_rejections) },
-    { type: 'similar', label: t(KEY.recruitment_all_applicants_filter_similar) },
     { type: 'conflicts', label: t(KEY.recruitment_all_applicants_filter_conflicts) },
-    { type: 'noConflicts', label: t(KEY.recruitment_all_applicants_filter_no_conflicts) },
-    { type: 'specific', label: t(KEY.recruitment_all_applicants_filter_specific) },
+    { type: 'no_conflicts', label: t(KEY.recruitment_all_applicants_filter_no_conflicts) },
+    { type: 'specific', label: t(KEY.recruitment_all_applicants_filter_specific) }
   ];
 
-  const handleFilterClick = (filterType: FilterType) => {
+  const handleActionClick = (filterType: FilterType) => {
     const newFilterType = filterType === activeFilter ? null : filterType;
     setActiveFilter(newFilterType);
     onFilterChange(newFilterType);
@@ -43,11 +41,21 @@ export function AllApplicantsFilterBar({ onFilterChange, onSearchChange }: AllAp
             theme={activeFilter === type ? 'samf' : 'outlined'}
             display="pill"
             className={styles.filter_button}
-            onClick={() => handleFilterClick(type)}
+            onClick={() => handleActionClick(type)}
           >
             {label}
           </Button>
         ))}
+      </div>
+      <div>
+      <Button
+            theme="blue"
+            display="pill"
+            className={styles.filter_button}
+            onClick={() => alert("Implement functionality")}
+          >
+            Tillat å ringe alle uten konflikt
+          </Button>
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ import { applicationKeys, recruitmentKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { RecruitmentStatusChoicesMapping } from '~/types';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-import { AllApplicantsFilterBar, AllApplicationsExpandableHeader, type FilterType } from './components';
+import { AllApplicantsActionbar, AllApplicationsExpandableHeader, type FilterType } from './components';
 
 // Interface for the grouped data received from the backend
 interface GroupedDataItem extends UserDto {
@@ -236,7 +236,7 @@ export function RecruitmentAllPositionsAdminPage() {
       }
       loading={isLoading}
     >
-      <AllApplicantsFilterBar onFilterChange={handleFilterChange} onSearchChange={handleSearchChange} />
+      <AllApplicantsActionbar onFilterChange={handleFilterChange} onSearchChange={handleSearchChange} />
       {renderApplicantList()}
     </AdminPageLayout>
   );
