@@ -50,6 +50,7 @@ from .utils import event_query, generate_timeslots, get_user_by_search, get_occu
 from .homepage import homepage
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .serializers import (
+    RecruitmentAllApplicationsPerRecruitmentGroupedSerializer,
     TagSerializer,
     GangSerializer,
     RoleSerializer,
@@ -674,9 +675,9 @@ class RecruitmentApplicationView(ModelViewSet):
 
 
 class RecruitmentAllApplicationsPerRecruitmentView(ListAPIView):
-    # TODO: IMPLEMENT HIGHEST LEVEL OF RECRUITMENT PERSMISSIONS. Something like GU_OPPTAKSANSVARLIG, MG_WEB, UKA_HR, ISFiT_RECRUITMENT
+    # TODO: IMPLEMENT HIGHEST LEVEL OF RECRUITMENT PERMISSIONS. Something like GU_OPPTAKSANSVARLIG, MG_WEB, UKA_HR, ISFiT_RECRUITMENT
     permission_classes = [IsAuthenticated]
-    serializer_class = RecruitmentAllApplicationsPerRecruitmentSerializer
+    serializer_class = RecruitmentAllApplicationsPerRecruitmentGroupedSerializer
 
     def get_queryset(self) -> QuerySet[RecruitmentApplication]:
         """Get all applications for a specific recruitment."""
@@ -685,7 +686,7 @@ class RecruitmentAllApplicationsPerRecruitmentView(ListAPIView):
 
         return RecruitmentApplication.objects.filter(
             recruitment=recruitment,  # Using the recruitment object directly
-        ).select_related('user', 'recruitment_position')
+        ).select_related('user', 'recruitment_position', 'interview')
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')

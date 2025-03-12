@@ -1242,3 +1242,153 @@ class PurchaseFeedbackSerializer(serializers.ModelSerializer):
             PurchaseFeedbackQuestion.objects.create(form=purchase_feedback, question=question, answer=answer)
 
         return purchase_feedback
+
+
+class RecruitmentAllApplicationsPerRecruitmentSerializer(serializers.ModelSerializer):
+    user = RecruitmentBasicUserSerializer(read_only=True)
+    recruitment_position = RecruitmentRecruitmentPositionSerializer(read_only=True)
+    interview = ApplicantInterviewSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentApplication
+        fields = [
+            'id',
+            'recruitment',
+            'user',
+            'applicant_priority',
+            'recruitment_position',
+            'recruiter_status',
+            'recruiter_priority',
+            'interview',
+        ]
+        read_only_fields = [
+            'id',
+            'recruitment',
+            'user',
+            'applicant_priority',
+            'recruitment_position',
+            'recruiter_priority',
+            'interview',
+        ]
+
+
+class GroupedApplicationsByUserSerializer(serializers.Serializer):
+    """Serializer to group applications by user"""
+
+    user = RecruitmentBasicUserSerializer(read_only=True)
+    applications = RecruitmentAllApplicationsPerRecruitmentSerializer(many=True, read_only=True)
+
+    class Meta:
+        fields = ['user', 'applications']
+
+
+class GroupedApplicationsListSerializer(serializers.ListSerializer):
+    """Serializer that groups applications by user and sorts them by overlap."""
+
+    def to_representation(self, data):
+        """Group applications by user and sort by position overlap."""
+        # Group applications by user
+        users_dict = {}
+        for application in data:
+            user_id = application.user.id
+            if user_id not in users_dict:
+                users_dict[user_id] = {'user': application.user, 'applications': []}
+            users_dict[user_id]['applications'].append(application)
+
+        # Convert to list of groups
+        grouped_data = list(users_dict.values())
+
+        # Sort the grouped data by overlap
+        grouped_data = self.reorder_applicants_by_overlap(grouped_data)
+
+        # Serialize each group
+        return [GroupedApplicationsByUserSerializer({'user': group['user'], 'applications': group['applications']}).data for group in grouped_data]
+
+    def build_position_sets(self, grouped_data):
+        """Helper method to build position sets for each user's applications."""
+        return [
+            {'user': group['user'], 'applications': group['applications'], 'positionSet': set(app.recruitment_position.id for app in group['applications'])}
+            for group in grouped_data
+        ]
+
+    def overlap(self, set_a, set_b):
+        """Helper method to calculate overlap between two sets."""
+        smaller, bigger = (set_a, set_b) if len(set_a) < len(set_b) else (set_b, set_a)
+        count = 0
+        for pos in smaller:
+            if pos in bigger:
+                count += 1
+        return count
+
+    def reorder_applicants_by_overlap(self, grouped_data):
+        """
+        Reorder applicants by overlapping positions similar to frontend logic.
+        """
+        if len(grouped_data) <= 1:
+            return grouped_data
+
+        with_sets = self.build_position_sets(grouped_data)
+
+        # Pick an initial user (one with most applications)
+        sorted_list = []
+        max_index = 0
+        max_size = 0
+        for i, item in enumerate(with_sets):
+            size = len(item['positionSet'])
+            if size > max_size:
+                max_size = size
+                max_index = i
+
+        sorted_list.append(with_sets[max_index])
+        del with_sets[max_index]
+
+        # Greedily pick next user with maximum overlap with the last user
+        while with_sets:
+            last = sorted_list[-1]
+            best_index = 0
+            best_overlap = -1
+            for i, item in enumerate(with_sets):
+                o = self.overlap(last['positionSet'], item['positionSet'])
+                if o > best_overlap:
+                    best_overlap = o
+                    best_index = i
+
+            sorted_list.append(with_sets[best_index])
+            del with_sets[best_index]
+
+        # Remove positionSet before returning
+        return [{'user': item['user'], 'applications': item['applications']} for item in sorted_list]
+
+
+class RecruitmentAllApplicationsPerRecruitmentGroupedSerializer(serializers.ModelSerializer):
+    """
+    Main serializer for the endpoint that returns applications grouped by user.
+    This serializer uses the GroupedApplicationsListSerializer to group and sort.
+    """
+
+    user = RecruitmentBasicUserSerializer(read_only=True)
+    recruitment_position = RecruitmentRecruitmentPositionSerializer(read_only=True)
+    interview = ApplicantInterviewSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentApplication
+        fields = [
+            'id',
+            'recruitment',
+            'user',
+            'applicant_priority',
+            'recruitment_position',
+            'recruiter_status',
+            'recruiter_priority',
+            'interview',
+        ]
+        read_only_fields = [
+            'id',
+            'recruitment',
+            'user',
+            'applicant_priority',
+            'recruitment_position',
+            'recruiter_priority',
+            'interview',
+        ]
+        list_serializer_class = GroupedApplicationsListSerializer

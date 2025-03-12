@@ -710,6 +710,7 @@ export const ROUTES_BACKEND = {
   samfundet__purchase_feedback: '/purchase-feedback/',
   samfundet__gang_application_stats: '/recruitment/:recruitmentId/gang/:gangId/stats/',
   samfundet__recruitment_positions_by_tags: '/recruitment/:id/positions-by-tags/',
+  samfundet__recruitment_all_applications: '/recruitment/all-applications/',
   static__path: '/static/:path',
   media__path: '/media/:path',
 } as const;
