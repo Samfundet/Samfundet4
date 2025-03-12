@@ -368,6 +368,243 @@ class TestRecruitmentInterview:
         assert fixture_recruitment_application2.interview == interview
 
 
+class TestRecruitmentPositionStats:
+    def test_recruitmentstats_position_update_reprioritization_no_interviews(
+        self,
+        fixture_user: User,
+        fixture_recruitment_position: RecruitmentPosition,
+        fixture_recruitment_position2: RecruitmentPosition,
+        fixture_recruitment: Recruitment,
+    ):
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).repriorization_count == 0
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position2).repriorization_count == 0
+        # Without Interview2
+        RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=1,
+        )
+        # Without Interview2
+        application2 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=2,
+        )
+
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).repriorization_count == 0
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position2).repriorization_count == 0
+
+        # Move application 2, postion 2 up
+        application2.update_priority(1)
+
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).repriorization_count == 0
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position2).repriorization_count == 0
+
+    def test_recruitmentstats_position_update_reprioritization_before_interview(
+        self,
+        fixture_user: User,
+        fixture_recruitment_position: RecruitmentPosition,
+        fixture_recruitment_position2: RecruitmentPosition,
+        fixture_recruitment: Recruitment,
+    ):
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).repriorization_count == 0
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position2).repriorization_count == 0
+
+        interview = Interview.objects.create(interview_time=timezone.now() + timezone.timedelta(hours=3), interview_location='Eurovision 2024')
+
+        # Without Interview2
+        RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            interview=interview,
+            applicant_priority=1,
+        )
+
+        interview2 = Interview.objects.create(interview_time=timezone.now() + timezone.timedelta(hours=4), interview_location='Eurovision 2025')
+
+        # Without Interview2
+        application2 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            interview=interview2,
+            applicant_priority=2,
+        )
+
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).repriorization_count == 0
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position2).repriorization_count == 0
+
+        # Move application 2, postion 2 up
+        application2.update_priority(1)
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).repriorization_count == 0
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position2).repriorization_count == 0
+
+    def test_recruitmentstats_position_update_reprioritization_one_interview(
+        self,
+        fixture_user: User,
+        fixture_recruitment_position: RecruitmentPosition,
+        fixture_recruitment_position2: RecruitmentPosition,
+        fixture_recruitment: Recruitment,
+    ):
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).repriorization_count == 0
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position2).repriorization_count == 0
+
+        interview = Interview.objects.create(interview_time=timezone.now() - timezone.timedelta(hours=3), interview_location='Eurovision 2024')
+
+        # Without Interview2
+        application = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            interview=interview,
+            applicant_priority=1,
+        )
+
+        # Without Interview2
+        RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=2,
+        )
+
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).repriorization_count == 0
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position2).repriorization_count == 0
+
+        # Move application 1, 1 position down
+        application.update_priority(-1)
+        fixture_recruitment.statistics.save()
+        position_stats = fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first()
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position2).repriorization_count == 0
+        assert position_stats.repriorization_value == -1
+        assert position_stats.repriorization_count == 1
+        assert position_stats.normalized_repriorization_value() == -1.0
+
+        application.update_priority(1)
+        fixture_recruitment.statistics.save()
+        position_stats = fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first()
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position2).repriorization_count == 0
+        assert position_stats.repriorization_value == 0
+        assert position_stats.repriorization_count == 2
+        assert position_stats.normalized_repriorization_value() == 0.0
+
+    def test_recruitmentstats_position_update_reprioritization_two_interview(
+        self,
+        fixture_user: User,
+        fixture_recruitment_position: RecruitmentPosition,
+        fixture_recruitment_position2: RecruitmentPosition,
+        fixture_recruitment: Recruitment,
+    ):
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).repriorization_count == 0
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position2).repriorization_count == 0
+
+        interview = Interview.objects.create(interview_time=timezone.now() - timezone.timedelta(hours=3), interview_location='Eurovision 2024')
+
+        # Without Interview2
+        application = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            interview=interview,
+            applicant_priority=1,
+        )
+
+        interview2 = Interview.objects.create(interview_time=timezone.now() - timezone.timedelta(hours=3), interview_location='Eurovision 2024')
+
+        # Without Interview2
+        RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position2,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            interview=interview2,
+            applicant_priority=2,
+        )
+
+        assert fixture_recruitment.statistics.position_stats.filter(recruitment_position=fixture_recruitment_position).first()
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position2).repriorization_count == 0
+
+        # Move application 1, 1 position down
+        application.update_priority(-1)
+        fixture_recruitment.statistics.save()
+        position_stats = fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position)
+        position_stats2 = fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position2)
+
+        assert position_stats.repriorization_value == -1
+        assert position_stats.repriorization_count == 1
+        assert position_stats.normalized_repriorization_value() == -1.0
+        assert position_stats2.repriorization_value == 1
+        assert position_stats2.repriorization_count == 1
+        assert position_stats2.normalized_repriorization_value() == 1.0
+
+        application.update_priority(1)
+        fixture_recruitment.statistics.save()
+        position_stats = fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position)
+        position_stats2 = fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position2)
+
+        assert position_stats.repriorization_value == 0
+        assert position_stats.repriorization_count == 2
+        assert position_stats.normalized_repriorization_value() == 0.0
+        assert position_stats2.repriorization_value == 0
+        assert position_stats2.repriorization_count == 2
+        assert position_stats2.normalized_repriorization_value() == 0.0
+
+    def test_recruitmentstats_position_test_withdrawnrate(
+        self, fixture_user: User, fixture_user2: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment
+    ):
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).withdrawn_rate == 0
+        application1 = RecruitmentApplication.objects.create(
+            user=fixture_user,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=1,
+        )
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).withdrawn_rate == 0
+        application1.withdrawn = True
+        application1.save()
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).withdrawn_rate == 1.0
+
+        application2 = RecruitmentApplication.objects.create(
+            user=fixture_user2,
+            recruitment_position=fixture_recruitment_position,
+            recruitment=fixture_recruitment,
+            application_text='I have applied',
+            applicant_priority=1,
+        )
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).withdrawn_rate == 0.5
+        application2.withdrawn = True
+        application2.save()
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).withdrawn_rate == 1.0
+        application2.withdrawn = False
+        application2.save()
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).withdrawn_rate == 0.5
+        application1.withdrawn = False
+        application1.save()
+        fixture_recruitment.statistics.save()
+        assert fixture_recruitment.statistics.position_stats.get(recruitment_position=fixture_recruitment_position).withdrawn_rate == 0.0
+
+
 class TestRecruitmentGangStat:
     def test_recruitmentstats_gang_single_application_single_gang(
         self, fixture_user: User, fixture_recruitment_position: RecruitmentPosition, fixture_recruitment: Recruitment

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Button, SamfundetLogoSpinner } from '~/Components';
+import { useNavigate, useParams } from 'react-router';
+import { Button } from '~/Components';
 import { Page } from '~/Components/Page';
 import { getInformationPage } from '~/api';
 import type { InformationPageDto } from '~/dto';
@@ -28,19 +28,24 @@ export function InformationPage() {
   const { user } = useAuthContext();
   const [page, setPage] = useState<InformationPageDto>();
   const { slugField } = useParams();
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
 
   // Fetch page data
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
     if (slugField) {
       getInformationPage(slugField)
-        .then((data) => setPage(data))
+        .then((data) => {
+          setPage(data);
+          setShowSpinner(false);
+        })
         .catch((error) => {
           if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
             navigate(ROUTES.frontend.not_found, { replace: true });
           }
           toast.error(t(KEY.common_something_went_wrong));
           console.error(error);
+          setShowSpinner(false);
         });
     }
   }, [navigate, slugField]);
@@ -48,17 +53,6 @@ export function InformationPage() {
   // Text and title
   const text = dbT(page, 'text') ?? '';
   const title = dbT(page, 'title') ?? '';
-
-  // Loading
-  if (!page) {
-    return (
-      <Page>
-        <div className={styles.spinner}>
-          <SamfundetLogoSpinner />
-        </div>
-      </Page>
-    );
-  }
 
   // Editing
   const editUrl = reverse({
@@ -68,7 +62,7 @@ export function InformationPage() {
   const canEditPage = hasPerm({ user: user, permission: PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE, obj: page?.slug_field });
 
   return (
-    <div className={styles.wrapper}>
+    <Page className={styles.wrapper} loading={showSpinner}>
       {canEditPage && (
         <>
           <Button rounded={true} theme="blue" onClick={() => navigate(editUrl)}>
@@ -79,6 +73,6 @@ export function InformationPage() {
         </>
       )}
       <SamfMarkdown>{`# ${title} \n ${text}`}</SamfMarkdown>
-    </div>
+    </Page>
   );
 }

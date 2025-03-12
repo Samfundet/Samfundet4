@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { getRecruitmentPosition, getUsers } from '~/api';
 import type { RecruitmentPositionDto, UserDto } from '~/dto';
@@ -16,19 +16,65 @@ export function RecruitmentPositionFormAdminPage() {
   const navigate = useNavigate();
   const { recruitmentId, gangId, positionId } = useParams();
   const [position, setPosition] = useState<Partial<RecruitmentPositionDto>>();
-  const [users, setUsers] = useState<UserDto[]>();
+  const [users, setUsers] = useState<UserDto[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
 
+  // Reference to store timeout ID for debouncing
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Function to handle user search with inline debounce
+  const handleUserSearch = useCallback(
+    (term: string) => {
+      // Clear any existing timeout
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+
+      if (!term.trim()) {
+        setUsers([]);
+        setIsSearching(false);
+        return;
+      }
+
+      setIsSearching(true);
+
+      // Set a new timeout
+      searchTimeoutRef.current = setTimeout(async () => {
+        try {
+          const results = await getUsers(term);
+          setUsers(results);
+        } catch (error) {
+          console.error('Error searching users:', error);
+          toast.error(t(KEY.common_something_went_wrong));
+        } finally {
+          setIsSearching(false);
+        }
+      }, 300); // 300ms debounce delay
+    },
+    [t],
+  );
+
+  // Clean up timeout on component unmount
   useEffect(() => {
-    getUsers().then((data) => {
-      setUsers(data);
-    });
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
   }, []);
 
+  // Load position data if editing
   useEffect(() => {
     if (positionId) {
       getRecruitmentPosition(positionId)
         .then((data) => {
           setPosition(data.data);
+          // If we have interviewers, fetch their data
+          if (data.data.interviewers?.length) {
+            // We need to make sure we have the interviewer data even without search
+            const interviewerIds = data.data.interviewers.map((i) => i.id);
+            getUsers(interviewerIds.join(' ')).then((results: UserDto[]) => setUsers(results));
+          }
         })
         .catch(() => {
           toast.error(t(KEY.common_something_went_wrong));
@@ -72,6 +118,8 @@ export function RecruitmentPositionFormAdminPage() {
         recruitmentId={recruitmentId}
         gangId={gangId}
         users={users}
+        onUserSearch={handleUserSearch}
+        isSearchingUsers={isSearching}
       />
     </AdminPageLayout>
   );

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { BackButton, SamfundetLogoSpinner } from '~/Components';
 import { Text } from '~/Components/Text/Text';
@@ -39,6 +39,7 @@ export function RecruitmentApplicantAdminPage() {
   const recruitmentApplication = data?.data.application;
   const applicant = data?.data.user;
   const interviewNotes = recruitmentApplication?.interview?.notes;
+  const interviewId = recruitmentApplication?.interview?.id;
 
   if (isLoading) {
     return (
@@ -64,22 +65,18 @@ export function RecruitmentApplicantAdminPage() {
         </Text>
         <Text>{recruitmentApplication?.application_text}</Text>
       </div>
+      {interviewId && (
+        <div className={classNames(styles.infoContainer)}>
+          <RecruitmentInterviewNotesForm initialData={initialData} interviewId={interviewId} />
+        </div>
+      )}
       <div className={styles.withdrawContainer}>
         <RecruitmentApplicantWithdraw application={data?.data.application} />
-      </div>
-      <div className={classNames(styles.infoContainer)}>
-        <RecruitmentInterviewNotesForm initialData={initialData} />
       </div>
       <div className={classNames(styles.infoContainer)}>
         <Text size="l" as="strong" className={styles.textBottom}>
           {t(KEY.recruitment_applications)} {t(KEY.common_in)}{' '}
           {dbT(data?.data.application.recruitment_position.gang, 'name')}
-        </Text>
-        <RecruitmentApplicantAllApplications applications={data?.data.other_applications} />
-      </div>
-      <div className={classNames(styles.infoContainer)}>
-        <Text size="l" as="strong" className={styles.textBottom}>
-          {t(KEY.recruitment_all_applications)}
         </Text>
         <RecruitmentApplicantAllApplications applications={data?.data.other_applications} />
       </div>

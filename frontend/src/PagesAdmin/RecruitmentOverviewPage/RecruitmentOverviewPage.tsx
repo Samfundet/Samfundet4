@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { type ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { TabView } from '~/Components';
 import type { Tab } from '~/Components/TabBar/TabBar';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';

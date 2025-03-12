@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouteLoaderData } from 'react-router-dom';
+import { useRouteLoaderData } from 'react-router';
 import { H1, Link, Table } from '~/Components';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getRoleUsers } from '~/api';

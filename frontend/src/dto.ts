@@ -1,5 +1,11 @@
 import type { ThemeValue } from '~/constants';
-import type { EventAgeRestrictionValue, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
+import type {
+  EventAgeRestrictionValue,
+  EventCategoryValue,
+  EventStatus,
+  EventTicketTypeValue,
+  HomePageElementVariation,
+} from './types';
 
 export type UserDto = {
   id: number;
@@ -31,6 +37,7 @@ export type RecruitmentAvailabilityDto = {
   start_date: string;
   end_date: string;
   timeslots: string[];
+  interval: number;
 };
 
 export type DateTimeslotDto = {
@@ -145,7 +152,7 @@ export type EventDto = {
   description_short_en: string;
   age_restriction: EventAgeRestrictionValue;
   location: string;
-  category: string;
+  category: EventCategoryValue;
   host: string;
 
   // Timestamps/duration
@@ -495,6 +502,35 @@ export type RecruitmentPositionDto = {
   accepted_applicants?: number;
 };
 
+export type RecruitmentPositionForApplicantDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+
+  short_description_nb: string;
+  short_description_en: string;
+
+  long_description_nb: string;
+  long_description_en: string;
+
+  tags: string;
+
+  is_funksjonaer_position: boolean;
+
+  norwegian_applicants_only: boolean;
+
+  default_application_letter_nb: string;
+  default_application_letter_en: string;
+
+  gang: GangDto;
+  recruitment: string;
+};
+
+export type PositionsByTagResponse = {
+  count: number;
+  positions: RecruitmentPositionForApplicantDto[];
+};
+
 export type RecruitmentPositionPostDto = Omit<RecruitmentPositionDto, 'gang' | 'id'> & {
   gang: { id: number };
   interviewer_ids?: number[];
@@ -519,6 +555,14 @@ export type InterviewDto = {
   room?: string;
   notes?: string;
   interviewers?: UserDto[];
+};
+
+export type RecruitmentPositionOrganizedApplicationsDto = {
+  unprocessed: RecruitmentApplicationDto[];
+  withdrawn: RecruitmentApplicationDto[];
+  rejected: RecruitmentApplicationDto[];
+  accepted: RecruitmentApplicationDto[];
+  hardtoget: RecruitmentApplicationDto[];
 };
 
 export type RecruitmentApplicationDto = {
@@ -614,6 +658,15 @@ export type InterviewRoomDto = {
   recruitment: string;
   gang?: number;
 };
+
+export interface InterviewerAvailabilityDto {
+  id: number;
+  user: number;
+  recruitment: number;
+  time: string; // HH:MM format ("08:00")
+  start_dt: string; // ISO datetime format ("2024-02-12T09:00:00Z")
+  end_dt: string;
+}
 
 // ############################################################
 //                       Purchase Feedback

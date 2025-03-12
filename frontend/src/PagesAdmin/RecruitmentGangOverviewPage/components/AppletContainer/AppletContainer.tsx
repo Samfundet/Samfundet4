@@ -75,8 +75,10 @@ export function AppletContainer({ recruitmentId }: Props) {
           <AppletCard
             title={lowerCapitalize(t(KEY.recruitment_rejection_email))}
             description={t(KEY.recruitment_applet_rejection_mail_description)}
-            url="#"
-            disabled={true}
+            url={reverse({
+              pattern: ROUTES.frontend.admin_recruitment_gang_overview_rejection_email,
+              urlParams: { recruitmentId },
+            })}
           />
 
           <AppletCard

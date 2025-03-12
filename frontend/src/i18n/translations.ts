@@ -43,6 +43,7 @@ export const nb = prepareTranslations({
   [KEY.pick_a_date]: 'Velg en dato',
 
   // Other common
+  [KEY.common_content]: 'Innhold',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Håndter',
   [KEY.common_yes]: 'Ja',
@@ -178,6 +179,8 @@ export const nb = prepareTranslations({
   [KEY.common_administration]: 'Administrasjon',
   [KEY.common_list_view]: 'Liste visning',
   [KEY.common_tab_view]: 'Fane visning',
+  [KEY.common_available]: 'Tilgjengelig',
+
   [KEY.common_at]: 'ved',
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -261,6 +264,9 @@ export const nb = prepareTranslations({
   [KEY.footer_developed_by]: 'Utviklet av MG::Web',
 
   // Recruitment:
+  [KEY.recruitment_look_at_recipients]: 'Gå videre og se gjennom mottakere',
+  [KEY.recruitment_preview]: 'Forhåndsvisning',
+  [KEY.recruitment_text_before_name]: 'Tekst før navn',
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Stilling',
   [KEY.recruitment_positions]: 'Stillinger',
@@ -276,6 +282,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_interviewer]: 'Intervjuer',
   [KEY.recruitment_interviewers]: 'Intervjuere',
   [KEY.recruitment_no_interviews]: 'Ingen intervjuer',
+  [KEY.recruitment_no_interviewers_available]: 'Ingen intervjuere tilgjengelig',
   [KEY.recruitment_interview_set]: 'Sett intervju',
   [KEY.recruitment_interview_groups]: 'Intervjugrupper',
   [KEY.recruitment_interview_group]: 'Intervjugrupper',
@@ -289,6 +296,9 @@ export const nb = prepareTranslations({
   [KEY.recruitment_priority]: 'Sokers prioritet',
   [KEY.recruitment_recruiter_priority]: 'Prioritet',
   [KEY.recruitment_recruiter_status]: 'Status',
+  [KEY.recruitment_recruiter_guide]: 'Føring',
+  [KEY.recruitment_guide_offer]: 'Kan gi tilbud',
+  [KEY.recruitment_guide_no_offer]: 'Ikke gi tillbud',
   [KEY.common_not_set]: 'Ikke satt',
   [KEY.common_campus]: 'Campus',
   [KEY.recruitment_duration]: 'Varighet',
@@ -303,6 +313,8 @@ export const nb = prepareTranslations({
     'Klar til å søke? \n Skriv litt om deg selv, din motivasjon for å søke og dine kvalifikasjoner for vervet. Du trenger ikke legge inn full CV og referanser - en kort tekst er nok. Vi gleder oss til å høre fra deg! Etter at du er registrert som søker, kan du logge inn for å se status på dine søknader. Hvis du har søkt flere verv, må du også prioritere hvilket du ønsker mest. Du vil kun få tilbud om ett verv.',
   [KEY.recruitment_volunteerfor]: 'Verv som',
   [KEY.recruitment_otherpositions]: 'Andre verv i',
+  [KEY.recruitment_no_other_positions]: 'Ingen andre verv i',
+  [KEY.recruitment_similar_positions]: 'Lignende verv',
   [KEY.recruitment_visible_from]: 'Synlig fra',
   [KEY.recruitment_organization]: 'Organisasjon',
   [KEY.recruitment_administrate]: 'Administrer opptak',
@@ -464,6 +476,8 @@ export const nb = prepareTranslations({
   [KEY.sulten_reservation_form_remember_closing]: 'Husk at Lyche stenger',
   [KEY.sulten_reservation_form_find_times]: 'Finn Ledige Tidspunkt',
   [KEY.sulten_dishes]: 'Retter',
+  [KEY.sulten_occation_drinks]: 'Drikke',
+  [KEY.sulten_occation_eat]: 'Spise',
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Tilgjenglighet',
@@ -557,6 +571,7 @@ export const en = prepareTranslations({
   [KEY.pick_a_date]: 'Pick a date',
 
   // No category:
+  [KEY.common_content]: 'Content',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Manage',
   [KEY.common_yes]: 'Yes',
@@ -689,6 +704,7 @@ export const en = prepareTranslations({
   [KEY.common_unprocessed]: 'Unprocessed',
   [KEY.common_list_view]: 'List view',
   [KEY.common_tab_view]: 'Tab view',
+  [KEY.common_available]: 'Available',
   [KEY.common_at]: 'at',
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -773,6 +789,9 @@ export const en = prepareTranslations({
   [KEY.footer_developed_by]: 'Developed by MG::Web',
 
   // Recruitment:
+  [KEY.recruitment_look_at_recipients]: 'Go ahead and look through recipients',
+  [KEY.recruitment_preview]: 'Preview',
+  [KEY.recruitment_text_before_name]: 'Text before name',
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Position',
   [KEY.recruitment_positions]: 'Positions',
@@ -789,6 +808,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_interviewer]: 'Interviewer',
   [KEY.recruitment_interviewers]: 'Interviewers',
   [KEY.recruitment_no_interviews]: 'No interviews',
+  [KEY.recruitment_no_interviewers_available]: 'No interviewers available',
   [KEY.recruitment_interview_set]: 'Set Interview',
   [KEY.recruitment_interview_groups]: 'Interview groups',
   [KEY.recruitment_interview_group]: 'Interview group',
@@ -798,6 +818,9 @@ export const en = prepareTranslations({
   [KEY.recruitment_priority]: 'Applicants priority',
   [KEY.recruitment_recruiter_priority]: 'Priority',
   [KEY.recruitment_recruiter_status]: 'Status',
+  [KEY.recruitment_recruiter_guide]: 'Guide',
+  [KEY.recruitment_guide_offer]: 'Can give offer',
+  [KEY.recruitment_guide_no_offer]: 'Do not give offer',
   [KEY.common_not_set]: 'Not set',
   [KEY.common_campus]: 'Campus',
   [KEY.recruitment_duration]: 'Duration',
@@ -810,6 +833,8 @@ export const en = prepareTranslations({
     ' Ready to apply? \nWrite a little bit about yourself, your motivation for applying and your qualifications for this job. You don’t have to send in a full CV or references from previous employers - a short text is enough. We look forward to hearing from you! When you have registered as an applicant, you can log in and check the status of your applications. If you apply for more than one job, you must prioritize which one you want the most. Note that you will only be offered one job.',
   [KEY.recruitment_volunteerfor]: 'Position as',
   [KEY.recruitment_otherpositions]: 'Other positions in',
+  [KEY.recruitment_no_other_positions]: 'No other positions in',
+  [KEY.recruitment_similar_positions]: 'Similar positions',
   [KEY.recruitment_no_positions]: 'No positions',
   [KEY.recruitment_active]: 'Active recruitments',
   [KEY.recruitment_no_gangs]: 'No gangs',
@@ -985,6 +1010,8 @@ export const en = prepareTranslations({
   [KEY.sulten_reservation_form_more_than_8_help]: 'More than 8 people? send us an',
   [KEY.sulten_reservation_form_remember_closing]: 'Remember that Lyche closes at',
   [KEY.sulten_reservation_form_find_times]: 'Find Available Times',
+  [KEY.sulten_occation_drinks]: 'Drinks',
+  [KEY.sulten_occation_eat]: 'Eating',
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Availability',

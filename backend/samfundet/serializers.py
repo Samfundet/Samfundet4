@@ -26,28 +26,21 @@ from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
     Tag,
     Gang,
-    Menu,
     User,
     Image,
     Merch,
-    Table,
     Venue,
     Campus,
-    Booking,
     Infobox,
     Profile,
     BlogPost,
     GangType,
     KeyValue,
-    MenuItem,
     TextItem,
     GangSection,
-    Reservation,
     ClosedPeriod,
-    FoodCategory,
     Organization,
     Saksdokument,
-    FoodPreference,
     MerchVariation,
     UserPreference,
     InformationPage,
@@ -76,6 +69,8 @@ if TYPE_CHECKING:
 
 if TYPE_CHECKING:
     from typing import Any
+
+from rest_framework.utils.serializer_helpers import ReturnList
 
 
 class TagSerializer(CustomBaseSerializer):
@@ -488,35 +483,6 @@ class BlogPostSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
-class FoodPreferenceSerializer(CustomBaseSerializer):
-    class Meta:
-        model = FoodPreference
-        fields = '__all__'
-
-
-class FoodCategorySerializer(CustomBaseSerializer):
-    class Meta:
-        model = FoodCategory
-        fields = ['id', 'name_nb', 'name_en']
-
-
-class MenuItemSerializer(CustomBaseSerializer):
-    food_preferences = FoodPreferenceSerializer(many=True, read_only=True)  # Todo make this work with post
-    food_category = FoodCategorySerializer(read_only=True)
-
-    class Meta:
-        model = MenuItem
-        fields = '__all__'
-
-
-class MenuSerializer(CustomBaseSerializer):
-    menu_items = MenuItemSerializer(many=True)
-
-    class Meta:
-        model = Menu
-        fields = '__all__'
-
-
 class RoleSerializer(CustomBaseSerializer):
     class Meta:
         model = Role
@@ -614,38 +580,6 @@ class InfoboxSerializer(CustomBaseSerializer):
 class KeyValueSerializer(serializers.ModelSerializer):
     class Meta:
         model = KeyValue
-        fields = '__all__'
-
-
-# =============================== #
-#            Sulten               #
-# =============================== #
-
-
-class TableSerializer(CustomBaseSerializer):
-    class Meta:
-        model = Table
-        fields = '__all__'
-
-
-class ReservationSerializer(CustomBaseSerializer):
-    class Meta:
-        model = Reservation
-        fields = '__all__'
-
-
-class ReservationCheckSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Reservation
-        fields = ['guest_count', 'occasion', 'reservation_date']
-
-
-class BookingSerializer(serializers.ModelSerializer):
-    tables = TableSerializer(many=True)
-    user = UserSerializer(many=True)
-
-    class Meta:
-        model = Booking
         fields = '__all__'
 
 
@@ -960,7 +894,9 @@ class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
             'short_description_en',
             'long_description_nb',
             'long_description_en',
+            'tags',
             'is_funksjonaer_position',
+            'norwegian_applicants_only',
             'default_application_letter_nb',
             'default_application_letter_en',
             'gang',
@@ -1078,6 +1014,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
     recruitment_position = RecruitmentPositionForApplicantSerializer()
     recruiter_priority = serializers.CharField(source='get_recruiter_priority_display')
     interview_time = serializers.SerializerMethodField(method_name='get_interview_time', read_only=True)
+    interview = InterviewSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentApplication
@@ -1093,6 +1030,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
             'recruiter_priority',
             'withdrawn',
             'interview_time',
+            'interview',
             'created_at',
         ]
         read_only_fields = [
@@ -1107,6 +1045,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
             'applicant_state',
             'interview_time',
             'withdrawn',
+            'interview',
             'created_at',
         ]
 
@@ -1211,6 +1150,41 @@ class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
 
     def get_application_count(self, application: RecruitmentApplication) -> int:
         return application.user.applications.filter(recruitment=application.recruitment).count()
+
+
+class RecruitmentPositionOrganizedApplications(CustomBaseSerializer):
+    ApplicationSerializer = RecruitmentApplicationForGangSerializer
+    unprocessed = serializers.SerializerMethodField(method_name='get_unprocessed', read_only=True)
+    withdrawn = serializers.SerializerMethodField(method_name='get_withdrawn', read_only=True)
+    accepted = serializers.SerializerMethodField(method_name='get_accepted', read_only=True)
+    rejected = serializers.SerializerMethodField(method_name='get_rejected', read_only=True)
+    hardtoget = serializers.SerializerMethodField(method_name='get_hardtoget', read_only=True)
+
+    class Meta:
+        model = RecruitmentPosition
+        fields = ['unprocessed', 'withdrawn', 'accepted', 'rejected', 'hardtoget']
+
+    def get_unprocessed(self, instance: RecruitmentPosition) -> ReturnList:
+        unprocessed = instance.applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.NOT_SET)
+        return self.ApplicationSerializer(unprocessed, many=True).data
+
+    def get_withdrawn(self, instance: RecruitmentPosition) -> ReturnList:
+        withdrawn = instance.applications.filter(withdrawn=True)
+        return self.ApplicationSerializer(withdrawn, many=True).data
+
+    def get_rejected(self, instance: RecruitmentPosition) -> ReturnList:
+        rejected = instance.applications.filter(
+            withdrawn=False, recruiter_status__in=[RecruitmentStatusChoices.AUTOMATIC_REJECTION, RecruitmentStatusChoices.REJECTION]
+        )
+        return self.ApplicationSerializer(rejected, many=True).data
+
+    def get_accepted(self, instance: RecruitmentPosition) -> ReturnList:
+        accepted = instance.applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_ACCEPTED)
+        return self.ApplicationSerializer(accepted, many=True).data
+
+    def get_hardtoget(self, instance: RecruitmentPosition) -> ReturnList:
+        hardtoget = instance.applications.filter(withdrawn=False, recruiter_status=RecruitmentStatusChoices.CALLED_AND_REJECTED)
+        return self.ApplicationSerializer(hardtoget, many=True).data
 
 
 class RecruitmentApplicationUpdateForGangSerializer(serializers.Serializer):
