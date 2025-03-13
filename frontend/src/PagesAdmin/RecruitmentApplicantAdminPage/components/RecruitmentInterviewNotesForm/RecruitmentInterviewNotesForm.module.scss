@@ -6,19 +6,19 @@
   min-height: 550px;
   max-height: 550px;
   margin: 10px;
+  padding: 8px 12px;
   line-height: 1.5;
   background-color: $white;
   border: 1px solid $grey-35;
   border-radius: 4px;
-  box-sizing: border-box;
   width: 100%;
   overflow-y: auto;
   position: relative; /* Added: Make this a positioning context for the button */
+  box-sizing: border-box; /* Added: Include padding in width calculation */
 }
 
 .markdownButton {
   height: 100%;
-  padding: 8px 12px;
   background: none;
   border: none;
   text-align: left;
@@ -37,6 +37,7 @@
   p,
   pre {
     margin: 0;
+    padding: 0;
   }
   overflow-wrap: break-word;
   width: 100%;
