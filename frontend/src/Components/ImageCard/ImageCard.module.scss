@@ -135,12 +135,26 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
 
 .ticket_type {
   font-size: 0.7rem;
-  background-color: #ff9800;
+  background-color: $green-light;
   color: black;
   border-radius: 4px;
   padding: 0.5px 6px;
   text-align: center;
+  float: left;
+  font-weight: bold;
 }
+
+.event_host {
+  font-size: 0.7rem;
+  background-color: $blue-medium;
+  color: black;
+  border-radius: 4px;
+  padding: 0.5px 6px;
+  text-align: center;
+  float: right;
+  font-weight: bold;
+}
+
 
 // Styling to container and children when it is hovered.
 .container:hover {
@@ -164,6 +178,12 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
   .bottom_description {
     opacity: 1;
     max-height: 3.5em;
+  }
+  .event_host{
+    visibility: hidden;
+  }
+  .ticket_type{
+    visibility: hidden;
   }
 }
 
