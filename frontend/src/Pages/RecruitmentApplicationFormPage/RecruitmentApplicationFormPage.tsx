@@ -325,7 +325,7 @@ export function RecruitmentApplicationFormPage() {
                   <Button type="submit" theme="green" display="basic">
                     {submitText}
                   </Button>
-                  {!recruitmentApplication?.withdrawn && (
+                  {!recruitmentApplication?.withdrawn && recruitmentApplication && (
                     <Button type="button" theme="samf" display="basic" onClick={() => withdrawApplication()}>
                       {t(KEY.recruitment_withdraw_application)}
                     </Button>
