@@ -1,18 +1,23 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { Logo } from './Logo';
 
-export default {
+const meta: Meta<typeof Logo> = {
   title: 'Components/Logo',
   component: Logo,
-} as ComponentMeta<typeof Logo>;
+};
 
-const Template: ComponentStory<typeof Logo> = (args) => <Logo {...args} />;
+export default meta;
 
-export const Samf = Template.bind({});
-Samf.args = { color: 'org-color', size: 'medium', organization: 'Samfundet' };
+type Story = StoryObj<typeof Logo>;
 
-export const Uka = Template.bind({});
-Uka.args = { color: 'org-color', size: 'medium', organization: 'UKA' };
+export const Samf: Story = {
+  args: { color: 'org-color', size: 'medium', organization: 'Samfundet' },
+};
 
-export const Isfit = Template.bind({});
-Isfit.args = { color: 'org-color', size: 'medium', organization: 'ISFiT' };
+export const Uka: Story = {
+  args: { color: 'org-color', size: 'medium', organization: 'UKA' },
+};
+
+export const Isfit: Story = {
+  args: { color: 'org-color', size: 'medium', organization: 'ISFiT' },
+};

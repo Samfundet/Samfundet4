@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-// @ts-nocheck
 import ReactModal from 'react-modal';
 import styles from './Modal.module.scss';
 
@@ -10,9 +9,9 @@ import styles from './Modal.module.scss';
 interface ModalProps extends ReactModal.Props {
   className?: string;
 }
-
 export function Modal({ children, className, ...props }: ModalProps) {
   return (
+    // @ts-ignore
     <ReactModal
       {...props} // Spread must be first
       className={classNames(styles.modal, className)}

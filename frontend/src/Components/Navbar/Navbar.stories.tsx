@@ -1,14 +1,16 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { Navbar } from './Navbar';
 
 // Local component config.
-export default {
+const meta: Meta<typeof Navbar> = {
   title: 'Components/Navbar',
   component: Navbar,
-} as ComponentMeta<typeof Navbar>;
-
-const Template: ComponentStory<typeof Navbar> = () => {
-  return <Navbar />;
 };
 
-export const Primary = Template.bind({});
+export default meta;
+
+type Story = StoryObj<typeof Navbar>;
+
+export const Primary: Story = {
+  render: () => <Navbar />,
+};

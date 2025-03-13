@@ -1,16 +1,19 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { PurchaseFeedbackForm } from './PurchaseFeedbackForm';
 
-export default {
+const meta: Meta<typeof PurchaseFeedbackForm> = {
   title: 'Components/PurchaseFeedbackForm',
   component: PurchaseFeedbackForm,
-} as ComponentMeta<typeof PurchaseFeedbackForm>;
+};
 
-const Template: ComponentStory<typeof PurchaseFeedbackForm> = (args) => <PurchaseFeedbackForm {...args} />;
+export default meta;
 
-export const Basic = Template.bind({});
-Basic.args = {
-  title: 'tittel',
-  alternatives: ['samfundet.no', 'Venner', 'Plakat'],
-  questions: ['hvem?', 'hva?', 'hvor?'],
+type Story = StoryObj<typeof PurchaseFeedbackForm>;
+
+export const Basic: Story = {
+  args: {
+    title: 'tittel',
+    alternatives: ['samfundet.no', 'Venner', 'Plakat'],
+    questions: ['hvem?', 'hva?', 'hvor?'],
+  },
 };
