@@ -1,23 +1,27 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { AuthContextProvider } from '~/context/AuthContext';
 import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { SplashHeaderBox } from './SplashHeaderBox';
 
 // Local component config.
-export default {
+const meta: Meta<typeof SplashHeaderBox> = {
   title: 'Components/SplashHeaderBox',
   component: SplashHeaderBox,
-} as ComponentMeta<typeof SplashHeaderBox>;
+  decorators: [
+    (Story) => (
+      <AuthContextProvider>
+        <GlobalContextProvider>
+          <Story />
+        </GlobalContextProvider>
+      </AuthContextProvider>
+    ),
+  ],
+};
 
-const Template: ComponentStory<typeof SplashHeaderBox> = (args) => (
-  <>
-    <AuthContextProvider>
-      <GlobalContextProvider>
-        <SplashHeaderBox {...args} />
-      </GlobalContextProvider>
-    </AuthContextProvider>
-  </>
-);
+export default meta;
 
-export const Basic = Template.bind({});
-Basic.args = {};
+type Story = StoryObj<typeof SplashHeaderBox>;
+
+export const Basic: Story = {
+  args: {},
+};

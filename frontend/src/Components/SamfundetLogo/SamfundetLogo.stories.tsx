@@ -1,13 +1,16 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { SamfundetLogo } from '~/Components/SamfundetLogo';
 
 // Local component config.
-export default {
+const meta: Meta<typeof SamfundetLogo> = {
   title: 'Components/SamfundetLogo',
   component: SamfundetLogo,
-} as ComponentMeta<typeof SamfundetLogo>;
+};
 
-const Template: ComponentStory<typeof SamfundetLogo> = () => <SamfundetLogo />;
+export default meta;
 
-export const Basic = Template.bind({});
-Basic.args = {};
+type Story = StoryObj<typeof SamfundetLogo>;
+
+export const Basic: Story = {
+  args: {},
+};

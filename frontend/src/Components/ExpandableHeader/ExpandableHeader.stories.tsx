@@ -1,32 +1,39 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { ExpandableHeader } from './ExpandableHeader';
 
 // Local component config.
-export default {
+const meta: Meta<typeof ExpandableHeader> = {
   title: 'Components/ExpandableHeader',
   component: ExpandableHeader,
   args: {
-    name: 'name',
     label: 'Choose option',
   },
-} as ComponentMeta<typeof ExpandableHeader>;
-
-const TemplateSingular: ComponentStory<typeof ExpandableHeader> = (args) => <ExpandableHeader {...args} />;
-
-const TemplateMultiple: ComponentStory<typeof ExpandableHeader> = (args) => (
-  <>
-    <ExpandableHeader {...args} />
-    <ExpandableHeader {...args} />
-  </>
-);
-
-export const Basic = TemplateSingular.bind({});
-Basic.args = { children: <div>Peek-a-Boo</div> };
-
-export const Nested = TemplateSingular.bind({});
-Nested.args = {
-  children: <ExpandableHeader />,
 };
 
-export const Multiple = TemplateMultiple.bind({});
-Multiple.args = { children: <div>Peek-a-Boo</div> };
+export default meta;
+
+type Story = StoryObj<typeof ExpandableHeader>;
+
+export const Basic: Story = {
+  args: {
+    children: <div>Peek-a-Boo</div>,
+  },
+};
+
+export const Nested: Story = {
+  args: {
+    children: <ExpandableHeader />,
+  },
+};
+
+export const Multiple: Story = {
+  render: (args) => (
+    <>
+      <ExpandableHeader {...args} />
+      <ExpandableHeader {...args} />
+    </>
+  ),
+  args: {
+    children: <div>Peek-a-Boo</div>,
+  },
+};
