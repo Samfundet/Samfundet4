@@ -341,29 +341,51 @@ export const router = createBrowserRouter(
               }
             />
           </Route>
+          {/* Lyche Menu */}
           <Route
-            path={ROUTES.frontend.admin_sulten_menu}
+            element={<Outlet />}
             handle={{
-              crumb: ({ pathname }: UIMatch) => (
-                <Link url={pathname}>
+              crumb: () => (
+                <Link url={ROUTES.frontend.admin_sulten_menu}>
                   {t(KEY.common_sulten)} {t(KEY.common_menu)}
                 </Link>
               ),
             }}
-            element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_MENU]} element={<SultenMenuAdminPage />} />}
-          />
-          <Route
-            path={ROUTES.frontend.admin_sulten_menuitem_create}
-            element={
-              <PermissionRoute required={[PERM.SAMFUNDET_ADD_MENUITEM]} element={<SultenMenuItemFormAdminPage />} />
-            }
-          />
-          <Route
-            path={ROUTES.frontend.admin_sulten_menuitem_edit}
-            element={
-              <PermissionRoute required={[PERM.SAMFUNDET_CHANGE_MENUITEM]} element={<SultenMenuItemFormAdminPage />} />
-            }
-          />
+          >
+            <Route
+              path={ROUTES.frontend.admin_sulten_menu}
+              element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_MENU]} element={<SultenMenuAdminPage />} />}
+            />
+            <Route
+              path={ROUTES.frontend.admin_sulten_menuitem_create}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => (
+                  <Link url={pathname}>
+                    {t(KEY.common_create)} {t(KEY.sulten_dishes)}
+                  </Link>
+                ),
+              }}
+              element={
+                <PermissionRoute required={[PERM.SAMFUNDET_ADD_MENUITEM]} element={<SultenMenuItemFormAdminPage />} />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_sulten_menuitem_edit}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => (
+                  <Link url={pathname}>
+                    {t(KEY.common_edit)} {t(KEY.sulten_dishes)}
+                  </Link>
+                ),
+              }}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_CHANGE_MENUITEM]}
+                  element={<SultenMenuItemFormAdminPage />}
+                />
+              }
+            />
+          </Route>
           {/* Recruitment */}
           <Route
             element={<Outlet />}
