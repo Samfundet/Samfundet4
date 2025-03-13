@@ -179,6 +179,8 @@ export const nb = prepareTranslations({
   [KEY.common_administration]: 'Administrasjon',
   [KEY.common_list_view]: 'Liste visning',
   [KEY.common_tab_view]: 'Fane visning',
+  [KEY.common_available]: 'Tilgjengelig',
+
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
   [KEY.common_press]: 'presse',
@@ -279,6 +281,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_interviewer]: 'Intervjuer',
   [KEY.recruitment_interviewers]: 'Intervjuere',
   [KEY.recruitment_no_interviews]: 'Ingen intervjuer',
+  [KEY.recruitment_no_interviewers_available]: 'Ingen intervjuere tilgjengelig',
   [KEY.recruitment_interview_set]: 'Sett intervju',
   [KEY.recruitment_interview_groups]: 'Intervjugrupper',
   [KEY.recruitment_interview_group]: 'Intervjugrupper',
@@ -292,6 +295,9 @@ export const nb = prepareTranslations({
   [KEY.recruitment_priority]: 'Sokers prioritet',
   [KEY.recruitment_recruiter_priority]: 'Prioritet',
   [KEY.recruitment_recruiter_status]: 'Status',
+  [KEY.recruitment_recruiter_guide]: 'Føring',
+  [KEY.recruitment_guide_offer]: 'Kan gi tilbud',
+  [KEY.recruitment_guide_no_offer]: 'Ikke gi tillbud',
   [KEY.common_not_set]: 'Ikke satt',
   [KEY.common_campus]: 'Campus',
   [KEY.recruitment_duration]: 'Varighet',
@@ -457,6 +463,8 @@ export const nb = prepareTranslations({
   [KEY.sulten_reservation_form_remember_closing]: 'Husk at Lyche stenger',
   [KEY.sulten_reservation_form_find_times]: 'Finn Ledige Tidspunkt',
   [KEY.sulten_dishes]: 'Retter',
+  [KEY.sulten_occation_drinks]: 'Drikke',
+  [KEY.sulten_occation_eat]: 'Spise',
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Tilgjenglighet',
@@ -683,6 +691,7 @@ export const en = prepareTranslations({
   [KEY.common_unprocessed]: 'Unprocessed',
   [KEY.common_list_view]: 'List view',
   [KEY.common_tab_view]: 'Tab view',
+  [KEY.common_available]: 'Available',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -786,6 +795,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_interviewer]: 'Interviewer',
   [KEY.recruitment_interviewers]: 'Interviewers',
   [KEY.recruitment_no_interviews]: 'No interviews',
+  [KEY.recruitment_no_interviewers_available]: 'No interviewers available',
   [KEY.recruitment_interview_set]: 'Set Interview',
   [KEY.recruitment_interview_groups]: 'Interview groups',
   [KEY.recruitment_interview_group]: 'Interview group',
@@ -795,6 +805,9 @@ export const en = prepareTranslations({
   [KEY.recruitment_priority]: 'Applicants priority',
   [KEY.recruitment_recruiter_priority]: 'Priority',
   [KEY.recruitment_recruiter_status]: 'Status',
+  [KEY.recruitment_recruiter_guide]: 'Guide',
+  [KEY.recruitment_guide_offer]: 'Can give offer',
+  [KEY.recruitment_guide_no_offer]: 'Do not give offer',
   [KEY.common_not_set]: 'Not set',
   [KEY.common_campus]: 'Campus',
   [KEY.recruitment_duration]: 'Duration',
@@ -973,6 +986,8 @@ export const en = prepareTranslations({
   [KEY.sulten_reservation_form_more_than_8_help]: 'More than 8 people? send us an',
   [KEY.sulten_reservation_form_remember_closing]: 'Remember that Lyche closes at',
   [KEY.sulten_reservation_form_find_times]: 'Find Available Times',
+  [KEY.sulten_occation_drinks]: 'Drinks',
+  [KEY.sulten_occation_eat]: 'Eating',
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Availability',

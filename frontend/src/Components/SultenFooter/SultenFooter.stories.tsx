@@ -1,10 +1,9 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { SultenFooter } from './SultenFooter';
 
-export default {
+const meta: Meta<typeof SultenFooter> = {
   title: 'Components/SultenFooter',
   component: SultenFooter,
-  args: {},
   decorators: [
     (Story) => (
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
@@ -12,8 +11,12 @@ export default {
       </div>
     ),
   ],
-} as ComponentMeta<typeof SultenFooter>;
+};
 
-const OneEvent: ComponentStory<typeof SultenFooter> = () => <SultenFooter />;
+export default meta;
 
-export const Basic = OneEvent.bind({});
+type Story = StoryObj<typeof SultenFooter>;
+
+export const Basic: Story = {
+  args: {},
+};
