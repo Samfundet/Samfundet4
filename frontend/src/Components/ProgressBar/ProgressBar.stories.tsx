@@ -1,37 +1,45 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { ProgressBar } from './ProgressBar';
 
 // Local component config.
-export default {
+const meta: Meta<typeof ProgressBar> = {
   title: 'Components/ProgressBar',
   component: ProgressBar,
-} as ComponentMeta<typeof ProgressBar>;
-
-const Template: ComponentStory<typeof ProgressBar> = (args) => <ProgressBar {...args} />;
-
-export const Low = Template.bind({});
-Low.args = {
-  value: 25,
-  max: 100,
 };
 
-export const Medium = Template.bind({});
-Medium.args = {
-  value: 50,
-  max: 100,
+export default meta;
+
+type Story = StoryObj<typeof ProgressBar>;
+
+export const Low: Story = {
+  args: {
+    value: 25,
+    max: 100,
+  },
 };
 
-export const High = Template.bind({});
-High.args = {
-  value: 75,
-  max: 100,
+export const Medium: Story = {
+  args: {
+    value: 50,
+    max: 100,
+  },
 };
 
-export const Loading = Template.bind({});
-Loading.args = {};
+export const High: Story = {
+  args: {
+    value: 75,
+    max: 100,
+  },
+};
 
-export const WithLabel = Template.bind({});
-WithLabel.args = { children: <div>Label</div> };
+export const Loading: Story = {
+  args: {},
+};
 
-export const FullWidth = Template.bind({});
-FullWidth.args = { fullWidth: true };
+export const WithLabel: Story = {
+  args: { children: <div>Label</div> },
+};
+
+export const FullWidth: Story = {
+  args: { fullWidth: true },
+};

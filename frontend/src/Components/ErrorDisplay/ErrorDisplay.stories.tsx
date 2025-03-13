@@ -1,15 +1,18 @@
-import type { ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { ErrorDisplay } from './ErrorDisplay';
 
-export default {
+const meta: Meta<typeof ErrorDisplay> = {
   title: 'Components/Error',
-  comonent: ErrorDisplay,
+  component: ErrorDisplay,
 };
 
-const Template: ComponentStory<typeof ErrorDisplay> = (args) => <ErrorDisplay {...args} />;
+export default meta;
 
-export const Default = Template.bind({});
-Default.args = {
-  header: 'Not found',
-  message: 'The resource you requested was not found',
+type Story = StoryObj<typeof ErrorDisplay>;
+
+export const Default: Story = {
+  args: {
+    header: 'Not found',
+    message: 'The resource you requested was not found',
+  },
 };
