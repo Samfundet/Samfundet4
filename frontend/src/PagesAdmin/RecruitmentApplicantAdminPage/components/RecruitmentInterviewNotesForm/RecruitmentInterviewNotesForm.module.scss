@@ -13,8 +13,6 @@
   border-radius: 4px;
   width: 100%;
   overflow-y: auto;
-  position: relative; /* Added: Make this a positioning context for the button */
-  box-sizing: border-box; /* Added: Include padding in width calculation */
 }
 
 .markdownButton {
@@ -27,9 +25,6 @@
   font-size: inherit;
   color: inherit;
   display: block;
-  width: 100%; /* Changed from inherit to 100% */
-  position: absolute; /* Added: Position absolutely within wrapper */
-  box-sizing: border-box; /* Added: Include padding in width calculation */
 }
 
 .markdownContent {
@@ -39,7 +34,6 @@
     margin: 0;
     padding: 0;
   }
-  overflow-wrap: break-word;
   width: 100%;
   height: 100%;
 }
