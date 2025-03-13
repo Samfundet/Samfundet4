@@ -145,14 +145,9 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
 }
 
 .event_host {
-  font-size: 0.7rem;
+  @extend .ticket_type;
   background-color: $blue-medium;
-  color: black;
-  border-radius: 4px;
-  padding: 0.5px 6px;
-  text-align: center;
   float: right;
-  font-weight: 700;
 }
 
 
@@ -178,12 +173,6 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
   .bottom_description {
     opacity: 1;
     max-height: 3.5em;
-  }
-  .event_host{
-    visibility: hidden;
-  }
-  .ticket_type{
-    visibility: hidden;
   }
 }
 
