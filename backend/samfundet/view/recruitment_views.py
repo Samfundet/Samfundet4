@@ -8,6 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 
+from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -51,7 +52,7 @@ class RecruitmentForRecruiterView(ModelViewSet):
     serializer_class = RecruitmentForRecruiterSerializer
     queryset = Recruitment.objects.all()
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Recruitment]:
         return filter_queryset_by_permissions(Recruitment.objects.all(), self.request.user, SAMFUNDET_VIEW_RECRUITMENT)
 
     def retrieve(self, request: Request, pk: int) -> Response:
