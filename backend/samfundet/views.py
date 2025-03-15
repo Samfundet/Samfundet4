@@ -20,7 +20,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly, IsAdminUser
 
 from django.conf import settings
 from django.http import QueryDict, HttpResponse
@@ -42,7 +42,15 @@ from root.constants import (
     GITHUB_SIGNATURE_HEADER,
     REQUESTED_IMPERSONATE_USER,
 )
-from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM
+from root.utils.permission_mixins import IsApplicationOwner, IsCreatorOnly, IsIntern
+from root.utils.permissions import (
+    SAMFUNDET_CHANGE_RECRUITMENTAPPLICATION,
+    SAMFUNDET_DELETE_RECRUITMENTAPPLICATION,
+    SAMFUNDET_VIEW_INTERVIEW,
+    SAMFUNDET_VIEW_INTERVIEWROOM,
+    SAMFUNDET_VIEW_RECRUITMENT,
+    SAMFUNDET_VIEW_RECRUITMENTAPPLICATION,
+)
 
 from samfundet.pagination import CustomPageNumberPagination
 
@@ -108,6 +116,7 @@ from .models.event import (
     PurchaseFeedbackAlternative,
 )
 from .models.general import (
+    GangSection,
     Tag,
     Gang,
     User,
@@ -140,7 +149,7 @@ from .models.recruitment import (
     RecruitmentInterviewAvailability,
     RecruitmentPositionSharedInterviewGroup,
 )
-from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+from .models.model_choices import RecruitmentApplicantStates, RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 # =============================== #
 #          Home Page              #
@@ -647,13 +656,300 @@ class RecruitmentStatisticsView(ModelViewSet):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionView(ModelViewSet):
+    # consolidate position
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentPositionSerializer
     queryset = RecruitmentPosition.objects.all()
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
+class RecruitmentAppicationViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentApplicationForApplicantSerializer
+    queryset = RecruitmentApplication.objects.all()
+
+    def _user_has_orgrole(self, user: User, permission_codename: str) -> bool:
+        org_roles = UserOrgRole.objects.filter(user=user).select_related('role')
+        return any(org_role.role.permissions.filter(codename=permission_codename.split('.')[-1]).exists() for org_role in org_roles)
+
+    def _user_has_gangrole(self, user: User, permission_code: str) -> bool:
+        gang_roles = UserGangRole.objects.filter(user=user).select_related('role')
+        return any(gang_role.role.permissions.filter(codename=permission_code.split('.')[-1]).exists() for gang_role in gang_roles)
+
+    def get_serializer_class(self):
+        """Return different serializers based on the action."""
+        if self.action == 'gang_applications':
+            return RecruitmentApplicationForGangSerializer
+        return self.serializer_class
+
+    # consolidate application views into one viewset with @actions
+    # [x] RecruitmentApplicationView
+    # [x] RecruitmentApplicationForApplicantView
+    # ----------------------#
+    #  Applicant logic      #
+    # ----------------------#
+    def update(self, request: Request, pk: int) -> Response:
+        data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
+        recruitment_position = get_object_or_404(RecruitmentPosition, pk=pk)
+        existing_application = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
+        # If update
+        if existing_application:
+            try:
+                existing_application.withdrawn = False
+                existing_application.application_text = data['application_text']
+                existing_application.save()
+                serializer = self.serializer_class(existing_application)
+                return Response(serializer.data, status.HTTP_200_OK)
+            except ValidationError as e:
+                return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
+
+        # If create
+        data['recruitment_position'] = recruitment_position.pk
+        data['recruitment'] = recruitment_position.recruitment.pk
+        data['user'] = request.user.pk
+        serializer = self.get_serializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request: Request, pk: int) -> Response:
+        application = get_object_or_404(RecruitmentApplication, user=request.user, recruitment_position=pk)
+
+        user_id = request.query_params.get('user_id')
+        if user_id:
+            # TODO: Add permissions
+            application = RecruitmentApplication.objects.filter(recruitment_position=pk, user_id=user_id).first()
+        serializer = self.get_serializer(application)
+        return Response(serializer.data)
+
+    def list(self, request: Request) -> Response:
+        """Returns a list of all the applications for a user for a specified recruitment"""
+        recruitment_id = request.query_params.get('recruitment')
+        user_id = request.query_params.get('user_id')
+
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        applications = RecruitmentApplication.objects.filter(
+            recruitment=recruitment,
+            user=request.user,
+        )
+
+        if user_id:
+            # TODO: Add permissions
+            applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user_id=user_id)
+        else:
+            applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user)
+
+        serializer = self.get_serializer(applications, many=True)
+        return Response(serializer.data)
+
+    def destroy(self, request: Request, *args, **kwargs) -> Response:
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def partial_update(self, request: Request, *args, **kwargs) -> Response:
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def create(self, request: Request, *args, **kwargs) -> Response:
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    # [x] RecruitmentApplicationWithdrawApplicantView
+    @action(detail=True, methods=['put', 'get'], url_path='applicant-withdraw')
+    def applicant_withdraw(self, request: Request, pk: int) -> Response:
+        # Checks if user has applied for position
+        application = get_object_or_404(RecruitmentApplication, recruitment_position=pk, user=request.user)
+        # Withdraw if applied
+        application.withdrawn = True
+        application.save()
+        serializer = RecruitmentApplicationForApplicantSerializer(application)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # [x] RecruitmentApplicationWithdrawRecruiterView
+
+    @action(detail=False, methods=['put', 'get'], url_path='recruiter-withdraw', permission_classes=[IsAuthenticated])
+    def recruiter_withdraw(self, request: Request) -> Response:
+        """
+        Withdraw an application as a recruiter.
+        Only accessible to users with the proper permission to change the application.
+
+        Takes application ID as a query parameter: ?application=<uuid>
+        """
+        application_id = request.query_params.get('application')
+        if not application_id:
+            return Response({'error': 'Application ID is required as a query parameter'}, status=status.HTTP_400_BAD_REQUEST)
+
+        application = get_object_or_404(RecruitmentApplication, pk=application_id)
+
+        # Check if user has permission to delete
+        if not request.user.has_perm(SAMFUNDET_DELETE_RECRUITMENTAPPLICATION, application):
+            raise PermissionDenied
+
+        # Withdraw the application
+        application.withdrawn = True
+        application.save()
+
+        # Return the updated application
+        serializer = RecruitmentApplicationForGangSerializer(application)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # [x] RecruitmentApplicationForGangView
+
+    @action(detail=False, methods=['get'], url_path='for-gang', permission_classes=[IsAuthenticated])
+    def gang_applications(self, request: Request) -> Response:
+        """Returns a list of all the applications for the specified gang."""
+        gang_id = request.query_params.get('gang')
+        recruitment_id = request.query_params.get('recruitment')
+
+        if not gang_id:
+            return Response({'error': 'A gang parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        gang = get_object_or_404(Gang, id=gang_id)
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        # permitted_applications = [
+        #    applications
+        #    for applications in RecruitmentApplication.objects.filter(
+        #        recruitment_position__gang=gang,
+        #        recruitment=recruitment,
+        #    )
+        #    if request.user.has_perm(SAMFUNDET_VIEW_RECRUITMENTAPPLICATION, applications)
+        #
+        # ]
+
+        applications = RecruitmentApplication.objects.filter(
+            recruitment_position__gang=gang,
+            recruitment=recruitment,
+        )
+
+        permitted_applications = get_objects_for_user(user=request.user, perms=[SAMFUNDET_VIEW_RECRUITMENTAPPLICATION], klass=applications)
+
+        serializer = RecruitmentApplicationForGangSerializer(permitted_applications, many=True)
+        return Response(serializer.data)
+
+    # [x] RecruitmentApplicationForRecruitmentPositionView -- NEVER USED --> make for section
+    @action(detail=False, methods=['get'], url_path='for-section', permission_classes=[IsAuthenticated])
+    def for_section(self, request: Request) -> Response:
+        """Returns a list of all the applications for the specified section."""
+        recruitment_id = request.query_params.get('recruitment')
+        section_id = request.query_params.get('section')
+
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not section_id:
+            return Response({'error': 'A section parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        section = get_object_or_404(GangSection, id=section_id)
+
+        # Here we're assuming there's a GangSection model that the recruitment_position references
+        applications = RecruitmentApplication.objects.filter(
+            recruitment=recruitment,
+            recruitment_position__section=section,
+        )
+
+        # Check permissions for each application
+        permitted_applications = get_objects_for_user(user=request.user, perms=[SAMFUNDET_VIEW_RECRUITMENTAPPLICATION], klass=applications)
+
+        serializer = self.get_serializer(permitted_applications, many=True)
+        return Response(serializer.data)
+
+    # [x] RecruitmentApplicationStateChoicesView + state
+    @action(detail=False, methods=['get'], url_path='application-state', permission_classes=[IsAuthenticated])
+    def application_state(self, request: Request) -> Response:
+        user = request.user
+
+        # Check user's organization roles
+        if self._user_has_orgrole(user, SAMFUNDET_VIEW_RECRUITMENT):
+            return self._get_application_state_response()
+
+        # Check user's gang roles
+        if self._user_has_gangrole(user, SAMFUNDET_VIEW_RECRUITMENT):
+            return self._get_application_state_response()
+        raise PermissionDenied("You don't have permission to view recruitment states")
+
+    def _get_application_state_response(self) -> Response:
+        """Helper method to return the application state response"""
+        return Response(
+            {
+                'state_description': RecruitmentApplicantStates.choices,
+                'status_description': RecruitmentStatusChoices.choices,
+                'recruiter_priority_description': RecruitmentPriorityChoices.choices,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    # [x] RecruitmentApplicationForGangUpdateStateView
+    @action(detail=True, methods=['put', 'get'], url_path='update-state', permission_classes=[IsAuthenticated])
+    def update_state(self, request: Request, pk: str) -> Response:  # noqa: C901
+        # Find the recruitment application
+        application = get_object_or_404(RecruitmentApplication, pk=pk)
+
+        # Check if user has permission to change this specific application
+        permission_code = 'samfundet.change_recruitmentapplication'
+
+        # First check if the user has direct object permission using Django Guardian
+        if not request.user.has_perm(permission_code, application):
+            # If not, check if they have the permission via organization roles
+            if not self._user_has_orgrole(request.user, permission_code):
+                # Finally, check if they have permission via gang roles,
+                # but specifically for the gang associated with this application
+                gang = application.recruitment_position.gang
+                gang_roles = UserGangRole.objects.filter(user=request.user, obj=gang).select_related('role')
+
+                # Check if any of these specific gang roles has the right permission
+                has_permission = any(gang_role.role.permissions.filter(codename=permission_code.split('.')[-1]).exists() for gang_role in gang_roles)
+
+                if not has_permission:
+                    raise PermissionDenied("You don't have permission to update this application's state")
+
+        # Continue with the serializer validation and update
+        update_serializer = RecruitmentApplicationUpdateForGangSerializer(data=request.data)
+        if update_serializer.is_valid():
+            # Update the application fields
+            if 'recruiter_priority' in update_serializer.validated_data:
+                application.recruiter_priority = update_serializer.validated_data['recruiter_priority']
+            if 'recruiter_status' in update_serializer.validated_data:
+                application.recruiter_status = update_serializer.validated_data['recruiter_status']
+            application.save()
+
+            # Update all applications for this gang and recruitment
+            applications = RecruitmentApplication.objects.filter(
+                recruitment_position__gang=application.recruitment_position.gang,
+                recruitment=application.recruitment,
+            )
+            application.update_applicant_state()
+
+            serializer = RecruitmentApplicationForGangSerializer(applications, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # [ ] RecruitmentApplicationForRecruitersView
+
+    # [ ] RecruitmentApplicationInterviewNotesView
+    # [ ] RecruitmentApplicationApplicantPriorityView
+
+    # [ ] RecruitmentUnprocessedApplicationsPerRecruitment
+    # [ ] ApplicantsWithoutThreeInterviewsCriteriaView
+    # [ ] ApplicantsWithoutInterviewsView
+
+    # [ ] DownloadRecruitmentApplicationGangCSV
+    # [ ] DownloadAllRecruitmentApplicationCSV
+
+    # [ ] RecruitmentApplicationSetInterviewView --- might want this in a InterviewViewSet
+    # pass
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionForApplicantView(ModelViewSet):
+    # consolidate position
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionForApplicantSerializer
     queryset = RecruitmentPosition.objects.all()
@@ -666,14 +962,9 @@ class RecruitmentSeparatePositionView(ModelViewSet):
     queryset = RecruitmentSeparatePosition.objects.all()
 
 
-class RecruitmentApplicationView(ModelViewSet):
-    permission_classes = [AllowAny]
-    serializer_class = RecruitmentApplicationForGangSerializer
-    queryset = RecruitmentApplication.objects.all()
-
-
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionsPerRecruitmentView(ListAPIView):
+    # consolidate position
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionSerializer
 
@@ -690,6 +981,7 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionsPerGangForApplicantView(ListAPIView):
+    # consoldate position
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionForApplicantSerializer
 
@@ -707,6 +999,7 @@ class RecruitmentPositionsPerGangForApplicantView(ListAPIView):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionsPerGangForGangView(ListAPIView):
+    # consolidate position
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentPositionSerializer
 
@@ -834,6 +1127,7 @@ class ApplicantsWithoutInterviewsView(APIView):
 
 
 class RecruitmentApplicationForApplicantView(ModelViewSet):
+    # consolidate applcation
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationForApplicantSerializer
     queryset = RecruitmentApplication.objects.all()
@@ -899,6 +1193,7 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
 
 
 class RecruitmentApplicationInterviewNotesView(APIView):
+    # consolidate application
     permission_classes = [IsAuthenticated]
     serializer_class = InterviewSerializer
 
@@ -913,6 +1208,7 @@ class RecruitmentApplicationInterviewNotesView(APIView):
 
 
 class RecruitmentApplicationWithdrawApplicantView(APIView):
+    # consolidate application
     permission_classes = [IsAuthenticated]
 
     def put(self, request: Request, pk: int) -> Response:
@@ -926,6 +1222,7 @@ class RecruitmentApplicationWithdrawApplicantView(APIView):
 
 
 class RecruitmentApplicationWithdrawRecruiterView(APIView):
+    # consolidate application
     permission_classes = [IsAuthenticated]
 
     def put(self, request: Request, pk: str) -> Response:
@@ -938,6 +1235,7 @@ class RecruitmentApplicationWithdrawRecruiterView(APIView):
 
 
 class RecruitmentApplicationApplicantPriorityView(APIView):
+    # consolidate application
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentUpdateUserPrioritySerializer
 
@@ -995,6 +1293,7 @@ class RecruitmentApplicationSetInterviewView(APIView):
 
 
 class RecruitmentApplicationForGangView(ModelViewSet):
+    # consolidate application
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationForGangSerializer
     queryset = RecruitmentApplication.objects.all()
@@ -1028,6 +1327,7 @@ class RecruitmentApplicationForGangView(ModelViewSet):
 
 
 class RecruitmentApplicationStateChoicesView(APIView):
+    # consolidate application
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
@@ -1037,6 +1337,7 @@ class RecruitmentApplicationStateChoicesView(APIView):
 
 
 class RecruitmentApplicationForGangUpdateStateView(APIView):
+    # consolidate application
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationUpdateForGangSerializer
 
@@ -1073,6 +1374,7 @@ class RecruitmentPositionOrganizedApplicationsView(APIView):
 
 
 class RecruitmentApplicationForPositionUpdateStateView(APIView):
+    # consolidate position
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationUpdateForGangSerializer
 
@@ -1095,6 +1397,7 @@ class RecruitmentApplicationForPositionUpdateStateView(APIView):
 
 
 class RecruitmentApplicationForRecruitmentPositionView(ModelViewSet):
+    # consolidate application
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationForGangSerializer
     queryset = RecruitmentApplication.objects.all()
@@ -1118,6 +1421,7 @@ class RecruitmentApplicationForRecruitmentPositionView(ModelViewSet):
 
 
 class ActiveRecruitmentPositionsView(ListAPIView):
+    # consolidate position
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionForApplicantSerializer
 
@@ -1288,6 +1592,7 @@ class InterviewRoomView(ModelViewSet):
 
 
 class RecruitmentApplicationForRecruitersView(APIView):
+    # consolidate application
     permission_classes = [IsAuthenticated]  # TODO correct perms
 
     def get(self, request: Request, application_id: str) -> Response:
