@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
 import {
   Button,
   Checkbox,
@@ -20,23 +19,9 @@ import type { AvailableTimes } from '~/apis/sulten/sultenDtos';
 import { TextItem } from '~/constants/TextItems';
 import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import type { FindTableData } from '../FindAvailableTablesForm/FindAvailableTablesForm';
 import styles from '../../LycheReservationPage.module.scss';
-
-// Combined schema for all form data
-const reservationSchema = z.object({
-  occasion: z.string().min(1, 'Required'),
-  guest_count: z.number().min(1).max(8),
-  reservation_date: z.date(),
-  start_time: z.string().min(1, 'Required'),
-  name: z.string().min(1, 'Required'),
-  phonenumber: z.string().min(1, 'Required'),
-  email: z.string().email('Invalid email address'),
-  additional_info: z.string().optional(),
-  agree: z.boolean().refine((val) => val === true, 'You must agree to the terms'),
-});
-
-export type ReservationFormData = z.infer<typeof reservationSchema>;
+import type { FindTableData } from '../FindAvailableTablesForm/FindAvailableTablesSchema';
+import { type ReservationFormData, reservationSchema } from './ReserveTableSchema';
 
 interface ReservationDetailsFormProps {
   findTableData: FindTableData;

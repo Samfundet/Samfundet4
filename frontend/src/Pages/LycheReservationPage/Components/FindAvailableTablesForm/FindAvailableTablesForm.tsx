@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
+import type { z } from 'zod';
 import {
   Button,
   DatePicker,
@@ -17,14 +17,7 @@ import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { KEY } from '~/i18n/constants';
 import { ReservationOccation, type ReservationOccationValues } from '~/types/sultenTypes';
 import styles from '../../LycheReservationPage.module.scss';
-
-export const findTableSchema = z.object({
-  occasion: z.string().min(1, 'Required'),
-  guest_count: z.number().min(1).max(8),
-  reservation_date: z.date(),
-});
-
-export type FindTableData = z.infer<typeof findTableSchema>;
+import { type FindTableData, findTableSchema } from './FindAvailableTablesSchema';
 
 export function FindAvailableTablesForm({ onSubmit }: { onSubmit: (data: z.infer<typeof findTableSchema>) => void }) {
   const { t } = useTranslation();
@@ -32,7 +25,7 @@ export function FindAvailableTablesForm({ onSubmit }: { onSubmit: (data: z.infer
     resolver: zodResolver(findTableSchema),
     defaultValues: {
       occasion: ReservationOccation.EAT,
-      guest_count: 1,
+      guest_count: 2,
       reservation_date: new Date(new Date().setDate(new Date().getDate() + 1)),
     },
   });

@@ -9,11 +9,10 @@ import { KV } from '~/constants';
 import { TextItem } from '~/constants/TextItems';
 import { useKeyValue, useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import {
-  FindAvailableTablesForm,
-  type FindTableData,
-} from './Components/FindAvailableTablesForm/FindAvailableTablesForm';
-import { ReservationDetailsForm, type ReservationFormData } from './Components/ReserveTableForm/ReserveTableForm';
+import { FindAvailableTablesForm } from './Components/FindAvailableTablesForm/FindAvailableTablesForm';
+import type { FindTableData } from './Components/FindAvailableTablesForm/FindAvailableTablesSchema';
+import { ReservationDetailsForm } from './Components/ReserveTableForm/ReserveTableForm';
+import type { ReservationFormData } from './Components/ReserveTableForm/ReserveTableSchema';
 import styles from './LycheReservationPage.module.scss';
 
 export function LycheReservationPage() {
