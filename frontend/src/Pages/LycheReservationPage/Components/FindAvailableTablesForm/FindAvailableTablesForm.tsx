@@ -24,9 +24,11 @@ export const findTableSchema = z.object({
   reservation_date: z.date(),
 });
 
+export type FindTableData = z.infer<typeof findTableSchema>;
+
 export function FindAvailableTablesForm({ onSubmit }: { onSubmit: (data: z.infer<typeof findTableSchema>) => void }) {
   const { t } = useTranslation();
-  const form = useForm<z.infer<typeof findTableSchema>>({
+  const form = useForm<FindTableData>({
     resolver: zodResolver(findTableSchema),
     defaultValues: {
       occasion: ReservationOccation.EAT,

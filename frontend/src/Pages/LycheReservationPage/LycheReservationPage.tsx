@@ -1,45 +1,82 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import type { z } from 'zod';
+import { z } from 'zod';
+import {
+  Button,
+  Checkbox,
+  Dropdown,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+} from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Link } from '~/Components/Link/Link';
 import { SultenPage } from '~/Components/SultenPage';
-import { SamfForm } from '~/Forms/SamfForm';
-import { SamfFormField } from '~/Forms/SamfFormField';
 import { checkReservationAvailability } from '~/apis/sulten/sultenApis';
 import type { AvailableTimes, ReservationCheckAvailabilityDto } from '~/apis/sulten/sultenDtos';
 import { KV } from '~/constants';
 import { TextItem } from '~/constants/TextItems';
 import { useKeyValue, useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { ReservationFormLine } from './Components';
 import {
   FindAvailableTablesForm,
-  type findTableSchema,
+  type FindTableData,
 } from './Components/FindAvailableTablesForm/FindAvailableTablesForm';
 import styles from './LycheReservationPage.module.scss';
+
+// Combined schema for all form data
+const reservationSchema = z.object({
+  occasion: z.string().min(1, 'Required'),
+  guest_count: z.number().min(1).max(8),
+  reservation_date: z.date(),
+  start_time: z.string().min(1, 'Required'),
+  name: z.string().min(1, 'Required'),
+  phonenumber: z.string().min(1, 'Required'),
+  email: z.string().email('Invalid email address'),
+  additional_info: z.string().optional(),
+  agree: z.boolean().refine((val) => val === true, 'You must agree to the terms'),
+});
+
+type ReservationFormData = z.infer<typeof reservationSchema>;
 
 export function LycheReservationPage() {
   const { t } = useTranslation();
   useTitle(t(KEY.common_reservation), t(KEY.common_sulten));
   const sultenMail = useKeyValue(KV.SULTEN_MAIL);
-  const [reservation, setReservation] = useState<FormProps>();
   const [availableDate, setAvailableDate] = useState<boolean>(false);
   const [availableTimes, setAvailableTimes] = useState<AvailableTimes[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [findTableData, setFindTableData] = useState<FindTableData | null>(null);
+  const termsText = useTextItem(TextItem.sulten_reservation_policy);
 
-  type FormProps = {
-    occasion: string;
-    guest_count: number;
-    reservation_date: Date;
-    start_time: string;
-    name: string;
-    phonenumber: string;
-    email: string;
-    additional_info: string;
-    agree: boolean;
-  };
+  // Form for reservation details
+  const reservationForm = useForm<ReservationFormData>({
+    resolver: zodResolver(reservationSchema),
+    defaultValues: {
+      start_time: '',
+      name: '',
+      phonenumber: '',
+      email: '',
+      additional_info: '',
+      agree: false,
+    },
+  });
+
+  // Update default values of form when findTableData changes with useEffect
+  useEffect(() => {
+    if (findTableData) {
+      reservationForm.reset({
+        ...findTableData,
+      });
+    }
+  }, [findTableData, reservationForm]);
 
   // Use TanStack Query mutation for API call
   const checkAvailabilityMutation = useMutation({
@@ -65,7 +102,7 @@ export function LycheReservationPage() {
     },
   });
 
-  function checkAvailableDate(data: z.infer<typeof findTableSchema>) {
+  function onFindTableSubmit(data: FindTableData) {
     // Format the date for the API (ISO string and extract just the date part)
     const formattedDate = data.reservation_date.toISOString().split('T')[0];
 
@@ -75,75 +112,137 @@ export function LycheReservationPage() {
       guest_count: data.guest_count,
     };
 
-    // Store form data for later use
-    setReservation({
-      ...reservation,
-      occasion: data.occasion,
-      guest_count: data.guest_count,
-      reservation_date: data.reservation_date,
-      start_time: '',
-      name: '',
-      phonenumber: '',
-      email: '',
-      additional_info: '',
-      agree: false,
-    });
+    // Store find table form data
+    setFindTableData(data);
 
     // Call the API
     checkAvailabilityMutation.mutate(apiPayload);
   }
 
-  function submit(data: FormProps) {
-    console.log({ ...reservation, ...data });
+  function onReservationSubmit(data: ReservationFormData) {
+    // Combine data from both forms
+    const completeData: ReservationFormData = {
+      // biome-ignore lint/style/noNonNullAssertion: <explanation>
+      ...findTableData!,
+      ...data,
+    };
+
+    console.log(completeData);
+    // Here you would submit the data to your backend
   }
 
   // Generate time options from available times returned by the API
-  const hoursOptions: DropdownOption<string>[] = availableTimes
+  const timeOptions: DropdownOption<string>[] = availableTimes
     .filter((timeSlot: AvailableTimes) => timeSlot) // Filter out any empty values
     .map((timeSlot: AvailableTimes) => ({
       value: timeSlot as unknown as string,
       label: timeSlot as unknown as string,
     }));
 
-  const reserveStage = (
-    <SamfForm
-      validateOn="submit"
-      className={styles.formContainer}
-      onSubmit={submit}
-      submitText={t(KEY.sulten_reservation_form_find_times)}
-    >
-      <div className={styles.reservation_info}>
-        <p className={styles.text}>
-          {t(KEY.common_date)} {reservation?.reservation_date?.toLocaleDateString()}
-        </p>
-        <p className={styles.text}>
-          {t(KEY.common_guests)} {reservation?.guest_count}
-        </p>
-      </div>
-      <ReservationFormLine label={`${t(KEY.common_time)}*`}>
-        <SamfFormField<string, FormProps> type="options" options={hoursOptions} field="start_time" required={true} />
-      </ReservationFormLine>
-      <ReservationFormLine label={`${t(KEY.common_name)}*`}>
-        <SamfFormField<string, FormProps> type="text" field="name" required={true} />
-      </ReservationFormLine>
-      <ReservationFormLine label={`${t(KEY.common_phonenumber)}*`}>
-        <SamfFormField<string, FormProps> type="text" field="phonenumber" required={true} />
-      </ReservationFormLine>
-      <ReservationFormLine label={`${t(KEY.common_email)}*`} underline={true}>
-        <SamfFormField<string, FormProps> type="email" field="email" required={true} />
-      </ReservationFormLine>
-      <ReservationFormLine label={t(KEY.common_message)}>
-        <SamfFormField<string, FormProps> type="text" field="additional_info" required={false} />
-      </ReservationFormLine>
-      <div className={styles.check_box}>
-        <SamfFormField<boolean, FormProps>
-          type="checkbox"
-          field="agree"
-          label={`${useTextItem(TextItem.sulten_reservation_policy)}*`}
-          required={true}
+  // Reservation details form
+  const reservationDetailsForm = (
+    <Form {...reservationForm}>
+      <form onSubmit={reservationForm.handleSubmit(onReservationSubmit)} className={styles.formContainer}>
+        <div className={styles.reservation_info}>
+          <p className={styles.text}>
+            {t(KEY.common_date)} {findTableData?.reservation_date?.toLocaleDateString()}
+          </p>
+          <p className={styles.text}>
+            {t(KEY.common_guests)} {findTableData?.guest_count}
+          </p>
+        </div>
+
+        <FormField
+          control={reservationForm.control}
+          name="start_time"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{`${t(KEY.common_time)}*`}</FormLabel>
+              <FormControl>
+                <Dropdown options={timeOptions} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-    </SamfForm>
+
+        <FormField
+          control={reservationForm.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{`${t(KEY.common_name)}*`}</FormLabel>
+              <FormControl>
+                <Input type="text" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={reservationForm.control}
+          name="phonenumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{`${t(KEY.common_phonenumber)}*`}</FormLabel>
+              <FormControl>
+                <Input type="text" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={reservationForm.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{`${t(KEY.common_email)}*`}</FormLabel>
+              <FormControl>
+                <Input type="email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={reservationForm.control}
+          name="additional_info"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t(KEY.common_message)}</FormLabel>
+              <FormControl>
+                <Input type="text" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={reservationForm.control}
+          name="agree"
+          render={({ field }) => (
+            <FormItem>
+              <div className={styles.check_box}>
+                <FormControl>
+                  <Checkbox checked={field.value} onChange={field.onChange} />
+                </FormControl>
+                <FormLabel>{termsText}*</FormLabel>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit" theme="green">
+          {t(KEY.sulten_reservation_form_find_times)}
+        </Button>
+      </form>
+    </Form>
   );
 
   return (
@@ -165,7 +264,7 @@ export function LycheReservationPage() {
         {checkAvailabilityMutation.isPending && <div className={styles.loading}>{t('Checking availability...')}</div>}
 
         {!checkAvailabilityMutation.isPending &&
-          (availableDate ? reserveStage : <FindAvailableTablesForm onSubmit={checkAvailableDate} />)}
+          (availableDate ? reservationDetailsForm : <FindAvailableTablesForm onSubmit={onFindTableSubmit} />)}
       </div>
     </SultenPage>
   );
