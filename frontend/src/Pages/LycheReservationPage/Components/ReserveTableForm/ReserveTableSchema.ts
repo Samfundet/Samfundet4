@@ -11,6 +11,7 @@ import {
   PHONENUMBER,
   RESERVATION_DATE,
   START_TIME,
+  VENUE,
 } from '~/schema/reservation';
 
 export const reservationSchema = z.object({
@@ -23,5 +24,6 @@ export const reservationSchema = z.object({
   email: EMAIL,
   additional_info: ADDITIONAL_INFO,
   agree: AGREE,
+  venue: VENUE,
 });
 export type ReservationFormData = z.infer<typeof reservationSchema>;

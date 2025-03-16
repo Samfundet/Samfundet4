@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import {
@@ -33,28 +32,6 @@ export function ReservationDetailsForm({ findTableData, availableTimes, onSubmit
   const { t } = useTranslation();
   const termsText = useTextItem(TextItem.sulten_reservation_policy);
 
-  // Form for reservation details
-  const reservationForm = useForm<ReservationFormData>({
-    resolver: zodResolver(reservationSchema),
-    defaultValues: {
-      start_time: '',
-      name: '',
-      phonenumber: '',
-      email: '',
-      additional_info: '',
-      agree: false,
-    },
-  });
-
-  // Update default values of form when findTableData changes with useEffect
-  useEffect(() => {
-    if (findTableData) {
-      reservationForm.reset({
-        ...findTableData,
-      });
-    }
-  }, [findTableData, reservationForm]);
-
   // Generate time options from available times returned by the API
   const timeOptions: DropdownOption<string>[] = availableTimes
     .filter((timeSlot: AvailableTimes) => timeSlot) // Filter out any empty values
@@ -62,6 +39,21 @@ export function ReservationDetailsForm({ findTableData, availableTimes, onSubmit
       value: timeSlot as unknown as string,
       label: timeSlot as unknown as string,
     }));
+
+  // Form for reservation details
+  const reservationForm = useForm<ReservationFormData>({
+    resolver: zodResolver(reservationSchema),
+    defaultValues: {
+      start_time: timeOptions[0]?.value,
+      name: '',
+      phonenumber: '',
+      email: '',
+      additional_info: '',
+      agree: false,
+      venue: 8,
+      ...findTableData,
+    },
+  });
 
   return (
     <Form {...reservationForm}>

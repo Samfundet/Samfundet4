@@ -1,9 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { SamfundetLogoSpinner } from '~/Components';
 import { Link } from '~/Components/Link/Link';
 import { SultenPage } from '~/Components/SultenPage';
-import { checkReservationAvailability } from '~/apis/sulten/sultenApis';
+import { type ReservationPostData, checkReservationAvailability, reserveTable } from '~/apis/sulten/sultenApis';
 import type { AvailableTimes, ReservationCheckAvailabilityDto } from '~/apis/sulten/sultenDtos';
 import { KV } from '~/constants';
 import { TextItem } from '~/constants/TextItems';
@@ -23,8 +24,9 @@ export function LycheReservationPage() {
   const [availableTimes, setAvailableTimes] = useState<AvailableTimes[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [findTableData, setFindTableData] = useState<FindTableData | null>(null);
+  const [reservationSuccess, setReservationSuccess] = useState<boolean>(false);
 
-  // Use TanStack Query mutation for API call
+  // Use TanStack Query mutation for availability check
   const checkAvailabilityMutation = useMutation({
     mutationFn: (data: ReservationCheckAvailabilityDto) => checkReservationAvailability(data),
     onSuccess: (data) => {
@@ -48,6 +50,24 @@ export function LycheReservationPage() {
     },
   });
 
+  // Use TanStack Query mutation for reservation submission
+  const reservationMutation = useMutation({
+    mutationFn: (data: ReservationPostData) => reserveTable(data),
+    onSuccess: () => {
+      // Handle successful reservation
+      setError(null);
+      setReservationSuccess(true);
+    },
+    onError: (error: unknown) => {
+      // Handle reservation errors
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError(t('An error occurred while submitting your reservation'));
+      }
+    },
+  });
+
   function onFindTableSubmit(data: FindTableData) {
     // Format the date for the API (ISO string and extract just the date part)
     const formattedDate = data.reservation_date.toISOString().split('T')[0];
@@ -67,15 +87,20 @@ export function LycheReservationPage() {
 
   function onReservationSubmit(data: ReservationFormData) {
     // Combine data from both forms
-    const completeData: ReservationFormData = {
-      // biome-ignore lint/style/noNonNullAssertion: <explanation>
-      ...findTableData!,
+    const formattedDate = data.reservation_date.toISOString().split('T')[0];
+    const completeData: ReservationPostData = {
       ...data,
+      reservation_date: formattedDate,
     };
 
-    console.log(completeData);
-    // Here you would submit the data to your backend
+    // Submit the reservation
+    reservationMutation.mutate(completeData);
   }
+
+  const isPending = checkAvailabilityMutation.isPending || reservationMutation.isPending;
+  const showSuccessMessage = reservationSuccess;
+  const showReservationForm = !isPending && !reservationSuccess && availableDate && findTableData;
+  const showFindTableForm = !isPending && !reservationSuccess && !availableDate;
 
   return (
     <SultenPage>
@@ -93,18 +118,21 @@ export function LycheReservationPage() {
 
         {error && <div className={styles.errorMessage}>{error}</div>}
 
-        {checkAvailabilityMutation.isPending && <div className={styles.loading}>{t('Checking availability...')}</div>}
+        {isPending && <SamfundetLogoSpinner />}
 
-        {!checkAvailabilityMutation.isPending && availableDate && findTableData && (
+        {showFindTableForm && <FindAvailableTablesForm onSubmit={onFindTableSubmit} />}
+        {showReservationForm && (
           <ReservationDetailsForm
             findTableData={findTableData}
             availableTimes={availableTimes}
             onSubmit={onReservationSubmit}
           />
         )}
-
-        {!checkAvailabilityMutation.isPending && !availableDate && (
-          <FindAvailableTablesForm onSubmit={onFindTableSubmit} />
+        {showSuccessMessage && (
+          <div className={styles.successMessage}>
+            <h2>{t('Reservation Successful!')}</h2>
+            <p>{t('Your table has been reserved. We look forward to seeing you!')}</p>
+          </div>
         )}
       </div>
     </SultenPage>
