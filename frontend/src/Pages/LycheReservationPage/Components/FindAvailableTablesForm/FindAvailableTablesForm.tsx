@@ -19,7 +19,7 @@ import { ReservationOccation, type ReservationOccationValues } from '~/types/sul
 import styles from '../../LycheReservationPage.module.scss';
 import { type FindTableData, findTableSchema } from './FindAvailableTablesSchema';
 
-export function FindAvailableTablesForm({ onSubmit }: { onSubmit: (data: z.infer<typeof findTableSchema>) => void }) {
+export function FindAvailableTablesForm({ onSubmit }: { onSubmit: (data: FindTableData) => void }) {
   const { t } = useTranslation();
   const form = useForm<FindTableData>({
     resolver: zodResolver(findTableSchema),
