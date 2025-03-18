@@ -247,8 +247,8 @@ class VenueView(ModelViewSet):
     lookup_field = 'slug'
 
     def create(self, request: Request) -> Response:
-        if not request.data.get("slug"):
-            return Response({"slug": "This field cannot be blank when creating a venue."}, status=status.HTTP_400_BAD_REQUEST)
+        if not request.data.get('slug'):
+            return Response({'slug': 'This field cannot be blank when creating a venue.'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
