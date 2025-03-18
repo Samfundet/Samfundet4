@@ -13,6 +13,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  InputFile,
   Link,
   Modal,
   OccupiedForm,
@@ -325,6 +326,11 @@ export function RecruitmentApplicationFormPage() {
                   <Button type="submit" theme="green" display="basic">
                     {submitText}
                   </Button>
+                  <Button type="button" theme="blue" display="basic">
+                    {"attachment"}
+                  </Button>
+                  <InputFile fileType='image' onSelected={() => { }}></InputFile>
+                  <InputFile fileType='image' onSelected={() => { }}></InputFile>
                   {!recruitmentApplication?.withdrawn && recruitmentApplication && (
                     <Button type="button" theme="samf" display="basic" onClick={() => withdrawApplication()}>
                       {t(KEY.recruitment_withdraw_application)}
