@@ -5,34 +5,29 @@
   // makes textBox and markdown alike
   min-height: 550px;
   max-height: 550px;
-  margin-top: 10px;
+  margin-top: 0;
   line-height: 1.5;
   background-color: $white;
   border: 1px solid $grey-35;
   border-radius: 4px;
-  padding: 10px; /* Add consistent padding */
+  padding: 12px; /* Add consistent padding */
   width: 100%;
   overflow-y: auto;
   position: relative;
-  overflow-wrap: break-word;
 }
 
 .markdownButton {
-  //make button 100% of parent without the content overflowing
-  top: 10px; /* Match parent padding */
-  left: 10px; /* Match parent padding */
-  right: 10px; /* Match parent padding */
-  bottom: 10px; /* Match parent padding */
+  //make button 100% of parent without the textarea overflowing by default
+  top: 12px; /* Match parent padding */
+  left: 12px; /* Match parent padding */
+  right: 12px; /* Match parent padding */
+  bottom: 12px; /* Match parent padding */
 
   //remove default styling on button
   background: none;
   border: none;
   text-align: left;
   cursor: pointer;
-  font-family: inherit;
-  font-size: inherit;
-  color: inherit;
-  display: block;
   position: absolute;
 }
 
@@ -44,9 +39,8 @@
     margin: 0;
     padding: 0;
   }
-  overflow-wrap: break-word;
+
   //make content 100% of button
-  width: 100%;
-  height: auto;
-  min-height: 100%;
+
+  height: 100%;
 }
