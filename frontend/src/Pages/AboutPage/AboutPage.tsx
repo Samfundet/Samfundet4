@@ -51,18 +51,35 @@ export function AboutPage() {
           {t(KEY.common_our_history).toUpperCase()}
         </Button>
       </div>
-      <h2 className={styles.header2}>{t(KEY.common_venues)}</h2>
 
-      <Carousel spacing={1.5} header>
-        {VENUES.images.map((image) => {
-          return (
-            <div key={image.name}>
-              <div className={styles.venue_bubble} style={backgroundImageFromUrl(image.src)} />
-              <div className={styles.venue_name}>{image.name}</div>
-            </div>
-          );
-        })}
-      </Carousel>
+      <div className={classNames(styles.box, styles.textBox)}>
+        <h2 className={styles.header}>{t(KEY.venuepage_title)}</h2>
+        <section className={styles.mapContainer}>
+          <iframe
+            src="https://use.mazemap.com/embed.html#v=1&campusid=107&zlevel=1&center=10.395303,63.42245&zoom=17.8&sharepoitype=poi&sharepoi=1000460543&utm_medium=iframe"
+            style={{
+              border: '0.1px black',
+              width: '100%',
+              height: '100%',
+              borderRadius: '3px',
+              marginTop: '1.5rem',
+            }}
+            allow="geolocation"
+            title="Samfundet Map"
+          ></iframe>
+        </section>
+
+        <Carousel spacing={1.5} header>
+          {VENUES.images.map((image) => {
+            return (
+              <div key={image.name}>
+                <div className={styles.venue_bubble} style={backgroundImageFromUrl(image.src)} />
+                <div className={styles.venue_name}>{image.name}</div>
+              </div>
+            );
+          })}
+        </Carousel>
+      </div>
 
       <div className={styles.row}>
         <Button className={styles.button} theme="outlined">

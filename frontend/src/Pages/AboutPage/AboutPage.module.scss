@@ -79,6 +79,16 @@
 
 .textBox {
   padding: 1.5em;
+  margin-top: 1.5em;
+}
+
+.mapContainer {
+  height: 400px;
+  margin: 1.5em 0;
+
+  @include for-mobile-only {
+    height: 88vh;
+  }
 }
 
 .row {
