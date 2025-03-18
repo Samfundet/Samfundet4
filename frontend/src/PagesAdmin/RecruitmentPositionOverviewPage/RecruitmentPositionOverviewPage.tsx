@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, RecruitmentApplicantsStatus } from '~/Components';
 import { Text } from '~/Components/Text/Text';

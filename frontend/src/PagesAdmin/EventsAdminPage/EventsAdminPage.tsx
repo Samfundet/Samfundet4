@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Carousel, EventQuery, ImageCard, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
@@ -129,6 +129,8 @@ export function EventsAdminPage() {
               subtitle=""
               imageUrl={BACKEND_DOMAIN + event.image_url}
               compact={true}
+              ticket_type={event.ticket_type}
+              host={event.host}
             />
           );
         })}

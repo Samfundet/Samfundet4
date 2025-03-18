@@ -1,5 +1,5 @@
 import { default as classnames } from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import type { ButtonType, Children } from '~/types';
 import styles from './Button.module.scss';
 import type { ButtonDisplay, ButtonTheme } from './types';

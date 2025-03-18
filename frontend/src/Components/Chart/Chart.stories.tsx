@@ -1,4 +1,4 @@
-import type { ComponentStory, Meta } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { Chart } from './Chart';
 
@@ -28,7 +28,7 @@ const campus_mock_data = [
   { label: 'Dragvoll', value: 10 },
 ];
 
-export default {
+const meta: Meta<typeof Chart> = {
   title: 'Components/Chart',
   component: Chart,
   args: {
@@ -42,20 +42,22 @@ export default {
     xLabelMagnitude: 1,
     yLabelMagnitude: 1,
   },
-} as Meta<typeof Chart>;
+};
 
-// Template for LineChart
-// @ts-ignore
-const Template: ComponentStory<typeof Chart> = (args) => <Chart {...args} />;
+export default meta;
 
-export const ApplicantsPerDay = Template.bind({});
-ApplicantsPerDay.args = {};
+type Story = StoryObj<typeof Chart>;
 
-export const CampusDistribution = Template.bind({});
-CampusDistribution.args = {
-  type: 'pie',
-  data: campus_mock_data,
-  chartTitle: 'Campus fordeling',
-  size: 'large',
-  legend: 'Antall søkere per campus',
+export const ApplicantsPerDay: Story = {
+  args: {},
+};
+
+export const CampusDistribution: Story = {
+  args: {
+    type: 'pie',
+    data: campus_mock_data,
+    chartTitle: 'Campus fordeling',
+    size: 'large',
+    legend: 'Antall søkere per campus',
+  },
 };

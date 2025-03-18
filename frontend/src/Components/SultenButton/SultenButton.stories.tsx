@@ -1,16 +1,21 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { SultenButton } from './SultenButton';
 
 // Local component config.
-export default {
+const meta: Meta<typeof SultenButton> = {
   title: 'Components/SultenButton',
   component: SultenButton,
   args: {
     name: 'name',
   },
-} as ComponentMeta<typeof SultenButton>;
+};
 
-const Template: ComponentStory<typeof SultenButton> = (args) => <SultenButton {...args}>Submit</SultenButton>;
+export default meta;
 
-export const Basic = Template.bind({});
-Basic.args = {};
+type Story = StoryObj<typeof SultenButton>;
+
+export const Basic: Story = {
+  args: {
+    children: 'Submit',
+  },
+};
