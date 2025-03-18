@@ -66,7 +66,7 @@ export function AboutPage() {
             }}
             allow="geolocation"
             title="Samfundet Map"
-          ></iframe>
+          />
         </section>
 
         <Carousel spacing={1.5} header>
