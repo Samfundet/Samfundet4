@@ -14,6 +14,7 @@ from django.core.files import File
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
+from django.core.files.uploadedfile import UploadedFile
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.password_validation import validate_password
 
@@ -47,6 +48,7 @@ from .models.general import (
     UserFeedbackModel,
 )
 from .models.recruitment import (
+    ApplicationFileAttachment,
     Interview,
     Recruitment,
     InterviewRoom,
@@ -71,6 +73,24 @@ if TYPE_CHECKING:
     from typing import Any
 
 from rest_framework.utils.serializer_helpers import ReturnList
+
+
+class ApplicationFileAttachmentSerializer(CustomBaseSerializer):
+    class Meta:
+        model = ApplicationFileAttachment
+        fields = ['id', 'application', 'application_file', 'application_file_type', 'created_at']
+        read_only_fields = ['id', 'application_file_type', 'created_at']
+
+    def validate_application_file(self, value: UploadedFile) -> UploadedFile:
+        if not value:
+            raise serializers.ValidationError('A file must be provided.')
+        return value
+
+    def create(self, validated_data: dict[str, Any]) -> ApplicationFileAttachment:
+        application = validated_data.get('application') or self.context.get('application')
+        if not application:
+            raise serializers.ValidationError('Application is required to attach a file.')
+        return super().create(validated_data)
 
 
 class TagSerializer(CustomBaseSerializer):
@@ -1099,6 +1119,7 @@ class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
     interview = InterviewSerializer(read_only=False)
     interviewers = InterviewerSerializer(many=True, read_only=True)
     recruitment_position = RecruitmentPositionSerializer(read_only=True)
+    application_attachment = ApplicationFileAttachmentSerializer(read_only=True)
     application_count = serializers.SerializerMethodField(method_name='get_application_count', read_only=True)
 
     class Meta:

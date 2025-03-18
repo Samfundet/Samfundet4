@@ -50,6 +50,7 @@ from .utils import event_query, generate_timeslots, get_user_by_search, get_occu
 from .homepage import homepage
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .serializers import (
+    ApplicationFileAttachmentSerializer,
     TagSerializer,
     GangSerializer,
     RoleSerializer,
@@ -128,6 +129,7 @@ from .models.general import (
     UserFeedbackModel,
 )
 from .models.recruitment import (
+    ApplicationFileAttachment,
     Interview,
     Recruitment,
     InterviewRoom,
@@ -601,6 +603,41 @@ class AssignGroupView(APIView):
 # =============================== #
 #            Recruitment          #
 # =============================== #
+
+
+class ApplicationFileAttachmentViewSet(ModelViewSet):
+    queryset = ApplicationFileAttachment.objects.all()
+    serializer_class = ApplicationFileAttachmentSerializer
+    permission_classes = [IsAuthenticated]
+    # parser_classes = (MultiPartParser, FormParser)
+
+    def get_queryset(self) -> Response | None:
+        # Restrict to the user's applications or recruiter permissions
+        # FIX: Consider permissions
+        user = self.request.user
+        if user.is_staff:
+            return self.queryset
+        return self.queryset.filter(application__user=user)
+
+    def create(self, request: Request) -> Response | None:
+        application_id = request.data.get('application_id')
+        try:
+            application = RecruitmentApplication.objects.get(id=application_id, user=request.user)
+        except RecruitmentApplication.DoesNotExist:
+            return Response({'error': 'Application not found or not authorized'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(data=request.data, context={'application': application})
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def destroy(self, request: Request) -> Response | None:
+        instance = self.get_object()
+        # FIX: Consider permissions
+        if instance.application.user != request.user and not request.user.is_staff:
+            return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
