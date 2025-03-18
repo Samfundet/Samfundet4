@@ -176,7 +176,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                       <FormControl>
                         <Input 
                           type="text" 
-                          className={styles.membership_number_field}
+                          className={styles.input_field}
                           disabled={ticketType !== "membershipNumber"}
                           style={{
                             backgroundColor: ticketType === "membershipNumber" ? "white" : "lightgrey",
@@ -207,6 +207,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                       <FormControl>
                         <Input 
                           type="email"
+                          className={styles.input_field}
                           disabled={ticketType !== "email"}
                           style={{
                             backgroundColor: ticketType === "email" ? "white" : "lightgray",
