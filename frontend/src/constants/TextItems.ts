@@ -100,6 +100,7 @@ export const TextItem = {
 
   //Purchase Ticket Information
   ticketless_description: 'ticketless_description',
+  member_ticket_description: 'member_ticket_description',
 
   // Gangspage
   gangspage_text: 'gangspage_text',

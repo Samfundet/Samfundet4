@@ -224,8 +224,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 {useTextItem(TextItem.ticketless_description)}
               </p>
               <p style={{display: ticketType === "email" ? "inline" : "none"}}>
-                Billetten(e) blir sendt på epost, og må vises fram i døren når du kommer til Samfundet. Billettene kan 
-                vises på mobil eller tas med som utskrift.
+                {useTextItem(TextItem.member_ticket_description)}
               </p>
             </div>
           </div>
