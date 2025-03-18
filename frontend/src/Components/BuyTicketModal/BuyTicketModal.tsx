@@ -8,6 +8,7 @@ import styles from './BuyTicketModal.module.scss';
 import { useState } from 'react';
 import BuyTicketForm from './BuyTicketForm';
 import type { EventDto } from '~/dto';
+import { logoBlack, logoWhite } from '~/assets';
 
 type BuyTicketModalProps = {
   event: EventDto;
@@ -32,6 +33,8 @@ export function BuyTicketModal({ event }: BuyTicketModalProps) {
       {ticketButton}
 
       <Modal isOpen={open} className={styles.modal}>
+        <img src={logoBlack} className={styles.samf_logo_black} alt="LogoBlack" />
+        <img src={logoWhite} className={styles.samf_logo_white} alt="LogoWhite" />
         <h2 className={styles.modal_title}>{dbT(event, 'title')}</h2>
           <button type="button" className={styles.close_btn} title="Close" onClick={() => setOpen(false)}>
             <Icon icon="octicon:x-24" width={24} />
