@@ -1,23 +1,27 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { AuthContextProvider } from '~/context/AuthContext';
 import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { ThemeSwitch } from './ThemeSwitch';
 
 // Local component config.
-export default {
+const meta: Meta<typeof ThemeSwitch> = {
   title: 'Components/ThemeSwitch',
   component: ThemeSwitch,
-} as ComponentMeta<typeof ThemeSwitch>;
+  decorators: [
+    (Story) => (
+      <AuthContextProvider>
+        <GlobalContextProvider>
+          <Story />
+        </GlobalContextProvider>
+      </AuthContextProvider>
+    ),
+  ],
+};
 
-const Template: ComponentStory<typeof ThemeSwitch> = (args) => (
-  <>
-    <AuthContextProvider>
-      <GlobalContextProvider>
-        <ThemeSwitch {...args} />
-      </GlobalContextProvider>
-    </AuthContextProvider>
-  </>
-);
+export default meta;
 
-export const Basic = Template.bind({});
-Basic.args = {};
+type Story = StoryObj<typeof ThemeSwitch>;
+
+export const Basic: Story = {
+  args: {},
+};

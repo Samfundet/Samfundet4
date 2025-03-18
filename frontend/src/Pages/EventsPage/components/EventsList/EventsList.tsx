@@ -32,6 +32,7 @@ export function EventsList({ events }: EventsListProps) {
     { content: t(KEY.common_to) },
     { content: t(KEY.common_venue), sortable: true },
     { content: t(KEY.category), sortable: true },
+    { content: t(KEY.admin_organizer), sortable: true },
     t(KEY.common_buy),
   ];
 
@@ -64,6 +65,7 @@ export function EventsList({ events }: EventsListProps) {
         { content: <TimeDisplay timestamp={event.end_dt} displayType="time" />, value: new Date(event.end_dt) },
         event.location,
         event.category,
+        event.host,
         event.ticket_type,
       ],
     }));
@@ -83,6 +85,7 @@ export function EventsList({ events }: EventsListProps) {
             compact={true}
             url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
             ticket_type={event.ticket_type}
+            host={event.host}
           />
         </div>
       );
