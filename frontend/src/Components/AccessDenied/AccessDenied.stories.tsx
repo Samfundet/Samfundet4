@@ -1,11 +1,15 @@
-import type { ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { AccessDenied } from './AccessDenied';
 
-export default {
+const meta: Meta<typeof AccessDenied> = {
   title: 'Components/AccessDenied',
   component: AccessDenied,
 };
 
-const Template: ComponentStory<typeof AccessDenied> = () => <AccessDenied />;
+export default meta;
 
-export const Default = Template.bind({});
+type Story = StoryObj<typeof AccessDenied>;
+
+export const Default: Story = {
+  render: () => <AccessDenied />,
+};

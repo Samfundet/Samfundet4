@@ -1,17 +1,21 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { Video } from './Video';
 
 // Local component config.
-export default {
+const meta: Meta<typeof Video> = {
   title: 'Components/Video',
   component: Video,
   args: {
-    name: 'name',
-    label: 'Approve',
+    title: 'Approve',
   },
-} as ComponentMeta<typeof Video>;
+};
 
-const Template: ComponentStory<typeof Video> = (args) => <Video {...args} />;
+export default meta;
 
-export const Basic = Template.bind({});
-Basic.args = { embedId: '88kgbMcDIQ4' };
+type Story = StoryObj<typeof Video>;
+
+export const Basic: Story = {
+  args: {
+    embedId: '88kgbMcDIQ4',
+  },
+};
