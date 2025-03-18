@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import {
   Button,
+  Dropdown,
   Form,
   FormControl,
   FormField,
@@ -13,7 +14,6 @@ import {
   FormMessage,
   Input,
   RadioButton,
-  Select,
 } from "~/Components";
 import { validEmail } from "~/Forms/util";
 import { KEY } from "~/i18n/constants";
@@ -106,12 +106,12 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                    <Select
+                    <Dropdown
                       {...field}
                       options={[...Array(9).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))} // Convert value to string
                       onChange={(e) => {
                         if (e) {
-                          form.setValue("tickets", Number(e.target.value)); // Convert string back to number
+                          form.setValue("tickets", Number(e)); // Convert string back to number
                         }
                       }}
                       value={field.value.toString()} // Ensure value is a string
@@ -135,12 +135,12 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 render={({ field }) => (
                   <FormItem className={styles.select_item}>
                     <FormControl>
-                    <Select
+                    <Dropdown
                       {...field}
                       options={[...Array(9).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))} // Convert value to string
                       onChange={(e) => {
                         if (e) {
-                          form.setValue("membershipTickets", Number(e.target.value)); // Convert string back to number
+                          form.setValue("membershipTickets", Number(e)); // Convert string back to number
                         }
                       }}
                       value={field.value.toString()} // Ensure value is a string
