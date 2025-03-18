@@ -201,7 +201,7 @@ class Profile(FullCleanSaveMixin):
 
 class Venue(CustomBaseModel):
     name = models.CharField(max_length=140, blank=True, null=True, unique=True)
-    slug = models.SlugField(unique=True, null=True, blank=True)
+    slug = models.SlugField(unique=True, null=False, blank=True)
     description = models.TextField(blank=True, null=True)
     floor = models.IntegerField(blank=True, null=True)
     last_renovated = models.DateTimeField(blank=True, null=True)

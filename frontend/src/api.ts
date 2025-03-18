@@ -179,6 +179,8 @@ export async function getVenue(id: string | number): Promise<VenueDto> {
 }
 
 export async function patchVenue(slug: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
+  console.log('slug: ', slug);
+  console.table(venue);
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { slug: slug } });
   const response = await axios.patch<VenueDto>(url, venue, { withCredentials: true });
   return response.data;

@@ -261,10 +261,22 @@ class VenueView(ModelViewSet):
     queryset = Venue.objects.all()
     lookup_field = 'slug'
 
-class TestVenueView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = VenueSerializer
-    queryset = Venue.objects.all()
+    def create(self, request: Request) -> Response:
+        if not request.data.get("slug"):
+            return Response({"slug": "This field cannot be blank when creating a venue."}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def partial_update(self, request: Request, slug: str) -> Response:
+        venue = get_object_or_404(Venue, slug=slug)
+        serializer = self.serializer_class(venue, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ClosedPeriodView(ModelViewSet):
