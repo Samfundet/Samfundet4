@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-from backend.root.utils import routes
 
 from rest_framework import status
 
@@ -9,6 +8,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import Permission
 
+from root.utils import routes
 from root.utils.permissions import SAMFUNDET_ADD_RECRUITMENT, SAMFUNDET_VIEW_RECRUITMENT, SAMFUNDET_CHANGE_RECRUITMENT, SAMFUNDET_DELETE_RECRUITMENT
 
 from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
