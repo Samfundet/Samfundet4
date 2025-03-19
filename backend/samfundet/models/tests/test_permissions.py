@@ -21,7 +21,7 @@ def organization_factory():
     """Factory fixture for creating Organization instances."""
     created_organizations = []
 
-    def create_organization(name='Test Organization'):
+    def create_organization(name='Test Organization') -> Organization:
         organization = Organization.objects.create(name=name)
         created_organizations.append(organization)
         return organization
@@ -34,7 +34,7 @@ def organization_factory():
 
 
 @pytest.fixture
-def recruitment_factory(organization_factory):
+def recruitment_factory(organization_factory) -> callable:  # noqa: C901
     """Factory fixture for creating Recruitment instances.
 
     Creates valid Recruitment objects with sensible default values that respect
@@ -42,7 +42,7 @@ def recruitment_factory(organization_factory):
     """
     created_recruitments = []
 
-    def create_recruitment(
+    def create_recruitment(  # noqa: C901
         name_nb='Test Recruitment NB',
         name_en='Test Recruitment EN',
         visible_from=None,
