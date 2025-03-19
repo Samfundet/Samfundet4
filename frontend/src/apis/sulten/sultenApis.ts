@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { t } from 'i18next';
 import type { ReservationFormData } from '~/Pages/LycheReservationPage/Components/ReserveTableForm/ReserveTableSchema';
 import { BACKEND_DOMAIN } from '~/constants';
+import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import type { AvailableTimes, ReservationCheckAvailabilityDto } from './sultenDtos';
 
@@ -34,7 +36,7 @@ export async function checkReservationAvailability(
 
       // Handle validation errors
       if (error.response.status === 400) {
-        throw new Error('Invalid reservation data');
+        throw new Error(t(KEY.error_invalid_reservation_data));
       }
     }
 
@@ -62,7 +64,7 @@ export async function reserveTable(data: ReservationPostData): Promise<void> {
 
       // Handle validation errors
       if (error.response.status === 400) {
-        throw new Error('Invalid reservation data');
+        throw new Error(t(KEY.error_invalid_reservation_data));
       }
     }
 

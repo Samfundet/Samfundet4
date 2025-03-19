@@ -72,7 +72,7 @@ export function ReservationDetailsForm({ findTableData, availableTimes, onSubmit
           name="start_time"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{`${t(KEY.common_time)}*`}</FormLabel>
+              <FormLabel>{t(KEY.common_time)}</FormLabel>
               <FormControl>
                 <Dropdown options={timeOptions} {...field} />
               </FormControl>
@@ -86,7 +86,7 @@ export function ReservationDetailsForm({ findTableData, availableTimes, onSubmit
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{`${t(KEY.common_name)}*`}</FormLabel>
+              <FormLabel>{t(KEY.common_name)}</FormLabel>
               <FormControl>
                 <Input type="text" {...field} />
               </FormControl>
@@ -100,7 +100,7 @@ export function ReservationDetailsForm({ findTableData, availableTimes, onSubmit
           name="phonenumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{`${t(KEY.common_phonenumber)}*`}</FormLabel>
+              <FormLabel>{t(KEY.common_phonenumber)}</FormLabel>
               <FormControl>
                 <Input type="text" {...field} />
               </FormControl>
@@ -114,7 +114,7 @@ export function ReservationDetailsForm({ findTableData, availableTimes, onSubmit
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{`${t(KEY.common_email)}*`}</FormLabel>
+              <FormLabel>{t(KEY.common_email)}</FormLabel>
               <FormControl>
                 <Input type="email" {...field} />
               </FormControl>

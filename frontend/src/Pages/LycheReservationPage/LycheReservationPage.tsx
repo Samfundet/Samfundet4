@@ -63,7 +63,7 @@ export function LycheReservationPage() {
       if (error instanceof Error) {
         setError(error.message);
       } else {
-        setError(t('An error occurred while submitting your reservation'));
+        setError(t(KEY.error_submitting_reservation));
       }
     },
   });
