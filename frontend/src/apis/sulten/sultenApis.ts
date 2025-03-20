@@ -1,5 +1,8 @@
 import axios from 'axios';
+import { t } from 'i18next';
+import type { ReservationFormData } from '~/Pages/LycheReservationPage/Components/ReserveTableForm/ReserveTableSchema';
 import { BACKEND_DOMAIN } from '~/constants';
+import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import type { AvailableTimes, ReservationCheckAvailabilityDto } from './sultenDtos';
 
@@ -33,7 +36,35 @@ export async function checkReservationAvailability(
 
       // Handle validation errors
       if (error.response.status === 400) {
-        throw new Error('Invalid reservation data');
+        throw new Error(t(KEY.error_invalid_reservation_data));
+      }
+    }
+
+    // Re-throw other errors
+    throw error;
+  }
+}
+
+export interface ReservationPostData extends Omit<ReservationFormData, 'reservation_date'> {
+  reservation_date: string;
+}
+
+export async function reserveTable(data: ReservationPostData): Promise<void> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__create_reservation_list;
+
+  try {
+    await axios.post(url, data, { withCredentials: true });
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      // Handle the 406 error specifically
+      if (error.response.status === 406) {
+        const errorData = error.response.data as ReservationCheckError;
+        throw new Error(errorData.error_en);
+      }
+
+      // Handle validation errors
+      if (error.response.status === 400) {
+        throw new Error(t(KEY.error_invalid_reservation_data));
       }
     }
 
