@@ -181,7 +181,13 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
     { sortable: false, content: t(KEY.recruitment_withdraw_application) },
   ];
 
-  const tableRows = applications.map((application) => ({
+  const filerActiveApplications = (application: RecruitmentApplicationDto) => {
+    return application.withdrawn === false;
+  }
+
+
+
+  const tableRows = applications.filter(filerActiveApplications).map((application) => ({
     cells: [
       // Only include priority arrows if there are multiple applications
       ...(applications.length > 1
