@@ -1,8 +1,8 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { Trans, useTranslation } from "react-i18next";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
+import { Trans, useTranslation } from 'react-i18next';
+import { z } from 'zod';
 import {
   Button,
   Dropdown,
@@ -10,18 +10,15 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
   Input,
   Link,
   RadioButton,
-} from "~/Components";
-import { validEmail } from "~/Forms/util";
-import { KEY } from "~/i18n/constants";
-import styles from "./BuyTicketModal.module.scss";
-import type { EventDto } from "~/dto";
-import { TextItem } from "~/constants";
-import { useTextItem } from "~/hooks";
+} from '~/Components';
+import { validEmail } from '~/Forms/util';
+import type { EventDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
+import styles from './BuyTicketModal.module.scss';
 
 // Validation schema
 const buyTicketFormSchema = z
@@ -29,15 +26,15 @@ const buyTicketFormSchema = z
     tickets: z.number().min(0),
     membershipTickets: z.number().min(0),
     membershipNumber: z.string().optional(),
-    email: z.string().refine(validEmail, { message: "Invalid email format" }).optional(),
+    email: z.string().refine(validEmail, { message: 'Invalid email format' }).optional(),
   })
   .refine((data) => data.email || data.membershipNumber, {
-    message: "You must provide either an email or a membership number",
-    path: ["email"],
+    message: 'You must provide either an email or a membership number',
+    path: ['email'],
   })
   .refine((data) => data.tickets > 1 || data.membershipTickets > 1, {
-    message: "You must select at least one ticket",
-    path: ["tickets"],
+    message: 'You must select at least one ticket',
+    path: ['tickets'],
   });
 
 type BuyTicketFormType = z.infer<typeof buyTicketFormSchema>;
@@ -56,36 +53,33 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
     defaultValues: {
       tickets: 0,
       membershipTickets: 0,
-      membershipNumber: "",
-      email: "",
-      ticketType: "membershipNumber"
+      membershipNumber: '',
+      email: '',
+      ticketType: 'membershipNumber',
     },
   });
 
-  const ticketType = useWatch({ control: form.control, name: "ticketType" });
+  const ticketType = useWatch({ control: form.control, name: 'ticketType' });
 
   const PostTicketForm = (data: BuyTicketFormType) => {
-    console.log("Submitted Ticket Form Data:", data);
+    console.log('Submitted Ticket Form Data:', data);
   };
-  
 
   const price = event?.price ?? 50;
   const price_member = event?.price_member ?? 30;
-  
 
+  const tickets = useWatch({ control: form.control, name: 'tickets' });
+  const membershipTickets = useWatch({ control: form.control, name: 'membershipTickets' });
 
-  const tickets = useWatch({ control: form.control, name: "tickets" });
-  const membershipTickets = useWatch({ control: form.control, name: "membershipTickets" });
-  
   useEffect(() => {
     setTotalPrice(tickets * price + membershipTickets * price_member);
   }, [tickets, membershipTickets, price, price_member]);
 
   useEffect(() => {
-    if (ticketType === "email") {
-      form.setValue("email", "");
-    } else if (ticketType === "membershipNumber") {
-      form.setValue("membershipNumber", "");
+    if (ticketType === 'email') {
+      form.setValue('email', '');
+    } else if (ticketType === 'membershipNumber') {
+      form.setValue('membershipNumber', '');
     }
   }, [ticketType, form]);
 
@@ -107,16 +101,16 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                    <Dropdown
-                      {...field}
-                      options={[...Array(9).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))} // Convert value to string
-                      onChange={(e) => {
-                        if (e) {
-                          form.setValue("tickets", Number(e)); // Convert string back to number
-                        }
-                      }}
-                      value={field.value.toString()} // Ensure value is a string
-                    />
+                      <Dropdown
+                        {...field}
+                        options={[...Array(9).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))}
+                        onChange={(e) => {
+                          if (e) {
+                            form.setValue('tickets', Number(e));
+                          }
+                        }}
+                        value={field.value.toString()}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -136,16 +130,16 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 render={({ field }) => (
                   <FormItem className={styles.select_item}>
                     <FormControl>
-                    <Dropdown
-                      {...field}
-                      options={[...Array(9).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))} // Convert value to string
-                      onChange={(e) => {
-                        if (e) {
-                          form.setValue("membershipTickets", Number(e)); // Convert string back to number
-                        }
-                      }}
-                      value={field.value.toString()} // Ensure value is a string
-                    />
+                      <Dropdown
+                        {...field}
+                        options={[...Array(9).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))}
+                        onChange={(e) => {
+                          if (e) {
+                            form.setValue('membershipTickets', Number(e));
+                          }
+                        }}
+                        value={field.value.toString()}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -161,10 +155,10 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 <div className={styles.radio_box}>
                   <RadioButton
                     name="ticketType"
-                    onChange={() => form.setValue("ticketType", "membershipNumber")}
+                    onChange={() => form.setValue('ticketType', 'membershipNumber')}
                     // defaultChecked={true}
-                    checked={ticketType === "membershipNumber"}
-                  />{" "}
+                    checked={ticketType === 'membershipNumber'}
+                  />{' '}
                   <label>{t(KEY.common_membership_number)}</label>
                 </div>
                 {/* Membership Number Field */}
@@ -173,16 +167,17 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                   name="membershipNumber"
                   render={({ field }) => (
                     <FormItem>
-                      {/* <FormLabel>{t(KEY.common_membership_number)}</FormLabel> */}
                       <FormControl>
-                        <Input 
-                          type="text" 
+                        <Input
+                          type="text"
                           className={styles.input_field}
-                          disabled={ticketType !== "membershipNumber"}
+                          disabled={ticketType !== 'membershipNumber'}
                           style={{
-                            backgroundColor: ticketType === "membershipNumber" ? "white" : "lightgrey",
-                          }} 
-                          placeholder="Enter membership number" {...field} />
+                            backgroundColor: ticketType === 'membershipNumber' ? 'white' : 'lightgrey',
+                          }}
+                          placeholder="Enter membership number"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -193,9 +188,9 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 <div className={styles.radio_box}>
                   <RadioButton
                     name="ticketType"
-                    onChange={() => form.setValue("ticketType", "email")}
-                    checked={ticketType === "email"}
-                  />{" "}
+                    onChange={() => form.setValue('ticketType', 'email')}
+                    checked={ticketType === 'email'}
+                  />{' '}
                   <label className={styles.email_label}>{t(KEY.common_email)}</label>
                 </div>
                 {/* Email Field */}
@@ -204,16 +199,17 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                   name="email"
                   render={({ field }) => (
                     <FormItem className={styles.email_field}>
-                      {/* <FormLabel>{t(KEY.common_email)}</FormLabel> */}
                       <FormControl>
-                        <Input 
+                        <Input
                           type="email"
                           className={styles.input_field}
-                          disabled={ticketType !== "email"}
+                          disabled={ticketType !== 'email'}
                           style={{
-                            backgroundColor: ticketType === "email" ? "white" : "lightgray",
-                          }} 
-                          placeholder="Enter your email" {...field} />
+                            backgroundColor: ticketType === 'email' ? 'white' : 'lightgray',
+                          }}
+                          placeholder="Enter your email"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -222,11 +218,11 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
               </div>
             </div>
             <div className={styles.ticket_type_description}>
-              <div style={{display: ticketType === "membershipNumber" ? "inline" : "none"}}>
+              <div style={{ display: ticketType === 'membershipNumber' ? 'inline' : 'none' }}>
                 <p>{t(KEY.ticketless_description)}</p>
                 <Trans i18nKey={KEY.ticketless_description_note} components={{ strong: <strong /> }} />
               </div>
-              <div style={{display: ticketType === "email" ? "inline" : "none"}}>
+              <div style={{ display: ticketType === 'email' ? 'inline' : 'none' }}>
                 <p>{t(KEY.email_ticket_description)}</p>
               </div>
             </div>
@@ -234,20 +230,26 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
 
           {/* Terms and Conditions */}
           <div>
-            <a href="https://stripe.com/en-no/privacy" target="_blank" className={styles.link}>{t(KEY.stripe_info)}{" "}</a>
+            <a href="https://stripe.com/en-no/privacy" target="_blank" className={styles.link} rel="noreferrer">
+              {t(KEY.stripe_info)}{' '}
+            </a>
             <p>{t(KEY.pay_info)}</p>
             {/* TODO: Add the url when the page is made */}
-            <Link url="#" className={styles.terms_link}>{t(KEY.sales_conditions)}</Link>
+            <Link url="#" className={styles.terms_link}>
+              {t(KEY.sales_conditions)}
+            </Link>
           </div>
 
           {/* Total Price */}
           <div className={styles.total_price}>
-            <strong>{t(KEY.common_total)}: {totalPrice} NOK</strong>
+            <strong>
+              {t(KEY.common_total)}: {totalPrice} NOK
+            </strong>
           </div>
 
           {/* Submit Button */}
           <Button type="submit" className={styles.pay_button}>
-          {t(KEY.common_to_payment)}
+            {t(KEY.common_to_payment)}
           </Button>
         </form>
       </Form>

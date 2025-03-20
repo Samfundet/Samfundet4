@@ -1,21 +1,21 @@
+import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Page } from '~/Components';
+import { BuyTicketModal } from '~/Components/BuyTicketModal';
 import { getEvent } from '~/api';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { PAID_TICKET_TYPES } from '~/types';
 import { dbT, lowerCapitalize } from '~/utils';
 import { Splash } from '../HomePage/components/Splash/Splash';
 import styles from './EventPage.module.scss';
 import { EventTable } from './components/EventTable';
-import { Icon } from '@iconify/react';
-import { PAID_TICKET_TYPES } from '~/types';
-import { BuyTicketModal } from '~/Components/BuyTicketModal';
 
 export function EventPage() {
   const { id } = useParams();
@@ -55,8 +55,8 @@ export function EventPage() {
     <></>
   );
 
-  console.log("isPaid?:", isPaid);
-  console.log("Data:", event);
+  console.log('isPaid?:', isPaid);
+  console.log('Data:', event);
   return (
     <Page className={styles.container} loading={showSpinner}>
       {/* TODO splash should be its own component rather than homepage subcomponent */}

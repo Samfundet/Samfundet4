@@ -245,9 +245,12 @@ export const nb = prepareTranslations({
   [KEY.mix]: 'Mikset',
 
   //Purchase Ticket Info:
-  [KEY.ticketless_description]: 'Medlemskortet blir billetten din, og det er bare å trekke kortet i døren når du kommer til Samfundet.',
-  [KEY.ticketless_description_note]: ' <strong>Merk:</strong> Du kan kun ha én billett på kortet per arrangement. Alle billettene vil bli tilsendt på epost.',
-  [KEY.email_ticket_description]: 'Billetten(e) blir sendt på epost, og må vises fram i døren når du kommer til Samfundet. Billettene kan vises på mobil eller tas med som utskrift.',
+  [KEY.ticketless_description]:
+    'Medlemskortet blir billetten din, og det er bare å trekke kortet i døren når du kommer til Samfundet.',
+  [KEY.ticketless_description_note]:
+    ' <strong>Merk:</strong> Du kan kun ha én billett på kortet per arrangement. Alle billettene vil bli tilsendt på epost.',
+  [KEY.email_ticket_description]:
+    'Billetten(e) blir sendt på epost, og må vises fram i døren når du kommer til Samfundet. Billettene kan vises på mobil eller tas med som utskrift.',
   [KEY.stripe_info]: 'Betalingen håndteres av Stripe.',
   [KEY.pay_info]: 'Alle priser er i norske kroner og er inkludert alle avgifter.',
   [KEY.sales_conditions]: 'Kjøp forutsetter at kunden godtar salgsbetingelsene.',
@@ -764,10 +767,12 @@ export const en = prepareTranslations({
   [KEY.mix]: 'Mixed',
 
   //Purchase Ticket Info:
-  [KEY.ticketless_description]: 
+  [KEY.ticketless_description]:
     'If you choose ticketless, your membership card itself will be your ticket. You will then simply swipe your card when you enter Samfundet.',
-  [KEY.ticketless_description_note]: '<strong>Please note:</strong> You may only have one ticket on your card per event. All the tickets will be sent to your email.',
-  [KEY.email_ticket_description]:'If you choose digital ticket, your ticket(s) will be sent to your email. The tickets barcode will be scanned when you enter Samfundet, either from your phone or a printed out copy.',
+  [KEY.ticketless_description_note]:
+    '<strong>Please note:</strong> You may only have one ticket on your card per event. All the tickets will be sent to your email.',
+  [KEY.email_ticket_description]:
+    'If you choose digital ticket, your ticket(s) will be sent to your email. The tickets barcode will be scanned when you enter Samfundet, either from your phone or a printed out copy.',
   [KEY.stripe_info]: 'The payment is processed by Stripe.',
   [KEY.pay_info]: 'All prices are in norwegian krone and includes all fees.',
   [KEY.sales_conditions]: 'Purchase requires acceptance of sales terms.',
