@@ -173,7 +173,7 @@
   version "1.8.2"
 
 "@chromatic-com/storybook@^3":
-  version "3.2.5"
+  version "3.2.6"
   dependencies:
     chromatic "^11.15.0"
     filesize "^10.0.12"
@@ -473,8 +473,8 @@
 "@sinonjs/text-encoding@^0.7.2":
   version "0.7.3"
 
-"@storybook/addon-actions@^8.6.4", "@storybook/addon-actions@8.6.4":
-  version "8.6.4"
+"@storybook/addon-actions@^8.6.4", "@storybook/addon-actions@8.6.7":
+  version "8.6.7"
   dependencies:
     "@storybook/global" "^5.0.0"
     "@types/uuid" "^9.0.1"
@@ -482,105 +482,105 @@
     polished "^4.2.2"
     uuid "^9.0.0"
 
-"@storybook/addon-backgrounds@8.6.4":
-  version "8.6.4"
+"@storybook/addon-backgrounds@8.6.7":
+  version "8.6.7"
   dependencies:
     "@storybook/global" "^5.0.0"
     memoizerific "^1.11.3"
     ts-dedent "^2.0.0"
 
-"@storybook/addon-controls@8.6.4":
-  version "8.6.4"
+"@storybook/addon-controls@8.6.7":
+  version "8.6.7"
   dependencies:
     "@storybook/global" "^5.0.0"
     dequal "^2.0.2"
     ts-dedent "^2.0.0"
 
-"@storybook/addon-docs@8.6.4":
-  version "8.6.4"
+"@storybook/addon-docs@8.6.7":
+  version "8.6.7"
   dependencies:
     "@mdx-js/react" "^3.0.0"
-    "@storybook/blocks" "8.6.4"
-    "@storybook/csf-plugin" "8.6.4"
-    "@storybook/react-dom-shim" "8.6.4"
+    "@storybook/blocks" "8.6.7"
+    "@storybook/csf-plugin" "8.6.7"
+    "@storybook/react-dom-shim" "8.6.7"
     react "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
     react-dom "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
     ts-dedent "^2.0.0"
 
 "@storybook/addon-essentials@^8.6.4":
-  version "8.6.4"
+  version "8.6.7"
   dependencies:
-    "@storybook/addon-actions" "8.6.4"
-    "@storybook/addon-backgrounds" "8.6.4"
-    "@storybook/addon-controls" "8.6.4"
-    "@storybook/addon-docs" "8.6.4"
-    "@storybook/addon-highlight" "8.6.4"
-    "@storybook/addon-measure" "8.6.4"
-    "@storybook/addon-outline" "8.6.4"
-    "@storybook/addon-toolbars" "8.6.4"
-    "@storybook/addon-viewport" "8.6.4"
+    "@storybook/addon-actions" "8.6.7"
+    "@storybook/addon-backgrounds" "8.6.7"
+    "@storybook/addon-controls" "8.6.7"
+    "@storybook/addon-docs" "8.6.7"
+    "@storybook/addon-highlight" "8.6.7"
+    "@storybook/addon-measure" "8.6.7"
+    "@storybook/addon-outline" "8.6.7"
+    "@storybook/addon-toolbars" "8.6.7"
+    "@storybook/addon-viewport" "8.6.7"
     ts-dedent "^2.0.0"
 
-"@storybook/addon-highlight@8.6.4":
-  version "8.6.4"
+"@storybook/addon-highlight@8.6.7":
+  version "8.6.7"
   dependencies:
     "@storybook/global" "^5.0.0"
 
 "@storybook/addon-interactions@^8.6.4":
-  version "8.6.4"
+  version "8.6.7"
   dependencies:
     "@storybook/global" "^5.0.0"
-    "@storybook/instrumenter" "8.6.4"
-    "@storybook/test" "8.6.4"
+    "@storybook/instrumenter" "8.6.7"
+    "@storybook/test" "8.6.7"
     polished "^4.2.2"
     ts-dedent "^2.2.0"
 
 "@storybook/addon-links@^8.6.4":
-  version "8.6.4"
+  version "8.6.7"
   dependencies:
     "@storybook/global" "^5.0.0"
     ts-dedent "^2.0.0"
 
-"@storybook/addon-measure@8.6.4":
-  version "8.6.4"
+"@storybook/addon-measure@8.6.7":
+  version "8.6.7"
   dependencies:
     "@storybook/global" "^5.0.0"
     tiny-invariant "^1.3.1"
 
-"@storybook/addon-outline@8.6.4":
-  version "8.6.4"
+"@storybook/addon-outline@8.6.7":
+  version "8.6.7"
   dependencies:
     "@storybook/global" "^5.0.0"
     ts-dedent "^2.0.0"
 
-"@storybook/addon-toolbars@8.6.4":
-  version "8.6.4"
+"@storybook/addon-toolbars@8.6.7":
+  version "8.6.7"
 
-"@storybook/addon-viewport@8.6.4":
-  version "8.6.4"
+"@storybook/addon-viewport@8.6.7":
+  version "8.6.7"
   dependencies:
     memoizerific "^1.11.3"
 
-"@storybook/blocks@8.6.4":
-  version "8.6.4"
+"@storybook/blocks@8.6.7":
+  version "8.6.7"
   dependencies:
     "@storybook/icons" "^1.2.12"
     ts-dedent "^2.0.0"
 
-"@storybook/builder-vite@8.6.4":
-  version "8.6.4"
+"@storybook/builder-vite@8.6.7":
+  version "8.6.7"
   dependencies:
-    "@storybook/csf-plugin" "8.6.4"
+    "@storybook/csf-plugin" "8.6.7"
     browser-assert "^1.2.1"
     ts-dedent "^2.0.0"
 
-"@storybook/components@8.6.4":
-  version "8.6.4"
+"@storybook/components@8.6.7":
+  version "8.6.7"
 
-"@storybook/core@8.6.4":
-  version "8.6.4"
+"@storybook/core@8.6.7":
+  version "8.6.7"
   dependencies:
-    "@storybook/theming" "8.6.4"
+    "@storybook/theming" "8.6.7"
     better-opn "^3.0.2"
     browser-assert "^1.2.1"
     esbuild "^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0 || ^0.25.0"
@@ -592,8 +592,8 @@
     util "^0.12.5"
     ws "^8.2.3"
 
-"@storybook/csf-plugin@8.6.4":
-  version "8.6.4"
+"@storybook/csf-plugin@8.6.7":
+  version "8.6.7"
   dependencies:
     unplugin "^1.3.1"
 
@@ -603,60 +603,60 @@
 "@storybook/icons@^1.2.12":
   version "1.4.0"
 
-"@storybook/instrumenter@8.6.4":
-  version "8.6.4"
+"@storybook/instrumenter@8.6.7":
+  version "8.6.7"
   dependencies:
     "@storybook/global" "^5.0.0"
     "@vitest/utils" "^2.1.1"
 
-"@storybook/manager-api@8.6.4":
-  version "8.6.4"
+"@storybook/manager-api@8.6.7":
+  version "8.6.7"
 
 "@storybook/node-logger@^8.6.4":
-  version "8.6.4"
+  version "8.6.7"
 
-"@storybook/preview-api@8.6.4":
-  version "8.6.4"
+"@storybook/preview-api@8.6.7":
+  version "8.6.7"
 
-"@storybook/react-dom-shim@8.6.4":
-  version "8.6.4"
+"@storybook/react-dom-shim@8.6.7":
+  version "8.6.7"
 
 "@storybook/react-vite@^8.6.4":
-  version "8.6.4"
+  version "8.6.7"
   dependencies:
     "@joshwooding/vite-plugin-react-docgen-typescript" "0.5.0"
     "@rollup/pluginutils" "^5.0.2"
-    "@storybook/builder-vite" "8.6.4"
-    "@storybook/react" "8.6.4"
+    "@storybook/builder-vite" "8.6.7"
+    "@storybook/react" "8.6.7"
     find-up "^5.0.0"
     magic-string "^0.30.0"
     react-docgen "^7.0.0"
     resolve "^1.22.8"
     tsconfig-paths "^4.2.0"
 
-"@storybook/react@^8.6.4", "@storybook/react@8.6.4":
-  version "8.6.4"
+"@storybook/react@^8.6.4", "@storybook/react@8.6.7":
+  version "8.6.7"
   dependencies:
-    "@storybook/components" "8.6.4"
+    "@storybook/components" "8.6.7"
     "@storybook/global" "^5.0.0"
-    "@storybook/manager-api" "8.6.4"
-    "@storybook/preview-api" "8.6.4"
-    "@storybook/react-dom-shim" "8.6.4"
-    "@storybook/theming" "8.6.4"
+    "@storybook/manager-api" "8.6.7"
+    "@storybook/preview-api" "8.6.7"
+    "@storybook/react-dom-shim" "8.6.7"
+    "@storybook/theming" "8.6.7"
 
-"@storybook/test@^8.6.4", "@storybook/test@8.6.4":
-  version "8.6.4"
+"@storybook/test@^8.6.4", "@storybook/test@8.6.7":
+  version "8.6.7"
   dependencies:
     "@storybook/global" "^5.0.0"
-    "@storybook/instrumenter" "8.6.4"
+    "@storybook/instrumenter" "8.6.7"
     "@testing-library/dom" "10.4.0"
     "@testing-library/jest-dom" "6.5.0"
     "@testing-library/user-event" "14.5.2"
     "@vitest/expect" "2.0.5"
     "@vitest/spy" "2.0.5"
 
-"@storybook/theming@8.6.4":
-  version "8.6.4"
+"@storybook/theming@8.6.7":
+  version "8.6.7"
 
 "@svgr/babel-plugin-add-jsx-attribute@8.0.0":
   version "8.0.0"
@@ -717,21 +717,21 @@
     "@svgr/hast-util-to-babel-ast" "8.0.0"
     svg-parser "^2.0.4"
 
-"@tanstack/query-core@5.67.3":
-  version "5.67.3"
+"@tanstack/query-core@5.69.0":
+  version "5.69.0"
 
 "@tanstack/query-devtools@5.67.2":
   version "5.67.2"
 
 "@tanstack/react-query-devtools@^5.59.0":
-  version "5.67.3"
+  version "5.69.0"
   dependencies:
     "@tanstack/query-devtools" "5.67.2"
 
-"@tanstack/react-query@^5.59.0", "@tanstack/react-query@^5.67.3":
-  version "5.67.3"
+"@tanstack/react-query@^5.59.0", "@tanstack/react-query@^5.69.0":
+  version "5.69.0"
   dependencies:
-    "@tanstack/query-core" "5.67.3"
+    "@tanstack/query-core" "5.69.0"
 
 "@testing-library/dom@>=7.21.4", "@testing-library/dom@10.4.0":
   version "10.4.0"
@@ -856,7 +856,7 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^16.8.0 || ^17.0.0 || ^18.0.0", "@types/react@^18.0.0", "@types/react@^18.2.28", "@types/react@>=16", "@types/react@>=18":
-  version "18.3.18"
+  version "18.3.19"
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
@@ -1060,7 +1060,7 @@ aws4@^1.8.0:
   version "1.13.2"
 
 axios@^1.7.4:
-  version "1.8.2"
+  version "1.8.4"
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.0"
@@ -1174,7 +1174,7 @@ camelcase@^6.2.0, camelcase@^6.3.0:
   version "6.3.0"
 
 caniuse-lite@^1.0.30001688, caniuse-lite@^1.0.30001702:
-  version "1.0.30001703"
+  version "1.0.30001706"
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -1550,7 +1550,7 @@ ecc-jsbn@~0.1.1:
     safer-buffer "^2.1.0"
 
 electron-to-chromium@^1.5.73:
-  version "1.5.114"
+  version "1.5.123"
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -2691,7 +2691,7 @@ ms@^2.1.1, ms@^2.1.3:
   version "2.1.3"
 
 nanoid@^3.3.8:
-  version "3.3.9"
+  version "3.3.11"
 
 nise@^5.1.5:
   version "5.1.9"
@@ -3055,12 +3055,12 @@ react-remove-scroll@2.5.4:
     use-sidecar "^1.1.2"
 
 react-router-dom@^7.2.0:
-  version "7.3.0"
+  version "7.4.0"
   dependencies:
-    react-router "7.3.0"
+    react-router "7.4.0"
 
-react-router@7.3.0:
-  version "7.3.0"
+react-router@7.4.0:
+  version "7.4.0"
   dependencies:
     "@types/cookie" "^0.6.0"
     cookie "^1.0.1"
@@ -3216,11 +3216,8 @@ safe-regex-test@^1.1.0:
 safer-buffer@^2.0.2, safer-buffer@^2.1.0, safer-buffer@~2.1.0:
   version "2.1.2"
 
-sass-migrator@^2.3.1:
-  version "2.3.1"
-
 sass@*, sass@^1.69.3:
-  version "1.85.1"
+  version "1.86.0"
   dependencies:
     chokidar "^4.0.0"
     immutable "^5.0.2"
@@ -3380,10 +3377,10 @@ sshpk@^1.18.0:
     safer-buffer "^2.0.2"
     tweetnacl "~0.14.0"
 
-"storybook@^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0", storybook@^8.6.4:
-  version "8.6.4"
+"storybook@^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0", storybook@^8.6.4, storybook@^8.6.7:
+  version "8.6.7"
   dependencies:
-    "@storybook/core" "8.6.4"
+    "@storybook/core" "8.6.7"
 
 "string-width-cjs@npm:string-width@^4.2.0":
   version "4.2.3"
