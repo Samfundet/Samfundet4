@@ -725,39 +725,39 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "psycopg"
-version = "3.2.2"
+version = "3.2.6"
 description = "PostgreSQL database adapter for Python"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "psycopg-3.2.2-py3-none-any.whl", hash = "sha256:babf565d459d8f72fb65da5e211dd0b58a52c51e4e1fa9cadecff42d6b7619b2"},
-    {file = "psycopg-3.2.2.tar.gz", hash = "sha256:8bad2e497ce22d556dac1464738cb948f8d6bab450d965cf1d8a8effd52412e0"},
+    {file = "psycopg-3.2.6-py3-none-any.whl", hash = "sha256:f3ff5488525890abb0566c429146add66b329e20d6d4835662b920cbbf90ac58"},
+    {file = "psycopg-3.2.6.tar.gz", hash = "sha256:16fa094efa2698f260f2af74f3710f781e4a6f226efe9d1fd0c37f384639ed8a"},
 ]
 
 [package.dependencies]
-psycopg-c = {version = "3.2.2", optional = true, markers = "implementation_name != \"pypy\" and extra == \"c\""}
+psycopg-c = {version = "3.2.6", optional = true, markers = "implementation_name != \"pypy\" and extra == \"c\""}
 typing-extensions = {version = ">=4.6", markers = "python_version < \"3.13\""}
 tzdata = {version = "*", markers = "sys_platform == \"win32\""}
 
 [package.extras]
-binary = ["psycopg-binary (==3.2.2) ; implementation_name != \"pypy\""]
-c = ["psycopg-c (==3.2.2) ; implementation_name != \"pypy\""]
-dev = ["ast-comments (>=1.1.2)", "black (>=24.1.0)", "codespell (>=2.2)", "dnspython (>=2.1)", "flake8 (>=4.0)", "mypy (>=1.11)", "types-setuptools (>=57.4)", "wheel (>=0.37)"]
+binary = ["psycopg-binary (==3.2.6) ; implementation_name != \"pypy\""]
+c = ["psycopg-c (==3.2.6) ; implementation_name != \"pypy\""]
+dev = ["ast-comments (>=1.1.2)", "black (>=24.1.0)", "codespell (>=2.2)", "dnspython (>=2.1)", "flake8 (>=4.0)", "isort-psycopg", "isort[colors] (>=6.0)", "mypy (>=1.14)", "pre-commit (>=4.0.1)", "types-setuptools (>=57.4)", "wheel (>=0.37)"]
 docs = ["Sphinx (>=5.0)", "furo (==2022.6.21)", "sphinx-autobuild (>=2021.3.14)", "sphinx-autodoc-typehints (>=1.12)"]
 pool = ["psycopg-pool"]
-test = ["anyio (>=4.0)", "mypy (>=1.11)", "pproxy (>=2.7)", "pytest (>=6.2.5)", "pytest-cov (>=3.0)", "pytest-randomly (>=3.5)"]
+test = ["anyio (>=4.0)", "mypy (>=1.14)", "pproxy (>=2.7)", "pytest (>=6.2.5)", "pytest-cov (>=3.0)", "pytest-randomly (>=3.5)"]
 
 [[package]]
 name = "psycopg-c"
-version = "3.2.2"
+version = "3.2.6"
 description = "PostgreSQL database adapter for Python -- C optimisation distribution"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 markers = "implementation_name != \"pypy\""
 files = [
-    {file = "psycopg_c-3.2.2.tar.gz", hash = "sha256:de8cac75bc6640ef0f54ad9187b81e07c430206a83c566b73d4cca41ecccb7c8"},
+    {file = "psycopg_c-3.2.6.tar.gz", hash = "sha256:b5fd4ce70f82766a122ca5076a36c4d5818eaa9df9bf76870bc83a064ffaed3a"},
 ]
 
 [[package]]
