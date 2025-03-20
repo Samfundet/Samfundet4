@@ -1,14 +1,16 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { UserFeedback } from '~/Components/UserFeedback/UserFeedback';
 
 // Local component config.
-export default {
+const meta: Meta<typeof UserFeedback> = {
   title: 'Components/UserFeedback',
   component: UserFeedback,
-} as ComponentMeta<typeof UserFeedback>;
-
-const Template: ComponentStory<typeof UserFeedback> = () => {
-  return <UserFeedback />;
 };
 
-export const Primary = Template.bind({});
+export default meta;
+
+type Story = StoryObj<typeof UserFeedback>;
+
+export const Primary: Story = {
+  render: () => <UserFeedback />,
+};

@@ -572,6 +572,8 @@ export function EventCreatorAdminPage() {
         description={dbT(formValues, 'description_short') ?? ''}
         imageUrl={formValues.image?.url ? BACKEND_DOMAIN + formValues.image.url : ''}
         date={formValues.start_dt ?? ''}
+        ticket_type={formValues.ticket_type}
+        host={formValues.host}
       />
       {/* Preview Info */}
       <div className={styles.previewText}>

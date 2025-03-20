@@ -16,7 +16,7 @@ type GangItemProps = {
 export function GangPositionDropdown({ type, recruitmentPositions, recruitmentId }: GangItemProps) {
   const filteredGangs = type.gangs
     .map((gang) => {
-      const filteredPositions = recruitmentPositions?.filter((pos) => pos.gang.id === gang.id);
+      const filteredPositions = recruitmentPositions?.filter((pos) => pos.gang && pos.gang.id === gang.id);
       if (filteredPositions && filteredPositions.length > 0) {
         return (
           <ExpandableHeader

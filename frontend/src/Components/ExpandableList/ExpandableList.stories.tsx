@@ -1,18 +1,19 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { Child, ExpandableList, ExpandableListContextProvider, Parent } from './index';
 
 // Local component config.
-export default {
+const meta: Meta<typeof ExpandableList> = {
   title: 'Components/ExpandableList',
   component: ExpandableList,
-  args: {
-    name: 'name',
-    label: 'Choose option',
-  },
-} as ComponentMeta<typeof ExpandableList>;
+  args: {},
+};
 
-const TemplateSingular: ComponentStory<typeof ExpandableList> = (args) => (
-  <>
+export default meta;
+
+type Story = StoryObj<typeof ExpandableList>;
+
+export const Basic: Story = {
+  render: (args) => (
     <ExpandableListContextProvider>
       <ExpandableList {...args}>
         <Parent content="item1" nestedDepth={0}>
@@ -33,8 +34,6 @@ const TemplateSingular: ComponentStory<typeof ExpandableList> = (args) => (
         </Parent>
       </ExpandableList>
     </ExpandableListContextProvider>
-  </>
-);
-
-export const Basic = TemplateSingular.bind({});
-Basic.args = { children: <div>Peek-a-Boo</div> };
+  ),
+  args: { children: <div>Peek-a-Boo</div> },
+};

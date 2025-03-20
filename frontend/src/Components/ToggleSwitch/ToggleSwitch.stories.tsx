@@ -1,16 +1,20 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { ToggleSwitch } from './ToggleSwitch';
 
 // Local component config.
-export default {
+const meta: Meta<typeof ToggleSwitch> = {
   title: 'Components/ToggleSwitch',
   component: ToggleSwitch,
-} as ComponentMeta<typeof ToggleSwitch>;
+};
 
-const Template: ComponentStory<typeof ToggleSwitch> = (args) => <ToggleSwitch {...args} />;
+export default meta;
 
-export const Basic = Template.bind({});
-Basic.args = {};
+type Story = StoryObj<typeof ToggleSwitch>;
 
-export const Disabled = Template.bind({});
-Disabled.args = { disabled: true };
+export const Basic: Story = {
+  args: {},
+};
+
+export const Disabled: Story = {
+  args: { disabled: true },
+};

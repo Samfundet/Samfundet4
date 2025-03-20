@@ -56,6 +56,7 @@ export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps
             description={event_short_dsc}
             url={url}
             ticket_type={event.ticket_type}
+            host={event.host}
           >
             <div className={styles.button_bar}>
               {canChangeEvent && (
