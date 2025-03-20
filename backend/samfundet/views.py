@@ -907,7 +907,7 @@ class RecruitmentApplicationWithdrawRecruiterView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class RecruitmentWithdrawnApplicationsForApplicant(ModelViewSet):
+class RecruitmentWithdrawnApplicationsForApplicant(ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationForApplicantSerializer
 
