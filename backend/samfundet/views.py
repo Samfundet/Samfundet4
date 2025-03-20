@@ -925,6 +925,10 @@ class RecruitmentWithdrawnApplicationsForApplicant(ReadOnlyModelViewSet):
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
 
+    def retrive(self) -> Response:
+        # make detail not allowed for now
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 
 class RecruitmentApplicationApplicantPriorityView(APIView):
     permission_classes = [IsAuthenticated]
