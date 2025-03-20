@@ -3,7 +3,7 @@
 @import "src/mixins";
 
 .modal {
-  margin: 1rem;
+  margin-top: 1rem;
   @include for-tablet-down {
     width: 70%;
   }

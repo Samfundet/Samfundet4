@@ -65,7 +65,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
     console.log('Submitted Ticket Form Data:', data);
   };
 
-  const price = event?.price ?? 50;
+  const price = event?.price ?? 50; //TODO: Change to actual price later
   const price_member = event?.price_member ?? 30;
 
   const tickets = useWatch({ control: form.control, name: 'tickets' });
