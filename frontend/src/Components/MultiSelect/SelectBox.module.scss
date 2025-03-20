@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .label {
   margin-bottom: 0.25rem;

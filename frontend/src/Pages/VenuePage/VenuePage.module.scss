@@ -1,6 +1,6 @@
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
-@import 'src/constants';
+@use 'src/constants' as *;
 
 .page {
   display: flex;
@@ -13,7 +13,7 @@
   font-weight: 700;
   font-size: 1.5em;
   text-align: left;
-  padding-left: .25em;
+  padding-left: 0.25em;
 }
 
 .container {
@@ -54,7 +54,6 @@
   @include theme-dark {
     background-color: $grey-0;
   }
-
 }
 
 .venues {
@@ -92,7 +91,6 @@
       height: 8em;
     }
   }
-
 }
 
 .venue_image {
@@ -100,8 +98,8 @@
   height: 5em;
   background-size: cover;
   background-position: center;
-  box-shadow: 0 0 0.5em .2em $black-t25;
-  border-radius: .5em;
+  box-shadow: 0 0 0.5em 0.2em $black-t25;
+  border-radius: 0.5em;
   transition: 0.2s;
   border: 3px solid transparent;
 
@@ -109,15 +107,14 @@
     filter: brightness(115%);
     transform: scale(103%);
   }
-
 }
 
 .venue_name {
   display: flex;
   justify-content: center;
   font-size: 1em;
-  padding-bottom: .25em;
-  padding-top: .25em;
+  padding-bottom: 0.25em;
+  padding-top: 0.25em;
 }
 
 /* stylelint-disable-next-line selector-max-class */

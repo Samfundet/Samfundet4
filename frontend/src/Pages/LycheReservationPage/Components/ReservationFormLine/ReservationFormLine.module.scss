@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .container {
   display: flex;
@@ -20,7 +20,7 @@
 }
 
 .block {
-  flex:1;
+  flex: 1;
   width: 100%;
 }
 

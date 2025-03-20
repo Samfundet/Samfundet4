@@ -1,10 +1,10 @@
 @use 'sass:color';
 
 /* stylelint-disable-next-line no-invalid-position-at-import-rule */
-@import 'src/constants';
+@use 'src/constants' as *;
 
 /* stylelint-disable-next-line no-invalid-position-at-import-rule */
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .container {
   position: relative;

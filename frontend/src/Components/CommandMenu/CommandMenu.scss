@@ -1,8 +1,8 @@
 /* stylelint-disable selector-max-compound-selectors */
 /* stylelint-disable selector-max-combinators */
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 $max-width: 700px;
 $bg: $red-samf;
