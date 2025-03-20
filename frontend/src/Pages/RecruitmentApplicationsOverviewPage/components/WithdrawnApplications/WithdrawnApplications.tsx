@@ -34,8 +34,8 @@ export function WithdrawnApplications({ recruitmentId, queryKey }: WithdrawnAppl
             url={reverse({
               pattern: ROUTES.frontend.recruitment_application,
               urlParams: {
+                recruitmentId: application.recruitment,
                 positionId: application.recruitment_position.id,
-                gangId: application.recruitment_position.gang.id,
               },
             })}
             className={styles.withdrawnLink}
