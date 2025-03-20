@@ -191,10 +191,6 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
     { sortable: false, content: t(KEY.recruitment_withdraw_application) },
   ];
 
-
-
-
-  // TODO: sort based on priority
   const tableRows = sortedActiveApplications.map((application) => ({
     cells: [
       // Only include priority arrows if there are multiple applications
