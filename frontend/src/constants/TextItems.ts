@@ -30,16 +30,19 @@ export const TextItem = {
   sulten_contact_page_title: 'sulten_contact_page_title',
 
   //Recruitment samf
+  samf_recruitment_description: 'samf_recruitment_description',
   no_recruitment_samf_header: 'no_recruitment_samf_header',
   no_recruitment_samf_about: 'no_recruitment_samf_about',
   no_recruitment_samf_next: 'no_recruitment_samf_next',
 
   //Recruitment ISFIT
+  isfit_recruitment_description: 'isfit_recruitment_description',
   no_recruitment_isfit_header: 'no_recruitment_isfit_header',
   no_recruitment_isfit_about: 'no_recruitment_isfit_about',
   no_recruitment_isfit_next: 'no_recruitment_isfit_next',
 
   //Recruitment UKA
+  uka_recruitment_description: 'uka_recruitment_description',
   no_recruitment_uka_header: 'no_recruitment_uka_header',
   no_recruitment_uka_about: 'no_recruitment_uka_about',
   no_recruitment_uka_next: 'no_recruitment_uka_next',
@@ -94,6 +97,9 @@ export const TextItem = {
   purchase_feedback_alternative_4: 'purchase_feedback_alternative_4',
   purchase_feedback_question_1: 'purchase_feedback_question_1',
   purchase_feedback_question_2: 'purchase_feedback_question_2',
+
+  // Gangspage
+  gangspage_text: 'gangspage_text',
 } as const;
 
 export type TextItemValue = (typeof TextItem)[keyof typeof TextItem];

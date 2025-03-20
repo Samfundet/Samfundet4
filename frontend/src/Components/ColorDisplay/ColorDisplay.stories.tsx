@@ -1,19 +1,23 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { COLORS, type ColorKey } from '~/types';
 import { ColorDisplay } from './ColorDisplay';
 
 // Local component config.
-export default {
+const meta: Meta<typeof ColorDisplay> = {
   title: 'Components/ColorDisplay',
   component: ColorDisplay,
-} as ComponentMeta<typeof ColorDisplay>;
+};
 
-const ListTemplate: ComponentStory<typeof ColorDisplay> = () => (
-  <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-    {Object.keys(COLORS).map((key) => (
-      <ColorDisplay key={key} color={key as ColorKey} />
-    ))}
-  </div>
-);
+export default meta;
 
-export const AllColors = ListTemplate.bind({});
+type Story = StoryObj<typeof ColorDisplay>;
+
+export const AllColors: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      {Object.keys(COLORS).map((key) => (
+        <ColorDisplay key={key} color={key as ColorKey} />
+      ))}
+    </div>
+  ),
+};

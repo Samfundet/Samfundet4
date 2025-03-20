@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 .snowflake {
   position: fixed;
   z-index: 9999;
@@ -55,10 +57,11 @@
 
 @for $i from 1 through 48 {
   .snowflake:nth-of-type(#{$i}) {
-    left: #{random(100)} + '%';
-    top: calc(-10% - #{random(10)}) + '%';
-    animation-duration: #{10 + random(5)}s, #{2.5 + random(2)}s;
-    animation-delay: #{($i * 0.2) + random(5)} + 's', #{random(4)} + 's';
+    left: #{math.random(100)} + '%';
+    top: calc(-10% - #{math.random(10)}) + '%';
+    animation-duration: #{10 + math.random(5)}s, #{2.5 + math.random(2)}s;
+    animation-delay: #{($i * 0.2) + math.random(5)} + 's', #{math.random(4)} + 's';
+    animation-name: snowflakes-fall, snowflakes-shake-#{$i};
 
     @keyframes snowflakes-shake-#{$i} {
       0%,
@@ -66,9 +69,8 @@
         transform: translateX(0);
       }
       50% {
-        transform: translateX(#{40 + random(40)}px);
+        transform: translateX(#{40 + math.random(40)}px);
       }
     }
-    animation-name: snowflakes-fall, snowflakes-shake-#{$i};
   }
 }

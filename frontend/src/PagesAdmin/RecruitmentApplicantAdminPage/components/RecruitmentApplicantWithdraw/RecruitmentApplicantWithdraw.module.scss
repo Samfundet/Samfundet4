@@ -1,0 +1,7 @@
+@use 'src/constants' as *;
+
+@use 'src/mixins' as *;
+
+.withdrawnText {
+  color: $red-samf;
+}

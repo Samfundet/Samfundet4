@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { Table } from '~/Components/Table';
-import { getGangList } from '~/api';
+import { getOrganizedGangList } from '~/api';
 import type { GangTypeDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -27,7 +27,7 @@ export function GangsAdminPage() {
   // TODO add permissions on render
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   useEffect(() => {
-    getGangList()
+    getOrganizedGangList()
       .then((data) => {
         setGangs(data);
         setShowSpinner(false);

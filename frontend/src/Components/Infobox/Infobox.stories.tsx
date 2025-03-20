@@ -1,9 +1,9 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { kitteh } from '~/assets';
 import { COLORS } from '~/types';
 import { Infobox } from './Infobox';
 
-export default {
+const meta: Meta<typeof Infobox> = {
   title: 'Components/Infobox',
   component: Infobox,
   args: {
@@ -13,8 +13,22 @@ export default {
     infoTxt: 'Lorem ipsum dolor sit ametur adipiscing elit, sed do eiusmod tempor incididuntincididunt incididunt.',
     bgColor: COLORS.red_samf,
   },
-} as ComponentMeta<typeof Infobox>;
-const Template: ComponentStory<typeof Infobox> = (args) => <Infobox {...args} />;
+};
 
-export const Basic = Template.bind({});
-Basic.args = {};
+export default meta;
+
+type Story = StoryObj<typeof Infobox>;
+
+export const Basic: Story = {
+  args: {},
+};
+
+export const Filled: Story = {
+  args: {
+    title: 'Filled Infobox',
+    img: kitteh,
+    infoURL: 'https://www.example.com',
+    infoTxt: 'This is a filled infobox with custom content.',
+    bgColor: COLORS.red_samf,
+  },
+};

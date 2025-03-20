@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .container {
   display: flex;
@@ -16,7 +16,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 4em
+  padding: 4em;
 }
 
 .row {
@@ -26,13 +26,23 @@
   }
 }
 
+.occupied_modal {
+  min-width: auto;
+}
+
 .text_container {
   flex: 6;
 }
 
 .other_positions {
   flex: 1;
-  margin-bottom: 1em;
+  margin: 0 0 1em 1em;
+}
+
+.other_positions_buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
 }
 
 .header {
@@ -68,6 +78,13 @@
   margin-bottom: 0.5em;
 }
 
-.withdrawn_cext {
-  color: $red-samf;
+.form_header {
+  display: flex;
+  gap: 0.5em;
+}
+
+.form_buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
 }

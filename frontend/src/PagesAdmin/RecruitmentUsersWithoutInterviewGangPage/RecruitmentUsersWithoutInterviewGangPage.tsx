@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { RecruitmentWithoutInterviewTable } from '~/Components';
 import { Text } from '~/Components/Text/Text';
@@ -102,7 +102,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
             withoutInterviewCount,
             t(KEY.common_out_of),
             t(KEY.common_total).toLowerCase(),
-            gangStats.data.total_applicants,
+            gangStats.data.applicant_count,
             t(KEY.recruitment_applications),
             t(KEY.common_have),
             t(KEY.recruitment_interview),

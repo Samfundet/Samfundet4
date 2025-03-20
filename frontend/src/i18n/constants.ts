@@ -57,6 +57,7 @@ export const KEY = {
   pick_a_date: 'pick_a_date',
 
   // No category:
+  common_content: 'common_content',
   common_url: 'common_url',
   common_manage: 'common_manage',
   common_yes: 'common_yes',
@@ -178,6 +179,7 @@ export const KEY = {
   common_processed: 'common_processed',
   common_rejected: 'common_rejected',
   common_it: 'common_it',
+  common_in: 'common_in',
   common_will: 'common_will',
   common_get: 'common_get',
   common_count: 'common_count',
@@ -195,6 +197,7 @@ export const KEY = {
   common_unprocessed: 'common_unprocessed',
   common_list_view: 'common_list_view',
   common_tab_view: 'common_tab_view',
+  common_available: 'common_available',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -202,7 +205,7 @@ export const KEY = {
   common_film_club: 'common_film_club',
   common_privacy_policy: 'common_privacy_policy',
   common_facilitation: 'common_facilitation',
-  common_the_groups_at_samfundet: 'common_the_groups_at_samfundet',
+  common_the_gangs_at_samfundet: 'common_the_gangs_at_samfundet',
   common_volunteering: 'common_volunteering',
   common_overview_map: 'common_overview_map',
   common_new_building: 'common_new_building',
@@ -243,9 +246,8 @@ export const KEY = {
 
   role_edit_could_not_load_permissions: 'role_edit_could_not_load_permissions',
 
-  // GroupsPage:
-  groupspage_gangs_text: 'groupspage_gangs_text',
-  groupspage_gangs_title: 'groupspage_gangs_title',
+  // GangsPage:
+  gangspage_title: 'gangspage_title',
 
   // EventPageAge:
   eighteen: 'eighteen',
@@ -280,8 +282,13 @@ export const KEY = {
   sulten_reservation_form_more_than_8_help: 'sulten_reservation_form_more_than_8_help',
   sulten_reservation_form_remember_closing: 'sulten_reservation_form_remember_closing',
   sulten_reservation_form_find_times: 'sulten_reservation_form_find_times',
+  sulten_occation_drinks: 'sulten_occation_drinks',
+  sulten_occation_eat: 'sulten_occation_eat',
 
   // Recruitment:
+  recruitment_look_at_recipients: 'recruitment_look_at_recipients',
+  recruitment_preview: 'recruitment_preview',
+  recruitment_text_before_name: 'recruitment_text_before_name',
   recruitment_tags: 'recruitment_tags',
   recruitment_position: 'recruitment_position',
   recruitment_positions: 'recruitment_positions',
@@ -291,6 +298,7 @@ export const KEY = {
   recruitment_interviews: 'recruitment_interviews',
   recruitment_interview_planned: 'recruitment_interview_planned',
   recruitment_no_interviews: 'recruitment_no_interviews',
+  recruitment_no_interviewers_available: 'recruitment_no_interviewers_available',
   recruitment_interview_set: 'recruitment_interview_set',
   recruitment_interview_groups: 'recruitment_interview_groups',
   recruitment_interview_group: 'recruitment_interview_group',
@@ -305,6 +313,9 @@ export const KEY = {
   recruitment_priority: 'recruitment_priority',
   recruitment_recruiter_priority: 'recruitment_recruiter_priority',
   recruitment_recruiter_status: 'recruitment_recruiter_status',
+  recruitment_recruiter_guide: 'recruitment_recruiter_guide',
+  recruitment_guide_offer: 'recruitment_guide_offer',
+  recruitment_guide_no_offer: 'recruitment_guide_no_offer',
   recruitment_duration: 'recruitment_duration',
   recruitment_funksjonaer: 'recruitment_funksjonaer',
   recruitment_jobtype: 'recruitment_jobtype',
@@ -314,6 +325,8 @@ export const KEY = {
   recruitment_applyforhelp: 'recruitment_applyforhelp',
   recruitment_volunteerfor: 'recruitment_volunteerfor',
   recruitment_otherpositions: 'recruitment_otherpositions',
+  recruitment_no_other_positions: 'recruitment_no_other_positions',
+  recruitment_similar_positions: 'recruitment_similar_positions',
   recruitment_visible_from: 'recruitment_visible_from',
   recruitment_administrate: 'recruitment_administrate',
   recruitment_administrate_positions: 'recruitment_administrate_positions',
@@ -329,7 +342,7 @@ export const KEY = {
   actual_application_deadline: 'actual_application_deadline',
   recruitment_number_of_applications: 'recruitment_number_of_applications',
   recrutment_default_application_letter: 'recrutment_default_application_letter',
-  reprioritization_deadline_for_groups: 'reprioritization_deadline_for_groups',
+  reprioritization_deadline_for_gangs: 'reprioritization_deadline_for_gangs',
   max_applications: 'max_applications',
   recruitment_promo_media: 'recruitment_promo_media',
   recruitment_norwegian_applicants_only: 'recruitment_norwegian_applicants_only',
@@ -375,9 +388,12 @@ export const KEY = {
   recruitment_dashboard_description: 'recruitment_dashboard_description',
   recruitment_application: 'recruitment_application',
   recruitment_admitted: 'recruitment_admitted',
+  recruitment_rejected: 'recruitment_rejected',
   recruitment_statistics: 'recruitment_statistics',
   recruitment_applications: 'recruitment_applications',
+
   recruitment_applications_processed: 'recruitment_applications_processed',
+  recruitment_applicants_processed: 'recruitment_applicants_processed',
   recruitment_automatic_rejection: 'recruitment_automatic_rejection',
   recruitment_rejection_email: 'recruitment_rejection_email',
   recruitment_stats_hours_header: 'recruitment_stats_hours_header',
@@ -465,6 +481,9 @@ export const KEY = {
   interview_availability_interval_description: 'interview_availability_interval_description',
   interview_availability_error_end_date_before_start_date: 'interview_availability_error_end_date_before_start_date',
   available_timeslots: 'available_timeslots',
+  confirm_occupied_time: 'confirm_occupied_time',
+  confirm_occupied_time_text: 'confirm_occupied_time_text',
+  confirm_occupied_time_send_application: 'confirm_occupied_time_send_application',
 
   // Feedback
   feedback_type: 'feedback_type',
@@ -503,6 +522,8 @@ export const KEY = {
   error_forbidden_description: 'error_forbidden_description',
   error_server_error: 'error_server_error',
   error_server_error_description: 'error_server_error_description',
+  error_submitting_reservation: 'error_submitting_reservation',
+  error_invalid_reservation_data: 'error_invalid_reservation_data',
 } as const;
 
 // This will ensure that each value matches the key exactly.

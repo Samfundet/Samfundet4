@@ -1,12 +1,15 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { InputTime } from './InputTime';
 
-export default {
+const meta: Meta<typeof InputTime> = {
   title: 'Components/InputTime',
   component: InputTime,
-} as ComponentMeta<typeof InputTime>;
+};
 
-const Template: ComponentStory<typeof InputTime> = (args) => <InputTime {...args}>Option</InputTime>;
+export default meta;
 
-export const Basic = Template.bind({});
-Basic.args = {};
+type Story = StoryObj<typeof InputTime>;
+
+export const Basic: Story = {
+  args: {},
+};

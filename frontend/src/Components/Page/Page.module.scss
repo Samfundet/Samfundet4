@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 $bottom-padding: 2em;
 $side-padding: 1em;
@@ -21,4 +21,10 @@ $side-padding: 1em;
   @include for-mobile-only {
     width: calc(100% - $side-padding * 2);
   }
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20%;
 }

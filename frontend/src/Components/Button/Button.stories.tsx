@@ -1,4 +1,4 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
 
 // Local component config.
@@ -8,18 +8,26 @@ export default {
   args: {
     name: 'name',
   },
-} as ComponentMeta<typeof Button>;
+} as Meta<typeof Button>;
 
-const Template: ComponentStory<typeof Button> = (args) => <Button {...args}>Submit</Button>;
+type Story = StoryObj<typeof Button>;
 
-export const Basic = Template.bind({});
-Basic.args = {};
+export const Basic: Story = {
+  args: {},
+  render: (args) => <Button {...args}>Submit</Button>,
+};
 
-export const Samf = Template.bind({});
-Samf.args = { theme: 'samf' };
+export const Samf: Story = {
+  args: { theme: 'samf' },
+  render: (args) => <Button {...args}>Submit</Button>,
+};
 
-export const Secondary = Template.bind({});
-Secondary.args = { theme: 'secondary' };
+export const Secondary: Story = {
+  args: { theme: 'secondary' },
+  render: (args) => <Button {...args}>Submit</Button>,
+};
 
-export const Disabled = Template.bind({});
-Disabled.args = { disabled: true };
+export const Disabled: Story = {
+  args: { disabled: true },
+  render: (args) => <Button {...args}>Submit</Button>,
+};

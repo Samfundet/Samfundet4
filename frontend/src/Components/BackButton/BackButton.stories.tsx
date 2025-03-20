@@ -1,15 +1,16 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { BackButton } from './BackButton';
 
 // Local component config.
-export default {
+const meta: Meta<typeof BackButton> = {
   title: 'Components/BackButton',
   component: BackButton,
-  args: {
-    message: 'Sigve: Konfirmasjon er bare en shitty versjon av bryllup',
-  },
-} as ComponentMeta<typeof BackButton>;
+};
 
-const Template: ComponentStory<typeof BackButton> = () => <BackButton />;
+export default meta;
 
-export const BackButtonTemplate = Template.bind({});
+type Story = StoryObj<typeof BackButton>;
+
+export const BackButtonTemplate: Story = {
+  render: (args) => <BackButton {...args} />,
+};

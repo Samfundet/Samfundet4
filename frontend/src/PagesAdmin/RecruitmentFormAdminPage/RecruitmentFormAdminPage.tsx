@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
+import { useNavigate, useParams, useRouteLoaderData } from 'react-router';
 import { toast } from 'react-toastify';
 import {
   Button,
@@ -55,8 +55,8 @@ export function RecruitmentFormAdminPage() {
     shown_application_deadline: utcTimestampToLocal(data?.recruitment?.shown_application_deadline, false) || '',
     reprioritization_deadline_for_applicant:
       utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_applicant, false) || '',
-    reprioritization_deadline_for_groups:
-      utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_groups, false) || '',
+    reprioritization_deadline_for_gangs:
+      utcTimestampToLocal(data?.recruitment?.reprioritization_deadline_for_gangs, false) || '',
     organization: getObjectFieldOrNumber<number>(data?.recruitment?.organization, 'id') || 1,
     max_applications: data?.recruitment?.max_applications,
     promo_media: data?.recruitment?.promo_media || '',
@@ -189,10 +189,10 @@ export function RecruitmentFormAdminPage() {
               />
               <FormField
                 control={form.control}
-                name="reprioritization_deadline_for_groups"
+                name="reprioritization_deadline_for_gangs"
                 render={({ field }) => (
                   <FormItem className={styles.item}>
-                    <FormLabel>{t(KEY.reprioritization_deadline_for_groups)}</FormLabel>
+                    <FormLabel>{t(KEY.reprioritization_deadline_for_gangs)}</FormLabel>
                     <FormControl>
                       <Input type="datetime-local" {...field} />
                     </FormControl>
@@ -209,7 +209,7 @@ export function RecruitmentFormAdminPage() {
                   <FormItem className={styles.item}>
                     <FormLabel>{t(KEY.max_applications)}</FormLabel>
                     <FormControl>
-                      <NumberInput allowDecimal={false} {...field} />
+                      <NumberInput allowDecimal={false} {...field} value={field.value ?? 0} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

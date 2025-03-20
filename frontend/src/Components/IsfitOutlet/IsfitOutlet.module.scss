@@ -1,3 +1,5 @@
-.deleteme {
-  color: red;
+@use '/src/constants.scss' as *;
+
+.navbar_outlet {
+  padding-top: $isfit-navbar-height;
 }

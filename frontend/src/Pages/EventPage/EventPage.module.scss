@@ -1,6 +1,6 @@
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
-@import 'src/constants';
+@use 'src/constants' as *;
 
 .container {
   width: 100%;
@@ -55,10 +55,4 @@
   flex-direction: row;
   justify-content: center;
   max-width: 50em;
-}
-
-.spinner {
-  display: flex;
-  justify-content: center;
-  margin-top: 20%;
 }

@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .container {
   display: flex;
@@ -11,12 +11,12 @@
   }
 }
 
+.infoContainer {
+  margin-top: 1em;
+}
+
 .withdrawContainer {
   display: flex;
   flex-direction: row;
   justify-content: center;
-}
-
-.withdrawnText {
-  color: $red-samf;
 }

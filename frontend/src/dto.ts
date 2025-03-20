@@ -1,5 +1,11 @@
 import type { ThemeValue } from '~/constants';
-import type { EventAgeRestrictionValue, EventStatus, EventTicketTypeValue, HomePageElementVariation } from './types';
+import type {
+  EventAgeRestrictionValue,
+  EventCategoryValue,
+  EventStatus,
+  EventTicketTypeValue,
+  HomePageElementVariation,
+} from './types';
 
 export type UserDto = {
   id: number;
@@ -45,6 +51,7 @@ export type RecruitmentAvailabilityDto = {
   end_time: string;
   timeslot_interval: number;
   timeslots: string[];
+  interval: number;
 };
 
 export type DateTimeslotDto = {
@@ -159,7 +166,7 @@ export type EventDto = {
   description_short_en: string;
   age_restriction: EventAgeRestrictionValue;
   location: string;
-  category: string;
+  category: EventCategoryValue;
   host: string;
 
   // Timestamps/duration
@@ -436,12 +443,21 @@ export type RecruitmentDto = {
   actual_application_deadline: string;
   shown_application_deadline: string;
   reprioritization_deadline_for_applicant: string;
-  reprioritization_deadline_for_groups: string;
+  reprioritization_deadline_for_gangs: string;
   max_applications?: number;
   organization: OrganizationDto;
   separate_positions?: RecruitmentSeparatePositionDto[];
-  recruitment_progress?: number;
   promo_media?: string;
+};
+
+export type RecruitmentForRecruiterDto = RecruitmentDto & {
+  statistics: RecruitmentStatsDto;
+  recruitment_progress: number;
+  total_applicants: number;
+  total_processed_applicants: number;
+  total_unprocessed_applicants: number;
+  total_processed_applications: number;
+  total_unprocessed_applications: number;
 };
 
 export type RecruitmentWriteDto = RecruitmentDto & {
@@ -500,6 +516,35 @@ export type RecruitmentPositionDto = {
   accepted_applicants?: number;
 };
 
+export type RecruitmentPositionForApplicantDto = {
+  id: number;
+  name_nb: string;
+  name_en: string;
+
+  short_description_nb: string;
+  short_description_en: string;
+
+  long_description_nb: string;
+  long_description_en: string;
+
+  tags: string;
+
+  is_funksjonaer_position: boolean;
+
+  norwegian_applicants_only: boolean;
+
+  default_application_letter_nb: string;
+  default_application_letter_en: string;
+
+  gang: GangDto;
+  recruitment: string;
+};
+
+export type PositionsByTagResponse = {
+  count: number;
+  positions: RecruitmentPositionForApplicantDto[];
+};
+
 export type RecruitmentPositionPostDto = Omit<RecruitmentPositionDto, 'gang' | 'id'> & {
   gang: { id: number };
   interviewer_ids?: number[];
@@ -524,6 +569,14 @@ export type InterviewDto = {
   room?: string;
   notes?: string;
   interviewers?: UserDto[];
+};
+
+export type RecruitmentPositionOrganizedApplicationsDto = {
+  unprocessed: RecruitmentApplicationDto[];
+  withdrawn: RecruitmentApplicationDto[];
+  rejected: RecruitmentApplicationDto[];
+  accepted: RecruitmentApplicationDto[];
+  hardtoget: RecruitmentApplicationDto[];
 };
 
 export type RecruitmentApplicationDto = {
@@ -586,8 +639,9 @@ export type RecruitmentCampusStatDto = {
 };
 
 export type RecruitmentGangStatDto = {
-  total_applications: number;
-  total_applicants: number;
+  gang: GangDto;
+  application_count: number;
+  applicant_count: number;
   average_priority: number;
   total_accepted: number;
   total_rejected: number;
@@ -600,11 +654,12 @@ export type RecruitmentStatsDto = {
   total_applications: number;
   total_withdrawn: number;
   total_accepted: number;
+  total_rejected: number;
   average_gangs_applied_to_per_applicant: number;
   average_applications_per_applicant: number;
   time_stats: RecruitmentTimeStatDto[];
   date_stats: RecruitmentDateStatDto[];
-  gang_stats: RecruitmentGangDto[];
+  gang_stats: RecruitmentGangStatDto[];
   campus_stats: RecruitmentCampusStatDto[];
 };
 
@@ -617,6 +672,15 @@ export type InterviewRoomDto = {
   recruitment: string;
   gang?: number;
 };
+
+export interface InterviewerAvailabilityDto {
+  id: number;
+  user: number;
+  recruitment: number;
+  time: string; // HH:MM format ("08:00")
+  start_dt: string; // ISO datetime format ("2024-02-12T09:00:00Z")
+  end_dt: string;
+}
 
 // ############################################################
 //                       Purchase Feedback

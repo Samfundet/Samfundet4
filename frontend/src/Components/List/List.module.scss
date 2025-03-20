@@ -1,4 +1,4 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
 .list_no_bullets {
   list-style-type: none;

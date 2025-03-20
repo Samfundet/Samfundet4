@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components';
 import { getEvent } from '~/api';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
@@ -41,16 +41,8 @@ export function EventPage() {
     }
   }, [id]);
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
   return (
-    <div className={styles.container}>
+    <Page className={styles.container} loading={showSpinner}>
       {/* TODO splash should be its own component rather than homepage subcomponent */}
       <Splash events={event && [event]} />
       <div className={styles.text_title}>{dbT(event, 'title')}</div>
@@ -70,6 +62,6 @@ export function EventPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Page>
   );
 }

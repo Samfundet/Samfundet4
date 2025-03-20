@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .container {
   display: flex;
@@ -12,9 +12,9 @@
 }
 
 .header {
-  display:block;
+  display: block;
 }
 
-.occupied_container  {
+.occupied_container {
   margin-top: 1.2em;
 }

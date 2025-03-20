@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Input, type InputProps } from '~/Components';
 
-export interface NumberInputProps extends Omit<InputProps, 'onChange'> {
+type ControlledInputProps = Extract<InputProps, { value: string | number | readonly string[] }>;
+
+export interface NumberInputProps extends Omit<ControlledInputProps, 'onChange'> {
   onChange?: (...event: unknown[]) => void;
   allowDecimal?: boolean;
   clamp?: boolean;

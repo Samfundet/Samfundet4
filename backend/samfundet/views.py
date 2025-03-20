@@ -4,7 +4,10 @@ import os
 import csv
 import hmac
 import hashlib
+import operator
 from typing import Any
+from datetime import datetime
+from functools import reduce
 from itertools import chain
 
 from guardian.shortcuts import get_objects_for_user
@@ -27,6 +30,7 @@ from django.db.models import Q, Count, QuerySet
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.utils.encoding import force_bytes
+from django.core.exceptions import ValidationError
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group, Permission
@@ -38,14 +42,16 @@ from root.constants import (
     GITHUB_SIGNATURE_HEADER,
     REQUESTED_IMPERSONATE_USER,
 )
+from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM
 
-from .utils import user_query, event_query, generate_timeslots, get_occupied_timeslots_from_request
+from samfundet.pagination import CustomPageNumberPagination
+
+from .utils import event_query, generate_timeslots, get_user_by_search, get_occupied_timeslots_from_request
 from .homepage import homepage
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .serializers import (
     TagSerializer,
     GangSerializer,
-    MenuSerializer,
     RoleSerializer,
     UserSerializer,
     EventSerializer,
@@ -53,15 +59,12 @@ from .serializers import (
     ImageSerializer,
     LoginSerializer,
     MerchSerializer,
-    TableSerializer,
     VenueSerializer,
-    BookingSerializer,
     InfoboxSerializer,
     ProfileSerializer,
     BlogPostSerializer,
     GangTypeSerializer,
     KeyValueSerializer,
-    MenuItemSerializer,
     RegisterSerializer,
     TextItemSerializer,
     InterviewSerializer,
@@ -70,28 +73,24 @@ from .serializers import (
     RecruitmentSerializer,
     UserOrgRoleSerializer,
     ClosedPeriodSerializer,
-    FoodCategorySerializer,
     OrganizationSerializer,
     SaksdokumentSerializer,
     UserFeedbackSerializer,
     UserGangRoleSerializer,
     InterviewRoomSerializer,
     ChangePasswordSerializer,
-    FoodPreferenceSerializer,
     UserPreferenceSerializer,
     InformationPageSerializer,
-    RecruitmentGangSerializer,
     OccupiedTimeslotSerializer,
     PurchaseFeedbackSerializer,
-    ReservationCheckSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     UserGangSectionRoleSerializer,
     RecruitmentStatisticsSerializer,
-    RecruitmentForRecruiterSerializer,
     RecruitmentSeparatePositionSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
+    RecruitmentPositionOrganizedApplications,
     RecruitmentPositionForApplicantSerializer,
     RecruitmentInterviewAvailabilitySerializer,
     RecruitmentApplicationForApplicantSerializer,
@@ -109,26 +108,19 @@ from .models.event import (
 from .models.general import (
     Tag,
     Gang,
-    Menu,
     User,
     Image,
     Merch,
-    Table,
     Venue,
-    Booking,
     Infobox,
     Profile,
     BlogPost,
     GangType,
     KeyValue,
-    MenuItem,
     TextItem,
-    Reservation,
     ClosedPeriod,
-    FoodCategory,
     Organization,
     Saksdokument,
-    FoodPreference,
     UserPreference,
     InformationPage,
     UserFeedbackModel,
@@ -270,12 +262,6 @@ class IsClosedView(ListAPIView):
         )
 
 
-class BookingView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = BookingSerializer
-    queryset = Booking.objects.all()
-
-
 class SaksdokumentView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = SaksdokumentSerializer
@@ -305,6 +291,15 @@ class GangTypeView(ModelViewSet):
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = GangTypeSerializer
     queryset = GangType.objects.all()
+
+
+class GangTypeOrganizationView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = GangTypeSerializer
+
+    def get(self, request: Request, organization: int) -> Response:
+        data = GangType.objects.filter(organization=organization)
+        return Response(data=self.serializer_class(data, many=True).data, status=status.HTTP_200_OK)
 
 
 class InformationPageView(ModelViewSet):
@@ -345,66 +340,6 @@ class RoleView(ModelViewSet):
         combined = list(chain(org_data, gang_data, section_data))
 
         return Response(combined)
-
-
-# =============================== #
-#            Sulten               #
-# =============================== #
-
-
-class MenuView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = MenuSerializer
-    queryset = Menu.objects.all()
-
-
-class MenuItemView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = MenuItemSerializer
-    queryset = MenuItem.objects.all()
-
-
-class FoodCategoryView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = FoodCategorySerializer
-    queryset = FoodCategory.objects.all()
-
-
-class FoodPreferenceView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = FoodPreferenceSerializer
-    queryset = FoodPreference.objects.all()
-
-
-class TableView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = TableSerializer
-    queryset = Table.objects.all()
-
-
-class ReservationCheckAvailabilityView(APIView):
-    permission_classes = [AllowAny]
-    serializer_class = ReservationCheckSerializer
-
-    def post(self, request: Request) -> Response:
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            if serializer.validated_data['reservation_date'] <= timezone.now().date():
-                return Response(
-                    {
-                        'error_nb': 'Reservasjoner må dessverre opprettes minst én dag i forveien.',
-                        'error_en': 'Unfortunately, reservations must be made at least one day in advance.',
-                    },
-                    status=status.HTTP_406_NOT_ACCEPTABLE,
-                )
-            venue = self.request.query_params.get('venue', Venue.objects.get(slug='lyche').id)
-            available_tables = Reservation.fetch_available_times_for_date(
-                venue=venue,
-                seating=serializer.validated_data['guest_count'],
-                date=serializer.validated_data['reservation_date'],
-            )
-            return Response(available_tables, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # =============================== #
@@ -509,8 +444,22 @@ class AllUsersView(ListAPIView):
     queryset = User.objects.all()
 
     def get(self, request: Request) -> Response:
-        users = user_query(query=request.query_params)
+        users = get_user_by_search(query=request.query_params)
         return Response(data=UserSerializer(users, many=True).data)
+
+
+class PaginatedSearchUsersView(ListAPIView):
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    serializer_class = UserSerializer
+    pagination_class = CustomPageNumberPagination
+
+    def get_queryset(self) -> QuerySet[User]:
+        """
+        Get queryset of users with search functionality using the user_query helper.
+        Returns ordered queryset of users filtered by search parameters if provided.
+        """
+        # Pass the query parameters directly to user_query
+        return get_user_by_search(query=self.request.query_params).order_by('username')
 
 
 class ImpersonateView(APIView):
@@ -650,27 +599,6 @@ class AssignGroupView(APIView):
 # =============================== #
 #            Recruitment          #
 # =============================== #
-
-
-@method_decorator(ensure_csrf_cookie, 'dispatch')
-class RecruitmentView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = RecruitmentSerializer
-    queryset = Recruitment.objects.all()
-
-    @action(detail=True, methods=['get'])
-    def gangs(self, request: Request, **kwargs: Any) -> Response:
-        recruitment = self.get_object()
-        gangs = Gang.objects.filter(organization__id=recruitment.organization_id)
-        serializer = RecruitmentGangSerializer(gangs, recruitment=recruitment, many=True)
-        return Response(serializer.data)
-
-
-@method_decorator(ensure_csrf_cookie, 'dispatch')
-class RecruitmentForRecruiterView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = RecruitmentForRecruiterSerializer
-    queryset = Recruitment.objects.all()
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
@@ -883,19 +811,26 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
     def update(self, request: Request, pk: int) -> Response:
         data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
         recruitment_position = get_object_or_404(RecruitmentPosition, pk=pk)
+        existing_application = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
+        # If update
+        if existing_application:
+            try:
+                existing_application.withdrawn = False
+                existing_application.application_text = data['application_text']
+                existing_application.save()
+                serializer = self.serializer_class(existing_application)
+                return Response(serializer.data, status.HTTP_200_OK)
+            except ValidationError as e:
+                return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
+
+        # If create
         data['recruitment_position'] = recruitment_position.pk
         data['recruitment'] = recruitment_position.recruitment.pk
         data['user'] = request.user.pk
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
-            existing_application = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
-            if existing_application:
-                existing_application.application_text = serializer.validated_data['application_text']
-                existing_application.save()
-                serializer = self.get_serializer(existing_application)
-                return Response(serializer.data, status=status.HTTP_200_OK)
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request: Request, pk: int) -> Response:
@@ -931,6 +866,20 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
 
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
+
+
+class RecruitmentApplicationInterviewNotesView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = InterviewSerializer
+
+    def put(self, request: Request, interview_id: str) -> Response:
+        interview = get_object_or_404(Interview, pk=interview_id)
+        update_serializer = self.serializer_class(interview, data=request.data, partial=True)
+        if update_serializer.is_valid() and 'notes' in update_serializer.validated_data:
+            interview.notes = update_serializer.validated_data['notes']
+            interview.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RecruitmentApplicationWithdrawApplicantView(APIView):
@@ -1083,13 +1032,22 @@ class RecruitmentApplicationForGangUpdateStateView(APIView):
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class RecruitmentPositionOrganizedApplicationsView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RecruitmentPositionOrganizedApplications
+
+    def get(self, request: Request, pk: int) -> Response:
+        position = get_object_or_404(RecruitmentPosition, pk=pk)
+        serializer = self.serializer_class(position)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class RecruitmentApplicationForPositionUpdateStateView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationUpdateForGangSerializer
 
     def put(self, request: Request, pk: int) -> Response:
         application = get_object_or_404(RecruitmentApplication, pk=pk)
-
         # TODO add check if user has permission to update for GANG
         update_serializer = self.serializer_class(data=request.data)
         if update_serializer.is_valid():
@@ -1100,12 +1058,9 @@ class RecruitmentApplicationForPositionUpdateStateView(APIView):
                 application.recruiter_status = update_serializer.data['recruiter_status']
             application.save()
             application.update_applicant_state()
-            applications = RecruitmentApplication.objects.filter(
-                recruitment_position=application.recruitment_position,  # Only change from above
-                recruitment=application.recruitment,
-            )
-            serializer = RecruitmentApplicationForGangSerializer(applications, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            position = get_object_or_404(RecruitmentPosition, pk=application.recruitment_position.id)
+            organized_serializer = RecruitmentPositionOrganizedApplications(position)
+            return Response(organized_serializer.data, status=status.HTTP_200_OK)
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -1176,7 +1131,7 @@ class DownloadAllRecruitmentApplicationCSV(APIView):
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
         applications = RecruitmentApplication.objects.filter(recruitment=recruitment)
 
-        filename = f"opptak_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        filename = f'opptak_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime("%Y-%m-%d %H.%M")}.csv'
         response = HttpResponse(
             content_type='text/csv',
             headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
@@ -1235,7 +1190,7 @@ class DownloadRecruitmentApplicationGangCSV(APIView):
         gang = get_object_or_404(Gang, id=gang_id)
         applications = RecruitmentApplication.objects.filter(recruitment_position__gang=gang, recruitment=recruitment)
 
-        filename = f"opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime('%Y-%m-%d %H.%M')}.csv"
+        filename = f'opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime("%Y-%m-%d %H.%M")}.csv'
         response = HttpResponse(
             content_type='text/csv',
             headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
@@ -1282,12 +1237,22 @@ class InterviewRoomView(ModelViewSet):
     serializer_class = InterviewRoomSerializer
     queryset = InterviewRoom.objects.all()
 
+    # noinspection PyMethodOverriding
+    def retrieve(self, request: Request, pk: int) -> Response:
+        room = get_object_or_404(InterviewRoom, pk=pk)
+        if not request.user.has_perm(SAMFUNDET_VIEW_INTERVIEWROOM, room):
+            raise PermissionDenied
+        return super().retrieve(request=request, pk=pk)
+
+    # noinspection PyMethodOverriding
     def list(self, request: Request) -> Response:
         recruitment = request.query_params.get('recruitment')
         if not recruitment:
             return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        filtered_rooms = InterviewRoom.objects.filter(recruitment__id=recruitment)
+        filtered_rooms = [
+            room for room in InterviewRoom.objects.filter(recruitment__id=recruitment) if request.user.has_perm(SAMFUNDET_VIEW_INTERVIEWROOM, room)
+        ]
         serialized_rooms = self.get_serializer(filtered_rooms, many=True)
         return Response(serialized_rooms.data)
 
@@ -1311,6 +1276,19 @@ class InterviewView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = InterviewSerializer
     queryset = Interview.objects.all()
+
+    # noinspection PyMethodOverriding
+    def retrieve(self, request: Request, pk: int) -> Response:
+        interview = get_object_or_404(Interview, pk=pk)
+        if not request.user.has_perm(SAMFUNDET_VIEW_INTERVIEW, interview):
+            raise PermissionDenied
+        return super().retrieve(request=request, pk=pk)
+
+    # noinspection PyMethodOverriding
+    def list(self, request: Request) -> Response:
+        interviews = [interview for interview in self.get_queryset() if request.user.has_perm(SAMFUNDET_VIEW_INTERVIEW, interview)]
+        serializer = self.get_serializer(interviews, many=True)
+        return Response(serializer.data)
 
 
 class RecruitmentInterviewAvailabilityView(ListCreateAPIView):
@@ -1341,6 +1319,7 @@ class RecruitmentAvailabilityView(APIView):
                 'end_time': end_time.strftime('%H:%M'),
                 'timeslot_interval': interval,
                 'timeslots': timeslots,
+                'interval': interval,
             }
         )
 
@@ -1491,3 +1470,97 @@ class GangApplicationCountView(APIView):
                 'total_rejected': gang_stat.total_rejected,
             }
         )
+
+
+class InterviewerAvailabilityForDate(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = OccupiedTimeslotSerializer
+
+    def get(self, request: Request, recruitment_id: int) -> Response:
+        try:
+            date_str = request.query_params.get('date')
+            if not date_str:
+                return Response({'error': 'Date parameter is required'}, status=400)
+
+            # Parse date in both formats (YYYY-MM-DD or YYYY.MM.DD)
+            try:
+                date_format = '%Y-%m-%d' if '-' in date_str else '%Y.%m.%d'
+                date = datetime.strptime(date_str, date_format).date()
+            except ValueError:
+                return Response({'error': 'Invalid date format. Use YYYY-MM-DD or YYYY.MM.DD'}, status=400)
+
+            interviewer_str = request.query_params.get('interviewers', '')
+            interviewers = [int(id_) for id_ in interviewer_str.split(',')] if interviewer_str else []
+
+            query = OccupiedTimeslot.objects.filter(recruitment__id=recruitment_id)
+            if interviewers:
+                query = query.filter(user__in=interviewers)
+
+            # Filter by date manually
+            result = [
+                {
+                    'id': slot.id,
+                    'user': slot.user.id,
+                    'recruitment': slot.recruitment.id,
+                    'time': slot.start_dt.strftime('%H:%M'),
+                    'start_dt': slot.start_dt.isoformat(),
+                    'end_dt': slot.end_dt.isoformat(),
+                }
+                for slot in query
+                if slot.start_dt.date() == date
+            ]
+
+            return Response(result)
+
+        except Exception as e:
+            return Response({'error': f'Error processing request: {str(e)}'}, status=500)
+
+
+class PositionByTagsView(ListAPIView):
+    """
+    Fetches recruitment positions by common tags for a specific recruitment.
+    Expects tags as query parameter in format: ?tags=tag1,tag2,tag3
+    Optionally accepts position_id parameter to exclude current position
+    This view expects a string which contains tags separated by comma from the client.
+    """
+
+    permission_classes = [AllowAny]
+    serializer_class = RecruitmentPositionForApplicantSerializer
+
+    def get_queryset(self) -> QuerySet:
+        recruitment_id = self.kwargs.get('id')
+        tags_param = self.request.query_params.get('tags')
+        current_position_id = self.request.query_params.get('position_id')
+
+        if not tags_param:
+            return RecruitmentPosition.objects.none()
+
+        # Split and clean the tags
+        tags = [tag.strip() for tag in tags_param.split(',') if tag.strip()]
+
+        if not tags:
+            return RecruitmentPosition.objects.none()
+
+        # Create Q objects for each tag to search in the tags field
+        tag_queries = [Q(tags__icontains=tag) for tag in tags]
+
+        # Combine queries with OR operator
+        combined_query = reduce(operator.or_, tag_queries)
+
+        # Base queryset with recruitment and tag filtering
+        queryset = RecruitmentPosition.objects.filter(combined_query, recruitment_id=recruitment_id).select_related('gang')
+
+        # Exclude current position if position_id is provided
+        if current_position_id:
+            queryset = queryset.exclude(id=current_position_id)
+
+        return queryset
+
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        if not request.query_params.get('tags'):
+            return Response({'message': 'No tags provided in query parameters'}, status=status.HTTP_400_BAD_REQUEST)
+
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response({'count': len(serializer.data), 'positions': serializer.data})

@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import type { ReactNode } from 'react';
-import { type UIMatch, useMatches } from 'react-router-dom';
+import { type UIMatch, useMatches } from 'react-router';
 import { Link } from '~/Components';
 import { ROUTES } from '~/routes';
 import styles from './Breadcrumb.module.scss';

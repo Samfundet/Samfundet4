@@ -1,0 +1,45 @@
+@use 'src/constants' as *;
+
+@use 'src/mixins' as *;
+
+.wrapper {
+  margin: 0.2em 0.1em;
+}
+
+.description {
+  text-align: center;
+  justify-content: center;
+  font-weight: 100;
+  font-size: 1.1em;
+  margin: 1.5em;
+}
+
+.gangs {
+  background-color: transparent;
+  border: 1px solid $grey-3;
+  box-shadow: none;
+  border-radius: 0.5em;
+  overflow: hidden;
+  margin: 1em;
+  padding: 1em;
+}
+
+.gangsTitle {
+  text-align: center;
+  font-size: 1.4em;
+  width: 100%;
+  font-weight: '700';
+  text-transform: uppercase;
+  margin-bottom: 0.5em;
+}
+
+.imageListText {
+  font-size: 1em;
+  font-weight: '800';
+}
+
+.header {
+  font-weight: 700;
+  font-size: 1.5em;
+  margin-bottom: 0.3em;
+}

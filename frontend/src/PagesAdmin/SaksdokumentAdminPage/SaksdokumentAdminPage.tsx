@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, InputField, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
@@ -47,7 +47,7 @@ export function SaksdokumentAdminPage() {
     // Filter by match all keywords.
     return documents.filter((doc) => {
       for (const kw of keywords) {
-        if (doc.title_nb?.toLowerCase().indexOf(kw) === -1) return false;
+        if (doc.title_nb?.toLowerCase().indexOf(kw.toLowerCase()) === -1) return false;
       }
       return true;
     });

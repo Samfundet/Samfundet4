@@ -43,6 +43,7 @@ export const nb = prepareTranslations({
   [KEY.pick_a_date]: 'Velg en dato',
 
   // Other common
+  [KEY.common_content]: 'Innhold',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Håndter',
   [KEY.common_yes]: 'Ja',
@@ -163,6 +164,7 @@ export const nb = prepareTranslations({
   [KEY.common_processed]: 'behandlet',
   [KEY.common_rejected]: 'avvist',
   [KEY.common_it]: 'det',
+  [KEY.common_in]: 'i',
   [KEY.common_will]: 'vil',
   [KEY.common_get]: 'få',
   [KEY.common_received]: 'mottat',
@@ -179,13 +181,15 @@ export const nb = prepareTranslations({
   [KEY.common_administration]: 'Administrasjon',
   [KEY.common_list_view]: 'Liste visning',
   [KEY.common_tab_view]: 'Fane visning',
+  [KEY.common_available]: 'Tilgjengelig',
+
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
   [KEY.common_press]: 'presse',
   [KEY.common_film_club]: 'filmklubb',
   [KEY.common_privacy_policy]: 'personvern',
   [KEY.common_facilitation]: 'tilrettelegging',
-  [KEY.common_the_groups_at_samfundet]: 'Gjengene på Samfundet',
+  [KEY.common_the_gangs_at_samfundet]: 'Gjengene på Samfundet',
   [KEY.common_volunteering]: 'Frivilligheten',
   [KEY.common_overview_map]: 'oversiktskart',
   [KEY.common_new_building]: 'nybygg',
@@ -230,10 +234,8 @@ export const nb = prepareTranslations({
   [KEY.contributors_page_text]: 'Samfundet.no utvikles av MG::Web, som er en seksjon i Markedsføringsgjengen.',
   [KEY.contributors_page_past_developers]: 'Tidligere utviklere',
 
-  // GroupsPage:
-  [KEY.groupspage_gangs_text]:
-    'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
-  [KEY.groupspage_gangs_title]: 'Gjengene på Samfundet',
+  // GangsPage:
+  [KEY.gangspage_title]: 'Gjengene på Samfundet',
 
   // EventPageAge:
   [KEY.eighteen]: '18 år',
@@ -263,6 +265,9 @@ export const nb = prepareTranslations({
   [KEY.footer_developed_by]: 'Utviklet av MG::Web',
 
   // Recruitment:
+  [KEY.recruitment_look_at_recipients]: 'Gå videre og se gjennom mottakere',
+  [KEY.recruitment_preview]: 'Forhåndsvisning',
+  [KEY.recruitment_text_before_name]: 'Tekst før navn',
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Stilling',
   [KEY.recruitment_positions]: 'Stillinger',
@@ -278,6 +283,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_interviewer]: 'Intervjuer',
   [KEY.recruitment_interviewers]: 'Intervjuere',
   [KEY.recruitment_no_interviews]: 'Ingen intervjuer',
+  [KEY.recruitment_no_interviewers_available]: 'Ingen intervjuere tilgjengelig',
   [KEY.recruitment_interview_set]: 'Sett intervju',
   [KEY.recruitment_interview_groups]: 'Intervjugrupper',
   [KEY.recruitment_interview_group]: 'Intervjugrupper',
@@ -291,19 +297,25 @@ export const nb = prepareTranslations({
   [KEY.recruitment_priority]: 'Sokers prioritet',
   [KEY.recruitment_recruiter_priority]: 'Prioritet',
   [KEY.recruitment_recruiter_status]: 'Status',
+  [KEY.recruitment_recruiter_guide]: 'Føring',
+  [KEY.recruitment_guide_offer]: 'Kan gi tilbud',
+  [KEY.recruitment_guide_no_offer]: 'Ikke gi tillbud',
   [KEY.common_not_set]: 'Ikke satt',
   [KEY.common_campus]: 'Campus',
   [KEY.recruitment_duration]: 'Varighet',
   [KEY.recruitment_admitted]: 'tatt opp',
+  [KEY.recruitment_rejected]: 'avslått',
   [KEY.recruitment_application]: 'Søknad',
   [KEY.recruitment_jobtype]: 'Stillingstype',
   [KEY.recruitment_funksjonaer]: 'Funksjonær',
   [KEY.recruitment_gangmember]: 'Gjengmedlem',
   [KEY.recruitment_applyfor]: 'Søk på dette vervet',
   [KEY.recruitment_applyforhelp]:
-    'Klar til å søke? \n Skriv litt om deg selv, din motivasjon for å søke og dine kvalifikasjoner for vervet. Du trenger ikke legge inn full CV og referanser - en kort tekst er nok. Vi gleder oss til å høre fra deg! Etter at du er registrert som søker, kan du logge inn for å se status på dine søknader. Hvis du har søkt flere verv, må du også prioritere hvilket du ønsker mest. Du vil kun få tilbud om ett verv.',
+    'Klar til å søke? \n Skriv litt om deg selv, din motivasjon for å søke og dine kvalifikasjoner for vervet. Du trenger ikke legge inn full CV og referanser - en kort tekst er nok. Vi gleder oss til å høre fra deg!',
   [KEY.recruitment_volunteerfor]: 'Verv som',
   [KEY.recruitment_otherpositions]: 'Andre verv i',
+  [KEY.recruitment_no_other_positions]: 'Ingen andre verv i',
+  [KEY.recruitment_similar_positions]: 'Lignende verv',
   [KEY.recruitment_visible_from]: 'Synlig fra',
   [KEY.recruitment_organization]: 'Organisasjon',
   [KEY.recruitment_administrate]: 'Administrer opptak',
@@ -318,7 +330,7 @@ export const nb = prepareTranslations({
   [KEY.actual_application_deadline]: 'Faktisk søknadsfrist',
   [KEY.recruitment_number_of_applications]: 'Antall søknader',
   [KEY.recrutment_default_application_letter]: 'Standard søknadstekst',
-  [KEY.reprioritization_deadline_for_groups]: 'Flaggefrist',
+  [KEY.reprioritization_deadline_for_gangs]: 'Flaggefrist',
   [KEY.max_applications]: 'Maks søknader per bruker',
   [KEY.recruitment_promo_media]: 'Promo video',
   [KEY.recruitment_norwegian_applicants_only]: 'Kun norsktalende søkere',
@@ -336,6 +348,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_recruiter_dashboard]: 'Dashbord',
   [KEY.recruitment_statistics]: 'Opptak statistikk',
   [KEY.recruitment_applications_processed]: 'søknader behandlet',
+  [KEY.recruitment_applicants_processed]: 'søkere behandlet',
   [KEY.recruitment_automatic_rejection]: 'Automatisk avslag',
   [KEY.recruitment_rejection_email]: 'avslagsmail',
   [KEY.recruitment_applicants_without_interview]: 'Søkere uten intervju',
@@ -453,12 +466,18 @@ export const nb = prepareTranslations({
   [KEY.sulten_reservation_form_remember_closing]: 'Husk at Lyche stenger',
   [KEY.sulten_reservation_form_find_times]: 'Finn Ledige Tidspunkt',
   [KEY.sulten_dishes]: 'Retter',
+  [KEY.sulten_occation_drinks]: 'Drikke',
+  [KEY.sulten_occation_eat]: 'Spise',
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Tilgjenglighet',
   [KEY.occupied_help_text]: 'Vennligst angi tider du <strong>ikke</strong> er tilgjengelig for intervju',
   [KEY.occupied_select_time_text]: 'Velg tidspunkt du er utilgjengelig',
   [KEY.occupied_show]: 'Sett din tilgjengelighet',
+  [KEY.confirm_occupied_time]: 'Bekreft din tilgjengelighet',
+  [KEY.confirm_occupied_time_text]:
+    'Vennligst bekreft at dette er tidene du <strong>ikke</strong> er tilgjengelig for intervju',
+  [KEY.confirm_occupied_time_send_application]: 'Lagre og send søknad',
   [KEY.interview_availability]: 'Intervju-tilgjengelighet',
   [KEY.interview_availability_description]:
     'Intervju-tilgjengelighet bestemmer når intervju kan holdes, og når brukere kan markere utilgjengelighet. ',
@@ -507,6 +526,8 @@ export const nb = prepareTranslations({
   [KEY.error_forbidden_description]: 'Du har ikke adgang til å se denne ressursen',
   [KEY.error_server_error]: 'Serverfeil',
   [KEY.error_server_error_description]: 'En serverfeil har opptstått',
+  [KEY.error_submitting_reservation]: 'Det skjedde en feil ved innsending av reservasjon',
+  [KEY.error_invalid_reservation_data]: 'Ugyldig reservasjonsdata',
 });
 
 export const en = prepareTranslations({
@@ -551,6 +572,7 @@ export const en = prepareTranslations({
   [KEY.pick_a_date]: 'Pick a date',
 
   // No category:
+  [KEY.common_content]: 'Content',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Manage',
   [KEY.common_yes]: 'Yes',
@@ -671,6 +693,7 @@ export const en = prepareTranslations({
   [KEY.common_personal]: 'Personal',
   [KEY.common_rejected]: 'rejected',
   [KEY.common_it]: 'it',
+  [KEY.common_in]: 'in',
   [KEY.common_will]: 'will',
   [KEY.common_get]: 'get',
   [KEY.common_received]: 'received',
@@ -684,6 +707,7 @@ export const en = prepareTranslations({
   [KEY.common_unprocessed]: 'Unprocessed',
   [KEY.common_list_view]: 'List view',
   [KEY.common_tab_view]: 'Tab view',
+  [KEY.common_available]: 'Available',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -691,7 +715,7 @@ export const en = prepareTranslations({
   [KEY.common_film_club]: 'Film club',
   [KEY.common_privacy_policy]: 'Privacy policy',
   [KEY.common_facilitation]: 'Facilitation',
-  [KEY.common_the_groups_at_samfundet]: 'The groups at Samfundet',
+  [KEY.common_the_gangs_at_samfundet]: 'The groups at Samfundet',
   [KEY.common_volunteering]: 'Volunteering',
   [KEY.common_overview_map]: 'Overview map',
   [KEY.common_new_building]: 'New building',
@@ -733,10 +757,8 @@ export const en = prepareTranslations({
   [KEY.loginpage_passwords_must_match]: 'Passwords must match',
   [KEY.loginpage_login_failed]: 'Login failed',
 
-  // GroupsPage:
-  [KEY.groupspage_gangs_text]:
-    'Samfundet consists of more than 20 groups (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
-  [KEY.groupspage_gangs_title]: 'The groups at Samfundet',
+  // GangsPage:
+  [KEY.gangspage_title]: 'The groups at Samfundet',
 
   // EventPageAge:
   [KEY.eighteen]: '18 years',
@@ -770,6 +792,9 @@ export const en = prepareTranslations({
   [KEY.footer_developed_by]: 'Developed by MG::Web',
 
   // Recruitment:
+  [KEY.recruitment_look_at_recipients]: 'Go ahead and look through recipients',
+  [KEY.recruitment_preview]: 'Preview',
+  [KEY.recruitment_text_before_name]: 'Text before name',
   [KEY.recruitment_tags]: 'Tags',
   [KEY.recruitment_position]: 'Position',
   [KEY.recruitment_positions]: 'Positions',
@@ -786,6 +811,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_interviewer]: 'Interviewer',
   [KEY.recruitment_interviewers]: 'Interviewers',
   [KEY.recruitment_no_interviews]: 'No interviews',
+  [KEY.recruitment_no_interviewers_available]: 'No interviewers available',
   [KEY.recruitment_interview_set]: 'Set Interview',
   [KEY.recruitment_interview_groups]: 'Interview groups',
   [KEY.recruitment_interview_group]: 'Interview group',
@@ -795,6 +821,9 @@ export const en = prepareTranslations({
   [KEY.recruitment_priority]: 'Applicants priority',
   [KEY.recruitment_recruiter_priority]: 'Priority',
   [KEY.recruitment_recruiter_status]: 'Status',
+  [KEY.recruitment_recruiter_guide]: 'Guide',
+  [KEY.recruitment_guide_offer]: 'Can give offer',
+  [KEY.recruitment_guide_no_offer]: 'Do not give offer',
   [KEY.common_not_set]: 'Not set',
   [KEY.common_campus]: 'Campus',
   [KEY.recruitment_duration]: 'Duration',
@@ -804,9 +833,11 @@ export const en = prepareTranslations({
   [KEY.recruitment_gangmember]: 'Gangmember',
   [KEY.recruitment_applyfor]: 'Apply for this position',
   [KEY.recruitment_applyforhelp]:
-    ' Ready to apply? \nWrite a little bit about yourself, your motivation for applying and your qualifications for this job. You don’t have to send in a full CV or references from previous employers - a short text is enough. We look forward to hearing from you! When you have registered as an applicant, you can log in and check the status of your applications. If you apply for more than one job, you must prioritize which one you want the most. Note that you will only be offered one job.',
+    ' Ready to apply? \nWrite a little bit about yourself, your motivation for applying and your qualifications for this job. You don’t have to send in a full CV or references from previous employers - a short text is enough. We look forward to hearing from you!',
   [KEY.recruitment_volunteerfor]: 'Position as',
   [KEY.recruitment_otherpositions]: 'Other positions in',
+  [KEY.recruitment_no_other_positions]: 'No other positions in',
+  [KEY.recruitment_similar_positions]: 'Similar positions',
   [KEY.recruitment_no_positions]: 'No positions',
   [KEY.recruitment_active]: 'Active recruitments',
   [KEY.recruitment_no_gangs]: 'No gangs',
@@ -825,7 +856,7 @@ export const en = prepareTranslations({
   [KEY.shown_application_deadline]: 'Displayed deadline',
   [KEY.recruitment_number_of_applications]: 'Number of applications',
   [KEY.recrutment_default_application_letter]: 'Default application letter',
-  [KEY.reprioritization_deadline_for_groups]: 'Group reprioritization deadline',
+  [KEY.reprioritization_deadline_for_gangs]: 'Group reprioritization deadline',
   [KEY.max_applications]: 'Max applications per user',
   [KEY.recruitment_promo_media]: 'Promo video',
   [KEY.reprioritization_deadline_for_applicant]: 'Reprioritization deadline',
@@ -841,9 +872,11 @@ export const en = prepareTranslations({
   [KEY.recruitment_overview]: 'Recruitment overview',
   [KEY.recruitment_recruiter_dashboard]: 'Dashboard',
   [KEY.recruitment_admitted]: 'admitted',
+  [KEY.recruitment_rejected]: 'rejected',
   [KEY.recruitment_statistics]: 'Recruitment statistics',
   [KEY.recruitment_applications]: 'applications',
   [KEY.recruitment_applications_processed]: 'applications processed',
+  [KEY.recruitment_applicants_processed]: 'applicants processed',
   [KEY.recruitment_automatic_rejection]: 'Automatic rejection',
   [KEY.recruitment_rejection_email]: 'rejection email',
   [KEY.recruitment_applicants_without_interview]: 'Applicants without interview',
@@ -970,12 +1003,18 @@ export const en = prepareTranslations({
   [KEY.sulten_reservation_form_more_than_8_help]: 'More than 8 people? send us an',
   [KEY.sulten_reservation_form_remember_closing]: 'Remember that Lyche closes at',
   [KEY.sulten_reservation_form_find_times]: 'Find Available Times',
+  [KEY.sulten_occation_drinks]: 'Drinks',
+  [KEY.sulten_occation_eat]: 'Eating',
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Availability',
   [KEY.occupied_help_text]: 'Please indicate times you are <strong>not</strong> available for interview',
   [KEY.occupied_select_time_text]: 'Select times you are unavailable',
   [KEY.occupied_show]: 'Set your availability',
+  [KEY.confirm_occupied_time]: 'Confirm your availability',
+  [KEY.confirm_occupied_time_text]:
+    'Please confirm that these are the times you are <strong>not</strong> available for interview',
+  [KEY.confirm_occupied_time_send_application]: 'Save and send application',
   [KEY.interview_availability]: 'Interview availability',
   [KEY.interview_availability_description]:
     'Intervju availability decides when interviews can be held, and when users can mark unavailability.',
@@ -1018,4 +1057,6 @@ export const en = prepareTranslations({
   [KEY.error_forbidden_description]: 'You do not have permission to view this resource',
   [KEY.error_server_error]: 'Server error',
   [KEY.error_server_error_description]: 'A server error has occurred',
+  [KEY.error_submitting_reservation]: 'An error occurred while submitting the reservation',
+  [KEY.error_invalid_reservation_data]: 'Invalid reservation data',
 });

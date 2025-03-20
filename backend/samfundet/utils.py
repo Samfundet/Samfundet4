@@ -42,12 +42,14 @@ def event_query(*, query: QueryDict, events: QuerySet[Event] = None) -> QuerySet
     return events
 
 
-def user_query(*, query: QueryDict, users: QuerySet[User] = None) -> QuerySet[User]:
+def get_user_by_search(*, query: QueryDict, users: QuerySet[User] = None) -> QuerySet[User]:
     if not users:
         users = User.objects.all()
     search = query.get('search', None)
     if search:
-        users = users.filter(Q(username__icontains=search) | Q(first_name__icontains=search) | Q(last_name__icontains=search))
+        for name in search.split():
+            users = users.filter(Q(username__icontains=name) | Q(first_name__icontains=name) | Q(last_name__icontains=name))
+        return users
     return users
 
 
