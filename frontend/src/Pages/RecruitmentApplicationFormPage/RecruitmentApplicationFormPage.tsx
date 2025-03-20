@@ -42,10 +42,14 @@ import styles from './RecruitmentApplicationFormPage.module.scss';
 
 type FormProps = {
   application_text: string;
+  video_url?: string;
+  image_attachment?: File;
 };
 
 const recruitmentApplicationSchema = z.object({
   application_text: z.string(),
+  video_url: z.string(),
+  image_attachment: z.instanceof(File).optional(),
 });
 
 type RecruitmentApplicationFormType = z.infer<typeof recruitmentApplicationSchema>;
@@ -61,6 +65,7 @@ export function RecruitmentApplicationFormPage() {
   const [similarPositions, setSimilarPositions] = useState<PositionsByTagResponse>();
 
   const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
+  const [imageAttachment, setImageAttachment] = useState<File>();
   const [openOccupiedForm, setOpenOccupiedForm] = useState(false);
   const [formData, setFormData] = useState<FormProps>();
   const [recruitmentId, setRecruitmentId] = useState(0);
@@ -79,7 +84,10 @@ export function RecruitmentApplicationFormPage() {
     if (recruitmentApplication?.application_text) {
       form.setValue('application_text', recruitmentApplication.application_text);
     }
-  }, [recruitmentApplication, form]);
+    if (recruitmentApplication?.image) form.setValue("image_attachment", recruitmentApplication.image);
+    if (recruitmentApplication?.video_url) form.setValue("video_url", recruitmentApplication.video_url);
+
+  }, [recruitmentApplication, form, imageAttachment]);
 
   useEffect(() => {
     Promise.allSettled([
@@ -281,7 +289,6 @@ export function RecruitmentApplicationFormPage() {
             </h2>
             <p className={styles.text}>{dbT(recruitmentPosition, 'long_description')}</p>
           </div>
-
           {!isMobile && (
             <div className={styles.other_positions}>
               {similarPositionsBtns}
@@ -322,20 +329,55 @@ export function RecruitmentApplicationFormPage() {
                     );
                   }}
                 />
-                <div className={styles.form_buttons}>
-                  <Button type="submit" theme="green" display="basic">
-                    {submitText}
-                  </Button>
-                  <Button type="button" theme="blue" display="basic">
-                    {"attachment"}
-                  </Button>
-                  <InputFile fileType='image' onSelected={() => { }}></InputFile>
-                  <InputFile fileType='image' onSelected={() => { }}></InputFile>
-                  {!recruitmentApplication?.withdrawn && recruitmentApplication && (
-                    <Button type="button" theme="samf" display="basic" onClick={() => withdrawApplication()}>
-                      {t(KEY.recruitment_withdraw_application)}
-                    </Button>
+                {!recruitmentPosition?.allow_video_url && (
+                  <FormField
+                    control={form.control}
+                    name="video_url"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormControl>
+                            <Textarea {...field}
+                              value={field.value}
+                              className={styles.video_url_textarea}
+                              placeholder='Youtube/video link:'
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )
+                    }}
+                  />
+                )}
+                <div className={styles.button_container}>
+                  {!recruitmentPosition?.allow_image_attachment && (
+                    <FormField
+                      control={form.control}
+                      name="image_attachment"
+                      render={({ field }) => {
+                        return (
+                          <FormItem>
+                            <FormControl>
+                              <InputFile
+                                fileType="image"
+                                onSelected={(file) => field.onChange(file)}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )
+                      }}
+                    />
+
                   )}
+                  <div className={styles.form_buttons}>
+                    <Button type="submit" theme="green" display="basic">
+                      {submitText}
+                    </Button>
+                    {!recruitmentApplication?.withdrawn && recruitmentApplication && (
+                      <Button type="button" theme="samf" display="basic" onClick={() => withdrawApplication()}>
+                        {t(KEY.recruitment_withdraw_application)}
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </form>
             </Form>
