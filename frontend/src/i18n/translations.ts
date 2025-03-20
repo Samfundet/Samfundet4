@@ -514,6 +514,8 @@ export const nb = prepareTranslations({
   [KEY.error_forbidden_description]: 'Du har ikke adgang til å se denne ressursen',
   [KEY.error_server_error]: 'Serverfeil',
   [KEY.error_server_error_description]: 'En serverfeil har opptstått',
+  [KEY.error_submitting_reservation]: 'Det skjedde en feil ved innsending av reservasjon',
+  [KEY.error_invalid_reservation_data]: 'Ugyldig reservasjonsdata',
 });
 
 export const en = prepareTranslations({
@@ -1031,4 +1033,6 @@ export const en = prepareTranslations({
   [KEY.error_forbidden_description]: 'You do not have permission to view this resource',
   [KEY.error_server_error]: 'Server error',
   [KEY.error_server_error_description]: 'A server error has occurred',
+  [KEY.error_submitting_reservation]: 'An error occurred while submitting the reservation',
+  [KEY.error_invalid_reservation_data]: 'Invalid reservation data',
 });
