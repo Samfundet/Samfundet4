@@ -64,7 +64,6 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
   };
 
   const handleNotesChange = (newNotes: string) => {
-    console.log(currentNotes);
     if (newNotes !== currentNotes && interviewId) {
       setCurrentNotes(newNotes);
       handleUpdateNotes.mutate({ notes: newNotes, interviewId });

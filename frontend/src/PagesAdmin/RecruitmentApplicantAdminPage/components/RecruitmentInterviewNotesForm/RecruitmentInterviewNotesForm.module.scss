@@ -3,8 +3,7 @@
 .textBox,
 .markdownWrapper {
   // makes textBox and markdown alike
-  min-height: 550px;
-  max-height: 550px;
+  height: 550px;
   margin-top: 0;
   line-height: 1.5;
   background-color: $white;
