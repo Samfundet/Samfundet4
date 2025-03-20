@@ -1,6 +1,6 @@
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
-@import 'src/constants';
+@use 'src/constants' as *;
 
 .carousel {
   padding-bottom: 2em;
@@ -14,7 +14,6 @@
 
 .tableContainer {
   margin-top: 1em;
-  border-radius: .2em;
+  border-radius: 0.2em;
   overflow-x: scroll;
 }
-

@@ -1,4 +1,6 @@
-@import 'src/mixins';
+@use 'src/constants' as *;
+
+@use 'src/mixins' as *;
 
 .wrapper {
   margin: 0.2em 0.1em;
