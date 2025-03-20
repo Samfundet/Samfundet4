@@ -170,27 +170,33 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
       </Button>
     );
   };
-  const tableColumns = [
-    // Only include priority column if there are multiple applications
-    ...(applications.length > 1 ? [{ sortable: false, content: t(KEY.recruitment_change_priority) }] : []),
-    { sortable: false, content: t(KEY.recruitment_application_for_position) },
-    // Only include priority display if there are multiple applications
-    ...(applications.length > 1 ? [{ sortable: false, content: t(KEY.recruitment_your_priority) }] : []),
-    { sortable: false, content: t(KEY.recruitment_interview_time) },
-    { sortable: false, content: t(KEY.recruitment_interview_location) },
-    { sortable: false, content: t(KEY.recruitment_withdraw_application) },
-  ];
 
   const filerActiveApplications = (application: RecruitmentApplicationDto) => {
     return application.withdrawn === false;
   }
 
+  const activeApplications = applications.filter(filerActiveApplications);
+
+
+  const tableColumns = [
+    // Only include priority column if there are multiple applications
+    ...(activeApplications.length > 1 ? [{ sortable: false, content: t(KEY.recruitment_change_priority) }] : []),
+    { sortable: false, content: t(KEY.recruitment_application_for_position) },
+    // Only include priority display if there are multiple applications
+    ...(activeApplications.length > 1 ? [{ sortable: false, content: t(KEY.recruitment_your_priority) }] : []),
+    { sortable: false, content: t(KEY.recruitment_interview_time) },
+    { sortable: false, content: t(KEY.recruitment_interview_location) },
+    { sortable: false, content: t(KEY.recruitment_withdraw_application) },
+  ];
+
+
+
 
   // TODO: sort based on priority
-  const tableRows = applications.filter(filerActiveApplications).map((application) => ({
+  const tableRows = activeApplications.map((application) => ({
     cells: [
       // Only include priority arrows if there are multiple applications
-      ...(applications.length > 1
+      ...(activeApplications.length > 1
         ? [
             {
               content: upDownArrow(application.id),
@@ -201,7 +207,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
         content: applicationLink(application),
       },
       // Only include priority number if there are multiple applications
-      ...(applications.length > 1
+      ...(activeApplications.length > 1
         ? [
             {
               content: application.applicant_priority,
@@ -222,7 +228,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
 
   return (
     <div>
-      {applications.length > 0 ? (
+      {activeApplications.length > 0 ? (
         <Table data={tableRows} columns={tableColumns} />
       ) : (
         <p>{t(KEY.recruitment_not_applied)}</p>
