@@ -56,14 +56,8 @@ export function AboutPage() {
         <h2 className={styles.header}>{t(KEY.venuepage_title)}</h2>
         <section className={styles.mapContainer}>
           <iframe
+            className={styles.map}
             src="https://use.mazemap.com/embed.html#v=1&campusid=107&zlevel=1&center=10.395303,63.42245&zoom=17.8&sharepoitype=poi&sharepoi=1000460543&utm_medium=iframe"
-            style={{
-              border: '0.1px black',
-              width: '100%',
-              height: '100%',
-              borderRadius: '3px',
-              marginTop: '1.5rem',
-            }}
             allow="geolocation"
             title="Samfundet Map"
           />
