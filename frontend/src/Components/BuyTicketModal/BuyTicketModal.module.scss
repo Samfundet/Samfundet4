@@ -14,10 +14,10 @@
 
 .samf_logo_black {
   width: 250px;
+  margin: auto;
   margin-left: 2.8rem;
   padding-top: 1rem;
   padding-bottom: 1.5rem;
-  margin: auto;
   @include theme-dark {
     display: none;
   }
@@ -82,7 +82,7 @@
 
 .select_label {
   padding-bottom: 0.5rem;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .price_label {
@@ -92,6 +92,7 @@
 .slect_item {
   float: right
 }
+
 .ticket_type {
   background-color: $grey-4;
   padding: 1rem;
@@ -119,7 +120,7 @@
 
 .ticket_type_description {
   padding: 1rem;
-  padding-top: 0rem;
+  padding-top: 0;
 }
 
 .radio_box {
