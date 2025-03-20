@@ -523,6 +523,8 @@ export const KEY = {
   error_forbidden_description: 'error_forbidden_description',
   error_server_error: 'error_server_error',
   error_server_error_description: 'error_server_error_description',
+  error_submitting_reservation: 'error_submitting_reservation',
+  error_invalid_reservation_data: 'error_invalid_reservation_data',
 } as const;
 
 // This will ensure that each value matches the key exactly.
