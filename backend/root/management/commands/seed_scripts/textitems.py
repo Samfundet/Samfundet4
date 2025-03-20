@@ -368,16 +368,6 @@ def seed():
             'text_nb': 'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
             'text_en': 'Samfundet consists of more than 20 gangs (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
         },
-        {
-            'key': 'ticketless_description',
-            'text_nb': 'Medlemskortet blir billetten din, og det er bare å trekke kortet i døren når du kommer til Samfundet. Merk: Du kan kun ha én billett på kortet per arrangement. Alle billettene vil bli tilsendt på epost.',
-            'text_en': 'If you choose ticketless, your membership card itself will be your ticket. You will then simply swipe your card when you enter Samfundet. Please note: You may only have one ticket on your card per event. All the tickets will be sent to your email.',
-        },
-        {
-            'key': 'member_ticket_description',
-            'text_nb': 'Billetten(e) blir sendt på epost, og må vises fram i døren når du kommer til Samfundet. Billettene kan vises på mobil eller tas med som utskrift.',
-            'text_en': 'If you choose digital ticket, your ticket(s) will be sent to your email. The tickets barcode will be scanned when you enter Samfundet, either from your phone or a printed out copy.',
-        },
     ]
 
     TextItem.objects.all().delete()

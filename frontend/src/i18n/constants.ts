@@ -256,6 +256,14 @@ export const KEY = {
   none: 'none',
   mix: 'mix',
 
+  // Purchase Ticket Info:
+  ticketless_description: 'ticketless_description',
+  ticketless_description_note: 'ticketless_description_note',
+  email_ticket_description: 'email_ticket_description',
+  stripe_info: 'stripe_info',
+  pay_info: 'pay_info',
+  sales_conditions: 'sales_conditions',
+
   // Venue Page:
   venuepage_title: 'venuepage_title',
 

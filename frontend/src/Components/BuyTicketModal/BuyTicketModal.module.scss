@@ -35,7 +35,6 @@
 }
 
 
-
 .container {
   padding: 2rem;
   padding-top: 0;
@@ -134,6 +133,11 @@
   @include theme-dark {
     color: $black;
   }
+}
+
+.link {
+  color: $red-samf;
+  text-decoration: none;
 }
 
 .total_price {

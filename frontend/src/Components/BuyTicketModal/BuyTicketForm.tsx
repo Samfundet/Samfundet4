@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { z } from "zod";
 import {
   Button,
@@ -13,6 +13,7 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  Link,
   RadioButton,
 } from "~/Components";
 import { validEmail } from "~/Forms/util";
@@ -221,13 +222,22 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
               </div>
             </div>
             <div className={styles.ticket_type_description}>
-              <p style={{display: ticketType === "membershipNumber" ? "inline" : "none"}}>
-                {useTextItem(TextItem.ticketless_description)}
-              </p>
-              <p style={{display: ticketType === "email" ? "inline" : "none"}}>
-                {useTextItem(TextItem.member_ticket_description)}
-              </p>
+              <div style={{display: ticketType === "membershipNumber" ? "inline" : "none"}}>
+                <p>{t(KEY.ticketless_description)}</p>
+                <Trans i18nKey={KEY.ticketless_description_note} components={{ strong: <strong /> }} />
+              </div>
+              <div style={{display: ticketType === "email" ? "inline" : "none"}}>
+                <p>{t(KEY.email_ticket_description)}</p>
+              </div>
             </div>
+          </div>
+
+          {/* Terms and Conditions */}
+          <div>
+            <a href="https://stripe.com/en-no/privacy" target="_blank" className={styles.link}>{t(KEY.stripe_info)}{" "}</a>
+            <p>{t(KEY.pay_info)}</p>
+            {/* TODO: Add the url when the page is made */}
+            <Link url="#" className={styles.terms_link}>{t(KEY.sales_conditions)}</Link>
           </div>
 
           {/* Total Price */}

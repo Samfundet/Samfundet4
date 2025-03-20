@@ -98,10 +98,6 @@ export const TextItem = {
   purchase_feedback_question_1: 'purchase_feedback_question_1',
   purchase_feedback_question_2: 'purchase_feedback_question_2',
 
-  //Purchase Ticket Information
-  ticketless_description: 'ticketless_description',
-  member_ticket_description: 'member_ticket_description',
-
   // Gangspage
   gangspage_text: 'gangspage_text',
 } as const;
