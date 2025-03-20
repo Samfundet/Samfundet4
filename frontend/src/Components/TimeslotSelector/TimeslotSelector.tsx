@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { TimeslotButton } from '~/Components';
+import { TimeslotButton, ToolTip } from '~/Components';
+import { getInterviewerAvailabilityOnDate, getRecruitmentAvailability } from '~/api';
+import type { RecruitmentApplicationDto } from '~/dto';
 import { useMouseDown } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { formatDateYMD, lowerCapitalize } from '~/utils';
@@ -17,6 +20,19 @@ type Props = {
   selectMultiple?: boolean;
   readOnly?: boolean;
   label?: string;
+  recruitmentId?: number;
+  application?: RecruitmentApplicationDto;
+};
+
+// Helper function to parse HH:MM string to minutes since midnight
+const parseTimeToMinutes = (timeStr: string): number => {
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  return hours * 60 + minutes;
+};
+
+// Helper function to check if two time ranges overlap
+const doTimeRangesOverlap = (startTime1: number, endTime1: number, startTime2: number, endTime2: number): boolean => {
+  return startTime1 < endTime2 && endTime1 > startTime2;
 };
 
 export function TimeslotSelector({
@@ -27,11 +43,100 @@ export function TimeslotSelector({
   disabledTimeslots,
   readOnly,
   label,
+  recruitmentId,
+  application,
   ...props
 }: Props) {
   const { t } = useTranslation();
 
   const [selectedTimeslots, setSelectedTimeslots] = useState<Record<string, string[]>>(props.selectedTimeslots || {});
+
+  const formattedDate = useMemo(() => (selectedDate ? formatDateYMD(selectedDate) : ''), [selectedDate]);
+
+  // Get interviewers from application data
+  const interviewers_objects = application?.recruitment_position.interviewers || [];
+  const interviewers = interviewers_objects.map((interviewer) => interviewer.id);
+
+  // Fetch occupied timeslots for interviewers on the selected date
+  const { data: occupiedTimeslots, isLoading } = useQuery({
+    queryKey: ['interviewerAvailability', recruitmentId, formattedDate, interviewers],
+    queryFn: async () => {
+      if (!recruitmentId || !formattedDate || !interviewers.length) {
+        return [];
+      }
+      const response = await getInterviewerAvailabilityOnDate(recruitmentId, formattedDate, interviewers);
+      return response.data;
+    },
+    enabled: !!(selectedDate && recruitmentId && interviewers.length > 0),
+  });
+
+  const { data: recruitmentTimeslots } = useQuery({
+    queryKey: ['recruitmentTimeslots', recruitmentId],
+    queryFn: async () => {
+      if (!recruitmentId) {
+        return null;
+      }
+      const response = await getRecruitmentAvailability(recruitmentId);
+      return response.data;
+    },
+    enabled: !!recruitmentId,
+  });
+
+  const timeslotInterval = recruitmentTimeslots?.interval || 30;
+
+  // Map of available interviewers for each timeslot
+  const timeslotAvailabilityMap = useMemo(() => {
+    if (!timeslots || !interviewers_objects || !selectedDate || !occupiedTimeslots) {
+      return new Map();
+    }
+
+    const availabilityMap = new Map();
+
+    // For each timeslot, determine which interviewers are available
+    for (const timeslot of timeslots) {
+      const timeslotMinutes = parseTimeToMinutes(timeslot);
+      const timeslotEndMinutes = timeslotMinutes + timeslotInterval;
+
+      // Find available interviewers for this timeslot by filtering out occupied interviewers
+      const availableInterviewers = interviewers_objects.filter((interviewer) => {
+        const isOccupied = occupiedTimeslots.some((slot) => {
+          if (slot.user !== interviewer.id) {
+            return false;
+          }
+          const occupiedTimeMinutes = parseTimeToMinutes(slot.time);
+          const occupiedEndMinutes = occupiedTimeMinutes + timeslotInterval;
+
+          // Check for overlap
+          return doTimeRangesOverlap(timeslotMinutes, timeslotEndMinutes, occupiedTimeMinutes, occupiedEndMinutes);
+        });
+
+        // Interviewer is available if not occupied
+        return !isOccupied;
+      });
+
+      availabilityMap.set(timeslot, availableInterviewers);
+    }
+
+    return availabilityMap;
+  }, [timeslots, interviewers_objects, selectedDate, occupiedTimeslots, timeslotInterval]);
+
+  // Format available interviewers for display in tooltip
+  const getAvailableInterviewersForTimeslot = useCallback(
+    (timeslot: string) => {
+      if (!selectedDate) return 'Select a date first';
+      if (isLoading) return 'Loading...';
+
+      const availableInterviewers = timeslotAvailabilityMap.get(timeslot);
+      if (!availableInterviewers) return 'No data available';
+
+      return availableInterviewers.length > 0
+        ? `${`${t(KEY.common_available)}: `}${availableInterviewers
+            .map((i: { first_name: string; last_name: string }) => `${i.first_name} ${i.last_name}`)
+            .join(', ')}`
+        : t(KEY.recruitment_no_interviewers_available);
+    },
+    [selectedDate, isLoading, timeslotAvailabilityMap, t],
+  );
 
   // Click & drag functionality
   const mouseDown = useMouseDown();
@@ -142,8 +247,9 @@ export function TimeslotSelector({
         {timeslots.map((timeslot) => {
           const selected = isTimeslotSelected(selectedDate, timeslot);
           const disabled = isTimeslotDisabled(selectedDate, timeslot);
+          const availableInterviewersForTimeslot = getAvailableInterviewersForTimeslot(timeslot);
 
-          return (
+          const button = (
             <TimeslotButton
               key={timeslot}
               active={selected}
@@ -166,6 +272,14 @@ export function TimeslotSelector({
             >
               {timeslot}
             </TimeslotButton>
+          );
+
+          return disabledTimeslots ? (
+            <ToolTip key={timeslot} value={availableInterviewersForTimeslot}>
+              {button}
+            </ToolTip>
+          ) : (
+            button
           );
         })}
       </div>
