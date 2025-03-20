@@ -55,7 +55,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
       membershipTickets: 0,
       membershipNumber: '',
       email: '',
-      ticketType: 'membershipNumber',
+      ticketType: 'email',
     },
   });
 
@@ -74,14 +74,6 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
   useEffect(() => {
     setTotalPrice(tickets * price + membershipTickets * price_member);
   }, [tickets, membershipTickets, price, price_member]);
-
-  useEffect(() => {
-    if (ticketType === 'email') {
-      form.setValue('email', '');
-    } else if (ticketType === 'membershipNumber') {
-      form.setValue('membershipNumber', '');
-    }
-  }, [ticketType, form]);
 
   return (
     <div className={styles.container}>
@@ -155,7 +147,10 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 <div className={styles.radio_box}>
                   <RadioButton
                     name="ticketType"
-                    onChange={() => form.setValue('ticketType', 'membershipNumber')}
+                    onChange={() => {
+                      form.setValue('ticketType', 'membershipNumber');
+                      form.setValue('email', '');
+                    }}
                     // defaultChecked={true}
                     checked={ticketType === 'membershipNumber'}
                   />{' '}
@@ -188,7 +183,10 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 <div className={styles.radio_box}>
                   <RadioButton
                     name="ticketType"
-                    onChange={() => form.setValue('ticketType', 'email')}
+                    onChange={() => {
+                      form.setValue('ticketType', 'email');
+                      form.setValue('membershipNumber', '');
+                    }}
                     checked={ticketType === 'email'}
                   />{' '}
                   <label className={styles.email_label}>{t(KEY.common_email)}</label>
