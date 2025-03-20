@@ -29,7 +29,7 @@
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 
-  &:hover {
+  &:not(:disabled):hover {
     background-color: $grey-4;
   }
 
@@ -47,9 +47,14 @@
       border-color: $grey-1;
       outline: 1px solid rgba(255, 255, 255, 0.6);
     }
-    &:hover {
+    &:not(:disabled):hover {
       background-color: color.scale($theme-dark-input-bg, $lightness: 8%);
     }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 

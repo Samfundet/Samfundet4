@@ -59,6 +59,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
         <div className={classNames(styles.popover, !open && styles.hidden)}>
           <MiniCalendar
             baseDate={value || new Date()}
+            initialSelectedDate={value}
             onChange={handleChange}
             minDate={minDate}
             maxDate={maxDate}
