@@ -186,7 +186,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
   }
 
 
-
+  // TODO: sort based on priority
   const tableRows = applications.filter(filerActiveApplications).map((application) => ({
     cells: [
       // Only include priority arrows if there are multiple applications
@@ -209,10 +209,10 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
           ]
         : []),
       {
-        content: niceDateTime(application.interview?.interview_time) ?? '-',
+        content: niceDateTime(application.interview?.interview_time) ?? t(KEY.common_not_set),
       },
       {
-        content: application.interview?.interview_location ?? '-',
+        content: application.interview?.interview_location ?? t(KEY.common_not_set),
       },
       {
         content: withdrawButton(application),
