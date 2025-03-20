@@ -1,6 +1,6 @@
-@import "/src/constants";
+@use '/src/constants' as *;
 
-@import "/src/mixins";
+@use '/src/mixins' as *;
 
 .chartContainer {
   @include flex-column-center;
@@ -12,7 +12,7 @@
   }
 }
 
-.legendWrapper{
+.legendWrapper {
   @include flex-column-center;
 }
 
@@ -25,11 +25,11 @@
   gap: 0.5rem;
   width: 100%;
   overflow: scroll;
-  -ms-overflow-style: none;  /* HIDES SCROLLBAR IE and Edge */
-  scrollbar-width: none;  /* HIDES SCROLLBAR Firefox */
+  -ms-overflow-style: none; /* HIDES SCROLLBAR IE and Edge */
+  scrollbar-width: none; /* HIDES SCROLLBAR Firefox */
   max-height: 250px;
 
-  @include theme-dark{
+  @include theme-dark {
     border: 1px solid $background-secondary;
   }
 
@@ -43,7 +43,7 @@
   display: none;
 }
 
-.labelWrapper{
+.labelWrapper {
   display: grid;
   grid-template-columns: auto auto;
   gap: 0.25rem;

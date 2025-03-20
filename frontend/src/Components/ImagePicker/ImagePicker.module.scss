@@ -1,12 +1,10 @@
+@use 'src/constants' as *;
 
-@import 'src/constants';
-
-@import 'src/mixins';
-
+@use 'src/mixins' as *;
 
 .container {
   @include flex-row-center;
-  gap: .5em;
+  gap: 0.5em;
 }
 
 .image_title {
@@ -19,7 +17,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: .5em;
+  gap: 0.5em;
 }
 
 .selected {
@@ -41,7 +39,7 @@
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
-  gap: .5em;
+  gap: 0.5em;
   margin: 0 auto;
 }
 
@@ -54,7 +52,7 @@
   background-size: cover;
   background-position: center;
   border: 3px solid transparent;
-  transition: .2s;
+  transition: 0.2s;
   transform: scale(0.9);
   cursor: pointer;
 

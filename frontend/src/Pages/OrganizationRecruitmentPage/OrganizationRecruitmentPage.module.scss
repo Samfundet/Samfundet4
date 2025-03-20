@@ -1,15 +1,14 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .recruitmentPage {
   @include flex-column;
-  padding: 2rem;
+  gap: 1rem;
 
   @include for-tablet-down {
     padding: 1rem 0.5rem;
   }
-  gap: 1rem;
 }
 
 .container {
