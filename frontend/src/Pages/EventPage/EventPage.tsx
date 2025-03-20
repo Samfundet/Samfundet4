@@ -55,8 +55,6 @@ export function EventPage() {
     <></>
   );
 
-  console.log('isPaid?:', isPaid);
-  console.log('Data:', event);
   return (
     <Page className={styles.container} loading={showSpinner}>
       {/* TODO splash should be its own component rather than homepage subcomponent */}

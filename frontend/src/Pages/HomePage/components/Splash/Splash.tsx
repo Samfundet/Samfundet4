@@ -45,6 +45,7 @@ export function Splash({ events, showInfo }: SplashProps) {
   ) : (
     <></>
   );
+
   const infoButton = events && (
     <Button
       link={reverse({
