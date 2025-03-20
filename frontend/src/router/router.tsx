@@ -1,4 +1,4 @@
-import { Outlet, Route, type UIMatch, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import { Outlet, Route, type UIMatch, createBrowserRouter, createRoutesFromElements } from 'react-router';
 import { Link, PermissionRoute, ProtectedRoute, RootErrorBoundary, SamfOutlet, SultenOutlet } from '~/Components';
 import {
   AboutPage,
@@ -55,6 +55,7 @@ import {
   RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
+  RecruitmentRejectionMailPage,
   RecruitmentSeparatePositionFormAdminPage,
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
@@ -340,29 +341,51 @@ export const router = createBrowserRouter(
               }
             />
           </Route>
+          {/* Lyche Menu */}
           <Route
-            path={ROUTES.frontend.admin_sulten_menu}
+            element={<Outlet />}
             handle={{
-              crumb: ({ pathname }: UIMatch) => (
-                <Link url={pathname}>
+              crumb: () => (
+                <Link url={ROUTES.frontend.admin_sulten_menu}>
                   {t(KEY.common_sulten)} {t(KEY.common_menu)}
                 </Link>
               ),
             }}
-            element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_MENU]} element={<SultenMenuAdminPage />} />}
-          />
-          <Route
-            path={ROUTES.frontend.admin_sulten_menuitem_create}
-            element={
-              <PermissionRoute required={[PERM.SAMFUNDET_ADD_MENUITEM]} element={<SultenMenuItemFormAdminPage />} />
-            }
-          />
-          <Route
-            path={ROUTES.frontend.admin_sulten_menuitem_edit}
-            element={
-              <PermissionRoute required={[PERM.SAMFUNDET_CHANGE_MENUITEM]} element={<SultenMenuItemFormAdminPage />} />
-            }
-          />
+          >
+            <Route
+              path={ROUTES.frontend.admin_sulten_menu}
+              element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_MENU]} element={<SultenMenuAdminPage />} />}
+            />
+            <Route
+              path={ROUTES.frontend.admin_sulten_menuitem_create}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => (
+                  <Link url={pathname}>
+                    {t(KEY.common_create)} {t(KEY.sulten_dishes)}
+                  </Link>
+                ),
+              }}
+              element={
+                <PermissionRoute required={[PERM.SAMFUNDET_ADD_MENUITEM]} element={<SultenMenuItemFormAdminPage />} />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_sulten_menuitem_edit}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => (
+                  <Link url={pathname}>
+                    {t(KEY.common_edit)} {t(KEY.sulten_dishes)}
+                  </Link>
+                ),
+              }}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_CHANGE_MENUITEM]}
+                  element={<SultenMenuItemFormAdminPage />}
+                />
+              }
+            />
+          </Route>
           {/* Recruitment */}
           <Route
             element={<Outlet />}
@@ -429,6 +452,20 @@ export const router = createBrowserRouter(
                 }
                 handle={{
                   crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link>,
+                }}
+              />
+              <Route
+                path={ROUTES.frontend.admin_recruitment_gang_overview_rejection_email}
+                element={
+                  <PermissionRoute
+                    required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                    element={<RecruitmentRejectionMailPage />}
+                  />
+                }
+                handle={{
+                  crumb: ({ pathname }: UIMatch) => (
+                    <Link url={pathname}>{lowerCapitalize(t(KEY.recruitment_rejection_email))}</Link>
+                  ),
                 }}
               />
               <Route

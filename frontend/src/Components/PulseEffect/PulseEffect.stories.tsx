@@ -1,34 +1,42 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { RadioButton } from '~/Components';
 import { AuthContextProvider } from '~/context/AuthContext';
 import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { PulseEffect } from './PulseEffect';
 
 // Local component config.
-export default {
+const meta: Meta<typeof PulseEffect> = {
   title: 'Components/PulseEffect',
   component: PulseEffect,
-} as ComponentMeta<typeof PulseEffect>;
-
-const Template: ComponentStory<typeof PulseEffect> = (args) => (
-  <AuthContextProvider>
-    <GlobalContextProvider>
-      <PulseEffect {...args} />
-    </GlobalContextProvider>
-  </AuthContextProvider>
-);
-
-export const ShortChild = Template.bind({});
-ShortChild.args = {
-  children: <span>Test</span>,
+  decorators: [
+    (Story) => (
+      <AuthContextProvider>
+        <GlobalContextProvider>
+          <Story />
+        </GlobalContextProvider>
+      </AuthContextProvider>
+    ),
+  ],
 };
 
-export const LongerChild = Template.bind({});
-LongerChild.args = {
-  children: <span>Some longer test example</span>,
+export default meta;
+
+type Story = StoryObj<typeof PulseEffect>;
+
+export const ShortChild: Story = {
+  args: {
+    children: <span>Test</span>,
+  },
 };
 
-export const WithRadioButton = Template.bind({});
-WithRadioButton.args = {
-  children: <RadioButton>Test</RadioButton>,
+export const LongerChild: Story = {
+  args: {
+    children: <span>Some longer test example</span>,
+  },
+};
+
+export const WithRadioButton: Story = {
+  args: {
+    children: <RadioButton>Test</RadioButton>,
+  },
 };

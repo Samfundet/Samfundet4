@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from 'react-router-dom';
+import type { LoaderFunctionArgs } from 'react-router';
 import { getGang, getRecruitment, getRecruitmentPosition, getRecruitmentSeparatePosition, getRole } from '~/api';
 import type { GangDto, RecruitmentDto, RecruitmentPositionDto, RecruitmentSeparatePositionDto, RoleDto } from '~/dto';
 

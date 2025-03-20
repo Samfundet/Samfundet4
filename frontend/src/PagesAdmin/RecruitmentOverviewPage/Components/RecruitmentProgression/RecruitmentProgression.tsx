@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Button, Link, ProgressBar, SamfundetLogoSpinner } from '~/Components';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';

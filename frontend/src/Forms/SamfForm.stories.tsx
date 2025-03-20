@@ -1,20 +1,18 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { AuthContextProvider } from '~/context/AuthContext';
-import { SamfForm, type SamfFormProps } from './SamfForm';
+import { SamfForm } from './SamfForm';
 import { SamfFormField } from './SamfFormField';
 
 // Local component config.
-export default {
+const meta: Meta<typeof SamfForm> = {
   title: 'Forms/SamfForm',
   component: SamfForm,
-} as ComponentMeta<typeof SamfForm>;
+};
 
-const Template: ComponentStory<typeof SamfForm> = (args) => (
-  <AuthContextProvider>
-    <SamfForm<BasicFormProps> {...args} />
-  </AuthContextProvider>
-);
+export default meta;
+
+type Story = StoryObj<typeof SamfForm>;
 
 function validateShrimp(values: BasicFormProps) {
   const str = values.advanced_field;
@@ -51,53 +49,59 @@ const initialData: BasicFormProps = {
   phonenumber: '',
 };
 
-export const Basic = Template.bind({});
-Basic.args = {
-  submitTextProp: 'Demo',
-  devMode: true,
-  onSubmit: (values: BasicFormProps) => {
-    alert(`Data that could be posted: ${JSON.stringify(values)}`);
+export const Basic: Story = {
+  args: {
+    submitTextProp: 'Demo',
+    devMode: true,
+    onSubmit: (values: BasicFormProps) => {
+      alert(`Data that could be posted: ${JSON.stringify(values)}`);
+    },
+    initialData,
+    validateOn: 'change',
+    validateOnInit: false,
+    children: (
+      <>
+        <div style={{ display: 'flex', gap: '.5em' }}>
+          <SamfFormField<string, BasicFormProps>
+            type={'text'}
+            field={'req_field'}
+            label="Tekst som er nødvendig"
+            required={true}
+          />
+          <SamfFormField<string, BasicFormProps>
+            type={'text'}
+            field={'advanced_field'}
+            label="Tekst med avansert krav"
+            validator={validateShrimp}
+          />
+        </div>
+        <div style={{ display: 'flex', gap: '.5em' }}>
+          <SamfFormField<number, BasicFormProps>
+            type={'number'}
+            field={'number_field'}
+            label="Tall-input med krav"
+            validator={validate69}
+          />
+          <SamfFormField<string, BasicFormProps>
+            type={'options'}
+            field={'option_field'}
+            label="Dropdown input"
+            options={options}
+          />
+        </div>
+        <SamfFormField<string, BasicFormProps>
+          type={'text_long'}
+          field={'large_field'}
+          label="Lang tekst input"
+          props={{ rows: 5 }}
+        />
+        <SamfFormField<string, BasicFormProps> type={'phonenumber'} field={'phonenumber'} label="Phonenumber" />
+      </>
+    ),
   },
-  initialData,
-  validateOn: 'change',
-  validateOnInit: false,
-  children: (
-    <>
-      <div style={{ display: 'flex', gap: '.5em' }}>
-        <SamfFormField<string, BasicFormProps>
-          type={'text'}
-          field={'req_field'}
-          label="Tekst som er nødvendig"
-          required={true}
-        />
-        <SamfFormField<string, BasicFormProps>
-          type={'text'}
-          field={'advanced_field'}
-          label="Tekst med avansert krav"
-          validator={validateShrimp}
-        />
-      </div>
-      <div style={{ display: 'flex', gap: '.5em' }}>
-        <SamfFormField<number, BasicFormProps>
-          type={'number'}
-          field={'number_field'}
-          label="Tall-input med krav"
-          validator={validate69}
-        />
-        <SamfFormField<string, BasicFormProps>
-          type={'options'}
-          field={'option_field'}
-          label="Dropdown input"
-          options={options}
-        />
-      </div>
-      <SamfFormField<string, BasicFormProps>
-        type={'text_long'}
-        field={'large_field'}
-        label="Lang tekst input"
-        props={{ rows: 5 }}
-      />
-      <SamfFormField<string, BasicFormProps> type={'phonenumber'} field={'phonenumber'} label="Phonenumber" />
-    </>
+  render: (args) => (
+    <AuthContextProvider>
+      <SamfForm<BasicFormProps> {...args} />
+    </AuthContextProvider>
   ),
-} as SamfFormProps<BasicFormProps>;
+} as Story;

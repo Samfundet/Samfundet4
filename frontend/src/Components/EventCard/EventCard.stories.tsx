@@ -1,10 +1,10 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { kitteh } from '~/assets';
 import { EventCard } from './EventCard';
 
 const now = new Date();
 
-export default {
+const meta: Meta<typeof EventCard> = {
   title: 'Components/EventCard',
   component: EventCard,
   args: {
@@ -23,21 +23,25 @@ export default {
       </div>
     ),
   ],
-} as ComponentMeta<typeof EventCard>;
+};
 
-const OneEvent: ComponentStory<typeof EventCard> = (args) => <EventCard {...args} />;
+export default meta;
 
-const ManyEvents: ComponentStory<typeof EventCard> = (args) => (
-  <>
-    {Array(8)
-      .fill(1)
-      .map((_, i) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
-        <EventCard key={i} {...args} />
-      ))}
-  </>
-);
+type Story = StoryObj<typeof EventCard>;
 
-export const Basic = OneEvent.bind({});
+export const Basic: Story = {
+  args: {},
+};
 
-export const MultipleEvents = ManyEvents.bind({});
+export const MultipleEvents: Story = {
+  render: (args) => (
+    <>
+      {Array(8)
+        .fill(1)
+        .map((_, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
+          <EventCard key={i} {...args} />
+        ))}
+    </>
+  ),
+};

@@ -14,6 +14,7 @@ import type {
   InformationPageDto,
   InterviewDto,
   InterviewRoomDto,
+  InterviewerAvailabilityDto,
   KeyValueDto,
   MenuDto,
   MenuItemDto,
@@ -32,6 +33,7 @@ import type {
   RecruitmentGangDto,
   RecruitmentGangStatDto,
   RecruitmentPositionDto,
+  RecruitmentPositionOrganizedApplicationsDto,
   RecruitmentPositionPostDto,
   RecruitmentPositionPutDto,
   RecruitmentSeparatePositionDto,
@@ -848,6 +850,20 @@ export async function getRecruitmentApplicationsForGang(
   return await axios.get(url, { withCredentials: true });
 }
 
+export async function getRecruitmentPositionOrganizedApplications(
+  positionId: string,
+): Promise<AxiosResponse<RecruitmentPositionOrganizedApplicationsDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_position_organized_applications,
+      urlParams: {
+        pk: positionId,
+      },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
 export async function getRecruitmentSharedInterviewGroups(
   recruitmentId: string,
 ): Promise<AxiosResponse<RecruitmentSharedInterviewGroupDto[]>> {
@@ -917,7 +933,7 @@ export async function updateRecruitmentApplicationStateForGang(
 export async function updateRecruitmentApplicationStateForPosition(
   applicationId: string,
   application: Partial<RecruitmentApplicationStateDto>,
-): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
+): Promise<AxiosResponse<RecruitmentPositionOrganizedApplicationsDto>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -1175,6 +1191,26 @@ export async function getRecruitmentGangStats(
       urlParams: {
         recruitmentId: recruitmentId,
         gangId: gangId,
+      },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function getInterviewerAvailabilityOnDate(
+  recruitmentId: number,
+  date: string,
+  interviewers: number[],
+): Promise<AxiosResponse<InterviewerAvailabilityDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__interviewer_availability_for_date,
+      urlParams: {
+        recruitmentId: recruitmentId,
+      },
+      queryParams: {
+        date: date,
+        interviewers: interviewers.join(','),
       },
     });
   return await axios.get(url, { withCredentials: true });

@@ -7,6 +7,8 @@ from rest_framework import routers
 
 from django.urls import path, include
 
+import samfundet.sulten_views.sulten_views
+
 from . import views
 
 # End: imports -----------------------------------------------------------------
@@ -25,12 +27,12 @@ router.register('user-preference', views.UserPreferenceView, 'user_preference')
 router.register('saksdokument', views.SaksdokumentView, 'saksdokument')
 router.register('profile', views.ProfileView, 'profile')
 router.register('permissions', views.PermissionView, 'permissions')
-router.register('menu', views.MenuView, 'menu')
-router.register('menu-items', views.MenuItemView, 'menu_items')
-router.register('food-preference', views.FoodPreferenceView, 'food_preference')
-router.register('food-category', views.FoodCategoryView, 'food_category')
-router.register('booking', views.BookingView, 'booking')
-router.register('table', views.TableView, 'table')
+router.register('menu', samfundet.sulten_views.sulten_views.MenuView, 'menu')
+router.register('menu-items', samfundet.sulten_views.sulten_views.MenuItemView, 'menu_items')
+router.register('food-preference', samfundet.sulten_views.sulten_views.FoodPreferenceView, 'food_preference')
+router.register('food-category', samfundet.sulten_views.sulten_views.FoodCategoryView, 'food_category')
+router.register('booking', samfundet.sulten_views.sulten_views.BookingView, 'booking')
+router.register('table', samfundet.sulten_views.sulten_views.TableView, 'table')
 router.register('textitem', views.TextItemView, 'text_item')
 router.register('interview-rooms', views.InterviewRoomView, 'interview_rooms')
 router.register('infobox', views.InfoboxView, 'infobox')
@@ -56,7 +58,7 @@ router.register(
 )
 
 ######## Lyche #########
-router.register('create-reservation', views.ReservationCreateView, 'create_reservation')
+router.register('create-reservation', samfundet.sulten_views.sulten_views.ReservationCreateView, 'create_reservation')
 
 
 app_name = 'samfundet'
@@ -84,7 +86,7 @@ urlpatterns = [
     path('webhook/', views.WebhookView.as_view(), name='webhook'),
     path('gangtypes/<int:organization>/', views.GangTypeOrganizationView.as_view(), name='gangsorganized'),
     ########## Lyche ##########
-    path('check-reservation/', views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
+    path('check-reservation/', samfundet.sulten_views.sulten_views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
     ########## Recruitment ##########
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
@@ -114,6 +116,11 @@ urlpatterns = [
         'recruitment-application-update-state-gang/<slug:pk>/',
         views.RecruitmentApplicationForGangUpdateStateView.as_view(),
         name='recruitment_application_update_state_gang',
+    ),
+    path(
+        'recruitment-position-organized-applications/<int:pk>/',
+        views.RecruitmentPositionOrganizedApplicationsView.as_view(),
+        name='recruitment_position_organized_applications',
     ),
     path(
         'recruitment-application-update-state-position/<slug:pk>/',
