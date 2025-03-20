@@ -500,6 +500,9 @@ export type RecruitmentPositionDto = {
   total_applicants?: number;
   processed_applicants?: number;
   accepted_applicants?: number;
+
+  allow_image_attachment?: boolean;
+  allow_video_url?: boolean;
 };
 
 export type RecruitmentPositionForApplicantDto = {
@@ -524,6 +527,7 @@ export type RecruitmentPositionForApplicantDto = {
 
   gang: GangDto;
   recruitment: string;
+
 };
 
 export type PositionsByTagResponse = {
@@ -580,6 +584,8 @@ export type RecruitmentApplicationDto = {
   created_at: string;
   withdrawn: boolean;
   application_count?: number;
+  video_url?: string;
+  image?: File;
 };
 
 export type RecruitmentApplicationRecruiterDto = {
