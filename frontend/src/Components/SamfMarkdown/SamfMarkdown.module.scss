@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 @use 'src/constants' as *;
 
 $default-spacing: 0.25em;
@@ -149,9 +151,9 @@ $medium-spacing: 1em;
     border-left: 1px solid $grey-1;
     background-color: $theme-dark-codeblock-bg;
     & > blockquote {
-      background-color: darken($theme-dark-codeblock-bg, 5%);
+      background-color: color.adjust($theme-dark, $lightness: -5%);
       & > blockquote {
-        background-color: darken($theme-dark-codeblock-bg, 10%);
+        background-color: color.adjust($theme-dark, $lightness: -10%);
       }
     }
   }
