@@ -13,6 +13,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  InputFile,
   Link,
   Modal,
   OccupiedForm,
@@ -41,10 +42,12 @@ import styles from './RecruitmentApplicationFormPage.module.scss';
 
 type FormProps = {
   application_text: string;
+  video_url?: string;
 };
 
 const recruitmentApplicationSchema = z.object({
   application_text: z.string(),
+  video_url: z.string(),
 });
 
 type RecruitmentApplicationFormType = z.infer<typeof recruitmentApplicationSchema>;
@@ -60,6 +63,7 @@ export function RecruitmentApplicationFormPage() {
   const [similarPositions, setSimilarPositions] = useState<PositionsByTagResponse>();
 
   const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
+  const [imageAttachment, setImageAttachment] = useState<File>();
   const [openOccupiedForm, setOpenOccupiedForm] = useState(false);
   const [formData, setFormData] = useState<FormProps>();
   const [recruitmentId, setRecruitmentId] = useState(0);
@@ -79,6 +83,10 @@ export function RecruitmentApplicationFormPage() {
       form.setValue('application_text', recruitmentApplication.application_text);
     }
   }, [recruitmentApplication, form]);
+
+  useEffect(() => {
+    if (imageAttachment) console.log(imageAttachment);
+  }, [imageAttachment]);
 
   useEffect(() => {
     Promise.allSettled([
@@ -280,7 +288,6 @@ export function RecruitmentApplicationFormPage() {
             </h2>
             <p className={styles.text}>{dbT(recruitmentPosition, 'long_description')}</p>
           </div>
-
           {!isMobile && (
             <div className={styles.other_positions}>
               {similarPositionsBtns}
@@ -321,15 +328,39 @@ export function RecruitmentApplicationFormPage() {
                     );
                   }}
                 />
-                <div className={styles.form_buttons}>
-                  <Button type="submit" theme="green" display="basic">
-                    {submitText}
-                  </Button>
-                  {!recruitmentApplication?.withdrawn && recruitmentApplication && (
-                    <Button type="button" theme="samf" display="basic" onClick={() => withdrawApplication()}>
-                      {t(KEY.recruitment_withdraw_application)}
-                    </Button>
+                {!recruitmentPosition?.allow_video_url && (
+                  <FormField
+                    control={form.control}
+                    name="video_url"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormControl>
+                            <Textarea {...field}
+                              value={field.value}
+                              className={styles.video_url_textarea}
+                              placeholder='link til video...'
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )
+                    }}
+                  />
+                )}
+                <div className={styles.button_container}>
+                  {!recruitmentPosition?.allow_image_attachment && (
+                    <InputFile fileType="image" onSelected={(img) => { setImageAttachment(img) }}></InputFile>
                   )}
+                  <div className={styles.form_buttons}>
+                    <Button type="submit" theme="green" display="basic">
+                      {submitText}
+                    </Button>
+                    {!recruitmentApplication?.withdrawn && recruitmentApplication && (
+                      <Button type="button" theme="samf" display="basic" onClick={() => withdrawApplication()}>
+                        {t(KEY.recruitment_withdraw_application)}
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </form>
             </Form>
