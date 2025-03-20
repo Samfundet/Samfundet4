@@ -1,8 +1,7 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
 .container {
   display: flex;
   flex-direction: row;
-  gap: .2em;
+  gap: 0.2em;
 }
-
