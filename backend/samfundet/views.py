@@ -867,6 +867,21 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['get'])
+    def withdrawn_applications(self, request: Request, **kwargs: Any) -> Response:
+        """Returns a list of all the applications for a user for a specified recruitment"""
+        recruitment_id = request.query_params.get('recruitment')
+
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user, withdrawn=True)
+
+        serializer = self.get_serializer(applications, many=True)
+        return Response(serializer.data)
+
 
 class RecruitmentApplicationInterviewNotesView(APIView):
     permission_classes = [IsAuthenticated]
@@ -905,29 +920,6 @@ class RecruitmentApplicationWithdrawRecruiterView(APIView):
         application.save()
         serializer = RecruitmentApplicationForApplicantSerializer(application)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class RecruitmentWithdrawnApplicationsForApplicant(ReadOnlyModelViewSet):
-    permission_classes = [IsAuthenticated]
-    serializer_class = RecruitmentApplicationForApplicantSerializer
-
-    def list(self, request: Request) -> Response:
-        """Returns a list of all the applications for a user for a specified recruitment"""
-        recruitment_id = request.query_params.get('recruitment')
-
-        if not recruitment_id:
-            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
-
-        applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user, withdrawn=True)
-
-        serializer = self.get_serializer(applications, many=True)
-        return Response(serializer.data)
-
-    def retrive(self) -> Response:
-        # make detail not allowed for now
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class RecruitmentApplicationApplicantPriorityView(APIView):

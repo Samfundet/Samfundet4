@@ -1052,7 +1052,7 @@ export async function getWithdrawnRecruitmentApplicationsApplicant(
   const url =
     BACKEND_DOMAIN +
     reverse({
-      pattern: ROUTES.backend.samfundet__recruitment_withdrawn_applications_for_applicant_list,
+      pattern: ROUTES.backend.samfundet__recruitment_applications_for_applicant_withdrawn_applications,
       queryParams: { recruitment: recruitmentId },
     });
   const response = await axios.get(url, { withCredentials: true });
