@@ -79,6 +79,7 @@ export function RecruitmentAllApplicationsAdminPage() {
     { content: t(KEY.recruitment_interview_time), sortable: false },
     { content: t(KEY.recruitment_recruiter_priority), sortable: false },
     { content: t(KEY.recruitment_recruiter_status), sortable: false },
+    { content: t(KEY.recruitment_recruiter_guide), sortable: false },
     { content: t(KEY.common_comment), sortable: false },
   ];
 
@@ -138,6 +139,10 @@ export function RecruitmentAllApplicationsAdminPage() {
               ) : (
                 'N/A'
               ),
+          },
+          {
+            value: app.applicant_state,
+            content: app.applicant_state,
           },
           {
             value: 'form',
