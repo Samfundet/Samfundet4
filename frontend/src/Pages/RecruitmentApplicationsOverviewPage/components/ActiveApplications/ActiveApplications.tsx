@@ -8,7 +8,7 @@ import type { RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { niceDateTime } from '~/utils';
 import type { ApplicantApplicationManagementQK } from '../../RecruitmentApplicationsOverviewPage';
-import { ActiveApplicationLink } from './ActiveApplicationLink/ActiveApplicationLink';
+import { ActiveApplicationLink } from './ActiveApplicationLink';
 import { ControlPriorityButton, type PriorityChange } from './ControlPriorityButton';
 
 type ActiveApplicationsProps = {
