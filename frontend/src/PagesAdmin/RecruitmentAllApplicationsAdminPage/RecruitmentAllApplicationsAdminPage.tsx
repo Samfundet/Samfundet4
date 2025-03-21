@@ -69,8 +69,8 @@ export function RecruitmentAllApplicationsAdminPage() {
     enabled: Boolean(recruitmentId),
   });
 
-  // Getting the applicants data from the API
-  const { data: apiResponse, isLoading: isLoadingApplications } = useQuery({
+  // Getting the applicants data
+  const { data: applications, isLoading: isLoadingApplications } = useQuery({
     queryKey: applicationKeys.all,
     queryFn: () => {
       if (!recruitmentId) {
@@ -81,18 +81,18 @@ export function RecruitmentAllApplicationsAdminPage() {
     enabled: Boolean(recruitmentId),
   });
 
-  // Extract applicant data from API response and build gang mapping
+  // Extract applicant data and build gang mapping
   useEffect(() => {
-    if (apiResponse?.data?.data && Array.isArray(apiResponse.data.data)) {
-      const applicantData = apiResponse.data.data;
+    if (applications?.data?.data && Array.isArray(applications.data.data)) {
+      const applicantData = applications.data.data;
       setParsedApplicantData(applicantData);
 
       // Build gang mapping from the applications
       const gangs: GangMapping = {};
 
-      applicantData.forEach((applicant) => {
+      for (const applicant of applicantData) {
         if (applicant.applications) {
-          applicant.applications.forEach((app) => {
+          for (const app of applicant.applications) {
             // Extract the gang object from the application
             const gang = app.recruitment_position?.gang;
 
@@ -109,13 +109,13 @@ export function RecruitmentAllApplicationsAdminPage() {
                 };
               }
             }
-          });
+          }
         }
-      });
+      }
 
       setGangMapping(gangs);
     }
-  }, [apiResponse]);
+  }, [applications]);
 
   // Table columns definition
   const tableColumns = [
