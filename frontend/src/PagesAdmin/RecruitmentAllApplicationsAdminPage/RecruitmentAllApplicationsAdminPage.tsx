@@ -13,6 +13,7 @@ import { ROUTES } from '~/routes';
 import { RecruitmentPriorityChoicesMapping, RecruitmentStatusChoicesMapping } from '~/types';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { AllApplicantsActionbar, AllApplicationsExpandableHeader, type FilterType } from './components';
+import { CommentForm } from './components/CommentForm';
 
 // Interface for the grouped data received from the backend
 interface GroupedDataItem extends UserDto {
@@ -182,6 +183,10 @@ export function RecruitmentAllApplicationsAdminPage() {
             ) : (
               'N/A'
             ),
+          },
+          {
+            value: 'form',
+            content: <CommentForm initialData={''} applicationId={''} />,
           },
         ],
       };
