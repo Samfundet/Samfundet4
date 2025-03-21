@@ -16,10 +16,18 @@ export type PriorityChange = {
 type ControlPriorityButtonsProps = {
   id: string;
   recruitmentId?: string;
+  isFirstItem?: boolean;
+  isLastItem?: boolean;
   onPriorityChange?: (changes: PriorityChange[]) => void;
 };
 
-export function ControlPriorityButtons({ id, recruitmentId, onPriorityChange }: ControlPriorityButtonsProps) {
+export function ControlPriorityButtons({
+  id,
+  recruitmentId,
+  isFirstItem = false,
+  isLastItem = false,
+  onPriorityChange,
+}: ControlPriorityButtonsProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
@@ -60,20 +68,24 @@ export function ControlPriorityButtons({ id, recruitmentId, onPriorityChange }: 
 
   return (
     <div className={styles.priorityControllBtnWrapper}>
-      <Button display="pill" theme="outlined" onClick={() => handleChangePriority(id, 'up')}>
-        <Icon
-          icon="material-symbols:keyboard-arrow-up-rounded"
-          className={styles.priorityControllArrow}
-          width={'1.5rem'}
-        />
-      </Button>
-      <Button display="pill" theme="outlined" onClick={() => handleChangePriority(id, 'down')}>
-        <Icon
-          icon="material-symbols:keyboard-arrow-down-rounded"
-          className={styles.priorityControllArrow}
-          width={'1.5rem'}
-        />
-      </Button>
+      {!isFirstItem && (
+        <Button display="pill" theme="outlined" onClick={() => handleChangePriority(id, 'up')}>
+          <Icon
+            icon="material-symbols:keyboard-arrow-up-rounded"
+            className={styles.priorityControllArrow}
+            width={'1.5rem'}
+          />
+        </Button>
+      )}
+      {!isLastItem && (
+        <Button display="pill" theme="outlined" onClick={() => handleChangePriority(id, 'down')}>
+          <Icon
+            icon="material-symbols:keyboard-arrow-down-rounded"
+            className={styles.priorityControllArrow}
+            width={'1.5rem'}
+          />
+        </Button>
+      )}
     </div>
   );
 }

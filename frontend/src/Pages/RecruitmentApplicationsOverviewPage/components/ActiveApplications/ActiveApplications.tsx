@@ -89,7 +89,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
     { sortable: false, content: t(KEY.recruitment_withdraw_application) },
   ];
 
-  const tableRows = sortedActiveApplications.map((application) => ({
+  const tableRows = sortedActiveApplications.map((application, index) => ({
     cells: [
       // Only include priority arrows if there are multiple applications
       ...(sortedActiveApplications.length > 1
@@ -99,6 +99,8 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
                 <ControlPriorityButtons
                   id={application.id}
                   recruitmentId={recruitmentId}
+                  isFirstItem={index === 0}
+                  isLastItem={index === sortedActiveApplications.length - 1}
                   onPriorityChange={setRecentChanges}
                 />
               ),
