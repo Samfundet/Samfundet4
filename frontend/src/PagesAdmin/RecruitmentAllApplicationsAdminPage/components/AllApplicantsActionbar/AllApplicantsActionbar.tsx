@@ -18,7 +18,7 @@ export function AllApplicantsActionbar({ onFilterChange, onSearchChange }: AllAp
   const filters: Array<{ type: FilterType; label: string }> = [
     { type: 'conflicts', label: t(KEY.recruitment_all_applicants_filter_conflicts) },
     { type: 'no_conflicts', label: t(KEY.recruitment_all_applicants_filter_no_conflicts) },
-    { type: 'specific', label: t(KEY.recruitment_all_applicants_filter_specific) }
+    { type: 'specific', label: t(KEY.recruitment_all_applicants_filter_specific) },
   ];
 
   const handleFilterClick = (filterType: FilterType) => {
@@ -46,16 +46,6 @@ export function AllApplicantsActionbar({ onFilterChange, onSearchChange }: AllAp
             {label}
           </Button>
         ))}
-      </div>
-      <div>
-      <Button
-            theme="blue"
-            display="pill"
-            className={styles.filter_button}
-            onClick={() => alert("Implement functionality")}
-          >
-            Tillat å ringe alle uten konflikt
-          </Button>
       </div>
     </div>
   );
