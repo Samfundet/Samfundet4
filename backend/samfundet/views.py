@@ -86,8 +86,8 @@ from .serializers import (
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     UserGangSectionRoleSerializer,
+    UserWithApplicationsSerializer,
     RecruitmentStatisticsSerializer,
-    UserForRecruitmentGroupedSerializer,
     RecruitmentSeparatePositionSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
@@ -645,7 +645,7 @@ class RecruitmentApplicationView(ModelViewSet):
 
 class RecruitmentAllApplicationsPerRecruitmentView(ListAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = UserForRecruitmentGroupedSerializer
+    serializer_class = UserWithApplicationsSerializer
 
     def get_recruitment_id(self) -> dict[str, Any]:
         """Get recruitment ID from query params."""
@@ -664,40 +664,16 @@ class RecruitmentAllApplicationsPerRecruitmentView(ListAPIView):
         return User.objects.filter(applications__recruitment__id=recruitment_id).distinct().select_related('campus')
 
     def list(self, request: Request, *args, **kwargs) -> Response:
-        """Override list method to structure response as expected by frontend."""
+        """Return list of applicants without data wrapping."""
         queryset = self.filter_queryset(self.get_queryset())
 
-        # Ensure we're dealing with a non-empty queryset
+        # If queryset is empty, return an empty list
         if not queryset.exists():
-            return Response({'data': []})
+            return Response([])
 
         serializer = self.get_serializer(queryset, many=True)
 
-        # When using many=True, serializer.data should always be a list
-        serialized_data = serializer.data
-        if not isinstance(serialized_data, list):
-            serialized_data = [serialized_data]
-
-        # Return data in the format expected by the frontend
-        return Response({'data': serialized_data})
-
-
-# TODO:
-# @action(detail=True, methods=['put'])
-# def allow_to_contact(self):
-#     pass
-
-# @action(detail=True, methods=['put'])
-# def revoke_allow_to_contact(self):
-#    pass
-
-# @action(detail=False, methods=['get'])
-# def no_conflict_applicants(self):
-#    pass
-
-# @action(detail=False, methods=['get'])
-# def conflict_applicants(self):
-#    pass
+        return Response(serializer.data)
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
