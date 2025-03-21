@@ -1,0 +1,36 @@
+.priorityChangeIndicator {
+    position: absolute;
+    top: -1rem;
+    right: -2.25rem;
+    font-size: 3rem;
+    opacity: 0;
+    animation: fadeInOut 2s ease;
+  }
+
+.positionLinkWrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.positionName {
+    display: inline-block;
+}
+
+@keyframes fadeInOut {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    15% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    85% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+}

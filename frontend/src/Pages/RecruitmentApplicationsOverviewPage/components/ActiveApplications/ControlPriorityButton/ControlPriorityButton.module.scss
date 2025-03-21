@@ -1,3 +1,11 @@
+.priorityControllBtnWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  gap: 1rem;
+}
+
 .priorityControllArrow {
     cursor: pointer;
   

@@ -1,19 +1,15 @@
-import { Icon } from '@iconify/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Button, Link, Table } from '~/Components';
+import { Button, Table } from '~/Components';
 import { getRecruitmentApplicationsForApplicant, withdrawRecruitmentApplicationApplicant } from '~/api';
 import type { RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { reverse } from '~/named-urls';
-import { ROUTES } from '~/routes';
-import { COLORS } from '~/types';
-import { dbT, niceDateTime } from '~/utils';
+import { niceDateTime } from '~/utils';
 import type { ApplicantApplicationManagementQK } from '../../RecruitmentApplicationsOverviewPage';
-import { ControlPriorityButton, type PriorityChange } from '../ControlPriorityButton';
-import styles from './ActiveApplications.module.scss';
+import { ActiveApplicationLink } from './ActiveApplicationLink/ActiveApplicationLink';
+import { ControlPriorityButton, type PriorityChange } from './ControlPriorityButton';
 
 type ActiveApplicationsProps = {
   recruitmentId?: string;
@@ -58,41 +54,6 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
       toast.error(t(KEY.common_something_went_wrong));
     },
   });
-
-  const applicationLink = (application: RecruitmentApplicationDto) => {
-    const change = recentChanges.find((change) => change.id === application.id);
-
-    return (
-      <div className={styles.positionLinkWrapper}>
-        {change &&
-          (change.direction === 'up' ? (
-            <Icon
-              className={styles.priorityChangeIndicator}
-              icon={'material-symbols:arrow-drop-up-rounded'}
-              color={COLORS.green_light}
-            />
-          ) : (
-            <Icon
-              className={styles.priorityChangeIndicator}
-              icon={'material-symbols:arrow-drop-down-rounded'}
-              color={COLORS.red_light}
-            />
-          ))}
-        <Link
-          url={reverse({
-            pattern: ROUTES.frontend.recruitment_application,
-            urlParams: {
-              recruitmentId: application.recruitment,
-              positionId: application.recruitment_position.id,
-            },
-          })}
-          className={styles.positionName}
-        >
-          {dbT(application.recruitment_position, 'name')}
-        </Link>
-      </div>
-    );
-  };
 
   const withdrawButton = (application: RecruitmentApplicationDto) => {
     return (
@@ -145,7 +106,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
           ]
         : []),
       {
-        content: applicationLink(application),
+        content: <ActiveApplicationLink application={application} recentChanges={recentChanges} />,
       },
       // Only include priority number if there are multiple applications
       ...(sortedActiveApplications.length > 1
