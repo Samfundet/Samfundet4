@@ -5,7 +5,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { COLORS } from '~/types';
 import { dbT } from '~/utils';
-import type { PriorityChange } from '../ControlPriorityButton';
+import type { PriorityChange } from '../ControlPriorityButtons';
 import styles from './ActiveApplicationLink.module.scss';
 
 type ActiveApplicationLinkProps = {

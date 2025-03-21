@@ -9,7 +9,7 @@ import { KEY } from '~/i18n/constants';
 import { niceDateTime } from '~/utils';
 import type { ApplicantApplicationManagementQK } from '../../RecruitmentApplicationsOverviewPage';
 import { ActiveApplicationLink } from './ActiveApplicationLink';
-import { ControlPriorityButton, type PriorityChange } from './ControlPriorityButton';
+import { ControlPriorityButtons, type PriorityChange } from './ControlPriorityButtons';
 
 type ActiveApplicationsProps = {
   recruitmentId?: string;
@@ -96,7 +96,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
         ? [
             {
               content: (
-                <ControlPriorityButton
+                <ControlPriorityButtons
                   id={application.id}
                   recruitmentId={recruitmentId}
                   onPriorityChange={setRecentChanges}

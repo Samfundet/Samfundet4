@@ -6,20 +6,20 @@ import { Button } from '~/Components';
 import { putRecruitmentPriorityForUser } from '~/api';
 import type { RecruitmentApplicationDto, UserPriorityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import styles from './ControlPriorityButton.module.scss';
+import styles from './ControlPriorityButtons.module.scss';
 
 export type PriorityChange = {
   id: string;
   direction: 'up' | 'down';
 };
 
-type ControlPriorityButtonProps = {
+type ControlPriorityButtonsProps = {
   id: string;
   recruitmentId?: string;
   onPriorityChange?: (changes: PriorityChange[]) => void;
 };
 
-export function ControlPriorityButton({ id, recruitmentId, onPriorityChange }: ControlPriorityButtonProps) {
+export function ControlPriorityButtons({ id, recruitmentId, onPriorityChange }: ControlPriorityButtonsProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
