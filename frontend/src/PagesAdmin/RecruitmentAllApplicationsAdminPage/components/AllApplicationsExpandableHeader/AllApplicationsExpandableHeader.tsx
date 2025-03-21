@@ -39,7 +39,10 @@ export function AllApplicationsExpandableHeader({
         <div className={styles.header_label_item}>{user.email}</div>
         <div className={styles.header_label_item}>{user.phone_number || 'N/A'}</div>
       </div>
-      {recruitment?.organization.name !== 'Samfundet' && setInterviewsButton}
+      {
+        //TODO: implement actuall permissions / state-control for this
+        recruitment?.organization.name !== 'Samfundet' && setInterviewsButton
+      }
     </div>
   );
 
