@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router';
-import { toast } from 'react-toastify';
-import { Button, Link, Page } from '~/Components';
+import { useParams } from 'react-router';
+import { Button, Page } from '~/Components';
 import { OccupiedFormModal } from '~/Components/OccupiedForm';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
