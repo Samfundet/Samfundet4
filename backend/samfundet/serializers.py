@@ -1216,42 +1216,64 @@ class PurchaseFeedbackSerializer(serializers.ModelSerializer):
         return purchase_feedback
 
 
-class UserApplicationsListSerializer(serializers.ListSerializer):
-    """List serializer that returns users"""
-
-    # TODO: remove fields not needed
-
-    def to_representation(self, users):
-        """Return users with their applications."""
-        # Get the recruitment context that's passed from the view
-        recruitment = self.context.get('recruitment')
-        if not recruitment:
-            raise serializers.ValidationError('Recruitment context is required')
-
-        # First, build data about each user and their applications
-        user_data = []
-        for user in users:
-            # Get the applications for this user for the specific recruitment
-            applications = RecruitmentApplication.objects.filter(user=user, recruitment=recruitment).select_related('recruitment_position', 'interview')
-
-            # Skip users with no applications
-            if not applications.exists():
-                continue
-
-            # Include user info and applications
-            user_data.append({'user': user, 'applications': applications})
-
-        # Use the child serializer (UserForRecruitmentGroupedSerializer) to generate the final output
-        return [self.child.to_representation(user_data['user'], applications=user_data['applications']) for user_data in user_data]
+class LimitedGangSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gang
+        fields = [
+            'id',
+            'name_en',
+            'name_nb',
+            'abbreviation',
+        ]
 
 
-class UserForRecruitmentGroupedSerializer(UserForRecruitmentSerializer):
-    """Extends UserForRecruitmentSerializer without custom sorting."""
+class RecruitmentPositionLimitedSerializer(serializers.ModelSerializer):
+    gang = LimitedGangSerializer(read_only=True)
 
-    # TODO: remove fields not needed
-    class Meta(UserForRecruitmentSerializer.Meta):
+    class Meta:
+        model = RecruitmentPosition
+        fields = [
+            'id',
+            'name_nb',
+            'name_en',
+            'gang',
+        ]
+
+
+class RecruitmentApplicationForRecruitmentResponsible(CustomBaseSerializer):
+    recruitment_position = RecruitmentPositionLimitedSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentApplication
+        fields = [
+            'id',
+            'recruitment_position',
+            'applicant_priority',
+            'recruiter_priority',
+            'recruiter_status',
+            'applicant_state',
+            'interview',
+            'created_at',
+            'recruitment',
+        ]
+        read_only_fields = [
+            'id',
+            'recruitment_position',
+            'applicant_priority',
+            'recruiter_priority',
+            'recruiter_status',
+            'applicant_state',
+            'interview',
+            'created_at',
+            'recruitment',
+        ]
+
+
+class UserWithApplicationsSerializer(serializers.ModelSerializer):
+    """Serializer that returns users with their grouped applications."""
+
+    class Meta:
         model = User
-        list_serializer_class = UserApplicationsListSerializer
         fields = [
             'id',
             'first_name',
@@ -1260,25 +1282,24 @@ class UserForRecruitmentGroupedSerializer(UserForRecruitmentSerializer):
             'email',
             'phone_number',
             'applications',
-            'campus',
         ]
 
-    def to_representation(self, instance, applications=None):
-        """
-        Override to_representation to accept pre-fetched applications
-        from the list serializer.
-        """
-        # Get basic user data using the parent serializer's fields
-        data = super(UserForRecruitmentSerializer, self).to_representation(instance)
+    def to_representation(self, instance):
+        """Return user with their applications for a specific recruitment."""
+        # Get basic user data
+        data = super().to_representation(instance)
 
-        # Add campus data
-        data['campus'] = CampusSerializer(instance.campus).data if instance.campus else None
+        # Get the recruitment context from the view
+        recruitment = self.context.get('recruitment')
+        if not recruitment:
+            raise serializers.ValidationError('Recruitment context is required')
 
-        # If applications were passed in from the list serializer, use those
-        if applications is not None:
-            data['applications'] = RecruitmentApplicationForApplicantSerializer(applications, many=True).data
-        else:
-            # Otherwise use the parent's method to get applications
-            data['applications'] = self.get_applications(instance)
+        # Get applications for this user for the specific recruitment
+        applications = RecruitmentApplication.objects.filter(user=instance, recruitment=recruitment, withdrawn=False).select_related(
+            'recruitment_position', 'interview'
+        )
+
+        # Add applications data
+        data['applications'] = RecruitmentApplicationForRecruitmentResponsible(applications, many=True).data
 
         return data
