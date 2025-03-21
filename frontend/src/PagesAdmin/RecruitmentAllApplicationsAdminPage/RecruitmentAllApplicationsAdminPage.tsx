@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Button, Link, Table, Text } from '~/Components';
+import { Button, Link, SamfundetLogoSpinner, Table, Text } from '~/Components';
 import { getAllRecruitmentApplications, getRecruitment } from '~/api';
 import type { ApplicationForAllApplications, RecruitmentApplicantApplicationsDto } from '~/dto';
 import { useTitle } from '~/hooks';
@@ -171,11 +171,11 @@ export function RecruitmentAllApplicationsAdminPage() {
   // Render applicant list
   const renderApplicantList = () => {
     if (isLoading) {
-      return <div>Loading applicants...</div>;
+      return <SamfundetLogoSpinner />;
     }
 
     if (!recruitment) {
-      return <div>Recruitment data not available</div>;
+      return <p>{t(KEY.common_something_went_wrong)}</p>;
     }
 
     // Use our state variable that was set from the API response
