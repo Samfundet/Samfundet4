@@ -10,7 +10,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { applicationKeys, recruitmentKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
-import { RecruitmentPriorityChoicesMapping, RecruitmentStatusChoicesMapping } from '~/types';
+import { RecruitmentPriorityChoicesMapping, RecruitmentStatusChoicesMapping, getApplicantStateColor } from '~/types';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { AllApplicantsActionbar, AllApplicationsExpandableHeader, type FilterType } from './components';
 import { CommentForm } from './components/CommentForm';
@@ -142,7 +142,8 @@ export function RecruitmentAllApplicationsAdminPage() {
           },
           {
             value: app.applicant_state,
-            content: app.applicant_state,
+            content:
+              <span style={{ backgroundColor: getApplicantStateColor(app.applicant_state) }}>FØRING</span> ?? 'N/A',
           },
           {
             value: 'form',
