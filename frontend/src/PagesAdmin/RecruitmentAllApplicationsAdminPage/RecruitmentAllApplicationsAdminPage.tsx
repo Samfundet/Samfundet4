@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Button, Link, Table, ToggleSwitch } from '~/Components';
+import { Button, Link, Table } from '~/Components';
 import { getAllRecruitmentApplications, getRecruitment } from '~/api';
 import type { RecruitmentApplicationDto, UserDto } from '~/dto';
 import { useTitle } from '~/hooks';
@@ -10,7 +10,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { applicationKeys, recruitmentKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
-import { RecruitmentStatusChoicesMapping } from '~/types';
+import { RecruitmentPriorityChoicesMapping, RecruitmentStatusChoicesMapping } from '~/types';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { AllApplicantsActionbar, AllApplicationsExpandableHeader, type FilterType } from './components';
 
@@ -127,7 +127,7 @@ export function RecruitmentAllApplicationsAdminPage() {
     { content: t(KEY.recruitment_interview_location), sortable: false },
     { content: t(KEY.recruitment_interview_time), sortable: false },
     { content: t(KEY.recruitment_priority), sortable: false },
-    { content: t(KEY.recruitment_allow_to_contact), sortable: false },
+    { content: t(KEY.recruitment_recruiter_priority), sortable: false },
     { content: t(KEY.recruitment_recruiter_status), sortable: false },
   ];
 
@@ -160,19 +160,23 @@ export function RecruitmentAllApplicationsAdminPage() {
           },
           {
             value: app.interview?.interview_location,
-            content: <span>{app.interview?.interview_location ?? 'N/A'}</span>,
+            content: <span>{app.interview?.interview_location ?? t(KEY.common_not_set)}</span>,
           },
           {
             value: app.interview?.interview_time,
-            content: <span>{app.interview?.interview_time ?? 'N/A'}</span>,
+            content: <span>{app.interview?.interview_time ?? t(KEY.common_not_set)}</span>,
           },
           {
             value: app.applicant_priority,
             content: <span>{app.applicant_priority}</span>,
           },
           {
-            value: 'Allow to contact',
-            content: <ToggleSwitch onChange={() => handleAllowCall()} />,
+            value: app.recruiter_priority,
+            content: app.recruiter_priority ? (
+              <span>{RecruitmentPriorityChoicesMapping[app.recruiter_priority]}</span>
+            ) : (
+              'N/A'
+            ),
           },
           {
             value: app.recruiter_status,
