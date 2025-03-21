@@ -46,7 +46,7 @@ import {
   InformationFormAdminPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
-  RecruitmentAllPositionsAdminPage,
+  RecruitmentAllApplicationsAdminPage,
   RecruitmentApplicantAdminPage,
   RecruitmentFormAdminPage,
   RecruitmentGangAdminPage,
@@ -402,7 +402,7 @@ export const router = createBrowserRouter(
               element={
                 <PermissionRoute
                   required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
-                  element={<RecruitmentAllPositionsAdminPage />}
+                  element={<RecruitmentAllApplicationsAdminPage />}
                 />
               }
               handle={{
@@ -585,7 +585,7 @@ export const router = createBrowserRouter(
                 element={
                   <PermissionRoute
                     required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
-                    element={<RecruitmentAllPositionsAdminPage />}
+                    element={<RecruitmentAllApplicationsAdminPage />}
                   />
                 }
                 handle={{

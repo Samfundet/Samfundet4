@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/mixins' as *;
 
-@import 'src/mixins';
+@use 'src/constants' as *;
 
 .filter_button {
   width: fit-content;

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Link, Table, ToggleSwitch } from '~/Components';
@@ -32,7 +32,7 @@ interface GangMapping {
 
 const browserTabTitle = 'All applicants';
 
-export function RecruitmentAllPositionsAdminPage() {
+export function RecruitmentAllApplicationsAdminPage() {
   const [activeFilter, setActiveFilter] = useState<FilterType>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [parsedApplicantData, setParsedApplicantData] = useState<GroupedDataItem[] | null>(null);
@@ -89,19 +89,19 @@ export function RecruitmentAllPositionsAdminPage() {
     if (apiResponse?.data?.data && Array.isArray(apiResponse.data.data)) {
       const applicantData = apiResponse.data.data;
       setParsedApplicantData(applicantData);
-      
+
       // Build gang mapping from the applications
       const gangs: GangMapping = {};
-      
-      applicantData.forEach(applicant => {
+
+      applicantData.forEach((applicant) => {
         if (applicant.applications) {
-          applicant.applications.forEach(app => {
+          applicant.applications.forEach((app) => {
             // Extract the gang object from the application
             const gang = app.recruitment_position?.gang;
-            
+
             if (gang && typeof gang === 'object' && 'id' in gang) {
               const gangId = gang.id;
-              
+
               // Add to our mapping if not already there
               if (!gangs[gangId]) {
                 gangs[gangId] = {
@@ -115,7 +115,7 @@ export function RecruitmentAllPositionsAdminPage() {
           });
         }
       });
-      
+
       setGangMapping(gangs);
     }
   }, [apiResponse]);
@@ -135,12 +135,10 @@ export function RecruitmentAllPositionsAdminPage() {
     return applications.map((app) => {
       // Extract the gang object directly from the application
       const gang = app.recruitment_position?.gang;
-      
+
       // Get gang details directly from the application
       const gangId = typeof gang === 'object' && 'id' in gang ? gang.id : (gang as unknown as number);
-      const gangDetails = typeof gang === 'object' && 'name_en' in gang 
-        ? gang as GangDetails 
-        : gangMapping[gangId];
+      const gangDetails = typeof gang === 'object' && 'name_en' in gang ? (gang as GangDetails) : gangMapping[gangId];
 
       const positionPageUrl = reverse({
         pattern: ROUTES.frontend.admin_recruitment_gang_position_applicants_overview,
@@ -211,7 +209,7 @@ export function RecruitmentAllPositionsAdminPage() {
       if (!item) {
         return null;
       }
-      
+
       const tableData = applicationsToTableRows(item.applications || []);
 
       return (
