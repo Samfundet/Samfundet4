@@ -1,0 +1,14 @@
+.priorityControllArrow {
+    cursor: pointer;
+  
+    &:hover {
+      filter: brightness(150%);
+      transform: scale(1.5);
+    }
+    &:active {
+      cursor: none;
+      filter: brightness(200%);
+      transform: scale(0.5);
+    }
+}
+
