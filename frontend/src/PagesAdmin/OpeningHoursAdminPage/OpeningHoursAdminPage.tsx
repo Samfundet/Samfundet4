@@ -2,7 +2,7 @@ import { type ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { InputTime } from '~/Components';
-import { getVenues, putVenue } from '~/api';
+import { getVenues, patchVenue } from '~/api';
 import type { VenueDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -42,7 +42,7 @@ export function OpeningHoursAdminPage() {
     const updatedVenues = venues.map((v) => (v.id === venue.id ? { ...v, [field]: value } : v));
     venueRef.current = updatedVenues;
     // Send field change to backend
-    putVenue(venue.slug, {
+    patchVenue(venue.slug, {
       [field]: value,
     });
   }
