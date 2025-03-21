@@ -14,7 +14,8 @@ type ActiveApplicationLinkProps = {
 };
 
 export function ActiveApplicationLink({ application, recentChanges }: ActiveApplicationLinkProps) {
-  const change = recentChanges.find((change) => change.id === application.id);
+  // Find a successful change for this application
+  const change = recentChanges.find((change) => change.id === application.id && change.successful);
 
   return (
     <div className={styles.positionLinkWrapper}>

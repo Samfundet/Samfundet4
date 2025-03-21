@@ -11,6 +11,7 @@ import styles from './ControlPriorityButtons.module.scss';
 export type PriorityChange = {
   id: string;
   direction: 'up' | 'down';
+  successful: boolean;
 };
 
 type ControlPriorityButtonsProps = {
@@ -33,7 +34,7 @@ export function ControlPriorityButtons({
 
   // Mutation for changing priority
   const priorityMutation = useMutation({
-    mutationFn: ({ id, direction }: PriorityChange) => {
+    mutationFn: ({ id, direction }: Omit<PriorityChange, 'successful'>) => {
       const data: UserPriorityDto = { direction: direction === 'up' ? 1 : -1 };
       return putRecruitmentPriorityForUser(id, data);
     },
@@ -41,17 +42,18 @@ export function ControlPriorityButtons({
       const oldData = queryClient.getQueryData<RecruitmentApplicationDto[]>(['applications', recruitmentId]);
       queryClient.setQueryData(['applications', recruitmentId], response.data);
 
-      if (oldData) {
+      // Only update state if we have the data and the callback
+      if (oldData && onPriorityChange) {
         const clickedApp = oldData.find((app) => app.id === variables.id);
         const swappedApp = response.data.find(
           (newApp) =>
             clickedApp && newApp.applicant_priority === clickedApp.applicant_priority && newApp.id !== clickedApp.id,
         );
 
-        if (clickedApp && swappedApp && onPriorityChange) {
+        if (clickedApp && swappedApp) {
           const changes: PriorityChange[] = [
-            { id: clickedApp.id, direction: variables.direction },
-            { id: swappedApp.id, direction: variables.direction === 'up' ? 'down' : 'up' },
+            { id: clickedApp.id, direction: variables.direction, successful: true },
+            { id: swappedApp.id, direction: variables.direction === 'up' ? 'down' : 'up', successful: true },
           ];
           onPriorityChange(changes);
         }
@@ -59,6 +61,10 @@ export function ControlPriorityButtons({
     },
     onError: () => {
       toast.error(t(KEY.common_something_went_wrong));
+      // Optionally, you could set a failed state here if you want to show that to the user
+      if (onPriorityChange) {
+        onPriorityChange([{ id, direction: 'up', successful: false }]);
+      }
     },
   });
 
@@ -69,7 +75,12 @@ export function ControlPriorityButtons({
   return (
     <div className={styles.priorityControllBtnWrapper}>
       {!isFirstItem && (
-        <Button display="pill" theme="outlined" onClick={() => handleChangePriority(id, 'up')}>
+        <Button
+          display="pill"
+          theme="outlined"
+          onClick={() => handleChangePriority(id, 'up')}
+          disabled={priorityMutation.isPending}
+        >
           <Icon
             icon="material-symbols:keyboard-arrow-up-rounded"
             className={styles.priorityControllArrow}
@@ -78,7 +89,12 @@ export function ControlPriorityButtons({
         </Button>
       )}
       {!isLastItem && (
-        <Button display="pill" theme="outlined" onClick={() => handleChangePriority(id, 'down')}>
+        <Button
+          display="pill"
+          theme="outlined"
+          onClick={() => handleChangePriority(id, 'down')}
+          disabled={priorityMutation.isPending}
+        >
           <Icon
             icon="material-symbols:keyboard-arrow-down-rounded"
             className={styles.priorityControllArrow}
