@@ -23,6 +23,7 @@ import type {
   PermissionDto,
   PositionsByTagResponse,
   PurchaseFeedbackDto,
+  RecruitmentApplicantApplicationsDto,
   RecruitmentApplicationDto,
   RecruitmentApplicationRecruiterDto,
   RecruitmentApplicationStateChoicesDto,
@@ -603,14 +604,15 @@ export async function getRoleUsers(id: number): Promise<RoleUsersDto[]> {
 
 export async function getAllRecruitmentApplications(
   recruitmentId: string,
-): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
+): Promise<AxiosResponse<RecruitmentApplicantApplicationsDto[]>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_all_applications,
       queryParams: { recruitment: recruitmentId },
     });
-  return axios.get<RecruitmentApplicationDto[]>(url, { withCredentials: true });
+  const response = await axios.get<RecruitmentApplicantApplicationsDto[]>(url, { withCredentials: true });
+  return response;
 }
 
 export async function getRecruitmentPositionsGangForApplicant(

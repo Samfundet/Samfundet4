@@ -526,6 +526,33 @@ export type RecruitmentPositionForApplicantDto = {
   recruitment: string;
 };
 
+export type LimitedGangDto = Pick<GangDto, 'id' | 'name_en' | 'name_nb' | 'abbreviation'>;
+
+export type RecruitmentPositionForAllApplicationsDto = Pick<RecruitmentPositionDto, 'id' | 'name_nb' | 'name_en'> & {
+  gang: LimitedGangDto;
+};
+
+export type ApplicationForAllApplications = Pick<
+  RecruitmentApplicationDto,
+  | 'id'
+  | 'applicant_priority'
+  | 'recruiter_priority'
+  | 'created_at'
+  | 'recruitment'
+  | 'recruiter_status'
+  | 'applicant_state'
+> & {
+  recruitment_position: RecruitmentPositionForAllApplicationsDto;
+  interview: InterviewDto | null;
+};
+
+export type RecruitmentApplicantApplicationsDto = Pick<
+  RecruitmentUserDto,
+  'id' | 'first_name' | 'last_name' | 'username' | 'email' | 'phone_number'
+> & {
+  applications: ApplicationForAllApplications[];
+};
+
 export type PositionsByTagResponse = {
   count: number;
   positions: RecruitmentPositionForApplicantDto[];
