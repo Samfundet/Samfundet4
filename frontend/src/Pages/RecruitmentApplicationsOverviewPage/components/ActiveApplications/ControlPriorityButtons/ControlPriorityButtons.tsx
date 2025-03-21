@@ -61,7 +61,6 @@ export function ControlPriorityButtons({
     },
     onError: () => {
       toast.error(t(KEY.common_something_went_wrong));
-      // Optionally, you could set a failed state here if you want to show that to the user
       if (onPriorityChange) {
         onPriorityChange([{ id, direction: 'up', successful: false }]);
       }
