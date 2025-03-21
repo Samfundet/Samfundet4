@@ -117,21 +117,21 @@ export function RecruitmentAllApplicationsAdminPage() {
           },
           {
             value: app.applicant_priority,
-            content: <span>{app.applicant_priority}</span>,
+            content: <Text>{app.applicant_priority}</Text>,
           },
           {
             value: app.interview?.interview_location,
-            content: <span>{app.interview?.interview_location ?? t(KEY.common_not_set)}</span>,
+            content: <Text>{app.interview?.interview_location ?? t(KEY.common_not_set)}</Text>,
           },
           {
             value: app.interview?.interview_time,
-            content: <span>{app.interview?.interview_time ?? t(KEY.common_not_set)}</span>,
+            content: <Text>{app.interview?.interview_time ?? t(KEY.common_not_set)}</Text>,
           },
           {
             value: app.recruiter_priority,
             content:
               app.recruiter_priority !== undefined && app.recruiter_priority !== null ? (
-                <span>{RecruitmentPriorityChoicesMapping[app.recruiter_priority]}</span>
+                <Text>{RecruitmentPriorityChoicesMapping[app.recruiter_priority]}</Text>
               ) : (
                 'N/A'
               ),
@@ -140,7 +140,7 @@ export function RecruitmentAllApplicationsAdminPage() {
             value: app.recruiter_status,
             content:
               app.recruiter_status !== undefined && app.recruiter_status !== null ? (
-                <span>{RecruitmentStatusChoicesMapping[app.recruiter_status]}</span>
+                <Text>{RecruitmentStatusChoicesMapping[app.recruiter_status]}</Text>
               ) : (
                 'N/A'
               ),
