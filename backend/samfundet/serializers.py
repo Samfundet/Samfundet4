@@ -1284,7 +1284,7 @@ class UserWithApplicationsSerializer(serializers.ModelSerializer):
             'applications',
         ]
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: User) -> dict:
         """Return user with their applications for a specific recruitment."""
         # Get basic user data
         data = super().to_representation(instance)

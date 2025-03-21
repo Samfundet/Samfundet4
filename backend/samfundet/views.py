@@ -663,7 +663,7 @@ class RecruitmentAllApplicationsPerRecruitmentView(ListAPIView):
         recruitment_id = self.get_recruitment_id()
         return User.objects.filter(applications__recruitment__id=recruitment_id).distinct().select_related('campus')
 
-    def list(self, request: Request, *args, **kwargs) -> Response:
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Return list of applicants without data wrapping."""
         queryset = self.filter_queryset(self.get_queryset())
 
