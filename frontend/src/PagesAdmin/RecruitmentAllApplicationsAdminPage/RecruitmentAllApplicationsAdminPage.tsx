@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Button, Link, Table } from '~/Components';
+import { Button, Link, Table, Text } from '~/Components';
 import { getAllRecruitmentApplications, getRecruitment } from '~/api';
 import type { ApplicationForAllApplications, RecruitmentApplicantApplicationsDto } from '~/dto';
 import { useTitle } from '~/hooks';
@@ -109,7 +109,7 @@ export function RecruitmentAllApplicationsAdminPage() {
         cells: [
           {
             value: gangName,
-            content: <strong>{gangName}</strong>,
+            content: <Text as="strong">{gangName}</Text>,
           },
           {
             value: app.recruitment_position.name_nb,
@@ -158,7 +158,7 @@ export function RecruitmentAllApplicationsAdminPage() {
           },
           {
             value: 'form',
-            content: <CommentForm initialData={''} applicationId={app.id} />,
+            content: <CommentForm initialData={''} applicationId={app.id} />, //ToDo: add comment, GU-nestleder still has use for it
           },
         ],
       };
