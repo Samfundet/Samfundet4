@@ -143,7 +143,11 @@ export function RecruitmentAllApplicationsAdminPage() {
           {
             value: app.applicant_state,
             content:
-              <span style={{ backgroundColor: getApplicantStateColor(app.applicant_state) }}>FØRING</span> ?? 'N/A',
+              app.applicant_state !== undefined ? (
+                <span style={{ backgroundColor: getApplicantStateColor(app.applicant_state) }}>FØRING</span>
+              ) : (
+                'N/A'
+              ),
           },
           {
             value: 'form',
