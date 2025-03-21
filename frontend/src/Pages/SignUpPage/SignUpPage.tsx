@@ -111,7 +111,7 @@ export function SignUpPage() {
               required={true}
               field="password_repeat"
               type="password"
-              label={`${t(KEY.common_repeat)} ${t(KEY.common_password)}` ?? ''}
+              label={`${t(KEY.common_repeat)} ${t(KEY.common_password)}`}
               validator={(values) => {
                 return values.password === values.password_repeat ? true : t(KEY.loginpage_passwords_must_match);
               }}

@@ -310,7 +310,7 @@ export const nb = prepareTranslations({
   [KEY.recruitment_gangmember]: 'Gjengmedlem',
   [KEY.recruitment_applyfor]: 'Søk på dette vervet',
   [KEY.recruitment_applyforhelp]:
-    'Klar til å søke? \n Skriv litt om deg selv, din motivasjon for å søke og dine kvalifikasjoner for vervet. Du trenger ikke legge inn full CV og referanser - en kort tekst er nok. Vi gleder oss til å høre fra deg! Etter at du er registrert som søker, kan du logge inn for å se status på dine søknader. Hvis du har søkt flere verv, må du også prioritere hvilket du ønsker mest. Du vil kun få tilbud om ett verv.',
+    'Klar til å søke? \n Skriv litt om deg selv, din motivasjon for å søke og dine kvalifikasjoner for vervet. Du trenger ikke legge inn full CV og referanser - en kort tekst er nok. Vi gleder oss til å høre fra deg!',
   [KEY.recruitment_volunteerfor]: 'Verv som',
   [KEY.recruitment_otherpositions]: 'Andre verv i',
   [KEY.recruitment_no_other_positions]: 'Ingen andre verv i',
@@ -527,6 +527,8 @@ export const nb = prepareTranslations({
   [KEY.error_forbidden_description]: 'Du har ikke adgang til å se denne ressursen',
   [KEY.error_server_error]: 'Serverfeil',
   [KEY.error_server_error_description]: 'En serverfeil har opptstått',
+  [KEY.error_submitting_reservation]: 'Det skjedde en feil ved innsending av reservasjon',
+  [KEY.error_invalid_reservation_data]: 'Ugyldig reservasjonsdata',
 });
 
 export const en = prepareTranslations({
@@ -830,7 +832,7 @@ export const en = prepareTranslations({
   [KEY.recruitment_gangmember]: 'Gangmember',
   [KEY.recruitment_applyfor]: 'Apply for this position',
   [KEY.recruitment_applyforhelp]:
-    ' Ready to apply? \nWrite a little bit about yourself, your motivation for applying and your qualifications for this job. You don’t have to send in a full CV or references from previous employers - a short text is enough. We look forward to hearing from you! When you have registered as an applicant, you can log in and check the status of your applications. If you apply for more than one job, you must prioritize which one you want the most. Note that you will only be offered one job.',
+    ' Ready to apply? \nWrite a little bit about yourself, your motivation for applying and your qualifications for this job. You don’t have to send in a full CV or references from previous employers - a short text is enough. We look forward to hearing from you!',
   [KEY.recruitment_volunteerfor]: 'Position as',
   [KEY.recruitment_otherpositions]: 'Other positions in',
   [KEY.recruitment_no_other_positions]: 'No other positions in',
@@ -1055,4 +1057,6 @@ export const en = prepareTranslations({
   [KEY.error_forbidden_description]: 'You do not have permission to view this resource',
   [KEY.error_server_error]: 'Server error',
   [KEY.error_server_error_description]: 'A server error has occurred',
+  [KEY.error_submitting_reservation]: 'An error occurred while submitting the reservation',
+  [KEY.error_invalid_reservation_data]: 'Invalid reservation data',
 });

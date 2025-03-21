@@ -1,4 +1,4 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { Alert } from './Alert';
 
 // Local component config.
@@ -8,40 +8,68 @@ export default {
   args: {
     message: 'Sigve: Konfirmasjon er bare en shitty versjon av bryllup',
   },
-} as ComponentMeta<typeof Alert>;
+} as Meta<typeof Alert>;
 
-const TypesTemplate: ComponentStory<typeof Alert> = (args) => (
-  <>
-    <Alert {...args} type="info" />
-    <Alert {...args} type="success" />
-    <Alert {...args} type="warning" />
-    <Alert {...args} type="error" />
-    <Alert {...args} type="samf" />
-  </>
-);
+type Story = StoryObj<typeof Alert>;
 
-const AlignTemplate: ComponentStory<typeof Alert> = (args) => (
-  <>
-    <Alert {...args} />
-    <Alert {...args} closable={true} />
-    <Alert {...args} title={'Example Title'} />
-    <Alert {...args} closable={true} title={'Example Title'} />
-  </>
-);
+const TypesTemplate: Story = {
+  render: (args) => (
+    <>
+      <Alert {...args} type="info" />
+      <Alert {...args} type="success" />
+      <Alert {...args} type="warning" />
+      <Alert {...args} type="error" />
+      <Alert {...args} type="samf" />
+    </>
+  ),
+};
 
-export const AllTypes = TypesTemplate.bind({});
+const AlignTemplate: Story = {
+  render: (args) => (
+    <>
+      <Alert {...args} />
+      <Alert {...args} closable={true} />
+      <Alert {...args} title={'Example Title'} />
+      <Alert {...args} closable={true} title={'Example Title'} />
+    </>
+  ),
+};
 
-export const WithTitle = TypesTemplate.bind({});
-WithTitle.args = { title: 'Example Title' };
+export const AllTypes: Story = {
+  ...TypesTemplate,
+};
 
-export const Closable = TypesTemplate.bind({});
-Closable.args = { closable: true };
+export const WithTitle: Story = {
+  ...TypesTemplate,
+  args: {
+    title: 'Example Title',
+  },
+};
 
-export const AlignCenter = AlignTemplate.bind({});
-AlignCenter.args = { align: 'center' };
+export const Closable: Story = {
+  ...TypesTemplate,
+  args: {
+    closable: true,
+  },
+};
 
-export const AlignLeft = AlignTemplate.bind({});
-AlignLeft.args = { align: 'left' };
+export const AlignCenter: Story = {
+  ...AlignTemplate,
+  args: {
+    align: 'center',
+  },
+};
 
-export const AlignRight = AlignTemplate.bind({});
-AlignRight.args = { align: 'right' };
+export const AlignLeft: Story = {
+  ...AlignTemplate,
+  args: {
+    align: 'left',
+  },
+};
+
+export const AlignRight: Story = {
+  ...AlignTemplate,
+  args: {
+    align: 'right',
+  },
+};

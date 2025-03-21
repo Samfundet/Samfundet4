@@ -1,9 +1,9 @@
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
-@import 'src/constants';
+@use 'src/constants' as *;
 
 .noMargin {
-  margin:0;
+  margin: 0;
 }
 
 .tooltip {

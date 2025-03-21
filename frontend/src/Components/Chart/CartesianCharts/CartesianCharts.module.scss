@@ -1,6 +1,6 @@
-@import "../../../constants";
+@use "../../../constants" as *;
 
-@import "../../../mixins";
+@use "../../../mixins" as *;
 
 .container{
   display: grid;
