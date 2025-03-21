@@ -124,9 +124,10 @@ export function RecruitmentAllApplicationsAdminPage() {
   const tableColumns = [
     { content: t(KEY.common_gang), sortable: false },
     { content: t(KEY.common_recruitmentposition), sortable: false },
+    { content: t(KEY.recruitment_priority), sortable: false },
     { content: t(KEY.recruitment_interview_location), sortable: false },
     { content: t(KEY.recruitment_interview_time), sortable: false },
-    { content: t(KEY.recruitment_priority), sortable: false },
+
     { content: t(KEY.recruitment_recruiter_priority), sortable: false },
     { content: t(KEY.recruitment_recruiter_status), sortable: false },
   ];
@@ -159,16 +160,16 @@ export function RecruitmentAllApplicationsAdminPage() {
             content: <Link url={positionPageUrl}>{app.recruitment_position.name_nb}</Link>,
           },
           {
+            value: app.applicant_priority,
+            content: <span>{app.applicant_priority}</span>,
+          },
+          {
             value: app.interview?.interview_location,
             content: <span>{app.interview?.interview_location ?? t(KEY.common_not_set)}</span>,
           },
           {
             value: app.interview?.interview_time,
             content: <span>{app.interview?.interview_time ?? t(KEY.common_not_set)}</span>,
-          },
-          {
-            value: app.applicant_priority,
-            content: <span>{app.applicant_priority}</span>,
           },
           {
             value: app.recruiter_priority,
