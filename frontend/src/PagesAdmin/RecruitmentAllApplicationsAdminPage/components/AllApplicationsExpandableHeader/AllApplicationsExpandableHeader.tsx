@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, ExpandableHeader } from '~/Components';
-import type { RecruitmentDto, UserDto } from '~/dto';
+import type { RecruitmentApplicantApplicationsDto, RecruitmentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import styles from './AllApplicationsExpandableHeader.module.scss';
 
 type AllApplicationsExpandableHeaderProps = {
-  user: UserDto;
+  user: RecruitmentApplicantApplicationsDto;
   recruitment: RecruitmentDto;
   onSetInterviewClick?: () => void;
   table: ReactNode;
