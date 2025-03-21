@@ -197,6 +197,7 @@ export const KEY = {
   common_tab_view: 'common_tab_view',
   common_available: 'common_available',
   common_at: 'common_at',
+  common_comment: 'common_comment',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',

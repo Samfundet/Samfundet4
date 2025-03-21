@@ -180,6 +180,7 @@ export const nb = prepareTranslations({
   [KEY.common_list_view]: 'Liste visning',
   [KEY.common_tab_view]: 'Fane visning',
   [KEY.common_available]: 'Tilgjengelig',
+  [KEY.common_comment]: 'Kommentar',
 
   [KEY.common_at]: 'ved',
   //About page
@@ -708,6 +709,7 @@ export const en = prepareTranslations({
   [KEY.common_tab_view]: 'Tab view',
   [KEY.common_available]: 'Available',
   [KEY.common_at]: 'at',
+  [KEY.common_comment]: 'Comment',
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
   [KEY.common_press]: 'Press',

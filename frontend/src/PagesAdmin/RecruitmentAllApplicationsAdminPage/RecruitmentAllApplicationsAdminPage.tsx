@@ -57,10 +57,6 @@ export function RecruitmentAllApplicationsAdminPage() {
     alert('IMPLEMENT ABILITY TO SET MULTIPLE INTERVIEWS FOR A SINGLE APPLICANT');
   };
 
-  const handleAllowCall = () => {
-    alert('IMPLEMENT CONTACT CONTROL FUNCTIONALITY');
-  };
-
   const { data: recruitment, isLoading: isLoadingRecruitment } = useQuery({
     queryKey: recruitmentKeys.all,
     queryFn: () => {
@@ -127,9 +123,9 @@ export function RecruitmentAllApplicationsAdminPage() {
     { content: t(KEY.recruitment_priority), sortable: false },
     { content: t(KEY.recruitment_interview_location), sortable: false },
     { content: t(KEY.recruitment_interview_time), sortable: false },
-
     { content: t(KEY.recruitment_recruiter_priority), sortable: false },
     { content: t(KEY.recruitment_recruiter_status), sortable: false },
+    { content: t(KEY.common_comment), sortable: false },
   ];
 
   const applicationsToTableRows = (applications: RecruitmentApplicationDto[]) => {
