@@ -1,0 +1,46 @@
+@use 'src/mixins' as *;
+
+@use 'src/constants' as *;
+
+.expandable_header {
+  background-color: $red_samf;
+  color: white;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0.15rem 0.15rem 0.15rem 0.5rem;
+
+  @include theme-dark {
+    background-color: #590000;
+  }
+}
+
+.expandable_header:hover {
+  background-color: $red_samf_hover;
+  @include theme-dark {
+    background-color: #400000;
+  }
+}
+
+.header_label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+}
+
+.applicant_contact_container {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(200px, 2fr) minmax(150px, 1fr);
+  gap: 2rem;
+  align-items: center;
+}
+
+.header_label_item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0; // Allows text truncation to work in grid
+}
+
+.set_interview_button {
+  justify-self: end; // Aligns button to the right
+}

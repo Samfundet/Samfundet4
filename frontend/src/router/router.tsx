@@ -46,6 +46,7 @@ import {
   InformationFormAdminPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
+  RecruitmentAllApplicationsAdminPage,
   RecruitmentApplicantAdminPage,
   RecruitmentFormAdminPage,
   RecruitmentGangAdminPage,
@@ -397,12 +398,18 @@ export const router = createBrowserRouter(
               element={<PermissionRoute element={<RecruitmentAdminPage />} />}
             />
             <Route
-              path={ROUTES.frontend.admin_recruitment_create}
+              path={ROUTES.frontend.admin_recruitment_all_positions}
               element={
-                <PermissionRoute required={[PERM.SAMFUNDET_ADD_RECRUITMENT]} element={<RecruitmentFormAdminPage />} />
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                  element={<RecruitmentAllApplicationsAdminPage />}
+                />
               }
-              handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
+              handle={{
+                crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_administrate)}</Link>,
+              }}
             />
+
             <Route
               path={ROUTES.frontend.admin_recruitment_applicant}
               element={
@@ -571,6 +578,18 @@ export const router = createBrowserRouter(
                   crumb: ({ pathname }: UIMatch) => (
                     <Link url={pathname}>{t(KEY.recruitment_applicants_open_to_other_positions)}</Link>
                   ),
+                }}
+              />
+              <Route
+                path="all-positions/:recruitmentId"
+                element={
+                  <PermissionRoute
+                    required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                    element={<RecruitmentAllApplicationsAdminPage />}
+                  />
+                }
+                handle={{
+                  crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_administrate)}</Link>,
                 }}
               />
               <Route
