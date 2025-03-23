@@ -8,6 +8,7 @@ from rest_framework import routers
 from django.urls import path, include
 
 import samfundet.sulten_views.sulten_views
+from samfundet.view import billig_views
 
 from . import views
 from .view import recruitment_views
@@ -54,6 +55,12 @@ router.register('recruitment-applications-for-group', views.RecruitmentApplicati
 router.register('recruitment-applications-for-gang', views.RecruitmentApplicationForGangView, 'recruitment_applications_for_gang')
 router.register('recruitment-applications-for-position', views.RecruitmentApplicationForRecruitmentPositionView, 'recruitment_applications_for_position')
 router.register('interview', views.InterviewView, 'interview')
+
+########## Billig ##########
+# TODO: these will probably be replaced or removed when we actually connect to Billig
+router.register('billig-event', billig_views.BilligEventReadOnlyModelViewSet, 'billig_event')
+router.register('billig-price-group', billig_views.BilligPriceGroupReadOnlyModelViewSet, 'billig_price_group')
+router.register('billig-ticket-group', billig_views.BilligTicketGroupReadOnlyModelViewSet, 'billig_ticket_group')
 
 ######## Lyche #########
 router.register('create-reservation', samfundet.sulten_views.sulten_views.ReservationCreateView, 'create_reservation')
