@@ -29,6 +29,16 @@ FULLY_PROTECTED_PERMS_MAP = {
     'DELETE': ['%(app_label)s.delete_%(model_name)s'],
 }
 
+DEFAULT_PERMS_MAP = {
+    'GET': [],
+    'OPTIONS': [],
+    'HEAD': [],
+    'POST': ['%(app_label)s.add_%(model_name)s'],
+    'PUT': ['%(app_label)s.change_%(model_name)s'],
+    'PATCH': ['%(app_label)s.change_%(model_name)s'],
+    'DELETE': ['%(app_label)s.delete_%(model_name)s'],
+}
+
 
 class SuperUserPermission(BasePermission):
     def has_permission(self, request: Request, view: APIView) -> bool:
@@ -161,6 +171,16 @@ class RoleProtectedObjectPermissions(DjangoObjectPermissions):
             return False
 
         return True
+
+
+class RoleProtectedOrAnonReadOnlyObjectPermissions(RoleProtectedObjectPermissions):
+    """
+    Django system that allows users with relevant roles permissions.
+    Note that this does not limit the queryset to only show objects that the user has permissions to.
+    If the user does not have read permissions for an object, they will still be able to see that the object exists.
+    """
+
+    perms_map = DEFAULT_PERMS_MAP
 
 
 def filter_queryset_by_permissions(queryset: QuerySet, user: User, permission: str) -> QuerySet:
