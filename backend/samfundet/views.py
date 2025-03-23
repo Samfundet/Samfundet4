@@ -564,6 +564,7 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
         data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
         recruitment_position = get_object_or_404(RecruitmentPosition, pk=pk)
         existing_application = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
+
         # If update
         if existing_application:
             try:
@@ -575,10 +576,18 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
             except ValidationError as e:
                 return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
 
-        # If create
+        # If create - check for existing applications to get open_for_other_positions value
+        other_applications = RecruitmentApplication.objects.filter(user=request.user, recruitment=recruitment_position.recruitment).first()
+
+        # Set up the data for the new application
         data['recruitment_position'] = recruitment_position.pk
         data['recruitment'] = recruitment_position.recruitment.pk
         data['user'] = request.user.pk
+
+        # If other applications exist, copy the open_for_other_positions value
+        if other_applications:
+            data['open_for_other_positions'] = other_applications.open_for_other_positions
+
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             serializer.save()
