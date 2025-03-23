@@ -714,55 +714,6 @@ class RecruitmentApplicationSetInterviewView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RecruitmentApplicationForGangView(ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    serializer_class = RecruitmentApplicationForGangSerializer
-    queryset = RecruitmentApplication.objects.all()
-
-    # TODO: User should only be able to edit the fields that are allowed
-
-    @action(detail=True, methods=['put'])
-    def application_comment(self, request: Request, **kwargs: Any) -> Response:
-        application_id = kwargs.get('pk')
-
-        if 'application_comment' not in request.data:
-            return Response({'error': 'application_comment field is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Use direct update to bypass model save() method and signals
-        comment_text = request.data['application_comment']
-        updated = RecruitmentApplication.objects.filter(id=application_id).update(application_comment=comment_text)
-
-        if updated:
-            # Return the updated comment in the response
-            return Response({'application_comment': comment_text}, status=status.HTTP_200_OK)
-        return Response({'error': 'Application not found'}, status=status.HTTP_404_NOT_FOUND)
-
-    def list(self, request: Request) -> Response:
-        """Returns a list of all the recruitments for the specified gang."""
-        gang_id = request.query_params.get('gang')
-        recruitment_id = request.query_params.get('recruitment')
-
-        if not gang_id:
-            return Response({'error': 'A gang parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        if not recruitment_id:
-            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        gang = get_object_or_404(Gang, id=gang_id)
-        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
-
-        applications = RecruitmentApplication.objects.filter(
-            recruitment_position__gang=gang,
-            recruitment=recruitment,  # only include applications related to the specified recruitment
-        )
-
-        # check permissions for each application
-        applications = get_objects_for_user(user=request.user, perms=['view_recruitmentapplication'], klass=applications)
-
-        serializer = self.get_serializer(applications, many=True)
-        return Response(serializer.data)
-
-
 class RecruitmentApplicationStateChoicesView(APIView):
     permission_classes = [IsAuthenticated]
 
