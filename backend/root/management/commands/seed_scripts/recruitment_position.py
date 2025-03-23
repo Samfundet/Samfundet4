@@ -33,6 +33,18 @@ POSITION_TYPES = {
         'tags': ['marketing', 'social-media', 'writing', 'communication', 'pr', 'design'],
         'name_prefix': 'PR',
     },
+    'restaurant': {
+        'tags': ['cooking', 'food-prep', 'service', 'kitchen', 'chef', 'catering', 'hygiene', 'menu-planning'],
+        'name_prefix': 'Rest',
+    },
+    'scene': {
+        'tags': ['stage-management', 'props', 'lighting', 'sound', 'scenography', 'production', 'backstage', 'rigging'],
+        'name_prefix': 'Scene',
+    },
+    'theater': {
+        'tags': ['acting', 'directing', 'dramaturgy', 'costume', 'makeup', 'script', 'performance', 'improv'],
+        'name_prefix': 'Theater',
+    },
 }
 
 
@@ -76,11 +88,11 @@ def seed():
 
     for recruitment_index, recruitment in enumerate(recruitments):
         # For each recruitment, select random gangs
-        selected_gangs = sample(list(gangs), 6)
+        # selected_gangs = sample(list(gangs), 6)
 
-        for gang_index, gang in enumerate(selected_gangs):
+        for gang_index, gang in enumerate(gangs):
             # For each gang, create 2-4 positions with different types
-            num_positions = randint(2, 4)
+            num_positions = randint(2, 9)
             position_types = sample(list(POSITION_TYPES.keys()), num_positions)
 
             for i, position_type in enumerate(position_types):
