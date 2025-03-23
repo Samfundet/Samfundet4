@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
+import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { type ReactElement, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -18,16 +19,20 @@ import {
   FormMessage,
   ImageCard,
   Input,
+  Text,
   Textarea,
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getEvent, postEvent } from '~/api';
+import { getBilligEvents } from '~/apis/billig/billigApis';
+import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { billigEventKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import {
   type Children,
@@ -72,6 +77,19 @@ export function EventCreatorAdminPage() {
     { value: EventCategory.LECTURE, label: 'Foredrag' },
     { value: EventCategory.OTHER, label: 'Annet' },
   ];
+
+  const { data: billigEvents, isLoading: isLoadingBilligEvent } = useQuery({
+    queryKey: billigEventKeys.all,
+    queryFn: getBilligEvents,
+  });
+
+  const mapBilligEventOptions = (events: BilligEventDto[]): DropdownOption<string>[] => {
+    return events.map((event) => ({
+      value: event.name,
+      label: `${event.name} (${event.sale_from})`,
+    }));
+  };
+  const billigEventOptions = billigEvents ? mapBilligEventOptions(billigEvents) : [];
 
   const ageLimitOptions: DropdownOption<EventAgeRestrictionValue>[] = [
     { value: EventAgeRestriction.NONE, label: 'Ingen' },
@@ -383,6 +401,25 @@ export function EventCreatorAdminPage() {
       },
       template: (
         <>
+          {isLoadingBilligEvent ? (
+            <Text as="strong">Loading billig event</Text>
+          ) : (
+            <FormField
+              control={form.control}
+              name="billig_event"
+              key={'billig_event'}
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Billig event</FormLabel>
+                  <FormControl>
+                    <Dropdown options={billigEventOptions} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
           <FormField
             control={form.control}
             name="age_restriction"
@@ -411,14 +448,6 @@ export function EventCreatorAdminPage() {
               </FormItem>
             )}
           />
-          {/* <PaymentForm
-            event={form.getValues()}
-            onChange={(partial) => {
-              // Update form values with payment data
-              const updatedValues = { ...form.getValues(), ...partial };
-              form.reset(updatedValues);
-            }}
-          /> */}
         </>
       ),
     },

@@ -22,3 +22,11 @@ export const permissionKeys = {
   details: () => [...permissionKeys.all, 'detail'] as const,
   detail: (id: number) => [...permissionKeys.details(), id] as const,
 };
+
+export const billigEventKeys = {
+  all: ['billigEvent'] as const,
+  lists: () => [...billigEventKeys.all, 'list'] as const,
+  list: (filters: unknown[]) => [...billigEventKeys.lists(), { filters }] as const,
+  details: () => [...billigEventKeys.all, 'detail'] as const,
+  detail: (id: number) => [...billigEventKeys.details(), id] as const,
+};

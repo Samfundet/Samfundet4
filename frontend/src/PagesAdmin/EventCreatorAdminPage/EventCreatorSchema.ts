@@ -27,6 +27,7 @@ export const eventSchema = z.object({
   // Payment/registration
   age_restriction: z.enum(['none', 'eighteen', 'twenty', 'mixed']),
   ticket_type: z.enum(['free', 'included', 'billig', 'registration', 'prepaid', 'custom']),
+  billig_event: z.string().min(1, { message: 'Billig event er ikke påkrevd' }),
   // Graphics
   image: OPTIONAL_IMAGE,
   // Summary/Publication date
