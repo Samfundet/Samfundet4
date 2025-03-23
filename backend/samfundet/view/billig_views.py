@@ -6,6 +6,9 @@ from rest_framework.permissions import AllowAny
 from samfundet.serializers import BilligEventSerializer, BilligPriceGroupSerializer, BilligTicketGroupSerializer
 from samfundet.models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 
+# These will probably be depricated when we actually connect to Billig.
+# They are mainly for aiding in development
+
 
 class BilligEventReadOnlyModelViewSet(ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
