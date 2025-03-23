@@ -113,7 +113,7 @@ class ImageSerializer(CustomBaseSerializer):
         return image
 
     def get_url(self, image: Image) -> str:
-        return image.image.url if image.image else None
+        return image.image.url
 
 
 class EventCustomTicketSerializer(CustomBaseSerializer):
