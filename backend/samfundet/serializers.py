@@ -632,7 +632,7 @@ class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
         exclude = ['id', 'recruitment_stats']
 
     def campus_name(self, stat: RecruitmentCampusStat) -> str:
-        return stat.campus.name_nb if stat.campus else None
+        return stat.campus.name_nb
 
     def get_applicant_percentage(self, stat: RecruitmentCampusStat) -> float:
         return stat.normalized_applicant_percentage()
