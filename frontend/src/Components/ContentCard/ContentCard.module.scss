@@ -1,6 +1,6 @@
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
-@import 'src/constants';
+@use 'src/constants' as *;
 
 $mobile-width: $primary-content-width-mobile;
 $background-light: #b7afaf;

@@ -14,6 +14,7 @@ import type {
   InformationPageDto,
   InterviewDto,
   InterviewRoomDto,
+  InterviewerAvailabilityDto,
   KeyValueDto,
   MenuDto,
   MenuItemDto,
@@ -575,7 +576,8 @@ export async function postRecruitment(recruitmentData: RecruitmentWriteDto): Pro
 
 export async function putRecruitment(id: string, recruitment: Partial<RecruitmentWriteDto>): Promise<AxiosResponse> {
   const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_detail, urlParams: { pk: id } });
+    BACKEND_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__recruitment_for_recruiter_detail, urlParams: { pk: id } });
   const response = await axios.put<RecruitmentDto>(url, recruitment, { withCredentials: true });
   return response;
 }
@@ -1162,6 +1164,26 @@ export async function getRecruitmentGangStats(
       urlParams: {
         recruitmentId: recruitmentId,
         gangId: gangId,
+      },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function getInterviewerAvailabilityOnDate(
+  recruitmentId: number,
+  date: string,
+  interviewers: number[],
+): Promise<AxiosResponse<InterviewerAvailabilityDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__interviewer_availability_for_date,
+      urlParams: {
+        recruitmentId: recruitmentId,
+      },
+      queryParams: {
+        date: date,
+        interviewers: interviewers.join(','),
       },
     });
   return await axios.get(url, { withCredentials: true });

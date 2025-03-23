@@ -1,21 +1,32 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { NotificationBadge } from './NotificationBadge';
 
 // Local component config.
-export default {
+const meta: Meta<typeof NotificationBadge> = {
   title: 'Components/NotificationBadge',
   component: NotificationBadge,
-} as ComponentMeta<typeof NotificationBadge>;
+};
 
-const ExampleStory: ComponentStory<typeof NotificationBadge> = (args) => (
-  <>
-    <br />
-    <NotificationBadge {...args} />
-  </>
-);
+export default meta;
 
-export const Basic = ExampleStory.bind({});
-Basic.args = {};
+type Story = StoryObj<typeof NotificationBadge>;
 
-export const WithBadge = ExampleStory.bind({});
-WithBadge.args = { number: 5 };
+export const Basic: Story = {
+  args: {},
+  render: (args) => (
+    <>
+      <br />
+      <NotificationBadge {...args} />
+    </>
+  ),
+};
+
+export const WithBadge: Story = {
+  args: { number: 5 },
+  render: (args) => (
+    <>
+      <br />
+      <NotificationBadge {...args} />
+    </>
+  ),
+};

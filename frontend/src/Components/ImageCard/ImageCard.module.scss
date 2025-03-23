@@ -1,6 +1,6 @@
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
-@import 'src/constants';
+@use 'src/constants' as *;
 
 $mobile-width: $primary-content-width-mobile;
 $card-border-radius: 0.5rem;
@@ -135,11 +135,19 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
 
 .ticket_type {
   font-size: 0.7rem;
-  background-color: #ff9800;
+  background-color: $green-light;
   color: black;
   border-radius: 4px;
   padding: 0.5px 6px;
   text-align: center;
+  float: left;
+  font-weight: 700;
+}
+
+.event_host {
+  @extend .ticket_type;
+  background-color: $blue-medium;
+  float: right;
 }
 
 // Styling to container and children when it is hovered.

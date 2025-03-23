@@ -1,8 +1,8 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { Skeleton } from './Skeleton';
 
 // Local component config.
-export default {
+const meta: Meta<typeof Skeleton> = {
   title: 'Components/Skeleton',
   component: Skeleton,
   // Using defaults from:
@@ -25,38 +25,45 @@ export default {
     containerTestId: '',
     wrapper: undefined,
   },
-} as ComponentMeta<typeof Skeleton>;
-
-const Template: ComponentStory<typeof Skeleton> = (args) => <Skeleton {...args} />;
-
-export const Basic = Template.bind({});
-Basic.args = {};
-
-export const Multiple = Template.bind({});
-Multiple.args = { count: 10 };
-
-export const OtherColors = Template.bind({});
-OtherColors.args = {
-  baseColor: '#a03033',
-  highlightColor: 'gold',
 };
 
-export const Circle = Template.bind({});
-Circle.args = {
-  circle: true,
-  width: '200px',
-  height: '200px',
+export default meta;
+
+type Story = StoryObj<typeof Skeleton>;
+
+export const Basic: Story = {
+  args: {},
 };
 
-export const Eyes = Template.bind({});
-Eyes.args = {
-  circle: true,
-  width: '200px',
-  height: '200px',
-  direction: 'rtl',
-  inline: true,
-  duration: 2,
-  baseColor: 'yellow',
-  highlightColor: 'black',
-  count: 2,
+export const Multiple: Story = {
+  args: { count: 10 },
+};
+
+export const OtherColors: Story = {
+  args: {
+    baseColor: '#a03033',
+    highlightColor: 'gold',
+  },
+};
+
+export const Circle: Story = {
+  args: {
+    circle: true,
+    width: '200px',
+    height: '200px',
+  },
+};
+
+export const Eyes: Story = {
+  args: {
+    circle: true,
+    width: '200px',
+    height: '200px',
+    direction: 'rtl',
+    inline: true,
+    duration: 2,
+    baseColor: 'yellow',
+    highlightColor: 'black',
+    count: 2,
+  },
 };

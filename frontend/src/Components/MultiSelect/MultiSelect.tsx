@@ -18,6 +18,9 @@ type MultiSelectProps<T> = {
   options?: DropdownOption<T>[];
   onChange?: (values: T[]) => void;
   className?: string;
+  onSearch?: (term: string) => void;
+  loading?: boolean;
+  emptyMessage?: string;
 };
 
 /**
@@ -25,7 +28,17 @@ type MultiSelectProps<T> = {
  * `selected`: Selected values if state is managed outside this component.
  */
 function MultiSelectInner<T>(
-  { optionsLabel, selectedLabel, className, selected: initialValues = [], options = [], onChange }: MultiSelectProps<T>,
+  {
+    optionsLabel,
+    selectedLabel,
+    className,
+    selected: initialValues = [],
+    options = [],
+    onChange,
+    onSearch,
+    loading = false,
+    emptyMessage = 'No options available',
+  }: MultiSelectProps<T>,
   ref: React.Ref<HTMLDivElement>,
 ) {
   const { t } = useTranslation();
@@ -35,18 +48,37 @@ function MultiSelectInner<T>(
   const [selected, setSelected] = useState<DropdownOption<T>[]>(initialValues);
 
   const filteredOptions = useMemo(
-    () => options.filter((item) => searchFilter(item, search)).filter((item) => !exists(item, selected)),
-    [options, search, selected],
+    () =>
+      onSearch
+        ? options
+        : options.filter((item) => searchFilter(item, search)).filter((item) => !exists(item, selected)),
+    [options, search, selected, onSearch],
   );
 
-  const filteredSelected = useMemo(() => selected.filter((item) => searchFilter(item, search)), [search, selected]);
+  const filteredSelected = useMemo(
+    () => (search && !onSearch ? selected.filter((item) => searchFilter(item, search)) : selected),
+    [search, selected, onSearch],
+  );
 
   useEffect(() => {
     onChange?.(selected.map((item) => item.value));
   }, [selected, onChange]);
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value;
+    setSearch(term);
+    if (onSearch) {
+      onSearch(term);
+    }
+  };
+
   function selectItem(item: DropdownOption<T>) {
     setSelected((selected) => [...selected, item]);
+
+    setSearch('');
+    if (onSearch) {
+      onSearch('');
+    }
   }
 
   function unselectItem(item: DropdownOption<T>) {
@@ -65,13 +97,21 @@ function MultiSelectInner<T>(
     <div className={classNames(styles.container, className)} ref={ref}>
       <Input
         type="text"
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={handleSearchChange}
         value={search}
         placeholder={`${t(KEY.common_search)}...`}
         className={styles.search_input}
       />
       <div className={styles.box_container}>
-        <SelectBox items={filteredOptions} onItemClick={selectItem} label={optionsLabel} />
+        <div className={styles.box_wrapper}>
+          <SelectBox
+            items={filteredOptions}
+            onItemClick={selectItem}
+            label={optionsLabel}
+            loading={loading}
+            emptyMessage={emptyMessage}
+          />
+        </div>
 
         <div className={styles.button_container}>
           <Button type="button" theme="blue" onClick={selectAll} disabled={filteredOptions.length === 0}>
@@ -85,7 +125,14 @@ function MultiSelectInner<T>(
           </Button>
         </div>
 
-        <SelectBox items={filteredSelected} onItemClick={unselectItem} itemButtonTheme="white" label={selectedLabel} />
+        <div className={styles.box_wrapper}>
+          <SelectBox
+            items={filteredSelected}
+            onItemClick={unselectItem}
+            itemButtonTheme="white"
+            label={selectedLabel}
+          />
+        </div>
       </div>
     </div>
   );

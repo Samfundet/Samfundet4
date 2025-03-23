@@ -129,6 +129,8 @@ export function EventsAdminPage() {
               subtitle=""
               imageUrl={BACKEND_DOMAIN + event.image_url}
               compact={true}
+              ticket_type={event.ticket_type}
+              host={event.host}
             />
           );
         })}

@@ -7,7 +7,10 @@ from rest_framework import routers
 
 from django.urls import path, include
 
+import samfundet.sulten_views.sulten_views
+
 from . import views
+from .view import recruitment_views
 
 # End: imports -----------------------------------------------------------------
 router = routers.DefaultRouter()
@@ -25,12 +28,12 @@ router.register('user-preference', views.UserPreferenceView, 'user_preference')
 router.register('saksdokument', views.SaksdokumentView, 'saksdokument')
 router.register('profile', views.ProfileView, 'profile')
 router.register('permissions', views.PermissionView, 'permissions')
-router.register('menu', views.MenuView, 'menu')
-router.register('menu-items', views.MenuItemView, 'menu_items')
-router.register('food-preference', views.FoodPreferenceView, 'food_preference')
-router.register('food-category', views.FoodCategoryView, 'food_category')
-router.register('booking', views.BookingView, 'booking')
-router.register('table', views.TableView, 'table')
+router.register('menu', samfundet.sulten_views.sulten_views.MenuView, 'menu')
+router.register('menu-items', samfundet.sulten_views.sulten_views.MenuItemView, 'menu_items')
+router.register('food-preference', samfundet.sulten_views.sulten_views.FoodPreferenceView, 'food_preference')
+router.register('food-category', samfundet.sulten_views.sulten_views.FoodCategoryView, 'food_category')
+router.register('booking', samfundet.sulten_views.sulten_views.BookingView, 'booking')
+router.register('table', samfundet.sulten_views.sulten_views.TableView, 'table')
 router.register('textitem', views.TextItemView, 'text_item')
 router.register('interview-rooms', views.InterviewRoomView, 'interview_rooms')
 router.register('infobox', views.InfoboxView, 'infobox')
@@ -40,8 +43,8 @@ router.register('merch', views.MerchView, 'merch')
 router.register('role', views.RoleView, 'role')
 
 ########## Recruitment ##########
-router.register('recruitment', views.RecruitmentView, 'recruitment')
-router.register('recruitment-for-recruiter', views.RecruitmentForRecruiterView, 'recruitment_for_recruiter')
+router.register('recruitment', recruitment_views.RecruitmentView, 'recruitment')
+router.register('recruitment-for-recruiter', recruitment_views.RecruitmentForRecruiterView, 'recruitment_for_recruiter')
 router.register('recruitment-stats', views.RecruitmentStatisticsView, 'recruitment_stats')
 router.register('recruitment-separateposition', views.RecruitmentSeparatePositionView, 'recruitment_separateposition')
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
@@ -53,7 +56,7 @@ router.register('recruitment-applications-for-position', views.RecruitmentApplic
 router.register('interview', views.InterviewView, 'interview')
 
 ######## Lyche #########
-router.register('create-reservation', views.ReservationCreateView, 'create_reservation')
+router.register('create-reservation', samfundet.sulten_views.sulten_views.ReservationCreateView, 'create_reservation')
 
 app_name = 'samfundet'
 
@@ -80,7 +83,7 @@ urlpatterns = [
     path('webhook/', views.WebhookView.as_view(), name='webhook'),
     path('gangtypes/<int:organization>/', views.GangTypeOrganizationView.as_view(), name='gangsorganized'),
     ########## Lyche ##########
-    path('check-reservation/', views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
+    path('check-reservation/', samfundet.sulten_views.sulten_views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
     ########## Recruitment ##########
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),

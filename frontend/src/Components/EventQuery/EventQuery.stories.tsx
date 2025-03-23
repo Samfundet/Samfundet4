@@ -1,21 +1,22 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import type { EventDto } from '~/dto';
 import { EventQuery } from './EventQuery';
 
 // Local component config.
-export default {
+const meta: Meta<typeof EventQuery> = {
   title: 'Components/EventQuery',
   component: EventQuery,
-  args: {
-    name: 'name',
-  },
-} as ComponentMeta<typeof EventQuery>;
-
-const Template: ComponentStory<typeof EventQuery> = () => {
-  const [events, setEvents] = useState<EventDto[]>([]);
-  return <EventQuery allEvents={events} setEvents={setEvents} />;
 };
 
-export const Basic = Template.bind({});
-Basic.args = {};
+export default meta;
+
+type Story = StoryObj<typeof EventQuery>;
+
+export const Basic: Story = {
+  render: () => {
+    const [events, setEvents] = useState<EventDto[]>([]);
+    return <EventQuery allEvents={events} setEvents={setEvents} />;
+  },
+  args: {},
+};
