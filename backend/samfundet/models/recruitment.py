@@ -482,8 +482,8 @@ class RecruitmentApplication(CustomBaseModel):
     def update_applicant_state(self) -> None:
         applications = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).order_by('applicant_priority')
         # Get top priority
-        top_wanted = applications.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED).order_by('applicant_priority').first()
-        top_reserved = applications.filter(recruiter_priority=RecruitmentPriorityChoices.RESERVE).order_by('applicant_priority').first()
+        top_wanted = applications.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED, withdrawn=False).order_by('applicant_priority').first()
+        top_reserved = applications.filter(recruiter_priority=RecruitmentPriorityChoices.RESERVE, withdrawn=False).order_by('applicant_priority').first()
         with transaction.atomic():
             for application in applications:
                 # I hate conditionals, so instead of checking all forms of condtions
