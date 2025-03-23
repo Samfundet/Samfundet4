@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import type { BilligTicketGroupDto } from '~/apis/billig/billigDtos';
+import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { Button } from '../Button';
 
 type BuyButtonProps = {
   eventId: number;
   billigId: number;
-  ticketSaleState: Pick<BilligTicketGroupDto, 'is_sold_out' | 'is_almost_sold_out'>;
+  ticketSaleState: Pick<BilligEventDto, 'is_sold_out' | 'is_almost_sold_out'>;
 };
 
 export function BuyButton({ eventId, billigId, ticketSaleState }: BuyButtonProps) {
