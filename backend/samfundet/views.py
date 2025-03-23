@@ -1369,6 +1369,36 @@ class OccupiedTimeslotView(ListCreateAPIView):
         return Response({'message': 'Successfully updated occupied timeslots'})
 
 
+class OccupiedTimeslotForUserView(APIView):
+    model = OccupiedTimeslot
+    serializer_class = OccupiedTimeslotSerializer
+    permission_classes = [IsAuthenticated]
+
+    # TODO: set correct permission. Must have permissions to see applications for the user
+    def get(self, request: Request, **kwargs: int) -> Response:
+        recruitment_id = self.request.query_params.get('recruitment')
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        user_id = self.request.query_params.get('user')
+        user = get_object_or_404(User, id=user_id)
+        occupied_timeslots = OccupiedTimeslot.objects.filter(user=user.id, recruitment__id=recruitment.id)
+        dates: dict[str, list[str]] = {}
+        for occupied in occupied_timeslots:
+            date_string = occupied.start_dt.strftime('%Y.%m.%d')
+            time_string = occupied.start_dt.strftime('%H:%M')
+
+            if date_string in dates:
+                dates[date_string].append(time_string)
+            else:
+                dates[date_string] = [time_string]
+
+        return Response(
+            {
+                'recruitment': recruitment.id,
+                'dates': dates,
+            }
+        )
+
+
 class UserFeedbackView(CreateAPIView):
     permission_classes = [AllowAny]
     model = UserFeedbackModel
