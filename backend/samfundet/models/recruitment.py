@@ -480,8 +480,7 @@ class RecruitmentApplication(CustomBaseModel):
         return RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
 
     def update_applicant_state(self) -> None:
-        # TODO: DO WE WANT TO CONSIDER WITHDRAWN APPLICATIONS HERE:
-        applications = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment).order_by('applicant_priority')
+        applications = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).order_by('applicant_priority')
         # Get top priority
         top_wanted = applications.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED).order_by('applicant_priority').first()
         top_reserved = applications.filter(recruiter_priority=RecruitmentPriorityChoices.RESERVE).order_by('applicant_priority').first()
