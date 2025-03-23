@@ -67,6 +67,7 @@ export function EventCreatorAdminPage() {
   const [event, setEvent] = useState<Partial<EventDto>>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
+  const [isBilligEvent, setIsBilligEvent] = useState<boolean>(false);
 
   // TODO these are temporary and must be fetched from API when implemented.
   const eventCategoryOptions: DropdownOption<EventCategoryValue>[] = [
@@ -102,6 +103,7 @@ export function EventCreatorAdminPage() {
     { value: EventTicketType.FREE, label: 'Gratis' },
     { value: EventTicketType.INCLUDED, label: 'Inkludert' },
     { value: EventTicketType.BILLIG, label: 'Billig' },
+    { value: EventTicketType.PREPAID, label: 'Forhåndskjøp' },
     { value: EventTicketType.REGISTRATION, label: 'Registrering' },
     { value: EventTicketType.CUSTOM, label: 'Custom' },
   ];
@@ -162,6 +164,11 @@ export function EventCreatorAdminPage() {
       setShowSpinner(false);
     }
   }, [id, t, form]);
+
+  const handleSetTicketType = (value: EventTicketTypeValue) => {
+    form.setValue('ticket_type', value);
+    setIsBilligEvent(value === EventTicketType.BILLIG);
+  };
 
   // ================================== //
   //          Creation Steps            //
@@ -401,25 +408,6 @@ export function EventCreatorAdminPage() {
       },
       template: (
         <>
-          {isLoadingBilligEvent ? (
-            <Text as="strong">Loading billig event</Text>
-          ) : (
-            <FormField
-              control={form.control}
-              name="billig_event"
-              key={'billig_event'}
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>Billig event</FormLabel>
-                  <FormControl>
-                    <Dropdown options={billigEventOptions} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-
           <FormField
             control={form.control}
             name="age_restriction"
@@ -442,12 +430,34 @@ export function EventCreatorAdminPage() {
               <FormItem className={styles.form_item}>
                 <FormLabel>Billettype</FormLabel>
                 <FormControl>
-                  <Dropdown options={ticketTypeOptions} {...field} />
+                  <Dropdown options={ticketTypeOptions} {...field} onChange={(value) => handleSetTicketType(value)} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          {isBilligEvent && !isLoadingBilligEvent && (
+            <FormField
+              control={form.control}
+              name="billig_event"
+              key={'billig_event'}
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Billig event</FormLabel>
+                  <FormControl>
+                    <Dropdown options={billigEventOptions} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+          {isBilligEvent && isLoadingBilligEvent && (
+            <FormItem className={styles.form_item}>
+              <FormLabel>Billig event</FormLabel>
+              <Text as="strong">Loading Billig events...</Text>
+            </FormItem>
+          )}
         </>
       ),
     },
