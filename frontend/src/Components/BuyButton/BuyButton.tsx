@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { BilligEventDto } from '~/apis/billig/billigDtos';
+import { KEY } from '~/i18n/constants';
 import { Button } from '../Button';
 
 type BuyButtonProps = {
@@ -10,11 +12,12 @@ type BuyButtonProps = {
 
 export function BuyButton({ eventId, billigId, ticketSaleState }: BuyButtonProps) {
   const [buttonText, setButtonText] = useState<string>('Kjøp');
+  const { t } = useTranslation();
   if (ticketSaleState.is_sold_out) {
-    setButtonText('Utsolgt');
+    setButtonText(t(KEY.common_sold_out));
   }
   if (ticketSaleState.is_almost_sold_out) {
-    setButtonText('Nesten utsolgt, kjøp!');
+    setButtonText(t(KEY.common_almost_sold_out));
   }
   const openPaymentForm = () => {
     alert(`ToDo: Open payment form modal with eventId ${eventId} and billigId ${billigId}`);
