@@ -409,6 +409,11 @@ class RecruitmentApplication(CustomBaseModel):
         super().clean()
         errors: dict[str, list[ValidationError]] = defaultdict(list)
 
+        # Skip validation if we're only updating certain fields
+        update_fields = kwargs.get('update_fields')
+        if update_fields and set(update_fields).issubset({'application_comment'}):
+            return
+
         # Cant use not self.pk, due to UUID generating it before save
         current_application = RecruitmentApplication.objects.filter(pk=self.pk).first()
         # validates if there are not two applications for same user and same recruitmentposition
