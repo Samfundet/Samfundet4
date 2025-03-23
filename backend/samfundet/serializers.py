@@ -938,7 +938,6 @@ class RecruitmentApplicationForApplicantSerializer(CustomBaseSerializer):
             'applicant_priority',
             'withdrawn',
         ]
-        exclude = ['application_comment']
 
     def create(self, validated_data: dict) -> RecruitmentApplication:
         recruitment_position = validated_data['recruitment_position']
@@ -1216,3 +1215,9 @@ class PurchaseFeedbackSerializer(serializers.ModelSerializer):
             PurchaseFeedbackQuestion.objects.create(form=purchase_feedback, question=question, answer=answer)
 
         return purchase_feedback
+
+
+class ApplicationCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentApplication
+        fields = ['application_comment']
