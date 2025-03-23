@@ -1,4 +1,5 @@
 import type { ThemeValue } from '~/constants';
+import type { BilligEventDto } from './apis/billig/billigDtos';
 import type {
   EventAgeRestrictionValue,
   EventCategoryValue,
@@ -154,6 +155,7 @@ export type EventDto = {
   location: string;
   category: EventCategoryValue;
   host: string;
+  billig?: BilligEventDto;
 
   // Timestamps/duration
   image_url: string;
