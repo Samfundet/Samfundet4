@@ -92,7 +92,7 @@ export function RecruitmentApplicantsStatus({
         styles.less_wanted_wanted,
         styles.less_wanted_reserve,
         styles.pending,
-        styles.pending,
+        styles.not_wanted,
       ][status];
     }
   }
@@ -110,6 +110,7 @@ export function RecruitmentApplicantsStatus({
   const data = applicants.map((application) => {
     const applicationStatusStyle = getStatusStyle(application?.applicant_state);
     const guideText = getStatusText(application?.recruiter_priority);
+    console.log(application.applicant_state)
     return {
       cells: [
         {
