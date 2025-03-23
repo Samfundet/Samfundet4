@@ -50,7 +50,7 @@ export function HomePage() {
   );
 
   return (
-    <Page>
+    <>
       <Splash events={homePage?.splash} showInfo={true} />
       <div className={styles.content}>
         {/*<SplashHeaderBox />*/}
@@ -59,6 +59,6 @@ export function HomePage() {
         {/* Render elements for frontpage. */}
         {homePage?.elements.map((el, index) => renderElement(index, el))}
       </div>
-    </Page>
+    </>
   );
 }
