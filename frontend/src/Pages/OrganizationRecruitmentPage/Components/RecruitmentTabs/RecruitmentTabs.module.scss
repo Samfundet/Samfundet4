@@ -1,8 +1,8 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
-.recruitmentTabsContainer{
+.recruitmentTabsContainer {
   @include flex-column-center;
   width: 100%;
   gap: 1rem;
