@@ -30,3 +30,19 @@ export const billigEventKeys = {
   details: () => [...billigEventKeys.all, 'detail'] as const,
   detail: (id: number) => [...billigEventKeys.details(), id] as const,
 };
+
+export const billigTicketGroupKeys = {
+  all: ['billigTicketGroup'] as const,
+  lists: () => [...billigTicketGroupKeys.all, 'list'] as const,
+  list: (filters: unknown[]) => [...billigTicketGroupKeys.lists(), { filters }] as const,
+  details: () => [...billigTicketGroupKeys.all, 'detail'] as const,
+  detail: (id: number) => [...billigTicketGroupKeys.details(), id] as const,
+};
+
+export const billigPriceGroupKeys = {
+  all: ['billigPriceGroup'] as const,
+  lists: () => [...billigPriceGroupKeys.all, 'list'] as const,
+  list: (filters: unknown[]) => [...billigPriceGroupKeys.lists(), { filters }] as const,
+  details: () => [...billigPriceGroupKeys.all, 'detail'] as const,
+  detail: (id: number) => [...billigPriceGroupKeys.details(), id] as const,
+};
