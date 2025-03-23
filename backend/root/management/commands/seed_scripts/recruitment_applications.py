@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from random import randint
 from collections.abc import Generator
 
 from django.db import transaction  # type: ignore
@@ -67,7 +68,7 @@ def create_application(position: RecruitmentPosition, user: User, recruitment_id
 
 def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
     """
-    Seed recruitment applications with deterministic behavior
+    Seed recruitment applications ensuring each position has 3-9 applicants
 
     Yields:
         Tuples of (progress percentage, status message)
@@ -85,17 +86,6 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
     # Sort positions by ID for consistency
     positions.sort(key=lambda p: p.id)
 
-    # Organize positions by recruitment
-    positions_by_recruitment: dict[int, list[RecruitmentPosition]] = {}
-    for position in positions:
-        recruitment_id = position.recruitment.id
-        if recruitment_id not in positions_by_recruitment:
-            positions_by_recruitment[recruitment_id] = []
-        positions_by_recruitment[recruitment_id].append(position)
-
-    # Sort recruitment IDs for consistency
-    recruitment_ids = sorted(positions_by_recruitment.keys())
-
     # Get eligible applicant users (already sorted by ID)
     applicant_users = get_applicant_users()
     if not applicant_users:
@@ -104,43 +94,60 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
 
     yield 10, f'Found {len(applicant_users)} eligible users and {len(positions)} positions'
 
+    # Track which users have applied to which recruitments and how many applications they've made
+    user_recruitment_map = {}  # {user_id: {recruitment_id: priority_counter}}
     applications_to_create = []
-    users_processed = 0
+    positions_processed = 0
 
     # Use transaction for better performance
     with transaction.atomic():
-        # Distribute users evenly across recruitments
-        for i, user in enumerate(applicant_users):
-            # Determine which recruitment this user applies to (cycle through them)
-            recruitment_index = i % len(recruitment_ids)
-            recruitment_id = recruitment_ids[recruitment_index]
+        # For each position, assign 3-9 applicants
+        for position in positions:
+            recruitment_id = position.recruitment.id
 
-            # Get positions for this recruitment
-            recruitment_positions = positions_by_recruitment[recruitment_id]
+            # Determine number of applicants for this position (between 3 and 9)
+            num_applicants = randint(3, min(9, len(applicant_users)))
 
-            # Each user applies to exactly 3 positions (or fewer if not enough positions)
-            num_applications = min(3, len(recruitment_positions))
+            # Find eligible users for this position
+            # Prioritize users with fewer applications to this recruitment
+            eligible_for_position = []
+            for user in applicant_users:
+                # Initialize user's recruitment map if needed
+                if user.id not in user_recruitment_map:
+                    user_recruitment_map[user.id] = {}
 
-            # Choose positions deterministically based on user ID
-            for j in range(num_applications):
-                # Select position based on user ID (cycle through positions)
-                position_index = (i + j) % len(recruitment_positions)
-                position = recruitment_positions[position_index]
+                # Initialize recruitment counter if needed
+                if recruitment_id not in user_recruitment_map[user.id]:
+                    user_recruitment_map[user.id][recruitment_id] = 0
 
-                # Create application with sequential priority (1, 2, 3)
+                # Add user to eligible list
+                eligible_for_position.append((user, user_recruitment_map[user.id][recruitment_id]))
+
+            # Sort by application count (users with fewer applications first)
+            eligible_for_position.sort(key=lambda x: x[1])
+
+            # Select first N users
+            selected_users = [user for user, _ in eligible_for_position[:num_applicants]]
+
+            # Create applications for selected users
+            for user in selected_users:
+                # Increment user's priority counter for this recruitment
+                user_recruitment_map[user.id][recruitment_id] += 1
+
+                # Create application with priority based on how many applications they've made to this recruitment
                 application = create_application(
                     position=position,
                     user=user,
                     recruitment_id=recruitment_id,
-                    priority=j + 1,
+                    priority=user_recruitment_map[user.id][recruitment_id],
                 )
 
                 applications_to_create.append(application)
 
-            users_processed += 1
-            if users_processed % 20 == 0:
-                progress = 10 + (users_processed / len(applicant_users) * 70)
-                yield progress, f'Processed {users_processed}/{len(applicant_users)} users'
+            positions_processed += 1
+            if positions_processed % 10 == 0:
+                progress = 10 + (positions_processed / len(positions) * 70)
+                yield progress, f'Processed {positions_processed}/{len(positions)} positions'
 
         # Create applications in batches for better performance
         if applications_to_create:
@@ -156,5 +163,14 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
                 progress = 80 + (total_created / len(applications_to_create) * 20)
                 yield progress, f'Created {total_created} of {len(applications_to_create)} applications'
 
+    # Verify that each position has the correct number of applicants
+    position_applicant_counts = {}
+    for position in positions:
+        count = RecruitmentApplication.objects.filter(recruitment_position=position).count()
+        position_applicant_counts[position.id] = count
+
+    min_applicants = min(position_applicant_counts.values()) if position_applicant_counts else 0
+    max_applicants = max(position_applicant_counts.values()) if position_applicant_counts else 0
+
     actual_created = RecruitmentApplication.objects.count()
-    yield 100, f'Created {actual_created} recruitment applications. Every user has exactly 3 applications (or fewer if not enough positions).'
+    yield 100, f'Created {actual_created} recruitment applications. Each position has between {min_applicants} and {max_applicants} applicants.'
