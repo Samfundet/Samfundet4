@@ -20,12 +20,7 @@ export function BuyButton({ eventId, billigId, ticketSaleState }: BuyButtonProps
     alert(`ToDo: Open payment form modal with eventId ${eventId} and billigId ${billigId}`);
   };
   return (
-    <Button
-      theme={'samf'}
-      onClick={() => {
-        openPaymentForm;
-      }}
-    >
+    <Button theme={'samf'} onClick={openPaymentForm}>
       {buttonText}
     </Button>
   );
