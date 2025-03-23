@@ -938,6 +938,7 @@ class RecruitmentApplicationForApplicantSerializer(CustomBaseSerializer):
             'applicant_priority',
             'withdrawn',
         ]
+        exclude = ['application_comment']
 
     def create(self, validated_data: dict) -> RecruitmentApplication:
         recruitment_position = validated_data['recruitment_position']
@@ -1032,6 +1033,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
             'interview_time',
             'interview',
             'created_at',
+            'application_comment',
         ]
         read_only_fields = [
             'id',

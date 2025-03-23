@@ -336,6 +336,10 @@ class RecruitmentApplication(CustomBaseModel):
     interview = models.ForeignKey(
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the application', related_name='applications'
     )
+
+    # simple comment for recruiters to communicate stuff like detailed priority and "guidance"/"føring"
+    application_comment = models.TextField(help_text='Application comment', null=True, blank=True)
+
     withdrawn = models.BooleanField(default=False, blank=True, null=True)
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its application
     recruiter_priority = models.IntegerField(
