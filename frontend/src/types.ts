@@ -110,6 +110,7 @@ export const EventTicketType = {
   FREE: 'free',
   INCLUDED: 'included',
   BILLIG: 'billig',
+  PREPAID: 'prepaid',
   REGISTRATION: 'registration',
   CUSTOM: 'custom',
 } as const;
