@@ -92,33 +92,12 @@ class RecruitmentApplicantStates(models.IntegerChoices):
     # 1 reserve
     # 2 wanted
     NOT_SET = 0, _('The priority is not set')
-    TOP_RESERVED = (1, _('This applicant is reserved for this posision as things are now'))
-    TOP_WANTED = (2, _('This position will go to this applicant as things are now'))
-    LESS_RESERVE = (
-        3,
-        _('Another position has this applicant on reserve, and the applicant has set higher priority on that position'),
-    )
-    LESS_RESERVE_RESERVED = (
-        4,
-        _('This applicant is on reserve for this position as things are now'),
-    )
-    LESS_RESERVE_WANTED = (
-        5,
-        _('Another position has higher priority'),
-    )
-    LESS_WANT = (
-        6,
-        _('Another position has this on reserve, and the applicant has set higher priority on that position'),
-    )
-    LESS_WANT_RESERVED = (
-        7,
-        _('This applciant will go to another position as things are no'),
-    )
-    LESS_WANT_WANTED = (
-        8,
-        _('Another position aslo has this applicant on wanted, but the applicant has set higher priority on that position'),
-    )
-    NOT_WANTED = (
-        10,
-        _('This applicant will go to another posision as things are now'),
-    )
+    TOP_RESERVED = 1, _('This applicant is reserved for this posision as things are now')
+    TOP_WANTED = 2, _('This position will go to this applicant as things are now')
+    LESS_RESERVE = 3, _('Another position has this applicant on reserve, and the applicant has set higher priority on that position')
+    LESS_RESERVE_RESERVED = 4, _('This applicant is on reserve for this position as things are now')
+    LESS_RESERVE_WANTED = 5, _('Another position has higher priority')
+    LESS_WANT = 6, _('Another position has this on reserve, and the applicant has set higher priority on that position')
+    LESS_WANT_RESERVED = 7, _('This applciant will go to another position as things are no')
+    LESS_WANT_WANTED = 8, _('Another position aslo has this applicant on wanted, but the applicant has set higher priority on that position')
+    NOT_WANTED = 10, _('This applicant will go to another posision as things are now')
