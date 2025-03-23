@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { InputField, MiniCalendar, TimeslotContainer } from '~/Components';
 import {
   getInterview,
-  getOccupiedTimeslots,
+  getOccupiedTimeForUser,
   getRecruitmentAvailability,
   setRecruitmentApplicationInterview,
 } from '~/api';
@@ -56,7 +56,10 @@ export function SetInterviewManuallyForm({
         setMaxDate(new Date(response.data.end_date));
         setTimeslots(response.data.timeslots);
       }),
-      getOccupiedTimeslots(recruitmentId).then((res) => {
+      // getOccupiedTimeslots(recruitmentId).then((res) => {
+      //   setOccupiedTimeslots(res.data.dates);
+      // }),
+      getOccupiedTimeForUser(recruitmentId, application.user.id).then((res) => {
         setOccupiedTimeslots(res.data.dates);
       }),
     ])
