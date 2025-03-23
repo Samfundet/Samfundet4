@@ -1,13 +1,13 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import "src/mixins";
+@use 'src/mixins' as *;
 
-.card{
+.card {
   display: grid;
   grid-template-areas:
-  "header logo"
-  "text logo"
-  "text buttons";
+    'header logo'
+    'text logo'
+    'text buttons';
   gap: 1.5rem;
   border-radius: 14px;
   padding: 0.5rem 1.5rem 0.5rem 1.5rem;
@@ -25,13 +25,13 @@
 
   @include for-tablet-down {
     grid-template-areas:
-    "header header"
-    "text logo"
-    "buttons buttons";
+      'header header'
+      'text logo'
+      'buttons buttons';
   }
 }
 
-.cardHeader{
+.cardHeader {
   grid-area: header;
 }
 
@@ -66,27 +66,27 @@
   gap: 0.5rem;
 }
 
-.SamfundetCard{
+.SamfundetCard {
   @extend .card;
   border-color: $red-samf;
 
-  .cardHeader{
+  .cardHeader {
     border-bottom: 2px solid $red-samf;
   }
 }
 
-.UKACard{
+.UKACard {
   @extend .card;
   border-color: $blue_uka;
-  .cardHeader{
+  .cardHeader {
     border-bottom: 2px solid $blue_uka;
   }
 }
 
-.ISFiTCard{
+.ISFiTCard {
   @extend .card;
   border-color: $blue_isfit;
-  .cardHeader{
+  .cardHeader {
     border-bottom: 2px solid $blue_isfit;
   }
 }

@@ -1,4 +1,4 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
 .navbar_outlet {
   padding-top: $navbar-height;
