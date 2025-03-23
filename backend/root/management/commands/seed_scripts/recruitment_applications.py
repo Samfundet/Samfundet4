@@ -101,12 +101,11 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
 
     # Use transaction for better performance
     with transaction.atomic():
-        # For each position, assign 3-9 applicants
         for position in positions:
             recruitment_id = position.recruitment.id
 
-            # Determine number of applicants for this position (between 3 and 9)
-            num_applicants = randint(3, min(9, len(applicant_users)))
+            # Determine number of applicants for this position (between 15 and 20)
+            num_applicants = randint(15, min(20, len(applicant_users)))
 
             # Find eligible users for this position
             # Prioritize users with fewer applications to this recruitment
@@ -169,8 +168,5 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
         count = RecruitmentApplication.objects.filter(recruitment_position=position).count()
         position_applicant_counts[position.id] = count
 
-    min_applicants = min(position_applicant_counts.values()) if position_applicant_counts else 0
-    max_applicants = max(position_applicant_counts.values()) if position_applicant_counts else 0
-
     actual_created = RecruitmentApplication.objects.count()
-    yield 100, f'Created {actual_created} recruitment applications. Each position has between {min_applicants} and {max_applicants} applicants.'
+    yield 100, f'Created {actual_created} recruitment applications.'
