@@ -1,16 +1,19 @@
+import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { Page } from '~/Components';
+import { Button, Page } from '~/Components';
 import { BuyButton } from '~/Components/BuyButton/BuyButton';
+import { BuyTicketModal } from '~/Components/BuyTicketModal';
 import { getEvent } from '~/api';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
+import { PAID_TICKET_TYPES } from '~/types';
+import { dbT, lowerCapitalize } from '~/utils';
 import { Splash } from '../HomePage/components/Splash/Splash';
 import styles from './EventPage.module.scss';
 import { EventTable } from './components/EventTable';
@@ -42,6 +45,17 @@ export function EventPage() {
     }
   }, [id]);
 
+  const isPaid = event && PAID_TICKET_TYPES.includes(event.ticket_type);
+
+  const ticketButton = isPaid ? (
+    <Button theme={'samf'} className={styles.ticket_button}>
+      <Icon icon="ph:ticket-bold" />
+      {lowerCapitalize(`${t(KEY.common_buy)} ${t(KEY.common_ticket_type)}`)}
+    </Button>
+  ) : (
+    <></>
+  );
+
   return (
     <Page className={styles.container} loading={showSpinner}>
       {/* TODO splash should be its own component rather than homepage subcomponent */}
@@ -50,6 +64,7 @@ export function EventPage() {
       <div className={styles.content_row}>
         {/* Info table */}
         <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
+        {isPaid && <BuyTicketModal event={event} />}{' '}
         {event?.billig && (
           <BuyButton ticketSaleState={event.billig.ticket_groups} eventId={event.id} billigId={event.billig.id} />
         )}
