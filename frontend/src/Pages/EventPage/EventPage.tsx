@@ -50,7 +50,9 @@ export function EventPage() {
       <div className={styles.content_row}>
         {/* Info table */}
         <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
-        {event?.billig && <BuyButton ticketSalesState={event.billig.ticket_groups} />}
+        {event?.billig && (
+          <BuyButton ticketSaleState={event.billig.ticket_groups} eventId={event.id} billigId={event.billig.id} />
+        )}
         {/* Text */}
         <div className={styles.text_container}>
           <div className={styles.description}>
