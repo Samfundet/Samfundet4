@@ -181,6 +181,7 @@ class RoleProtectedOrAnonReadOnlyObjectPermissions(RoleProtectedObjectPermission
     """
 
     perms_map = DEFAULT_PERMS_MAP
+    authenticated_users_only = False
 
 
 def filter_queryset_by_permissions(queryset: QuerySet, user: User, permission: str) -> QuerySet:
