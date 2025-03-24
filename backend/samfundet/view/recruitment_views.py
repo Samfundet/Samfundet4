@@ -82,16 +82,16 @@ class RecruitmentApplicationForGangView(ModelViewSet):
     def application_comment(self, request: Request, **kwargs: Any) -> Response:
         application_id = kwargs.get('pk')
 
-        if 'application_comment' not in request.data:
-            return Response({'error': 'application_comment field is required'}, status=status.HTTP_400_BAD_REQUEST)
+        if 'comment' not in request.data:
+            return Response({'error': 'comment field is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Use direct update to bypass model save() method and signals
-        comment_text = request.data['application_comment']
-        updated = RecruitmentApplication.objects.filter(id=application_id).update(application_comment=comment_text)
+        comment_text = request.data['comment']
+        updated = RecruitmentApplication.objects.filter(id=application_id).update(comment=comment_text)
 
         if updated:
             # Return the updated comment in the response
-            return Response({'application_comment': comment_text}, status=status.HTTP_200_OK)
+            return Response({'comment': comment_text}, status=status.HTTP_200_OK)
         return Response({'error': 'Application not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def list(self, request: Request) -> Response:
