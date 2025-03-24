@@ -10,15 +10,9 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { applicationKeys, recruitmentKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
-import {
-  RecruitmentPriorityChoicesMapping,
-  RecruitmentStatusChoicesMapping,
-  getApplicantStateColor,
-  getApplicantStateName,
-} from '~/types';
+import { RecruitmentPriorityChoicesMapping, RecruitmentStatusChoicesMapping } from '~/types';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { AllApplicantsActionbar, AllApplicationsExpandableHeader, type FilterType } from './components';
-import { CommentForm } from './components/CommentForm';
 
 const browserTabTitle = 'All applicants';
 
@@ -85,7 +79,6 @@ export function RecruitmentAllApplicationsAdminPage() {
     { content: t(KEY.recruitment_recruiter_priority), sortable: false },
     { content: t(KEY.recruitment_recruiter_status), sortable: false },
     { content: t(KEY.recruitment_recruiter_guide), sortable: false },
-    { content: t(KEY.common_comment), sortable: false },
   ];
 
   const applicationsToTableRows = (applications: ApplicationForAllApplications[]) => {
@@ -147,18 +140,7 @@ export function RecruitmentAllApplicationsAdminPage() {
           },
           {
             value: app.applicant_state,
-            content:
-              app.applicant_state !== undefined ? (
-                <span style={{ backgroundColor: getApplicantStateColor(app.applicant_state) }}>
-                  {getApplicantStateName(app.applicant_state)}
-                </span>
-              ) : (
-                'N/A'
-              ),
-          },
-          {
-            value: 'form',
-            content: <CommentForm initialData={''} applicationId={app.id} />, //ToDo: add comment, GU-nestleder still has use for it
+            content: app.applicant_state !== undefined ? <span>{app.applicant_state}</span> : 'N/A',
           },
         ],
       };
