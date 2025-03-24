@@ -36,6 +36,7 @@ import {
   ClosedPeriodAdminPage,
   ClosedPeriodFormAdminPage,
   CreateInterviewRoomPage,
+  CurrentRecruitmentStatisticsAdminPage,
   EventCreatorAdminPage,
   EventsAdminPage,
   GangsAdminPage,
@@ -51,13 +52,13 @@ import {
   RecruitmentGangAdminPage,
   RecruitmentGangAllApplicantsAdminPage,
   RecruitmentGangOverviewPage,
+  RecruitmentHistoricStatisticsAdminPage,
   RecruitmentOpenToOtherPositionsPage,
   RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
   RecruitmentPositionOverviewPage,
   RecruitmentRejectionMailPage,
   RecruitmentSeparatePositionFormAdminPage,
-  RecruitmentStatisticsAdminPage,
   RecruitmentUnprocessedApplicantsPage,
   RecruitmentUsersWithoutInterviewGangPage,
   RecruitmentUsersWithoutThreeInterviewCriteriaPage,
@@ -398,6 +399,10 @@ export const router = createBrowserRouter(
               element={<PermissionRoute element={<RecruitmentAdminPage />} />}
             />
             <Route
+              path={ROUTES.frontend.admin_recruitment_statistics}
+              element={<PermissionRoute element={<RecruitmentHistoricStatisticsAdminPage />} />}
+            />
+            <Route
               path={ROUTES.frontend.admin_recruitment_create}
               element={
                 <PermissionRoute required={[PERM.SAMFUNDET_ADD_RECRUITMENT]} element={<RecruitmentFormAdminPage />} />
@@ -442,11 +447,11 @@ export const router = createBrowserRouter(
                 }}
               />
               <Route
-                path={ROUTES.frontend.admin_recruitment_statistics}
+                path={ROUTES.frontend.admin_current_recruitment_statistics}
                 element={
                   <PermissionRoute
                     required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
-                    element={<RecruitmentStatisticsAdminPage />}
+                    element={<CurrentRecruitmentStatisticsAdminPage />}
                   />
                 }
                 handle={{

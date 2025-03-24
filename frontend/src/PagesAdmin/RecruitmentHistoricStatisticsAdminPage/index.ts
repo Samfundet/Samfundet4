@@ -1,0 +1,1 @@
+export { RecruitmentHistoricStatisticsAdminPage } from './RecruitmentHistoricStatisticsAdminPage';

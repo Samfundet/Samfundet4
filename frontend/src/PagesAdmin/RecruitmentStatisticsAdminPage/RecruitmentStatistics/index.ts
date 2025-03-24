@@ -1,1 +1,0 @@
-export { ThisRecruitmentStatistics } from './ThisRecruitmentStatistics';
