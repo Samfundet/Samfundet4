@@ -5,7 +5,7 @@ import { type Tab, TabView } from '~/Components';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { RecruitmentStatistics } from './RecruitmentStatistics/RecruitmentStatistics';
+import { RecruitmentStatistics } from './RecruitmentStatistics/ThisRecruitmentStatistics';
 
 export function RecruitmentStatisticsAdminPage() {
   const { t } = useTranslation();
@@ -14,10 +14,11 @@ export function RecruitmentStatisticsAdminPage() {
   useTitle(t(KEY.recruitment_overview));
   const tabs: Tab<ReactNode>[] = useMemo(() => {
     return [
-      { key: 1, label: t(KEY.recruitment_applicants), value: <RecruitmentStatistics recruitmentId={recruitmentId} /> },
-      { key: 2, label: 'TEST', value: <div>Test</div> },
+      { key: 1, label: 'This recruitment', value: <RecruitmentStatistics recruitmentId={recruitmentId} /> },
+      { key: 2, label: 'Historic applicant statistics', value: <div>historic applicant statistics</div> },
+      { key: 3, label: 'Historic campus statistics', value: <div>historic campus statistics</div> },
     ];
-  }, [recruitmentId, t]);
+  }, [recruitmentId]);
 
   return (
     <AdminPageLayout title={`${t(KEY.recruitment_overview)} `}>

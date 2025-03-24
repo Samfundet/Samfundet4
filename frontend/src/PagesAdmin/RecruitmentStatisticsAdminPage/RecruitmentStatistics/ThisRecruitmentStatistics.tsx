@@ -9,13 +9,13 @@ import type { RecruitmentForRecruiterDto } from '~/dto';
 import { useCustomNavigate, useParentElementWidth } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './RecruitmentStatistics.module.scss';
+import styles from './ThisRecruitmentStatistics.module.scss';
 
 type RecruitmentStatisticsProps = {
   recruitmentId?: string;
 };
 
-export function RecruitmentStatistics({ recruitmentId }: RecruitmentStatisticsProps) {
+export function ThisRecruitmentStatistics({ recruitmentId }: RecruitmentStatisticsProps) {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
   const chartRef = useRef<HTMLDivElement>(null);

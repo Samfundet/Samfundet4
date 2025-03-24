@@ -1,1 +1,1 @@
-export { RecruitmentStatistics } from './RecruitmentStatistics';
+export { ThisRecruitmentStatistics } from './ThisRecruitmentStatistics';
