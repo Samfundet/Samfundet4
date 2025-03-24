@@ -80,25 +80,6 @@ export const COLORS = {
   // Defaults
   background_primary: '#ffffff',
   background_secondary: '#efefef',
-
-  // Application state colors (model_choices.py RecruitmentApplicantStates)
-
-  not_set: '#ffffff',
-
-  rejected: '#f9cccd',
-  accepted: '#ccf9cd',
-  withdrawn: '#bbbbbb',
-
-  pending: '#fff5bc',
-  top_wanted: '#32ff32',
-  top_reserve: '#afffaf',
-  less_reserve: '#ffb343',
-  less_reserve_wanted: '#e3fc00',
-  less_reserve_reserved: '#fc3f00',
-  less_want: '#f74343',
-  less_want_reserved: '#f74343',
-  less_want_wanted: '#f74343',
-  not_wanted: '#dc1010',
 } as const;
 
 export type Color = typeof COLORS;
@@ -216,60 +197,6 @@ export const RecruitmentPriorityChoicesMapping: { [key: number]: string } = {
   1: RecruitmentPriorityChoices.RESERVE,
   2: RecruitmentPriorityChoices.WANTED,
   3: RecruitmentPriorityChoices.NOT_WANTED,
-};
-
-export const RecruitmentApplicantStates = {
-  // see model_choices.py (RecruitmentApplicantStates)
-  NOT_SET: 0,
-  TOP_RESERVED: 1,
-  TOP_WANTED: 2,
-  LESS_RESERVE: 3,
-  LESS_RESERVE_RESERVED: 4,
-  LESS_RESERVE_WANTED: 5,
-  LESS_WANT: 6,
-  LESS_WANT_RESERVED: 7,
-  LESS_WANT_WANTED: 8,
-  NOT_WANTED: 10,
-} as const;
-
-// Name mapping for display purposes
-export const RecruitmentApplicantStatesNames: { [key: number]: string } = {
-  // see model_choices.py (RecruitmentApplicantStates)
-  0: 'Unprocessed',
-  1: 'Top Reserve',
-  2: 'Top Wanted',
-  3: 'Lower Position (Other on Reserve)',
-  4: 'Lower Position (Other on Reserve, You Reserved)',
-  5: 'Lower Position (Other on Reserve, You Wanted)',
-  6: 'Lower Position (Other on Wanted)',
-  7: 'Lower Position (Other on Wanted, You Reserved)',
-  8: 'Lower Position (Other on Wanted, You Wanted)',
-  10: 'Not Wanted',
-};
-
-// Color mapping for applicant states
-export const ApplicationStateColorMapping: { [key: number]: string } = {
-  // see model_choices.py (RecruitmentApplicantStates)
-  [RecruitmentApplicantStates.NOT_SET]: COLORS.not_set,
-  [RecruitmentApplicantStates.TOP_RESERVED]: COLORS.top_reserve,
-  [RecruitmentApplicantStates.TOP_WANTED]: COLORS.top_wanted,
-  [RecruitmentApplicantStates.LESS_RESERVE]: COLORS.less_reserve,
-  [RecruitmentApplicantStates.LESS_RESERVE_RESERVED]: COLORS.less_reserve_reserved,
-  [RecruitmentApplicantStates.LESS_RESERVE_WANTED]: COLORS.less_reserve_wanted,
-  [RecruitmentApplicantStates.LESS_WANT]: COLORS.less_want,
-  [RecruitmentApplicantStates.LESS_WANT_RESERVED]: COLORS.less_want_reserved,
-  [RecruitmentApplicantStates.LESS_WANT_WANTED]: COLORS.less_want_wanted,
-  [RecruitmentApplicantStates.NOT_WANTED]: COLORS.not_wanted,
-};
-
-// Helper function to get the color for a state
-export const getApplicantStateColor = (state: number): string => {
-  return ApplicationStateColorMapping[state] || COLORS.not_set;
-};
-
-// Helper function to get state name
-export const getApplicantStateName = (state: number): string => {
-  return RecruitmentApplicantStatesNames[state] || 'Unknown State';
 };
 
 /* For DRF pagination, see pagination.py */
