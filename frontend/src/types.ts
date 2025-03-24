@@ -191,6 +191,14 @@ export const RecruitmentPriorityChoices = {
   NOT_WANTED: 'Not Wanted',
 } as const;
 
+// Recruitment Priority Choices Mapping
+export const RecruitmentPriorityChoicesMapping: { [key: number]: string } = {
+  0: RecruitmentPriorityChoices.NOT_SET,
+  1: RecruitmentPriorityChoices.RESERVE,
+  2: RecruitmentPriorityChoices.WANTED,
+  3: RecruitmentPriorityChoices.NOT_WANTED,
+};
+
 /* For DRF pagination, see pagination.py */
 export interface PageNumberPaginationType<T> {
   page_size: number;
