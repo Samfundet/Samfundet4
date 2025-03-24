@@ -196,8 +196,6 @@ export const KEY = {
   common_list_view: 'common_list_view',
   common_tab_view: 'common_tab_view',
   common_available: 'common_available',
-  common_at: 'common_at',
-  common_comment: 'common_comment',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -224,6 +222,10 @@ export const KEY = {
   common_ticket_type_included: 'common_ticket_type_included',
   common_ticket_type_registration: 'common_ticket_type_registration',
 
+  // Billig
+
+  common_sold_out: 'common_sold_out',
+  common_almost_sold_out: 'common_almost_sold_out',
   // ==================== //
   //        Others        //
   // ==================== //
@@ -300,7 +302,6 @@ export const KEY = {
   recruitment_no_interviews: 'recruitment_no_interviews',
   recruitment_no_interviewers_available: 'recruitment_no_interviewers_available',
   recruitment_interview_set: 'recruitment_interview_set',
-  recruitment_interview_set_all: 'recruitment_interview_set_all',
   recruitment_interview_groups: 'recruitment_interview_groups',
   recruitment_interview_group: 'recruitment_interview_group',
   recruitment_applicants: 'recruitment_applicants',
@@ -392,7 +393,6 @@ export const KEY = {
   recruitment_rejected: 'recruitment_rejected',
   recruitment_statistics: 'recruitment_statistics',
   recruitment_applications: 'recruitment_applications',
-  recruitment_allow_to_contact: 'recruitment_allow_to_contact',
 
   recruitment_applications_processed: 'recruitment_applications_processed',
   recruitment_applicants_processed: 'recruitment_applicants_processed',
@@ -408,13 +408,6 @@ export const KEY = {
   error_recruitment_form_3: 'error_recruitment_form_3',
   error_recruitment_form_4: 'error_recruitment_form_4',
   recruitment_separate_recruitment: 'recruitment_separate_recruitment',
-  recruitment_all_applicants_filter_name: 'recruitment_all_applicants_filter_name',
-  recruitment_all_applicants_filter_no_rejections: 'recruitment_all_applicants_filter_no_rejections',
-  recruitment_all_applicants_filter_similar: 'recruitment_all_applicants_filter_similar',
-  recruitment_all_applicants_filter_conflicts: 'recruitment_all_applicants_filter_conflicts',
-  recruitment_all_applicants_filter_no_conflicts: 'recruitment_all_applicants_filter_no_conflicts',
-  recruitment_all_applicants_filter_specific: 'recruitment_all_applicants_filter_specific',
-  recruitment_search_for_applicant: 'recruitment_search_for_applicant',
 
   // Recruitment applets
   recruitment_applet_dashboard_description: 'recruitment_applet_dashboard_description',
@@ -430,8 +423,6 @@ export const KEY = {
   recruitment_choose_interview_time_and_location: 'recruitment_choose_interview_time_and_location',
   recruitment_choose_interview_time: 'recruitment_choose_interview_time',
   recruitment_choose_interview_location: 'recruitment_choose_interview_location',
-  recruitment_all_applicants: 'recruitment_all_applicants',
-  recruitment_manage_all_applicants: 'recruitment_manage_all_applicants',
 
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
