@@ -338,7 +338,7 @@ class RecruitmentApplication(CustomBaseModel):
     )
 
     # simple comment for recruiters to communicate stuff like detailed priority and "guidance"/"føring"
-    application_comment = models.TextField(help_text='Application comment', null=True, blank=True)
+    comment = models.TextField(help_text='Application comment', null=True, blank=True)
 
     withdrawn = models.BooleanField(default=False, blank=True, null=True)
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its application
@@ -411,7 +411,7 @@ class RecruitmentApplication(CustomBaseModel):
 
         # Skip validation if we're only updating certain fields
         update_fields = kwargs.get('update_fields')
-        if update_fields and set(update_fields).issubset({'application_comment'}):
+        if update_fields and set(update_fields).issubset({'comment'}):
             return
 
         # Cant use not self.pk, due to UUID generating it before save
