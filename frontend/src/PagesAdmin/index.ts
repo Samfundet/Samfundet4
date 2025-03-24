@@ -24,6 +24,7 @@ export { RecruitmentPositionOverviewPage } from './RecruitmentPositionOverviewPa
 export { RecruitmentRecruiterDashboardPage } from './RecruitmentRecruiterDashboardPage';
 export { RecruitmentRejectionMailPage } from './RecruitmentRejectionMailPage';
 export { RecruitmentSeparatePositionFormAdminPage } from './RecruitmentSeparatePositionFormAdminPage';
+export { RecruitmentStatisticsAdminPage } from './RecruitmentStatisticsAdminPage';
 export { RecruitmentUnprocessedApplicantsPage } from './RecruitmentUnprocessedApplicantsPage';
 export { RecruitmentUsersWithoutInterviewGangPage } from './RecruitmentUsersWithoutInterviewGangPage';
 export { RecruitmentUsersWithoutThreeInterviewCriteriaPage } from './RecruitmentUsersWithoutThreeInterviewCriteriaPage';

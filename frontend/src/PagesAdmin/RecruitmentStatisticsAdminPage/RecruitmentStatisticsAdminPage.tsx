@@ -9,7 +9,7 @@ import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import { RecruitmentStatistics } from './RecruitmentStatistics/RecruitmentStatistics';
 
-export function RecruitmentOverviewPage() {
+export function RecruitmentStatisticsAdminPage() {
   const { t } = useTranslation();
   const { recruitmentId } = useParams();
 
