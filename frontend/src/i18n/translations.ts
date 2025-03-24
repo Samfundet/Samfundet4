@@ -209,6 +209,10 @@ export const nb = prepareTranslations({
   [KEY.common_ticket_type_included]: 'Inkludert i inngang',
   [KEY.common_ticket_type_registration]: 'Påmelding',
 
+  // Billig
+  [KEY.common_sold_out]: 'Utsolgt',
+  [KEY.common_almost_sold_out]: 'Nesten utsolgt',
+
   // ==================== //
   //        Others        //
   // ==================== //
@@ -738,6 +742,9 @@ export const en = prepareTranslations({
   [KEY.common_ticket_type_included]: 'Included with entrance',
   [KEY.common_ticket_type_registration]: 'Registration',
 
+  // Billig
+  [KEY.common_sold_out]: 'Sold out',
+  [KEY.common_almost_sold_out]: 'Almost sold out',
   // ==================== //
   //        Others        //
   // ==================== //

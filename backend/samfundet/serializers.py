@@ -113,7 +113,7 @@ class ImageSerializer(CustomBaseSerializer):
         return image
 
     def get_url(self, image: Image) -> str:
-        return image.image.url if image.image else None
+        return image.image.url
 
 
 class EventCustomTicketSerializer(CustomBaseSerializer):
@@ -632,7 +632,7 @@ class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
         exclude = ['id', 'recruitment_stats']
 
     def campus_name(self, stat: RecruitmentCampusStat) -> str:
-        return stat.campus.name_nb if stat.campus else None
+        return stat.campus.name_nb
 
     def get_applicant_percentage(self, stat: RecruitmentCampusStat) -> float:
         return stat.normalized_applicant_percentage()
@@ -1032,6 +1032,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
             'interview_time',
             'interview',
             'created_at',
+            'comment',
         ]
         read_only_fields = [
             'id',
@@ -1214,6 +1215,12 @@ class PurchaseFeedbackSerializer(serializers.ModelSerializer):
             PurchaseFeedbackQuestion.objects.create(form=purchase_feedback, question=question, answer=answer)
 
         return purchase_feedback
+
+
+class ApplicationCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentApplication
+        fields = ['comment']
 
 
 class LimitedGangSerializer(serializers.ModelSerializer):

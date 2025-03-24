@@ -1,4 +1,5 @@
 import { Carousel, IconButton, ImageCard } from '~/Components';
+import { BuyButton } from '~/Components/BuyButton/BuyButton';
 import { BACKEND_DOMAIN } from '~/constants';
 import { useAuthContext } from '~/context/AuthContext';
 import type { EventDto, HomePageElementDto } from '~/dto';
@@ -58,6 +59,10 @@ export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps
             ticket_type={event.ticket_type}
             host={event.host}
           >
+            {event.billig && (
+              <BuyButton eventId={event.id} billigId={event.billig?.id} ticketSaleState={event.billig?.ticket_groups} />
+            )}
+
             <div className={styles.button_bar}>
               {canChangeEvent && (
                 <IconButton icon="mdi:pencil" url={editUrl} title="Edit" color={COLORS.blue} border="solid white 1px" />

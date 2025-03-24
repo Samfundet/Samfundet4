@@ -224,6 +224,10 @@ export const KEY = {
   common_ticket_type_included: 'common_ticket_type_included',
   common_ticket_type_registration: 'common_ticket_type_registration',
 
+  // Billig
+
+  common_sold_out: 'common_sold_out',
+  common_almost_sold_out: 'common_almost_sold_out',
   // ==================== //
   //        Others        //
   // ==================== //
