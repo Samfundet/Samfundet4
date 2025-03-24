@@ -62,7 +62,6 @@ from .serializers import (
     PurchaseFeedbackSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
-    UserWithApplicationsSerializer,
     RecruitmentStatisticsSerializer,
     RecruitmentSeparatePositionSerializer,
     RecruitmentApplicationForGangSerializer,
@@ -391,39 +390,6 @@ class RecruitmentApplicationView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentApplicationForGangSerializer
     queryset = RecruitmentApplication.objects.all()
-
-
-class RecruitmentAllApplicationsPerRecruitmentView(ListAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = UserWithApplicationsSerializer
-
-    def get_recruitment_id(self) -> dict[str, Any]:
-        """Get recruitment ID from query params."""
-        return self.request.query_params.get('recruitment')
-
-    def get_serializer_context(self) -> dict[str, Any]:
-        """Add recruitment object to context for the serializer to use."""
-        context = super().get_serializer_context()
-        recruitment_id = self.get_recruitment_id()
-        context['recruitment'] = get_object_or_404(Recruitment, id=recruitment_id)
-        return context
-
-    def get_queryset(self) -> QuerySet[User]:
-        """Get all users who have applied to this recruitment."""
-        recruitment_id = self.get_recruitment_id()
-        return User.objects.filter(applications__recruitment__id=recruitment_id).distinct().select_related('campus')
-
-    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        """Return list of applicants without data wrapping."""
-        queryset = self.filter_queryset(self.get_queryset())
-
-        # If queryset is empty, return an empty list
-        if not queryset.exists():
-            return Response([])
-
-        serializer = self.get_serializer(queryset, many=True)
-
-        return Response(serializer.data)
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
