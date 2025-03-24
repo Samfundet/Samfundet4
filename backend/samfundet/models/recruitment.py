@@ -336,6 +336,10 @@ class RecruitmentApplication(CustomBaseModel):
     interview = models.ForeignKey(
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the application', related_name='applications'
     )
+
+    # simple comment for recruiters to communicate stuff like detailed priority and "guidance"/"føring"
+    comment = models.TextField(help_text='Application comment', null=True, blank=True)
+
     withdrawn = models.BooleanField(default=False, blank=True, null=True)
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its application
     recruiter_priority = models.IntegerField(
@@ -404,6 +408,11 @@ class RecruitmentApplication(CustomBaseModel):
     def clean(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
         super().clean()
         errors: dict[str, list[ValidationError]] = defaultdict(list)
+
+        # Skip validation if we're only updating certain fields
+        update_fields = kwargs.get('update_fields')
+        if update_fields and set(update_fields).issubset({'comment'}):
+            return
 
         # Cant use not self.pk, due to UUID generating it before save
         current_application = RecruitmentApplication.objects.filter(pk=self.pk).first()
