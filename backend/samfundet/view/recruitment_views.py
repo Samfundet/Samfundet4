@@ -78,7 +78,7 @@ class RecruitmentApplicationForGangView(ModelViewSet):
 
     # TODO: User should only be able to edit the fields that are allowed
 
-    @action(detail=True, methods=['put'])
+    @action(detail=True, methods=['put'], url_path='add-comment')
     def application_comment(self, request: Request, **kwargs: Any) -> Response:
         application_id = kwargs.get('pk')
 
