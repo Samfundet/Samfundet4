@@ -86,6 +86,7 @@ export const ROUTES_FRONTEND = {
   admin_recruitment_users_without_interview: '/control-panel/recruitment/:recruitmentId/users-without-interview/',
   admin_recruitment_open_to_other_positions: '/control-panel/recruitment/:recruitmentId/users-open-to-other-positions/',
   admin_recruitment_overview: '/control-panel/recruitment/:recruitmentId/recruitment-overview/',
+  admin_recruitment_statistics: '/control-panel/recruitment/:recruitmentId/statistics/',
   admin_recruitment_gang_overview: '/control-panel/recruitment/:recruitmentId/gang-overview/',
   admin_recruitment_gang_overview_rejection_email:
     '/control-panel/recruitment/:recruitmentId/gang-overview/rejection-email/',

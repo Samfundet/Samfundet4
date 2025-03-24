@@ -7,7 +7,7 @@ import type { RecruitmentForRecruiterDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
-import { RecruitmentProgression } from './Components/RecruitmentProgression';
+import { RecruitmentStatistics } from './RecruitmentStatistics/RecruitmentStatistics';
 
 export function RecruitmentOverviewPage() {
   const { t } = useTranslation();
@@ -23,7 +23,7 @@ export function RecruitmentOverviewPage() {
 
   return (
     <AdminPageLayout title={`${t(KEY.recruitment_overview)}: ${dbT(data, 'name')}`}>
-      <RecruitmentProgression recruitment={data} />
+      <RecruitmentStatistics statistics={data?.statistics} />
     </AdminPageLayout>
   );
 }
