@@ -396,7 +396,13 @@ export const router = createBrowserRouter(
               path={ROUTES.frontend.admin_recruitment}
               element={<PermissionRoute element={<RecruitmentAdminPage />} />}
             />
-
+            <Route
+              path={ROUTES.frontend.admin_recruitment_create}
+              element={
+                <PermissionRoute required={[PERM.SAMFUNDET_ADD_RECRUITMENT]} element={<RecruitmentFormAdminPage />} />
+              }
+              handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
+            />
             <Route
               path={ROUTES.frontend.admin_recruitment_applicant}
               element={
