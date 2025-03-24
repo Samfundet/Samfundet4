@@ -1,0 +1,25 @@
+@use 'src/mixins' as *;
+
+@use 'src/constants' as *;
+
+.filter_button {
+  width: fit-content;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.filte_buttons_container {
+  overflow-x: auto;
+  width: 80%;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 0.5rem 0.25rem;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

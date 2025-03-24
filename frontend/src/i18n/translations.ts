@@ -180,7 +180,9 @@ export const nb = prepareTranslations({
   [KEY.common_list_view]: 'Liste visning',
   [KEY.common_tab_view]: 'Fane visning',
   [KEY.common_available]: 'Tilgjengelig',
+  [KEY.common_comment]: 'Kommentar',
 
+  [KEY.common_at]: 'ved',
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
   [KEY.common_press]: 'presse',
@@ -398,6 +400,14 @@ export const nb = prepareTranslations({
   [KEY.recruitment_choose_interview_location]: 'Velg intervjusted',
   [KEY.recruitment_dashboard_description]:
     'Her har man oversikt over dine kommende intervjuer, stillinger du har noe å gjøre med, og kan sette tider du er tilgjengelig til å avholde intervjuer',
+  [KEY.recruitment_all_applicants_filter_name]: 'Sorter på navn',
+  [KEY.recruitment_all_applicants_filter_no_rejections]: 'Vis kun hvor søkeren er ønsket',
+  [KEY.recruitment_all_applicants_filter_similar]: 'Sorter på like stillinger',
+  [KEY.recruitment_all_applicants_filter_conflicts]: 'Vis kun konflikter',
+  [KEY.recruitment_all_applicants_filter_no_conflicts]: 'Vis kun uten konflikter',
+  [KEY.recruitment_all_applicants_filter_specific]: 'Vis kun søkere for spesifikke verv',
+  [KEY.recruitment_search_for_applicant]: 'Søk etter søker',
+
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
@@ -420,6 +430,8 @@ export const nb = prepareTranslations({
   [KEY.admin_gangsadminpage_abbreviation]: 'Forkortelse',
   [KEY.recruitment_create_room]: 'Opprett rom',
   [KEY.recruitment_separate_recruitment]: 'Separat opptak',
+  [KEY.recruitment_allow_to_contact]: 'Tillatt å kontakte',
+  [KEY.recruitment_interview_set_all]: 'Sett alle intervjuer',
 
   // Recruitment applets
   [KEY.recruitment_applet_dashboard_description]: 'Ditt personlige dashbord',
@@ -432,6 +444,8 @@ export const nb = prepareTranslations({
   [KEY.recruitment_applet_without_interview_title]: 'Uten intervju',
   [KEY.recruitment_applet_without_interview_description]: 'Søkere som ikke har noen intervju satt',
   [KEY.recruitment_applet_three_interview_title]: '< 3 intervju',
+  [KEY.recruitment_all_applicants]: 'Alle søkere',
+  [KEY.recruitment_manage_all_applicants]: 'Administrer alle søkere for dette opptaket',
 
   // CommandMenu:
   [KEY.command_menu_label]: 'Global kommando meny',
@@ -698,7 +712,8 @@ export const en = prepareTranslations({
   [KEY.common_list_view]: 'List view',
   [KEY.common_tab_view]: 'Tab view',
   [KEY.common_available]: 'Available',
-
+  [KEY.common_at]: 'at',
+  [KEY.common_comment]: 'Comment',
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
   [KEY.common_press]: 'Press',
@@ -915,6 +930,18 @@ export const en = prepareTranslations({
     'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcomming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
   [KEY.recruitment_create_room]: 'Create room',
   [KEY.recruitment_separate_recruitment]: 'Seperate recruitment',
+  [KEY.recruitment_allow_to_contact]: 'Allow to contact',
+  [KEY.recruitment_interview_set_all]: 'Set all interviews',
+  [KEY.recruitment_choose_interview_time_and_location]: 'Choose time and location of interview',
+  [KEY.recruitment_choose_interview_time]: 'Choose time of interview',
+  [KEY.recruitment_choose_interview_location]: 'Choose location of interview',
+  [KEY.recruitment_all_applicants_filter_name]: 'Sort by name',
+  [KEY.recruitment_all_applicants_filter_no_rejections]: 'Display only where the applicant is wanted',
+  [KEY.recruitment_all_applicants_filter_similar]: 'Sort by the same positions',
+  [KEY.recruitment_all_applicants_filter_conflicts]: 'Display conflicts only',
+  [KEY.recruitment_all_applicants_filter_no_conflicts]: 'Display no conflicts',
+  [KEY.recruitment_all_applicants_filter_specific]: 'Display applicant by positions',
+  [KEY.recruitment_search_for_applicant]: 'Search for applicant',
 
   // Recruitment applets
   [KEY.recruitment_applet_dashboard_description]: 'Your personal dashboard',
@@ -927,9 +954,8 @@ export const en = prepareTranslations({
   [KEY.recruitment_applet_without_interview_title]: 'Without interview',
   [KEY.recruitment_applet_without_interview_description]: 'Applicants without any interviews set',
   [KEY.recruitment_applet_three_interview_title]: '< 3 interviews',
-  [KEY.recruitment_choose_interview_time_and_location]: 'Choose time and location of interview',
-  [KEY.recruitment_choose_interview_time]: 'Choose time of interview',
-  [KEY.recruitment_choose_interview_location]: 'Choose location of interview',
+  [KEY.recruitment_all_applicants]: 'All applicants',
+  [KEY.recruitment_manage_all_applicants]: 'Manage all applicants for this recruitment',
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
