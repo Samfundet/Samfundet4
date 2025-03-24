@@ -14,8 +14,8 @@ export function RecruitmentStatisticsAdminPage() {
   useTitle(t(KEY.recruitment_overview));
   const tabs: Tab<ReactNode>[] = useMemo(() => {
     return [
-      { key: 1, label: 'TEST', value: <div>Test</div> },
-      { key: 2, label: t(KEY.recruitment_statistics), value: <RecruitmentStatistics recruitmentId={recruitmentId} /> },
+      { key: 1, label: t(KEY.recruitment_applicants), value: <RecruitmentStatistics recruitmentId={recruitmentId} /> },
+      { key: 2, label: 'TEST', value: <div>Test</div> },
     ];
   }, [recruitmentId, t]);
 
