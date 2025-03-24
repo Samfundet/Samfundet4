@@ -6,6 +6,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { RecruitmentStatusChoicesMapping } from '~/types';
+import { CommentForm } from './CommentForm';
 import styles from './ProcessedApplicants.module.scss';
 
 type ProcessedType = 'rejected' | 'withdrawn' | 'accepted' | 'hardtoget';
@@ -30,6 +31,7 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
 
   const rows = data.map((application) => {
     const applicantName = `${application.user.first_name} ${application.user.last_name}`;
+    const applicationComment = application.comment;
     return {
       cells: [
         {
@@ -70,6 +72,10 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
             </Button>
           ),
           value: application.recruiter_status,
+        },
+        {
+          content: <CommentForm initialData={applicationComment ?? ''} applicationId={application.id} />,
+          value: application.id,
         },
       ],
     };
