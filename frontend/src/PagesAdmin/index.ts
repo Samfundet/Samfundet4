@@ -12,7 +12,6 @@ export { InformationAdminPage } from './InformationAdminPage';
 export { InformationFormAdminPage } from './InformationFormAdminPage';
 export { OpeningHoursAdminPage } from './OpeningHoursAdminPage';
 export { RecruitmentAdminPage } from './RecruitmentAdminPage';
-export { RecruitmentAllApplicationsAdminPage } from './RecruitmentAllApplicationsAdminPage';
 export { RecruitmentApplicantAdminPage } from './RecruitmentApplicantAdminPage';
 export { RecruitmentFormAdminPage } from './RecruitmentFormAdminPage';
 export { RecruitmentGangAdminPage } from './RecruitmentGangAdminPage';

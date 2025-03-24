@@ -46,7 +46,6 @@ import {
   InformationFormAdminPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
-  RecruitmentAllApplicationsAdminPage,
   RecruitmentApplicantAdminPage,
   RecruitmentFormAdminPage,
   RecruitmentGangAdminPage,
@@ -397,18 +396,6 @@ export const router = createBrowserRouter(
               path={ROUTES.frontend.admin_recruitment}
               element={<PermissionRoute element={<RecruitmentAdminPage />} />}
             />
-            <Route
-              path={ROUTES.frontend.admin_recruitment_all_positions}
-              element={
-                <PermissionRoute
-                  required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
-                  element={<RecruitmentAllApplicationsAdminPage />}
-                />
-              }
-              handle={{
-                crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_administrate)}</Link>,
-              }}
-            />
 
             <Route
               path={ROUTES.frontend.admin_recruitment_applicant}
@@ -578,18 +565,6 @@ export const router = createBrowserRouter(
                   crumb: ({ pathname }: UIMatch) => (
                     <Link url={pathname}>{t(KEY.recruitment_applicants_open_to_other_positions)}</Link>
                   ),
-                }}
-              />
-              <Route
-                path="all-positions/:recruitmentId"
-                element={
-                  <PermissionRoute
-                    required={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
-                    element={<RecruitmentAllApplicationsAdminPage />}
-                  />
-                }
-                handle={{
-                  crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_administrate)}</Link>,
                 }}
               />
               <Route
