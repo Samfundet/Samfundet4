@@ -1032,7 +1032,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
             'interview_time',
             'interview',
             'created_at',
-            'application_comment',
+            'comment',
         ]
         read_only_fields = [
             'id',
@@ -1220,4 +1220,4 @@ class PurchaseFeedbackSerializer(serializers.ModelSerializer):
 class ApplicationCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecruitmentApplication
-        fields = ['application_comment']
+        fields = ['comment']
