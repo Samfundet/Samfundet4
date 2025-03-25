@@ -582,6 +582,7 @@ export type RecruitmentApplicationDto = {
   created_at: string;
   withdrawn: boolean;
   application_count?: number;
+  comment?: string;
 };
 
 export type RecruitmentApplicationRecruiterDto = {
