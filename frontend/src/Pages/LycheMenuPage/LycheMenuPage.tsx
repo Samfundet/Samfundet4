@@ -72,14 +72,14 @@ export function LycheMenuPage() {
   return (
     <SultenPage>
       <LycheFrame>
-        <img className={styles.menuLogo} src={menuLogo} alt="Menu Logo" />
-        <h1 className={styles.menuHeader}> {t(KEY.common_menu)}</h1>
-        <section className={styles.menuIntroduction}> {menuIntroText1} </section>
-        <section className={styles.menuIntroduction}> {menuIntroText2} </section>
-        <section className={styles.menuIntroduction}> {menuIntroText3} </section>
-        <h2 className={styles.menuHeader2}> {t(KEY.sulten_menu_you_are_welcome)} </h2>
-        <h1 className={styles.menuHeader}> {t(KEY.common_opening_hours)}</h1>
-        <section className={styles.openingHours}>
+        <img className={styles.menu_logo} src={menuLogo} alt="Menu Logo" />
+        <h1 className={styles.menu_header}> {t(KEY.common_menu)}</h1>
+        <section className={styles.menu_introduction}> {menuIntroText1} </section>
+        <section className={styles.menu_introduction}> {menuIntroText2} </section>
+        <section className={styles.menu_introduction}> {menuIntroText3} </section>
+        <h2 className={styles.menu_header2}> {t(KEY.sulten_menu_you_are_welcome)} </h2>
+        <h1 className={styles.menu_header}> {t(KEY.common_opening_hours)}</h1>
+        <section className={styles.opening_hours}>
           <p>
             {' '}
             {t(KEY.common_day_monday)} - {t(KEY.common_day_thursday)}: 16:00 - 23:00{' '}
