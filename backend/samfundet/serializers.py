@@ -445,11 +445,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
         # Use a set to collect unique permissions directly
-        permissions = {
-            codename
-            for user_role in user_roles
-            for codename in user_role.role.permissions.values_list('codename', flat=True)
-        }
+        permissions = {codename for user_role in user_roles for codename in user_role.role.permissions.values_list('codename', flat=True)}
 
         return list(permissions)
 
