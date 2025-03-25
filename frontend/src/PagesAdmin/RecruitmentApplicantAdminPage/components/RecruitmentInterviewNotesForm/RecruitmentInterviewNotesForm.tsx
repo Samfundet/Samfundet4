@@ -26,7 +26,7 @@ interface RecruitmentInterviewNotesFormProps {
 export function RecruitmentInterviewNotesForm({ initialData, interviewId }: RecruitmentInterviewNotesFormProps) {
   const { t } = useTranslation();
   const [currentNotes, setCurrentNotes] = useState(initialData.notes || '');
-  const [markdownState, setMarkdownState] = useState<boolean>(false);
+  const [markdownState, setMarkdownState] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const form = useForm<RecruitmentInterviewNotesFormType>({
@@ -36,8 +36,6 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
       interviewId: interviewId || 0,
     },
   });
-
-  const formNotes = form.watch('notes');
 
   const handleUpdateNotes = useMutation({
     mutationFn: ({ notes, interviewId }: { notes: string; interviewId: number }) =>
@@ -59,9 +57,9 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
     }
   }, [markdownState]);
 
-  const handleFocus = () => {
+  function handleFocus() {
     setMarkdownState(true);
-  };
+  }
 
   const handleNotesChange = (newNotes: string) => {
     if (newNotes !== currentNotes && interviewId) {

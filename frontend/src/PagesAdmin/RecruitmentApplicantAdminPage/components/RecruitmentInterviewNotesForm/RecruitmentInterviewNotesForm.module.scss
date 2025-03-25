@@ -16,6 +16,9 @@
 }
 
 .markdownButton {
+  cursor: pointer;
+  position: absolute;
+
   //make button 100% of parent without the textarea overflowing by default
   top: 12px; /* Match parent padding */
   left: 12px; /* Match parent padding */
@@ -25,22 +28,16 @@
   //remove default styling on button
   background: none;
   border: none;
-  text-align: left;
-  cursor: pointer;
-  position: absolute;
 }
 
 .markdownContent {
+  text-align: left;
   //remove defautl styling on content
-
   /* stylelint-disable-next-line selector-max-type */
   p,
   pre {
     margin: 0;
     padding: 0;
   }
-
-  //make content 100% of button
-
   height: 100%;
 }
