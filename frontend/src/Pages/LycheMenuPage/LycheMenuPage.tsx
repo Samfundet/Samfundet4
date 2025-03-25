@@ -99,7 +99,8 @@ export function LycheMenuPage() {
                 key={item.id}
                 dishTitle={currentLanguage === 'nb' ? item.name_nb ?? '' : item.name_en ?? ''}
                 dishDescription={currentLanguage === 'nb' ? item.description_nb ?? '' : item.description_en ?? ''}
-                allergens="" // Not in the seed data
+                allergens="Allgergener: Mel, Egg " // Not in the seed data
+                recommendations="Anbefalinger: Noe godt i glasset " // Not in the seed data
                 price={`${item.price_member},- / ${item.price},-`}
               />
             ))}
