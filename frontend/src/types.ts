@@ -81,24 +81,23 @@ export const COLORS = {
   background_primary: '#ffffff',
   background_secondary: '#efefef',
 
-  // Application state colors (model_choices.py in RecruitmentApplicantStates)
+  // Applicant state colors (model_choices.py in RecruitmentApplicantStates)
+  // these should communicate possible actions
+  applicant_state_0: '#f5f0d5', // action needed here
+  applicant_state_1: '#63b88f', // might call
+  applicant_state_2: '#046404', // should call
+  applicant_state_3: '#ebbc7c', // action needed here
+  applicant_state_4: '#e3fc00', // dont call
+  applicant_state_5: '#e53b2f', // dont call
+  applicant_state_6: '#ebbc7c', // action needed here
+  applicant_state_7: '#e53b2f', // dont call
+  applicant_state_8: '#e53b2f', // dont call
+  applicant_state_10: '#9f3dd3', // not wanted
 
-  not_set: '#ffffff',
-
-  rejected: '#f9cccd',
-  accepted: '#ccf9cd',
-  withdrawn: '#bbbbbb',
-
-  pending: '#fff5bc',
-  top_wanted: '#32ff32',
-  top_reserve: '#afffaf',
-  less_reserve: '#ffb343',
-  less_reserve_wanted: '#e3fc00',
-  less_reserve_reserved: '#fc3f00',
-  less_want: '#f74343',
-  less_want_reserved: '#f74343',
-  less_want_wanted: '#f74343',
-  not_wanted: '#dc1010',
+  // Final application result colors
+  rejected: '#dee73e',
+  accepted: '#4f49eb',
+  withdrawn: '#7f7f7f',
 } as const;
 
 export type Color = typeof COLORS;
@@ -250,42 +249,76 @@ export const RecruitmentApplicantStates = {
   NOT_WANTED: 10,
 } as const;
 
-// Name mapping for display purposes
-export const RecruitmentApplicantStatesNames: { [key: number]: string } = {
-  // Application state colors (model_choices.py in RecruitmentApplicantStates)
-  0: 'Unprocessed',
-  1: 'Top Reserve',
-  2: 'Top Wanted',
-  3: 'Lower Position (Other on Reserve)',
-  4: 'Lower Position (Other on Reserve, You Reserved)',
-  5: 'Lower Position (Other on Reserve, You Wanted)',
-  6: 'Lower Position (Other on Wanted)',
-  7: 'Lower Position (Other on Wanted, You Reserved)',
-  8: 'Lower Position (Other on Wanted, You Wanted)',
-  10: 'Not Wanted',
+export const RecruitmentApplicantStatesDescriptions: {
+  [key: number]: { short: string; long: string; comment?: string };
+} = {
+  0: {
+    short: 'Ubehandlet',
+    long: 'Søker ikke behandlet.',
+    comment: 'Trenger handling!',
+  },
+  1: {
+    short: 'Søkers topprioritet, men satt reserve her.',
+    long: 'Søkeren er satt på reserve for dette vervet og det er dens topprioritet; Hvis enighet i opptaksforum kan søkeren få tilbud når offisiell ringerunde starter.',
+  },
+  2: {
+    short: 'Søkers topprioritet og ønsket her.',
+    long: 'Søkeren er ønsket for vervet og det er dens topprioritet; Bør få tilbud når offisiell ringerunde starter.',
+  },
+  3: {
+    short: 'Reserve på annet verv, ubehandlet her.',
+    long: 'Søkeren er satt som reserve på andre verv den prioriterer høyere. Søkeren er ubehandlet her.',
+    comment: 'Trenger handling!',
+  },
+  4: {
+    // ############### Special color ###############
+    short: 'Reserve på annet verv og på reserve her.',
+    long: 'Søkeren er satt reserve på andre verv den prioriterer høyere, men også reserve for dette vervet',
+  },
+  5: {
+    short: 'Reserve på annet verv, og ønsket her.',
+    long: 'Søkeren er satt som reserve på andre verv den prioriterer høyere, men ønsket for dette vervet',
+  },
+  6: {
+    short: 'Ønsket for annet verv, og ubehandlet her.',
+    long: 'Søkeren er ønsket for andre verv den prioriterer høyere og ubehandlet her.',
+    comment: 'Trenger handling!',
+  },
+  7: {
+    short: 'Ønsket for annet verv, og på reserve her.',
+    long: 'Søkeren er ønsket for andre verv den prioriterer høyere, og satt reserve her.',
+  },
+  8: {
+    short: 'Ønsket for annet verv og ønsket her.',
+    long: 'Søkeren er ønsket for andre verv den prioriterer høyere, men også ønsket for dette vervet.',
+  },
+  10: {
+    short: 'Ikke ønsket',
+    long: 'Søkeren er ikke ønsket for dette vervet.',
+  },
 };
 
 // Helper function to get state name
-export const getApplicantStateName = (state: number): string => {
-  return RecruitmentApplicantStatesNames[state] || 'Unknown State';
+export const getRecruitmentApplicantStateName = (state: number): { short: string; long: string } => {
+  return RecruitmentApplicantStatesDescriptions[state] || 'Unknown state!!';
 };
 
 // Color mapping for applicant states
 export const ApplicationStateColorMapping: { [key: number]: string } = {
   // Application state colors (model_choices.py in RecruitmentApplicantStates)
-  [RecruitmentApplicantStates.NOT_SET]: COLORS.not_set,
-  [RecruitmentApplicantStates.TOP_RESERVED]: COLORS.top_reserve,
-  [RecruitmentApplicantStates.TOP_WANTED]: COLORS.top_wanted,
-  [RecruitmentApplicantStates.LESS_RESERVE]: COLORS.less_reserve,
-  [RecruitmentApplicantStates.LESS_RESERVE_RESERVED]: COLORS.less_reserve_reserved,
-  [RecruitmentApplicantStates.LESS_RESERVE_WANTED]: COLORS.less_reserve_wanted,
-  [RecruitmentApplicantStates.LESS_WANT]: COLORS.less_want,
-  [RecruitmentApplicantStates.LESS_WANT_RESERVED]: COLORS.less_want_reserved,
-  [RecruitmentApplicantStates.LESS_WANT_WANTED]: COLORS.less_want_wanted,
-  [RecruitmentApplicantStates.NOT_WANTED]: COLORS.not_wanted,
+  [RecruitmentApplicantStates.NOT_SET]: COLORS.applicant_state_0,
+  [RecruitmentApplicantStates.TOP_RESERVED]: COLORS.applicant_state_1,
+  [RecruitmentApplicantStates.TOP_WANTED]: COLORS.applicant_state_2,
+  [RecruitmentApplicantStates.LESS_RESERVE]: COLORS.applicant_state_3,
+  [RecruitmentApplicantStates.LESS_RESERVE_RESERVED]: COLORS.applicant_state_4,
+  [RecruitmentApplicantStates.LESS_RESERVE_WANTED]: COLORS.applicant_state_5,
+  [RecruitmentApplicantStates.LESS_WANT]: COLORS.applicant_state_6,
+  [RecruitmentApplicantStates.LESS_WANT_RESERVED]: COLORS.applicant_state_7,
+  [RecruitmentApplicantStates.LESS_WANT_WANTED]: COLORS.applicant_state_8,
+  [RecruitmentApplicantStates.NOT_WANTED]: COLORS.applicant_state_10,
 };
 
 // Helper function to get the color for a state
 export const getApplicantStateColor = (state: number): string => {
-  return ApplicationStateColorMapping[state] || COLORS.not_set;
+  return ApplicationStateColorMapping[state] || COLORS.white;
 };
