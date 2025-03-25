@@ -83,10 +83,24 @@
   }
 }
 
+.delete_button {
+  opacity: 0;
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  pointer-events: all;
+  transition: opacity 0.05s ease;
+}
+
+.image_wrapper:hover .delete_button {
+  opacity: 1;
+}
+
 .image_wrapper {
   position: relative;
   display: inline-block; 
   overflow: visible;
+  pointer-events: all
 }
 
 .preview {
@@ -97,13 +111,6 @@
   max-width: 15em;
   max-height: 8em;
   margin: 0 auto;
-}
-
-.delete_button {
-  position: absolute;
-  top: -7px;
-  right: -7px;
-  pointer-events: all;
 }
 
 .horizontal {
