@@ -1048,7 +1048,7 @@ export async function withdrawRecruitmentApplicationApplicant(positionId: number
 
 export async function getWithdrawnRecruitmentApplicationsApplicant(
   recruitmentId: number | string,
-): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
+): Promise<RecruitmentApplicationDto[]> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -1057,7 +1057,7 @@ export async function getWithdrawnRecruitmentApplicationsApplicant(
     });
   const response = await axios.get(url, { withCredentials: true });
 
-  return response;
+  return response.data;
 }
 
 export async function withdrawRecruitmentApplicationRecruiter(id: string): Promise<AxiosResponse> {
