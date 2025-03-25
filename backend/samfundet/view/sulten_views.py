@@ -3,14 +3,13 @@ from __future__ import annotations
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
-from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet 
 from rest_framework.generics import CreateAPIView
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, DjangoModelPermissionsOrAnonReadOnly
 
-from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from django.core.exceptions import ValidationError
+
 from samfundet.models.general import Menu, Table, Venue, Booking, MenuItem, Reservation, FoodCategory, FoodPreference
 from samfundet.serializer.sulten_serializers import (
     MenuSerializer,
