@@ -22,3 +22,11 @@ export const permissionKeys = {
   details: () => [...permissionKeys.all, 'detail'] as const,
   detail: (id: number) => [...permissionKeys.details(), id] as const,
 };
+
+export const applicationKeys = {
+  all: ['applications'] as const,
+  lists: () => [...applicationKeys.all, 'list'] as const,
+  list: (recruitmentId?: string) => [...applicationKeys.lists(), recruitmentId] as const,
+  details: () => [...applicationKeys.all, 'detail'] as const,
+  detail: (id: string) => [...applicationKeys.details(), id] as const,
+};

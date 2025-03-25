@@ -6,6 +6,7 @@ import { Button, Table } from '~/Components';
 import { getRecruitmentApplicationsForApplicant, withdrawRecruitmentApplicationApplicant } from '~/api';
 import type { RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { applicationKeys } from '~/queryKeys';
 import { niceDateTime } from '~/utils';
 import type { ApplicantApplicationManagementQK } from '../../RecruitmentApplicationsOverviewPage';
 import { ActiveApplicationLink } from './ActiveApplicationLink';
@@ -33,7 +34,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
 
   // Query for fetching applications
   const { data: applications } = useQuery({
-    queryKey: ['applications', recruitmentId],
+    queryKey: applicationKeys.list(recruitmentId),
     queryFn: () => getRecruitmentApplicationsForApplicant(recruitmentId as string),
     enabled: !!recruitmentId,
     initialData: [],
