@@ -57,6 +57,7 @@ export const KEY = {
   pick_a_date: 'pick_a_date',
 
   // No category:
+  common_content: 'common_content',
   common_url: 'common_url',
   common_manage: 'common_manage',
   common_yes: 'common_yes',
@@ -194,6 +195,7 @@ export const KEY = {
   common_unprocessed: 'common_unprocessed',
   common_list_view: 'common_list_view',
   common_tab_view: 'common_tab_view',
+  common_available: 'common_available',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -220,6 +222,10 @@ export const KEY = {
   common_ticket_type_included: 'common_ticket_type_included',
   common_ticket_type_registration: 'common_ticket_type_registration',
 
+  // Billig
+
+  common_sold_out: 'common_sold_out',
+  common_almost_sold_out: 'common_almost_sold_out',
   // ==================== //
   //        Others        //
   // ==================== //
@@ -278,8 +284,13 @@ export const KEY = {
   sulten_reservation_form_more_than_8_help: 'sulten_reservation_form_more_than_8_help',
   sulten_reservation_form_remember_closing: 'sulten_reservation_form_remember_closing',
   sulten_reservation_form_find_times: 'sulten_reservation_form_find_times',
+  sulten_occation_drinks: 'sulten_occation_drinks',
+  sulten_occation_eat: 'sulten_occation_eat',
 
   // Recruitment:
+  recruitment_look_at_recipients: 'recruitment_look_at_recipients',
+  recruitment_preview: 'recruitment_preview',
+  recruitment_text_before_name: 'recruitment_text_before_name',
   recruitment_tags: 'recruitment_tags',
   recruitment_position: 'recruitment_position',
   recruitment_positions: 'recruitment_positions',
@@ -289,6 +300,7 @@ export const KEY = {
   recruitment_interviews: 'recruitment_interviews',
   recruitment_interview_planned: 'recruitment_interview_planned',
   recruitment_no_interviews: 'recruitment_no_interviews',
+  recruitment_no_interviewers_available: 'recruitment_no_interviewers_available',
   recruitment_interview_set: 'recruitment_interview_set',
   recruitment_interview_groups: 'recruitment_interview_groups',
   recruitment_interview_group: 'recruitment_interview_group',
@@ -303,6 +315,9 @@ export const KEY = {
   recruitment_priority: 'recruitment_priority',
   recruitment_recruiter_priority: 'recruitment_recruiter_priority',
   recruitment_recruiter_status: 'recruitment_recruiter_status',
+  recruitment_recruiter_guide: 'recruitment_recruiter_guide',
+  recruitment_guide_offer: 'recruitment_guide_offer',
+  recruitment_guide_no_offer: 'recruitment_guide_no_offer',
   recruitment_duration: 'recruitment_duration',
   recruitment_funksjonaer: 'recruitment_funksjonaer',
   recruitment_jobtype: 'recruitment_jobtype',
@@ -312,6 +327,8 @@ export const KEY = {
   recruitment_applyforhelp: 'recruitment_applyforhelp',
   recruitment_volunteerfor: 'recruitment_volunteerfor',
   recruitment_otherpositions: 'recruitment_otherpositions',
+  recruitment_no_other_positions: 'recruitment_no_other_positions',
+  recruitment_similar_positions: 'recruitment_similar_positions',
   recruitment_visible_from: 'recruitment_visible_from',
   recruitment_administrate: 'recruitment_administrate',
   recruitment_administrate_positions: 'recruitment_administrate_positions',
@@ -499,6 +516,8 @@ export const KEY = {
   error_forbidden_description: 'error_forbidden_description',
   error_server_error: 'error_server_error',
   error_server_error_description: 'error_server_error_description',
+  error_submitting_reservation: 'error_submitting_reservation',
+  error_invalid_reservation_data: 'error_invalid_reservation_data',
 } as const;
 
 // This will ensure that each value matches the key exactly.

@@ -1,6 +1,6 @@
 /* stylelint-disable selector-max-type */
 /* Necessary for theme mixin */
-@import './constants';
+@use './constants' as *;
 
 /* Screen size media queries */
 // https://www.freecodecamp.org/news/the-100-correct-way-to-do-css-breakpoints-88d6a5ba1862/

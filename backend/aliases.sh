@@ -28,7 +28,7 @@
 #        _setup:         #
 ##########################
 # Enable aliases in CI/CD environments, only available in bash. https://github.com/actions/toolkit/issues/766#issuecomment-928305811
-shopt -s expand_aliases
+[ "$SHELL" = "/bin/bash" ] && shopt -s expand_aliases
 
 
 ##########################
@@ -45,7 +45,7 @@ alias pip-install-poetry='python -m pip install poetry'
 ##########################
 alias poetry-info='poetry env info'
 alias poetry-where='poetry-info' # Find location of environment.
-alias poetry-sync='poetry install --sync' # Install the exact dependencies from lockfile.
+alias poetry-sync='poetry sync' # Install the exact dependencies from lockfile.
 alias poetry-i='poetry-sync' # Shorter alias for 'poetry-sync'.
 alias poetry-s='poetry-sync' # Shorter alias for 'poetry-sync'.
 alias poetry-lock='poetry lock --no-update' # Locks current dependencies according to the rules in pyproject.toml. Use to make sure current state is valid. This will not update to latest minors etc. IMPORTANT: it doesn't install anything in venv, use 'poetry-sync' for that.

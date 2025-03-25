@@ -1,4 +1,4 @@
-import { useRouteLoaderData } from 'react-router-dom';
+import { useRouteLoaderData } from 'react-router';
 import type { RecruitmentLoader } from '~/router/loaders';
 import { OrgNameType } from '~/types';
 import { IsNumber } from '~/utils';

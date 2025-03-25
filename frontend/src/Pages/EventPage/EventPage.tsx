@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { SamfundetLogoSpinner } from '~/Components';
+import { Page } from '~/Components';
+import { BuyButton } from '~/Components/BuyButton/BuyButton';
 import { getEvent } from '~/api';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
@@ -41,23 +42,17 @@ export function EventPage() {
     }
   }, [id]);
 
-  if (showSpinner) {
-    return (
-      <div className={styles.spinner}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
-
   return (
-    <div className={styles.container}>
+    <Page className={styles.container} loading={showSpinner}>
       {/* TODO splash should be its own component rather than homepage subcomponent */}
       <Splash events={event && [event]} />
       <div className={styles.text_title}>{dbT(event, 'title')}</div>
       <div className={styles.content_row}>
         {/* Info table */}
         <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
-
+        {event?.billig && (
+          <BuyButton ticketSaleState={event.billig.ticket_groups} eventId={event.id} billigId={event.billig.id} />
+        )}
         {/* Text */}
         <div className={styles.text_container}>
           <div className={styles.description}>
@@ -70,6 +65,6 @@ export function EventPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Page>
   );
 }

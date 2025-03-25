@@ -1,13 +1,28 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
+import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { Button, Link, Modal, OccupiedForm, Page, SamfundetLogoSpinner } from '~/Components';
-import { Text } from '~/Components/Text/Text';
-import { SamfForm } from '~/Forms/SamfForm';
-import { SamfFormField } from '~/Forms/SamfFormField';
+import { z } from 'zod';
 import {
+  Button,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  Link,
+  Modal,
+  OccupiedForm,
+  Page,
+  Textarea,
+  ToolTip,
+} from '~/Components';
+import { Text } from '~/Components/Text/Text';
+import {
+  getPositionsByTag,
   getRecruitmentApplicationForPosition,
   getRecruitmentPositionForApplicant,
   getRecruitmentPositionsGangForApplicant,
@@ -15,8 +30,8 @@ import {
   withdrawRecruitmentApplicationApplicant,
 } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
-import type { RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
-import { useCustomNavigate, useTitle } from '~/hooks';
+import type { PositionsByTagResponse, RecruitmentApplicationDto, RecruitmentPositionDto } from '~/dto';
+import { useCustomNavigate, useMobile, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -28,6 +43,12 @@ type FormProps = {
   application_text: string;
 };
 
+const recruitmentApplicationSchema = z.object({
+  application_text: z.string(),
+});
+
+type RecruitmentApplicationFormType = z.infer<typeof recruitmentApplicationSchema>;
+
 export function RecruitmentApplicationFormPage() {
   const { user } = useAuthContext();
   const navigate = useCustomNavigate();
@@ -36,17 +57,28 @@ export function RecruitmentApplicationFormPage() {
 
   const [recruitmentPosition, setRecruitmentPosition] = useState<RecruitmentPositionDto>();
   const [recruitmentPositionsForGang, setRecruitmentPositionsForGang] = useState<RecruitmentPositionDto[]>();
+  const [similarPositions, setSimilarPositions] = useState<PositionsByTagResponse>();
 
   const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
   const [openOccupiedForm, setOpenOccupiedForm] = useState(false);
   const [formData, setFormData] = useState<FormProps>();
   const [recruitmentId, setRecruitmentId] = useState(0);
-
   const [loading, setLoading] = useState(true);
 
   const { positionId } = useParams();
+  const isMobile = useMobile();
+
+  const form = useForm<RecruitmentApplicationFormType>({
+    resolver: zodResolver(recruitmentApplicationSchema),
+  });
 
   useTitle(recruitmentPosition ? (dbT(recruitmentPosition, 'name') as string) : '');
+
+  useEffect(() => {
+    if (recruitmentApplication?.application_text) {
+      form.setValue('application_text', recruitmentApplication.application_text);
+    }
+  }, [recruitmentApplication, form]);
 
   useEffect(() => {
     Promise.allSettled([
@@ -71,12 +103,26 @@ export function RecruitmentApplicationFormPage() {
   }, [positionId, standardNavigate, t]);
 
   useEffect(() => {
+    if (!recruitmentPosition?.recruitment || !recruitmentPosition?.gang.id) return;
     getRecruitmentPositionsGangForApplicant(
       recruitmentPosition?.recruitment as string,
       recruitmentPosition?.gang.id,
     ).then((res) => {
-      setRecruitmentPositionsForGang(res.data);
+      // Filter out the current position from the gang positions
+      const filteredPositions = res.data.filter((position) => position.id !== recruitmentPosition?.id);
+      setRecruitmentPositionsForGang(filteredPositions);
     });
+  }, [recruitmentPosition]);
+
+  useEffect(() => {
+    if (!recruitmentPosition) return;
+    getPositionsByTag(recruitmentPosition.recruitment, recruitmentPosition.tags, recruitmentPosition.id)
+      .then((positions) => {
+        setSimilarPositions(positions);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, [recruitmentPosition]);
 
   function withdrawApplication() {
@@ -104,35 +150,29 @@ export function RecruitmentApplicationFormPage() {
     setOpenOccupiedForm(true);
   }
 
-  function submitData(data: FormProps) {
-    putRecruitmentApplication(data as Partial<RecruitmentApplicationDto>, positionId ? +positionId : 1)
-      .then(() => {
-        navigate({
-          url: reverse({
-            pattern: ROUTES.frontend.recruitment_application_overview,
-            urlParams: {
-              recruitmentId: recruitmentPosition?.recruitment,
-            },
-          }),
-        });
-        toast.success(t(KEY.common_creation_successful));
-      })
-      .catch(() => {
-        toast.error(t(KEY.common_something_went_wrong));
+  const submitData = useMutation({
+    mutationFn: ({ data, positionId }: { data: Partial<RecruitmentApplicationDto>; positionId: number }) => {
+      return putRecruitmentApplication(data, positionId);
+    },
+    onSuccess: () => {
+      navigate({
+        url: reverse({
+          pattern: ROUTES.frontend.recruitment_application_overview,
+          urlParams: {
+            recruitmentId: recruitmentPosition?.recruitment,
+          },
+        }),
       });
-  }
-
-  if (loading) {
-    return (
-      <div className={styles.spinner_container}>
-        <SamfundetLogoSpinner />
-      </div>
-    );
-  }
+      toast.success(t(KEY.common_creation_successful));
+    },
+    onError: () => {
+      toast.error(t(KEY.common_something_went_wrong));
+    },
+  });
 
   if (!positionId || Number.isNaN(Number(positionId))) {
     return (
-      <Page>
+      <Page loading={loading}>
         <div className={styles.container}>
           <h1>{t(KEY.recruitment_application)}</h1>
           <p>The position id is invalid, please enter another position id</p>
@@ -141,10 +181,59 @@ export function RecruitmentApplicationFormPage() {
     );
   }
 
+  const handlePosNavigate = (pos: RecruitmentPositionDto) => {
+    navigate({
+      url: reverse({
+        pattern: ROUTES.frontend.recruitment_application,
+        urlParams: {
+          recruitmentId: pos.recruitment,
+          positionId: pos.id,
+        },
+      }),
+    });
+  };
+
   const submitText = `${t(KEY.common_send)} ${t(KEY.recruitment_application)}`;
 
+  const otherPositionsAtGang = recruitmentPositionsForGang && recruitmentPositionsForGang.length > 0 && (
+    <div className={styles.other_positions}>
+      <h2 className={styles.sub_header}>
+        {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
+      </h2>
+      <div className={styles.other_positions_buttons}>
+        {recruitmentPositionsForGang?.map((pos) => (
+          <Button key={pos.id} display="pill" theme="outlined" onClick={() => handlePosNavigate(pos)}>
+            {dbT(pos, 'name')}
+          </Button>
+        ))}
+      </div>
+    </div>
+  );
+
+  const similarPositionsBtns = (
+    <div className={styles.other_positions}>
+      {similarPositions?.positions && (
+        <>
+          <h2 className={styles.sub_header}>{t(KEY.recruitment_similar_positions)}</h2>
+          <div className={styles.other_positions_buttons}>
+            {similarPositions.positions.map((similarPosition) => (
+              <Button
+                key={similarPosition.id}
+                display="pill"
+                theme="outlined"
+                onClick={() => handlePosNavigate(similarPosition)}
+              >
+                {dbT(similarPosition, 'name')}
+              </Button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+
   return (
-    <Page>
+    <Page loading={loading}>
       <div className={styles.container}>
         {openOccupiedForm && (
           <Modal isOpen={openOccupiedForm} className={styles.occupied_modal}>
@@ -160,7 +249,9 @@ export function RecruitmentApplicationFormPage() {
               <OccupiedForm
                 recruitmentId={recruitmentId}
                 onCancel={() => setOpenOccupiedForm(false)}
-                onConfirm={() => formData && submitData(formData)}
+                onConfirm={() =>
+                  formData && submitData.mutate({ data: formData, positionId: positionId ? +positionId : 1 })
+                }
                 header="confirm_occupied_time"
                 subHeader="confirm_occupied_time_text"
                 saveButtonText="confirm_occupied_time_send_application"
@@ -188,59 +279,61 @@ export function RecruitmentApplicationFormPage() {
               </Link>
             </h2>
             <p className={styles.text}>{dbT(recruitmentPosition, 'long_description')}</p>
-            <h2 className={styles.sub_header}>{t(KEY.recruitment_applyfor)}</h2>
-            <p className={styles.text}>{t(KEY.recruitment_applyforhelp)}</p>
           </div>
-          <div className={styles.other_positions}>
-            <h2 className={styles.sub_header}>
-              {t(KEY.recruitment_otherpositions)} {dbT(recruitmentPosition?.gang, 'name')}
-            </h2>
-            {recruitmentPositionsForGang?.map((pos) => {
-              if (pos.id === recruitmentPosition?.id) {
-                return (
-                  <Button
-                    key={pos.id}
-                    display="pill"
-                    theme="outlined"
-                    onClick={() => {
-                      navigate({
-                        url: reverse({
-                          pattern: ROUTES.frontend.recruitment_application,
-                          urlParams: { positionId: pos.id, recruitmentId: recruitmentId },
-                        }),
-                      });
-                    }}
-                  >
-                    {dbT(pos, 'name')}
-                  </Button>
-                );
-              }
-            })}
-          </div>
+
+          {!isMobile && (
+            <div className={styles.other_positions}>
+              {similarPositionsBtns}
+              {otherPositionsAtGang}
+            </div>
+          )}
         </div>
-        {recruitmentApplication && (
+        {recruitmentApplication?.withdrawn && (
           <div className={styles.withdrawn_container}>
-            {recruitmentApplication?.withdrawn ? (
-              <Text size="l" as="i" className={styles.withdrawn_text}>
-                {t(KEY.recruitment_withdrawn_message)}:
-              </Text>
-            ) : (
-              <Button theme="samf" display="basic" onClick={() => withdrawApplication()}>
-                {t(KEY.recruitment_withdraw_application)}
-              </Button>
-            )}
+            <Text size="l" as="i" className={styles.withdrawn_text}>
+              {t(KEY.recruitment_withdrawn_message)}
+            </Text>
           </div>
         )}
         {user ? (
-          <SamfForm
-            initialData={recruitmentApplication as FormProps}
-            onSubmit={handleOnSubmit}
-            submitText={submitText}
-            devMode={false}
-          >
-            <h2 className={styles.label}>{t(KEY.recruitment_application)}:</h2>
-            <SamfFormField field="application_text" type="text_long" />{' '}
-          </SamfForm>
+          <>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(handleOnSubmit)}>
+                <div className={styles.form_header}>
+                  <h2 className={styles.label}>{t(KEY.recruitment_application)}</h2>
+                  <ToolTip value={t(KEY.recruitment_applyforhelp)}>
+                    <Icon icon="mingcute:question-fill" width="1.2em" height="1.2em" />
+                  </ToolTip>
+                </div>
+                <FormField
+                  control={form.control}
+                  name="application_text"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormControl>
+                          <Textarea
+                            {...field}
+                            value={field.value} // Ensure the Textarea is controlled
+                          />
+                        </FormControl>
+                      </FormItem>
+                    );
+                  }}
+                />
+                <div className={styles.form_buttons}>
+                  <Button type="submit" theme="green" display="basic">
+                    {submitText}
+                  </Button>
+                  {!recruitmentApplication?.withdrawn && recruitmentApplication && (
+                    <Button type="button" theme="samf" display="basic" onClick={() => withdrawApplication()}>
+                      {t(KEY.recruitment_withdraw_application)}
+                    </Button>
+                  )}
+                </div>
+              </form>
+            </Form>
+          </>
         ) : (
           <div>
             <Button
@@ -254,6 +347,13 @@ export function RecruitmentApplicationFormPage() {
               {t(KEY.common_login)}
             </Button>
           </div>
+        )}
+
+        {isMobile && (
+          <>
+            {similarPositionsBtns}
+            {otherPositionsAtGang}
+          </>
         )}
       </div>
     </Page>

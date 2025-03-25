@@ -1,7 +1,7 @@
 /* stylelint-disable declaration-no-important */
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .button {
   @include flex-row;

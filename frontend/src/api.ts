@@ -14,12 +14,14 @@ import type {
   InformationPageDto,
   InterviewDto,
   InterviewRoomDto,
+  InterviewerAvailabilityDto,
   KeyValueDto,
   MenuDto,
   MenuItemDto,
   OccupiedTimeslotDto,
   OrganizationDto,
   PermissionDto,
+  PositionsByTagResponse,
   PurchaseFeedbackDto,
   RecruitmentApplicationDto,
   RecruitmentApplicationRecruiterDto,
@@ -31,6 +33,7 @@ import type {
   RecruitmentGangDto,
   RecruitmentGangStatDto,
   RecruitmentPositionDto,
+  RecruitmentPositionOrganizedApplicationsDto,
   RecruitmentPositionPostDto,
   RecruitmentPositionPutDto,
   RecruitmentSeparatePositionDto,
@@ -52,6 +55,7 @@ import type {
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { BACKEND_DOMAIN } from './constants';
+import type { PageNumberPaginationType } from './types';
 
 export async function getCsrfToken(): Promise<string> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__csrf;
@@ -116,6 +120,18 @@ export async function impersonateUser(userId: number): Promise<boolean> {
 export async function getUsers(search?: string): Promise<UserDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__users + (search ? `?search=${search}` : '');
   const response = await axios.get<UserDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function getUsersSearchPaginated(
+  page: number,
+  search?: string,
+): Promise<PageNumberPaginationType<UserDto>> {
+  const searchParam = search ? `&search=${encodeURIComponent(search)}` : '';
+  const url = `${BACKEND_DOMAIN}${ROUTES.backend.samfundet__users_search_paginated}?page=${page}${searchParam}`;
+  const response = await axios.get<PageNumberPaginationType<UserDto>>(url, {
+    withCredentials: true,
+  });
   return response.data;
 }
 
@@ -560,7 +576,8 @@ export async function postRecruitment(recruitmentData: RecruitmentWriteDto): Pro
 
 export async function putRecruitment(id: string, recruitment: Partial<RecruitmentWriteDto>): Promise<AxiosResponse> {
   const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__recruitment_detail, urlParams: { pk: id } });
+    BACKEND_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__recruitment_for_recruiter_detail, urlParams: { pk: id } });
   const response = await axios.put<RecruitmentDto>(url, recruitment, { withCredentials: true });
   return response;
 }
@@ -834,6 +851,20 @@ export async function getRecruitmentApplicationsForGang(
   return await axios.get(url, { withCredentials: true });
 }
 
+export async function getRecruitmentPositionOrganizedApplications(
+  positionId: string,
+): Promise<AxiosResponse<RecruitmentPositionOrganizedApplicationsDto>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_position_organized_applications,
+      urlParams: {
+        pk: positionId,
+      },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
 export async function getRecruitmentSharedInterviewGroups(
   recruitmentId: string,
 ): Promise<AxiosResponse<RecruitmentSharedInterviewGroupDto[]>> {
@@ -903,7 +934,7 @@ export async function updateRecruitmentApplicationStateForGang(
 export async function updateRecruitmentApplicationStateForPosition(
   applicationId: string,
   application: Partial<RecruitmentApplicationStateDto>,
-): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
+): Promise<AxiosResponse<RecruitmentPositionOrganizedApplicationsDto>> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -1136,4 +1167,41 @@ export async function getRecruitmentGangStats(
       },
     });
   return await axios.get(url, { withCredentials: true });
+}
+
+export async function getInterviewerAvailabilityOnDate(
+  recruitmentId: number,
+  date: string,
+  interviewers: number[],
+): Promise<AxiosResponse<InterviewerAvailabilityDto[]>> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__interviewer_availability_for_date,
+      urlParams: {
+        recruitmentId: recruitmentId,
+      },
+      queryParams: {
+        date: date,
+        interviewers: interviewers.join(','),
+      },
+    });
+  return await axios.get(url, { withCredentials: true });
+}
+
+export async function getPositionsByTag(
+  recruitmentId: string,
+  tags: string,
+  currentPositionId: number,
+): Promise<PositionsByTagResponse> {
+  const url = `${
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_positions_by_tags,
+      urlParams: { id: recruitmentId },
+    })
+  }?tags=${encodeURIComponent(tags)}&position_id=${currentPositionId}`;
+
+  const response = await axios.get<PositionsByTagResponse>(url, { withCredentials: true });
+  return response.data;
 }

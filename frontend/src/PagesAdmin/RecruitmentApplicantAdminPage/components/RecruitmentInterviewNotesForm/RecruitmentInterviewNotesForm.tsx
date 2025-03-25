@@ -1,13 +1,30 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Textarea } from '~/Components';
+import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { putRecrutmentInterviewNotes } from '~/api';
 import { KEY } from '~/i18n/constants';
+import styles from './RecruitmentInterviewNotesForm.module.scss';
+
+const MarkdownPreview = ({
+  notes,
+  onFocus,
+}: { notes: string; onFocus: React.MouseEventHandler<HTMLButtonElement> }) => {
+  return (
+    <div className={styles.markdownWrapper}>
+      <button type="button" onClick={onFocus} className={styles.markdownButton}>
+        <div className={styles.markdownContent}>
+          <SamfMarkdown>{notes}</SamfMarkdown>
+        </div>
+      </button>
+    </div>
+  );
+};
 
 const recruitmentNotesSchema = z.object({
   notes: z.string(),
@@ -24,6 +41,9 @@ interface RecruitmentInterviewNotesFormProps {
 export function RecruitmentInterviewNotesForm({ initialData, interviewId }: RecruitmentInterviewNotesFormProps) {
   const { t } = useTranslation();
   const [currentNotes, setCurrentNotes] = useState(initialData.notes || '');
+  const [markdownState, setMarkdownState] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   const form = useForm<RecruitmentInterviewNotesFormType>({
     resolver: zodResolver(recruitmentNotesSchema),
     defaultValues: {
@@ -43,12 +63,40 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
     },
   });
 
+  useEffect(() => {
+    if (markdownState && textareaRef.current) {
+      const textarea = textareaRef.current;
+      textarea.focus();
+      // Set cursor position to end of text
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+    }
+  }, [markdownState]);
+
+  function handleFocus() {
+    setMarkdownState(true);
+  }
+
   const handleNotesChange = (newNotes: string) => {
     if (newNotes !== currentNotes && interviewId) {
       setCurrentNotes(newNotes);
       handleUpdateNotes.mutate({ notes: newNotes, interviewId });
     }
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.stopImmediatePropagation();
+      if (interviewId) {
+        // Ensure data is saved before leaving (e.g. on refresh)
+        putRecrutmentInterviewNotes(currentNotes, interviewId);
+        // preventDefault() triggers the confirmation box.
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [currentNotes, interviewId]);
 
   return (
     <Form {...form}>
@@ -61,13 +109,22 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
               <FormItem>
                 <FormLabel>{t(KEY.recruitment_interview_notes)}</FormLabel>
                 <FormControl>
-                  <Textarea
-                    {...field}
-                    onBlur={(newNotes) => {
-                      field.onBlur(); // Call the default onBlur handler from react-hook-form
-                      handleNotesChange(newNotes.target.value); // Call your custom function on blur
-                    }}
-                  />
+                  <div>
+                    {markdownState ? (
+                      <Textarea
+                        {...field}
+                        ref={textareaRef}
+                        className={styles.textBox}
+                        onBlur={(newNotes) => {
+                          field.onBlur();
+                          handleNotesChange(newNotes.target.value);
+                          setMarkdownState(false);
+                        }}
+                      />
+                    ) : (
+                      <MarkdownPreview notes={currentNotes} onFocus={handleFocus} />
+                    )}
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
