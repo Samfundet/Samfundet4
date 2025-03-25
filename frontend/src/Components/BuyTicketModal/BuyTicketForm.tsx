@@ -114,7 +114,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
             {/* Member Tickets */}
             <div className={styles.ticket_select}>
               <div className={styles.select_info}>
-                <p className={styles.select_label}>{`${t(KEY.common_member)}`}</p>
+                <p className={styles.select_label}>{t(KEY.common_member)}</p>
                 <p className={styles.price_label}>{price_member} kr per billett</p>
               </div>
               <FormField
