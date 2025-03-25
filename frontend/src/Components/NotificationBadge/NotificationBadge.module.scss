@@ -1,4 +1,4 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
 .wrapper {
   position: relative; // Needed in order to position the badge.

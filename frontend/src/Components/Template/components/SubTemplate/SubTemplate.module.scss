@@ -1,4 +1,4 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
 .sub_template {
   background-color: blue;

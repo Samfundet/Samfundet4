@@ -1,4 +1,3 @@
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
-@import 'src/constants';
-
+@use 'src/constants' as *;

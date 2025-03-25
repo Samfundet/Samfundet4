@@ -1,4 +1,4 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
 .altText {
   text-align: center;
@@ -10,4 +10,3 @@
   margin-left: -1.8px;
   color: $grey-3;
 }
-
