@@ -535,7 +535,8 @@ class Reservation(FullCleanSaveMixin):
         tables = Table.objects.filter(venue=venue.id, seating__gte=seating)
         # fetch all reservations for those tables for that date
         reserved_tables = (
-            Reservation.objects.filter(venue=venue.slug, reservation_date=date, table__in=tables).values('table', 'start_time', 'end_time').order_by('start_time')
+            Reservation.objects.filter(venue=venue.slug, reservation_date=date, table__in=tables).values(
+                'table', 'start_time', 'end_time').order_by('start_time')
         )
 
         # fetch opening hours for the date

@@ -21,6 +21,7 @@ import { KEY } from '~/i18n/constants';
 import styles from '../../LycheReservationPage.module.scss';
 import type { FindTableData } from '../FindAvailableTablesForm/FindAvailableTablesSchema';
 import { type ReservationFormData, reservationSchema } from './ReserveTableSchema';
+import { VENUE } from '~/constants/constants';
 
 interface ReservationDetailsFormProps {
   findTableData: FindTableData;
@@ -50,7 +51,7 @@ export function ReservationDetailsForm({ findTableData, availableTimes, onSubmit
       email: '',
       additional_info: '',
       agree: false,
-      venue: 'lyche',
+      venue: VENUE.LYCHE,
       ...findTableData,
     },
   });
