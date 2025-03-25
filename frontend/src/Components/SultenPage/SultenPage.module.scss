@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .container {
   background-size: 100% 100%;
