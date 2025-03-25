@@ -33,6 +33,7 @@ export function LycheReservationPage() {
       // Handle the successful response
       setAvailableTimes(data);
       setError(null);
+      console.log(data);
       if (data.length > 0) {
         setAvailableDate(true);
       } else {
@@ -88,11 +89,12 @@ export function LycheReservationPage() {
   function onReservationSubmit(data: ReservationFormData) {
     // Combine data from both forms
     const formattedDate = data.reservation_date.toISOString().split('T')[0];
+    console.log(data);
     const completeData: ReservationPostData = {
       ...data,
       reservation_date: formattedDate,
     };
-
+    console.table(completeData);
     // Submit the reservation
     reservationMutation.mutate(completeData);
   }

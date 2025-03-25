@@ -946,7 +946,7 @@ def test_reservation_clean(
     fixture_date_monday: date,
 ):
     url = reverse(routes.samfundet__create_reservation_list)
-    data = {'reservation_date': fixture_date_monday.strftime('%Y-%m-%d'), 'venue': fixture_venue.id, 'guest_count': 3, 'start_time': '10:00'}
+    data = {'reservation_date': fixture_date_monday.strftime('%Y-%m-%d'), 'venue': fixture_venue.slug, 'guest_count': 3, 'start_time': '10:00'}
     response: Response = fixture_rest_client.post(path=url, data=data)
     assert status.is_success(code=response.status_code)
     Reservation.objects.first().delete()
@@ -959,7 +959,7 @@ def test_reservation_double_booked(
     fixture_date_monday: date,
 ):
     url = reverse(routes.samfundet__create_reservation_list)
-    data = {'reservation_date': fixture_date_monday.strftime('%Y-%m-%d'), 'venue': fixture_venue.id, 'guest_count': 3, 'start_time': '10:00'}
+    data = {'reservation_date': fixture_date_monday.strftime('%Y-%m-%d'), 'venue': fixture_venue.slug, 'guest_count': 3, 'start_time': '10:00'}
     response: Response = fixture_rest_client.post(path=url, data=data)
     assert status.is_success(code=response.status_code)
 
@@ -977,7 +977,7 @@ def test_reservation_end_before_start(
     url = reverse(routes.samfundet__create_reservation_list)
     data = {
         'reservation_date': fixture_date_monday.strftime('%Y-%m-%d'),
-        'venue': fixture_venue.id,
+        'venue': fixture_venue.slug,
         'guest_count': 3,
         'end_time': '09:00',
         'start_time': '10:00',

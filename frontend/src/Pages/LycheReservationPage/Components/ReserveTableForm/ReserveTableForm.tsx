@@ -50,7 +50,7 @@ export function ReservationDetailsForm({ findTableData, availableTimes, onSubmit
       email: '',
       additional_info: '',
       agree: false,
-      venue: 8,
+      venue: 'lyche',
       ...findTableData,
     },
   });

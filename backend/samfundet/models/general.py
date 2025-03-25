@@ -452,7 +452,7 @@ class Reservation(FullCleanSaveMixin):
     start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
     end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
 
-    venue = models.ForeignKey(Venue, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Sted')
+    venue = models.ForeignKey(Venue, to_field='slug', on_delete=models.PROTECT, blank=True, null=True, verbose_name='Sted')
 
     occasion = models.CharField(max_length=24, choices=ReservationOccasion.choices, default=ReservationOccasion.FOOD)
     guest_count = models.PositiveSmallIntegerField(null=False, verbose_name='Antall gjester')
