@@ -12,7 +12,7 @@ APPLICANT_COUNT = 900
 
 DEFAULT_PASSWORD = 'passord'  # noqa: S105
 
-APPLICANT_EMAIL_DOMAIN = 'applicant.com'
+APPLICANT_EMAIL_DOMAIN = 'example.com'
 
 # Common Norwegian first names for realistic seed data
 FIRST_NAMES = [
