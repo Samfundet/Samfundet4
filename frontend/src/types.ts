@@ -80,6 +80,25 @@ export const COLORS = {
   // Defaults
   background_primary: '#ffffff',
   background_secondary: '#efefef',
+
+  // Application state colors (model_choices.py in RecruitmentApplicantStates)
+
+  not_set: '#ffffff',
+
+  rejected: '#f9cccd',
+  accepted: '#ccf9cd',
+  withdrawn: '#bbbbbb',
+
+  pending: '#fff5bc',
+  top_wanted: '#32ff32',
+  top_reserve: '#afffaf',
+  less_reserve: '#ffb343',
+  less_reserve_wanted: '#e3fc00',
+  less_reserve_reserved: '#fc3f00',
+  less_want: '#f74343',
+  less_want_reserved: '#f74343',
+  less_want_wanted: '#f74343',
+  not_wanted: '#dc1010',
 } as const;
 
 export type Color = typeof COLORS;
