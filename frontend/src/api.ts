@@ -770,7 +770,7 @@ export async function setRecruitmentApplicationInterview(
 
 export async function getRecruitmentApplicationsForApplicant(
   recruitmentId: string,
-): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
+): Promise<RecruitmentApplicationDto[]> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -779,7 +779,7 @@ export async function getRecruitmentApplicationsForApplicant(
     });
   const response = await axios.get(url, { withCredentials: true });
 
-  return response;
+  return response.data;
 }
 
 export async function getRecruitmentApplicationsForRecruiter(

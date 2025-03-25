@@ -34,7 +34,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
   // Query for fetching applications
   const { data: applications } = useQuery({
     queryKey: ['applications', recruitmentId],
-    queryFn: () => getRecruitmentApplicationsForApplicant(recruitmentId as string).then((response) => response.data),
+    queryFn: () => getRecruitmentApplicationsForApplicant(recruitmentId as string),
     enabled: !!recruitmentId,
     initialData: [],
   });
