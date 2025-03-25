@@ -14,6 +14,7 @@ type WithdrawnApplicationsProps = {
   recruitmentId: string;
   queryKey: ApplicantApplicationManagementQK;
 };
+
 export function WithdrawnApplications({ recruitmentId, queryKey }: WithdrawnApplicationsProps) {
   const { t } = useTranslation();
 
