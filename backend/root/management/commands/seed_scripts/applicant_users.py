@@ -123,18 +123,6 @@ LAST_NAMES = [
 ]
 
 
-def get_name_parts(first_name: str, last_name: str) -> tuple[str, str]:
-    """
-    Get consistent name parts for username creation.
-
-    Returns:
-        Tuple of (first_part, last_part) for username construction
-    """
-    first_part = first_name.lower()[:3]
-    last_part = last_name.lower()[:3]
-    return first_part, last_part
-
-
 def generate_applicant_username(first_name: str, last_name: str, counter: int = 0) -> str:
     """
     Generate a predictable username for an applicant based on name.
@@ -143,7 +131,8 @@ def generate_applicant_username(first_name: str, last_name: str, counter: int = 
     Returns:
         A consistent, predictable username for the applicant
     """
-    first_part, last_part = get_name_parts(first_name, last_name)
+    first_part = first_name.lower()[:3]
+    last_part = last_name.lower()[:3]
     if counter == 0:
         return f'{first_part}{last_part}'
     return f'{first_part}{last_part}{counter}'
