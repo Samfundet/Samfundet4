@@ -235,3 +235,57 @@ export interface CursorPaginatedResponse<T> {
   previous: string | null; // URL or cursor for previous page
   results: T[]; // Current page results
 }
+
+export const RecruitmentApplicantStates = {
+  // Application state colors (model_choices.py in RecruitmentApplicantStates)
+  NOT_SET: 0,
+  TOP_RESERVED: 1,
+  TOP_WANTED: 2,
+  LESS_RESERVE: 3,
+  LESS_RESERVE_RESERVED: 4,
+  LESS_RESERVE_WANTED: 5,
+  LESS_WANT: 6,
+  LESS_WANT_RESERVED: 7,
+  LESS_WANT_WANTED: 8,
+  NOT_WANTED: 10,
+} as const;
+
+// Name mapping for display purposes
+export const RecruitmentApplicantStatesNames: { [key: number]: string } = {
+  // Application state colors (model_choices.py in RecruitmentApplicantStates)
+  0: 'Unprocessed',
+  1: 'Top Reserve',
+  2: 'Top Wanted',
+  3: 'Lower Position (Other on Reserve)',
+  4: 'Lower Position (Other on Reserve, You Reserved)',
+  5: 'Lower Position (Other on Reserve, You Wanted)',
+  6: 'Lower Position (Other on Wanted)',
+  7: 'Lower Position (Other on Wanted, You Reserved)',
+  8: 'Lower Position (Other on Wanted, You Wanted)',
+  10: 'Not Wanted',
+};
+
+// Helper function to get state name
+export const getApplicantStateName = (state: number): string => {
+  return RecruitmentApplicantStatesNames[state] || 'Unknown State';
+};
+
+// Color mapping for applicant states
+export const ApplicationStateColorMapping: { [key: number]: string } = {
+  // Application state colors (model_choices.py in RecruitmentApplicantStates)
+  [RecruitmentApplicantStates.NOT_SET]: COLORS.not_set,
+  [RecruitmentApplicantStates.TOP_RESERVED]: COLORS.top_reserve,
+  [RecruitmentApplicantStates.TOP_WANTED]: COLORS.top_wanted,
+  [RecruitmentApplicantStates.LESS_RESERVE]: COLORS.less_reserve,
+  [RecruitmentApplicantStates.LESS_RESERVE_RESERVED]: COLORS.less_reserve_reserved,
+  [RecruitmentApplicantStates.LESS_RESERVE_WANTED]: COLORS.less_reserve_wanted,
+  [RecruitmentApplicantStates.LESS_WANT]: COLORS.less_want,
+  [RecruitmentApplicantStates.LESS_WANT_RESERVED]: COLORS.less_want_reserved,
+  [RecruitmentApplicantStates.LESS_WANT_WANTED]: COLORS.less_want_wanted,
+  [RecruitmentApplicantStates.NOT_WANTED]: COLORS.not_wanted,
+};
+
+// Helper function to get the color for a state
+export const getApplicantStateColor = (state: number): string => {
+  return ApplicationStateColorMapping[state] || COLORS.not_set;
+};
