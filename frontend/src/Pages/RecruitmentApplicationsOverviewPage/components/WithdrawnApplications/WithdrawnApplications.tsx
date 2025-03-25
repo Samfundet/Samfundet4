@@ -17,10 +17,11 @@ type WithdrawnApplicationsProps = {
 export function WithdrawnApplications({ recruitmentId, queryKey }: WithdrawnApplicationsProps) {
   const { t } = useTranslation();
 
-  const { data: withdrawnApplications = [] } = useQuery({
+  const { data: withdrawnApplications } = useQuery({
     queryKey: queryKey.withdrawnApplications(recruitmentId),
     queryFn: () => getWithdrawnRecruitmentApplicationsApplicant(recruitmentId).then((response) => response.data),
     enabled: !!recruitmentId,
+    initialData: [],
   });
 
   const withdrawnTableColumns = [{ sortable: true, content: t(KEY.recruitment_withdrawn) }];
