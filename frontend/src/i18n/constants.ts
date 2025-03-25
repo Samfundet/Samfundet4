@@ -257,6 +257,9 @@ export const KEY = {
   mix: 'mix',
 
   // Purchase Ticket Info:
+  invalid_email_message: 'invalid_email_message',
+  email_or_membership_number_message: 'email_or_membership_number_message',
+  no_tickets_selected_message: 'no_tickets_selected_message',
   ticketless_description: 'ticketless_description',
   ticketless_description_note: 'ticketless_description_note',
   email_ticket_description: 'email_ticket_description',

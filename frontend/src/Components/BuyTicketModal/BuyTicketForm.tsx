@@ -19,6 +19,7 @@ import { validEmail } from '~/Forms/util';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import styles from './BuyTicketModal.module.scss';
+import { t } from 'i18next';
 
 // Validation schema
 const buyTicketFormSchema = z
@@ -26,14 +27,14 @@ const buyTicketFormSchema = z
     tickets: z.number().min(0),
     membershipTickets: z.number().min(0),
     membershipNumber: z.string().optional(),
-    email: z.string().refine(validEmail, { message: 'Invalid email format' }).optional(),
+    email: z.string().refine(validEmail, { message: t(KEY.invalid_email_message) }).optional(),
   })
   .refine((data) => data.email || data.membershipNumber, {
-    message: 'You must provide either an email or a membership number',
+    message: t(KEY.email_or_membership_number_message),
     path: ['email'],
   })
-  .refine((data) => data.tickets > 1 || data.membershipTickets > 1, {
-    message: 'You must select at least one ticket',
+  .refine((data) => data.tickets >= 1 || data.membershipTickets >= 1, {
+    message: t(KEY.no_tickets_selected_message),
     path: ['tickets'],
   });
 
