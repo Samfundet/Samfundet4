@@ -10,7 +10,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissionsOrAnonRea
 
 from django.utils import timezone
 
-from samfundet.models.general import Menu, Table, Venue, Booking, MenuItem, Reservation, FoodCategory, FoodPreference
+from samfundet.models.general import Menu, Table, Booking, MenuItem, Reservation, FoodCategory, FoodPreference
 from samfundet.serializer.sulten_serializers import (
     MenuSerializer,
     TableSerializer,
