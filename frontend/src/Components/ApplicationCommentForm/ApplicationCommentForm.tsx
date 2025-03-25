@@ -30,13 +30,13 @@ export function ApplicationCommentForm({ initialData, handlePost }: CommentFormP
       // Update state
       setComment(newValue);
 
-      alert(`---TODO--- Comment updated: ${newValue}`);
+      handlePost();
     }
   };
 
   return (
     <div>
-      <Textarea ref={textareaRef} value={comment} onChange={(e) => setComment(e.target.value)} onBlur={handlePost} />
+      <Textarea ref={textareaRef} value={comment} onChange={(e) => setComment(e.target.value)} onBlur={handleBlur} />
     </div>
   );
 }

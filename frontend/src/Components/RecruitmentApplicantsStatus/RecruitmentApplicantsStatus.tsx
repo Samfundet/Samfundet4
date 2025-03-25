@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { TimeDisplay, ToolTip } from '~/Components';
+import { ApplicationCommentForm, TimeDisplay, ToolTip } from '~/Components';
 import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
@@ -56,6 +56,10 @@ export function RecruitmentApplicantsStatus({
 }: RecruitmentApplicantsStatusProps) {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
+
+  const postComment = () => {
+    alert('---TODO--- Comment updated');
+  };
 
   const tableColumns = [
     { content: t(KEY.recruitment_applicant), sortable: true, hideSortButton: false },
@@ -217,6 +221,10 @@ export function RecruitmentApplicantsStatus({
               onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_status, value)}
             />
           ),
+        },
+        {
+          value: application.comment,
+          content: <ApplicationCommentForm initialData={application.comment ?? ''} handlePost={postComment} />,
         },
       ],
     };
