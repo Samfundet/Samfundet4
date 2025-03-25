@@ -2,7 +2,8 @@ import type { ReactNode } from 'react';
 import { ProtectedRoute } from '~/Components';
 
 type PermissionRouteProps = {
-  required?: string[];
+  requiredPermissions?: string[];
+  resolveWithRolePermissions?: boolean;
   obj?: string | number;
   requiresStaff?: boolean;
   element: ReactNode;
@@ -28,14 +29,21 @@ type PermissionRouteProps = {
  * />
  * ```
  */
-export function PermissionRoute({ element, required, obj, requiresStaff }: PermissionRouteProps) {
+export function PermissionRoute({
+  element,
+  requiredPermissions,
+  obj,
+  requiresStaff,
+  resolveWithRolePermissions = false,
+}: PermissionRouteProps) {
   return (
     <ProtectedRoute
       authState={true}
-      requirePermissions={required}
+      requirePermissions={requiredPermissions}
       requiresStaff={requiresStaff}
       obj={obj}
       element={element}
+      resolveWithRolePermissions={resolveWithRolePermissions}
     />
   );
 }

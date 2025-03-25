@@ -56,16 +56,22 @@ export function hasPermissions(
   user: UserDto | null | undefined,
   permissions: string[] | undefined,
   obj?: string | number,
+  resolveWithRolePermissions = false,
 ): boolean {
   if (!user || !permissions) return false;
 
-  for (const permission of permissions) {
-    if (!hasPerm({ user, permission, obj })) {
-      return false;
-    }
+  const hasAllModelPermissions = permissions.every((permission) => hasPerm({ user, permission, obj }));
+
+  if (!resolveWithRolePermissions) {
+    return hasAllModelPermissions;
   }
-  // Because of how JS treats empty lists as truthy, if permissions is an empty list, we'll return true here
-  return true;
+
+  const rolePermissions = user.role_permissions || [];
+  const hasAllRolePermissions = permissions.every((permission) =>
+    rolePermissions.some((rolePermission) => rolePermission.includes(permission)),
+  );
+
+  return hasAllModelPermissions || hasAllRolePermissions;
 }
 
 // ------------------------------
