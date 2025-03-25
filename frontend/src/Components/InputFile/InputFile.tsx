@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import { type ChangeEvent, type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
+import { COLORS } from '~/types';
+import { IconButton } from '../IconButton';
 import { TimeDisplay } from '../TimeDisplay';
 import styles from './InputFile.module.scss';
 
@@ -52,7 +54,6 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
       case 'pdf':
         return 'application/pdf';
     }
-    return '*';
   }
 
   const icons: Record<InputFileType, string> = {
@@ -99,7 +100,18 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
           {/* Image/pdf preview. Shows empty preview for pdf type */}
           {(fileType === 'pdf' || preview) && (
             <div className={classNames(styles.preview_container, styles[typePreviewClass])}>
-              {preview && <img className={styles.preview} src={preview} alt="Preview" />}
+              {preview && (
+                <div className={styles.image_wrapper}>
+                  <img className={styles.preview} src={preview} alt="Preview" />
+                  <IconButton
+                    color={COLORS.red}
+                    icon="mdi:delete"
+                    onClick={() => setSelectedFile(undefined)}
+                    className={styles.delete_button}
+                    title="Delete file"
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
