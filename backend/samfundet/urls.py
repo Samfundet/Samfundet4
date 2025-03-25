@@ -7,6 +7,8 @@ from rest_framework import routers
 
 from django.urls import path, include
 
+import samfundet.view.event_views
+import samfundet.view.general_views
 import samfundet.sulten_views.sulten_views
 
 from . import views
@@ -14,18 +16,18 @@ from .view import recruitment_views
 
 # End: imports -----------------------------------------------------------------
 router = routers.DefaultRouter()
-router.register('images', views.ImageView, 'images')
-router.register('tags', views.TagView, 'tags')
-router.register('events', views.EventView, 'events')
-router.register('eventgroups', views.EventGroupView, 'eventgroups')
-router.register('venues', views.VenueView, 'venues')
-router.register('closed', views.ClosedPeriodView, 'closedperiods')
-router.register('gangs', views.GangView, 'gangs')
-router.register('gangsorganized', views.GangTypeView, 'gangsorganized')
-router.register('information', views.InformationPageView, 'information')
-router.register('blog', views.BlogPostView, 'blog')
+router.register('images', samfundet.view.general_views.ImageView, 'images')
+router.register('tags', samfundet.view.general_views.TagView, 'tags')
+router.register('events', samfundet.view.event_views.EventView, 'events')
+router.register('eventgroups', samfundet.view.event_views.EventGroupView, 'eventgroups')
+router.register('venues', samfundet.view.general_views.VenueView, 'venues')
+router.register('closed', samfundet.view.general_views.ClosedPeriodView, 'closedperiods')
+router.register('gangs', samfundet.view.general_views.GangView, 'gangs')
+router.register('gangsorganized', samfundet.view.general_views.GangTypeView, 'gangsorganized')
+router.register('information', samfundet.view.general_views.InformationPageView, 'information')
+router.register('blog', samfundet.view.general_views.BlogPostView, 'blog')
 router.register('user-preference', views.UserPreferenceView, 'user_preference')
-router.register('saksdokument', views.SaksdokumentView, 'saksdokument')
+router.register('saksdokument', samfundet.view.general_views.SaksdokumentView, 'saksdokument')
 router.register('profile', views.ProfileView, 'profile')
 router.register('permissions', views.PermissionView, 'permissions')
 router.register('menu', samfundet.sulten_views.sulten_views.MenuView, 'menu')
@@ -34,13 +36,13 @@ router.register('food-preference', samfundet.sulten_views.sulten_views.FoodPrefe
 router.register('food-category', samfundet.sulten_views.sulten_views.FoodCategoryView, 'food_category')
 router.register('booking', samfundet.sulten_views.sulten_views.BookingView, 'booking')
 router.register('table', samfundet.sulten_views.sulten_views.TableView, 'table')
-router.register('textitem', views.TextItemView, 'text_item')
+router.register('textitem', samfundet.view.general_views.TextItemView, 'text_item')
 router.register('interview-rooms', views.InterviewRoomView, 'interview_rooms')
-router.register('infobox', views.InfoboxView, 'infobox')
-router.register('key-value', views.KeyValueView, 'key_value')
-router.register('organizations', views.OrganizationView, 'organizations')
-router.register('merch', views.MerchView, 'merch')
-router.register('role', views.RoleView, 'role')
+router.register('infobox', samfundet.view.general_views.InfoboxView, 'infobox')
+router.register('key-value', samfundet.view.general_views.KeyValueView, 'key_value')
+router.register('organizations', samfundet.view.general_views.OrganizationView, 'organizations')
+router.register('merch', samfundet.view.general_views.MerchView, 'merch')
+router.register('role', samfundet.view.general_views.RoleView, 'role')
 
 ########## Recruitment ##########
 router.register('recruitment', recruitment_views.RecruitmentView, 'recruitment')
@@ -50,8 +52,7 @@ router.register('recruitment-separateposition', views.RecruitmentSeparatePositio
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
 router.register('recruitment-position-for-applicant', views.RecruitmentPositionForApplicantView, 'recruitment_position_for_applicant')
 router.register('recruitment-applications-for-applicant', views.RecruitmentApplicationForApplicantView, 'recruitment_applications_for_applicant')
-router.register('recruitment-applications-for-group', views.RecruitmentApplicationForGangView, 'recruitment_applications_for_group')
-router.register('recruitment-applications-for-gang', views.RecruitmentApplicationForGangView, 'recruitment_applications_for_gang')
+router.register('recruitment-applications-for-gang', recruitment_views.RecruitmentApplicationForGangView, 'recruitment_applications_for_gang')
 router.register('recruitment-applications-for-position', views.RecruitmentApplicationForRecruitmentPositionView, 'recruitment_applications_for_position')
 router.register('interview', views.InterviewView, 'interview')
 
@@ -75,13 +76,13 @@ urlpatterns = [
     path('users/', views.AllUsersView.as_view(), name='users'),
     path('users-search-paginated/', views.PaginatedSearchUsersView.as_view(), name='users_search_paginated'),
     path('impersonate/', views.ImpersonateView.as_view(), name='impersonate'),
-    path('events-per-day/', views.EventPerDayView.as_view(), name='eventsperday'),
-    path('events-upcomming/', views.EventsUpcomingView.as_view(), name='eventsupcomming'),
-    path('isclosed/', views.IsClosedView().as_view(), name='isclosed'),
-    path('home/', views.HomePageView().as_view(), name='home'),
+    path('events-per-day/', samfundet.view.event_views.EventPerDayView.as_view(), name='eventsperday'),
+    path('events-upcomming/', samfundet.view.event_views.EventsUpcomingView.as_view(), name='eventsupcomming'),
+    path('isclosed/', samfundet.view.general_views.IsClosedView().as_view(), name='isclosed'),
+    path('home/', samfundet.view.general_views.HomePageView().as_view(), name='home'),
     path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
     path('webhook/', views.WebhookView.as_view(), name='webhook'),
-    path('gangtypes/<int:organization>/', views.GangTypeOrganizationView.as_view(), name='gangsorganized'),
+    path('gangtypes/<int:organization>/', samfundet.view.general_views.GangTypeOrganizationView.as_view(), name='gangsorganized'),
     ########## Lyche ##########
     path('check-reservation/', samfundet.sulten_views.sulten_views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
     ########## Recruitment ##########

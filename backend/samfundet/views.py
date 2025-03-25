@@ -8,7 +8,6 @@ import operator
 from typing import Any
 from datetime import datetime
 from functools import reduce
-from itertools import chain
 
 from guardian.shortcuts import get_objects_for_user
 
@@ -17,8 +16,7 @@ from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from rest_framework.decorators import action
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
@@ -46,46 +44,24 @@ from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTE
 
 from samfundet.pagination import CustomPageNumberPagination
 
-from .utils import event_query, generate_timeslots, get_user_by_search, get_occupied_timeslots_from_request
-from .homepage import homepage
-from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
+from .utils import generate_timeslots, get_user_by_search, get_occupied_timeslots_from_request
 from .serializers import (
-    TagSerializer,
-    GangSerializer,
-    RoleSerializer,
     UserSerializer,
-    EventSerializer,
     GroupSerializer,
-    ImageSerializer,
     LoginSerializer,
-    MerchSerializer,
-    VenueSerializer,
-    InfoboxSerializer,
     ProfileSerializer,
-    BlogPostSerializer,
-    GangTypeSerializer,
-    KeyValueSerializer,
     RegisterSerializer,
-    TextItemSerializer,
     InterviewSerializer,
-    EventGroupSerializer,
     PermissionSerializer,
     RecruitmentSerializer,
-    UserOrgRoleSerializer,
-    ClosedPeriodSerializer,
-    OrganizationSerializer,
-    SaksdokumentSerializer,
     UserFeedbackSerializer,
-    UserGangRoleSerializer,
     InterviewRoomSerializer,
     ChangePasswordSerializer,
     UserPreferenceSerializer,
-    InformationPageSerializer,
     OccupiedTimeslotSerializer,
     PurchaseFeedbackSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
-    UserGangSectionRoleSerializer,
     RecruitmentStatisticsSerializer,
     RecruitmentSeparatePositionSerializer,
     RecruitmentApplicationForGangSerializer,
@@ -100,29 +76,14 @@ from .serializers import (
     RecruitmentPositionSharedInterviewGroupSerializer,
 )
 from .models.event import (
-    Event,
-    EventGroup,
     PurchaseFeedbackQuestion,
     PurchaseFeedbackAlternative,
 )
 from .models.general import (
-    Tag,
     Gang,
     User,
-    Image,
-    Merch,
-    Venue,
-    Infobox,
     Profile,
-    BlogPost,
-    GangType,
-    KeyValue,
-    TextItem,
-    ClosedPeriod,
-    Organization,
-    Saksdokument,
     UserPreference,
-    InformationPage,
     UserFeedbackModel,
 )
 from .models.recruitment import (
@@ -139,217 +100,6 @@ from .models.recruitment import (
     RecruitmentPositionSharedInterviewGroup,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
-
-# =============================== #
-#          Home Page              #
-# =============================== #
-
-
-class HomePageView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request: Request) -> Response:
-        return Response(data=homepage.generate())
-
-
-# =============================== #
-#            Utility              #
-# =============================== #
-
-
-# Localized text storage
-class TextItemView(ReadOnlyModelViewSet):
-    """All CRUD operations can be performed in the admin panel instead."""
-
-    permission_classes = [AllowAny]
-    serializer_class = TextItemSerializer
-    queryset = TextItem.objects.all()
-
-
-class KeyValueView(ReadOnlyModelViewSet):
-    """All CRUD operations can be performed in the admin panel instead."""
-
-    permission_classes = [AllowAny]
-    serializer_class = KeyValueSerializer
-    queryset = KeyValue.objects.all()
-    lookup_field = 'key'
-
-
-# Images
-class ImageView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = ImageSerializer
-    queryset = Image.objects.all().order_by('-pk')
-
-
-# Image tags
-class TagView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = TagSerializer
-    queryset = Tag.objects.all()
-
-
-# =============================== #
-#           Events                #
-# =============================== #
-
-
-class EventView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = EventSerializer
-    queryset = Event.objects.all()
-
-
-class EventPerDayView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request: Request) -> Response:
-        # Fetch and serialize events.
-        events = Event.objects.filter(start_dt__gt=timezone.now()).order_by('start_dt')
-        serialized = EventSerializer(events, many=True).data
-
-        # Organize in date dictionary.
-        events_per_day: dict = {}
-        for event, serial in zip(events, serialized, strict=False):
-            date = event.start_dt.strftime('%Y-%m-%d')
-            events_per_day.setdefault(date, [])
-            events_per_day[date].append(serial)
-
-        return Response(data=events_per_day)
-
-
-class EventsUpcomingView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request: Request) -> Response:
-        events = event_query(query=request.query_params)
-        events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')
-        return Response(data=EventSerializer(events, many=True).data)
-
-
-class EventGroupView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = EventGroupSerializer
-    queryset = EventGroup.objects.all()
-
-
-# =============================== #
-#            General              #
-# =============================== #
-
-
-class VenueView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = VenueSerializer
-    queryset = Venue.objects.all()
-    lookup_field = 'slug'
-
-
-class ClosedPeriodView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = ClosedPeriodSerializer
-    queryset = ClosedPeriod.objects.all()
-
-
-class IsClosedView(ListAPIView):
-    permission_classes = [AllowAny]
-    serializer_class = ClosedPeriodSerializer
-
-    def get_queryset(self) -> QuerySet:
-        return ClosedPeriod.objects.filter(
-            start_dt__lte=timezone.now(),
-            end_dt__gte=timezone.now(),
-        )
-
-
-class SaksdokumentView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = SaksdokumentSerializer
-    queryset = Saksdokument.objects.all()
-
-
-class OrganizationView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = OrganizationSerializer
-    queryset = Organization.objects.all()
-
-    @action(detail=True, methods=['get'])
-    def gangs(self, request: Request, **kwargs: Any) -> Response:
-        organization = self.get_object()
-        gangs = Gang.objects.filter(organization=organization)
-        serializer = GangSerializer(gangs, many=True)
-        return Response(serializer.data)
-
-
-class GangView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = GangSerializer
-    queryset = Gang.objects.all()
-
-
-class GangTypeView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = GangTypeSerializer
-    queryset = GangType.objects.all()
-
-
-class GangTypeOrganizationView(APIView):
-    permission_classes = [AllowAny]
-    serializer_class = GangTypeSerializer
-
-    def get(self, request: Request, organization: int) -> Response:
-        data = GangType.objects.filter(organization=organization)
-        return Response(data=self.serializer_class(data, many=True).data, status=status.HTTP_200_OK)
-
-
-class InformationPageView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = InformationPageSerializer
-    queryset = InformationPage.objects.all()
-
-
-class InfoboxView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = InfoboxSerializer
-    queryset = Infobox.objects.all()
-
-
-class BlogPostView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = BlogPostSerializer
-    queryset = BlogPost.objects.all()
-
-
-class RoleView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = RoleSerializer
-    queryset = Role.objects.all()
-
-    @action(detail=True, methods=['get'])
-    def users(self, request: Request, pk: int) -> Response:
-        role = get_object_or_404(Role, id=pk)
-
-        org_roles = UserOrgRole.objects.filter(role=role).select_related('user', 'obj')
-        gang_roles = UserGangRole.objects.filter(role=role).select_related('user', 'obj')
-        section_roles = UserGangSectionRole.objects.filter(role=role).select_related('user', 'obj')
-
-        org_data = UserOrgRoleSerializer(org_roles, many=True).data
-        gang_data = UserGangRoleSerializer(gang_roles, many=True).data
-        section_data = UserGangSectionRoleSerializer(section_roles, many=True).data
-
-        combined = list(chain(org_data, gang_data, section_data))
-
-        return Response(combined)
-
-
-# =============================== #
-#             Merch               #
-# =============================== #
-class MerchView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = MerchSerializer
-    queryset = Merch.objects.all()
-
 
 # =============================== #
 #          Auth/Login             #
@@ -977,39 +727,6 @@ class RecruitmentApplicationSetInterviewView(APIView):
             application_serializer = RecruitmentApplicationForGangSerializer(RecruitmentApplication.objects.get(id=pk))
             return Response(application_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class RecruitmentApplicationForGangView(ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    serializer_class = RecruitmentApplicationForGangSerializer
-    queryset = RecruitmentApplication.objects.all()
-
-    # TODO: User should only be able to edit the fields that are allowed
-
-    def list(self, request: Request) -> Response:
-        """Returns a list of all the recruitments for the specified gang."""
-        gang_id = request.query_params.get('gang')
-        recruitment_id = request.query_params.get('recruitment')
-
-        if not gang_id:
-            return Response({'error': 'A gang parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        if not recruitment_id:
-            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        gang = get_object_or_404(Gang, id=gang_id)
-        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
-
-        applications = RecruitmentApplication.objects.filter(
-            recruitment_position__gang=gang,
-            recruitment=recruitment,  # only include applications related to the specified recruitment
-        )
-
-        # check permissions for each application
-        applications = get_objects_for_user(user=request.user, perms=['view_recruitmentapplication'], klass=applications)
-
-        serializer = self.get_serializer(applications, many=True)
-        return Response(serializer.data)
 
 
 class RecruitmentApplicationStateChoicesView(APIView):
