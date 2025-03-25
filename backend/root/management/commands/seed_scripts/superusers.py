@@ -38,7 +38,7 @@ def create_test_superusers(*, username, firstname, lastname, campus):
     User.objects.create_user(
         username=username,
         email=f'{username}@mg-web.no',
-        password='passord',  # nosec
+        password='Django123',  # nosec
         first_name=firstname,
         last_name=lastname,
         is_superuser=(ENV == Environment.DEV),

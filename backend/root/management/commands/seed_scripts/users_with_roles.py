@@ -170,7 +170,6 @@ SAMFUNDET_USER_TYPES = {
     ),
 }
 
-
 # This dictionary will track sequential numbers for each unique naminpattern
 sequential_counters = {}
 
@@ -300,7 +299,7 @@ def create_user_from_type_data(type_data, username, first_name, last_name, all_c
     return User(
         username=username,
         email=f'{username}{number}@samfundet.no',
-        password='!',  # Temporary unusable password
+        password='temp_pswd',  # Temporary unusable password
         first_name=first_name,
         last_name=last_name,
         is_superuser=False,
@@ -420,7 +419,7 @@ def prepare_section_level_users(organizations, universal_user_types, gang_to_sec
                     interviewer = User(
                         username=interviewer_username,
                         email=f'{interviewer_username}@samfundet.no',
-                        password='!',  # Temporary unusable password
+                        password='temp_pswd',  # Temporary unusable password
                         first_name=f'Intervjuer {i}',
                         last_name=f'{gang.name_nb} - {section.name_nb}',
                         is_superuser=False,
@@ -492,7 +491,7 @@ def prepare_samfundet_specific_users(
                 user = User(
                     username=username,
                     email=f'{username}@samfundet.no',
-                    password='!',  # Temporary unusable password
+                    password='temp_pswd',  # Temporary unusable password
                     first_name=type_data.title_nb,
                     last_name=samfundet_org.name,
                     is_superuser=False,
@@ -550,7 +549,7 @@ def prepare_redaksjonen_users(  # noqa: C901
                     user = User(
                         username=username,
                         email=f'{username}@samfundet.no',
-                        password='!',  # Temporary unusable password
+                        password='temp_pswd',  # Temporary unusable password
                         first_name=type_data.title_nb,
                         last_name=f'{mg.name_nb} - {redaksjonen.name_nb}',
                         is_superuser=False,
@@ -660,7 +659,7 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
         # Pre-compute a single hashed password to use for all users
         # This avoids expensive password hashing for each user
         temp_user = User()
-        temp_user.set_password('test123')  # nosec
+        temp_user.set_password('Django123')  # nosec
         hashed_password = temp_user.password
 
         # Set the same hashed password for all users before bulk creation

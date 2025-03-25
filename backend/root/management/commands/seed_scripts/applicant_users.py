@@ -10,7 +10,7 @@ from samfundet.models.general import User, Campus
 # Number of applicant users to create
 APPLICANT_COUNT = 900
 
-DEFAULT_PASSWORD = 'passord'  # noqa: S105
+DEFAULT_PASSWORD = 'Django123'  # noqa: S105
 
 APPLICANT_EMAIL_DOMAIN = 'example.com'
 
