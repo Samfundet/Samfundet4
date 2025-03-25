@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from collections.abc import Generator
 
 from django.db import transaction  # type: ignore
+from django.contrib.auth.hashers import make_password
 
 from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from samfundet.models.general import Gang, User, Campus, GangSection, Organization
@@ -658,9 +659,7 @@ def seed() -> Generator[tuple[float, str], None, None]:  # noqa: C901
 
         # Pre-compute a single hashed password to use for all users
         # This avoids expensive password hashing for each user
-        temp_user = User()
-        temp_user.set_password('Django123')  # nosec
-        hashed_password = temp_user.password
+        hashed_password = make_password('Django123')  # nosec
 
         # Set the same hashed password for all users before bulk creation
         for user in users_to_create:

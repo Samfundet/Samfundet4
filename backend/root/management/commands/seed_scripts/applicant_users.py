@@ -4,6 +4,7 @@ import itertools
 from collections.abc import Generator
 
 from django.db import transaction  # type: ignore
+from django.contrib.auth.hashers import make_password
 
 from samfundet.models.general import User, Campus
 
@@ -178,18 +179,6 @@ def create_user_object(username: str, first_name: str, last_name: str, hashed_pa
     )
 
 
-def get_hashed_password(password: str) -> str:
-    """
-    Generate a hashed password using Django's password hashing.
-
-    Returns:
-        Hashed password string
-    """
-    temp_user = User()
-    temp_user.set_password(password)
-    return temp_user.password
-
-
 def create_batch_of_applicants(count: int, campuses: list[Campus], start_index: int, existing_usernames: set[str]) -> list[User]:
     """
     Create a batch of applicant users with predictable name combinations.
@@ -198,7 +187,7 @@ def create_batch_of_applicants(count: int, campuses: list[Campus], start_index: 
         List of created User objects
     """
     # Pre-hash a password once for all users
-    hashed_password = get_hashed_password(DEFAULT_PASSWORD)
+    hashed_password = make_password(DEFAULT_PASSWORD)
 
     # Ensure we have at least one campus
     if not campuses:
