@@ -224,7 +224,7 @@ export function RecruitmentApplicantsStatus({
         },
         {
           value: application.comment,
-          content: <ApplicationCommentForm initialData={application.comment ?? ''} handlePost={postComment} />,
+          content: <ApplicationCommentForm commentText={application.comment} handlePost={postComment} />,
         },
       ],
     };
