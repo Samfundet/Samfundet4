@@ -1,17 +1,17 @@
-import styles from './LycheMenuPage.module.scss';
-import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { getMenu } from '~/api';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { LycheFrame } from '~/Components/LycheFrame';
 import { LycheMenuDivider } from '~/Components/LycheMenuDivider/LycheMenuDivider';
 import { MenuItem } from '~/Components/MenuItem';
 import { SultenPage } from '~/Components/SultenPage';
-import { useTitle } from '~/hooks';
-import { KEY } from '~/i18n/constants';
+import { getMenu } from '~/api';
 import menuLogo from '~/assets/lyche/menu-logo.png';
-import React from 'react';
 import { TextItem } from '~/constants';
+import { useTitle } from '~/hooks';
 import { useTextItem } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import styles from './LycheMenuPage.module.scss';
 
 export function LycheMenuPage() {
   const { t, i18n } = useTranslation();
