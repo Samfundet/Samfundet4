@@ -83,21 +83,16 @@ export const COLORS = {
 
   // Applicant state colors (model_choices.py in RecruitmentApplicantStates)
   // these should communicate possible actions
-  applicant_state_0: '#f5f0d5', // action needed here
-  applicant_state_1: '#63b88f', // might call
-  applicant_state_2: '#046404', // should call
-  applicant_state_3: '#ebbc7c', // action needed here
-  applicant_state_4: '#e3fc00', // dont call
-  applicant_state_5: '#e53b2f', // dont call
-  applicant_state_6: '#ebbc7c', // action needed here
-  applicant_state_7: '#e53b2f', // dont call
-  applicant_state_8: '#e53b2f', // dont call
-  applicant_state_10: '#9f3dd3', // not wanted
+  action_needed_here: '#f5f0d5',
+  might_contact: '#63b88f',
+  will_contact: '#046404',
+  do_not_contact: '#e53b2f',
+  not_wanted: '#9f3dd3',
 
   // Final application result colors
-  rejected: '#dee73e',
-  accepted: '#4f49eb',
-  withdrawn: '#7f7f7f',
+  rejected_this_offer: '#dee73e',
+  accepted_this_offer: '#4f49eb',
+  withdrawn_application: '#7f7f7f',
 } as const;
 
 export type Color = typeof COLORS;
@@ -364,16 +359,16 @@ export const getRecruitmentApplicantStateName = (
 // Color mapping for applicant states
 export const ApplicationStateColorMapping: { [key: number]: string } = {
   // Application state colors (model_choices.py in RecruitmentApplicantStates)
-  [RecruitmentApplicantStates.NOT_SET]: COLORS.applicant_state_0,
-  [RecruitmentApplicantStates.TOP_PRI_RESERVED_HERE]: COLORS.applicant_state_1,
-  [RecruitmentApplicantStates.TOP_PRI_WANTED_HERE]: COLORS.applicant_state_2,
-  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_UNPROCESSED_HERE]: COLORS.applicant_state_3,
-  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_RESERVED_HERE]: COLORS.applicant_state_4,
-  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_WANTED_HERE]: COLORS.applicant_state_5,
-  [RecruitmentApplicantStates.WANTED_ELSEWHERE_UNPROCESSED_HERE]: COLORS.applicant_state_6,
-  [RecruitmentApplicantStates.WANTED_ELSEWHERE_RESERVE_HERE]: COLORS.applicant_state_7,
-  [RecruitmentApplicantStates.WANTED_ELSEWHERE_WANTED_HERE]: COLORS.applicant_state_8,
-  [RecruitmentApplicantStates.NOT_WANTED]: COLORS.applicant_state_10,
+  [RecruitmentApplicantStates.NOT_SET]: COLORS.action_needed_here,
+  [RecruitmentApplicantStates.TOP_PRI_RESERVED_HERE]: COLORS.might_contact,
+  [RecruitmentApplicantStates.TOP_PRI_WANTED_HERE]: COLORS.will_contact,
+  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_UNPROCESSED_HERE]: COLORS.action_needed_here,
+  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_RESERVED_HERE]: COLORS.do_not_contact,
+  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_WANTED_HERE]: COLORS.do_not_contact,
+  [RecruitmentApplicantStates.WANTED_ELSEWHERE_UNPROCESSED_HERE]: COLORS.action_needed_here,
+  [RecruitmentApplicantStates.WANTED_ELSEWHERE_RESERVE_HERE]: COLORS.do_not_contact,
+  [RecruitmentApplicantStates.WANTED_ELSEWHERE_WANTED_HERE]: COLORS.do_not_contact,
+  [RecruitmentApplicantStates.NOT_WANTED]: COLORS.not_wanted,
 };
 
 // Helper function to get the color for a state

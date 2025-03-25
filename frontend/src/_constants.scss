@@ -80,22 +80,17 @@ $background-secondary: #efefef;
 
 // Applicant state colors (model_choices.py in RecruitmentApplicantStates)
 // these should communicate possible actions
-$applicant_state_0: #ebbc7c; // action needed here
-$applicant_state_1: #63b88f; // might call
-$applicant_state_2: #046404; // should call
-$applicant_state_3: #ebbc7c; // action needed here
-$applicant_state_4: #e53b2f; // dont call
-$applicant_state_5: #e53b2f; // dont call
-$applicant_state_6: #ebbc7c; // action needed here
-$applicant_state_7: #e53b2f; // dont call
-$applicant_state_8: #e53b2f; // dont call
-$applicant_state_10: #9f3dd3; // not wanted
+$action_needed_here: #ebbc7c;
+$might_contact: #63b88f;
+$will_contact: #046404;
+$do_not_contact: #e53b2f;
+$not_wanted: #9f3dd3;
 
 
 // Final application result colors
-$rejected: #dee73e;
-$accepted: #4f49eb;
-$withdrawn: #7f7f7f;
+$rejected_this_offer: #dee73e;
+$accepted_this_offer: #4f49eb;
+$withdrawn_application: #7f7f7f;
 
 /* Screen sizes, breakpoint (bp) */
 $large-desktop-bp-lower: 1201px;
