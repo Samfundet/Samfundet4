@@ -1,3 +1,4 @@
+import styles from './LycheMenuPage.module.scss';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { getMenu } from '~/api';
@@ -7,22 +8,28 @@ import { MenuItem } from '~/Components/MenuItem';
 import { SultenPage } from '~/Components/SultenPage';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import menuLogo from '~/assets/lyche/menu-logo.png';
 import React from 'react';
+import { TextItem } from '~/constants';
+import { useTextItem } from '~/hooks';
 
 export function LycheMenuPage() {
   const { t, i18n } = useTranslation();
+  const menuIntroText1 = useTextItem(TextItem.sulten_menu_introduction_text1);
+  const menuIntroText2 = useTextItem(TextItem.sulten_menu_introduction_text2);
+  const menuIntroText3 = useTextItem(TextItem.sulten_menu_introduction_text3);
+
   const currentLanguage = i18n.language;
   useTitle(t(KEY.common_menu), t(KEY.common_sulten));
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ['menu', 6], //hard coded for now, not sure what this should fetch normally - what is the plan with different menus?
+    queryKey: ['menu', 7], //hard coded for now, not sure what this should fetch normally - what is the plan with different menus?
     queryFn: async () => {
-      const response = await getMenu('6');
+      const response = await getMenu('7');
       return response;
     },
   });
 
-  console.log(data);
   // Process menu data to group by food category
   const groupedMenuItems = React.useMemo(() => {
     if (!data?.menu_items) return {};
@@ -65,6 +72,25 @@ export function LycheMenuPage() {
   return (
     <SultenPage>
       <LycheFrame>
+        <img className={styles.menuLogo} src={menuLogo} alt="Menu Logo" />
+        <h1 className={styles.menuHeader}> {t(KEY.common_menu)}</h1>
+        <section className={styles.menuIntroduction}> {menuIntroText1} </section>
+        <section className={styles.menuIntroduction}> {menuIntroText2} </section>
+        <section className={styles.menuIntroduction}> {menuIntroText3} </section>
+        <h2 className={styles.menuHeader2}> {t(KEY.sulten_menu_you_are_welcome)} </h2>
+        <h1 className={styles.menuHeader}> {t(KEY.common_opening_hours)}</h1>
+        <section className={styles.openingHours}>
+          <p>
+            {' '}
+            {t(KEY.common_day_monday)} - {t(KEY.common_day_thursday)}: 16:00 - 23:00{' '}
+          </p>
+          <p>
+            {' '}
+            {t(KEY.common_day_friday)} - {t(KEY.common_day_saturday)}: 16:00 - 02:00{' '}
+          </p>
+          <p> {t(KEY.common_day_sunday)}: 16:00 - 21:00 </p>
+        </section>
+
         {sortedCategories.map((category) => (
           <React.Fragment key={category.id}>
             <LycheMenuDivider title={category.name} />
