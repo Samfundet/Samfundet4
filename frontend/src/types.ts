@@ -236,17 +236,17 @@ export interface CursorPaginatedResponse<T> {
 }
 
 export const RecruitmentApplicantStates = {
-  // Application state colors (model_choices.py in RecruitmentApplicantStates)
-  NOT_SET: 0,
-  TOP_RESERVED: 1,
-  TOP_WANTED: 2,
-  LESS_RESERVE: 3,
-  LESS_RESERVE_RESERVED: 4,
-  LESS_RESERVE_WANTED: 5,
-  LESS_WANT: 6,
-  LESS_WANT_RESERVED: 7,
-  LESS_WANT_WANTED: 8,
-  NOT_WANTED: 10,
+  // Application state (model_choices.py in RecruitmentApplicantStates)
+  NOT_SET: 0, // needs processing here
+  TOP_PRI_RESERVED_HERE: 1, // going here
+  TOP_PRI_WANTED_HERE: 2, // might go here
+  RESERVED_ELSEWHERE_UNPROCESSED_HERE: 3, // needs processing here
+  RESERVED_ELSEWHERE_RESERVED_HERE: 4, // going elsewhere, does not go here due to applicants prioirity higher elsewhere
+  RESERVED_ELSEWHERE_WANTED_HERE: 5, // going elsewhere, does not go here due to applicants prioirity higher elsewhere
+  WANTED_ELSEWHERE_UNPROCESSED_HERE: 6, // needs processing here
+  WANTED_ELSEWHERE_RESERVE_HERE: 7, // going elsewhere, does not go here due to applicants prioirity higher elsewhere
+  WANTED_ELSEWHERE_WANTED_HERE: 8, // going elsewhere, does not go here due to applicants prioirity higher elsewhere
+  NOT_WANTED: 10, // does not go here
 } as const;
 
 export const RecruitmentApplicantStatesDescriptions: {
@@ -365,14 +365,14 @@ export const getRecruitmentApplicantStateName = (
 export const ApplicationStateColorMapping: { [key: number]: string } = {
   // Application state colors (model_choices.py in RecruitmentApplicantStates)
   [RecruitmentApplicantStates.NOT_SET]: COLORS.applicant_state_0,
-  [RecruitmentApplicantStates.TOP_RESERVED]: COLORS.applicant_state_1,
-  [RecruitmentApplicantStates.TOP_WANTED]: COLORS.applicant_state_2,
-  [RecruitmentApplicantStates.LESS_RESERVE]: COLORS.applicant_state_3,
-  [RecruitmentApplicantStates.LESS_RESERVE_RESERVED]: COLORS.applicant_state_4,
-  [RecruitmentApplicantStates.LESS_RESERVE_WANTED]: COLORS.applicant_state_5,
-  [RecruitmentApplicantStates.LESS_WANT]: COLORS.applicant_state_6,
-  [RecruitmentApplicantStates.LESS_WANT_RESERVED]: COLORS.applicant_state_7,
-  [RecruitmentApplicantStates.LESS_WANT_WANTED]: COLORS.applicant_state_8,
+  [RecruitmentApplicantStates.TOP_PRI_RESERVED_HERE]: COLORS.applicant_state_1,
+  [RecruitmentApplicantStates.TOP_PRI_WANTED_HERE]: COLORS.applicant_state_2,
+  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_UNPROCESSED_HERE]: COLORS.applicant_state_3,
+  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_RESERVED_HERE]: COLORS.applicant_state_4,
+  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_WANTED_HERE]: COLORS.applicant_state_5,
+  [RecruitmentApplicantStates.WANTED_ELSEWHERE_UNPROCESSED_HERE]: COLORS.applicant_state_6,
+  [RecruitmentApplicantStates.WANTED_ELSEWHERE_RESERVE_HERE]: COLORS.applicant_state_7,
+  [RecruitmentApplicantStates.WANTED_ELSEWHERE_WANTED_HERE]: COLORS.applicant_state_8,
   [RecruitmentApplicantStates.NOT_WANTED]: COLORS.applicant_state_10,
 };
 
