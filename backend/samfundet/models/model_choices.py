@@ -91,13 +91,13 @@ class RecruitmentApplicantStates(models.IntegerChoices):
     # 0 not set
     # 1 reserve
     # 2 wanted
-    NOT_SET = 0, _('The priority is not set')
-    TOP_RESERVED = 1, _('This applicant is reserved for this posision as things are now')
-    TOP_WANTED = 2, _('This position will go to this applicant as things are now')
-    LESS_RESERVE = 3, _('Another position has this applicant on reserve, and the applicant has set higher priority on that position')
-    LESS_RESERVE_RESERVED = 4, _('This applicant is on reserve for this position as things are now')
-    LESS_RESERVE_WANTED = 5, _('Another position has higher priority')
-    LESS_WANT = 6, _('Another position has this on reserve, and the applicant has set higher priority on that position')
-    LESS_WANT_RESERVED = 7, _('This applciant will go to another position as things are no')
-    LESS_WANT_WANTED = 8, _('Another position aslo has this applicant on wanted, but the applicant has set higher priority on that position')
-    NOT_WANTED = 10, _('This applicant will go to another posision as things are now')
+    NOT_SET = 0, _('Unprocessed, action needed.')
+    TOP_PRI_RESERVED_HERE = 1, _('Applicants top priority, but set as reserve here.')
+    TOP_PRI_WANTED_HERE = 2, _('Applicants top priority and wanted here.')
+    RESERVED_ELSEWHERE_UNPROCESSED_HERE = 3, _('Reserve for another position, unprocessed here. Action needed.')
+    RESERVED_ELSEWHERE_RESERVED_HERE = 4, _('Reserve for another position and reserve here.')
+    RESERVED_ELSEWHERE_WANTED_HERE = 5, _('Reserve for another position, and wanted here.')
+    WANTED_ELSEWHERE_UNPROCESSED_HERE = 6, _('Wanted for another position, and unprocessed here. Action needed.')
+    WANTED_ELSEWHERE_RESERVE_HERE = 7, _('Wanted for another position, and reserve here.')
+    WANTED_ELSEWHERE_WANTED_HERE = 8, _('Wanted for another position and wanted here.')
+    NOT_WANTED = 10, _('The applicant is not wanted for this position.')
