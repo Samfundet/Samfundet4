@@ -248,6 +248,9 @@ export const nb = prepareTranslations({
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',
   [KEY.email_or_membership_number_message]: 'Du må oppgi enten en e-post eller et medlemsnummer', 
   [KEY.no_tickets_selected_message]: 'Du må velge minst én billett',
+  [KEY.kr_per_ticket]: 'kr per billett',
+  [KEY.enter_membership_number]: 'Skriv inn medlemsnummer',
+  [KEY.enter_email]: 'Skriv inn e-postadresse',
   [KEY.ticketless_description]:
     'Medlemskortet blir billetten din, og det er bare å trekke kortet i døren når du kommer til Samfundet.',
   [KEY.ticketless_description_note]:
@@ -775,6 +778,9 @@ export const en = prepareTranslations({
   [KEY.invalid_email_message]: 'Invalid email format',
   [KEY.email_or_membership_number_message]: 'You must provide either an email or a membership number',
   [KEY.no_tickets_selected_message]: 'You must select at least one ticket',
+  [KEY.kr_per_ticket]: 'kr per ticket',
+  [KEY.enter_membership_number]: 'Enter your membership number',
+  [KEY.enter_email]: 'Enter your email address',
   [KEY.ticketless_description]:
     'If you choose ticketless, your membership card itself will be your ticket. You will then simply swipe your card when you enter Samfundet.',
   [KEY.ticketless_description_note]:

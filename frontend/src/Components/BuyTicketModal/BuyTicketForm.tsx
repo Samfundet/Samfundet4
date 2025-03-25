@@ -86,7 +86,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
             <div className={styles.ticket_select}>
               <div className={styles.select_info}>
                 <p className={styles.select_label}>{`${t(KEY.common_not)}-${t(KEY.common_member)}`}</p>
-                <p className={styles.price_label}>{price} kr per billett</p>
+                <p className={styles.price_label}>{price} {t(KEY.kr_per_ticket)}</p>
               </div>
               <FormField
                 control={form.control}
@@ -115,7 +115,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
             <div className={styles.ticket_select}>
               <div className={styles.select_info}>
                 <p className={styles.select_label}>{t(KEY.common_member)}</p>
-                <p className={styles.price_label}>{price_member} kr per billett</p>
+                <p className={styles.price_label}>{price_member} {t(KEY.kr_per_ticket)}</p>
               </div>
               <FormField
                 control={form.control}
@@ -171,7 +171,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                           style={{
                             backgroundColor: ticketType === 'membershipNumber' ? 'white' : 'lightgrey',
                           }}
-                          placeholder="Enter membership number"
+                          placeholder={t(KEY.enter_membership_number)}
                           {...field}
                         />
                       </FormControl>
@@ -206,7 +206,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                           style={{
                             backgroundColor: ticketType === 'email' ? 'white' : 'lightgray',
                           }}
-                          placeholder="Enter your email"
+                          placeholder={t(KEY.enter_email)}
                           {...field}
                         />
                       </FormControl>
