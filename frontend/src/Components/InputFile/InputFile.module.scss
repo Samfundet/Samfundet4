@@ -84,6 +84,14 @@
   }
 }
 
+.image_wrapper {
+  height: 9em;
+  width: 9em;
+  position: relative;
+  display: inline-block; 
+  overflow: visible;
+}
+
 .preview {
   @include shadow-light;
   border: 1px solid $black;
@@ -92,6 +100,13 @@
   max-width: 100%;
   max-height: 100%;
   margin: 0 auto;
+}
+
+.delete_button {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  pointer-events: all;
 }
 
 .horizontal {
