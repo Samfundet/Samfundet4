@@ -236,11 +236,11 @@ export const RecruitmentApplicantStates = {
   TOP_PRI_RESERVED_HERE: 1, // going here
   TOP_PRI_WANTED_HERE: 2, // might go here
   RESERVED_ELSEWHERE_UNPROCESSED_HERE: 3, // needs processing here
-  RESERVED_ELSEWHERE_RESERVED_HERE: 4, // going elsewhere, does not go here due to applicants prioirity higher elsewhere
-  RESERVED_ELSEWHERE_WANTED_HERE: 5, // going elsewhere, does not go here due to applicants prioirity higher elsewhere
+  RESERVED_ELSEWHERE_RESERVED_HERE: 4, // going elsewhere, does not go here due to `applicant_prioirity` higher elsewhere
+  RESERVED_ELSEWHERE_WANTED_HERE: 5, // going elsewhere, does not go here due to `applicant_prioirity` higher elsewhere
   WANTED_ELSEWHERE_UNPROCESSED_HERE: 6, // needs processing here
-  WANTED_ELSEWHERE_RESERVE_HERE: 7, // going elsewhere, does not go here due to applicants prioirity higher elsewhere
-  WANTED_ELSEWHERE_WANTED_HERE: 8, // going elsewhere, does not go here due to applicants prioirity higher elsewhere
+  WANTED_ELSEWHERE_RESERVE_HERE: 7, // going elsewhere, does not go here due to `applicant_prioirity` higher elsewhere
+  WANTED_ELSEWHERE_WANTED_HERE: 8, // going elsewhere, does not go here due to `applicant_prioirity` higher elsewhere
   NOT_WANTED: 10, // does not go here
 } as const;
 
