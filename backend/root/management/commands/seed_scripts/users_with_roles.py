@@ -299,7 +299,7 @@ def create_user_from_type_data(type_data, username, first_name, last_name, all_c
     number = random.randint(1, 9999)
     return User(
         username=username,
-        email=f'{username}{number}@samfundet.no',
+        email=f'{username}{number}@example.com',
         password='temp_pswd',  # Temporary unusable password
         first_name=first_name,
         last_name=last_name,
@@ -419,7 +419,7 @@ def prepare_section_level_users(organizations, universal_user_types, gang_to_sec
                     # Create the interviewer user
                     interviewer = User(
                         username=interviewer_username,
-                        email=f'{interviewer_username}@samfundet.no',
+                        email=f'{interviewer_username}@example.com',
                         password='temp_pswd',  # Temporary unusable password
                         first_name=f'Intervjuer {i}',
                         last_name=f'{gang.name_nb} - {section.name_nb}',
@@ -491,7 +491,7 @@ def prepare_samfundet_specific_users(
                 # Create user
                 user = User(
                     username=username,
-                    email=f'{username}@samfundet.no',
+                    email=f'{username}@example.com',
                     password='temp_pswd',  # Temporary unusable password
                     first_name=type_data.title_nb,
                     last_name=samfundet_org.name,
