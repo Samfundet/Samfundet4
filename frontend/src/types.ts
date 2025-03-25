@@ -250,56 +250,114 @@ export const RecruitmentApplicantStates = {
 } as const;
 
 export const RecruitmentApplicantStatesDescriptions: {
-  [key: number]: { short: string; long: string; comment?: string };
+  [key: number]: {
+    short_nb: string;
+    long_nb: string;
+    short_en: string;
+    long_en: string;
+    guidance_nb: string;
+    guidance_en: string;
+  };
 } = {
   0: {
-    short: 'Ubehandlet',
-    long: 'Søker ikke behandlet.',
-    comment: 'Trenger handling!',
+    short_nb: 'Ubehandlet',
+    short_en: 'Unprocessed',
+    long_nb: 'Søker ikke behandlet.',
+    long_en: 'Applicant not processed.',
+    guidance_nb: 'Må behandles',
+    guidance_en: 'Needs processing',
   },
   1: {
-    short: 'Søkers topprioritet, men satt reserve her.',
-    long: 'Søkeren er satt på reserve for dette vervet og det er dens topprioritet; Hvis enighet i opptaksforum kan søkeren få tilbud når offisiell ringerunde starter.',
+    short_nb: 'Søkers topprioritet, men satt reserve her.',
+    short_en: "Applicant's top priority, but set as reserve here.",
+    long_nb:
+      'Søkeren er satt på reserve for dette vervet og det er dens topprioritet; Hvis enighet i opptaksforum kan søkeren få tilbud når offisiell ringerunde starter.',
+    long_en:
+      'The applicant is set as reserve for this position and it is their top priority; If there is agreement in the admission forum, the applicant can receive an offer when the official round of calling starts.',
+    guidance_nb: 'Gitt klarsignal: kan kontakte, hvis ønskelig.',
+    guidance_en: 'With goahed signal: can contact, if you want.',
   },
   2: {
-    short: 'Søkers topprioritet og ønsket her.',
-    long: 'Søkeren er ønsket for vervet og det er dens topprioritet; Bør få tilbud når offisiell ringerunde starter.',
+    short_nb: 'Søkers topprioritet og ønsket her.',
+    short_en: "Applicant's top priority and wanted here.",
+    long_nb:
+      'Søkeren er ønsket for vervet og det er dens topprioritet; Bør få tilbud når offisiell ringerunde starter.',
+    long_en:
+      'The applicant is wanted for the position and it is their top priority; Should receive an offer when the official round of calling starts.',
+    guidance_nb: 'Gitt klarsignal: kan kontakte.',
+    guidance_en: 'With goahed signal: can contact.',
   },
   3: {
-    short: 'Reserve på annet verv, ubehandlet her.',
-    long: 'Søkeren er satt som reserve på andre verv den prioriterer høyere. Søkeren er ubehandlet her.',
-    comment: 'Trenger handling!',
+    short_nb: 'Reserve på annet verv, ubehandlet her.',
+    short_en: 'Reserve for another position, unprocessed here.',
+    long_nb: 'Søkeren er satt som reserve på andre verv den prioriterer høyere. Søkeren er ubehandlet her.',
+    long_en:
+      'The applicant is set as reserve for other positions they prioritize higher. The applicant is unprocessed here.',
+    guidance_nb: 'Må behandles',
+    guidance_en: 'Needs processing',
   },
   4: {
-    // ############### Special color ###############
-    short: 'Reserve på annet verv og på reserve her.',
-    long: 'Søkeren er satt reserve på andre verv den prioriterer høyere, men også reserve for dette vervet',
+    short_nb: 'Reserve på annet verv og på reserve her.',
+    short_en: 'Reserve for another position and reserve here.',
+    long_nb: 'Søkeren er satt reserve på andre verv den prioriterer høyere, men også reserve for dette vervet',
+    long_en:
+      'The applicant is set as reserve for other positions they prioritize higher, but also reserve for this position',
+    guidance_nb: 'Ikke kontakt!',
+    guidance_en: 'Do not contact!',
   },
   5: {
-    short: 'Reserve på annet verv, og ønsket her.',
-    long: 'Søkeren er satt som reserve på andre verv den prioriterer høyere, men ønsket for dette vervet',
+    short_nb: 'Reserve på annet verv, og ønsket her.',
+    short_en: 'Reserve for another position, and wanted here.',
+    long_nb: 'Søkeren er satt som reserve på andre verv den prioriterer høyere, men ønsket for dette vervet',
+    long_en: 'The applicant is set as reserve for other positions they prioritize higher, but wanted for this position',
+    guidance_nb: 'Ikke kontakt!',
+    guidance_en: 'Do not contact!',
   },
   6: {
-    short: 'Ønsket for annet verv, og ubehandlet her.',
-    long: 'Søkeren er ønsket for andre verv den prioriterer høyere og ubehandlet her.',
-    comment: 'Trenger handling!',
+    short_nb: 'Ønsket for annet verv, og ubehandlet her.',
+    short_en: 'Wanted for another position, and unprocessed here.',
+    long_nb: 'Søkeren er ønsket for andre verv den prioriterer høyere og ubehandlet her.',
+    long_en: 'The applicant is wanted for other positions they prioritize higher and unprocessed here.',
+    guidance_nb: 'Må behandles',
+    guidance_en: 'Needs processing',
   },
   7: {
-    short: 'Ønsket for annet verv, og på reserve her.',
-    long: 'Søkeren er ønsket for andre verv den prioriterer høyere, og satt reserve her.',
+    short_nb: 'Ønsket for annet verv, og på reserve her.',
+    short_en: 'Wanted for another position, and reserve here.',
+    long_nb: 'Søkeren er ønsket for andre verv den prioriterer høyere, og satt reserve her.',
+    long_en: 'The applicant is wanted for other positions they prioritize higher, and set as reserve here.',
+    guidance_nb: 'Ikke kontakt!',
+    guidance_en: 'Do not contact!',
   },
   8: {
-    short: 'Ønsket for annet verv og ønsket her.',
-    long: 'Søkeren er ønsket for andre verv den prioriterer høyere, men også ønsket for dette vervet.',
+    short_nb: 'Ønsket for annet verv og ønsket her.',
+    short_en: 'Wanted for another position and wanted here.',
+    long_nb: 'Søkeren er ønsket for andre verv den prioriterer høyere, men også ønsket for dette vervet.',
+    long_en: 'The applicant is wanted for other positions they prioritize higher, but also wanted for this position.',
+    guidance_nb: 'Ikke kontakt!',
+    guidance_en: 'Do not contact!',
   },
   10: {
-    short: 'Ikke ønsket',
-    long: 'Søkeren er ikke ønsket for dette vervet.',
+    short_nb: 'Ikke ønsket',
+    short_en: 'Not wanted',
+    long_nb: 'Søkeren er ikke ønsket for dette vervet.',
+    long_en: 'The applicant is not wanted for this position.',
+    guidance_nb: 'Ikke kontakt!',
+    guidance_en: 'Do not contact!',
   },
 };
 
 // Helper function to get state name
-export const getRecruitmentApplicantStateName = (state: number): { short: string; long: string } => {
+export const getRecruitmentApplicantStateName = (
+  state: number,
+): {
+  short_nb: string;
+  long_nb: string;
+  comment_nb?: string;
+  short_en: string;
+  long_en: string;
+  comment_en?: string;
+} => {
   return RecruitmentApplicantStatesDescriptions[state] || 'Unknown state!!';
 };
 
