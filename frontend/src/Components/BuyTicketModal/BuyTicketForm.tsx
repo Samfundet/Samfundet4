@@ -62,7 +62,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
 
   const ticketType = useWatch({ control: form.control, name: 'ticketType' });
 
-  const PostTicketForm = (data: BuyTicketFormType) => {
+  function onSubmit(data: BuyTicketFormType): void{
     console.log('Submitted Ticket Form Data:', data);
   };
 
@@ -79,7 +79,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
   return (
     <div className={styles.container}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(PostTicketForm)}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           {/* Ticket Selection */}
           <div className={styles.ticket_selection_container}>
             {/* Non-Member Tickets */}
