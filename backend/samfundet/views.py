@@ -714,39 +714,6 @@ class RecruitmentApplicationSetInterviewView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RecruitmentApplicationForGangView(ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    serializer_class = RecruitmentApplicationForGangSerializer
-    queryset = RecruitmentApplication.objects.all()
-
-    # TODO: User should only be able to edit the fields that are allowed
-
-    def list(self, request: Request) -> Response:
-        """Returns a list of all the recruitments for the specified gang."""
-        gang_id = request.query_params.get('gang')
-        recruitment_id = request.query_params.get('recruitment')
-
-        if not gang_id:
-            return Response({'error': 'A gang parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        if not recruitment_id:
-            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        gang = get_object_or_404(Gang, id=gang_id)
-        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
-
-        applications = RecruitmentApplication.objects.filter(
-            recruitment_position__gang=gang,
-            recruitment=recruitment,  # only include applications related to the specified recruitment
-        )
-
-        # check permissions for each application
-        applications = get_objects_for_user(user=request.user, perms=['view_recruitmentapplication'], klass=applications)
-
-        serializer = self.get_serializer(applications, many=True)
-        return Response(serializer.data)
-
-
 class RecruitmentApplicationStateChoicesView(APIView):
     permission_classes = [IsAuthenticated]
 
