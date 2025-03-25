@@ -3,11 +3,13 @@
 # =============================== #
 from __future__ import annotations
 
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from django.utils import timezone
 
@@ -17,8 +19,9 @@ from samfundet.utils import event_query
 from samfundet.serializers import (
     EventSerializer,
     EventGroupSerializer,
+    PurchaseFeedbackSerializer,
 )
-from samfundet.models.event import Event, EventGroup
+from samfundet.models.event import Event, EventGroup, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
 
 
 class EventView(ModelViewSet):
@@ -58,3 +61,31 @@ class EventGroupView(ModelViewSet):
     permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
     serializer_class = EventGroupSerializer
     queryset = EventGroup.objects.all()
+
+
+class PurchaseFeedbackView(CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PurchaseFeedbackSerializer
+
+    def post(self, request: Request) -> Response:
+        request.data['event'] = request.data.pop('eventId')
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        purchase_model = serializer.save(user=request.user)
+
+        alternatives = request.data.get('alternatives', {})
+        for alternative, selected in alternatives.items():
+            PurchaseFeedbackAlternative.objects.create(
+                alternative=alternative,
+                selected=selected,
+                form=purchase_model,
+            )
+
+        questions = request.data.get('questions', {})
+        for question, answer in questions.items():
+            PurchaseFeedbackQuestion.objects.create(
+                question=question,
+                answer=answer,
+                form=purchase_model,
+            )
+        return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})

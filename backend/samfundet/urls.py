@@ -7,6 +7,7 @@ from rest_framework import routers
 
 from django.urls import path, include
 
+import samfundet.view.user_views
 import samfundet.view.event_views
 import samfundet.view.sulten_views
 import samfundet.view.general_views
@@ -26,10 +27,10 @@ router.register('gangs', samfundet.view.general_views.GangView, 'gangs')
 router.register('gangsorganized', samfundet.view.general_views.GangTypeView, 'gangsorganized')
 router.register('information', samfundet.view.general_views.InformationPageView, 'information')
 router.register('blog', samfundet.view.general_views.BlogPostView, 'blog')
-router.register('user-preference', views.UserPreferenceView, 'user_preference')
+router.register('user-preference', samfundet.view.user_views.UserPreferenceView, 'user_preference')
 router.register('saksdokument', samfundet.view.general_views.SaksdokumentView, 'saksdokument')
-router.register('profile', views.ProfileView, 'profile')
-router.register('permissions', views.PermissionView, 'permissions')
+router.register('profile', samfundet.view.user_views.ProfileView, 'profile')
+router.register('permissions', samfundet.view.user_views.PermissionView, 'permissions')
 router.register('menu', samfundet.view.sulten_views.MenuView, 'menu')
 router.register('menu-items', samfundet.view.sulten_views.MenuItemView, 'menu_items')
 router.register('food-preference', samfundet.view.sulten_views.FoodPreferenceView, 'food_preference')
@@ -66,21 +67,21 @@ urlpatterns = [
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='samfundet:schema'), name='swagger_ui'),
     path('schema/redoc/', SpectacularRedocView.as_view(url_name='samfundet:schema'), name='redoc'),
-    path('csrf/', views.CsrfView.as_view(), name='csrf'),
-    path('login/', views.LoginView.as_view(), name='login'),
-    path('register/', views.RegisterView.as_view(), name='register'),
-    path('logout/', views.LogoutView.as_view(), name='logout'),
-    path('password/change/', views.ChangePasswordView.as_view(), name='change-password'),
-    path('user/', views.UserView.as_view(), name='user'),
-    path('groups/', views.AllGroupsView.as_view(), name='groups'),
-    path('users/', views.AllUsersView.as_view(), name='users'),
-    path('users-search-paginated/', views.PaginatedSearchUsersView.as_view(), name='users_search_paginated'),
-    path('impersonate/', views.ImpersonateView.as_view(), name='impersonate'),
+    path('csrf/', samfundet.view.user_views.CsrfView.as_view(), name='csrf'),
+    path('login/', samfundet.view.user_views.LoginView.as_view(), name='login'),
+    path('register/', samfundet.view.user_views.RegisterView.as_view(), name='register'),
+    path('logout/', samfundet.view.user_views.LogoutView.as_view(), name='logout'),
+    path('password/change/', samfundet.view.user_views.ChangePasswordView.as_view(), name='change-password'),
+    path('user/', samfundet.view.user_views.UserView.as_view(), name='user'),
+    path('groups/', samfundet.view.user_views.AllGroupsView.as_view(), name='groups'),
+    path('users/', samfundet.view.user_views.AllUsersView.as_view(), name='users'),
+    path('users-search-paginated/', samfundet.view.user_views.PaginatedSearchUsersView.as_view(), name='users_search_paginated'),
+    path('impersonate/', samfundet.view.user_views.ImpersonateView.as_view(), name='impersonate'),
     path('events-per-day/', samfundet.view.event_views.EventPerDayView.as_view(), name='eventsperday'),
     path('events-upcomming/', samfundet.view.event_views.EventsUpcomingView.as_view(), name='eventsupcomming'),
     path('isclosed/', samfundet.view.general_views.IsClosedView().as_view(), name='isclosed'),
     path('home/', samfundet.view.general_views.HomePageView().as_view(), name='home'),
-    path('assign_group/', views.AssignGroupView.as_view(), name='assign_group'),
+    path('assign_group/', samfundet.view.user_views.AssignGroupView.as_view(), name='assign_group'),
     path('webhook/', views.WebhookView.as_view(), name='webhook'),
     path('gangtypes/<int:organization>/', samfundet.view.general_views.GangTypeOrganizationView.as_view(), name='gangsorganized'),
     ########## Lyche ##########
@@ -171,8 +172,8 @@ urlpatterns = [
     ),
     path('recruitment-interview-availability/', views.RecruitmentInterviewAvailabilityView.as_view(), name='recruitment_interview_availability'),
     path('recruitment/<int:id>/availability/', views.RecruitmentAvailabilityView.as_view(), name='recruitment_availability'),
-    path('feedback/', views.UserFeedbackView.as_view(), name='feedback'),
-    path('purchase-feedback/', views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
+    path('feedback/', samfundet.view.general_views.UserFeedbackView.as_view(), name='feedback'),
+    path('purchase-feedback/', samfundet.view.event_views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
     path('recruitment/<int:recruitment_id>/gang/<int:gang_id>/stats/', views.GangApplicationCountView.as_view(), name='gang-application-stats'),
     path('recruitment/<int:id>/positions-by-tags/', views.PositionByTagsView.as_view(), name='recruitment_positions_by_tags'),
 ]
