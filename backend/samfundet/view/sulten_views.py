@@ -74,9 +74,8 @@ class ReservationCheckAvailabilityView(APIView):
                     },
                     status=status.HTTP_406_NOT_ACCEPTABLE,
                 )
-            venue = self.request.query_params.get('venue', Venue.objects.get(slug='lyche').id)
             available_tables = Reservation.fetch_available_times_for_date(
-                venue=venue,
+                slug='lyche',
                 seating=serializer.validated_data['guest_count'],
                 date=serializer.validated_data['reservation_date'],
             )
