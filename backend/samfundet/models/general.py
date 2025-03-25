@@ -452,7 +452,7 @@ class Reservation(FullCleanSaveMixin):
     start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
     end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
 
-    venue = models.ForeignKey(Venue, to_field='slug', on_delete=models.PROTECT, blank=True, null=True, verbose_name='Sted')
+    venue = models.ForeignKey(Venue, to_field='slug', on_delete=models.PROTECT, blank=True, null=True, verbose_name='Lokale')
 
     occasion = models.CharField(max_length=24, choices=ReservationOccasion.choices, default=ReservationOccasion.FOOD)
     guest_count = models.PositiveSmallIntegerField(null=False, verbose_name='Antall gjester')
@@ -523,20 +523,23 @@ class Reservation(FullCleanSaveMixin):
 
         return tables.exclude(id__in=reserved_tables.values_list('table_id', flat=True)).order_by('seating').first()
 
-    def fetch_available_times_for_date(*, venue: int, seating: int, date: date) -> list[str]:  # noqa: C901
+    def fetch_available_times_for_date(*, slug: str, seating: int, date: date) -> list[str]:  # noqa: C901
         """
         Method for returning available reservation times for a venue
         Based on the amount of seating and the date
         """
+
+        # Fetch venue with the given id
+        venue = Venue.objects.get(slug=slug)
         # Fetch tables that fits size criteria
-        tables = Table.objects.filter(venue=venue, seating__gte=seating)
+        tables = Table.objects.filter(venue=venue.id, seating__gte=seating)
         # fetch all reservations for those tables for that date
         reserved_tables = (
-            Reservation.objects.filter(venue=venue, reservation_date=date, table__in=tables).values('table', 'start_time', 'end_time').order_by('start_time')
+            Reservation.objects.filter(venue=venue.slug, reservation_date=date, table__in=tables).values('table', 'start_time', 'end_time').order_by('start_time')
         )
 
         # fetch opening hours for the date
-        open_hours = Venue.objects.get(id=venue).get_opening_hours_date(date)
+        open_hours = venue.get_opening_hours_date(date)
         c_time = datetime.combine(date, open_hours[0])
         end_time = datetime.combine(date, open_hours[1]) - timezone.timedelta(hours=1)
 
