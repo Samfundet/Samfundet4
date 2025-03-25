@@ -81,8 +81,12 @@ from .models.recruitment import (
 
 # Unregister User and Group to set new Admins.
 admin.site.unregister(Group)
-# Just for testing TODO remove when done
-admin.site.register(OccupiedTimeslot)
+
+
+@admin.register(OccupiedTimeslot)
+class OccupiedTimeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'recruitment']
+    list_select_related = True
 
 
 @admin.register(User)
