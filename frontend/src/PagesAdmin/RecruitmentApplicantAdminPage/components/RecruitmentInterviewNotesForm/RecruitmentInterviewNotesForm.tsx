@@ -114,8 +114,8 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
                         ref={textareaRef}
                         className={styles.textBox}
                         onBlur={(newNotes) => {
-                          field.onBlur(); // Call the default onBlur handler from react-hook-form
-                          handleNotesChange(newNotes.target.value); // Call your custom function on blur
+                          field.onBlur();
+                          handleNotesChange(newNotes.target.value);
                           setMarkdownState(false);
                         }}
                       />
