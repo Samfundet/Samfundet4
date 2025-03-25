@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
+import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { type ReactElement, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -18,16 +19,20 @@ import {
   FormMessage,
   ImageCard,
   Input,
+  Text,
   Textarea,
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getEvent, postEvent } from '~/api';
+import { getBilligEvents } from '~/apis/billig/billigApis';
+import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { billigEventKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import {
   type Children,
@@ -62,6 +67,7 @@ export function EventCreatorAdminPage() {
   const [event, setEvent] = useState<Partial<EventDto>>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
+  const [isBilligEvent, setIsBilligEvent] = useState<boolean>(false);
 
   // TODO these are temporary and must be fetched from API when implemented.
   const eventCategoryOptions: DropdownOption<EventCategoryValue>[] = [
@@ -72,6 +78,19 @@ export function EventCreatorAdminPage() {
     { value: EventCategory.LECTURE, label: 'Foredrag' },
     { value: EventCategory.OTHER, label: 'Annet' },
   ];
+
+  const { data: billigEvents, isLoading: isLoadingBilligEvent } = useQuery({
+    queryKey: billigEventKeys.all,
+    queryFn: getBilligEvents,
+  });
+
+  const mapBilligEventOptions = (events: BilligEventDto[]): DropdownOption<string>[] => {
+    return events.map((event) => ({
+      value: event.name,
+      label: `${event.name} (${event.sale_from})`,
+    }));
+  };
+  const billigEventOptions = billigEvents ? mapBilligEventOptions(billigEvents) : [];
 
   const ageLimitOptions: DropdownOption<EventAgeRestrictionValue>[] = [
     { value: EventAgeRestriction.NONE, label: 'Ingen' },
@@ -84,6 +103,7 @@ export function EventCreatorAdminPage() {
     { value: EventTicketType.FREE, label: 'Gratis' },
     { value: EventTicketType.INCLUDED, label: 'Inkludert' },
     { value: EventTicketType.BILLIG, label: 'Billig' },
+    { value: EventTicketType.PREPAID, label: 'Forhåndskjøp' },
     { value: EventTicketType.REGISTRATION, label: 'Registrering' },
     { value: EventTicketType.CUSTOM, label: 'Custom' },
   ];
@@ -144,6 +164,11 @@ export function EventCreatorAdminPage() {
       setShowSpinner(false);
     }
   }, [id, t, form]);
+
+  const handleSetTicketType = (value: EventTicketTypeValue) => {
+    form.setValue('ticket_type', value);
+    setIsBilligEvent(value === EventTicketType.BILLIG);
+  };
 
   // ================================== //
   //          Creation Steps            //
@@ -405,20 +430,34 @@ export function EventCreatorAdminPage() {
               <FormItem className={styles.form_item}>
                 <FormLabel>Billettype</FormLabel>
                 <FormControl>
-                  <Dropdown options={ticketTypeOptions} {...field} />
+                  <Dropdown options={ticketTypeOptions} {...field} onChange={(value) => handleSetTicketType(value)} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          {/* <PaymentForm
-            event={form.getValues()}
-            onChange={(partial) => {
-              // Update form values with payment data
-              const updatedValues = { ...form.getValues(), ...partial };
-              form.reset(updatedValues);
-            }}
-          /> */}
+          {isBilligEvent && !isLoadingBilligEvent && (
+            <FormField
+              control={form.control}
+              name="billig_event"
+              key={'billig_event'}
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>Billig event</FormLabel>
+                  <FormControl>
+                    <Dropdown options={billigEventOptions} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+          {isBilligEvent && isLoadingBilligEvent && (
+            <FormItem className={styles.form_item}>
+              <FormLabel>Billig event</FormLabel>
+              <Text as="strong">Loading Billig events...</Text>
+            </FormItem>
+          )}
         </>
       ),
     },
