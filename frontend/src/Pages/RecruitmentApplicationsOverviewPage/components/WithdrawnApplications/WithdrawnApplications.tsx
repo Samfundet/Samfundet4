@@ -20,7 +20,7 @@ export function WithdrawnApplications({ recruitmentId, queryKey }: WithdrawnAppl
 
   const { data: withdrawnApplications } = useQuery({
     queryKey: queryKey.withdrawnApplications(recruitmentId),
-    queryFn: () => getWithdrawnRecruitmentApplicationsApplicant(recruitmentId).then((response) => response.data),
+    queryFn: () => getWithdrawnRecruitmentApplicationsApplicant(recruitmentId),
     enabled: !!recruitmentId,
     initialData: [],
   });
