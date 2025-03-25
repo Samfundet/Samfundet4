@@ -32,10 +32,11 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
   }, [recentChanges]);
 
   // Query for fetching applications
-  const { data: applications = [] } = useQuery({
+  const { data: applications } = useQuery({
     queryKey: ['applications', recruitmentId],
     queryFn: () => getRecruitmentApplicationsForApplicant(recruitmentId as string).then((response) => response.data),
     enabled: !!recruitmentId,
+    initialData: [],
   });
 
   // Mutation for withdrawing application
