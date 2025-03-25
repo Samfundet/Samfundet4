@@ -11,6 +11,21 @@ import { putRecrutmentInterviewNotes } from '~/api';
 import { KEY } from '~/i18n/constants';
 import styles from './RecruitmentInterviewNotesForm.module.scss';
 
+const MarkdownPreview = ({
+  notes,
+  onFocus,
+}: { notes: string; onFocus: React.MouseEventHandler<HTMLButtonElement> }) => {
+  return (
+    <div className={styles.markdownWrapper}>
+      <button type="button" onClick={onFocus} className={styles.markdownButton}>
+        <div className={styles.markdownContent}>
+          <SamfMarkdown>{notes}</SamfMarkdown>
+        </div>
+      </button>
+    </div>
+  );
+};
+
 const recruitmentNotesSchema = z.object({
   notes: z.string(),
   interviewId: z.number(),
@@ -67,17 +82,6 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
       handleUpdateNotes.mutate({ notes: newNotes, interviewId });
     }
   };
-  const MarkdownPreview = () => {
-    return (
-      <div className={styles.markdownWrapper}>
-        <button type="button" onClick={handleFocus} className={styles.markdownButton}>
-          <div className={styles.markdownContent}>
-            <SamfMarkdown>{currentNotes}</SamfMarkdown>
-          </div>
-        </button>
-      </div>
-    );
-  };
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -118,7 +122,7 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
                         }}
                       />
                     ) : (
-                      <MarkdownPreview />
+                      <MarkdownPreview notes={currentNotes} onFocus={handleFocus} />
                     )}
                   </div>
                 </FormControl>
