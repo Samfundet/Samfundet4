@@ -69,7 +69,7 @@ export function RecruitmentApplicantsStatus({
     { content: t(KEY.recruitment_recruiter_priority), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_recruiter_guide), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_recruiter_status), sortable: false, hideSortButton: false },
-    { content: 't(KEY.common_comment)', sortable: false, hideSortButton: true },
+    { content: t(KEY.common_comment), sortable: false, hideSortButton: true },
   ];
 
   function updateApplications(id: string, field: string, value: string | number | undefined) {
