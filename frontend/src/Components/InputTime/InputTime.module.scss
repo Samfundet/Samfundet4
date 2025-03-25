@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .inputTime {
   display: flex;
@@ -42,10 +42,10 @@
 }
 
 .error {
-  color:$red;
+  color: $red;
 }
 
 .errorMessage {
   font-size: 0.8em;
-  color:$red;
+  color: $red;
 }

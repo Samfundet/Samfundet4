@@ -96,7 +96,7 @@
     "cypress-vite": "^1.4.2",
     "prop-types": "^15.8.1",
     "react-i18next": "^13.3.0",
-    "sass": "^1.69.3",
+    "sass": "^1.86.0",
     "storybook": "^8.6.4",
     "stylelint": "^15.10.3",
     "stylelint-config-sass-guidelines": "^10.0.0",

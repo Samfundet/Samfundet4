@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .no_recruitment_wrapper {
   margin-top: 1em;
@@ -28,7 +28,6 @@
   @include for-desktop-up {
     padding: 3em 6em 3em 6em;
   }
-
 }
 
 .link {

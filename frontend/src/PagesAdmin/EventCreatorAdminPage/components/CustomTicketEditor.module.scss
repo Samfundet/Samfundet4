@@ -1,7 +1,6 @@
+@use 'src/constants' as *;
 
-@import 'src/constants';
-
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .custom_ticket_container {
   display: flex;
@@ -19,5 +18,5 @@
 }
 
 .delete_button {
-  margin-bottom: .25em;
+  margin-bottom: 0.25em;
 }
