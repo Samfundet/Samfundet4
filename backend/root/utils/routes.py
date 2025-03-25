@@ -610,6 +610,7 @@ samfundet__recruitment_recruiter_dashboard = 'samfundet:recruitment_recruiter_da
 samfundet__recruitment_download_applications_csv = 'samfundet:recruitment_download_applications_csv'
 samfundet__recruitment_download_gang_application_csv = 'samfundet:recruitment_download_gang_application_csv'
 samfundet__occupied_timeslots = 'samfundet:occupied_timeslots'
+samfundet__occupiedtime_for_user = 'samfundet:occupiedtime_for_user'
 samfundet__interviewer_availability_for_date = 'samfundet:interviewer-availability-for-date'
 samfundet__recruitment_interview_availability = 'samfundet:recruitment_interview_availability'
 samfundet__recruitment_availability = 'samfundet:recruitment_availability'
