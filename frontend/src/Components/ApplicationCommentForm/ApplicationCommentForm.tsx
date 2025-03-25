@@ -3,19 +3,19 @@ import { useEffect, useRef, useState } from 'react';
 import { Textarea } from '~/Components';
 
 type CommentFormProps = {
-  initialData: string;
+  commentText?: string;
   handlePost: () => void;
 };
 
-export function ApplicationCommentForm({ initialData, handlePost }: CommentFormProps) {
-  const [comment, setComment] = useState(initialData || '');
+export function ApplicationCommentForm({ commentText, handlePost }: CommentFormProps) {
+  const [comment, setComment] = useState(commentText || '');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const prevCommentRef = useRef(comment);
 
   // Update state if initialData changes
   useEffect(() => {
-    setComment(initialData || '');
-  }, [initialData]);
+    setComment(commentText || '');
+  }, [commentText]);
 
   // Handle blur event
   const handleBlur = (event: React.FocusEvent<HTMLTextAreaElement>) => {
