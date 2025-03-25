@@ -1,6 +1,8 @@
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
-@import 'src/constants';
+@use 'sass:color';
+
+@use 'src/constants' as *;
 
 .tab_bar {
   @include flex-row;
@@ -84,7 +86,7 @@ $outline-width: 2px;
 .tab_button:not(.selected):hover {
   // color: $blue;
   /* stylelint-disable-next-line function-no-unknown */
-  background-color: lighten($color: $blue, $amount: 40%);
+  background-color: color.adjust($blue, $lightness: 40%);
 
   @include theme-dark {
     color: $white;

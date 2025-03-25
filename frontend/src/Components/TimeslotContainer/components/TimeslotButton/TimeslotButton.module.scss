@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .timeslot {
   padding: 0.5rem 1rem;
