@@ -248,16 +248,6 @@ def create_batch_of_applicants(count: int, campuses: list[Campus], start_index: 
     return users_to_create
 
 
-def calculate_progress(total_created: int, target_count: int) -> float:
-    """
-    Calculate progress percentage.
-
-    Returns:
-        Progress percentage (0-100)
-    """
-    return (total_created / target_count) * 90
-
-
 def seed() -> Generator[tuple[float, str], None, None]:
     """
     Create applicant users with no roles.
@@ -297,7 +287,7 @@ def seed() -> Generator[tuple[float, str], None, None]:
             # Update progress and name index
             total_created += len(users_batch)
             name_index += len(users_batch)  # Update index for next batch
-            progress = calculate_progress(total_created, APPLICANT_COUNT)
+            progress = (total_created / APPLICANT_COUNT) * 90
             yield progress, f'Created {total_created} of {APPLICANT_COUNT} applicant users'
 
     yield 100, f'Created {total_created} applicant users successfully'
