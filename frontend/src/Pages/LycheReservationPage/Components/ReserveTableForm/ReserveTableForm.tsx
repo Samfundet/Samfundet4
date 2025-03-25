@@ -16,12 +16,12 @@ import {
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import type { AvailableTimes } from '~/apis/sulten/sultenDtos';
 import { TextItem } from '~/constants/TextItems';
+import { VENUE } from '~/constants/constants';
 import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import styles from '../../LycheReservationPage.module.scss';
 import type { FindTableData } from '../FindAvailableTablesForm/FindAvailableTablesSchema';
 import { type ReservationFormData, reservationSchema } from './ReserveTableSchema';
-import { VENUE } from '~/constants/constants';
 
 interface ReservationDetailsFormProps {
   findTableData: FindTableData;
