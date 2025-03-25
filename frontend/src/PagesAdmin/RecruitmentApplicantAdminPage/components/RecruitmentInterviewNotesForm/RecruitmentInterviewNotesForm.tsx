@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -11,10 +12,12 @@ import { putRecrutmentInterviewNotes } from '~/api';
 import { KEY } from '~/i18n/constants';
 import styles from './RecruitmentInterviewNotesForm.module.scss';
 
-const MarkdownPreview = ({
-  notes,
-  onFocus,
-}: { notes: string; onFocus: React.MouseEventHandler<HTMLButtonElement> }) => {
+type MarkdownPreviewProps = {
+  notes: string;
+  onFocus: React.MouseEventHandler<HTMLButtonElement>;
+};
+
+function MarkdownPreview({ notes, onFocus }: MarkdownPreviewProps) {
   return (
     <div className={styles.markdownWrapper}>
       <button type="button" onClick={onFocus} className={styles.markdownButton}>
@@ -24,7 +27,7 @@ const MarkdownPreview = ({
       </button>
     </div>
   );
-};
+}
 
 const recruitmentNotesSchema = z.object({
   notes: z.string(),
