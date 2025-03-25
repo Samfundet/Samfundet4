@@ -92,7 +92,7 @@ export function RecruitmentApplicantsStatus({
         styles.less_wanted_wanted,
         styles.less_wanted_reserve,
         styles.pending,
-        styles.not_wanted,
+        styles.pending,
       ][status];
     }
   }
