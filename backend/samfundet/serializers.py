@@ -391,6 +391,7 @@ class UserSerializer(serializers.ModelSerializer):
     permissions = serializers.SerializerMethodField(method_name='get_permissions', read_only=True)
     object_permissions = serializers.SerializerMethodField(method_name='get_object_permissions', read_only=True)
     user_preference = serializers.SerializerMethodField(method_name='get_user_preference', read_only=True)
+    role_permissions = serializers.SerializerMethodField(method_name='get_role_permissions', read_only=True)
 
     class Meta:
         model = User
@@ -424,6 +425,29 @@ class UserSerializer(serializers.ModelSerializer):
     def get_user_preference(self, user: User) -> dict:
         user_preference, _created = UserPreference.objects.get_or_create(user=user)
         return UserPreferenceSerializer(user_preference, many=False).data
+
+    def get_role_permissions(self, user: User) -> list[str]:
+        """
+        Retrieve all unique permission codenames for a given user across all their roles
+        and role types.
+
+        Args:
+            user: Django User model instance
+
+        Returns:
+            List of unique permission codenames
+        """
+        # Collect all user role relationships
+        user_roles = itertools.chain(
+            UserOrgRole.objects.filter(user=user),
+            UserGangRole.objects.filter(user=user),
+            UserGangSectionRole.objects.filter(user=user),
+        )
+
+        # Use a set to collect unique permissions directly
+        permissions = {codename for user_role in user_roles for codename in user_role.role.permissions.values_list('codename', flat=True)}
+
+        return list(permissions)
 
 
 # GANGS ###
