@@ -85,8 +85,6 @@
 }
 
 .image_wrapper {
-  height: 9em;
-  width: 9em;
   position: relative;
   display: inline-block; 
   overflow: visible;
@@ -97,8 +95,8 @@
   border: 1px solid $black;
   height: auto;
   width: auto;
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 15em;
+  max-height: 8em;
   margin: 0 auto;
 }
 
