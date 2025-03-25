@@ -1,0 +1,43 @@
+@import 'src/constants.scss';
+
+.textBox,
+.markdownWrapper {
+  // makes textBox and markdown alike
+  height: 550px;
+  margin-top: 0;
+  line-height: 1.5;
+  background-color: $white;
+  border: 1px solid $grey-35;
+  border-radius: 4px;
+  padding: 12px; /* Add consistent padding */
+  width: 100%;
+  overflow-y: auto;
+  position: relative;
+}
+
+.markdownButton {
+  cursor: pointer;
+  position: absolute;
+
+  //make button 100% of parent without the textarea overflowing by default
+  top: 12px; /* Match parent padding */
+  left: 12px; /* Match parent padding */
+  right: 12px; /* Match parent padding */
+  bottom: 12px; /* Match parent padding */
+
+  //remove default styling on button
+  background: none;
+  border: none;
+}
+
+.markdownContent {
+  text-align: left;
+  //remove defautl styling on content
+  /* stylelint-disable-next-line selector-max-type */
+  p,
+  pre {
+    margin: 0;
+    padding: 0;
+  }
+  height: 100%;
+}
