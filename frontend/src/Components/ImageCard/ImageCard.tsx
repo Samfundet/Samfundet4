@@ -58,7 +58,7 @@ export function ImageCard({
     displayTicketType = t(KEY.common_ticket_type_free);
     ticketTypeStyle = styles.ticket_type;
   }
-  
+
   return (
     <div className={containerStyle}>
       <Link url={url} className={classNames(cardStyle, styles.image)} style={backgroundImageFromUrl(imageUrl)}>
