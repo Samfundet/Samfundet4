@@ -20,6 +20,7 @@ import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import styles from './BuyTicketModal.module.scss';
 import { t } from 'i18next';
+import { ROUTES } from '~/routes';
 
 // Validation schema
 const buyTicketFormSchema = z
@@ -67,7 +68,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
     console.log('Submitted Ticket Form Data:', data);
   };
 
-  const price = event?.price ?? 50; //TODO: Change to actual price later
+  const price = event?.price ?? 50; //TODO: fetch from billig (in ISSUE #1797)
   const price_member = event?.price_member ?? 30;
 
   const tickets = useWatch({ control: form.control, name: 'tickets' });
@@ -153,7 +154,6 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                       form.setValue('ticketType', 'membershipNumber');
                       form.setValue('email', '');
                     }}
-                    // defaultChecked={true}
                     checked={ticketType === 'membershipNumber'}
                   />{' '}
                   <label>{t(KEY.common_membership_number)}</label>
@@ -230,7 +230,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
 
           {/* Terms and Conditions */}
           <div>
-            <a href="https://stripe.com/en-no/privacy" target="_blank" className={styles.link} rel="noreferrer">
+            <a href={ROUTES.other.stripe_info} target="_blank" className={styles.link} rel="noreferrer">
               {t(KEY.stripe_info)}{' '}
             </a>
             <p>{t(KEY.pay_info)}</p>
