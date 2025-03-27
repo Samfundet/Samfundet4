@@ -233,7 +233,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
               {t(KEY.stripe_info)}{' '}
             </a>
             <p>{t(KEY.pay_info)}</p>
-            {/* TODO: Add the url when the page is made */}
+            {/* TODO: Add the url when the page is made (in ISSUE #1827)*/}
             <Link url="#" className={styles.terms_link}>
               {t(KEY.sales_conditions)}
             </Link>
