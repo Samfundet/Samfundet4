@@ -84,16 +84,11 @@
 }
 
 .delete_button {
-  opacity: 0;
+  opacity: 1;
   position: absolute;
   top: -7px;
   right: -7px;
   pointer-events: all;
-  transition: opacity 0.05s ease;
-}
-
-.image_wrapper:hover .delete_button {
-  opacity: 1;
 }
 
 .image_wrapper {
