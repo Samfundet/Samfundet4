@@ -53,10 +53,10 @@ export function ImageCard({
   }
 
   let displayTicketType = '';
-  let ticketTypeStyle = styles.ticket_type_hidden
+  let ticketTypeStyle = styles.ticket_type_hidden;
   if (ticket_type === 'free' || ticket_type === 'registration') {
     displayTicketType = t(KEY.common_ticket_type_free);
-    ticketTypeStyle = styles.ticket_type
+    ticketTypeStyle = styles.ticket_type;
   }
   
   return (
