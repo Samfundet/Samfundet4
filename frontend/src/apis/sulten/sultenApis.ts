@@ -50,8 +50,7 @@ export interface ReservationPostData extends Omit<ReservationFormData, 'reservat
 }
 
 export async function reserveTable(data: ReservationPostData): Promise<void> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__create_reservation_list;
-
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__reservation_create;
   try {
     await axios.post(url, data, { withCredentials: true });
   } catch (error) {
