@@ -336,6 +336,10 @@ class RecruitmentApplication(CustomBaseModel):
     interview = models.ForeignKey(
         Interview, on_delete=models.SET_NULL, null=True, blank=True, help_text='The interview for the application', related_name='applications'
     )
+
+    # simple comment for recruiters to communicate stuff like detailed priority and "guidance"/"føring"
+    comment = models.TextField(help_text='Application comment', null=True, blank=True)
+
     withdrawn = models.BooleanField(default=False, blank=True, null=True)
     # TODO: Important that the following is not sent along with the rest of the object whenever a user retrieves its application
     recruiter_priority = models.IntegerField(
@@ -404,6 +408,11 @@ class RecruitmentApplication(CustomBaseModel):
     def clean(self, *args: tuple, **kwargs: dict) -> None:  # noqa: C901
         super().clean()
         errors: dict[str, list[ValidationError]] = defaultdict(list)
+
+        # Skip validation if we're only updating certain fields
+        update_fields = kwargs.get('update_fields')
+        if update_fields and set(update_fields).issubset({'comment'}):
+            return
 
         # Cant use not self.pk, due to UUID generating it before save
         current_application = RecruitmentApplication.objects.filter(pk=self.pk).first()
@@ -480,11 +489,10 @@ class RecruitmentApplication(CustomBaseModel):
         return RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).count()
 
     def update_applicant_state(self) -> None:
-        # TODO: DO WE WANT TO CONSIDER WITHDRAWN APPLICATIONS HERE:
-        applications = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment).order_by('applicant_priority')
+        applications = RecruitmentApplication.objects.filter(user=self.user, recruitment=self.recruitment, withdrawn=False).order_by('applicant_priority')
         # Get top priority
-        top_wanted = applications.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED).order_by('applicant_priority').first()
-        top_reserved = applications.filter(recruiter_priority=RecruitmentPriorityChoices.RESERVE).order_by('applicant_priority').first()
+        top_wanted = applications.filter(recruiter_priority=RecruitmentPriorityChoices.WANTED, withdrawn=False).order_by('applicant_priority').first()
+        top_reserved = applications.filter(recruiter_priority=RecruitmentPriorityChoices.RESERVE, withdrawn=False).order_by('applicant_priority').first()
         with transaction.atomic():
             for application in applications:
                 # I hate conditionals, so instead of checking all forms of condtions

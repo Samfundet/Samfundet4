@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Page } from '~/Components';
 import { BuyTicketModal } from '~/Components/BuyTicketModal';
+import { BuyButton } from '~/Components/BuyButton/BuyButton';
 import { getEvent } from '~/api';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
@@ -63,7 +64,10 @@ export function EventPage() {
       <div className={styles.content_row}>
         {/* Info table */}
         <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
-        {isPaid && <BuyTicketModal event={event} />}
+        {event?.billig && (
+          <BuyButton ticketSaleState={event.billig.ticket_groups} eventId={event.id} billigId={event.billig.id} />
+          
+        )}        
         {/* Text */}
         <div className={styles.text_container}>
           <div className={styles.description}>

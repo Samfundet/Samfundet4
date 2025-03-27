@@ -55,7 +55,7 @@ poetry run ruff check
 _Run Ruff fix_
 
 ```
-poetry run ruff check --fix
+poetry run ruff check --fix .
 ```
 
 _Verify migrations_
