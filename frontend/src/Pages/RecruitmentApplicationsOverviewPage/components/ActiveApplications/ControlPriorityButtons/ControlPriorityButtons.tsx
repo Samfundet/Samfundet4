@@ -6,6 +6,7 @@ import { Button } from '~/Components';
 import { putRecruitmentPriorityForUser } from '~/api';
 import type { RecruitmentApplicationDto, UserPriorityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { applicationKeys } from '~/queryKeys';
 import styles from './ControlPriorityButtons.module.scss';
 
 export type PriorityChange = {
@@ -40,7 +41,8 @@ export function ControlPriorityButtons({
     },
     onSuccess: (response, variables) => {
       const oldData = queryClient.getQueryData<RecruitmentApplicationDto[]>(['applications', recruitmentId]);
-      queryClient.setQueryData(['applications', recruitmentId], response.data);
+      applicationKeys.list(recruitmentId);
+      queryClient.setQueryData(applicationKeys.list(recruitmentId), response.data);
 
       // Only update state if we have the data and the callback
       if (oldData && onPriorityChange) {
