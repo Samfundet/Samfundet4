@@ -8,7 +8,8 @@
     - Add relevant labels
 2. Create a branch for the task.
     - Desired branch name is in the format `<your name>/<title>`
-    - Example: `bob/fix-button-bug`
+    - You may include the issue number in the branch title if you wish
+    - Example: `bob/125-fix-button-bug`
     - Branch names should always be lowercase
 3. Write code, commit, push.
     - Remember to write good commit messages, even if they'll be squashed when merging, it helps reviewers :~)
