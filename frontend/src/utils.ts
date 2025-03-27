@@ -56,14 +56,14 @@ export function hasPermissions(
   user: UserDto | null | undefined,
   permissions: string[] | undefined,
   obj?: string | number,
-  resolveWithRolePermissions = false,
+  resolveWithRolePermissions = false, // If true checks permissions granted through role system
 ): boolean {
   if (!user || !permissions) return false;
 
   const hasAllModelPermissions = permissions.every((permission) => hasPerm({ user, permission, obj }));
 
-  if (!resolveWithRolePermissions) {
-    return hasAllModelPermissions;
+  if (hasAllModelPermissions) {
+    return true;
   }
 
   const rolePermissions = user.role_permissions || [];
@@ -71,7 +71,7 @@ export function hasPermissions(
     rolePermissions.some((rolePermission) => rolePermission.includes(permission)),
   );
 
-  return hasAllModelPermissions || hasAllRolePermissions;
+  return resolveWithRolePermissions && hasAllRolePermissions;
 }
 
 // ------------------------------
