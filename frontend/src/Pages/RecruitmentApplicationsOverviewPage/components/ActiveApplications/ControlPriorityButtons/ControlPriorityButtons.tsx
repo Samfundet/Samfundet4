@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import { putRecruitmentPriorityForUser } from '~/api';
-import type { RecruitmentApplicationDto, UserPriorityDto } from '~/dto';
+import type { UserPriorityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { applicationKeys } from '~/queryKeys';
 import styles from './ControlPriorityButtons.module.scss';
@@ -40,16 +40,21 @@ export function ControlPriorityButtons({
       return putRecruitmentPriorityForUser(id, data);
     },
     onSuccess: (response, variables) => {
-      const oldData = queryClient.getQueryData<RecruitmentApplicationDto[]>(['applications', recruitmentId]);
-      applicationKeys.list(recruitmentId);
+      // Update the cache with the correct query key
       queryClient.setQueryData(applicationKeys.list(recruitmentId), response.data);
 
-      // Only update state if we have the data and the callback
-      if (oldData && onPriorityChange) {
-        const clickedApp = oldData.find((app) => app.id === variables.id);
+      // Only update state if we have the callback
+      if (onPriorityChange) {
+        // Find the clicked application in the response data instead of old data
+        const clickedApp = response.data.find((app) => app.id === variables.id);
+
+        // Find the swapped application
         const swappedApp = response.data.find(
           (newApp) =>
-            clickedApp && newApp.applicant_priority === clickedApp.applicant_priority && newApp.id !== clickedApp.id,
+            clickedApp &&
+            newApp.id !== clickedApp.id &&
+            ((variables.direction === 'up' && newApp.applicant_priority === clickedApp.applicant_priority + 1) ||
+              (variables.direction === 'down' && newApp.applicant_priority === clickedApp.applicant_priority - 1)),
         );
 
         if (clickedApp && swappedApp) {
