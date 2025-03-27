@@ -29,6 +29,7 @@ const buyTicketFormSchema = z
     membershipTickets: z.number().min(0),
     membershipNumber: z.string().optional(),
     email: z.string().refine(validEmail, { message: t(KEY.invalid_email_message) }).optional(),
+    ticketType: z.enum(['email', 'membershipNumber']),
   })
   .refine((data) => data.email || data.membershipNumber, {
     message: t(KEY.email_or_membership_number_message),
@@ -46,14 +47,15 @@ interface BuyTicketFormProps {
   event: EventDto;
 }
 
+const TICKET_TYPE_EMAIL = 'email';
+const TICKET_TYPE_MEMBERSHIP = 'membershipNumber';
+
 export function BuyTicketForm({ event }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const [totalPrice, setTotalPrice] = useState(0);
   const numberOfTickets = event.numberOfTickets ?? 9;
-  const TICKET_TYPE_EMAIL = 'email';
-  const TICKET_TYPE_MEMBERSHIP = 'membershipNumber';
 
-  const form = useForm<BuyTicketFormType & { ticketType: string }>({
+  const form = useForm<BuyTicketFormType>({
     resolver: zodResolver(buyTicketFormSchema),
     defaultValues: {
       tickets: 0,
@@ -172,7 +174,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                           className={styles.input_field}
                           disabled={ticketType !== TICKET_TYPE_MEMBERSHIP}
                           style={{
-                            backgroundColor: ticketType === 'membershipNumber' ? 'white' : 'lightgrey',
+                            backgroundColor: ticketType === TICKET_TYPE_MEMBERSHIP ? 'white' : 'lightgrey',
                           }}
                           placeholder={t(KEY.enter_membership_number)}
                           {...field}
@@ -203,11 +205,11 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                     <FormItem className={styles.email_field}>
                       <FormControl>
                         <Input
-                          type="email"
+                          type={TICKET_TYPE_EMAIL}
                           className={styles.input_field}
                           disabled={ticketType !== TICKET_TYPE_EMAIL}
                           style={{
-                            backgroundColor: ticketType === 'email' ? 'white' : 'lightgray',
+                            backgroundColor: ticketType === TICKET_TYPE_EMAIL ? 'white' : 'lightgray',
                           }}
                           placeholder={t(KEY.enter_email)}
                           {...field}
@@ -220,11 +222,11 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
               </div>
             </div>
             <div className={styles.ticket_type_description}>
-              <div style={{ display: ticketType === 'membershipNumber' ? 'inline' : 'none' }}>
+              <div style={{ display: ticketType === TICKET_TYPE_MEMBERSHIP ? 'inline' : 'none' }}>
                 <p>{t(KEY.ticketless_description)}</p>
                 <Trans i18nKey={KEY.ticketless_description_note} components={{ strong: <strong /> }} />
               </div>
-              <div style={{ display: ticketType === 'email' ? 'inline' : 'none' }}>
+              <div style={{ display: ticketType === TICKET_TYPE_EMAIL ? 'inline' : 'none' }}>
                 <p>{t(KEY.email_ticket_description)}</p>
               </div>
             </div>
