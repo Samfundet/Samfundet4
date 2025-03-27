@@ -8,6 +8,7 @@ import styles from './RecruitmentApplicationsOverviewPage.module.scss';
 import { ActiveApplications, WithdrawnApplications } from './components';
 
 export type ApplicantApplicationManagementQK = {
+  // TODO: improve this
   applications: (recruitmentId: string) => readonly ['applications', string];
   withdrawnApplications: (recruitmentId: string) => readonly ['withdrawnApplications', string];
 };
