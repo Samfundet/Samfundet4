@@ -3,8 +3,12 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Button, Table } from '~/Components';
-import { getRecruitmentApplicationsForApplicant, withdrawRecruitmentApplicationApplicant } from '~/api';
-import type { RecruitmentApplicationDto } from '~/dto';
+import {
+  getRecruitmentApplicationsForApplicant,
+  putRecruitmentPriorityForUser,
+  withdrawRecruitmentApplicationApplicant,
+} from '~/api';
+import type { RecruitmentApplicationDto, UserPriorityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { applicationKeys } from '~/queryKeys';
 import { niceDateTime } from '~/utils';
@@ -38,6 +42,46 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
     queryFn: () => getRecruitmentApplicationsForApplicant(recruitmentId as string),
     enabled: !!recruitmentId,
     initialData: [],
+  });
+
+  const handlePriorityChange = (id: string, direction: 'up' | 'down') => {
+    priorityMutation.mutate({ id, direction });
+  };
+
+  // Mutation for changing priority
+  const priorityMutation = useMutation({
+    mutationFn: ({ id, direction }: Omit<PriorityChange, 'successful'>) => {
+      const data: UserPriorityDto = { direction: direction === 'up' ? 1 : -1 };
+      return putRecruitmentPriorityForUser(id, data);
+    },
+    onSuccess: (response, variables) => {
+      // Update the cache with the correct query key
+      queryClient.setQueryData(applicationKeys.list(recruitmentId), response.data);
+
+      // Find the clicked application in the response data
+      const clickedApp = response.data.find((app) => app.id === variables.id);
+
+      // Find the swapped application - the one that changed position with the clicked app
+      const swappedApp = response.data.find(
+        (newApp) =>
+          clickedApp &&
+          newApp.id !== clickedApp.id &&
+          ((variables.direction === 'up' && newApp.applicant_priority === clickedApp.applicant_priority + 1) ||
+            (variables.direction === 'down' && newApp.applicant_priority === clickedApp.applicant_priority - 1)),
+      );
+
+      if (clickedApp && swappedApp) {
+        const changes: PriorityChange[] = [
+          { id: clickedApp.id, direction: variables.direction, successful: true },
+          { id: swappedApp.id, direction: variables.direction === 'up' ? 'down' : 'up', successful: true },
+        ];
+        setRecentChanges(changes);
+      }
+    },
+    onError: () => {
+      toast.error(t(KEY.common_something_went_wrong));
+      //setRecentChanges([{ id: variables.id, direction: variables.direction, successful: false }]);
+    },
   });
 
   // Mutation for withdrawing application
@@ -103,7 +147,8 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
                   recruitmentId={recruitmentId}
                   isFirstItem={index === 0}
                   isLastItem={index === sortedActiveApplications.length - 1}
-                  onPriorityChange={setRecentChanges}
+                  onPriorityChange={handlePriorityChange}
+                  isPending={priorityMutation.isPaused}
                 />
               ),
             },
