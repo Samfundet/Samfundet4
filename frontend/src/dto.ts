@@ -154,6 +154,7 @@ export type EventDto = {
   location: string;
   category: EventCategoryValue;
   host: string;
+  numberOfTickets?: number;
 
   // Timestamps/duration
   image_url: string;

@@ -48,6 +48,7 @@ interface BuyTicketFormProps {
 export function BuyTicketForm({ event }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const [totalPrice, setTotalPrice] = useState(0);
+  const numberOfTickets = event.numberOfTickets ?? 9;
 
   const form = useForm<BuyTicketFormType & { ticketType: string }>({
     resolver: zodResolver(buyTicketFormSchema),
@@ -96,7 +97,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                     <FormControl>
                       <Dropdown
                         {...field}
-                        options={[...Array(9).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))}
+                        options={[...Array(numberOfTickets).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))}
                         onChange={(e) => {
                           if (e) {
                             form.setValue('tickets', Number(e));
@@ -125,7 +126,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                     <FormControl>
                       <Dropdown
                         {...field}
-                        options={[...Array(9).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))}
+                        options={[...Array(numberOfTickets).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))}
                         onChange={(e) => {
                           if (e) {
                             form.setValue('membershipTickets', Number(e));
