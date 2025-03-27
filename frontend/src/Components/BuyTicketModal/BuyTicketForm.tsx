@@ -70,7 +70,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
 
   function onSubmit(data: BuyTicketFormType): void{
     console.log('Submitted Ticket Form Data:', data);
-  };
+  }
 
   const price = event?.price ?? 50; //TODO: fetch from billig (in ISSUE #1797)
   const price_member = event?.price_member ?? 30;
