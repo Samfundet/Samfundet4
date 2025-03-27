@@ -59,12 +59,14 @@
 }
 
 .preview_container {
+  position: relative;
   height: 8em;
   min-width: 6em;
   background: white;
   @include theme-dark {
     background-color: $grey-0;
   }
+  max-width: 100%;
 }
 
 .preview_image {
@@ -95,7 +97,8 @@
   position: relative;
   display: inline-block; 
   overflow: visible;
-  pointer-events: all
+  pointer-events: all;
+  object-fit: contain;
 }
 
 .preview {
@@ -103,7 +106,7 @@
   border: 1px solid $black;
   height: auto;
   width: auto;
-  max-width: 15em;
+  max-width: 100%;
   max-height: 8em;
   margin: 0 auto;
 }
