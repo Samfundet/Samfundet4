@@ -53,23 +53,19 @@ export function ImageCard({
   }
 
   let displayTicketType = '';
-  if (ticket_type === 'billig' || ticket_type === 'custom') {
-    displayTicketType = t(KEY.common_ticket_type_billig);
-  }
+  let ticketTypeStyle = styles.ticket_type_hidden
   if (ticket_type === 'free' || ticket_type === 'registration') {
     displayTicketType = t(KEY.common_ticket_type_free);
+    ticketTypeStyle = styles.ticket_type
   }
-  if (ticket_type === 'included') {
-    displayTicketType = t(KEY.common_ticket_type_included);
-  }
-
+  
   return (
     <div className={containerStyle}>
       <Link url={url} className={classNames(cardStyle, styles.image)} style={backgroundImageFromUrl(imageUrl)}>
         <div className={styles.card_inner}>
           <div>
             <Badge className={styles.event_host} text={host} />
-            <Badge className={styles.ticket_type} text={displayTicketType} />
+            <Badge className={ticketTypeStyle} text={displayTicketType} />
           </div>
           <div>{children}</div>
           <div className={styles.card_content}>
