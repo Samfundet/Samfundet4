@@ -250,7 +250,7 @@ export const nb = prepareTranslations({
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',
-  [KEY.email_or_membership_number_message]: 'Du må oppgi enten en e-post eller et medlemsnummer', 
+  [KEY.email_or_membership_number_message]: 'Du må oppgi enten en e-post eller et medlemsnummer',
   [KEY.no_tickets_selected_message]: 'Du må velge minst én billett',
   [KEY.kr_per_ticket]: 'kr per billett',
   [KEY.enter_membership_number]: 'Skriv inn medlemsnummer',

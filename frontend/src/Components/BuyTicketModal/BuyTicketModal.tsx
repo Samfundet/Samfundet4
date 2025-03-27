@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import { useState } from 'react';
 import { logoBlack, logoWhite } from '~/assets';
 import type { EventDto } from '~/dto';
-import { dbT} from '~/utils';
+import { dbT } from '~/utils';
 import { Modal } from '../Modal';
 import BuyTicketForm from './BuyTicketForm';
 import styles from './BuyTicketModal.module.scss';

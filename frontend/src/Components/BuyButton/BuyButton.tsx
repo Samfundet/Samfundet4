@@ -1,9 +1,9 @@
+import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { KEY } from '~/i18n/constants';
 import { Button } from '../Button';
-import { Icon } from '@iconify/react';
 
 type BuyButtonProps = {
   eventId: number;

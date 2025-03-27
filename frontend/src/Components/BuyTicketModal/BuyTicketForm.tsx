@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
@@ -18,9 +19,8 @@ import {
 import { validEmail } from '~/Forms/util';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import styles from './BuyTicketModal.module.scss';
-import { t } from 'i18next';
 import { ROUTES } from '~/routes';
+import styles from './BuyTicketModal.module.scss';
 
 // Validation schema
 const buyTicketFormSchema = z
@@ -28,7 +28,10 @@ const buyTicketFormSchema = z
     tickets: z.number().min(0),
     membershipTickets: z.number().min(0),
     membershipNumber: z.string().optional(),
-    email: z.string().refine(validEmail, { message: t(KEY.invalid_email_message) }).optional(),
+    email: z
+      .string()
+      .refine(validEmail, { message: t(KEY.invalid_email_message) })
+      .optional(),
     ticketType: z.enum(['email', 'membershipNumber']),
   })
   .refine((data) => data.email || data.membershipNumber, {
@@ -68,7 +71,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
 
   const ticketType = useWatch({ control: form.control, name: 'ticketType' });
 
-  function onSubmit(data: BuyTicketFormType): void{
+  function onSubmit(data: BuyTicketFormType): void {
     console.log('Submitted Ticket Form Data:', data);
   }
 
@@ -92,7 +95,9 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
             <div className={styles.ticket_select}>
               <div className={styles.select_info}>
                 <p className={styles.select_label}>{`${t(KEY.common_not)}-${t(KEY.common_member)}`}</p>
-                <p className={styles.price_label}>{price} {t(KEY.kr_per_ticket)}</p>
+                <p className={styles.price_label}>
+                  {price} {t(KEY.kr_per_ticket)}
+                </p>
               </div>
               <FormField
                 control={form.control}
@@ -102,7 +107,10 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                     <FormControl>
                       <Dropdown
                         {...field}
-                        options={[...Array(numberOfTickets).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))}
+                        options={[...Array(numberOfTickets).keys()].map((num) => ({
+                          label: `${num}`,
+                          value: num.toString(),
+                        }))}
                         onChange={(e) => {
                           if (e) {
                             form.setValue('tickets', Number(e));
@@ -121,7 +129,9 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
             <div className={styles.ticket_select}>
               <div className={styles.select_info}>
                 <p className={styles.select_label}>{t(KEY.common_member)}</p>
-                <p className={styles.price_label}>{price_member} {t(KEY.kr_per_ticket)}</p>
+                <p className={styles.price_label}>
+                  {price_member} {t(KEY.kr_per_ticket)}
+                </p>
               </div>
               <FormField
                 control={form.control}
@@ -131,7 +141,10 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                     <FormControl>
                       <Dropdown
                         {...field}
-                        options={[...Array(numberOfTickets).keys()].map((num) => ({ label: `${num}`, value: num.toString() }))}
+                        options={[...Array(numberOfTickets).keys()].map((num) => ({
+                          label: `${num}`,
+                          value: num.toString(),
+                        }))}
                         onChange={(e) => {
                           if (e) {
                             form.setValue('membershipTickets', Number(e));
