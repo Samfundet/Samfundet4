@@ -92,7 +92,6 @@ export function LycheReservationPage() {
       ...data,
       reservation_date: formattedDate,
     };
-
     // Submit the reservation
     reservationMutation.mutate(completeData);
   }

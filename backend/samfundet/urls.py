@@ -58,7 +58,7 @@ router.register('recruitment-applications-for-position', views.RecruitmentApplic
 router.register('interview', views.InterviewView, 'interview')
 
 ######## Lyche #########
-router.register('create-reservation', samfundet.view.sulten_views.ReservationCreateView, 'create_reservation')
+# Lyche routes go here
 
 app_name = 'samfundet'
 
@@ -86,6 +86,7 @@ urlpatterns = [
     path('gangtypes/<int:organization>/', samfundet.view.general_views.GangTypeOrganizationView.as_view(), name='gangsorganized'),
     ########## Lyche ##########
     path('check-reservation/', samfundet.view.sulten_views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
+    path('reservations/', samfundet.view.sulten_views.ReservationCreateView.as_view(), name='reservation-create'),
     ########## Recruitment ##########
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
@@ -167,6 +168,7 @@ urlpatterns = [
         name='recruitment_download_gang_application_csv',
     ),
     path('occupiedtimeslot/', views.OccupiedTimeslotView.as_view(), name='occupied_timeslots'),
+    path('occupiedtime-for-user/', views.OccupiedTimeslotForUserView.as_view(), name='occupiedtime_for_user'),
     path(
         'recruitment/<int:recruitment_id>/interviewer-availability/', views.InterviewerAvailabilityForDate.as_view(), name='interviewer-availability-for-date'
     ),
