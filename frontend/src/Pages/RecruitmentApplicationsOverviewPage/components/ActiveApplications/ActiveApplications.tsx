@@ -14,7 +14,13 @@ import { applicationKeys } from '~/queryKeys';
 import { niceDateTime } from '~/utils';
 import type { ApplicantApplicationManagementQK } from '../../RecruitmentApplicationsOverviewPage';
 import { ActiveApplicationLink } from './ActiveApplicationLink';
-import { ControlPriorityButtons, type PriorityChange } from './ControlPriorityButtons';
+import { ControlPriorityButtons } from './ControlPriorityButtons';
+
+export type PriorityChangeType = {
+  id: string;
+  direction: 'up' | 'down';
+  successful: boolean;
+};
 
 type ActiveApplicationsProps = {
   recruitmentId?: string;
@@ -24,7 +30,7 @@ type ActiveApplicationsProps = {
 export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicationsProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [recentChanges, setRecentChanges] = useState<PriorityChange[]>([]);
+  const [recentChanges, setRecentChanges] = useState<PriorityChangeType[]>([]);
 
   // Clear the recent change after 2 seconds
   useEffect(() => {
@@ -50,7 +56,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
 
   // Mutation for changing priority
   const priorityMutation = useMutation({
-    mutationFn: ({ id, direction }: Omit<PriorityChange, 'successful'>) => {
+    mutationFn: ({ id, direction }: Omit<PriorityChangeType, 'successful'>) => {
       const data: UserPriorityDto = { direction: direction === 'up' ? 1 : -1 };
       return putRecruitmentPriorityForUser(id, data);
     },
@@ -71,7 +77,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
       );
 
       if (clickedApp && swappedApp) {
-        const changes: PriorityChange[] = [
+        const changes: PriorityChangeType[] = [
           { id: clickedApp.id, direction: variables.direction, successful: true },
           { id: swappedApp.id, direction: variables.direction === 'up' ? 'down' : 'up', successful: true },
         ];

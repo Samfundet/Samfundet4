@@ -1,16 +1,15 @@
-import { Icon } from '@iconify/react';
 import { Link } from '~/Components';
 import type { RecruitmentApplicationDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { COLORS } from '~/types';
 import { dbT } from '~/utils';
-import type { PriorityChange } from '../ControlPriorityButtons';
+import type { PriorityChangeType } from '../ActiveApplications';
 import styles from './ActiveApplicationLink.module.scss';
+import { PriorityChangeIndicator } from './PriorityChangeIndicator/PriorityChangeIndicator';
 
 type ActiveApplicationLinkProps = {
   application: RecruitmentApplicationDto;
-  recentChanges: PriorityChange[];
+  recentChanges: PriorityChangeType[];
 };
 
 export function ActiveApplicationLink({ application, recentChanges }: ActiveApplicationLinkProps) {
@@ -19,20 +18,7 @@ export function ActiveApplicationLink({ application, recentChanges }: ActiveAppl
 
   return (
     <div className={styles.positionLinkWrapper}>
-      {change &&
-        (change.direction === 'up' ? (
-          <Icon
-            className={styles.priorityChangeIndicator}
-            icon={'material-symbols:arrow-drop-up-rounded'}
-            color={COLORS.green_light}
-          />
-        ) : (
-          <Icon
-            className={styles.priorityChangeIndicator}
-            icon={'material-symbols:arrow-drop-down-rounded'}
-            color={COLORS.red_light}
-          />
-        ))}
+      {change && <PriorityChangeIndicator direction={change.direction} />}
       <Link
         url={reverse({
           pattern: ROUTES.frontend.recruitment_application,
