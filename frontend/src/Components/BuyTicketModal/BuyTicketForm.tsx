@@ -50,6 +50,8 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const [totalPrice, setTotalPrice] = useState(0);
   const numberOfTickets = event.numberOfTickets ?? 9;
+  const TICKET_TYPE_EMAIL = 'email';
+  const TICKET_TYPE_MEMBERSHIP = 'membershipNumber';
 
   const form = useForm<BuyTicketFormType & { ticketType: string }>({
     resolver: zodResolver(buyTicketFormSchema),
@@ -58,7 +60,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
       membershipTickets: 0,
       membershipNumber: '',
       email: '',
-      ticketType: 'email',
+      ticketType: TICKET_TYPE_EMAIL,
     },
   });
 
@@ -151,10 +153,10 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                   <RadioButton
                     name="ticketType"
                     onChange={() => {
-                      form.setValue('ticketType', 'membershipNumber');
+                      form.setValue('ticketType', TICKET_TYPE_MEMBERSHIP);
                       form.setValue('email', '');
                     }}
-                    checked={ticketType === 'membershipNumber'}
+                    checked={ticketType === TICKET_TYPE_MEMBERSHIP}
                   />{' '}
                   <label>{t(KEY.common_membership_number)}</label>
                 </div>
@@ -168,7 +170,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                         <Input
                           type="text"
                           className={styles.input_field}
-                          disabled={ticketType !== 'membershipNumber'}
+                          disabled={ticketType !== TICKET_TYPE_MEMBERSHIP}
                           style={{
                             backgroundColor: ticketType === 'membershipNumber' ? 'white' : 'lightgrey',
                           }}
@@ -186,10 +188,10 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                   <RadioButton
                     name="ticketType"
                     onChange={() => {
-                      form.setValue('ticketType', 'email');
+                      form.setValue('ticketType', TICKET_TYPE_EMAIL);
                       form.setValue('membershipNumber', '');
                     }}
-                    checked={ticketType === 'email'}
+                    checked={ticketType === TICKET_TYPE_EMAIL}
                   />{' '}
                   <label className={styles.email_label}>{t(KEY.common_email)}</label>
                 </div>
@@ -203,7 +205,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                         <Input
                           type="email"
                           className={styles.input_field}
-                          disabled={ticketType !== 'email'}
+                          disabled={ticketType !== TICKET_TYPE_EMAIL}
                           style={{
                             backgroundColor: ticketType === 'email' ? 'white' : 'lightgray',
                           }}
