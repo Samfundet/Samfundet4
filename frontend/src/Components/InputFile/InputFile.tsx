@@ -101,6 +101,7 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
           {(fileType === 'pdf' || preview) && (
             <div className={classNames(styles.preview_container, styles[typePreviewClass])}>
               {preview && (
+                {/* Delete-button */}
                 <div className={styles.image_wrapper}>
                   <img className={styles.preview} src={preview} alt="Preview" />
                   <IconButton
