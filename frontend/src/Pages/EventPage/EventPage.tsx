@@ -24,6 +24,7 @@ export function EventPage() {
   const [event, setEvent] = useState<EventDto>();
   const navigate = useNavigate();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [showModal, setShowModal] = useState(false);
 
   useTitle((event && dbT(event, 'title')) || t(KEY.common_event));
 
@@ -45,17 +46,6 @@ export function EventPage() {
     }
   }, [id]);
 
-  const isPaid = event && PAID_TICKET_TYPES.includes(event.ticket_type);
-
-  const ticketButton = isPaid ? (
-    <Button theme={'samf'} className={styles.ticket_button}>
-      <Icon icon="ph:ticket-bold" />
-      {lowerCapitalize(`${t(KEY.common_buy)} ${t(KEY.common_ticket_type)}`)}
-    </Button>
-  ) : (
-    <></>
-  );
-
   return (
     <Page className={styles.container} loading={showSpinner}>
       {/* TODO splash should be its own component rather than homepage subcomponent */}
@@ -65,9 +55,20 @@ export function EventPage() {
         {/* Info table */}
         <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
         {event?.billig && (
-          <BuyButton ticketSaleState={event.billig.ticket_groups} eventId={event.id} billigId={event.billig.id} />
-          
-        )}        
+          <>
+            <BuyButton
+              eventId={event.id}
+              billigId={event.billig.id}
+              ticketSaleState={event.billig.ticket_groups}
+              onClick={() => setShowModal(true)}
+            />
+            <BuyTicketModal
+              event={event}
+              isOpen={showModal}
+              onClose={() => setShowModal(false)}
+            />
+          </>
+        )}
         {/* Text */}
         <div className={styles.text_container}>
           <div className={styles.description}>
