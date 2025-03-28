@@ -23,10 +23,28 @@ export const permissionKeys = {
   detail: (id: number) => [...permissionKeys.details(), id] as const,
 };
 
+// export const applicationKeys = {
+//   all: ['applications'] as const,
+//   lists: () => [...applicationKeys.all, 'list'] as const,
+//   list: (recruitmentId?: string) => [...applicationKeys.lists(), recruitmentId] as const,
+//   details: () => [...applicationKeys.all, 'detail'] as const,
+//   detail: (id: string) => [...applicationKeys.details(), id] as const,
+// };
+
 export const applicationKeys = {
   all: ['applications'] as const,
   lists: () => [...applicationKeys.all, 'list'] as const,
-  list: (recruitmentId?: string) => [...applicationKeys.lists(), recruitmentId] as const,
+  list: (filters: unknown[]) => [...applicationKeys.lists(), { filters }] as const,
   details: () => [...applicationKeys.all, 'detail'] as const,
-  detail: (id: string) => [...applicationKeys.details(), id] as const,
+  detail: (id: number) => [...applicationKeys.details(), id] as const,
+  users: (id: number) => [...applicationKeys.detail(id), 'users'] as const,
+};
+
+export const withdrawnApplicationKeys = {
+  all: ['withdrawn_application'] as const,
+  lists: () => [...withdrawnApplicationKeys.all, 'list'] as const,
+  list: (filters: unknown[]) => [...withdrawnApplicationKeys.lists(), { filters }] as const,
+  details: () => [...withdrawnApplicationKeys.all, 'detail'] as const,
+  detail: (id: number) => [...withdrawnApplicationKeys.details(), id] as const,
+  users: (id: number) => [...withdrawnApplicationKeys.detail(id), 'users'] as const,
 };

@@ -7,20 +7,9 @@ import { ROUTES } from '~/routes';
 import styles from './RecruitmentApplicationsOverviewPage.module.scss';
 import { ActiveApplications, WithdrawnApplications } from './components';
 
-export type ApplicantApplicationManagementQK = {
-  // TODO: improve this
-  applications: (recruitmentId: string) => readonly ['applications', string];
-  withdrawnApplications: (recruitmentId: string) => readonly ['withdrawnApplications', string];
-};
-
 export function RecruitmentApplicationsOverviewPage() {
   const { recruitmentId } = useParams();
   const { t } = useTranslation();
-
-  const QUERY_KEYS: ApplicantApplicationManagementQK = {
-    applications: (recruitmentId: string) => ['applications', recruitmentId] as const,
-    withdrawnApplications: (recruitmentId: string) => ['withdrawnApplications', recruitmentId] as const,
-  };
 
   return (
     <Page>
@@ -37,8 +26,8 @@ export function RecruitmentApplicationsOverviewPage() {
 
         {recruitmentId && (
           <>
-            <ActiveApplications recruitmentId={recruitmentId} queryKey={QUERY_KEYS} />
-            <WithdrawnApplications recruitmentId={recruitmentId} queryKey={QUERY_KEYS} />
+            <ActiveApplications recruitmentId={recruitmentId} />
+            <WithdrawnApplications recruitmentId={recruitmentId} />
           </>
         )}
       </div>

@@ -5,21 +5,20 @@ import { getWithdrawnRecruitmentApplicationsApplicant } from '~/api';
 import type { RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import { withdrawnApplicationKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
-import type { ApplicantApplicationManagementQK } from '../../RecruitmentApplicationsOverviewPage';
 import styles from './WithdrawnApplications.module.scss';
 
 type WithdrawnApplicationsProps = {
   recruitmentId: string;
-  queryKey: ApplicantApplicationManagementQK;
 };
 
-export function WithdrawnApplications({ recruitmentId, queryKey }: WithdrawnApplicationsProps) {
+export function WithdrawnApplications({ recruitmentId }: WithdrawnApplicationsProps) {
   const { t } = useTranslation();
 
   const { data: withdrawnApplications } = useQuery({
-    queryKey: queryKey.withdrawnApplications(recruitmentId),
+    queryKey: withdrawnApplicationKeys.all,
     queryFn: () => getWithdrawnRecruitmentApplicationsApplicant(recruitmentId),
     enabled: !!recruitmentId,
     initialData: [],

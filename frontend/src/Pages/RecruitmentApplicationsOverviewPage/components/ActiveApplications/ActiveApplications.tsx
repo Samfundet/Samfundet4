@@ -10,9 +10,8 @@ import {
 } from '~/api';
 import type { RecruitmentApplicationDto, UserPriorityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { applicationKeys } from '~/queryKeys';
+import { applicationKeys, withdrawnApplicationKeys } from '~/queryKeys';
 import { niceDateTime } from '~/utils';
-import type { ApplicantApplicationManagementQK } from '../../RecruitmentApplicationsOverviewPage';
 import { ActiveApplicationLink } from './ActiveApplicationLink';
 import { ControlPriorityButtons } from './ControlPriorityButtons';
 
@@ -24,10 +23,9 @@ export type PriorityChangeType = {
 
 type ActiveApplicationsProps = {
   recruitmentId?: string;
-  queryKey: ApplicantApplicationManagementQK;
 };
 
-export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicationsProps) {
+export function ActiveApplications({ recruitmentId }: ActiveApplicationsProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
@@ -35,7 +33,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
 
   // Query for fetching applications
   const { data: applications } = useQuery({
-    queryKey: applicationKeys.list(recruitmentId),
+    queryKey: applicationKeys.all,
     queryFn: () => getRecruitmentApplicationsForApplicant(recruitmentId as string),
     enabled: !!recruitmentId,
     initialData: [],
@@ -54,8 +52,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
     // In your mutation success handler:
     onSuccess: (response) => {
       // Get previous applications data
-      const previousApplications =
-        queryClient.getQueryData<RecruitmentApplicationDto[]>(applicationKeys.list(recruitmentId)) || [];
+      const previousApplications = queryClient.getQueryData<RecruitmentApplicationDto[]>(applicationKeys.all) || [];
 
       // Get new applications data
       const newApplications = response.data;
@@ -72,7 +69,7 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
       }
 
       // Update the cache with the new data
-      queryClient.setQueryData(applicationKeys.list(recruitmentId), newApplications);
+      queryClient.setQueryData(applicationKeys.all, newApplications);
 
       // Set the changed applications
       setChangedApplicationIds(changes);
@@ -93,10 +90,10 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
     onSuccess: () => {
       // Pass the proper query filter objects
       queryClient.invalidateQueries({
-        queryKey: queryKey.applications(recruitmentId as string),
+        queryKey: withdrawnApplicationKeys.all,
       });
       queryClient.invalidateQueries({
-        queryKey: queryKey.withdrawnApplications(recruitmentId as string),
+        queryKey: withdrawnApplicationKeys.all,
       });
     },
     onError: () => {
