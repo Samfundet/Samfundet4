@@ -88,9 +88,9 @@ export function ActiveApplications({ recruitmentId }: ActiveApplicationsProps) {
   const withdrawMutation = useMutation({
     mutationFn: (positionId: string) => withdrawRecruitmentApplicationApplicant(positionId),
     onSuccess: () => {
-      // Pass the proper query filter objects
+      // Invalidate both active and withdrawn applications queries
       queryClient.invalidateQueries({
-        queryKey: withdrawnApplicationKeys.all,
+        queryKey: applicationKeys.all,
       });
       queryClient.invalidateQueries({
         queryKey: withdrawnApplicationKeys.all,
