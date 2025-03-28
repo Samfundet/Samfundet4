@@ -3,8 +3,6 @@
 @use 'src/constants' as *;
 
 $event-header-height: 5em;
-$event-header-bg-light: rgba(255, 255, 255, 0.9);
-$event-header-bg-dark: rgba(31, 31, 31, 0.9);
 
 .events_container{
     margin: 0 auto;
