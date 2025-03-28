@@ -21,6 +21,11 @@
     border-color: $grey-0;
     color: $grey-35;
   }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 }
 
 .dot {
@@ -51,22 +56,6 @@
   }
 }
 
-.timeslot_disabled {
-  border-color: $grey-3;
-  color: $grey-3;
-  cursor: not-allowed;
-
-  .dot {
-    background: $grey-3;
-  }
-}
-
-.timeslot_only_one_valid {
-  border-color: $green;
-  color: $green;
-  cursor: pointer;
-
-  .dot {
-    background: $green;
-  }
+.timeslot_read_only {
+  cursor: initial;
 }

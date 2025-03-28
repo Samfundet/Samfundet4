@@ -47,6 +47,15 @@ export function AppletContainer({ recruitmentId }: Props) {
           />
 
           <AppletCard
+            title={t(KEY.interview_availability)}
+            description={t(KEY.recruitment_applet_interview_availability_description)}
+            url={reverse({
+              pattern: ROUTES.frontend.admin_recruitment_interview_availability,
+              urlParams: { recruitmentId },
+            })}
+          />
+
+          <AppletCard
             title={t(KEY.common_overview)}
             description={t(KEY.recruitment_applet_overview_description)}
             url={reverse({ pattern: ROUTES.frontend.admin_recruitment_overview, urlParams: { recruitmentId } })}
