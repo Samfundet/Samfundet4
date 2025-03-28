@@ -21,6 +21,7 @@
 .event_day_item_wrapper{
     display: flex;
     flex-direction: column;
+    box-shadow: 1px 1px 7px $black-t25;
 }
 
 .event_day_item_header {
@@ -32,9 +33,11 @@
 }
 
 .free_badge {
-    background-color: $orange-light;
+    opacity: 0.50;
+    background-color: $blue-lighter;
 }
 
 .included_badge {
-    background-color: $orange-ligher;
+    opacity: 0.50;
+    background-color: $blue-lighter;
 }

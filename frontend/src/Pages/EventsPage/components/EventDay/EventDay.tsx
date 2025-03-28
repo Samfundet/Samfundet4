@@ -22,6 +22,12 @@ export function EventDay({ date, events, isDesktop }: EventTableProps) {
         </Button>
       );
     }
+    if (event.ticket_type === 'free' && !isDesktop) {
+      return <Badge className={styles.free_badge} text="free" />;
+    }
+    if (event.ticket_type === 'included' && !isDesktop) {
+      return <Badge className={styles.included_badge} text="included" />;
+    }
     return null;
   };
 
