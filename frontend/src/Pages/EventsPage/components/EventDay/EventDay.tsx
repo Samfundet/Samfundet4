@@ -1,4 +1,4 @@
-import { Button, H4, Link, Table, type TableRow, TimeDisplay } from '~/Components';
+import { Button, H2, H4, Link, Table, type TableRow, TimeDisplay } from '~/Components';
 import { Badge } from '~/Components/Badge';
 import type { EventDto } from '~/dto';
 import { reverse } from '~/named-urls';
@@ -120,9 +120,15 @@ export function EventDay({ date, events, isDesktop }: EventTableProps) {
 
   return (
     <div className={styles.event_day_item_wrapper}>
-      <H4 className={styles.event_day_item_header}>
-        <TimeDisplay timestamp={date} displayType="nice-date" />
-      </H4>
+      {isDesktop ? (
+        <H2 className={styles.event_day_item_header}>
+          <TimeDisplay timestamp={date} displayType="nice-date" />
+        </H2>
+      ) : (
+        <H4 className={styles.event_day_item_header}>
+          <TimeDisplay timestamp={date} displayType="nice-date" />
+        </H4>
+      )}
       <Table className={styles.event_day_table} data={isDesktop ? eventRowsDesktop() : eventRowsMobile()} />
     </div>
   );
