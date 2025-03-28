@@ -177,6 +177,10 @@ export type EventDto = {
   capacity?: number;
 };
 
+export type EventsPerDayDto = {
+  [date: string]: EventDto[];
+};
+
 export type EventGroupDto = {
   id: number;
   name: string;

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Page } from '~/Components';
 import { getEventsPerDay } from '~/api';
+import type { EventsPerDayDto } from '~/dto';
 import { useDesktop, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import styles from './EventPage.module.scss';
@@ -12,7 +13,7 @@ import { EventFilter, type ViewType } from './components/EventFilter/EventFilter
 
 export function EventsPage() {
   const { t } = useTranslation();
-  const [events, setEvents] = useState({});
+  const [events, setEvents] = useState<EventsPerDayDto>({}); // Fix 1: Type the events state
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [viewType, setViewType] = useState('table'); // Default view
   const isDesktop = useDesktop();
