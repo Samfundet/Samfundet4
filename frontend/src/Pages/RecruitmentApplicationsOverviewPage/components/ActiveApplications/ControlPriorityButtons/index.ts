@@ -1,1 +1,1 @@
-export { ControlPriorityButtons, type PriorityChange } from './ControlPriorityButtons';
+export { ControlPriorityButtons } from './ControlPriorityButtons';
