@@ -1,0 +1,31 @@
+@use 'src/constants' as *;
+
+
+
+.event_day_table {
+    width: 100%;
+    table-layout: fixed;
+    border: 2px solid $red-samf;
+}
+
+.event_title_link{
+    text-align: left;
+}
+
+.event_buy{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.event_day_item_wrapper{
+    display: flex;
+    flex-direction: column;
+}
+
+.event_day_item_header {
+    background-color:$red-samf;
+    color: $white;
+    padding: 0.25rem;
+}
