@@ -9,4 +9,5 @@ export const ROUTES_OTHER = {
   lyche_facebook: 'https://www.facebook.com/samfundet.lyche',
   akademika: 'https://www.akademika.no/butikker',
   laws_and_statutes: 'http://raadet.samfundet.no/lover.html',
+  stripe_info: 'https://stripe.com/en-no/privacy',
 } as const;

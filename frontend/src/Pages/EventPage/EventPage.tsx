@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Page } from '~/Components';
 import { BuyButton } from '~/Components/BuyButton/BuyButton';
+import { BuyTicketModal } from '~/Components/BuyTicketModal';
 import { getEvent } from '~/api';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
@@ -21,6 +22,7 @@ export function EventPage() {
   const [event, setEvent] = useState<EventDto>();
   const navigate = useNavigate();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [showModal, setShowModal] = useState(false);
 
   useTitle((event && dbT(event, 'title')) || t(KEY.common_event));
 
@@ -51,7 +53,15 @@ export function EventPage() {
         {/* Info table */}
         <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
         {event?.billig && (
-          <BuyButton ticketSaleState={event.billig.ticket_groups} eventId={event.id} billigId={event.billig.id} />
+          <>
+            <BuyButton
+              eventId={event.id}
+              billigId={event.billig.id}
+              ticketSaleState={event.billig.ticket_groups}
+              onClick={() => setShowModal(true)}
+            />
+            <BuyTicketModal event={event} isOpen={showModal} onClose={() => setShowModal(false)} />
+          </>
         )}
         {/* Text */}
         <div className={styles.text_container}>
