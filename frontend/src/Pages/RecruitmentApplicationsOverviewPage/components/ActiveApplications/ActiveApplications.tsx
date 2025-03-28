@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Button, Table } from '~/Components';
@@ -30,17 +30,8 @@ type ActiveApplicationsProps = {
 export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicationsProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [recentChanges, setRecentChanges] = useState<PriorityChangeType[]>([]);
 
-  // Clear the recent change after 2 seconds
-  useEffect(() => {
-    if (recentChanges.length > 0) {
-      const timer = setTimeout(() => {
-        setRecentChanges([]);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [recentChanges]);
+  const [changedApplicationIds, setChangedApplicationIds] = useState<Record<string, 'up' | 'down'>>({});
 
   // Query for fetching applications
   const { data: applications } = useQuery({
@@ -60,33 +51,39 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
       const data: UserPriorityDto = { direction: direction === 'up' ? 1 : -1 };
       return putRecruitmentPriorityForUser(id, data);
     },
-    onSuccess: (response, variables) => {
-      // Update the cache with the correct query key
-      queryClient.setQueryData(applicationKeys.list(recruitmentId), response.data);
+    // In your mutation success handler:
+    onSuccess: (response) => {
+      // Get previous applications data
+      const previousApplications =
+        queryClient.getQueryData<RecruitmentApplicationDto[]>(applicationKeys.list(recruitmentId)) || [];
 
-      // Find the clicked application in the response data
-      const clickedApp = response.data.find((app) => app.id === variables.id);
+      // Get new applications data
+      const newApplications = response.data;
 
-      // Find the swapped application - the one that changed position with the clicked app
-      const swappedApp = response.data.find(
-        (newApp) =>
-          clickedApp &&
-          newApp.id !== clickedApp.id &&
-          ((variables.direction === 'up' && newApp.applicant_priority === clickedApp.applicant_priority + 1) ||
-            (variables.direction === 'down' && newApp.applicant_priority === clickedApp.applicant_priority - 1)),
-      );
+      // Find out which applications changed priority
+      const changes: Record<string, 'up' | 'down'> = {};
 
-      if (clickedApp && swappedApp) {
-        const changes: PriorityChangeType[] = [
-          { id: clickedApp.id, direction: variables.direction, successful: true },
-          { id: swappedApp.id, direction: variables.direction === 'up' ? 'down' : 'up', successful: true },
-        ];
-        setRecentChanges(changes);
+      for (const newApp of newApplications) {
+        const prevApp = previousApplications.find((app) => app.id === newApp.id);
+        if (prevApp && prevApp.applicant_priority !== newApp.applicant_priority) {
+          // Priority changed
+          changes[newApp.id] = newApp.applicant_priority < prevApp.applicant_priority ? 'up' : 'down';
+        }
       }
+
+      // Update the cache with the new data
+      queryClient.setQueryData(applicationKeys.list(recruitmentId), newApplications);
+
+      // Set the changed applications
+      setChangedApplicationIds(changes);
+
+      // Clear the changes after a timeout
+      setTimeout(() => {
+        setChangedApplicationIds({});
+      }, 1000);
     },
     onError: () => {
       toast.error(t(KEY.common_something_went_wrong));
-      //setRecentChanges([{ id: variables.id, direction: variables.direction, successful: false }]);
     },
   });
 
@@ -154,14 +151,14 @@ export function ActiveApplications({ recruitmentId, queryKey }: ActiveApplicatio
                   isFirstItem={index === 0}
                   isLastItem={index === sortedActiveApplications.length - 1}
                   onPriorityChange={handlePriorityChange}
-                  isPending={priorityMutation.isPaused}
+                  isPending={priorityMutation.isPending}
                 />
               ),
             },
           ]
         : []),
       {
-        content: <ActiveApplicationLink application={application} recentChanges={recentChanges} />,
+        content: <ActiveApplicationLink application={application} changedApplicationIds={changedApplicationIds} />,
       },
       // Only include priority number if there are multiple applications
       ...(sortedActiveApplications.length > 1

@@ -3,22 +3,21 @@ import type { RecruitmentApplicationDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
-import type { PriorityChangeType } from '../ActiveApplications';
 import styles from './ActiveApplicationLink.module.scss';
 import { PriorityChangeIndicator } from './PriorityChangeIndicator/PriorityChangeIndicator';
 
 type ActiveApplicationLinkProps = {
   application: RecruitmentApplicationDto;
-  recentChanges: PriorityChangeType[];
+  changedApplicationIds: Record<string, 'up' | 'down'>;
 };
 
-export function ActiveApplicationLink({ application, recentChanges }: ActiveApplicationLinkProps) {
+export function ActiveApplicationLink({ application, changedApplicationIds }: ActiveApplicationLinkProps) {
   // Find a successful change for this application
-  const change = recentChanges.find((change) => change.id === application.id && change.successful);
+  const direction = changedApplicationIds[application.id];
 
   return (
     <div className={styles.positionLinkWrapper}>
-      {change && <PriorityChangeIndicator direction={change.direction} />}
+      {direction && <PriorityChangeIndicator direction={direction} />}
       <Link
         url={reverse({
           pattern: ROUTES.frontend.recruitment_application,
