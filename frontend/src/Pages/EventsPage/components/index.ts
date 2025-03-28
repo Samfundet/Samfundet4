@@ -1,1 +1,1 @@
-export { EventsList } from './EventsList';
+export { EventGrid } from './EventGrid';
