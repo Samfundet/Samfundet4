@@ -1,7 +1,5 @@
 @use 'src/constants' as *;
 
-
-
 .event_day_table {
     width: 100%;
     table-layout: fixed;
@@ -17,6 +15,7 @@
     display: flex;
     align-items: center;
     justify-content: end;
+    z-index: 999; // the button should be at the top, so that it always is clickable
 }
 
 .event_day_item_wrapper{
@@ -28,4 +27,13 @@
     background-color:$red-samf;
     color: $white;
     padding: 0.25rem;
+    border-radius: 0.25rem 0.25rem 0 0;
+}
+
+.free_badge {
+    background-color: $orange-light;
+}
+
+.included_badge {
+    background-color: $orange-ligher;
 }
