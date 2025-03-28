@@ -655,6 +655,22 @@ export async function getOccupiedTimeslots(recruitmentId: number): Promise<Axios
   return response;
 }
 
+export async function getOccupiedTimeForUser(
+  recruitmentId: number,
+  userId: number,
+): Promise<AxiosResponse<OccupiedTimeslotDto>> {
+  console.log(userId);
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__occupiedtime_for_user,
+      queryParams: { recruitment: recruitmentId, user: userId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response;
+}
+
 export async function postOccupiedTimeslots(
   timeslots: OccupiedTimeslotDto,
 ): Promise<AxiosResponse<OccupiedTimeslotDto>> {
