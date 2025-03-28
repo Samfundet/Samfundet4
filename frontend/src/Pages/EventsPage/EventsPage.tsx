@@ -13,7 +13,7 @@ import { EventFilter, type ViewType } from './components/EventFilter/EventFilter
 
 export function EventsPage() {
   const { t } = useTranslation();
-  const [events, setEvents] = useState<EventsPerDayDto>({}); // Fix 1: Type the events state
+  const [events, setEvents] = useState<EventsPerDayDto>({});
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [viewType, setViewType] = useState('table'); // Default view
   const isDesktop = useDesktop();
