@@ -26,7 +26,8 @@ class EventStatus(models.TextChoices):
     so that it can be restored if something wrong happens
     """
 
-    ACTIVE = 'active', _('Aktiv')
+    PUBLIC = 'public', _('Offentlig')
+    PRIVATE = 'private', _('Privat')
     ARCHIVED = 'archived', _('Arkivert')
     CANCELED = 'cancelled', _('Avlyst')
     DELETED = 'deleted', _('Slettet')
