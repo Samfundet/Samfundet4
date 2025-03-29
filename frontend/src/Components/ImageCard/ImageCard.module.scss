@@ -144,6 +144,10 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
   font-weight: 700;
 }
 
+.ticket_type_hidden{
+  display: none
+}
+
 .event_host {
   @extend .ticket_type;
   background-color: $blue-medium;
