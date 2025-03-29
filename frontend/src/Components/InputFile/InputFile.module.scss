@@ -59,12 +59,14 @@
 }
 
 .preview_container {
+  position: relative;
   height: 8em;
   min-width: 6em;
   background: white;
   @include theme-dark {
     background-color: $grey-0;
   }
+  max-width: 100%;
 }
 
 .preview_image {
@@ -83,13 +85,29 @@
   }
 }
 
+.delete_button {
+  opacity: 1;
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  pointer-events: all;
+}
+
+.image_wrapper {
+  position: relative;
+  display: inline-block; 
+  overflow: visible;
+  pointer-events: all;
+  object-fit: contain;
+}
+
 .preview {
   @include shadow-light;
   border: 1px solid $black;
   height: auto;
   width: auto;
   max-width: 100%;
-  max-height: 100%;
+  max-height: 8em;
   margin: 0 auto;
 }
 
