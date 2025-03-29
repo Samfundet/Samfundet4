@@ -1,22 +1,21 @@
+import { useQuery } from '@tanstack/react-query';
 import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Chart, SamfundetLogoSpinner } from '~/Components';
 import { Table } from '~/Components/Table';
-import { Text } from '~/Components/Text/Text';
-import type { RecruitmentStatsDto } from '~/dto';
+import { getRecruitmentForRecruiter } from '~/api';
+import type { RecruitmentForRecruiterDto } from '~/dto';
 import { useCustomNavigate, useParentElementWidth } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import styles from './RecruitmentStatistics.module.scss';
 
 type RecruitmentStatisticsProps = {
-  statistics: RecruitmentStatsDto | undefined;
+  recruitmentId?: string;
 };
 
-export function RecruitmentStatistics({ statistics }: RecruitmentStatisticsProps) {
-  const { recruitmentId } = useParams();
+export function RecruitmentStatistics({ recruitmentId }: RecruitmentStatisticsProps) {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
   const chartRef = useRef<HTMLDivElement>(null);
@@ -37,11 +36,16 @@ export function RecruitmentStatistics({ statistics }: RecruitmentStatisticsProps
     toast.error(t(KEY.common_something_went_wrong));
   }
 
+  const { data, isLoading, error } = useQuery<RecruitmentForRecruiterDto>({
+    queryKey: ['recruitmentStats', recruitmentId],
+    queryFn: () => getRecruitmentForRecruiter(recruitmentId as string),
+    enabled: typeof recruitmentId === 'string',
+  });
+
+  const statistics = data?.statistics;
+
   return (
     <div className={styles.container}>
-      <Text as={'strong'} size={'xl'}>
-        {t(KEY.recruitment_statistics)}
-      </Text>
       {statistics ? (
         <>
           <Table
