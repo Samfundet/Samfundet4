@@ -8,10 +8,10 @@
 from __future__ import annotations
 
 import uuid
+import datetime as dt
 from typing import Any
 
 from django.db import models
-from django.utils import timezone
 from django.db.models import Prefetch, QuerySet
 
 from root.utils.mixins import CustomBaseModel
@@ -151,8 +151,8 @@ class Event(CustomBaseModel):
     # Event group is used for events occurring multiple times (e.g. a concert repeating twice)
     event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=True)
 
-    # Event status
-    status = models.CharField(max_length=30, choices=EventStatus.choices, blank=False, null=False, default=EventStatus.ACTIVE)
+    # Event status, can be used to override event visibility
+    status = models.CharField(max_length=30, choices=EventStatus.choices, blank=False, null=False, default=EventStatus.PUBLIC)
 
     # Text/images etc
     title_nb = models.CharField(max_length=140, blank=False, null=False)
@@ -176,11 +176,13 @@ class Event(CustomBaseModel):
     category = models.CharField(max_length=30, choices=EventCategory.choices, blank=False, null=False, default=EventCategory.OTHER)
 
     # ======================== #
-    #    Duration/Timestamps   #
+    #        Timestamps        #
     # ======================== #
     start_dt = models.DateTimeField(blank=False, null=False)
-    duration = models.PositiveIntegerField(blank=False, null=False)
-    publish_dt = models.DateTimeField(blank=False, null=False)
+    end_dt = models.DateTimeField(blank=False, null=False)
+    visibility_from_dt = models.DateTimeField(blank=False, null=False)
+    visibility_to_dt = models.DateTimeField(blank=False, null=False)
+
     doors_time = models.TimeField(blank=True, null=True)
 
     # ======================== #
@@ -212,8 +214,12 @@ class Event(CustomBaseModel):
         return self.image.image.url
 
     @property
-    def end_dt(self) -> timezone.datetime:
-        return self.start_dt + timezone.timedelta(minutes=self.duration)
+    def is_visible(self) -> bool:
+        return (self.visibility_from_dt <= dt.datetime.now() <= self.visibility_to_dt) and self.status == EventStatus.PUBLIC
+
+    @property
+    def is_ongoing(self) -> bool:
+        return self.start_dt <= dt.datetime.now() <= self.end_dt
 
     @property
     def billig(self) -> BilligEvent | None:
