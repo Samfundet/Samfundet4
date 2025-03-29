@@ -196,6 +196,9 @@ export const KEY = {
   common_list_view: 'common_list_view',
   common_tab_view: 'common_tab_view',
   common_available: 'common_available',
+  common_membership_number: 'common_membership_number',
+  common_to_payment: 'common_to_payment',
+
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -256,6 +259,14 @@ export const KEY = {
   twenty: 'twenty',
   none: 'none',
   mix: 'mix',
+
+  // Purchase Ticket Info:
+  ticketless_description: 'ticketless_description',
+  ticketless_description_note: 'ticketless_description_note',
+  email_ticket_description: 'email_ticket_description',
+  stripe_info: 'stripe_info',
+  pay_info: 'pay_info',
+  sales_conditions: 'sales_conditions',
 
   // Venue Page:
   venuepage_title: 'venuepage_title',
