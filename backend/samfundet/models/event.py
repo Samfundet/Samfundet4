@@ -8,10 +8,10 @@
 from __future__ import annotations
 
 import uuid
-import datetime as dt
 from typing import Any
 
 from django.db import models
+from django.utils import timezone
 from django.db.models import Prefetch, QuerySet
 
 from root.utils.mixins import CustomBaseModel
@@ -215,11 +215,11 @@ class Event(CustomBaseModel):
 
     @property
     def is_visible(self) -> bool:
-        return (self.visibility_from_dt <= dt.datetime.now() <= self.visibility_to_dt) and self.status == EventStatus.PUBLIC
+        return (self.visibility_from_dt <= timezone.now() <= self.visibility_to_dt) and self.status == EventStatus.PUBLIC
 
     @property
     def is_ongoing(self) -> bool:
-        return self.start_dt <= dt.datetime.now() <= self.end_dt
+        return self.start_dt <= timezone.now() <= self.end_dt
 
     @property
     def billig(self) -> BilligEvent | None:
