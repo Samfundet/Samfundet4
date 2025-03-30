@@ -163,7 +163,7 @@ class Event(CustomBaseModel):
     description_short_en = models.TextField(blank=False, null=False)
     image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
     host = models.CharField(max_length=140, blank=False, null=False)
-    organization = models.CharField(max_length=30, choices=OrganizationChoices, blank=True, null=True)
+    organization = models.CharField(max_length=30, choices=OrganizationChoices, blank=False, null=False, default=OrganizationChoices.SAMFUNDET)
     editors = models.ManyToManyField(Gang, blank=True)
 
     email_contact = models.EmailField(max_length=200, blank=True, null=True)
