@@ -43,6 +43,7 @@ class OrganizationChoices(models.TextChoices):
     SAMFUNDET = 'samfundet', _('Samfundet')
     UKA = 'uka', _('UKA')
     ISFIT = 'isfit', _('ISFiT')
+    EXTERNAL = 'external', _('Ekstern')
 
 
 class EventTicketType(models.TextChoices):
