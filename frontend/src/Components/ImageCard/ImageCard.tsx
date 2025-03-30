@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { t } from 'i18next';
 import type { ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { Skeleton } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import type { Children } from '~/types';
@@ -43,6 +44,8 @@ export function ImageCard({
   const containerStyle = classNames(styles.container, compact && styles.compact, className);
   const cardStyle = classNames(styles.card);
   const bottomDescriptionStyle = styles.bottom_description;
+  const [displayTicketType, setTicketType] = useState('');
+  const [showTicket, setShowTicket] = useState(false);
 
   if (isSkeleton) {
     return (
@@ -52,12 +55,16 @@ export function ImageCard({
     );
   }
 
-  let displayTicketType = '';
-  let ticketTypeStyle = styles.ticket_type_hidden;
-  if (ticket_type === 'free' || ticket_type === 'registration') {
-    displayTicketType = t(KEY.common_ticket_type_free);
-    ticketTypeStyle = styles.ticket_type;
-  }
+  useEffect(()=>{
+    if (ticket_type === 'free' || ticket_type === 'registration') {
+      setTicketType(t(KEY.common_ticket_type_free));
+      setShowTicket(true);
+    }
+    else{
+      setTicketType('');
+      setShowTicket(false);
+    }
+  }, [ticket_type])
 
   return (
     <div className={containerStyle}>
@@ -65,7 +72,7 @@ export function ImageCard({
         <div className={styles.card_inner}>
           <div>
             <Badge className={styles.event_host} text={host} />
-            <Badge className={ticketTypeStyle} text={displayTicketType} />
+            {showTicket && <Badge text={displayTicketType} className={styles.ticket_type}/>}
           </div>
           <div>{children}</div>
           <div className={styles.card_content}>
