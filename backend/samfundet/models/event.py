@@ -163,7 +163,15 @@ class Event(CustomBaseModel):
     description_short_en = models.TextField(blank=False, null=False)
     image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
     host = models.CharField(max_length=140, blank=False, null=False)
+    is_external_host = models.BooleanField(default=False)
     editors = models.ManyToManyField(Gang, blank=True)
+
+    email_contact = models.EmailField(max_length=200, blank=True, null=True)
+
+    host_link = models.URLField(max_length=200, blank=True, null=True)
+    instagram_link = models.URLField(max_length=200, blank=True, null=True)
+    facebook_link = models.URLField(max_length=200, blank=True, null=True)
+    x_link = models.URLField(max_length=200, blank=True, null=True)
 
     # ======================== #
     #       Venue/Entrance     #
