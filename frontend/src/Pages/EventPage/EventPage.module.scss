@@ -12,11 +12,12 @@
 }
 
 .image_wrapper {
-  position: relative;
-  width: 100%;
+  //width: 100%;
+
   // border: 2px solid red;
   padding: 0;
   margin: 0;
+  overflow: hidden;
   //overflow: hidden;
 
   // max-width: 100%;
@@ -25,11 +26,12 @@
   // height: 100vh;
   // max-height: 45vw;
   // //object-fit: cover;
-  // position: relative;
+  position: relative;
 }
 
 .event_image {
   margin: 0;
+  height: 40vh;
 }
 
 .content_row {

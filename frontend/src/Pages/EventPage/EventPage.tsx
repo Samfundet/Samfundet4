@@ -46,15 +46,12 @@ export function EventPage() {
 
   return (
     <Page className={styles.container} loading={showSpinner}>
-      {/* TODO splash should be its own component rather than homepage subcomponent */}
-      {/* <Splash events={event && [event]} /> */}
       <div className={styles.image_wrapper}>
         {event && <Image src={BACKEND_DOMAIN + event.image_url} className={styles.event_image} />}
       </div>
 
       <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>
       <div className={styles.content_row}>
-        {/* Info table */}
         {event && <EventInformation event={event} />}
         {event?.billig && (
           <BuyButton ticketSaleState={event.billig.ticket_groups} eventId={event.id} billigId={event.billig.id} />
@@ -69,7 +66,8 @@ export function EventPage() {
               <SamfMarkdown>{dbT(event, 'description_long')}</SamfMarkdown>
             </div>
           </div>
-          <ExpandableHeader label={t(KEY.common_description)} className={styles.expandable_header}>
+          <ExpandableHeader label={t(KEY.common_details)} className={styles.expandable_header}>
+            {/* Info table */}
             <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
           </ExpandableHeader>
         </div>
