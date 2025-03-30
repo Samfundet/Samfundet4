@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { ExpandableHeader, H1, Image, Page } from '~/Components';
 import { BuyButton } from '~/Components/BuyButton/BuyButton';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
@@ -17,7 +17,6 @@ import { EventTable } from './components/EventTable';
 export function EventPage() {
   const { t } = useTranslation();
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const { data: event, isLoading } = useQuery({
     queryKey: id ? eventKeys.detail(Number(id)) : ['events', 'no-id'],
