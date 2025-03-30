@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '~/Components';
 import { KEY } from '~/i18n/constants';
-import type { Children } from '~/types';
+import { type Children, EventTicketType } from '~/types';
 import { backgroundImageFromUrl } from '~/utils';
 import { Badge } from '../Badge';
 import { Link } from '../Link';
@@ -49,7 +49,7 @@ export function ImageCard({
   const [showTicket, setShowTicket] = useState(false);
 
   useEffect(() => {
-    if (ticket_type === 'free' || ticket_type === 'registration') {
+    if (ticket_type === EventTicketType.FREE || ticket_type === EventTicketType.REGISTRATION) {
       setTicketType(t(KEY.common_ticket_type_free));
       setShowTicket(true);
     } else {
