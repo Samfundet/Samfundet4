@@ -13,15 +13,17 @@
 
 .image_wrapper {
   display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  padding: 0;
-  margin: 0;
 }
 
 .event_image {
   height: 45vh;
   margin: 0;
   object-fit:cover;
+  border-bottom-right-radius: 0.10rem;
+  border-bottom-left-radius: 0.10rem;
 }
 
 .content_row {
@@ -29,13 +31,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 2em;
-}
-
-.text_title {
-  font-weight: 700;
-  font-size: 2em;
-  text-align: center;
+  gap: 1em;
 }
 
 .info_list {
@@ -52,11 +48,11 @@
   align-items: flex-start;
   text-align: left;
   gap: 1rem;
-  transition: height 2s ease;
+  margin: 0 1rem 0 1rem;
 }
 
 .description_short {
-  margin-bottom: 2em;
+  margin-bottom: 0;
 }
 
 .text_short {
