@@ -2,17 +2,19 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { Page } from '~/Components';
+import { ExpandableHeader, H1, Image, Page } from '~/Components';
 import { BuyButton } from '~/Components/BuyButton/BuyButton';
+import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { getEvent } from '~/api';
+import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
-import { Splash } from '../HomePage/components/Splash/Splash';
 import styles from './EventPage.module.scss';
+import { EventInformation } from './components/EventInformation/EventInformation';
 import { EventTable } from './components/EventTable';
 
 export function EventPage() {
@@ -45,11 +47,15 @@ export function EventPage() {
   return (
     <Page className={styles.container} loading={showSpinner}>
       {/* TODO splash should be its own component rather than homepage subcomponent */}
-      <Splash events={event && [event]} />
-      <div className={styles.text_title}>{dbT(event, 'title')}</div>
+      {/* <Splash events={event && [event]} /> */}
+      <div className={styles.image_wrapper}>
+        {event && <Image src={BACKEND_DOMAIN + event.image_url} className={styles.event_image} />}
+      </div>
+
+      <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>
       <div className={styles.content_row}>
         {/* Info table */}
-        <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
+        {event && <EventInformation event={event} />}
         {event?.billig && (
           <BuyButton ticketSaleState={event.billig.ticket_groups} eventId={event.id} billigId={event.billig.id} />
         )}
@@ -60,9 +66,12 @@ export function EventPage() {
               <p className={styles.text_short}>{dbT(event, 'description_short')}</p>
             </div>
             <div className={styles.description_long}>
-              <p>{dbT(event, 'description_long')}</p>
+              <SamfMarkdown>{dbT(event, 'description_long')}</SamfMarkdown>
             </div>
           </div>
+          <ExpandableHeader label={t(KEY.common_description)} className={styles.expandable_header}>
+            <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
+          </ExpandableHeader>
         </div>
       </div>
     </Page>
