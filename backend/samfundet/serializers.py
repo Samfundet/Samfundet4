@@ -200,7 +200,7 @@ class EventSerializer(CustomBaseSerializer):
     # For post/put (change image by id).
     image_id = serializers.IntegerField(write_only=True)
 
-    def validate(self, data) -> dict:
+    def validate(self, data: dict) -> dict:
         # Check if all required fields are present for validation
         if all(key in data for key in ['start_dt', 'end_dt', 'visibility_from_dt', 'visibility_to_dt']):
             # Validate start is before end
