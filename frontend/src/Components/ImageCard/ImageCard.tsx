@@ -44,8 +44,19 @@ export function ImageCard({
   const containerStyle = classNames(styles.container, compact && styles.compact, className);
   const cardStyle = classNames(styles.card);
   const bottomDescriptionStyle = styles.bottom_description;
+
   const [displayTicketType, setTicketType] = useState('');
   const [showTicket, setShowTicket] = useState(false);
+
+  useEffect(() => {
+    if (ticket_type === 'free' || ticket_type === 'registration') {
+      setTicketType(t(KEY.common_ticket_type_free));
+      setShowTicket(true);
+    } else {
+      setTicketType('');
+      setShowTicket(false);
+    }
+  }, [ticket_type]);
 
   if (isSkeleton) {
     return (
@@ -55,24 +66,13 @@ export function ImageCard({
     );
   }
 
-  useEffect(()=>{
-    if (ticket_type === 'free' || ticket_type === 'registration') {
-      setTicketType(t(KEY.common_ticket_type_free));
-      setShowTicket(true);
-    }
-    else{
-      setTicketType('');
-      setShowTicket(false);
-    }
-  }, [ticket_type])
-
   return (
     <div className={containerStyle}>
       <Link url={url} className={classNames(cardStyle, styles.image)} style={backgroundImageFromUrl(imageUrl)}>
         <div className={styles.card_inner}>
           <div>
             <Badge className={styles.event_host} text={host} />
-            {showTicket && <Badge text={displayTicketType} className={styles.ticket_type}/>}
+            {showTicket && <Badge text={displayTicketType} className={styles.ticket_type} />}
           </div>
           <div>{children}</div>
           <div className={styles.card_content}>
