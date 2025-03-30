@@ -18,7 +18,7 @@ from root.utils.mixins import CustomBaseModel
 
 from samfundet.models.billig import BilligEvent, BilligTicketGroup
 from samfundet.models.general import Gang, User, Image
-from samfundet.models.model_choices import EventStatus, EventCategory, EventTicketType, EventAgeRestriction
+from samfundet.models.model_choices import EventStatus, EventCategory, EventTicketType, EventAgeRestriction, OrganizationChoices
 
 # ======================== #
 #      Event Group         #
@@ -164,6 +164,7 @@ class Event(CustomBaseModel):
     image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
     host = models.CharField(max_length=140, blank=False, null=False)
     is_external_host = models.BooleanField(default=False)
+    organization = models.CharField(max_length=30, choices=OrganizationChoices, blank=True, null=True)
     editors = models.ManyToManyField(Gang, blank=True)
 
     email_contact = models.EmailField(max_length=200, blank=True, null=True)

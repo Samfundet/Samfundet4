@@ -33,6 +33,18 @@ class EventStatus(models.TextChoices):
     DELETED = 'deleted', _('Slettet')
 
 
+class OrganizationChoices(models.TextChoices):
+    """
+    Used independently of recruitment for
+    stuff like differentiationg UKA and ISFiT
+    events from Samfundet events
+    """
+
+    SAMFUNDET = 'samfundet', _('Samfundet')
+    UKA = 'uka', _('UKA')
+    ISFIT = 'isfit', _('ISFiT')
+
+
 class EventTicketType(models.TextChoices):
     """
     Handles event ticket type.
