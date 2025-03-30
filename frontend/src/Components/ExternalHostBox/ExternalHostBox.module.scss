@@ -1,0 +1,16 @@
+@use 'src/mixins' as *;
+
+@use 'src/constants' as *;
+
+.external_host_box_wrapper{
+    display: flex;
+    background-color: $red-samf;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    color: $white;
+}
+
+.external_host_link{
+    color: $white;
+    text-decoration: underline $white;
+}

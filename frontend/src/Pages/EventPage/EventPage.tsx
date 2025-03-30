@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { ExpandableHeader, H1, Image, Page } from '~/Components';
+import { ExpandableHeader, ExternalHostBox, H1, Image, Page } from '~/Components';
 import { BuyButton } from '~/Components/BuyButton/BuyButton';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { getEvent } from '~/api';
@@ -34,6 +34,13 @@ export function EventPage() {
       <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>
       <div className={styles.content_row}>
         {event && <EventInformation event={event} />}
+        {event && (
+          /* Todo: make this dynamic, after link is added to model and it is possible to add link in event form */
+          <ExternalHostBox
+            host={'Gløshaugen Revy- og Teaterlag'}
+            host_link={'https://www.facebook.com/glosrevyteater'}
+          />
+        )}
         {event?.billig && (
           <BuyButton ticketSaleState={event.billig.ticket_groups} eventId={event.id} billigId={event.billig.id} />
         )}
