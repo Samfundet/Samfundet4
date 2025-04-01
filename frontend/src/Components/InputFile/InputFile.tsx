@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { type ChangeEvent, type ReactNode, useEffect, useState } from 'react';
+import { type ChangeEvent, type ReactNode, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import { COLORS } from '~/types';
@@ -21,6 +21,7 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
   const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | undefined>(undefined);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleOnChange(e?: ChangeEvent<HTMLInputElement>) {
     if (e === undefined) return;
@@ -33,6 +34,13 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
       }
     }
   }
+
+  const handleClearFile = () => {
+    setSelectedFile(undefined);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   // Create preview on file change
   useEffect(() => {
@@ -72,7 +80,13 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
       <label>{label}</label>
       {/* Label container to accept button input */}
       <label className={classNames(styles.file_label, horizontalPreview && styles.horizontal, isError && styles.error)}>
-        <input type="file" accept={acceptTypes()} onChange={handleOnChange} style={{ display: 'none' }} />
+        <input
+          type="file"
+          accept={acceptTypes()}
+          onChange={handleOnChange}
+          style={{ display: 'none' }}
+          ref={fileInputRef}
+        />
 
         {/* Select button */}
         <div className={styles.top_row}>
@@ -107,7 +121,7 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
                   <IconButton
                     color={COLORS.red}
                     icon="mdi:delete"
-                    onClick={() => setSelectedFile(undefined)}
+                    onClick={handleClearFile}
                     className={styles.delete_button}
                     title="Delete file"
                   />
