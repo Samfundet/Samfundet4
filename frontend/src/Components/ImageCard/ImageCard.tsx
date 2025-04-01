@@ -1,9 +1,10 @@
 import classNames from 'classnames';
 import { t } from 'i18next';
 import type { ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { Skeleton } from '~/Components';
 import { KEY } from '~/i18n/constants';
-import type { Children } from '~/types';
+import { type Children, EventTicketType } from '~/types';
 import { backgroundImageFromUrl } from '~/utils';
 import { Badge } from '../Badge';
 import { Link } from '../Link';
@@ -44,6 +45,19 @@ export function ImageCard({
   const cardStyle = classNames(styles.card);
   const bottomDescriptionStyle = styles.bottom_description;
 
+  const [displayTicketType, setTicketType] = useState('');
+  const [showTicket, setShowTicket] = useState(false);
+
+  useEffect(() => {
+    if (ticket_type === EventTicketType.FREE || ticket_type === EventTicketType.REGISTRATION) {
+      setTicketType(t(KEY.common_ticket_type_free));
+      setShowTicket(true);
+    } else {
+      setTicketType('');
+      setShowTicket(false);
+    }
+  }, [ticket_type]);
+
   if (isSkeleton) {
     return (
       <div className={containerStyle}>
@@ -52,24 +66,13 @@ export function ImageCard({
     );
   }
 
-  let displayTicketType = '';
-  if (ticket_type === 'billig' || ticket_type === 'custom') {
-    displayTicketType = t(KEY.common_ticket_type_billig);
-  }
-  if (ticket_type === 'free' || ticket_type === 'registration') {
-    displayTicketType = t(KEY.common_ticket_type_free);
-  }
-  if (ticket_type === 'included') {
-    displayTicketType = t(KEY.common_ticket_type_included);
-  }
-
   return (
     <div className={containerStyle}>
       <Link url={url} className={classNames(cardStyle, styles.image)} style={backgroundImageFromUrl(imageUrl)}>
         <div className={styles.card_inner}>
           <div>
             <Badge className={styles.event_host} text={host} />
-            <Badge className={styles.ticket_type} text={displayTicketType} />
+            {showTicket && <Badge text={displayTicketType} className={styles.ticket_type} />}
           </div>
           <div>{children}</div>
           <div className={styles.card_content}>

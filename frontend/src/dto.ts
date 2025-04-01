@@ -25,6 +25,7 @@ export type UserDto = {
   groups: GroupDto[];
   permissions?: string[];
   object_permissions?: ObjectPermissionDto[];
+  role_permissions?: string[];
 };
 
 export type CampusDto = {
