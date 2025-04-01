@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next';
 import { Link, Text } from '~/Components';
+import { KEY } from '~/i18n/constants';
 import styles from './ExternalHostBox.module.scss';
 
 type ExternalHostBoxProps = {
@@ -7,14 +9,13 @@ type ExternalHostBoxProps = {
 };
 
 export function ExternalHostBox({ host, host_link }: ExternalHostBoxProps) {
+  const { t } = useTranslation();
   return (
     <div className={styles.external_host_box_wrapper}>
-      <Text>
-        Arrangeres i regi av ekstern arrangør, ikke gjengene på Samfundet. Henvendelser kan rettes mot:
-        <Link className={styles.external_host_link} target={'external'} url={host_link}>
-          {host}
-        </Link>
-      </Text>
+      <Text>{`${t(KEY.event_external_host_message)}: `}</Text>
+      <Link className={styles.external_host_link} target={'external'} url={host_link}>
+        {host}
+      </Link>
     </div>
   );
 }
