@@ -17,9 +17,9 @@ export function LycheMenuPage() {
   const { t, i18n } = useTranslation();
 
   const introTexts = [
-    useTextItem(TextItem.sulten_menu_introduction_text_1),
-    useTextItem(TextItem.sulten_menu_introduction_text_2),
-    useTextItem(TextItem.sulten_menu_introduction_text_3),
+    { key: 'intro-main', text: useTextItem(TextItem.sulten_menu_introduction_text_1) },
+    { key: 'intro-quality', text: useTextItem(TextItem.sulten_menu_introduction_text_2) },
+    { key: 'intro-pricing', text: useTextItem(TextItem.sulten_menu_introduction_text_3) },
   ];
 
   const currentLanguage = i18n.language;
@@ -87,9 +87,9 @@ export function LycheMenuPage() {
       <LycheFrame>
         <img className={styles.menu_logo} src={menuLogo} alt="Menu Logo" />
         <h1 className={styles.menu_header}> {t(KEY.common_menu)}</h1>
-        {introTexts.map((text, index) => (
-          <section key={index} className={styles.menu_introduction}>
-            {text}
+        {introTexts.map((item) => (
+          <section key={item.key} className={styles.menu_introduction}>
+            {item.text}
           </section>
         ))}
         <h2 className={styles.menu_header2}> {t(KEY.sulten_menu_you_are_welcome)} </h2>
