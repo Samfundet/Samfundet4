@@ -1008,22 +1008,17 @@ export async function getApplicantsWithoutThreeInterviewCriteria(
 }
 
 export async function putRecruitmentApplication(
-  application: Partial<RecruitmentApplicationDto>,
+  formData: FormData,
   applicationId: number,
-): Promise<AxiosResponse> {
+) {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_applications_for_applicant_detail,
       urlParams: { pk: applicationId },
     });
-  const data = {
-    application_text: application.application_text,
-    recruitment_position: application.recruitment_position,
-  };
-  const response = await axios.put(url, data, { withCredentials: true });
 
-  return response;
+  return axios.putForm(url, formData, { withCredentials: true });
 }
 
 export async function putRecrutmentInterviewNotes(notes: string, interviewId: number): Promise<AxiosResponse> {

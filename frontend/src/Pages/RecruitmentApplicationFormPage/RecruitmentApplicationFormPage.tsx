@@ -43,13 +43,18 @@ import styles from './RecruitmentApplicationFormPage.module.scss';
 type FormProps = {
   application_text: string;
   video_url?: string;
-  image_attachment?: File;
+  image_file?: File | null;
 };
 
 const recruitmentApplicationSchema = z.object({
   application_text: z.string(),
   video_url: z.string(),
-  image_attachment: z.instanceof(File).optional(),
+  image_file: z
+    .instanceof(File)
+    .refine((file) => file.size < 1024 * 1024 * 10, {
+      message: "File can't be larger than 10 MB"
+    })
+    .nullable(),
 });
 
 type RecruitmentApplicationFormType = z.infer<typeof recruitmentApplicationSchema>;
@@ -81,10 +86,13 @@ export function RecruitmentApplicationFormPage() {
   useTitle(recruitmentPosition ? (dbT(recruitmentPosition, 'name') as string) : '');
 
   useEffect(() => {
+    // Populate form fields if application exists
     if (recruitmentApplication?.application_text) {
       form.setValue('application_text', recruitmentApplication.application_text);
     }
-    if (recruitmentApplication?.image) form.setValue("image_attachment", recruitmentApplication.image);
+    if (recruitmentApplication?.image) {
+      form.setValue("image_file", recruitmentApplication.image);
+    }
     if (recruitmentApplication?.video_url) form.setValue("video_url", recruitmentApplication.video_url);
 
   }, [recruitmentApplication, form, imageAttachment]);
@@ -160,8 +168,14 @@ export function RecruitmentApplicationFormPage() {
   }
 
   const submitData = useMutation({
-    mutationFn: ({ data, positionId }: { data: Partial<RecruitmentApplicationDto>; positionId: number }) => {
-      return putRecruitmentApplication(data, positionId);
+    mutationFn: ({ data, positionId }: { data: FormProps; positionId: number }) => {
+      const fd = new FormData();
+      fd.append('application_text', data.application_text);
+
+      if (data.video_url) fd.append('application_video_url', data.video_url);
+      if (data.image_file) fd.append('application_image', data.image_file);
+
+      return putRecruitmentApplication(fd, positionId);
     },
     onSuccess: () => {
       navigate({
@@ -329,7 +343,7 @@ export function RecruitmentApplicationFormPage() {
                     );
                   }}
                 />
-                {!recruitmentPosition?.allow_video_url && (
+                {recruitmentPosition?.allow_video_url && (
                   <FormField
                     control={form.control}
                     name="video_url"
@@ -340,7 +354,7 @@ export function RecruitmentApplicationFormPage() {
                             <Textarea {...field}
                               value={field.value}
                               className={styles.video_url_textarea}
-                              placeholder='Youtube/video link:'
+                              placeholder='YouTube/video url:'
                             />
                           </FormControl>
                         </FormItem>
@@ -349,24 +363,22 @@ export function RecruitmentApplicationFormPage() {
                   />
                 )}
                 <div className={styles.button_container}>
-                  {!recruitmentPosition?.allow_image_attachment && (
+                  {recruitmentPosition?.allow_image_attachment && (
                     <FormField
                       control={form.control}
-                      name="image_attachment"
-                      render={({ field }) => {
-                        return (
-                          <FormItem>
-                            <FormControl>
-                              <InputFile
-                                fileType="image"
-                                onSelected={(file) => field.onChange(file)}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )
-                      }}
+                      name="image_file"
+                      render={({ field: { onChange, ...fieldProps } }) => (
+                        <FormItem>
+                          <FormControl>
+                            <InputFile
+                              fileType="image"
+                              onSelected={(file) => onChange(file)}
+                              {...fieldProps}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
                     />
-
                   )}
                   <div className={styles.form_buttons}>
                     <Button type="submit" theme="green" display="basic">
