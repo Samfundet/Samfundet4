@@ -5,7 +5,7 @@ import { LycheFrame } from '~/Components/LycheFrame';
 import { LycheMenuDivider } from '~/Components/LycheMenuDivider/LycheMenuDivider';
 import { MenuItem } from '~/Components/MenuItem';
 import { SultenPage } from '~/Components/SultenPage';
-import { getMenu } from '~/api';
+import { getMenu, getMenus } from '~/api';
 import menuLogo from '~/assets/lyche/menu-logo.png';
 import { TextItem } from '~/constants';
 import { useTitle } from '~/hooks';
@@ -15,19 +15,32 @@ import styles from './LycheMenuPage.module.scss';
 
 export function LycheMenuPage() {
   const { t, i18n } = useTranslation();
-  const menuIntroText1 = useTextItem(TextItem.sulten_menu_introduction_text_1);
-  const menuIntroText2 = useTextItem(TextItem.sulten_menu_introduction_text_2);
-  const menuIntroText3 = useTextItem(TextItem.sulten_menu_introduction_text_3);
+
+  const introTexts = [
+    useTextItem(TextItem.sulten_menu_introduction_text_1),
+    useTextItem(TextItem.sulten_menu_introduction_text_2),
+    useTextItem(TextItem.sulten_menu_introduction_text_3),
+  ];
 
   const currentLanguage = i18n.language;
   useTitle(t(KEY.common_menu), t(KEY.common_sulten));
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['menu'], //mulig hvilken meny som skal hentes må spesifiseres hvis det skal finens flere menyer, var usikker på hvordan dette skulle funke
+  const { data: menus, isLoading: menusLoading } = useQuery({
+    queryKey: ['menus'],
     queryFn: async () => {
-      const response = await getMenu('8');
-      return response;
+      return await getMenus();
     },
+  });
+
+  const menuId = menus && menus.length > 0 ? menus[0].id : null; // Mulig dette må endres hvis vi får flere menyer, vet ikke helt hvordan dette er ment å fungere. Finnes kun én meny per nå så bruker bare den første
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['menu', menuId],
+    queryFn: async () => {
+      if (!menuId) return null;
+      return await getMenu(menuId);
+    },
+    enabled: !!menuId,
   });
 
   // Process menu data to group by food category
@@ -74,19 +87,19 @@ export function LycheMenuPage() {
       <LycheFrame>
         <img className={styles.menu_logo} src={menuLogo} alt="Menu Logo" />
         <h1 className={styles.menu_header}> {t(KEY.common_menu)}</h1>
-        <section className={styles.menu_introduction}> {menuIntroText1} </section>
-        <section className={styles.menu_introduction}> {menuIntroText2} </section>
-        <section className={styles.menu_introduction}> {menuIntroText3} </section>
+        {introTexts.map((text, index) => (
+          <section key={index} className={styles.menu_introduction}>
+            {text}
+          </section>
+        ))}
         <h2 className={styles.menu_header2}> {t(KEY.sulten_menu_you_are_welcome)} </h2>
         <h1 className={styles.menu_header}> {t(KEY.common_opening_hours)}</h1>
         <section className={styles.opening_hours}>
           <p>
-            {' '}
-            {t(KEY.common_day_monday)} - {t(KEY.common_day_thursday)}: 16:00 - 23:00{' '}
+            {t(KEY.common_day_monday)} - {t(KEY.common_day_thursday)}: 16:00 - 23:00
           </p>
           <p>
-            {' '}
-            {t(KEY.common_day_friday)} - {t(KEY.common_day_saturday)}: 16:00 - 02:00{' '}
+            {t(KEY.common_day_friday)} - {t(KEY.common_day_saturday)}: 16:00 - 02:00
           </p>
           <p> {t(KEY.common_day_sunday)}: 16:00 - 21:00 </p>
         </section>

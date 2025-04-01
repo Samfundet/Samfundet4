@@ -255,6 +255,7 @@ export type MenuItemDto = {
 };
 
 export type MenuDto = {
+  id?: number;
   name_nb?: string;
   description_nb?: string;
 

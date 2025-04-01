@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import random
 
-from root.utils.samfundet_random import words
-
 from samfundet.models.general import Menu, MenuItem, FoodCategory, FoodPreference
 
 preferences = [
@@ -131,7 +129,7 @@ def seed():
         )
 
         # Menu items
-        for j, item_data in enumerate(menu_template[cat_name]):
+        for _, item_data in enumerate(menu_template[cat_name]):
             # Extract all item data
             name_nb, name_en, desc_nb, desc_en = item_data
 
