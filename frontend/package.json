@@ -52,7 +52,7 @@
     "cypress-fail-on-console-error": "^5.0.1",
     "date-fns": "^2.30.0",
     "i18next": "^24.2.3",
-    "i18next-browser-languagedetector": "^7.1.0",
+    "i18next-browser-languagedetector": "^8.0.4",
     "path": "^0.12.7",
     "path-to-regexp": "^8.0.0",
     "postcss": "^8.4.31",
