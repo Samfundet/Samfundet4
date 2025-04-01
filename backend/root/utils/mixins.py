@@ -57,6 +57,17 @@ class FieldTrackerMixin(Model):
     class Meta:
         abstract = True
 
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        if not hasattr(self, self._FTM_TRACK_FIELDS_NAME):
+            raise Exception(f"Missing field '{self._FTM_TRACK_FIELDS_NAME}' : list[str]'")
+
+        # Shorthand select all fields.
+        if self.ftm_get_tracked_fields() == '__all__':
+            # Fetch field_names from meta.
+            track_fields = [field.attname for field in self._meta.fields if field.attname not in self._FTM_FIELD_BLACKLIST]
+            setattr(self, self._FTM_TRACK_FIELDS_NAME, track_fields)
+
     def save(self, *args: Any, **kwargs: Any) -> None:
         """Extends django 'save' to log all changes."""
 
@@ -90,17 +101,6 @@ class FieldTrackerMixin(Model):
                 f'{self} failed attempting to save:\n\nold: {self.ftm_log_parse(fields=dirty_fields_old)}\n\nnew: {self.ftm_log_parse(fields=dirty_fields_new)}'
             )
             raise e
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        if not hasattr(self, self._FTM_TRACK_FIELDS_NAME):
-            raise Exception(f"Missing field '{self._FTM_TRACK_FIELDS_NAME}' : list[str]'")
-
-        # Shorthand select all fields.
-        if self.ftm_get_tracked_fields() == '__all__':
-            # Fetch field_names from meta.
-            track_fields = [field.attname for field in self._meta.fields if field.attname not in self._FTM_FIELD_BLACKLIST]
-            setattr(self, self._FTM_TRACK_FIELDS_NAME, track_fields)
 
     @staticmethod
     def ftm_log_parse(*, fields: dict) -> dict:
