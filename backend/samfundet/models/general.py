@@ -672,6 +672,7 @@ class Saksdokument(CustomBaseModel):
     def __str__(self) -> str:
         return f'{self.title_nb}'
 
+
 class Infobox(CustomBaseModel):
     title_nb = models.CharField(max_length=60, blank=True, null=True, verbose_name='Tittel (norsk)')
     text_nb = models.CharField(max_length=255, blank=True, null=True, verbose_name='Tekst (norsk)')
