@@ -1,6 +1,6 @@
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
-@import 'src/constants';
+@use 'src/constants' as *;
 
 $mobile-width: $primary-content-width-mobile;
 $card-border-radius: 0.5rem;
@@ -149,7 +149,6 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
   background-color: $blue-medium;
   float: right;
 }
-
 
 // Styling to container and children when it is hovered.
 .container:hover {

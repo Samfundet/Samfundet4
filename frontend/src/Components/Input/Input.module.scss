@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .date,
 .datetimeLocal,
@@ -47,7 +47,8 @@
 .number {
   -webkit-appearance: textfield;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     -moz-appearance: initial;
   }
 }

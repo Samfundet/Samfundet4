@@ -207,6 +207,10 @@ export const nb = prepareTranslations({
   [KEY.common_ticket_type_included]: 'Inkludert i inngang',
   [KEY.common_ticket_type_registration]: 'Påmelding',
 
+  // Billig
+  [KEY.common_sold_out]: 'Utsolgt',
+  [KEY.common_almost_sold_out]: 'Nesten utsolgt',
+
   // ==================== //
   //        Others        //
   // ==================== //
@@ -514,6 +518,8 @@ export const nb = prepareTranslations({
   [KEY.error_forbidden_description]: 'Du har ikke adgang til å se denne ressursen',
   [KEY.error_server_error]: 'Serverfeil',
   [KEY.error_server_error_description]: 'En serverfeil har opptstått',
+  [KEY.error_submitting_reservation]: 'Det skjedde en feil ved innsending av reservasjon',
+  [KEY.error_invalid_reservation_data]: 'Ugyldig reservasjonsdata',
 });
 
 export const en = prepareTranslations({
@@ -721,6 +727,9 @@ export const en = prepareTranslations({
   [KEY.common_ticket_type_included]: 'Included with entrance',
   [KEY.common_ticket_type_registration]: 'Registration',
 
+  // Billig
+  [KEY.common_sold_out]: 'Sold out',
+  [KEY.common_almost_sold_out]: 'Almost sold out',
   // ==================== //
   //        Others        //
   // ==================== //
@@ -1031,4 +1040,6 @@ export const en = prepareTranslations({
   [KEY.error_forbidden_description]: 'You do not have permission to view this resource',
   [KEY.error_server_error]: 'Server error',
   [KEY.error_server_error_description]: 'A server error has occurred',
+  [KEY.error_submitting_reservation]: 'An error occurred while submitting the reservation',
+  [KEY.error_invalid_reservation_data]: 'Invalid reservation data',
 });

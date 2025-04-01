@@ -183,11 +183,6 @@ SAMFUNDET_CHANGE_NONMEMBEREMAILREGISTRATION = 'samfundet.change_nonmemberemailre
 SAMFUNDET_DELETE_NONMEMBEREMAILREGISTRATION = 'samfundet.delete_nonmemberemailregistration'
 SAMFUNDET_VIEW_NONMEMBEREMAILREGISTRATION = 'samfundet.view_nonmemberemailregistration'
 
-SAMFUNDET_ADD_NOTIFICATION = 'samfundet.add_notification'
-SAMFUNDET_CHANGE_NOTIFICATION = 'samfundet.change_notification'
-SAMFUNDET_DELETE_NOTIFICATION = 'samfundet.delete_notification'
-SAMFUNDET_VIEW_NOTIFICATION = 'samfundet.view_notification'
-
 SAMFUNDET_ADD_OCCUPIEDTIMESLOT = 'samfundet.add_occupiedtimeslot'
 SAMFUNDET_CHANGE_OCCUPIEDTIMESLOT = 'samfundet.change_occupiedtimeslot'
 SAMFUNDET_DELETE_OCCUPIEDTIMESLOT = 'samfundet.delete_occupiedtimeslot'
@@ -257,6 +252,11 @@ SAMFUNDET_ADD_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP = 'samfundet.add_recruitme
 SAMFUNDET_CHANGE_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP = 'samfundet.change_recruitmentpositionsharedinterviewgroup'
 SAMFUNDET_DELETE_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP = 'samfundet.delete_recruitmentpositionsharedinterviewgroup'
 SAMFUNDET_VIEW_RECRUITMENTPOSITIONSHAREDINTERVIEWGROUP = 'samfundet.view_recruitmentpositionsharedinterviewgroup'
+
+SAMFUNDET_ADD_RECRUITMENTPOSITIONSTAT = 'samfundet.add_recruitmentpositionstat'
+SAMFUNDET_CHANGE_RECRUITMENTPOSITIONSTAT = 'samfundet.change_recruitmentpositionstat'
+SAMFUNDET_DELETE_RECRUITMENTPOSITIONSTAT = 'samfundet.delete_recruitmentpositionstat'
+SAMFUNDET_VIEW_RECRUITMENTPOSITIONSTAT = 'samfundet.view_recruitmentpositionstat'
 
 SAMFUNDET_ADD_RECRUITMENTSEPARATEPOSITION = 'samfundet.add_recruitmentseparateposition'
 SAMFUNDET_CHANGE_RECRUITMENTSEPARATEPOSITION = 'samfundet.change_recruitmentseparateposition'
