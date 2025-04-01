@@ -15,17 +15,17 @@ import styles from './LycheMenuPage.module.scss';
 
 export function LycheMenuPage() {
   const { t, i18n } = useTranslation();
-  const menuIntroText1 = useTextItem(TextItem.sulten_menu_introduction_text1);
-  const menuIntroText2 = useTextItem(TextItem.sulten_menu_introduction_text2);
-  const menuIntroText3 = useTextItem(TextItem.sulten_menu_introduction_text3);
+  const menuIntroText1 = useTextItem(TextItem.sulten_menu_introduction_text_1);
+  const menuIntroText2 = useTextItem(TextItem.sulten_menu_introduction_text_2);
+  const menuIntroText3 = useTextItem(TextItem.sulten_menu_introduction_text_3);
 
   const currentLanguage = i18n.language;
   useTitle(t(KEY.common_menu), t(KEY.common_sulten));
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ['menu', 7], //hard coded for now, not sure what this should fetch normally - what is the plan with different menus?
+    queryKey: ['menu'], //mulig hvilken meny som skal hentes må spesifiseres hvis det skal finens flere menyer, var usikker på hvordan dette skulle funke
     queryFn: async () => {
-      const response = await getMenu('7');
+      const response = await getMenu('8');
       return response;
     },
   });
@@ -99,8 +99,8 @@ export function LycheMenuPage() {
                 key={item.id}
                 dishTitle={currentLanguage === 'nb' ? item.name_nb ?? '' : item.name_en ?? ''}
                 dishDescription={currentLanguage === 'nb' ? item.description_nb ?? '' : item.description_en ?? ''}
-                allergens="Allgergener: Mel, Egg " // Not in the seed data
-                recommendations="Anbefalinger: Noe godt i glasset " // Not in the seed data
+                allergens="Allgergener: Mel, Egg " // Not in seed data yet
+                recommendations="Anbefalinger: Noe godt i glasset " // Not in seed data yet
                 price={`${item.price_member},- / ${item.price},-`}
               />
             ))}

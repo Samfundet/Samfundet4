@@ -21,9 +21,9 @@ export const TextItem = {
   sulten_lyche_about_menu_text: 'sulten_lyche_about_menu_text',
   sulten_contact_page_text: 'sulten_contact_page_text',
   sulten_reservation_policy: 'sulten_reservation_policy',
-  sulten_menu_introduction_text1: 'sulten_menu_introduction_text1',
-  sulten_menu_introduction_text2: 'sulten_menu_introduction_text2',
-  sulten_menu_introduction_text3: 'sulten_menu_introduction_text3',
+  sulten_menu_introduction_text_1: 'sulten_menu_introduction_text_1',
+  sulten_menu_introduction_text_2: 'sulten_menu_introduction_text_2',
+  sulten_menu_introduction_text_3: 'sulten_menu_introduction_text_3',
 
   //About page
   festivals: 'festivals',
