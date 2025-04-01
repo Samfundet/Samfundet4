@@ -81,17 +81,13 @@ class FieldTrackerMixin(Model):
                 LOG.info(f"{self} was saved.\nFieldTrackerMixin couldn't detect any changes to tracked fields.")
             else:  # Log changes.
                 LOG.info(f'{self} has changed:\n\nold: {dirty_fields_old}\n\n new:{dirty_fields_new}')
-                LOG.info(
-                    f'{self} has changed:\n\n' f'old: {self.ftm_log_parse(fields=dirty_fields_old)}\n\n' f'new:{self.ftm_log_parse(fields=dirty_fields_new)}'
-                )
+                LOG.info(f'{self} has changed:\n\nold: {self.ftm_log_parse(fields=dirty_fields_old)}\n\nnew:{self.ftm_log_parse(fields=dirty_fields_new)}')
         except Exception as e:
             # Get all changes.
             dirty_fields_old, dirty_fields_new = self.ftm_get_dirty_fields()
             LOG.info(f'{self} failed attempting to save:\n\nold: {dirty_fields_old}\n\nnew: {dirty_fields_new}')
             LOG.info(
-                f'{self} failed attempting to save:\n\n'
-                f'old: {self.ftm_log_parse(fields=dirty_fields_old)}\n\n'
-                f'new: {self.ftm_log_parse(fields=dirty_fields_new)}'
+                f'{self} failed attempting to save:\n\nold: {self.ftm_log_parse(fields=dirty_fields_old)}\n\nnew: {self.ftm_log_parse(fields=dirty_fields_new)}'
             )
             raise e
 
