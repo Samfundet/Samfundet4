@@ -245,6 +245,8 @@ export const nb = prepareTranslations({
   [KEY.twenty]: '20 år',
   [KEY.none]: 'Ingen',
   [KEY.mix]: 'Mikset',
+  [KEY.event_external_host_message]:
+    'Arrangeres i regi av ekstern arrangør, ikke gjengene på Samfundet. Henvendelser kan rettes mot',
 
   // Venue Page:
   [KEY.venuepage_title]: 'Kart og lokaler',
@@ -760,6 +762,8 @@ export const en = prepareTranslations({
   [KEY.twenty]: '20 years',
   [KEY.none]: 'None',
   [KEY.mix]: 'Mixed',
+  [KEY.event_external_host_message]:
+    'Organized by an external organizer, not the groups at the Samfundet. Inquiries can be directed to',
 
   // VenuePage:
   [KEY.venuepage_title]: 'Map and Venues',

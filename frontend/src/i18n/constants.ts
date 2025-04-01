@@ -258,6 +258,8 @@ export const KEY = {
   none: 'none',
   mix: 'mix',
 
+  event_external_host_message: 'event_external_host_message',
+
   // Venue Page:
   venuepage_title: 'venuepage_title',
 
