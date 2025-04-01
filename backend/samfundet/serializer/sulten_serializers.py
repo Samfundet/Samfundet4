@@ -4,7 +4,6 @@ from rest_framework import serializers
 
 from root.utils.mixins import FullCleanSerializer, CustomBaseSerializer
 
-from samfundet.serializers import UserSerializer
 from samfundet.models.general import Menu, Table, MenuItem, Reservation, FoodCategory, FoodPreference
 
 
