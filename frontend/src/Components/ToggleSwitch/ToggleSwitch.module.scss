@@ -1,4 +1,4 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
 // Needed to display component properly.
 // This is also set in global.scss.

@@ -11,4 +11,4 @@ export const PHONENUMBER = z.string().regex(PHONENUMBER_REGEX, 'Invalid phonenum
 export const EMAIL = z.string().email('Invalid email address');
 export const ADDITIONAL_INFO = z.string().optional();
 export const AGREE = z.boolean().refine((val: boolean) => val === true, 'You must agree to the terms');
-export const VENUE = z.number().int().min(1);
+export const VENUE = z.string().min(1);

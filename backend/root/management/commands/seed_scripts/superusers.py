@@ -34,11 +34,11 @@ TEST_USERS = [
 ]
 
 
-def create_test_users(*, username, firstname, lastname, campus):
+def create_test_superusers(*, username, firstname, lastname, campus):
     User.objects.create_user(
         username=username,
         email=f'{username}@mg-web.no',
-        password='passord',  # nosec
+        password='Django123',  # nosec
         first_name=firstname,
         last_name=lastname,
         is_superuser=(ENV == Environment.DEV),
@@ -54,7 +54,7 @@ def seed():
     existing_superusers = User.objects.filter(is_superuser=True).values_list('username', flat=True)
     for i, user in enumerate(TEST_USERS):
         if user[0] not in existing_superusers:
-            create_test_users(username=user[0], firstname=user[1], lastname=user[2], campus=random.choice(campus))
+            create_test_superusers(username=user[0], firstname=user[1], lastname=user[2], campus=random.choice(campus))
         yield i / len(TEST_USERS), 'Creating test users'
 
     yield 100, f'Created {len(TEST_USERS)} test users'

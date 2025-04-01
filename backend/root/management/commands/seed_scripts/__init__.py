@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-from root.management.commands.seed_scripts import roles, users_with_roles
-
 from . import (
     menu,
     gangs,
     merch,
+    roles,
     samf3,
-    users,
     billig,
     campus,
     events,
@@ -17,8 +15,11 @@ from . import (
     blogposts,
     documents,
     textitems,
+    superusers,
     recruitment,
     organizations,
+    applicant_users,
+    users_with_roles,
     information_pages,
     recruitment_position,
     recruitment_applications,
@@ -38,7 +39,7 @@ from . import (
 
 SEED_SCRIPTS = [
     ('campus', campus.seed),
-    ('users', users.seed),
+    ('users', superusers.seed),
     ('images', images.seed),
     ('organization', organizations.seed),
     ('gang', gangs.seed),
@@ -51,16 +52,17 @@ SEED_SCRIPTS = [
     ('textitems', textitems.seed),
     ('blogposts', blogposts.seed),
     ('merch', merch.seed),
+    ('roles', roles.seed),
+    ('users_with_roles', users_with_roles.seed),
+    ('applicant_users', applicant_users.seed),
     ('recruitment', recruitment.seed),
     ('recruitment_position', recruitment_position.seed),
     ('recruitment_position_shared_interview', recruitment_sharedinterviewgroups.seed),
     ('recruitment_interviewavailability', recruitment_interviewavailability.seed),
     ('recruitment_separate_position', recruitment_separate_position.seed),
     ('recruitment_applications', recruitment_applications.seed),
-    ('recruitment_occupied_time', recruitment_occupied_time.seed),
     ('recruitment_position_interviewers', recruitment_position_interviewers.seed),
-    ('roles', roles.seed),
-    ('users_with_roles', users_with_roles.seed),
+    ('recruitment_occupied_time', recruitment_occupied_time.seed),
     # Example seed (not run unless targeted specifically)
     ('example', example.seed),
 ]
