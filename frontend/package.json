@@ -48,7 +48,7 @@
     "@tanstack/react-query-devtools": "^5.59.0",
     "axios": "^1.7.4",
     "classnames": "^2.3.2",
-    "cmdk": "^0.2.0",
+    "cmdk": "^1.1.1",
     "cypress-fail-on-console-error": "^5.0.1",
     "date-fns": "^2.30.0",
     "i18next": "^24.2.3",
