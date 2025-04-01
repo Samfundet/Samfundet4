@@ -1020,7 +1020,11 @@ export async function putRecruitmentApplication(
   const data = {
     application_text: application.application_text,
     recruitment_position: application.recruitment_position,
+    application_video_url: application.video_url,
+    application_image: application.image,
+
   };
+  console.log("api data:" + data.application_image);
   const response = await axios.put(url, data, { withCredentials: true });
 
   return response;
