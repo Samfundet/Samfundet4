@@ -21,7 +21,6 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
-from django.db import transaction
 from django.conf import settings
 from django.http import QueryDict, HttpResponse
 from django.utils import timezone
@@ -576,17 +575,10 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
             except ValidationError as e:
                 return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
 
-        # If create - check for existing applications to get open_for_other_positions value
-        other_applications = RecruitmentApplication.objects.filter(user=request.user, recruitment=recruitment_position.recruitment).first()
-
         # Set up the data for the new application
         data['recruitment_position'] = recruitment_position.pk
         data['recruitment'] = recruitment_position.recruitment.pk
         data['user'] = request.user.pk
-
-        # If other applications exist, copy the open_for_other_positions value
-        if other_applications:
-            data['open_for_other_positions'] = other_applications.open_for_other_positions
 
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
@@ -628,34 +620,16 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['put', 'get'], url_path='toggle-open-for-other-positions')
-    def toggle_open_for_other_positions(self, request: Request, pk: int) -> Response:
-        recruitment_position = get_object_or_404(RecruitmentPosition, pk=pk)
-        recruitment = recruitment_position.recruitment
+    @action(detail=True, methods=['put', 'get'], url_path='toggle-open-to-similar-positions')
+    def toggle_open_to_similar_positions(self, request: Request, pk: int) -> Response:
+        application = get_object_or_404(RecruitmentApplication, user=request.user, recruitment_position=pk)
+        current_state = application.open_to_similar_positions
 
-        # Get the current application to check its value (for toggling)
-        existing_application = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
-
-        if not existing_application:
-            return Response({'error': 'No application found for this position'}, status=status.HTTP_404_NOT_FOUND)
-
-        # Determine the new value (toggle current value)
-        new_value = not existing_application.open_for_other_positions
-
-        try:
-            # Update all applications for this user in this recruitment
-            with transaction.atomic():
-                applications = RecruitmentApplication.objects.filter(user=request.user, recruitment=recruitment)
-
-                applications.update(open_for_other_positions=new_value)
-
-            # Return the updated application for the current position
-            updated_application = RecruitmentApplication.objects.get(user=request.user, recruitment_position=pk)
-            serializer = self.serializer_class(updated_application)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        # Toggle state
+        application.open_to_similar_positions = not current_state
+        application.save()
+        serializer = RecruitmentApplicationForApplicantSerializer(application)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class RecruitmentApplicationInterviewNotesView(APIView):
