@@ -13,7 +13,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, getObjectFieldOrNumber, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
-
+import styles from './RecruitmentAdminPage.module.scss';
 export function RecruitmentAdminPage() {
   const navigate = useNavigate();
   const [recruitments, setRecruitments] = useState<RecruitmentDto[]>([]);
@@ -99,11 +99,14 @@ export function RecruitmentAdminPage() {
 
   const backendUrl = ROUTES.backend.admin__samfundet_recruitment_changelist;
   const header = (
-    <>
+    <div className={styles.header}>
       <Button theme="success" rounded={true} link={ROUTES.frontend.admin_recruitment_create}>
         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_recruitment)}`)}
       </Button>
-    </>
+      <Button theme="yellow" rounded={true} link={ROUTES.frontend.admin_recruitment_statistics}>
+        {lowerCapitalize(`${t(KEY.recruitment_statistics)}`)}
+      </Button>
+    </div>
   );
 
   return (

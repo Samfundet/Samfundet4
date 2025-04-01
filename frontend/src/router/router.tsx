@@ -455,6 +455,10 @@ export const router = createBrowserRouter(
               element={<PermissionRoute element={<RecruitmentAdminPage />} />}
             />
             <Route
+              path={ROUTES.frontend.admin_recruitment_statistics}
+              element={<PermissionRoute element={<RecruitmentHistoricStatisticsAdminPage />} />}
+            />
+            <Route
               path={ROUTES.frontend.admin_recruitment_create}
               element={
                 <PermissionRoute
