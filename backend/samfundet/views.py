@@ -14,12 +14,12 @@ from guardian.shortcuts import get_objects_for_user
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
-from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.permissions import AllowAny, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
 from django.conf import settings
 from django.http import QueryDict, HttpResponse
@@ -27,40 +27,22 @@ from django.utils import timezone
 from django.core.mail import EmailMessage
 from django.db.models import Q, Count, QuerySet
 from django.shortcuts import get_object_or_404
-from django.contrib.auth import login, logout, update_session_auth_hash
 from django.utils.encoding import force_bytes
 from django.core.exceptions import ValidationError
-from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
-from django.contrib.auth.models import Group, Permission
-from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from root.constants import (
-    XCSRFTOKEN,
-    AUTH_BACKEND,
     GITHUB_SIGNATURE_HEADER,
-    REQUESTED_IMPERSONATE_USER,
 )
 from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM
 
-from samfundet.pagination import CustomPageNumberPagination
-
-from .utils import generate_timeslots, get_user_by_search, get_occupied_timeslots_from_request
+from .utils import generate_timeslots, get_occupied_timeslots_from_request
 from .serializers import (
-    UserSerializer,
-    GroupSerializer,
-    LoginSerializer,
-    ProfileSerializer,
-    RegisterSerializer,
     InterviewSerializer,
-    PermissionSerializer,
     RecruitmentSerializer,
-    UserFeedbackSerializer,
     InterviewRoomSerializer,
-    ChangePasswordSerializer,
-    UserPreferenceSerializer,
     OccupiedTimeslotSerializer,
-    PurchaseFeedbackSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
@@ -76,16 +58,9 @@ from .serializers import (
     RecruitmentShowUnprocessedApplicationsSerializer,
     RecruitmentPositionSharedInterviewGroupSerializer,
 )
-from .models.event import (
-    PurchaseFeedbackQuestion,
-    PurchaseFeedbackAlternative,
-)
 from .models.general import (
     Gang,
     User,
-    Profile,
-    UserPreference,
-    UserFeedbackModel,
 )
 from .models.recruitment import (
     Interview,
@@ -101,158 +76,6 @@ from .models.recruitment import (
     RecruitmentPositionSharedInterviewGroup,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
-
-# =============================== #
-#          Auth/Login             #
-# =============================== #
-
-
-@method_decorator(csrf_protect, 'dispatch')
-class LoginView(APIView):
-    # This view should be accessible also for unauthenticated users.
-    permission_classes = [AllowAny]
-
-    def post(self, request: Request) -> Response:
-        serializer = LoginSerializer(data=self.request.data, context={'request': self.request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        login(request=request, user=user, backend=AUTH_BACKEND)
-        new_csrf_token = get_token(request=request)
-
-        response = Response(
-            status=status.HTTP_202_ACCEPTED,
-            data=new_csrf_token,
-            headers={XCSRFTOKEN: new_csrf_token},
-        )
-
-        # Reset impersonation after login.
-        setattr(response, REQUESTED_IMPERSONATE_USER, None)
-
-        return response
-
-
-@method_decorator(csrf_protect, 'dispatch')
-class LogoutView(APIView):
-    # This view should be accessible also for unauthenticated users.
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request: Request) -> Response:
-        if not request.user.is_authenticated:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        logout(request)
-        response = Response(status=status.HTTP_200_OK)
-
-        # Reset impersonation after logout.
-        setattr(response, REQUESTED_IMPERSONATE_USER, None)
-
-        return response
-
-
-@method_decorator(csrf_protect, 'dispatch')
-class RegisterView(APIView):
-    # This view should be accessible also for unauthenticated users.
-    permission_classes = [AllowAny]
-
-    def post(self, request: Request) -> Response:
-        serializer = RegisterSerializer(data=self.request.data, context={'request': self.request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        login(request=request, user=user, backend=AUTH_BACKEND)
-        new_csrf_token = get_token(request=request)
-        res = Response(
-            status=status.HTTP_202_ACCEPTED,
-            data=new_csrf_token,
-            headers={XCSRFTOKEN: new_csrf_token},
-        )
-        return res
-
-
-class ChangePasswordView(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def post(self, request: Request) -> Response:
-        serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        new_password = serializer.validated_data['new_password']
-        user = request.user
-        user.set_password(new_password)
-        user.save()
-        update_session_auth_hash(request, user)
-        return Response({'message': 'Successfully updated password'}, status=status.HTTP_200_OK)
-
-
-class UserView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request: Request) -> Response:
-        return Response(data=UserSerializer(request.user, many=False).data)
-
-
-class AllUsersView(ListAPIView):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
-
-    def get(self, request: Request) -> Response:
-        users = get_user_by_search(query=request.query_params)
-        return Response(data=UserSerializer(users, many=True).data)
-
-
-class PaginatedSearchUsersView(ListAPIView):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = UserSerializer
-    pagination_class = CustomPageNumberPagination
-
-    def get_queryset(self) -> QuerySet[User]:
-        """
-        Get queryset of users with search functionality using the user_query helper.
-        Returns ordered queryset of users filtered by search parameters if provided.
-        """
-        # Pass the query parameters directly to user_query
-        return get_user_by_search(query=self.request.query_params).order_by('username')
-
-
-class ImpersonateView(APIView):
-    permission_classes = [IsAuthenticated]  # TODO: Permission check.
-
-    def post(self, request: Request) -> Response:
-        response = Response(status=200)
-        user_id = request.data.get('user_id', None)
-        setattr(response, REQUESTED_IMPERSONATE_USER, user_id)
-        return response
-
-
-class AllGroupsView(ListAPIView):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = GroupSerializer
-    queryset = Group.objects.all()
-
-
-@method_decorator(ensure_csrf_cookie, 'dispatch')
-class CsrfView(APIView):
-    permission_classes: list[type[BasePermission]] = [AllowAny]
-
-    def get(self, request: Request) -> Response:
-        csrf_token = get_token(request=request)
-        return Response(data=csrf_token, headers={XCSRFTOKEN: csrf_token})
-
-
-@method_decorator(csrf_protect, 'dispatch')
-class UserPreferenceView(ModelViewSet):
-    serializer_class = UserPreferenceSerializer
-    queryset = UserPreference.objects.all()
-
-
-class ProfileView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()
-
-
-class PermissionView(ModelViewSet):
-    serializer_class = PermissionSerializer
-    queryset = Permission.objects.all()
 
 
 class WebhookView(APIView):
@@ -290,61 +113,6 @@ class WebhookView(APIView):
         expected_signature = 'sha256=' + hash_object.hexdigest()
         if not hmac.compare_digest(force_bytes(expected_signature), force_bytes(signature_header)):
             raise PermissionDenied(detail="Request signatures didn't match!")
-
-
-@method_decorator(ensure_csrf_cookie, 'dispatch')
-class AssignGroupView(APIView):
-    """Assigns a user to a group."""
-
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request: Request) -> Response:
-        username = request.data.get('username')
-        group_name = request.data.get('group_name')
-
-        if not username or not group_name:
-            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            group = Group.objects.get(name=group_name)
-        except Group.DoesNotExist:
-            return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-        if request.user.has_perm('auth.change_group', group):
-            user.groups.add(group)
-        else:
-            return Response({'error': 'You do not have permission to add users to this group.'}, status=status.HTTP_403_FORBIDDEN)
-
-        return Response({'message': f"User '{username}' added to group '{group_name}'."}, status=status.HTTP_200_OK)
-
-    def delete(self, request: Request) -> Response:
-        username = request.data.get('username')
-        group_name = request.data.get('group_name')
-
-        if not username or not group_name:
-            return Response({'error': 'Username and group_name fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            group = Group.objects.get(name=group_name)
-        except Group.DoesNotExist:
-            return Response({'error': 'Group not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-        if request.user.has_perm('auth.change_group', group):
-            user.groups.remove(group)
-        else:
-            return Response({'error': 'You do not have permission to remove users from this group.'}, status=status.HTTP_403_FORBIDDEN)
-
-        return Response({'message': f"User '{username}' removed from '{group_name}'."}, status=status.HTTP_200_OK)
 
 
 # =============================== #
@@ -728,39 +496,6 @@ class RecruitmentApplicationSetInterviewView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RecruitmentApplicationForGangView(ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    serializer_class = RecruitmentApplicationForGangSerializer
-    queryset = RecruitmentApplication.objects.all()
-
-    # TODO: User should only be able to edit the fields that are allowed
-
-    def list(self, request: Request) -> Response:
-        """Returns a list of all the recruitments for the specified gang."""
-        gang_id = request.query_params.get('gang')
-        recruitment_id = request.query_params.get('recruitment')
-
-        if not gang_id:
-            return Response({'error': 'A gang parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        if not recruitment_id:
-            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        gang = get_object_or_404(Gang, id=gang_id)
-        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
-
-        applications = RecruitmentApplication.objects.filter(
-            recruitment_position__gang=gang,
-            recruitment=recruitment,  # only include applications related to the specified recruitment
-        )
-
-        # check permissions for each application
-        applications = get_objects_for_user(user=request.user, perms=['view_recruitmentapplication'], klass=applications)
-
-        serializer = self.get_serializer(applications, many=True)
-        return Response(serializer.data)
-
-
 class RecruitmentApplicationStateChoicesView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -1133,55 +868,34 @@ class OccupiedTimeslotView(ListCreateAPIView):
         return Response({'message': 'Successfully updated occupied timeslots'})
 
 
-class UserFeedbackView(CreateAPIView):
-    permission_classes = [AllowAny]
-    model = UserFeedbackModel
-    serializer_class = UserFeedbackSerializer
-
-    def create(self, request: Request) -> Response:
-        data = request.data
-
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-
-        UserFeedbackModel.objects.create(
-            user=request.user if request.user.is_authenticated else None,
-            text=data.get('text'),
-            path=data.get('path'),
-            user_agent=request.META.get('HTTP_USER_AGENT'),
-            screen_resolution=data.get('screen_resolution'),
-            contact_email=data.get('contact_email'),
-        )
-
-        return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
-
-
-class PurchaseFeedbackView(CreateAPIView):
+class OccupiedTimeslotForUserView(APIView):
+    model = OccupiedTimeslot
+    serializer_class = OccupiedTimeslotSerializer
     permission_classes = [IsAuthenticated]
-    serializer_class = PurchaseFeedbackSerializer
 
-    def post(self, request: Request) -> Response:
-        request.data['event'] = request.data.pop('eventId')
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        purchase_model = serializer.save(user=request.user)
+    # TODO: set correct permission. Must have permissions to see applications for the user
+    def get(self, request: Request, **kwargs: int) -> Response:
+        recruitment_id = self.request.query_params.get('recruitment')
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        user_id = self.request.query_params.get('user')
+        user = get_object_or_404(User, id=user_id)
+        occupied_timeslots = OccupiedTimeslot.objects.filter(user=user.id, recruitment__id=recruitment.id)
+        dates: dict[str, list[str]] = {}
+        for occupied in occupied_timeslots:
+            date_string = occupied.start_dt.strftime('%Y.%m.%d')
+            time_string = occupied.start_dt.strftime('%H:%M')
 
-        alternatives = request.data.get('alternatives', {})
-        for alternative, selected in alternatives.items():
-            PurchaseFeedbackAlternative.objects.create(
-                alternative=alternative,
-                selected=selected,
-                form=purchase_model,
-            )
+            if date_string in dates:
+                dates[date_string].append(time_string)
+            else:
+                dates[date_string] = [time_string]
 
-        questions = request.data.get('questions', {})
-        for question, answer in questions.items():
-            PurchaseFeedbackQuestion.objects.create(
-                question=question,
-                answer=answer,
-                form=purchase_model,
-            )
-        return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+        return Response(
+            {
+                'recruitment': recruitment.id,
+                'dates': dates,
+            }
+        )
 
 
 class GangApplicationCountView(APIView):
