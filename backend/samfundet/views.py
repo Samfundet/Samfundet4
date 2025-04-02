@@ -341,15 +341,15 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
         """Override get_queryset to filter by current user"""
         return RecruitmentApplication.objects.filter(user=self.request.user)
 
-    def destroy(self, request: Request, *args, **kwargs) -> Response:
+    def destroy(self, request: Request, *args: tuple, **kwargs: dict[str, Any]) -> Response:
         """Override destroy method to disallow deletion"""
         return Response({'detail': 'DELETE operation not allowed.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    def partial_update(self, request: Request, *args, **kwargs) -> Response:
+    def partial_update(self, request: Request, *args: tuple, **kwargs: dict[str, Any]) -> Response:
         """Override partial_update method to disallow PATCH requests"""
         return Response({'detail': 'PATCH operation not allowed.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    def create(self, request: Request, *args, **kwargs) -> Response:
+    def create(self, request: Request, *args: tuple, **kwargs: dict[str, Any]) -> Response:
         """Override create method to disallow POST requests"""
         # We only PUT; in the update method contains logic for saving a new application
         return Response({'detail': 'POST operation not allowed.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
