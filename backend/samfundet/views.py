@@ -337,6 +337,10 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
     serializer_class = RecruitmentApplicationForApplicantSerializer
     queryset = RecruitmentApplication.objects.all()
 
+    def get_queryset(self) -> QuerySet:
+        """Override get_queryset to filter by current user"""
+        return RecruitmentApplication.objects.filter(user=self.request.user)
+
     def destroy(self, request: Request, *args, **kwargs) -> Response:
         """Override destroy method to disallow deletion"""
         return Response({'detail': 'DELETE operation not allowed.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -353,7 +357,10 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
     def update(self, request: Request, pk: int) -> Response:
         data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
         recruitment_position = get_object_or_404(RecruitmentPosition, pk=pk)
-        existing_application = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
+
+        # overridden get_queryset only returns the authenticated users applications
+        existing_application = self.get_queryset().filter(recruitment_position=pk).first()
+
         # If update
         if existing_application:
             try:
@@ -365,7 +372,7 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
             except ValidationError as e:
                 return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
 
-        # If create
+        # If we got here there was nothing to update, proceed create with PUT
         data['recruitment_position'] = recruitment_position.pk
         data['recruitment'] = recruitment_position.recruitment.pk
         data['user'] = request.user.pk
@@ -377,8 +384,7 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
 
     def retrieve(self, request: Request, pk: int) -> Response:
         application = get_object_or_404(
-            RecruitmentApplication,
-            user=request.user,  # only returns the authenticated users application
+            self.get_queryset(),  # overridden get_queryset only returns the authenticated users applications
             recruitment_position=pk,
         )
         serializer = self.get_serializer(application)
@@ -393,10 +399,8 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
 
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
 
-        applications = RecruitmentApplication.objects.filter(
-            recruitment=recruitment,
-            user=request.user,  # only returns the authenticated users applications
-        )
+        # overridden get_queryset only returns the authenticated users applications
+        applications = self.get_queryset().filter(recruitment=recruitment)
 
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
