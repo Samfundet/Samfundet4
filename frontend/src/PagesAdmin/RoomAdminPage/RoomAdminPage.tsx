@@ -43,10 +43,6 @@ export function RoomAdminPage() {
     return <p>{t(KEY.common_loading)}</p>;
   }
 
-  if (!interviewRooms || interviewRooms.length === 0) {
-    return <p>No rooms found</p>;
-  }
-
   const columns = [
     { content: t(KEY.common_name) || 'Room Name' },
     { content: t(KEY.recruitment_interview_location) || 'Location' },
@@ -57,7 +53,7 @@ export function RoomAdminPage() {
     { content: 'Actions', sortable: false },
   ];
 
-  const tableData = interviewRooms.map((room) => ({
+  const tableData = interviewRooms?.map((room) => ({
     cells: [
       room.name,
       room.location,

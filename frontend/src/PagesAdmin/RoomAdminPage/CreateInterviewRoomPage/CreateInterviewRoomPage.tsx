@@ -39,8 +39,8 @@ export function CreateInterviewRoomPage() {
   const queryClient = useQueryClient();
 
   const { data: interviewRoom, isLoading } = useQuery({
-    queryKey: interviewRoomKeys.detail(roomId || -1),
-    queryFn: () => (roomId ? getInterviewRoom(roomId as string) : undefined),
+    queryKey: interviewRoomKeys.detail(roomId),
+    queryFn: () => (roomId ? getInterviewRoom(roomId) : undefined),
     enabled: !!roomId,
   });
 
