@@ -99,7 +99,7 @@ export function RoomAdminPage() {
         >
           {t(KEY.common_create)}
         </Button>
-        <Table columns={columns} data={tableData} />
+        <Table isLoading={isLoading} columns={columns} data={tableData || []} />
       </AdminPageLayout>
     </>
   );
