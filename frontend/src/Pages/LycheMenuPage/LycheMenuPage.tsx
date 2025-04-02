@@ -11,6 +11,7 @@ import { TextItem } from '~/constants';
 import { useTitle } from '~/hooks';
 import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { dbT } from '~/utils';
 import styles from './LycheMenuPage.module.scss';
 
 export function LycheMenuPage() {
@@ -52,12 +53,7 @@ export function LycheMenuPage() {
         const categoryId = typeof item.food_category === 'object' ? item.food_category.id : item.food_category;
 
         if (categoryId === undefined) return acc; // Skip items with undefined categoryId
-        const categoryName =
-          typeof item.food_category === 'object'
-            ? currentLanguage === 'nb'
-              ? item.food_category.name_nb
-              : item.food_category.name_en
-            : '';
+        const categoryName = typeof item.food_category === 'object' ? dbT(item.food_category, 'name') : '';
 
         if (!acc[categoryId]) {
           acc[categoryId] = {
@@ -110,10 +106,10 @@ export function LycheMenuPage() {
             {category.items.map((item) => (
               <MenuItem
                 key={item.id}
-                dishTitle={currentLanguage === 'nb' ? item.name_nb ?? '' : item.name_en ?? ''}
-                dishDescription={currentLanguage === 'nb' ? item.description_nb ?? '' : item.description_en ?? ''}
-                allergens="Allgergener: Mel, Egg " // Not in seed data yet
-                recommendations="Anbefalinger: Noe godt i glasset " // Not in seed data yet
+                dishTitle={dbT(item, 'name') ?? ''}
+                dishDescription={dbT(item, 'description') ?? ''}
+                allergens="Allgergener: Mel, Egg " // Not in seed data yet, see issue #1863
+                recommendations="Anbefalinger: Noe godt i glasset " // Not in seed data yet, see issue #1863
                 price={`${item.price_member},- / ${item.price},-`}
               />
             ))}

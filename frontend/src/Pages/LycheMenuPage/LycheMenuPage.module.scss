@@ -1,4 +1,5 @@
-@import 'src/mixins';
+@use 'src/constants' as *;
+@use 'src/mixins' as *;
 
 .menu_logo {
   width: 50%;
