@@ -44,13 +44,13 @@ export function RoomAdminPage() {
   }
 
   const columns = [
-    { content: t(KEY.common_name) || 'Room Name' },
-    { content: t(KEY.recruitment_interview_location) || 'Location' },
-    { content: t(KEY.start_time) || 'Start Time' },
-    { content: t(KEY.end_time) || 'End Time' },
-    { content: t(KEY.common_recruitment) || 'Recruitment' },
-    { content: t(KEY.common_gang) || 'Gang' },
-    { content: 'Actions', sortable: false },
+    { content: t(KEY.common_name) },
+    { content: t(KEY.recruitment_interview_location) },
+    { content: t(KEY.start_time) },
+    { content: t(KEY.end_time) },
+    { content: t(KEY.common_recruitment) },
+    { content: t(KEY.common_gang) },
+    { content: 'Actions' },
   ];
 
   const tableData = interviewRooms?.map((room) => ({

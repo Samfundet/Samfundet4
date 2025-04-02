@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react'; // Add this import
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
@@ -38,8 +38,11 @@ export function CreateInterviewRoomPage() {
   const { recruitmentId, roomId } = useParams();
   const queryClient = useQueryClient();
 
+  // Parse roomId to number if it exists
+  const roomIdNumber = roomId ? Number.parseInt(roomId, 10) : undefined;
+
   const { data: interviewRoom, isLoading } = useQuery({
-    queryKey: interviewRoomKeys.detail(roomId),
+    queryKey: interviewRoomKeys.detail(roomIdNumber as number),
     queryFn: () => (roomId ? getInterviewRoom(roomId) : undefined),
     enabled: !!roomId,
   });
@@ -110,7 +113,7 @@ export function CreateInterviewRoomPage() {
       putInterviewRoom(data.id, data.room),
     onSuccess: () => {
       // Invalidate relevant queries to ensure fresh data
-      queryClient.invalidateQueries({ queryKey: interviewRoomKeys.detail(roomId || -1) });
+      queryClient.invalidateQueries({ queryKey: interviewRoomKeys.detail(roomIdNumber as number) });
       queryClient.invalidateQueries({ queryKey: interviewRoomKeys.lists() });
 
       toast.success(t(KEY.common_update_successful));
@@ -228,7 +231,7 @@ export function CreateInterviewRoomPage() {
                 name="gang"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t(KEY.end_time)}</FormLabel>
+                    <FormLabel>{t(KEY.common_gang)}</FormLabel>
                     <FormControl>
                       {recruitmentGangs ? (
                         <Dropdown
