@@ -1112,10 +1112,11 @@ export async function getInterviewRoomsForRecruitment(
   return await axios.get(url, { withCredentials: true });
 }
 
-export async function getInterviewRoom(id: string): Promise<AxiosResponse<InterviewRoomDto>> {
+export async function getInterviewRoom(id: string): Promise<InterviewRoomDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__interview_rooms_detail, urlParams: { pk: id } });
-  return await axios.get(url, { withCredentials: true });
+  const response = await axios.get<InterviewRoomDto>(url, { withCredentials: true });
+  return response.data;
 }
 
 export async function postInterviewRoom(data: Partial<InterviewRoomDto>): Promise<AxiosResponse> {
