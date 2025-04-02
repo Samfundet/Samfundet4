@@ -328,7 +328,7 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
     Provides CRUD operations with role-based permissions:
     - List/Retrieve: Available to authenticated users for their own applications
     - Create/Update: Available to authenticated users for their own applications
-    - destoy and partial_update gives 405
+    - create, destroy and partial_update gives 405
     This endpoint allows users to manage their own recruitment applications,
     including creating new applications, updating existing ones, and viewing their application history for specific recruitment.
     """
