@@ -1,4 +1,4 @@
-import { Chart, H2 } from '~/Components';
+import { Chart } from '~/Components';
 import type { CartesianChartsData } from '~/Components/Chart/CartesianCharts/utils/types';
 import styles from './ApplicantCountCharts.module.scss';
 
@@ -27,7 +27,6 @@ export function ApplicantCountCharts({
         />
       </div>
       <div className={styles.chart_wrapper}>
-        <H2>Spring Semester Applicants</H2>
         <Chart
           type="bar"
           chartTitle={'Spring'}
@@ -38,9 +37,7 @@ export function ApplicantCountCharts({
           data={indexedHistoricUniqueApplicantsSpring}
         />
       </div>
-
       <div className={styles.chart_wrapper}>
-        <H2>Autumn Semester Applicants</H2>
         <Chart
           type="bar"
           chartTitle={'Autumn'}
