@@ -13,7 +13,7 @@ export function CampusDistributionCharts({ historicCampusDistribution }: CampusD
 
   return (
     <>
-      <H4>These boxes contain the exact same data so that you can scroll to compare semesteres.</H4>
+      <H4>These boxes contain the exact same data so that you can scroll to compare semesters.</H4>
       <div className={styles.charts_container}>
         <div className={styles.charts_group}>
           {historicCampusDistribution.map((data) => (
