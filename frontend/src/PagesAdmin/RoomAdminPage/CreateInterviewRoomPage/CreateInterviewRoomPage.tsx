@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react'; // Add this import
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
@@ -18,7 +19,6 @@ import {
 } from '~/Components';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getInterviewRoom, postInterviewRoom, putInterviewRoom } from '~/api';
-import type { InterviewRoomDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { interviewRoomKeys } from '~/queryKeys';
@@ -41,29 +41,28 @@ export function CreateInterviewRoomPage() {
     enabled: !!roomId,
   });
 
-  // Set an empty form state for new rooms, or use the existing data for edit mode
-  const defaultValues: Partial<InterviewRoomDto> = roomId
-    ? {
-        name: interviewRoom?.name || '',
-        location: interviewRoom?.location || '',
-        start_time: utcTimestampToLocal(interviewRoom?.start_time, false) || '',
-        end_time: utcTimestampToLocal(interviewRoom?.end_time, false) || '',
-      }
-    : {
-        name: '',
-        location: '',
-        start_time: '',
-        end_time: '',
-      };
-
+  // Initialize with empty values first
   const form = useForm<FormType>({
     resolver: zodResolver(roomSchema),
-    defaultValues,
-    // Reset the form when roomId changes (including when it changes to undefined)
-    resetOptions: {
-      keepDirtyValues: false,
+    defaultValues: {
+      name: '',
+      location: '',
+      start_time: '',
+      end_time: '',
     },
   });
+
+  // Update form values when data is loaded
+  useEffect(() => {
+    if (roomId && interviewRoom) {
+      form.reset({
+        name: interviewRoom.name || '',
+        location: interviewRoom.location || '',
+        start_time: utcTimestampToLocal(interviewRoom.start_time, false) || '',
+        end_time: utcTimestampToLocal(interviewRoom.end_time, false) || '',
+      });
+    }
+  }, [roomId, interviewRoom, form]);
 
   const createMutation = useMutation({
     mutationFn: (data: FormType & { recruitment: string | undefined }) => postInterviewRoom(data),
@@ -112,11 +111,6 @@ export function CreateInterviewRoomPage() {
 
   const isPending = createMutation.isPending || updateMutation.isPending;
   const submitText = roomId ? t(KEY.common_save) : t(KEY.common_create);
-
-  // Reset form when roomId changes
-  // useEffect(() => {
-  //   form.reset(defaultValues);
-  // }, [roomId, form, defaultValues]);
 
   if (isLoading && roomId) {
     return (
