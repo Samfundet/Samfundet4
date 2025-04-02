@@ -974,11 +974,18 @@ export async function getActiveRecruitmentPositions(): Promise<AxiosResponse<Rec
   return response;
 }
 
-export async function getActiveRecruitments(): Promise<AxiosResponse<RecruitmentDto[]>> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__active_recruitments;
+export async function getAllActiveRecruitments(): Promise<AxiosResponse<RecruitmentDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__active_recruitment_list;
   const response = await axios.get(url, { withCredentials: true });
 
   return response;
+}
+
+export async function getActiveSamfRecruitments(): Promise<RecruitmentDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__active_recruitment_get_active_samf_recruitment;
+  const response = await axios.get<RecruitmentDto[]>(url, { withCredentials: true });
+
+  return response.data;
 }
 
 export async function getApplicantsWithoutInterviews(
