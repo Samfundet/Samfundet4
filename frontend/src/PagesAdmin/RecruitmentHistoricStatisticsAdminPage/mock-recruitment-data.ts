@@ -7,7 +7,7 @@
 //   - both V/H
 
 // v17 is baseline
-const indexed_historic_unique_applicants = [
+export const indexed_historic_unique_applicants = [
   { label: 'v12', number: 110 },
   { label: 'h12', number: 115 },
   { label: 'v13', number: 110 },
@@ -39,7 +39,7 @@ const indexed_historic_unique_applicants = [
 ];
 
 // only V - v17 is baseline
-const indexed_historic_unique_applicants_v = [
+export const indexed_historic_unique_applicants_v = [
   { label: 'v12', number: 110 },
   { label: 'v13', number: 110 },
   { label: 'v14', number: 110 },
@@ -58,7 +58,7 @@ const indexed_historic_unique_applicants_v = [
 ];
 
 //  only H - v17 is baseline
-const indexed_historic_unique_applicants_h = [
+export const indexed_historic_unique_applicants_h = [
   { label: 'h12', number: 115 },
   { label: 'h13', number: 115 },
   { label: 'h14', number: 115 },
@@ -89,7 +89,7 @@ const indexed_historic_unique_applicants_h = [
  * WEIGHTED NUMBERS SHOULD BE COMPUTED IN BACKEND
  */
 
-const total_campus_members = [
+export const total_campus_members = [
   {
     label: 'v18',
     data: {
@@ -272,7 +272,7 @@ const total_campus_members = [
   },
 ];
 
-const unique_applicans_per_campus = [
+export const unique_applicans_per_campus = [
   {
     label: 'v18',
     data: {
