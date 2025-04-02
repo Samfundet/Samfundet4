@@ -1,31 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useRouteLoaderData } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, CrudButtons, Table } from '~/Components';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { deleteInterviewRoom, getInterviewRoomsForRecruitment } from '~/api';
-import type { InterviewRoomDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import { interviewRoomKeys } from '~/queryKeys';
 import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
 
 export function RoomAdminPage() {
-  const [interviewRooms, setInterviewRooms] = useState<InterviewRoomDto[] | undefined>();
   const data = useRouteLoaderData('recruitment') as RecruitmentLoader | undefined;
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
   useTitle(`${t(KEY.common_room)} ${t(KEY.common_overview)}`);
 
-  useEffect(() => {
-    if (data?.recruitment?.id) {
-      getInterviewRoomsForRecruitment(data.recruitment.id.toString()).then((response) =>
-        setInterviewRooms(response.data),
-      );
-    }
-  }, [data?.recruitment?.id]);
+  const { data: interviewRooms, isLoading } = useQuery({
+    queryKey: interviewRoomKeys.all,
+    queryFn: () => (data?.recruitment?.id ? getInterviewRoomsForRecruitment(data?.recruitment?.id) : undefined),
+    enabled: !!data?.recruitment?.id,
+  });
 
   if (!interviewRooms) {
     return <p>No rooms found</p>;
@@ -64,7 +61,6 @@ export function RoomAdminPage() {
             onDelete={() => {
               deleteInterviewRoom(room.id.toString()).then(() => {
                 toast.success('Interview room deleted');
-                setInterviewRooms(interviewRooms.filter((r) => r.id !== room.id));
               });
             }}
           />
