@@ -982,7 +982,7 @@ export async function getAllActiveRecruitments(): Promise<AxiosResponse<Recruitm
 }
 
 export async function getActiveSamfRecruitments(): Promise<RecruitmentDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__active_recruitment_get_active_samf_recruitment;
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__active_recruitment_get_active_samf_recruitments;
   const response = await axios.get<RecruitmentDto[]>(url, { withCredentials: true });
 
   return response.data;
