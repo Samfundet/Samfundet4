@@ -62,7 +62,7 @@ class ActiveRecruitmentsView(ReadOnlyModelViewSet):
         )
 
     @action(detail=False, methods=['get'], url_path='samfundet')
-    def get_active_samf_recruitment(self, request: Request, **kwargs: Any) -> Response:
+    def get_active_samf_recruitments(self, request: Request, **kwargs: Any) -> Response:
         try:
             samfundet_org = Organization.objects.get(name='Samfundet')
 

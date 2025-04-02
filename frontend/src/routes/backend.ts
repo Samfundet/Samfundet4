@@ -544,7 +544,7 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_detail: '/api/recruitment/:pk/',
   samfundet__recruitment_gangs: '/api/recruitment/:pk/gangs/',
   samfundet__active_recruitment_list: '/api/active-recruitment/',
-  samfundet__active_recruitment_get_active_samf_recruitment: '/api/active-recruitment/samfundet/',
+  samfundet__active_recruitment_get_active_samf_recruitments: '/api/active-recruitment/samfundet/',
   samfundet__active_recruitment_detail: '/api/active-recruitment/:pk/',
   samfundet__recruitment_for_recruiter_list: '/api/recruitment-for-recruiter/',
   samfundet__recruitment_for_recruiter_detail: '/api/recruitment-for-recruiter/:pk/',
