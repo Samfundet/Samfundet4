@@ -14,14 +14,70 @@ import {
   indexed_historic_unique_applicants_h,
   indexed_historic_unique_applicants_v,
 } from './mock-applicant-count';
-import { mock_campus_applicant_data } from './mock-campus-distribution';
+import { type CampusApplicantDataset, mock_campus_applicant_data } from './mock-campus-distribution';
+
+const mapApplicantCountData = (data: { number: number; label: string }[]): CartesianChartsData[] => {
+  /**
+   * #######################################################################
+   * TODO:
+   * This map will probably have to change to
+   * adhere to the final backend solution.
+   * There will also probably be raw application count
+   * data in backend, where we calculate "safe-to-send" indexed data
+   * #######################################################################
+   */
+  return data.map((dataItem) => ({
+    value: dataItem.number,
+    label: dataItem.label,
+  }));
+};
+
+const computeWeightedDistribution = (data: CampusApplicantDataset) => {
+  /**
+   * ################################################################
+   *  TODO:
+   *  This computation should probably be done in backend, or we should
+   *  store the data in such a way that no computation is needed
+   * ################################################################
+   */
+  return data.map((semesterData) => {
+    // Calculate the raw weighted values for each campus
+    const rawWeightedValues = semesterData.campus_applicant_data.map((campus) => ({
+      label: campus.label,
+      weightedValue: campus.applicants / campus.student_campus_count,
+    }));
+
+    // Calculate the total of all weighted values
+    const totalWeightedValue = rawWeightedValues.reduce((sum, campus) => sum + campus.weightedValue, 0);
+
+    // Normalize values to percentages (adding up to 100%)
+    const normalizedDistribution: CircularChartData[] = rawWeightedValues.map((campus) => ({
+      label: campus.label,
+      value: Number(((campus.weightedValue / totalWeightedValue) * 100).toFixed(2)),
+    }));
+
+    // Return object with semester and normalized campus distribution
+    return {
+      semester: semesterData.semester,
+      distribution: normalizedDistribution,
+    };
+  });
+};
 
 export function RecruitmentHistoricStatisticsAdminPage() {
   const { t } = useTranslation();
 
   useTitle(t(KEY.recruitment_overview));
 
-  /* Applicant count data state */
+  // ----------------------------------------------------------------------------------------------------------------------------------------
+  /**
+   *  #####################
+   *  TODO:
+   *  This will be replaced
+   *  with actuall queries
+   *  #####################
+   *
+   */
   const [indexedHistoricUniqueApplicants, setindexedHistoricUniqueApplicants] = useState<CartesianChartsData[]>([]);
   const [indexedHistoricUniqueApplicantsSpring, setIndexedHistoricUniqueApplicantsSpring] = useState<
     CartesianChartsData[]
@@ -36,66 +92,15 @@ export function RecruitmentHistoricStatisticsAdminPage() {
   >([]);
 
   useEffect(() => {
-    /* Transform applicant count data */
-    const formattedData: CartesianChartsData[] = indexed_historic_unique_applicants.map((dataItem) => ({
-      value: dataItem.number,
-      label: dataItem.label,
-    }));
+    /* Applicant count state */
+    setindexedHistoricUniqueApplicants(mapApplicantCountData(indexed_historic_unique_applicants));
+    setIndexedHistoricUniqueApplicantsSpring(mapApplicantCountData(indexed_historic_unique_applicants_v));
+    setIndexedHistoricUniqueApplicantsAutumn(mapApplicantCountData(indexed_historic_unique_applicants_h));
 
-    const formattedSpringData: CartesianChartsData[] = indexed_historic_unique_applicants_v.map((dataItem) => ({
-      value: dataItem.number,
-      label: dataItem.label,
-    }));
-
-    const formattedAutumnData: CartesianChartsData[] = indexed_historic_unique_applicants_h.map((dataItem) => ({
-      value: dataItem.number,
-      label: dataItem.label,
-    }));
-
-    setindexedHistoricUniqueApplicants(formattedData);
-    setIndexedHistoricUniqueApplicantsSpring(formattedSpringData);
-    setIndexedHistoricUniqueApplicantsAutumn(formattedAutumnData);
-
-    /* Calculate weighted campus distribution data */
-    const weightedDistribution = computeWeightedDistribution();
-
-    // Sort by semester (ascending order)
-    weightedDistribution.sort((a, b) => a.semester.localeCompare(b.semester));
-
-    // Format data for the CampusDistributionCharts component
-    const formattedDistribution = weightedDistribution.map((item) => ({
-      semester: item.semester,
-      distribution: item.campus_distribution,
-    }));
-
-    // Set the data for campus distribution charts
-    setHistoricCampusDistribution(formattedDistribution);
+    /* Campus distribution state */
+    setHistoricCampusDistribution(computeWeightedDistribution(mock_campus_applicant_data));
   }, []);
-
-  const computeWeightedDistribution = () => {
-    return mock_campus_applicant_data.map((semesterData) => {
-      // Calculate the raw weighted values for each campus
-      const rawWeightedValues = semesterData.campus_applicant_data.map((campus) => ({
-        label: campus.label,
-        weightedValue: campus.applicants / campus.student_campus_count,
-      }));
-
-      // Calculate the total of all weighted values
-      const totalWeightedValue = rawWeightedValues.reduce((sum, campus) => sum + campus.weightedValue, 0);
-
-      // Normalize values to percentages (adding up to 100%)
-      const normalizedDistribution: CircularChartData[] = rawWeightedValues.map((campus) => ({
-        label: campus.label,
-        value: Number(((campus.weightedValue / totalWeightedValue) * 100).toFixed(2)),
-      }));
-
-      // Return object with semester and normalized campus distribution
-      return {
-        semester: semesterData.semester,
-        campus_distribution: normalizedDistribution,
-      };
-    });
-  };
+  // ----------------------------------------------------------------------------------------------------------------------------------------
 
   const tabs: Tab<ReactNode>[] = useMemo(() => {
     return [
