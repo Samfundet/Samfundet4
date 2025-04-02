@@ -66,13 +66,13 @@ class ActiveRecruitmentsView(ReadOnlyModelViewSet):
         try:
             samfundet_org = Organization.objects.get(name='Samfundet')
 
-            # Get the most recent active recruitment for Samfundet, using the overriden get_queryset method
-            active_samfundet_recruitment = self.get_queryset().filter(organization=samfundet_org)
+            # Get active recruitments for Samfundet, using the overriden get_queryset method
+            active_samfundet_recruitments = self.get_queryset().filter(organization=samfundet_org)
 
-            if not active_samfundet_recruitment:
+            if not active_samfundet_recruitments:
                 return Response({'message': 'No active recruitment for Samfundet'}, status=status.HTTP_404_NOT_FOUND)
 
-            serializer = self.get_serializer(active_samfundet_recruitment, many=True)
+            serializer = self.get_serializer(active_samfundet_recruitments, many=True)
             return Response(serializer.data)
 
         except Organization.DoesNotExist:
