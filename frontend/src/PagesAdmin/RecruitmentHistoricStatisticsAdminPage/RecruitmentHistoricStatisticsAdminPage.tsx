@@ -11,7 +11,7 @@ export function RecruitmentHistoricStatisticsAdminPage() {
 
   return (
     <AdminPageLayout title={`${t(KEY.recruitment_overview)} `}>
-      <H1>RecruitmentHistoricStatisticsAdminPage</H1>
+      <H1>RecruitmentHistoricStatisticsAdminPage is under construction</H1>
     </AdminPageLayout>
   );
 }
