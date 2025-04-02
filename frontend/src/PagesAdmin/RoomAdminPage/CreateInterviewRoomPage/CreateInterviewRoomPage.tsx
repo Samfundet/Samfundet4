@@ -39,7 +39,7 @@ export function CreateInterviewRoomPage() {
   const queryClient = useQueryClient();
 
   const { data: interviewRoom, isLoading } = useQuery({
-    queryKey: interviewRoomKeys.detail(roomId || ''),
+    queryKey: interviewRoomKeys.detail(roomId || -1),
     queryFn: () => (roomId ? getInterviewRoom(roomId as string) : undefined),
     enabled: !!roomId,
   });
@@ -110,7 +110,7 @@ export function CreateInterviewRoomPage() {
       putInterviewRoom(data.id, data.room),
     onSuccess: () => {
       // Invalidate relevant queries to ensure fresh data
-      queryClient.invalidateQueries({ queryKey: interviewRoomKeys.detail(roomId || '') });
+      queryClient.invalidateQueries({ queryKey: interviewRoomKeys.detail(roomId || -1) });
       queryClient.invalidateQueries({ queryKey: interviewRoomKeys.lists() });
 
       toast.success(t(KEY.common_update_successful));
@@ -237,7 +237,7 @@ export function CreateInterviewRoomPage() {
                           value={field.value}
                         />
                       ) : (
-                        <p>Loading gangs..</p>
+                        <p>{t(KEY.common_loading)}</p>
                       )}
                     </FormControl>
                     <FormMessage />

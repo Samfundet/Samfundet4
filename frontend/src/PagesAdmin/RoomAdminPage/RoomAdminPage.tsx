@@ -48,12 +48,12 @@ export function RoomAdminPage() {
   }
 
   const columns = [
-    { content: t(KEY.common_name) || 'Room Name', sortable: true },
-    { content: t(KEY.recruitment_interview_location) || 'Location', sortable: true },
-    { content: t(KEY.start_time) || 'Start Time', sortable: true },
-    { content: t(KEY.end_time) || 'End Time', sortable: true },
-    { content: t(KEY.common_recruitment) || 'Recruitment', sortable: true },
-    { content: t(KEY.common_gang) || 'Gang', sortable: true },
+    { content: t(KEY.common_name) || 'Room Name' },
+    { content: t(KEY.recruitment_interview_location) || 'Location' },
+    { content: t(KEY.start_time) || 'Start Time' },
+    { content: t(KEY.end_time) || 'End Time' },
+    { content: t(KEY.common_recruitment) || 'Recruitment' },
+    { content: t(KEY.common_gang) || 'Gang' },
     { content: 'Actions', sortable: false },
   ];
 
@@ -103,7 +103,7 @@ export function RoomAdminPage() {
         >
           {t(KEY.common_create)}
         </Button>
-        <Table columns={columns} data={tableData} defaultSortColumn={0} />
+        <Table columns={columns} data={tableData} />
       </AdminPageLayout>
     </>
   );
