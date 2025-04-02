@@ -457,7 +457,13 @@ export const router = createBrowserRouter(
             />
             <Route
               path={ROUTES.frontend.admin_recruitment_statistics}
-              element={<PermissionRoute element={<RecruitmentHistoricStatisticsAdminPage />} />}
+              element={
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_CHANGE_RECRUITMENT, PERM.SAMFUNDET_ADD_RECRUITMENT]}
+                  resolveWithRolePermissions={true}
+                  element={<RecruitmentHistoricStatisticsAdminPage />}
+                />
+              }
             />
             <Route
               path={ROUTES.frontend.admin_recruitment_create}
