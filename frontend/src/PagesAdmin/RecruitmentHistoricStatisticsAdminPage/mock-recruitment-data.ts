@@ -76,16 +76,13 @@ export const indexed_historic_unique_applicants_h = [
 ];
 
 // campus numbers percentage distribution
-// - pie chart for "this recruitment"  [x]
 
 // campus numbers weighted distribution (antall søkere delt på antall studenter på det campus)
-// - pie chart for "this recruitment"
 // - streamgraph for historic data
 // - line diagram for each campus
 
 /*
- * THIS MOCK DATA IS MEANT TO COMMUNICATE WHAT KIND OF DATA WE NEED
- * FOR THE ACTUALL IMPLEMENTATION WE SHOULD COMPUTE MORE IN BACKEND
+ * THIS MOCK DATA IS MEANT TO COMMUNICATE WHAT KIND OF DATA WE NEED FOR THE ACTUALL IMPLEMENTATION
  * WEIGHTED NUMBERS SHOULD BE COMPUTED IN BACKEND
  */
 
