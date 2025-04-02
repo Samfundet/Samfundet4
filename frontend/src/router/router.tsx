@@ -91,6 +91,7 @@ import {
   recruitmentGangPositionLoader,
   recruitmentLoader,
   roleLoader,
+  samfRecruitmentLoader,
   separatePositionLoader,
 } from '~/router/loaders';
 import { dbT, lowerCapitalize } from '~/utils';
@@ -125,7 +126,7 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.contact} element={<div />} />
           <Route path={ROUTES.frontend.luka} element={<div />} />
           {/* Recruitment */}
-          <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
+          <Route path={ROUTES.frontend.recruitment} loader={samfRecruitmentLoader} element={<RecruitmentPage />} />
         </Route>
       </Route>
       {/* Specific recruitment */}
