@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useRouteLoaderData } from 'react-router';
 import { toast } from 'react-toastify';
@@ -16,6 +16,7 @@ export function RoomAdminPage() {
   const data = useRouteLoaderData('recruitment') as RecruitmentLoader | undefined;
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   useTitle(`${t(KEY.common_room)} ${t(KEY.common_overview)}`);
 
   const { data: interviewRooms, isLoading } = useQuery({
@@ -24,17 +25,35 @@ export function RoomAdminPage() {
     enabled: !!data?.recruitment?.id,
   });
 
-  if (!interviewRooms) {
+  // Implement delete mutation
+  const deleteMutation = useMutation({
+    mutationFn: (roomId: string) => deleteInterviewRoom(roomId),
+    onSuccess: () => {
+      // Invalidate and refetch the interview room list
+      queryClient.invalidateQueries({ queryKey: interviewRoomKeys.all });
+      toast.success('Interview room deleted');
+    },
+    onError: (error) => {
+      toast.error(t(KEY.common_something_went_wrong) || 'Failed to delete interview room');
+      console.error('Error deleting interview room:', error);
+    },
+  });
+
+  if (isLoading) {
+    return <p>{t(KEY.common_loading)}</p>;
+  }
+
+  if (!interviewRooms || interviewRooms.length === 0) {
     return <p>No rooms found</p>;
   }
 
   const columns = [
-    { content: 'Room Name', sortable: true },
-    { content: 'Location', sortable: true },
-    { content: 'Start Time', sortable: true },
-    { content: 'End Time', sortable: true },
-    { content: 'Recruitment', sortable: true },
-    { content: 'Gang', sortable: true },
+    { content: t(KEY.common_name) || 'Room Name', sortable: true },
+    { content: t(KEY.recruitment_interview_location) || 'Location', sortable: true },
+    { content: t(KEY.start_time) || 'Start Time', sortable: true },
+    { content: t(KEY.end_time) || 'End Time', sortable: true },
+    { content: t(KEY.common_recruitment) || 'Recruitment', sortable: true },
+    { content: t(KEY.common_gang) || 'Gang', sortable: true },
     { content: 'Actions', sortable: false },
   ];
 
@@ -42,8 +61,8 @@ export function RoomAdminPage() {
     cells: [
       room.name,
       room.location,
-      new Date(room.start_time),
-      new Date(room.end_time),
+      new Date(room.start_time).toLocaleString(),
+      new Date(room.end_time).toLocaleString(),
       room.recruitment,
       room.gang !== undefined ? room.gang : 'N/A',
       {
@@ -59,9 +78,9 @@ export function RoomAdminPage() {
               })
             }
             onDelete={() => {
-              deleteInterviewRoom(room.id.toString()).then(() => {
-                toast.success('Interview room deleted');
-              });
+              if (window.confirm('Are you sure you want to delete this room?')) {
+                deleteMutation.mutate(room.id.toString());
+              }
             }}
           />
         ),
