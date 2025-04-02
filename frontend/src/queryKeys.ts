@@ -30,3 +30,11 @@ export const interviewRoomKeys = {
   details: () => [...interviewRoomKeys.all, 'detail'] as const,
   detail: (id: number) => [...interviewRoomKeys.details(), id] as const,
 };
+
+export const recruitmentGangKeys = {
+  all: ['recruitmentgangs'] as const,
+  lists: () => [...recruitmentGangKeys.all, 'list'] as const,
+  list: (filters: unknown[]) => [...recruitmentGangKeys.lists(), { filters }] as const,
+  details: () => [...recruitmentGangKeys.all, 'detail'] as const,
+  detail: (id: number) => [...recruitmentGangKeys.details(), id] as const,
+};

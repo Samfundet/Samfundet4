@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import type { z } from 'zod';
 import {
   Button,
+  Dropdown,
   Form,
   FormControl,
   FormField,
@@ -17,11 +18,13 @@ import {
   Input,
   SamfundetLogoSpinner,
 } from '~/Components';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
-import { getInterviewRoom, postInterviewRoom, putInterviewRoom } from '~/api';
+import { getInterviewRoom, getRecruitmentGangs, postInterviewRoom, putInterviewRoom } from '~/api';
+import type { GangDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
-import { interviewRoomKeys } from '~/queryKeys';
+import { interviewRoomKeys, recruitmentGangKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { utcTimestampToLocal } from '~/utils';
 import styles from './CreateInterviewRoom.module.scss';
@@ -41,6 +44,19 @@ export function CreateInterviewRoomPage() {
     enabled: !!roomId,
   });
 
+  const { data: recruitmentGangs } = useQuery({
+    queryKey: recruitmentGangKeys.all,
+    queryFn: () => (recruitmentId ? getRecruitmentGangs(recruitmentId as string) : undefined),
+    enabled: !!recruitmentId,
+  });
+
+  const mapGangs = (gangs: GangDto[]): DropdownOption<number>[] => {
+    return gangs.map((gang: GangDto) => ({
+      label: gang.name_nb,
+      value: gang.id,
+    }));
+  };
+
   // Initialize with empty values first
   const form = useForm<FormType>({
     resolver: zodResolver(roomSchema),
@@ -49,6 +65,7 @@ export function CreateInterviewRoomPage() {
       location: '',
       start_time: '',
       end_time: '',
+      gang: -1,
     },
   });
 
@@ -60,6 +77,7 @@ export function CreateInterviewRoomPage() {
         location: interviewRoom.location || '',
         start_time: utcTimestampToLocal(interviewRoom.start_time, false) || '',
         end_time: utcTimestampToLocal(interviewRoom.end_time, false) || '',
+        gang: interviewRoom.gang || -1,
       });
     }
   }, [roomId, interviewRoom, form]);
@@ -197,6 +215,30 @@ export function CreateInterviewRoomPage() {
                     <FormLabel>{t(KEY.end_time)}</FormLabel>
                     <FormControl>
                       <Input type="datetime-local" {...field} disabled={isPending} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className={styles.row}>
+              <FormField
+                key="gang"
+                control={form.control}
+                name="gang"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t(KEY.end_time)}</FormLabel>
+                    <FormControl>
+                      {recruitmentGangs ? (
+                        <Dropdown
+                          options={mapGangs(recruitmentGangs)}
+                          onChange={(value) => field.onChange(value)}
+                          value={field.value}
+                        />
+                      ) : (
+                        <p>Loading gangs..</p>
+                      )}
                     </FormControl>
                     <FormMessage />
                   </FormItem>

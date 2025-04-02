@@ -6,4 +6,5 @@ export const roomSchema = z.object({
   location: z.string().min(1, { message: 'Lokasjon er påkrevd' }),
   start_time: LOCAL_DATETIME,
   end_time: LOCAL_DATETIME,
+  gang: z.number(),
 });
