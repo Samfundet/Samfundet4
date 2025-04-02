@@ -1,0 +1,73 @@
+
+@use 'src/constants' as *;
+
+@use 'src/mixins' as *;
+
+.menu_logo {
+  width: 50%;
+  margin: 0 25%;
+
+  @include for-mobile-only {
+    width: 80%;
+    margin: 0 10%;
+  }
+}
+
+.menu_header {
+  display: flex;
+  justify-content: center;
+  font-size: 50px;
+  font-weight: 200;
+  margin-top: 3rem;
+  color: $sulten-orange;
+
+  @include for-mobile-only {
+    font-size: 35px;
+  }
+}
+
+.menu_introduction {
+  display: flex;
+  width: 58%;
+  margin: 2rem 21%;
+  font-size: large;
+  font-weight: 200;
+  text-align: center;
+  letter-spacing: 2px;
+  line-height: 35px;
+
+  @include for-mobile-only {
+    width: 90%;
+    margin: 2rem 5% 3rem;
+    font-size: 17px;
+  }
+}
+
+.menu_header2 {
+  display: flex;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 400;
+  margin: 2rem 0 4rem;
+
+  @include for-mobile-only {
+    font-size: 20px;
+    margin: 1rem 0;
+  }
+}
+
+.opening_hours {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 200;
+  align-items: center;
+  letter-spacing: 2px;
+  line-height: 38px;
+  margin: 2rem 0 6rem;
+
+  @include for-mobile-only {
+    font-size: 17px;
+  }
+}
