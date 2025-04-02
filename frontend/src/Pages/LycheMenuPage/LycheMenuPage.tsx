@@ -15,16 +15,14 @@ import { dbT } from '~/utils';
 import styles from './LycheMenuPage.module.scss';
 
 export function LycheMenuPage() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  useTitle(t(KEY.common_menu), t(KEY.common_sulten));
 
   const introTexts = [
     { key: 'intro-main', text: useTextItem(TextItem.sulten_menu_introduction_text_1) },
     { key: 'intro-quality', text: useTextItem(TextItem.sulten_menu_introduction_text_2) },
     { key: 'intro-pricing', text: useTextItem(TextItem.sulten_menu_introduction_text_3) },
   ];
-
-  const currentLanguage = i18n.language;
-  useTitle(t(KEY.common_menu), t(KEY.common_sulten));
 
   const { data: menus, isLoading: menusLoading } = useQuery({
     queryKey: ['menus'],
@@ -68,7 +66,7 @@ export function LycheMenuPage() {
       },
       {} as Record<string, { id: number; name: string; items: typeof data.menu_items }>,
     );
-  }, [data?.menu_items, currentLanguage]);
+  }, [data?.menu_items]);
 
   // Sort categories by their ID to maintain order
   const sortedCategories = React.useMemo(() => {
