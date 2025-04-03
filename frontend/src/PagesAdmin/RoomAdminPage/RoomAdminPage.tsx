@@ -1,52 +1,64 @@
-import { useEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useRouteLoaderData } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, CrudButtons, Table } from '~/Components';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { deleteInterviewRoom, getInterviewRoomsForRecruitment } from '~/api';
-import type { InterviewRoomDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import { interviewRoomKeys } from '~/queryKeys';
 import type { RecruitmentLoader } from '~/router/loaders';
 import { ROUTES } from '~/routes';
 
 export function RoomAdminPage() {
-  const [interviewRooms, setInterviewRooms] = useState<InterviewRoomDto[] | undefined>();
   const data = useRouteLoaderData('recruitment') as RecruitmentLoader | undefined;
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   useTitle(`${t(KEY.common_room)} ${t(KEY.common_overview)}`);
 
-  useEffect(() => {
-    if (data?.recruitment?.id) {
-      getInterviewRoomsForRecruitment(data.recruitment.id.toString()).then((response) =>
-        setInterviewRooms(response.data),
-      );
-    }
-  }, [data?.recruitment?.id]);
+  const { data: interviewRooms, isLoading } = useQuery({
+    queryKey: interviewRoomKeys.all,
+    queryFn: () => (data?.recruitment?.id ? getInterviewRoomsForRecruitment(data?.recruitment?.id) : undefined),
+    enabled: !!data?.recruitment?.id,
+  });
 
-  if (!interviewRooms) {
-    return <p>No rooms found</p>;
+  // Implement delete mutation
+  const deleteMutation = useMutation({
+    mutationFn: (roomId: string) => deleteInterviewRoom(roomId),
+    onSuccess: () => {
+      // Invalidate and refetch the interview room list
+      queryClient.invalidateQueries({ queryKey: interviewRoomKeys.all });
+      toast.success('Interview room deleted');
+    },
+    onError: (error) => {
+      toast.error(t(KEY.common_something_went_wrong) || 'Failed to delete interview room');
+      console.error('Error deleting interview room:', error);
+    },
+  });
+
+  if (isLoading) {
+    return <p>{t(KEY.common_loading)}</p>;
   }
 
   const columns = [
-    { content: 'Room Name', sortable: true },
-    { content: 'Location', sortable: true },
-    { content: 'Start Time', sortable: true },
-    { content: 'End Time', sortable: true },
-    { content: 'Recruitment', sortable: true },
-    { content: 'Gang', sortable: true },
-    { content: 'Actions', sortable: false },
+    { content: t(KEY.common_name) },
+    { content: t(KEY.recruitment_interview_location) },
+    { content: t(KEY.start_time) },
+    { content: t(KEY.end_time) },
+    { content: t(KEY.common_recruitment) },
+    { content: t(KEY.common_gang) },
+    { content: 'Actions' },
   ];
 
-  const tableData = interviewRooms.map((room) => ({
+  const tableData = interviewRooms?.map((room) => ({
     cells: [
       room.name,
       room.location,
-      new Date(room.start_time),
-      new Date(room.end_time),
+      new Date(room.start_time).toLocaleString(),
+      new Date(room.end_time).toLocaleString(),
       room.recruitment,
       room.gang !== undefined ? room.gang : 'N/A',
       {
@@ -62,10 +74,9 @@ export function RoomAdminPage() {
               })
             }
             onDelete={() => {
-              deleteInterviewRoom(room.id.toString()).then(() => {
-                toast.success('Interview room deleted');
-                setInterviewRooms(interviewRooms.filter((r) => r.id !== room.id));
-              });
+              if (window.confirm('Are you sure you want to delete this room?')) {
+                deleteMutation.mutate(room.id.toString());
+              }
             }}
           />
         ),
@@ -88,7 +99,7 @@ export function RoomAdminPage() {
         >
           {t(KEY.common_create)}
         </Button>
-        <Table columns={columns} data={tableData} defaultSortColumn={0} />
+        <Table isLoading={isLoading} columns={columns} data={tableData || []} />
       </AdminPageLayout>
     </>
   );
