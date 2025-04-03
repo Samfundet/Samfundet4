@@ -1,38 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Page, SamfundetLogoSpinner } from '~/Components';
-import { getActiveRecruitments } from '~/api';
+import { getActiveSamfRecruitments } from '~/api';
 import type { RecruitmentDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { recruitmentKeys } from '~/queryKeys';
 import { NoPositions, RecruitmentCard } from './Components';
 import styles from './RecruitmentPage.module.scss';
 
 export function RecruitmentPage() {
-  const [recruitments, setRecruitments] = useState<RecruitmentDto[]>([]);
-  const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
   useTitle(t(KEY.common_recruitment));
 
-  useEffect(() => {
-    getActiveRecruitments()
-      .then((response) => {
-        setRecruitments(response.data);
-      })
-      .catch((error) => {
-        console.log('Error fetching data:', error);
-      });
-    setLoading(false);
-  }, []);
+  const { data: activeSamfRecruitments, isLoading } = useQuery({
+    /* Important! Navbar navigates to this page if there are multiple active Samf recruitments! */
+    /* Take it into consideration if recruitments for all organizations should be fetched here in the future */
+    queryKey: recruitmentKeys.all,
+    queryFn: getActiveSamfRecruitments,
+  });
 
   return (
     <Page>
       <div className={styles.container}>
         <div className={styles.cardContainer}>
-          {loading ? (
+          {isLoading ? (
             <SamfundetLogoSpinner />
-          ) : recruitments && recruitments.length > 0 ? (
-            recruitments.map((recruitment: RecruitmentDto) => (
+          ) : activeSamfRecruitments && activeSamfRecruitments.length > 0 ? (
+            activeSamfRecruitments.map((recruitment: RecruitmentDto) => (
               <RecruitmentCard recruitment={recruitment} key={recruitment.id} />
             ))
           ) : (

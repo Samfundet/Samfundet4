@@ -47,6 +47,7 @@ router.register('role', samfundet.view.general_views.RoleView, 'role')
 
 ########## Recruitment ##########
 router.register('recruitment', recruitment_views.RecruitmentView, 'recruitment')
+router.register('active-recruitment', recruitment_views.ActiveRecruitmentsView, 'active_recruitment')
 router.register('recruitment-for-recruiter', recruitment_views.RecruitmentForRecruiterView, 'recruitment_for_recruiter')
 router.register('recruitment-stats', views.RecruitmentStatisticsView, 'recruitment_stats')
 router.register('recruitment-separateposition', views.RecruitmentSeparatePositionView, 'recruitment_separateposition')
@@ -88,7 +89,6 @@ urlpatterns = [
     path('check-reservation/', samfundet.view.sulten_views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
     path('reservations/', samfundet.view.sulten_views.ReservationCreateView.as_view(), name='reservation-create'),
     ########## Recruitment ##########
-    path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
     path(
         'recruitment-show-unprocessed-applicants/',

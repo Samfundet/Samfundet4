@@ -18,7 +18,7 @@ from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import AllowAny, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.permissions import AllowAny, IsAuthenticated, DjangoModelPermissions
 
 from django.conf import settings
 from django.http import QueryDict, HttpResponse
@@ -579,16 +579,6 @@ class ActiveRecruitmentPositionsView(ListAPIView):
     def get_queryset(self) -> Response:
         """Returns all active recruitment positions."""
         return RecruitmentPosition.objects.filter(recruitment__visible_from__lte=timezone.now(), recruitment__actual_application_deadline__gte=timezone.now())
-
-
-class ActiveRecruitmentsView(ListAPIView):
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-    serializer_class = RecruitmentSerializer
-
-    def get_queryset(self) -> Response:
-        """Returns all active recruitments"""
-        # TODO Use is not completed instead of actual_application_deadline__gte
-        return Recruitment.objects.filter(visible_from__lte=timezone.now(), actual_application_deadline__gte=timezone.now())
 
 
 class RecruitmentInterviewGroupView(APIView):
