@@ -14,7 +14,7 @@ export function ExternalHostBox({ host, host_link }: ExternalHostBoxProps) {
   return (
     <div className={styles.external_host_box_wrapper}>
       <Text>
-        {`${t(KEY.event_external_host_message)}: `}{' '}
+        {t(KEY.event_external_host_message)}:{' '}
         <Link
           style={{ color: COLORS.white, textDecoration: `underline ${COLORS.white}` }}
           target={'external'}
