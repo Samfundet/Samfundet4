@@ -35,7 +35,7 @@ export function EventPage() {
       <div className={styles.content_row}>
         {event && <EventInformation event={event} />}
         {event && (
-          /* Todo: make this dynamic, after link is added to model and it is possible to add link in event form */
+          /* Todo: (issue #1865) make this dynamic, after link is added to model and it is possible to add link in event form */
           /* Should only be rendered if the host is actually external */
           <ExternalHostBox
             host={'Gløshaugen Revy- og Teaterlag'}
