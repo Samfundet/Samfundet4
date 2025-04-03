@@ -472,6 +472,7 @@ export const nb = prepareTranslations({
   [KEY.sulten_dishes]: 'Retter',
   [KEY.sulten_occation_drinks]: 'Drikke',
   [KEY.sulten_occation_eat]: 'Spise',
+  [KEY.sulten_menu_you_are_welcome]: 'Velbekomme!',
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Tilgjenglighet',
@@ -1003,6 +1004,7 @@ export const en = prepareTranslations({
   [KEY.sulten_reservation_form_find_times]: 'Find Available Times',
   [KEY.sulten_occation_drinks]: 'Drinks',
   [KEY.sulten_occation_eat]: 'Eating',
+  [KEY.sulten_menu_you_are_welcome]: "You're welcome!",
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Availability',
