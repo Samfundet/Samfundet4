@@ -57,12 +57,17 @@ def generate_timeslots(start_time: datetime.time, end_time: datetime.time, inter
     # Convert from datetime.time objects to datetime.datetime
     start_datetime = datetime.datetime.combine(datetime.datetime.today(), start_time)
     end_datetime = datetime.datetime.combine(datetime.datetime.today(), end_time)
+
+    # If end time is before start, it likely means we want to pass midnight. So add another day
+    if end_datetime < start_datetime:
+        end_datetime += datetime.timedelta(days=1)
+
     diff = end_datetime - start_datetime
 
     # Calculate the number of intervals. Rounded to ensure we don't bypass end_time
     num_intervals = int(diff.total_seconds() / (interval_minutes * 60))
 
-    timeslots = [start_datetime + datetime.timedelta(minutes=i * interval_minutes) for i in range(num_intervals + 1)]
+    timeslots = [start_datetime + datetime.timedelta(minutes=i * interval_minutes) for i in range(num_intervals)]
     formatted = [timeslot.strftime('%H:%M') for timeslot in timeslots]
 
     return formatted

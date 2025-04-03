@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { InputField, MiniCalendar, TimeslotContainer } from '~/Components';
+import { InputField, MiniCalendar, TimeslotSelector } from '~/Components';
 import {
   getInterview,
   getOccupiedTimeForUser,
@@ -112,6 +112,7 @@ export function SetInterviewManuallyForm({
   }
 
   function save() {
+    // TODO: handle deleting interview (if no timeslot/location is selected, or add a "delete" button)
     const data: InterviewDto = {
       interview_time: convertToDateObject(interviewTimeslot).toISOString(),
       interview_location: location,
@@ -171,14 +172,13 @@ export function SetInterviewManuallyForm({
               initialSelectedDate={selectedDate}
             />
 
-            <TimeslotContainer
+            <TimeslotSelector
               selectedDate={selectedDate}
               timeslots={timeslots}
-              onChange={(slots) => setInterviewTimeslot(slots)}
-              selectedTimeslot={interviewTimeslot}
+              onChange={setInterviewTimeslot}
+              selectedTimeslots={interviewTimeslot}
               disabledTimeslots={occupiedTimeslots}
-              hasDisabledTimeslots={true}
-              selectMultiple={false}
+              label={t(KEY.recruitment_choose_interview_time)}
               recruitmentId={recruitmentId}
               application={application}
             />

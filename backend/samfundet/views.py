@@ -800,10 +800,44 @@ class RecruitmentAvailabilityView(APIView):
             {
                 'start_date': availability.start_date,
                 'end_date': availability.end_date,
+                'start_time': start_time.strftime('%H:%M'),
+                'end_time': end_time.strftime('%H:%M'),
+                'timeslot_interval': interval,
                 'timeslots': timeslots,
                 'interval': interval,
             }
         )
+
+    def post(self, request: Request, **kwargs: int) -> Response:
+        recruitment_id = kwargs.get('id')
+
+        data = {'recruitment': recruitment_id, **request.data}
+        serializer = self.serializer_class(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        # TODO: Check that user has permission to edit/create availability of this recruitment
+
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        try:
+            availability = RecruitmentInterviewAvailability.objects.get(recruitment__id=recruitment_id)
+            availability.start_time = serializer.validated_data['start_time']
+            availability.end_time = serializer.validated_data['end_time']
+            availability.start_date = serializer.validated_data['start_date']
+            availability.end_date = serializer.validated_data['end_date']
+            availability.timeslot_interval = serializer.validated_data['timeslot_interval']
+            availability.save()
+            return Response(status=status.HTTP_200_OK)
+        except RecruitmentInterviewAvailability.DoesNotExist:
+            RecruitmentInterviewAvailability.objects.create(
+                recruitment=recruitment,
+                start_time=serializer.validated_data['start_time'],
+                end_time=serializer.validated_data['end_time'],
+                start_date=serializer.validated_data['start_date'],
+                end_date=serializer.validated_data['end_date'],
+                timeslot_interval=serializer.validated_data['timeslot_interval'],
+            )
+            return Response(status=status.HTTP_201_CREATED)
 
 
 class OccupiedTimeslotView(ListCreateAPIView):
