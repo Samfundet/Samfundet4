@@ -157,6 +157,7 @@ export type EventDto = {
   category: EventCategoryValue;
   host: string;
   billig?: BilligEventDto;
+  numberOfTickets?: number;
 
   // Timestamps/duration
   image_url: string;
@@ -168,6 +169,10 @@ export type EventDto = {
 
   // Ticket type for event (billig, free, custom, registration etc.)
   ticket_type: EventTicketTypeValue;
+
+  // Price for billig events
+  price?: number;
+  price_member?: number;
 
   // Custom tickets (only relevant for custom price group events)
   custom_tickets: EventCustomTicketDto[];
