@@ -32,11 +32,10 @@ export function EventInformation({ event }: EventInformationProps) {
       </div>
       {event.custom_tickets && (
         <div className={styles.event_information_group}>
-          {event.custom_tickets.map((ticket, index) => {
-            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-            return <EventInfoWidget key={index} icon="carbon:ticket" info={`${ticket.price},-`} />;
+          {event.custom_tickets.map((ticket) => {
+            return <EventInfoWidget key={ticket.id} icon="carbon:ticket" info={`${ticket.price},-`} />;
           })}
-          {/* Todo add billig prices */}
+          {/* Todo(issue #1866) add billig prices  */}
         </div>
       )}
     </div>
