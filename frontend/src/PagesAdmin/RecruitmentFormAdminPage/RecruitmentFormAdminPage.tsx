@@ -31,7 +31,7 @@ import { type recruitmentFormType, recruitmentSchema } from './recruitmentSchema
 
 /**
  * Admin form for creating and editing a recruitment.
-*/
+ */
 export function RecruitmentFormAdminPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();

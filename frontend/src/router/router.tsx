@@ -577,7 +577,7 @@ export const router = createBrowserRouter(
                 element={
                   <PermissionRoute
                     element={<RecruitmentRecruiterDashboardPage />}
-                    requiredPermissions={[PERM.SAMFUNDET_CHANGE_RECRUITMENT, PERM.SAMFUNDET_ADD_RECRUITMENT]}
+                    requiredPermissions={[PERM.SAMFUNDET_VIEW_INTERVIEW]}
                     resolveWithRolePermissions={true}
                   />
                 }
@@ -808,7 +808,7 @@ export const router = createBrowserRouter(
                   element={
                     <PermissionRoute
                       element={<RecruitmentGangAllApplicantsAdminPage />}
-                      requiredPermissions={[PERM.SAMFUNDET_VIEW_RECRUITMENTAPPLICATION]}
+                      requiredPermissions={[PERM.SAMFUNDET_ADD_RECRUITMENTPOSITION]}
                       resolveWithRolePermissions={true}
                     />
                   }
