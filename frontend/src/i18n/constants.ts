@@ -155,6 +155,7 @@ export const KEY = {
   common_select_all: 'common_select_all',
   common_information: 'common_information',
   common_description: 'common_description',
+  common_details: 'common_details',
   common_recruitment: 'common_recruitment',
   common_reservation: 'common_reservation',
   common_contributors: 'common_contributors',
@@ -256,6 +257,8 @@ export const KEY = {
   twenty: 'twenty',
   none: 'none',
   mix: 'mix',
+
+  event_external_host_message: 'event_external_host_message',
 
   // Venue Page:
   venuepage_title: 'venuepage_title',

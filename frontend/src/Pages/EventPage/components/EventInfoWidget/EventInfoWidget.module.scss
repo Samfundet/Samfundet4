@@ -1,0 +1,30 @@
+@use 'src/mixins' as *;
+
+@use 'src/constants' as *;
+
+.widget_wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.widget_content {
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 0.10rem 0 0.10rem;
+    border: 1px solid $black-t75;
+    border-radius: 0.10rem;
+    box-shadow: 0 0 1px $black-t50;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.widget_icon {
+    margin-right: 0.1rem;
+}
+
+.widget_info {
+    margin: 0.1rem;
+}
