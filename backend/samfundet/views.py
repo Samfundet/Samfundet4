@@ -322,14 +322,45 @@ class ApplicantsWithoutInterviewsView(APIView):
 
 
 class RecruitmentApplicationForApplicantView(ModelViewSet):
+    """
+    API endpoints for applicants to apply, fetch and update applications. Not for admin/recruiters.
+    Only the user which created the appliation should be able to read or update. Any authenticated user can create an application.
+    Provides CRUD operations with role-based permissions:
+    - List/Retrieve: Available to authenticated users for their own applications
+    - Create/Update: Available to authenticated users for their own applications
+    - create, destroy and partial_update gives 405
+    This endpoint allows users to manage their own recruitment applications,
+    including creating new applications, updating existing ones, and viewing their application history for specific recruitment.
+    """
+
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationForApplicantSerializer
     queryset = RecruitmentApplication.objects.all()
 
+    def get_queryset(self) -> QuerySet:
+        """Override get_queryset to filter by current user"""
+        return RecruitmentApplication.objects.filter(user=self.request.user)
+
+    def destroy(self, request: Request, *args: tuple, **kwargs: dict[str, Any]) -> Response:
+        """Override destroy method to disallow deletion"""
+        return Response({'detail': 'DELETE operation not allowed.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def partial_update(self, request: Request, *args: tuple, **kwargs: dict[str, Any]) -> Response:
+        """Override partial_update method to disallow PATCH requests"""
+        return Response({'detail': 'PATCH operation not allowed.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def create(self, request: Request, *args: tuple, **kwargs: dict[str, Any]) -> Response:
+        """Override create method to disallow POST requests"""
+        # We only PUT; in the update method contains logic for saving a new application
+        return Response({'detail': 'POST operation not allowed.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
     def update(self, request: Request, pk: int) -> Response:
         data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
         recruitment_position = get_object_or_404(RecruitmentPosition, pk=pk)
-        existing_application = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
+
+        # overridden get_queryset only returns the authenticated users applications
+        existing_application = self.get_queryset().filter(recruitment_position=pk).first()
+
         # If update
         if existing_application:
             try:
@@ -341,7 +372,7 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
             except ValidationError as e:
                 return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
 
-        # If create
+        # If we got here there was nothing to update, proceed create with PUT
         data['recruitment_position'] = recruitment_position.pk
         data['recruitment'] = recruitment_position.recruitment.pk
         data['user'] = request.user.pk
@@ -352,35 +383,24 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request: Request, pk: int) -> Response:
-        application = get_object_or_404(RecruitmentApplication, user=request.user, recruitment_position=pk)
-
-        user_id = request.query_params.get('user_id')
-        if user_id:
-            # TODO: Add permissions
-            application = RecruitmentApplication.objects.filter(recruitment_position=pk, user_id=user_id).first()
+        application = get_object_or_404(
+            self.get_queryset(),  # overridden get_queryset only returns the authenticated users applications
+            recruitment_position=pk,
+        )
         serializer = self.get_serializer(application)
         return Response(serializer.data)
 
     def list(self, request: Request) -> Response:
         """Returns a list of all the applications for a user for a specified recruitment"""
         recruitment_id = request.query_params.get('recruitment')
-        user_id = request.query_params.get('user_id')
 
         if not recruitment_id:
             return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
 
-        applications = RecruitmentApplication.objects.filter(
-            recruitment=recruitment,
-            user=request.user,
-        )
-
-        if user_id:
-            # TODO: Add permissions
-            applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user_id=user_id)
-        else:
-            applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user)
+        # overridden get_queryset only returns the authenticated users applications
+        applications = self.get_queryset().filter(recruitment=recruitment)
 
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
