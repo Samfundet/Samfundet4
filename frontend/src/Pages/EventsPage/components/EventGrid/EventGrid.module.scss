@@ -1,0 +1,28 @@
+@use 'src/mixins' as *;
+
+@use 'src/constants' as *;
+
+.event_grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  margin: 0 auto;
+  gap: 1em;
+
+  @include for-tablet-down {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  @include for-mobile-only {
+    grid-template-columns: 1fr;
+    gap: 2em;
+  }
+}
+
+.event_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
