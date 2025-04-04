@@ -138,6 +138,7 @@ export const nb = prepareTranslations({
   [KEY.common_recruitment]: 'Opptak',
   [KEY.common_information]: 'Informasjon',
   [KEY.common_description]: 'Beskrivelse',
+  [KEY.common_details]: 'Detaljer',
   [KEY.common_reservation]: 'Reservasjon',
   [KEY.common_opening_hours]: 'Åpningstider',
   [KEY.common_general]: 'Generelt',
@@ -207,6 +208,10 @@ export const nb = prepareTranslations({
   [KEY.common_ticket_type_included]: 'Inkludert i inngang',
   [KEY.common_ticket_type_registration]: 'Påmelding',
 
+  // Billig
+  [KEY.common_sold_out]: 'Utsolgt',
+  [KEY.common_almost_sold_out]: 'Nesten utsolgt',
+
   // ==================== //
   //        Others        //
   // ==================== //
@@ -240,6 +245,8 @@ export const nb = prepareTranslations({
   [KEY.twenty]: '20 år',
   [KEY.none]: 'Ingen',
   [KEY.mix]: 'Mikset',
+  [KEY.event_external_host_message]:
+    'Arrangeres i regi av ekstern arrangør, ikke gjengene på Samfundet. Henvendelser kan rettes mot',
 
   // Venue Page:
   [KEY.venuepage_title]: 'Kart og lokaler',
@@ -465,6 +472,7 @@ export const nb = prepareTranslations({
   [KEY.sulten_dishes]: 'Retter',
   [KEY.sulten_occation_drinks]: 'Drikke',
   [KEY.sulten_occation_eat]: 'Spise',
+  [KEY.sulten_menu_you_are_welcome]: 'Velbekomme!',
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Tilgjenglighet',
@@ -650,6 +658,7 @@ export const en = prepareTranslations({
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Contact us',
   [KEY.common_description]: 'Description',
+  [KEY.common_details]: 'Details',
   [KEY.common_information]: 'Information',
   [KEY.common_recruitment]: 'Recruitment',
   [KEY.common_reservation]: 'Reservation',
@@ -723,6 +732,9 @@ export const en = prepareTranslations({
   [KEY.common_ticket_type_included]: 'Included with entrance',
   [KEY.common_ticket_type_registration]: 'Registration',
 
+  // Billig
+  [KEY.common_sold_out]: 'Sold out',
+  [KEY.common_almost_sold_out]: 'Almost sold out',
   // ==================== //
   //        Others        //
   // ==================== //
@@ -751,6 +763,8 @@ export const en = prepareTranslations({
   [KEY.twenty]: '20 years',
   [KEY.none]: 'None',
   [KEY.mix]: 'Mixed',
+  [KEY.event_external_host_message]:
+    'Organized by an external organizer, not the groups at the Samfundet. Inquiries can be directed to',
 
   // VenuePage:
   [KEY.venuepage_title]: 'Map and Venues',
@@ -990,6 +1004,7 @@ export const en = prepareTranslations({
   [KEY.sulten_reservation_form_find_times]: 'Find Available Times',
   [KEY.sulten_occation_drinks]: 'Drinks',
   [KEY.sulten_occation_eat]: 'Eating',
+  [KEY.sulten_menu_you_are_welcome]: "You're welcome!",
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Availability',

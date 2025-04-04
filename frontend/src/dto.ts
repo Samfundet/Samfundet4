@@ -1,4 +1,5 @@
 import type { ThemeValue } from '~/constants';
+import type { BilligEventDto } from './apis/billig/billigDtos';
 import type {
   EventAgeRestrictionValue,
   EventCategoryValue,
@@ -24,6 +25,7 @@ export type UserDto = {
   groups: GroupDto[];
   permissions?: string[];
   object_permissions?: ObjectPermissionDto[];
+  role_permissions?: string[];
 };
 
 export type CampusDto = {
@@ -154,6 +156,7 @@ export type EventDto = {
   location: string;
   category: EventCategoryValue;
   host: string;
+  billig?: BilligEventDto;
 
   // Timestamps/duration
   image_url: string;
@@ -255,6 +258,7 @@ export type MenuItemDto = {
 };
 
 export type MenuDto = {
+  id?: number;
   name_nb?: string;
   description_nb?: string;
 
@@ -580,6 +584,7 @@ export type RecruitmentApplicationDto = {
   created_at: string;
   withdrawn: boolean;
   application_count?: number;
+  comment?: string;
 };
 
 export type RecruitmentApplicationRecruiterDto = {
