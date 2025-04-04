@@ -68,20 +68,20 @@ GANGS = {
 
 
 def seed():  # noqa: C901
-    total_gangs = sum(len(gangs) for org in GANGS for gangs in GANGS[org])
+    total_gangs = sum(len(gangs) for org_name, org_data in GANGS.items() for gang_type, gangs in org_data.items())
     created_count = 0
 
     yield 0, 'Creating gangs'
 
-    for org in GANGS:
-        organization = Organization.objects.get(name=org)
+    for org_name, org_data in GANGS.items():
+        organization = Organization.objects.get(name=org_name)
 
-        for gang_type in GANGS[org]:
+        for gang_type, gangs in org_data.items():
             gtype = None
             if gang_type != '':
                 gtype, _ = GangType.objects.get_or_create(title_nb=gang_type, organization=organization)
 
-            for gang in GANGS[org][gang_type]:
+            for gang in gangs:
                 name, abbr, sections = gang
                 g, _ = Gang.objects.get_or_create(
                     name_nb=name,

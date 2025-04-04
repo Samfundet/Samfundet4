@@ -25,6 +25,7 @@ export type UserDto = {
   groups: GroupDto[];
   permissions?: string[];
   object_permissions?: ObjectPermissionDto[];
+  role_permissions?: string[];
 };
 
 export type CampusDto = {
@@ -257,6 +258,7 @@ export type MenuItemDto = {
 };
 
 export type MenuDto = {
+  id?: number;
   name_nb?: string;
   description_nb?: string;
 
