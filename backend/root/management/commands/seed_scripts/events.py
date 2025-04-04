@@ -27,10 +27,6 @@ COUNT = 50
 # Event time as offset plus/minus today
 DAY_RANGE = 365 // 2
 
-# Duration in hours
-DURATION_MIN = 1
-DURATION_MAX = 5
-
 # Capacity
 MIN_CAPACITY = 10
 MAX_CAPACITY = 300
@@ -92,6 +88,24 @@ def create_event_ticket_type(capacity) -> tuple[str, dict]:
     return ticket_type, ticket_type_data
 
 
+def random_end_dt(start_dt):
+    """
+    Generate a random end time based on the start time.
+    Randomly chooses between SHORT (1-5 hours) and LONG (10-15 days) durations.
+    """
+    # Define duration options
+    event_duration_options = {'SHORT': timezone.timedelta(hours=random.uniform(1, 5)), 'LONG': timezone.timedelta(days=random.uniform(10, 15))}
+
+    # Randomly choose between SHORT and LONG durations
+    # You can adjust the weights to change the probability of each option
+    duration_type = random.choice(['SHORT', 'LONG'])
+
+    # Get the selected duration
+    duration = event_duration_options[duration_type]
+
+    return start_dt + duration
+
+
 def dummy_metadata() -> dict:
     title_nb, title_en = words(2, include_english=True)
     dsc_short_nb, dsc_short_en = words(10, include_english=True)
@@ -103,7 +117,6 @@ def dummy_metadata() -> dict:
         'description_short_en': dsc_short_en,
         'description_long_nb': dsc_long_nb,
         'description_long_en': dsc_long_en,
-        'duration': random.randint(0, 180),
         'location': random.choice(VENUES).name,
         'age_restriction': random.choice(AGE_GROUPS),
         'category': random.choice(CATEGORIES),
@@ -123,11 +136,16 @@ def do_seed():  # noqa: C901
     for i in range(COUNT):
         metadata = dummy_metadata()
         capacity = random.randint(MIN_CAPACITY, MAX_CAPACITY)
-        event_time = timezone.now() + timezone.timedelta(
+
+        # Generate start datetime
+        start_dt = timezone.now() + timezone.timedelta(
             days=random.randint(-DAY_RANGE, DAY_RANGE),
             hours=random.randint(-12, 12),
             minutes=random.randint(-30, 30),
         )
+
+        # Generate end datetime (1-5 hours after start)
+        end_dt = random_end_dt(start_dt)
 
         # Create price group with relevant info
         ticket_type, ticket_type_data = create_event_ticket_type(capacity)
@@ -164,10 +182,22 @@ def do_seed():  # noqa: C901
 
             # Add event
             recurring_offset = timezone.timedelta(days=j * 7)
+            event_start_dt = start_dt + recurring_offset
+            event_end_dt = end_dt + recurring_offset
+
+            # Adjust visibility dates for recurring events
+            # For recurring events, make visibility_from the same for all events in the group
+            event_visibility_from_dt = event_start_dt
+
+            # Visibility to is relative to the specific event's end time
+            event_visibility_to_dt = event_end_dt
+
             event = Event.objects.create(
                 **metadata_this,
-                start_dt=event_time + recurring_offset,
-                publish_dt=event_time + recurring_offset - timezone.timedelta(days=random.randint(7, 21)),
+                start_dt=event_start_dt,
+                end_dt=event_end_dt,
+                visibility_from_dt=event_visibility_from_dt - timezone.timedelta(days=random.randint(7, 21)),
+                visibility_to_dt=event_visibility_to_dt,
                 event_group=group,
                 capacity=capacity,
                 ticket_type=ticket_type,
