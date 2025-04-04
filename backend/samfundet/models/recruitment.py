@@ -354,6 +354,10 @@ class RecruitmentApplication(CustomBaseModel):
         choices=RecruitmentApplicantStates.choices, default=RecruitmentApplicantStates.NOT_SET, help_text='The state of the applicant for the recruiter'
     )
 
+    open_to_similar_positions = models.BooleanField(
+        help_text='Is the applicant interested in any position they did not apply for, but which is similar to this?', default=False
+    )
+
     def resolve_org(self, *, return_id: bool = False) -> Organization | int:
         return self.recruitment.resolve_org(return_id=return_id)
 

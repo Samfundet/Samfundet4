@@ -957,6 +957,7 @@ class RecruitmentApplicationForApplicantSerializer(CustomBaseSerializer):
             'created_at',
             'user',
             'recruitment',
+            'open_to_similar_positions',
         ]
         read_only_fields = [
             'applicant_priority',
@@ -1057,6 +1058,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
             'interview',
             'created_at',
             'comment',
+            'open_to_similar_positions',
         ]
         read_only_fields = [
             'id',
@@ -1072,6 +1074,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
             'withdrawn',
             'interview',
             'created_at',
+            'open_to_similar_positions',
         ]
 
     def get_interview_time(self, instance: RecruitmentApplication) -> str | None:

@@ -555,6 +555,7 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_position_for_applicant_detail: '/api/recruitment-position-for-applicant/:pk/',
   samfundet__recruitment_applications_for_applicant_list: '/api/recruitment-applications-for-applicant/',
   samfundet__recruitment_applications_for_applicant_detail: '/api/recruitment-applications-for-applicant/:pk/',
+  samfundet__recruitment_applications_for_applicant_toggle_open_to_similar_positions: '/api/recruitment-applications-for-applicant/:pk/toggle-open-to-similar-positions/',
   samfundet__recruitment_applications_for_gang_list: '/api/recruitment-applications-for-gang/',
   samfundet__recruitment_applications_for_gang_detail: '/api/recruitment-applications-for-gang/:pk/',
   samfundet__recruitment_applications_for_gang_application_comment: '/api/recruitment-applications-for-gang/:pk/add-comment/',
