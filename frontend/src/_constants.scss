@@ -77,6 +77,21 @@ $theme-dark-input-bg-disabled: #7b7b7b;
 $background-primary: #ffffff;
 $background-secondary: #efefef;
 
+
+// Applicant state colors (model_choices.py in RecruitmentApplicantStates)
+// these should communicate possible actions
+$action_needed_here: #ebbc7c;
+$might_contact: #63b88f;
+$will_contact: #046404;
+$do_not_contact: #e53b2f;
+$not_wanted: #9f3dd3;
+
+
+// Final application result colors
+$rejected_this_offer: #dee73e;
+$accepted_this_offer: #4f49eb;
+$withdrawn_application: #7f7f7f;
+
 /* Screen sizes, breakpoint (bp) */
 $large-desktop-bp-lower: 1201px;
 $desktop-bp-upper: 1200px;
