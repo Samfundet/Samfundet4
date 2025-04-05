@@ -1,0 +1,16 @@
+.charts_group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    background-color: rgba(201, 201, 201, 0.25);
+}
+
+.chart_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
