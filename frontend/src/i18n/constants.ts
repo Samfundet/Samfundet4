@@ -155,6 +155,7 @@ export const KEY = {
   common_select_all: 'common_select_all',
   common_information: 'common_information',
   common_description: 'common_description',
+  common_details: 'common_details',
   common_recruitment: 'common_recruitment',
   common_reservation: 'common_reservation',
   common_contributors: 'common_contributors',
@@ -257,6 +258,8 @@ export const KEY = {
   none: 'none',
   mix: 'mix',
 
+  event_external_host_message: 'event_external_host_message',
+
   // Venue Page:
   venuepage_title: 'venuepage_title',
 
@@ -286,6 +289,7 @@ export const KEY = {
   sulten_reservation_form_find_times: 'sulten_reservation_form_find_times',
   sulten_occation_drinks: 'sulten_occation_drinks',
   sulten_occation_eat: 'sulten_occation_eat',
+  sulten_menu_you_are_welcome: 'sulten_menu_you_are_welcome',
 
   // Recruitment:
   recruitment_look_at_recipients: 'recruitment_look_at_recipients',
