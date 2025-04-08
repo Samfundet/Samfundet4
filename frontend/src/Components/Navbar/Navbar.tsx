@@ -140,15 +140,13 @@ export function Navbar() {
         route={ROUTES.frontend.sulten}
         label={t(KEY.common_restaurant)}
       />
-      {showActiveRecruitments && (
-        <NavbarItem
-          setExpandedDropdown={setExpandedDropdown}
-          expandedDropdown={expandedDropdown}
-          route={navigateToSamfRecruitment()}
-          label={t(KEY.common_volunteer)}
-          labelClassName={styles.active_recruitment}
-        />
-      )}
+      <NavbarItem
+        setExpandedDropdown={setExpandedDropdown}
+        expandedDropdown={expandedDropdown}
+        route={navigateToSamfRecruitment()}
+        label={t(KEY.common_volunteer)}
+        labelClassName={styles.active_recruitment}
+      />
     </div>
   );
 
