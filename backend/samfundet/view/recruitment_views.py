@@ -20,6 +20,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from root.utils.permissions import SAMFUNDET_VIEW_RECRUITMENT
 from root.custom_classes.permission_classes import RoleProtectedObjectPermissions, filter_queryset_by_permissions
 
+from samfundet.models.model_choices import OrganizationNames
 from samfundet.serializers import RecruitmentSerializer, RecruitmentGangSerializer, RecruitmentForRecruiterSerializer, RecruitmentApplicationForGangSerializer
 from samfundet.models.general import Gang, Organization
 from samfundet.models.recruitment import Recruitment, RecruitmentApplication
@@ -64,7 +65,7 @@ class ActiveRecruitmentsView(ReadOnlyModelViewSet):
     @action(detail=False, methods=['get'], url_path='samfundet')
     def get_active_samf_recruitments(self, request: Request, **kwargs: Any) -> Response:
         try:
-            samfundet_org = Organization.objects.get(name='Samfundet')
+            samfundet_org = Organization.objects.get(name=OrganizationNames.SAMFUNDET)
 
             # Get active recruitments for Samfundet, using the overriden get_queryset method
             active_samfundet_recruitments = self.get_queryset().filter(organization=samfundet_org)
