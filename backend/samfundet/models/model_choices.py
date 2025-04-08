@@ -104,6 +104,6 @@ class RecruitmentApplicantStates(models.IntegerChoices):
 
 
 class OrganizationNames(models.TextChoices):
-    SAMFUNDET = 'SAMFUNDET', _('Samfundet')
-    UKA = 'UKA', _('Uka')
-    ISFIT = 'ISFIT', _('ISFiT')
+    SAMFUNDET = 'Samfundet', _('Samfundet')
+    UKA = 'UKA', _('UKA')
+    ISFIT = 'ISFiT', _('ISFiT')
