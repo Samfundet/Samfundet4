@@ -56,10 +56,8 @@ export function Navbar() {
     queryFn: getActiveSamfRecruitments,
   });
 
-  const showActiveRecruitments = activeSamfRecruitments !== undefined && activeSamfRecruitments?.length > 0;
-
   const navigateToSamfRecruitment = () => {
-    if (showActiveRecruitments && activeSamfRecruitments.length === 1) {
+    if (activeSamfRecruitments?.length === 1) {
       return reverse({
         pattern: ROUTES.frontend.organization_recruitment,
         urlParams: { recruitmentId: activeSamfRecruitments[0].id },
