@@ -58,6 +58,16 @@ export function Navbar() {
 
   const showActiveRecruitments = activeSamfRecruitments !== undefined && activeSamfRecruitments?.length > 0;
 
+  const navigateToSamfRecruitment = () => {
+    if (showActiveRecruitments && activeSamfRecruitments.length === 1) {
+      return reverse({
+        pattern: ROUTES.frontend.organization_recruitment,
+        urlParams: { recruitmentId: activeSamfRecruitments[0].id },
+      });
+    }
+    return ROUTES.frontend.recruitment;
+  };
+
   // Return profile button for navbar if logged in.
   const mobileProfileButton = (
     <div className={styles.navbar_profile_button}>
@@ -134,16 +144,7 @@ export function Navbar() {
         <NavbarItem
           setExpandedDropdown={setExpandedDropdown}
           expandedDropdown={expandedDropdown}
-          route={
-            activeSamfRecruitments.length === 1
-              ? // goes to the one samf recruitment if there is only one
-                reverse({
-                  pattern: ROUTES.frontend.organization_recruitment,
-                  urlParams: { recruitmentId: activeSamfRecruitments[0].id },
-                })
-              : // goes to the page with recruitment cards if there is multiple samf recruitments
-                ROUTES.frontend.recruitment
-          }
+          route={navigateToSamfRecruitment()}
           label={t(KEY.common_volunteer)}
           labelClassName={styles.active_recruitment}
         />
