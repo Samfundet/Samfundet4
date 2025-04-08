@@ -20,10 +20,10 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from root.utils.permissions import SAMFUNDET_VIEW_RECRUITMENT
 from root.custom_classes.permission_classes import RoleProtectedObjectPermissions, filter_queryset_by_permissions
 
-from samfundet.models.model_choices import OrganizationNames
 from samfundet.serializers import RecruitmentSerializer, RecruitmentGangSerializer, RecruitmentForRecruiterSerializer, RecruitmentApplicationForGangSerializer
 from samfundet.models.general import Gang, Organization
 from samfundet.models.recruitment import Recruitment, RecruitmentApplication
+from samfundet.models.model_choices import OrganizationNames
 
 # =============================== #
 #        Public views             #
@@ -64,20 +64,19 @@ class ActiveRecruitmentsView(ReadOnlyModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='samfundet')
     def get_active_samf_recruitments(self, request: Request, **kwargs: Any) -> Response:
-        try:
-            samfundet_org = Organization.objects.get(name=OrganizationNames.SAMFUNDET)
+        samfundet_org = Organization.objects.get(name=OrganizationNames.SAMFUNDET)
 
-            # Get active recruitments for Samfundet, using the overriden get_queryset method
-            active_samfundet_recruitments = self.get_queryset().filter(organization=samfundet_org)
+        if not samfundet_org:
+            return Response({'message': f'No active recruitment for {OrganizationNames.SAMFUNDET}'}, status=status.HTTP_404_NOT_FOUND)
 
-            if not active_samfundet_recruitments:
-                return Response({'message': 'No active recruitment for Samfundet'}, status=status.HTTP_404_NOT_FOUND)
+        # Get active recruitments for Samfundet, using the overriden get_queryset method
+        active_samfundet_recruitments = self.get_queryset().filter(organization=samfundet_org)
 
-            serializer = self.get_serializer(active_samfundet_recruitments, many=True)
-            return Response(serializer.data)
+        if not active_samfundet_recruitments:
+            return Response({'message': 'No active recruitment for Samfundet'}, status=status.HTTP_404_NOT_FOUND)
 
-        except Organization.DoesNotExist:
-            return Response({'error': 'No organization named Samfundet exists'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.get_serializer(active_samfundet_recruitments, many=True)
+        return Response(serializer.data)
 
 
 # =============================== #
