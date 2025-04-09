@@ -65,7 +65,7 @@ export const ROUTES_FRONTEND = {
   admin_information_edit: '/control-panel/information/edit/:slugField/',
   admin_information_create: '/control-panel/information/create/',
   // Opening hours:
-  admin_opening_hours: '/control-panel/opening_hours/',
+  admin_opening_hours: '/control-panel/opening-hours/',
   // Closed periods:
   admin_closed: '/control-panel/closed/',
   admin_closed_create: '/control-panel/closed/create/',
@@ -117,5 +117,5 @@ export const ROUTES_FRONTEND = {
   api_testing: '/api-testing/',
   components: '/components/',
   route_overview: '/route/overview/',
-  not_found: '/not_found',
+  not_found: '/not-found',
 } as const;
