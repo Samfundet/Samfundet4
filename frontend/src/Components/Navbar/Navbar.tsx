@@ -56,6 +56,8 @@ export function Navbar() {
     queryFn: getActiveSamfRecruitments,
   });
 
+  const showActiveRecruitments = activeSamfRecruitments !== undefined && activeSamfRecruitments?.length > 0;
+
   const navigateToSamfRecruitment = () => {
     if (activeSamfRecruitments?.length === 1) {
       return reverse({
@@ -143,7 +145,7 @@ export function Navbar() {
         expandedDropdown={expandedDropdown}
         route={navigateToSamfRecruitment()}
         label={t(KEY.common_volunteer)}
-        labelClassName={styles.active_recruitment}
+        labelClassName={showActiveRecruitments ? styles.active_recruitment : ''}
       />
     </div>
   );
