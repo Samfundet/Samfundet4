@@ -118,9 +118,9 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
                         {...field}
                         ref={textareaRef}
                         className={styles.textBox}
-                        onBlur={(newNotes) => {
+                        onBlur={() => {
                           field.onBlur();
-                          handleNotesChange(newNotes.target.value);
+                          handleNotesChange(form.getValues('notes'));
                           setMarkdownState(false);
                         }}
                       />
