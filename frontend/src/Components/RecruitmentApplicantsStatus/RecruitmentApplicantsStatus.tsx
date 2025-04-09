@@ -1,8 +1,10 @@
+// RecruitmentApplicantsStatus.tsx
 import { useTranslation } from 'react-i18next';
 import { TimeDisplay, ToolTip } from '~/Components';
 import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
+import { RecruitmentApplicantStates, getRecruitmentApplicantStateName } from '~/constants/applicant-state';
 import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -23,7 +25,7 @@ type RecruitmentApplicantsStatusProps = {
   onInterviewChange: () => void;
 };
 
-// TODO add backend to fetch these
+// Priority options for the dropdown
 const priorityOptions: DropdownOption<number>[] = [
   { label: 'Not Set', value: 0 },
   { label: 'Reserve', value: 1 },
@@ -31,6 +33,7 @@ const priorityOptions: DropdownOption<number>[] = [
   { label: 'Not Wanted', value: 3 },
 ];
 
+// Status options for the dropdown
 const statusOptions: DropdownOption<number>[] = [
   { label: 'Nothing', value: 0 },
   { label: 'Called and accepted', value: 1 },
@@ -79,37 +82,56 @@ export function RecruitmentApplicantsStatus({
     }
   }
 
-  function getStatusStyle(status: number | undefined) {
-    if (typeof status !== 'undefined') {
-      return [
-        styles.pending,
-        styles.top_reserve,
-        styles.top_wanted,
-        styles.less_reserve,
-        styles.less_reserve_wanted,
-        styles.less_reserve_reserve,
-        styles.less_wanted,
-        styles.less_wanted_wanted,
-        styles.less_wanted_reserve,
-        styles.pending,
-        styles.pending,
-      ][status];
+  // Get the CSS class for the applicant state
+  function getStatusStyle(status: number | undefined): string {
+    if (typeof status === 'undefined') {
+      return styles.pending;
+    }
+
+    // Map the applicant state to the correct CSS class
+    switch (status) {
+      case RecruitmentApplicantStates.NOT_SET:
+        return styles.pending;
+      case RecruitmentApplicantStates.TOP_PRI_RESERVED_HERE:
+        return styles.top_reserve;
+      case RecruitmentApplicantStates.TOP_PRI_WANTED_HERE:
+        return styles.top_wanted;
+      case RecruitmentApplicantStates.RESERVED_ELSEWHERE_UNPROCESSED_HERE:
+        return styles.less_reserve;
+      case RecruitmentApplicantStates.RESERVED_ELSEWHERE_RESERVED_HERE:
+        return styles.less_reserve_reserve;
+      case RecruitmentApplicantStates.RESERVED_ELSEWHERE_WANTED_HERE:
+        return styles.less_reserve_wanted;
+      case RecruitmentApplicantStates.WANTED_ELSEWHERE_UNPROCESSED_HERE:
+        return styles.less_wanted;
+      case RecruitmentApplicantStates.WANTED_ELSEWHERE_RESERVE_HERE:
+        return styles.less_wanted_reserve;
+      case RecruitmentApplicantStates.WANTED_ELSEWHERE_WANTED_HERE:
+        return styles.less_wanted_wanted;
+      case RecruitmentApplicantStates.NOT_WANTED:
+        return styles.not_wanted;
+      default:
+        return styles.pending;
     }
   }
 
-  function getStatusText(applicantstatus: number | undefined) {
-    if (typeof applicantstatus !== 'undefined') {
-      const priority = RecruitmentPriorityChoicesMapping[applicantstatus];
-      if (priority === RecruitmentPriorityChoices.WANTED) {
-        return t(KEY.recruitment_guide_offer);
-      }
+  // Get the guidance text based on the recruiter priority
+  function getStatusText(applicantPriority: number | undefined): string {
+    if (typeof applicantPriority === 'undefined') {
       return t(KEY.recruitment_guide_no_offer);
     }
+
+    const priority = RecruitmentPriorityChoicesMapping[applicantPriority];
+    if (priority === RecruitmentPriorityChoices.WANTED) {
+      return t(KEY.recruitment_guide_offer);
+    }
+    return t(KEY.recruitment_guide_no_offer);
   }
 
   const data = applicants.map((application) => {
     const applicationStatusStyle = getStatusStyle(application?.applicant_state);
     const guideText = getStatusText(application?.recruiter_priority);
+
     return {
       cells: [
         {
@@ -170,7 +192,7 @@ export function RecruitmentApplicantsStatus({
           content: (
             <Text>
               {application.interview?.interview_location
-                ? application.interview?.interview_location
+                ? application.interview.interview_location
                 : t(KEY.common_not_set)}
             </Text>
           ),
@@ -189,10 +211,10 @@ export function RecruitmentApplicantsStatus({
           ),
         },
         {
-          value: application.recruiter_status,
+          value: application.applicant_state,
           style: styles.pending,
           content: (
-            <ToolTip value="her skal det stå noe informativt">
+            <ToolTip value={t(getRecruitmentApplicantStateName(application.applicant_state).short)}>
               <Badge className={applicationStatusStyle} text={guideText} />
             </ToolTip>
           ),
