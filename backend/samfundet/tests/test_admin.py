@@ -59,8 +59,6 @@ ROUTES_TO_SUCCEED_ON_GET_REQUEST_WITH_SUPERUSER = [
     routes.admin__samfundet_menu_changelist,
     routes.admin__samfundet_table_add,
     routes.admin__samfundet_table_changelist,
-    routes.admin__samfundet_booking_add,
-    routes.admin__samfundet_booking_changelist,
     routes.admin__samfundet_saksdokument_add,
     routes.admin__samfundet_saksdokument_changelist,
     routes.admin__samfundet_textitem_add,
