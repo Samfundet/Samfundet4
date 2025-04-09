@@ -17,6 +17,7 @@ from rest_framework.request import Request
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
@@ -330,6 +331,7 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
         data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
         recruitment_position = get_object_or_404(RecruitmentPosition, pk=pk)
         existing_application = RecruitmentApplication.objects.filter(user=request.user, recruitment_position=pk).first()
+
         # If update
         if existing_application:
             try:
@@ -341,10 +343,11 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
             except ValidationError as e:
                 return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
 
-        # If create
+        # Set up the data for the new application
         data['recruitment_position'] = recruitment_position.pk
         data['recruitment'] = recruitment_position.recruitment.pk
         data['user'] = request.user.pk
+
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -384,6 +387,17 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
 
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
+
+    @action(detail=True, methods=['put', 'get'], url_path='toggle-open-to-similar-positions')
+    def toggle_open_to_similar_positions(self, request: Request, pk: int) -> Response:
+        application = get_object_or_404(RecruitmentApplication, user=request.user, recruitment_position=pk)
+        current_state = application.open_to_similar_positions
+
+        # Toggle state
+        application.open_to_similar_positions = not current_state
+        application.save()
+        serializer = RecruitmentApplicationForApplicantSerializer(application)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class RecruitmentApplicationInterviewNotesView(APIView):
