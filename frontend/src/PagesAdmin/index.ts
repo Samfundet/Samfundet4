@@ -17,6 +17,7 @@ export { RecruitmentFormAdminPage } from './RecruitmentFormAdminPage';
 export { RecruitmentGangAdminPage } from './RecruitmentGangAdminPage';
 export { RecruitmentGangAllApplicantsAdminPage } from './RecruitmentGangAllApplicantsAdminPage';
 export { RecruitmentGangOverviewPage } from './RecruitmentGangOverviewPage';
+export { RecruitmentHistoricStatisticsAdminPage } from './RecruitmentHistoricStatisticsAdminPage';
 export { RecruitmentOpenToOtherPositionsPage } from './RecruitmentOpenToOtherPositionsPage';
 export { RecruitmentOverviewPage } from './RecruitmentOverviewPage';
 export { RecruitmentPositionFormAdminPage } from './RecruitmentPositionFormAdminPage';
