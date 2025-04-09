@@ -86,21 +86,39 @@ export const getRecruitmentApplicantStateName = (
 };
 
 // Color mapping for applicant states
-export const ApplicationStateColorMapping: { [key: number]: string } = {
+export const ApplicationStateColorMapping: { [key: number]: { background: string; forground: string } } = {
   // Application state colors (model_choices.py in RecruitmentApplicantStates)
-  [RecruitmentApplicantStates.NOT_SET]: COLORS.action_needed_here,
-  [RecruitmentApplicantStates.TOP_PRI_RESERVED_HERE]: COLORS.might_contact,
-  [RecruitmentApplicantStates.TOP_PRI_WANTED_HERE]: COLORS.will_contact,
-  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_UNPROCESSED_HERE]: COLORS.action_needed_here,
-  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_RESERVED_HERE]: COLORS.do_not_contact,
-  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_WANTED_HERE]: COLORS.do_not_contact,
-  [RecruitmentApplicantStates.WANTED_ELSEWHERE_UNPROCESSED_HERE]: COLORS.action_needed_here,
-  [RecruitmentApplicantStates.WANTED_ELSEWHERE_RESERVE_HERE]: COLORS.do_not_contact,
-  [RecruitmentApplicantStates.WANTED_ELSEWHERE_WANTED_HERE]: COLORS.do_not_contact,
-  [RecruitmentApplicantStates.NOT_WANTED]: COLORS.not_wanted,
+  [RecruitmentApplicantStates.NOT_SET]: { background: COLORS.action_needed_here, forground: COLORS.black },
+  [RecruitmentApplicantStates.TOP_PRI_RESERVED_HERE]: { background: COLORS.might_contact, forground: COLORS.white },
+  [RecruitmentApplicantStates.TOP_PRI_WANTED_HERE]: { background: COLORS.will_contact, forground: COLORS.white },
+  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_UNPROCESSED_HERE]: {
+    background: COLORS.action_needed_here,
+    forground: COLORS.black,
+  },
+  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_RESERVED_HERE]: {
+    background: COLORS.do_not_contact,
+    forground: COLORS.black,
+  },
+  [RecruitmentApplicantStates.RESERVED_ELSEWHERE_WANTED_HERE]: {
+    background: COLORS.do_not_contact,
+    forground: COLORS.black,
+  },
+  [RecruitmentApplicantStates.WANTED_ELSEWHERE_UNPROCESSED_HERE]: {
+    background: COLORS.action_needed_here,
+    forground: COLORS.black,
+  },
+  [RecruitmentApplicantStates.WANTED_ELSEWHERE_RESERVE_HERE]: {
+    background: COLORS.do_not_contact,
+    forground: COLORS.black,
+  },
+  [RecruitmentApplicantStates.WANTED_ELSEWHERE_WANTED_HERE]: {
+    background: COLORS.do_not_contact,
+    forground: COLORS.black,
+  },
+  [RecruitmentApplicantStates.NOT_WANTED]: { background: COLORS.not_wanted, forground: COLORS.black },
 };
 
 // Helper function to get the color for a state
-export const getApplicantStateColor = (state: number): string => {
+export const getApplicantStateColor = (state: number): { background: string; forground: string } => {
   return ApplicationStateColorMapping[state] || COLORS.white;
 };
