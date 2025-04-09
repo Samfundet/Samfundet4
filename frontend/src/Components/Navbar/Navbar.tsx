@@ -1,18 +1,20 @@
 import { Icon } from '@iconify/react';
+import { useQuery } from '@tanstack/react-query';
 import { default as classNames } from 'classnames';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 import { Button, Link, ThemeSwitch } from '~/Components';
-import { getActiveRecruitments, logout, stopImpersonatingUser } from '~/api';
+import { getActiveSamfRecruitments, logout, stopImpersonatingUser } from '~/api';
 import { logoWhite } from '~/assets';
 import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
-import type { RecruitmentDto } from '~/dto';
 import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
+import { recruitmentKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import styles from './Navbar.module.scss';
 import { HamburgerMenu, LanguageButton, NavbarItem } from './components';
@@ -23,7 +25,6 @@ export function Navbar() {
   const { isMobileNavigation, setIsMobileNavigation } = useGlobalContext();
   const { t, i18n } = useTranslation();
   const { user, setUser } = useAuthContext();
-  const [activeRecruitments, setActiveRecruitments] = useState<RecruitmentDto[]>();
   const navigate = useNavigate();
   const isDesktop = useDesktop();
   const [cookies, setCookie, removeCookie] = useCookies();
@@ -50,13 +51,22 @@ export function Navbar() {
     }
   }, [isMobileNavigation, isDesktop]);
 
-  useEffect(() => {
-    getActiveRecruitments().then((response) => {
-      setActiveRecruitments(response.data);
-    });
-  }, []);
+  const { data: activeSamfRecruitments } = useQuery({
+    queryKey: recruitmentKeys.all,
+    queryFn: getActiveSamfRecruitments,
+  });
 
-  const showActiveRecruitments = activeRecruitments !== undefined && activeRecruitments?.length > 0;
+  const showActiveRecruitments = activeSamfRecruitments !== undefined && activeSamfRecruitments?.length > 0;
+
+  const navigateToSamfRecruitment = () => {
+    if (activeSamfRecruitments?.length === 1) {
+      return reverse({
+        pattern: ROUTES.frontend.organization_recruitment,
+        urlParams: { recruitmentId: activeSamfRecruitments[0].id },
+      });
+    }
+    return ROUTES.frontend.recruitment;
+  };
 
   // Return profile button for navbar if logged in.
   const mobileProfileButton = (
@@ -133,7 +143,7 @@ export function Navbar() {
       <NavbarItem
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
-        route={ROUTES.frontend.recruitment}
+        route={navigateToSamfRecruitment()}
         label={t(KEY.common_volunteer)}
         labelClassName={showActiveRecruitments ? styles.active_recruitment : ''}
       />

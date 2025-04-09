@@ -1,6 +1,15 @@
-import type { LoaderFunctionArgs } from 'react-router';
-import { getGang, getRecruitment, getRecruitmentPosition, getRecruitmentSeparatePosition, getRole } from '~/api';
+import { type LoaderFunctionArgs, redirect } from 'react-router';
+import {
+  getActiveSamfRecruitments,
+  getGang,
+  getRecruitment,
+  getRecruitmentPosition,
+  getRecruitmentSeparatePosition,
+  getRole,
+} from '~/api';
 import type { GangDto, RecruitmentDto, RecruitmentPositionDto, RecruitmentSeparatePositionDto, RoleDto } from '~/dto';
+import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
 
 export type RecruitmentLoader = {
   recruitment: RecruitmentDto | undefined;
@@ -24,6 +33,28 @@ export type RoleLoader = {
 
 export async function roleLoader({ params }: LoaderFunctionArgs): Promise<RoleLoader> {
   return { role: await getRole(Number.parseInt(params.roleId as string)) };
+}
+
+export async function samfRecruitmentLoader() {
+  try {
+    const activeSamfRecruitments = await getActiveSamfRecruitments();
+
+    // Check if there's only one recruitment and redirect if needed
+    if (activeSamfRecruitments?.length === 1) {
+      return redirect(
+        reverse({
+          pattern: ROUTES.frontend.recruitment_application_overview,
+          urlParams: { recruitmentId: activeSamfRecruitments[0].id },
+        }),
+      );
+    }
+
+    // Otherwise, return the recruitments data
+    return { activeSamfRecruitments };
+  } catch (error) {
+    console.error('Error fetching recruitments:', error);
+    return { activeSamfRecruitments: [] };
+  }
 }
 
 export async function recruitmentLoader({ params }: LoaderFunctionArgs): Promise<RecruitmentLoader> {
