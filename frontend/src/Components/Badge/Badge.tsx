@@ -1,7 +1,8 @@
 import classnames from 'classnames';
+import type { HTMLAttributes } from 'react';
 import styles from './Badge.module.scss';
 
-type BadgeProps = {
+type BadgeProps = HTMLAttributes<HTMLDivElement> & {
   text?: string;
   className?: string;
 };

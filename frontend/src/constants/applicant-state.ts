@@ -97,11 +97,11 @@ export const ApplicationStateColorMapping: { [key: number]: { background: string
   },
   [RecruitmentApplicantStates.RESERVED_ELSEWHERE_RESERVED_HERE]: {
     background: COLORS.do_not_contact,
-    forground: COLORS.black,
+    forground: COLORS.white,
   },
   [RecruitmentApplicantStates.RESERVED_ELSEWHERE_WANTED_HERE]: {
     background: COLORS.do_not_contact,
-    forground: COLORS.black,
+    forground: COLORS.white,
   },
   [RecruitmentApplicantStates.WANTED_ELSEWHERE_UNPROCESSED_HERE]: {
     background: COLORS.action_needed_here,
@@ -109,11 +109,11 @@ export const ApplicationStateColorMapping: { [key: number]: { background: string
   },
   [RecruitmentApplicantStates.WANTED_ELSEWHERE_RESERVE_HERE]: {
     background: COLORS.do_not_contact,
-    forground: COLORS.black,
+    forground: COLORS.white,
   },
   [RecruitmentApplicantStates.WANTED_ELSEWHERE_WANTED_HERE]: {
     background: COLORS.do_not_contact,
-    forground: COLORS.black,
+    forground: COLORS.white,
   },
   [RecruitmentApplicantStates.NOT_WANTED]: { background: COLORS.not_wanted, forground: COLORS.black },
 };
