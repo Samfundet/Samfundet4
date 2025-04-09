@@ -78,11 +78,11 @@ def add_event(image_csv, row) -> Event | None:
         description_long_nb=row['long_description_no'],
         description_long_en=row['long_description_en'],
         duration=int(row['duration']),
-        location=f"Samf3 Area<{row['organizer_id']}>",
+        location=f'Samf3 Area<{row["organizer_id"]}>',
         age_restriction=EventAgeRestriction.NO_RESTRICTION,  # TODO
         category=category,
         image=image,
-        host=f"Samf3 Organizer<{row['organizer_id']}>",
+        host=f'Samf3 Organizer<{row["organizer_id"]}>',
         start_dt=start_dt,
         publish_dt=publish_dt,
         event_group=None,

@@ -428,14 +428,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_role_permissions(self, user: User) -> list[str]:
         """
-        Retrieve all unique permission codenames for a given user across all their roles
+        Retrieve all unique permission full names for a given user across all their roles
         and role types.
 
         Args:
             user: Django User model instance
 
         Returns:
-            List of unique permission codenames
+            List of unique permission full names
         """
         # Collect all user role relationships
         user_roles = itertools.chain(
@@ -444,8 +444,8 @@ class UserSerializer(serializers.ModelSerializer):
             UserGangSectionRole.objects.filter(user=user),
         )
 
-        # Use a set to collect unique permissions directly
-        permissions = {codename for user_role in user_roles for codename in user_role.role.permissions.values_list('codename', flat=True)}
+        # Use a set to collect unique full permission names
+        permissions = {f'{perm.content_type.app_label}.{perm.codename}' for user_role in user_roles for perm in user_role.role.permissions.all()}
 
         return list(permissions)
 

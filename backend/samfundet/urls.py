@@ -11,6 +11,7 @@ import samfundet.view.user_views
 import samfundet.view.event_views
 import samfundet.view.sulten_views
 import samfundet.view.general_views
+from samfundet.view import billig_views
 
 from . import views
 from .view import recruitment_views
@@ -57,8 +58,14 @@ router.register('recruitment-applications-for-gang', recruitment_views.Recruitme
 router.register('recruitment-applications-for-position', views.RecruitmentApplicationForRecruitmentPositionView, 'recruitment_applications_for_position')
 router.register('interview', views.InterviewView, 'interview')
 
+########## Billig ##########
+# TODO: these will probably be replaced or removed when we actually connect to Billig
+router.register('billig-event', billig_views.BilligEventReadOnlyModelViewSet, 'billig_event')
+router.register('billig-price-group', billig_views.BilligPriceGroupReadOnlyModelViewSet, 'billig_price_group')
+router.register('billig-ticket-group', billig_views.BilligTicketGroupReadOnlyModelViewSet, 'billig_ticket_group')
+
 ######## Lyche #########
-router.register('create-reservation', samfundet.view.sulten_views.ReservationCreateView, 'create_reservation')
+# Lyche routes go here
 
 app_name = 'samfundet'
 
@@ -86,6 +93,7 @@ urlpatterns = [
     path('gangtypes/<int:organization>/', samfundet.view.general_views.GangTypeOrganizationView.as_view(), name='gangsorganized'),
     ########## Lyche ##########
     path('check-reservation/', samfundet.view.sulten_views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
+    path('reservations/', samfundet.view.sulten_views.ReservationCreateView.as_view(), name='reservation-create'),
     ########## Recruitment ##########
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
@@ -167,6 +175,7 @@ urlpatterns = [
         name='recruitment_download_gang_application_csv',
     ),
     path('occupiedtimeslot/', views.OccupiedTimeslotView.as_view(), name='occupied_timeslots'),
+    path('occupiedtime-for-user/', views.OccupiedTimeslotForUserView.as_view(), name='occupiedtime_for_user'),
     path(
         'recruitment/<int:recruitment_id>/interviewer-availability/', views.InterviewerAvailabilityForDate.as_view(), name='interviewer-availability-for-date'
     ),
