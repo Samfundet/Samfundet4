@@ -368,6 +368,21 @@ def seed():
             'text_nb': 'Samfundet består av mer enn 20 gjenger som jobber med blandt annet lyd, lys, teater, snekring, IT, artistbooking, korsang, markedsføring, musikk og mye annet. Gjengene er organisert i følgende grupperinger:',
             'text_en': 'Samfundet consists of more than 20 gangs (gjenger) with different responsibilities, including lights, theatre, IT, booking, music, marketing and lots more!',
         },
+        {
+            'key': 'sulten_menu_introduction_text_1',
+            'text_nb': 'Lyche er en restaurant og spritbar som drives utelukkende av frivillige studenter. Om lag 100 engasjerte amatører jobber som kokker og barservitører, og gjør sitt beste for at du som gjest skal få en hyggelig opplevelse.',
+            'text_en': 'Lyche is a restaurant and liquor bar run exclusively by volunteer students. About 100 dedicated amateurs work as chefs and bar waiters and do their best for you as a guest to have a pleasant experience.',
+        },
+        {
+            'key': 'sulten_menu_introduction_text_2',
+            'text_nb': 'Hos Lyche ønsker vi å legge vekt på mat og drikke av høy kvalitet. Derfor har vi både et variert og godt gjennomtenkt utvalg. Vi har fokus på å lage rettene våre fra bunnen av og med lokale råvarer.',
+            'text_en': 'At Lyche, we want to emphasize high-quality food and drinks. This applies both to having a varied but also a well-thought-out selection. We make our dishes with a focus on making them from scratch with local ingredients.',
+        },
+        {
+            'key': 'sulten_menu_introduction_text_3',
+            'text_nb': 'I menyen oppgis det to priser på både mat og drikke. Den førstnevnte er medlemspris for medlemmer av Studentersamfundet. Denne gis ved fremvisning av medlemskap.',
+            'text_en': 'The menu states two prices for both drinks and food. The former includes a membership discount for members of the Student Society. The discount is given upon presentation of a membership card.',
+        },
     ]
 
     TextItem.objects.all().delete()

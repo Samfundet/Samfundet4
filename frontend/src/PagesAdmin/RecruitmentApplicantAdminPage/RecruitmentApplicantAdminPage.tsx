@@ -21,6 +21,13 @@ import {
 } from './components';
 
 export function RecruitmentApplicantAdminPage() {
+  /**
+   * Admin page for viewing details of a specific recruitment application.
+   *
+   * Fetches and displays information about the applicant, their application,
+   * interview notes, and other applications within the same gang.
+   * Allows recruiters to view and edit interview notes and withdraw the application.
+   */
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { applicationID } = useParams();
