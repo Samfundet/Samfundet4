@@ -143,7 +143,7 @@ export function RecruitmentInterviewAvailabilityForm({ recruitmentId, data }: Pr
               name="start_date"
               disabled={isPending}
               render={({ field: { onChange, ...fieldProps } }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.start_date)}</FormLabel>
                   <FormControl>
                     <DatePicker
@@ -163,7 +163,7 @@ export function RecruitmentInterviewAvailabilityForm({ recruitmentId, data }: Pr
               name="end_date"
               disabled={isPending}
               render={({ field: { onChange, ...fieldProps } }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.end_date)}</FormLabel>
                   <FormControl>
                     <DatePicker
@@ -183,7 +183,7 @@ export function RecruitmentInterviewAvailabilityForm({ recruitmentId, data }: Pr
               name="start_time"
               disabled={isPending}
               render={({ field: { onChange, ...fieldProps } }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.start_time)}</FormLabel>
                   <FormControl>
                     <Input
@@ -206,7 +206,7 @@ export function RecruitmentInterviewAvailabilityForm({ recruitmentId, data }: Pr
               name="end_time"
               disabled={isPending}
               render={({ field: { onChange, ...fieldProps } }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.end_time)}</FormLabel>
                   <FormControl>
                     <Input
@@ -229,7 +229,7 @@ export function RecruitmentInterviewAvailabilityForm({ recruitmentId, data }: Pr
               name="timeslot_interval"
               disabled={isPending}
               render={({ field: { onChange, ...fieldProps } }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.common_interval)}</FormLabel>
                   <FormDescription>{t(KEY.interview_availability_interval_description)}</FormDescription>
                   <FormControl>

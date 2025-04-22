@@ -35,7 +35,7 @@ $form-col-width: 260px;
     grid-template-columns: repeat(2, $form-col-width);
     gap: 0.5rem 1rem;
 
-    > *:last-child {
+    .form_item:last-child {
       grid-column: span 2;
     }
   }
