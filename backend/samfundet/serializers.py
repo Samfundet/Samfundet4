@@ -995,8 +995,11 @@ class RecruitmentInterviewAvailabilitySerializer(CustomBaseSerializer):
         fields = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
 
     def validate(self, data: dict) -> dict:
-        start_date: datetime.date = data.get('start_date')
-        end_date: datetime.date = data.get('end_date')
+        start_date: datetime.date | None  = data.get('start_date')
+        end_date: datetime.date | None = data.get('end_date')
+
+        if not start_date or not end_date:
+            raise serializers.ValidationError('start_date and end_date are required')
 
         if start_date > end_date:
             raise serializers.ValidationError('end_date must be greater than start_date')
