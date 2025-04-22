@@ -10,6 +10,7 @@ import { z } from 'zod';
 import {
   Button,
   DatePicker,
+  Dropdown,
   Form,
   FormControl,
   FormField,
@@ -19,7 +20,6 @@ import {
   H3,
   Input,
   MiniCalendar,
-  NumberInput,
   TimeslotSelector,
 } from '~/Components';
 import { FormDescription } from '~/Components/Forms/Form';
@@ -28,8 +28,7 @@ import type { RecruitmentAvailabilityDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import {
   AVAILABILITY_TIMESLOT_INTERVAL,
-  AVAILABILITY_TIMESLOT_INTERVAL_MAX,
-  AVAILABILITY_TIMESLOT_INTERVAL_MIN,
+  AVAILABILITY_TIMESLOT_INTERVAL_OPTIONS,
   AVAILABILITY_TIMESLOT_TIME,
 } from '~/schema/recruitment';
 import styles from './RecruitmentInterviewAvailabilityForm.module.scss';
@@ -228,19 +227,21 @@ export function RecruitmentInterviewAvailabilityForm({ recruitmentId, data }: Pr
               control={form.control}
               name="timeslot_interval"
               disabled={isPending}
-              render={({ field: { onChange, ...fieldProps } }) => (
+              render={({ field: { onChange, value, ...fieldProps } }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.common_interval)}</FormLabel>
                   <FormDescription>{t(KEY.interview_availability_interval_description)}</FormDescription>
                   <FormControl>
-                    <NumberInput
-                      min={AVAILABILITY_TIMESLOT_INTERVAL_MIN}
-                      max={AVAILABILITY_TIMESLOT_INTERVAL_MAX}
-                      className={styles.interval_input}
-                      onChange={(e) => {
-                        onChange(e);
+                    <Dropdown
+                      options={AVAILABILITY_TIMESLOT_INTERVAL_OPTIONS.map((o) => ({
+                        value: String(o),
+                        label: String(o),
+                      }))}
+                      onChange={(value) => {
+                        onChange(value);
                         updateTimeslotPreview();
                       }}
+                      value={String(value)}
                       {...fieldProps}
                     />
                   </FormControl>
