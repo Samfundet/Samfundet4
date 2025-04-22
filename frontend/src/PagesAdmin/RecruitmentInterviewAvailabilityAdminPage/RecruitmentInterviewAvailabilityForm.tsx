@@ -185,6 +185,7 @@ export function RecruitmentInterviewAvailabilityForm({ recruitmentId, data }: Pr
                 <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.start_time)}</FormLabel>
                   <FormControl>
+                    {/* TODO: Use Time input component when it's made, issue #1870 */}
                     <Input
                       type="text"
                       placeholder="HH:MM"
@@ -208,6 +209,7 @@ export function RecruitmentInterviewAvailabilityForm({ recruitmentId, data }: Pr
                 <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.end_time)}</FormLabel>
                   <FormControl>
+                    {/* TODO: Use Time input component when it's made, issue #1870 */}
                     <Input
                       type="text"
                       placeholder="HH:MM"
