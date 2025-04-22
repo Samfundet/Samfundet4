@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import datetime
 import re
+import datetime
 import itertools
 from typing import TYPE_CHECKING
 from collections import defaultdict
