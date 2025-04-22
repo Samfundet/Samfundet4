@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { InputField, MiniCalendar, TimeslotSelector } from '~/Components';
 import {
   getInterview,
-  getOccupiedTimeslots,
+  getOccupiedTimeForUser,
   getRecruitmentAvailability,
   setRecruitmentApplicationInterview,
 } from '~/api';
@@ -42,7 +42,7 @@ export function SetInterviewManuallyForm({
   const [location, setLocation] = useState<string>('');
 
   useEffect(() => {
-    if (!recruitmentId) {
+    if (!recruitmentId || !application) {
       return;
     }
     setLoading(true);
@@ -56,7 +56,7 @@ export function SetInterviewManuallyForm({
         setMaxDate(new Date(response.data.end_date));
         setTimeslots(response.data.timeslots);
       }),
-      getOccupiedTimeslots(recruitmentId).then((res) => {
+      getOccupiedTimeForUser(recruitmentId, application.user.id).then((res) => {
         setOccupiedTimeslots(res.data.dates);
       }),
     ])
@@ -66,7 +66,7 @@ export function SetInterviewManuallyForm({
       })
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recruitmentId, t]);
+  }, [recruitmentId, application, t]);
 
   useEffect(() => {
     if (!application.id || !application.interview?.id) {

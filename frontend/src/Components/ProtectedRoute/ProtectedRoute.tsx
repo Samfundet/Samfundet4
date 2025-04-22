@@ -11,6 +11,7 @@ type ProtectedRouteProps = {
   redirectPath?: string; // path to redirect to if auth state or permissions are not valid
   requiresStaff?: boolean; // requires user to have is_staff flag
   element: ReactNode; // If protection passes, this element is returned
+  resolveWithRolePermissions?: boolean; // If true, will resolve permissions with role permissions
 };
 
 /**
@@ -23,9 +24,10 @@ export function ProtectedRoute({
   authState,
   requirePermissions,
   obj,
+  element,
   requiresStaff = false,
   redirectPath = ROUTES.frontend.home,
-  element,
+  resolveWithRolePermissions = false,
 }: ProtectedRouteProps) {
   const { user } = useAuthContext();
   const location = useLocation();
@@ -37,7 +39,7 @@ export function ProtectedRoute({
   // TODO: Redirect to access denied page if we don't have permission. Issue #1236
 
   // If permissions is provided but authState=false, hasPermissions returns false, so we navigate away
-  if (requirePermissions !== undefined && !hasPermissions(user, requirePermissions, obj)) {
+  if (requirePermissions !== undefined && !hasPermissions(user, requirePermissions, obj, resolveWithRolePermissions)) {
     return <Navigate to={redirectPath} replace state={{ path: location.pathname }} />;
   }
   if (requiresStaff && !user?.is_staff) {

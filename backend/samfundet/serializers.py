@@ -114,7 +114,7 @@ class ImageSerializer(CustomBaseSerializer):
         return image
 
     def get_url(self, image: Image) -> str:
-        return image.image.url if image.image else None
+        return image.image.url
 
 
 class EventCustomTicketSerializer(CustomBaseSerializer):
@@ -392,6 +392,7 @@ class UserSerializer(serializers.ModelSerializer):
     permissions = serializers.SerializerMethodField(method_name='get_permissions', read_only=True)
     object_permissions = serializers.SerializerMethodField(method_name='get_object_permissions', read_only=True)
     user_preference = serializers.SerializerMethodField(method_name='get_user_preference', read_only=True)
+    role_permissions = serializers.SerializerMethodField(method_name='get_role_permissions', read_only=True)
 
     class Meta:
         model = User
@@ -425,6 +426,29 @@ class UserSerializer(serializers.ModelSerializer):
     def get_user_preference(self, user: User) -> dict:
         user_preference, _created = UserPreference.objects.get_or_create(user=user)
         return UserPreferenceSerializer(user_preference, many=False).data
+
+    def get_role_permissions(self, user: User) -> list[str]:
+        """
+        Retrieve all unique permission full names for a given user across all their roles
+        and role types.
+
+        Args:
+            user: Django User model instance
+
+        Returns:
+            List of unique permission full names
+        """
+        # Collect all user role relationships
+        user_roles = itertools.chain(
+            UserOrgRole.objects.filter(user=user),
+            UserGangRole.objects.filter(user=user),
+            UserGangSectionRole.objects.filter(user=user),
+        )
+
+        # Use a set to collect unique full permission names
+        permissions = {f'{perm.content_type.app_label}.{perm.codename}' for user_role in user_roles for perm in user_role.role.permissions.all()}
+
+        return list(permissions)
 
 
 # GANGS ###
@@ -633,7 +657,7 @@ class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
         exclude = ['id', 'recruitment_stats']
 
     def campus_name(self, stat: RecruitmentCampusStat) -> str:
-        return stat.campus.name_nb if stat.campus else None
+        return stat.campus.name_nb
 
     def get_applicant_percentage(self, stat: RecruitmentCampusStat) -> float:
         return stat.normalized_applicant_percentage()
@@ -1042,6 +1066,7 @@ class RecruitmentApplicationForRecruiterSerializer(serializers.ModelSerializer):
             'interview_time',
             'interview',
             'created_at',
+            'comment',
         ]
         read_only_fields = [
             'id',
@@ -1224,3 +1249,9 @@ class PurchaseFeedbackSerializer(serializers.ModelSerializer):
             PurchaseFeedbackQuestion.objects.create(form=purchase_feedback, question=question, answer=answer)
 
         return purchase_feedback
+
+
+class ApplicationCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentApplication
+        fields = ['comment']

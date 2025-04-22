@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from random import sample, randint
 
+from django.db import transaction
+
 from root.utils.samfundet_random import words
 
 from samfundet.models.general import Gang
@@ -32,6 +34,18 @@ POSITION_TYPES = {
     'pr': {
         'tags': ['marketing', 'social-media', 'writing', 'communication', 'pr', 'design'],
         'name_prefix': 'PR',
+    },
+    'restaurant': {
+        'tags': ['cooking', 'food-prep', 'service', 'kitchen', 'chef', 'catering', 'hygiene', 'menu-planning'],
+        'name_prefix': 'Rest',
+    },
+    'scene': {
+        'tags': ['stage-management', 'props', 'lighting', 'sound', 'scenography', 'production', 'backstage', 'rigging'],
+        'name_prefix': 'Scene',
+    },
+    'theater': {
+        'tags': ['acting', 'directing', 'dramaturgy', 'costume', 'makeup', 'script', 'performance', 'improv'],
+        'name_prefix': 'Theater',
     },
 }
 
@@ -70,27 +84,45 @@ def seed():
     RecruitmentPosition.objects.all().delete()
     yield 0, 'Deleted old recruitmentpositions'
 
-    gangs = Gang.objects.all()
-    recruitments = Recruitment.objects.all()
+    # Prefetch all gangs and recruitments to avoid repeated database queries
+    gangs = list(Gang.objects.all())
+    recruitments = list(Recruitment.objects.all())
     created_count = 0
 
-    for recruitment_index, recruitment in enumerate(recruitments):
-        # For each recruitment, select random gangs
-        selected_gangs = sample(list(gangs), 6)
+    # Create all position objects but don't save them yet
+    positions_to_create = []
+    total_iterations = len(recruitments) * len(gangs)
+    current_iteration = 0
 
-        for gang_index, gang in enumerate(selected_gangs):
-            # For each gang, create 2-4 positions with different types
-            num_positions = randint(2, 4)
+    # Pre-generate all position data
+    for _recruitment_index, recruitment in enumerate(recruitments):
+        for _gang_index, gang in enumerate(gangs):
+            # For each gang, create 2-9 positions with different types
+            num_positions = randint(2, 9)
             position_types = sample(list(POSITION_TYPES.keys()), num_positions)
 
             for i, position_type in enumerate(position_types):
                 position_data = generate_position_data(gang=gang, recruitment=recruitment, position_index=i + 1, position_type=position_type)
 
-                _, created = RecruitmentPosition.objects.get_or_create(**position_data)
-                if created:
-                    created_count += 1
+                # Instead of get_or_create, append to a list for bulk creation
+                positions_to_create.append(position_data)
 
-                progress = (gang_index + recruitment_index / len(recruitments)) / len(gangs)
-                yield progress, 'recruitment_positions'
+            current_iteration += 1
+            progress = current_iteration / total_iterations * 80  # Report up to 80% for data generation
+            yield progress, 'recruitment_positions'
+
+    # Use bulk_create in batches to efficiently insert the records
+    # Use a transaction to make this faster and more reliable
+    with transaction.atomic():
+        batch_size = 100  # Adjust based on your database capabilities
+        for i in range(0, len(positions_to_create), batch_size):
+            batch = positions_to_create[i : i + batch_size]
+            # Convert dictionaries to model instances
+            instances = [RecruitmentPosition(**data) for data in batch]
+            created = RecruitmentPosition.objects.bulk_create(instances)
+            created_count += len(created)
+
+            progress = 80 + (i / len(positions_to_create) * 20)  # From 80% to 100%
+            yield min(progress, 99), 'recruitment_positions'
 
     yield 100, f'Created {created_count} recruitment_positions'

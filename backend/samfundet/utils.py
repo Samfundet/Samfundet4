@@ -94,11 +94,11 @@ def get_occupied_timeslots_from_request(
         )
 
         # Check that all provided timeslots exist for the recruitment
-        for date in user_dates:
-            invalid = [x for x in user_dates[date] if x not in timeslots]
+        for date, date_timeslots in user_dates.items():
+            invalid = [x for x in date_timeslots if x not in timeslots]
             if invalid:
                 raise ValidationError(f'Invalid dates: {invalid}')
-            for timeslot in user_dates[date]:
+            for timeslot in date_timeslots:
                 start_date = make_aware(
                     datetime.datetime.strptime(f'{date} {timeslot}', '%Y.%m.%d %H:%M'),
                     timezone=datetime.UTC,
