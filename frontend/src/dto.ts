@@ -545,7 +545,6 @@ export type RecruitmentPositionForApplicantDto = {
 
   gang: GangDto;
   recruitment: string;
-
 };
 
 export type PositionsByTagResponse = {
