@@ -999,7 +999,7 @@ class RecruitmentInterviewAvailabilitySerializer(CustomBaseSerializer):
         end_date: datetime.date = data.get('end_date')
 
         if start_date > end_date:
-            raise serializers.ValidationError("end_date must be greater than start_date")
+            raise serializers.ValidationError('end_date must be greater than start_date')
 
         return super().validate(data)
 
