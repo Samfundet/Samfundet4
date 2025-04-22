@@ -370,7 +370,7 @@ export function RecruitmentApplicationFormPage() {
                       render={({ field: { onChange, ...fieldProps } }) => (
                         <FormItem>
                           <FormControl>
-                            <InputFile fileType="image" onSelected={(file) => onChange(file)} {...fieldProps} />
+                            <InputFile fileType="image" onSelected={onChange} {...fieldProps} />
                           </FormControl>
                         </FormItem>
                       )}
