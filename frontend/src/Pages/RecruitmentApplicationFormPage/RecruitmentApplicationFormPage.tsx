@@ -354,7 +354,7 @@ export function RecruitmentApplicationFormPage() {
                               {...field}
                               value={field.value}
                               className={styles.video_url_textarea}
-                              placeholder="YouTube/video url:"
+                              placeholder="YouTube/video URL:"
                             />
                           </FormControl>
                         </FormItem>
