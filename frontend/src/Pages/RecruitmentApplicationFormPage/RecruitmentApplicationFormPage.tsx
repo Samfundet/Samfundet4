@@ -52,7 +52,7 @@ const recruitmentApplicationSchema = z.object({
   image_file: z
     .instanceof(File)
     .refine((file) => file.size < 1024 * 1024 * 10, {
-      message: "File can't be larger than 10 MB"
+      message: "File can't be larger than 10 MB",
     })
     .nullable(),
 });
@@ -91,11 +91,10 @@ export function RecruitmentApplicationFormPage() {
       form.setValue('application_text', recruitmentApplication.application_text);
     }
     if (recruitmentApplication?.image) {
-      form.setValue("image_file", recruitmentApplication.image);
+      form.setValue('image_file', recruitmentApplication.image);
     }
-    if (recruitmentApplication?.video_url) form.setValue("video_url", recruitmentApplication.video_url);
-
-  }, [recruitmentApplication, form, imageAttachment]);
+    if (recruitmentApplication?.video_url) form.setValue('video_url', recruitmentApplication.video_url);
+  }, [recruitmentApplication, form]);
 
   useEffect(() => {
     Promise.allSettled([
@@ -351,14 +350,15 @@ export function RecruitmentApplicationFormPage() {
                       return (
                         <FormItem>
                           <FormControl>
-                            <Textarea {...field}
+                            <Textarea
+                              {...field}
                               value={field.value}
                               className={styles.video_url_textarea}
-                              placeholder='YouTube/video url:'
+                              placeholder="YouTube/video url:"
                             />
                           </FormControl>
                         </FormItem>
-                      )
+                      );
                     }}
                   />
                 )}
@@ -370,11 +370,7 @@ export function RecruitmentApplicationFormPage() {
                       render={({ field: { onChange, ...fieldProps } }) => (
                         <FormItem>
                           <FormControl>
-                            <InputFile
-                              fileType="image"
-                              onSelected={(file) => onChange(file)}
-                              {...fieldProps}
-                            />
+                            <InputFile fileType="image" onSelected={(file) => onChange(file)} {...fieldProps} />
                           </FormControl>
                         </FormItem>
                       )}

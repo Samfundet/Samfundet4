@@ -1007,10 +1007,7 @@ export async function getApplicantsWithoutThreeInterviewCriteria(
   return await axios.get(url, { withCredentials: true });
 }
 
-export async function putRecruitmentApplication(
-  formData: FormData,
-  applicationId: number,
-) {
+export async function putRecruitmentApplication(formData: FormData, applicationId: number) {
   const url =
     BACKEND_DOMAIN +
     reverse({
