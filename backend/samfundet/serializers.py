@@ -995,7 +995,7 @@ class RecruitmentInterviewAvailabilitySerializer(CustomBaseSerializer):
         fields = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
 
     def validate(self, data: dict) -> dict:
-        start_date: datetime.date | None  = data.get('start_date')
+        start_date: datetime.date | None = data.get('start_date')
         end_date: datetime.date | None = data.get('end_date')
 
         if not start_date or not end_date:
