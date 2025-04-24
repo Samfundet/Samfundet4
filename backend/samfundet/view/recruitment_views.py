@@ -7,10 +7,11 @@ from guardian.shortcuts import get_objects_for_user
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly
 
+from django.utils import timezone
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
@@ -20,8 +21,9 @@ from root.utils.permissions import SAMFUNDET_VIEW_RECRUITMENT
 from root.custom_classes.permission_classes import RoleProtectedObjectPermissions, filter_queryset_by_permissions
 
 from samfundet.serializers import RecruitmentSerializer, RecruitmentGangSerializer, RecruitmentForRecruiterSerializer, RecruitmentApplicationForGangSerializer
-from samfundet.models.general import Gang
+from samfundet.models.general import Gang, Organization
 from samfundet.models.recruitment import Recruitment, RecruitmentApplication
+from samfundet.models.model_choices import OrganizationNames
 
 # =============================== #
 #        Public views             #
@@ -43,6 +45,37 @@ class RecruitmentView(ModelViewSet):
         recruitment = self.get_object()
         gangs = Gang.objects.filter(organization__id=recruitment.organization_id)
         serializer = RecruitmentGangSerializer(gangs, recruitment=recruitment, many=True)
+        return Response(serializer.data)
+
+
+@method_decorator(ensure_csrf_cookie, 'dispatch')
+class ActiveRecruitmentsView(ReadOnlyModelViewSet):
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+    serializer_class = RecruitmentSerializer
+    queryset = Recruitment.objects.all()
+
+    def get_queryset(self) -> QuerySet[Recruitment]:
+        """Default queryset to show only active recruitments"""
+        now = timezone.now()
+        return Recruitment.objects.filter(
+            visible_from__lte=now,  # __lte: less than or equal to (Django lookup type)
+            actual_application_deadline__gte=now,  # __gte: greater than or equal to (Django lookup type)
+        )
+
+    @action(detail=False, methods=['get'], url_path='samfundet')
+    def get_active_samf_recruitments(self, request: Request, **kwargs: Any) -> Response:
+        samfundet_org = Organization.objects.get(name=OrganizationNames.SAMFUNDET)
+
+        if not samfundet_org:
+            return Response({'message': f'No active recruitment for {OrganizationNames.SAMFUNDET}'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Get active recruitments for Samfundet, using the overriden get_queryset method
+        active_samfundet_recruitments = self.get_queryset().filter(organization=samfundet_org)
+
+        if not active_samfundet_recruitments:
+            return Response({'message': 'No active recruitment for Samfundet'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(active_samfundet_recruitments, many=True)
         return Response(serializer.data)
 
 

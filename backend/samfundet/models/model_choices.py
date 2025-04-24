@@ -101,3 +101,9 @@ class RecruitmentApplicantStates(models.IntegerChoices):
     WANTED_ELSEWHERE_RESERVE_HERE = 7, _('Wanted for another position, and reserve here.')
     WANTED_ELSEWHERE_WANTED_HERE = 8, _('Wanted for another position and wanted here.')
     NOT_WANTED = 10, _('The applicant is not wanted for this position.')
+
+
+class OrganizationNames(models.TextChoices):
+    SAMFUNDET = 'Samfundet', _('Samfundet')
+    UKA = 'UKA', _('UKA')
+    ISFIT = 'ISFiT', _('ISFiT')
