@@ -155,6 +155,7 @@ export const KEY = {
   common_select_all: 'common_select_all',
   common_information: 'common_information',
   common_description: 'common_description',
+  common_details: 'common_details',
   common_recruitment: 'common_recruitment',
   common_reservation: 'common_reservation',
   common_contributors: 'common_contributors',
@@ -257,6 +258,8 @@ export const KEY = {
   none: 'none',
   mix: 'mix',
 
+  event_external_host_message: 'event_external_host_message',
+
   // Venue Page:
   venuepage_title: 'venuepage_title',
 
@@ -286,6 +289,7 @@ export const KEY = {
   sulten_reservation_form_find_times: 'sulten_reservation_form_find_times',
   sulten_occation_drinks: 'sulten_occation_drinks',
   sulten_occation_eat: 'sulten_occation_eat',
+  sulten_menu_you_are_welcome: 'sulten_menu_you_are_welcome',
 
   // Recruitment:
   recruitment_look_at_recipients: 'recruitment_look_at_recipients',
@@ -423,6 +427,50 @@ export const KEY = {
   recruitment_choose_interview_time_and_location: 'recruitment_choose_interview_time_and_location',
   recruitment_choose_interview_time: 'recruitment_choose_interview_time',
   recruitment_choose_interview_location: 'recruitment_choose_interview_location',
+
+  // Recruitment application state
+  application_needs_processing: 'application_needs_processing',
+  do_not_contact: 'do_not_contact',
+
+  not_set_short: 'not_set_short',
+  not_set_long: 'not_set_long',
+  //not_set_guidance: 'not_set_guidance',
+
+  top_pri_reserved_here_short: 'top_pri_reserved_here_short',
+  top_pri_reserved_here_long: 'top_pri_reserved_here_long',
+  top_pri_reserved_here_guidance: 'top_pri_reserved_here_guidance',
+
+  top_pri_wanted_here_short: 'top_pri_wanted_here_short',
+  top_pri_wanted_here_long: 'top_pri_wanted_here_long',
+  top_pri_wanted_here_guidance: 'top_pri_wanted_here_guidance',
+
+  reserved_elsewhere_unprocessed_here_short: 'reserved_elsewhere_unprocessed_here_short',
+  reserved_elsewhere_unprocessed_here_long: 'reserved_elsewhere_unprocessed_here_long',
+  //reserved_elsewhere_unprocessed_here_guidance: 'reserved_elsewhere_unprocessed_here_guidance',
+
+  reserved_elsewhere_reserved_here_short: 'reserved_elsewhere_reserved_here_short',
+  reserved_elsewhere_reserved_here_long: 'reserved_elsewhere_reserved_here_long',
+  //reserved_elsewhere_reserved_here_guidance: 'reserved_elsewhere_reserved_here_guidance',
+
+  reserved_elsewhere_wanted_here_short: 'reserved_elsewhere_wanted_here_short',
+  reserved_elsewhere_wanted_here_long: 'reserved_elsewhere_wanted_here_long',
+  //reserved_elsewhere_wanted_here_guidance: 'reserved_elsewhere_wanted_here_guidance',
+
+  wanted_elsewhere_unprocessed_here_short: 'wanted_elsewhere_unprocessed_here_short',
+  wanted_elsewhere_unprocessed_here_long: 'wanted_elsewhere_unprocessed_here_long',
+  //wanted_elsewhere_unprocessed_here_guidance: 'wanted_elsewhere_unprocessed_here_guidance',
+
+  wanted_elsewhere_reserve_here_short: 'wanted_elsewhere_reserve_here_short',
+  wanted_elsewhere_reserve_here_long: 'wanted_elsewhere_reserve_here_long',
+  //wanted_elsewhere_reserve_here_guidance: 'wanted_elsewhere_reserve_here_guidance',
+
+  wanted_elsewhere_wanted_here_short: 'wanted_elsewhere_wanted_here_short',
+  wanted_elsewhere_wanted_here_long: 'wanted_elsewhere_wanted_here_long',
+  //wanted_elsewhere_wanted_here_guidance: 'wanted_elsewhere_wanted_here_guidance',
+
+  not_wanted_short: 'not_wanted_short',
+  not_wanted_long: 'not_wanted_long',
+  //not_wanted_guidance: 'not_wanted_guidance',
 
   // Admin:
   admin_users_last_active: 'admin_users_last_active',

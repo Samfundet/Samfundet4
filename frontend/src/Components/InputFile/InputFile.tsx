@@ -1,8 +1,10 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { type ChangeEvent, type ReactNode, useEffect, useState } from 'react';
+import { type ChangeEvent, type ReactNode, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
+import { COLORS } from '~/types';
+import { IconButton } from '../IconButton';
 import { TimeDisplay } from '../TimeDisplay';
 import styles from './InputFile.module.scss';
 
@@ -19,6 +21,7 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
   const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | undefined>(undefined);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleOnChange(e?: ChangeEvent<HTMLInputElement>) {
     if (e === undefined) return;
@@ -31,6 +34,13 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
       }
     }
   }
+
+  const handleClearFile = () => {
+    setSelectedFile(undefined);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   // Create preview on file change
   useEffect(() => {
@@ -52,7 +62,6 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
       case 'pdf':
         return 'application/pdf';
     }
-    return '*';
   }
 
   const icons: Record<InputFileType, string> = {
@@ -71,7 +80,13 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
       <label>{label}</label>
       {/* Label container to accept button input */}
       <label className={classNames(styles.file_label, horizontalPreview && styles.horizontal, isError && styles.error)}>
-        <input type="file" accept={acceptTypes()} onChange={handleOnChange} style={{ display: 'none' }} />
+        <input
+          type="file"
+          accept={acceptTypes()}
+          onChange={handleOnChange}
+          style={{ display: 'none' }}
+          ref={fileInputRef}
+        />
 
         {/* Select button */}
         <div className={styles.top_row}>
@@ -99,7 +114,19 @@ export function InputFile({ fileType, label, error = false, onSelected }: InputF
           {/* Image/pdf preview. Shows empty preview for pdf type */}
           {(fileType === 'pdf' || preview) && (
             <div className={classNames(styles.preview_container, styles[typePreviewClass])}>
-              {preview && <img className={styles.preview} src={preview} alt="Preview" />}
+              {preview && (
+                /* Delete-button */
+                <div className={styles.image_wrapper}>
+                  <img className={styles.preview} src={preview} alt="Preview" />
+                  <IconButton
+                    color={COLORS.red}
+                    icon="mdi:delete"
+                    onClick={handleClearFile}
+                    className={styles.delete_button}
+                    title="Delete file"
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
