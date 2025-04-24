@@ -43,8 +43,7 @@ interface RecruitmentInterviewNotesFormProps {
 
 export function RecruitmentInterviewNotesForm({ initialData, interviewId }: RecruitmentInterviewNotesFormProps) {
   const { t } = useTranslation();
-  const [currentNotes, setCurrentNotes] = useState(initialData.notes || '');
-  const [markdownState, setMarkdownState] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const form = useForm<RecruitmentInterviewNotesFormType>({
@@ -55,11 +54,15 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
     },
   });
 
-  const handleUpdateNotes = useMutation({
+  const watchedNotes = form.watch('notes');
+
+  const updateNotesMutation = useMutation({
     mutationFn: ({ notes, interviewId }: { notes: string; interviewId: number }) =>
       putRecrutmentInterviewNotes(notes, interviewId),
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
+      // 'variables' contains the { notes, interviewId } passed to mutate
       toast.success(t(KEY.common_update_successful));
+      form.reset({ ...form.getValues(), notes: variables.notes });
     },
     onError: (error) => {
       toast.error(t(KEY.common_something_went_wrong));
@@ -67,74 +70,84 @@ export function RecruitmentInterviewNotesForm({ initialData, interviewId }: Recr
   });
 
   useEffect(() => {
-    if (markdownState && textareaRef.current) {
+    if (isEditing && textareaRef.current) {
       const textarea = textareaRef.current;
       textarea.focus();
-      // Set cursor position to end of text
       textarea.setSelectionRange(textarea.value.length, textarea.value.length);
     }
-  }, [markdownState]);
+  }, [isEditing]);
 
-  function handleFocus() {
-    setMarkdownState(true);
-  }
-
-  const handleNotesChange = (newNotes: string) => {
-    if (newNotes !== currentNotes && interviewId) {
-      setCurrentNotes(newNotes);
-      handleUpdateNotes.mutate({ notes: newNotes, interviewId });
+  // Effect to reset form if initialData changes from props after initial mount
+  useEffect(() => {
+    // Only reset if the incoming initial notes are different from the current form value
+    // and the form isn't currently dirty (to avoid discarding user edits).
+    if (initialData.notes !== form.getValues('notes') && !form.formState.isDirty) {
+      form.reset({
+        notes: initialData.notes || '',
+        interviewId: interviewId || 0,
+      });
+    } else if (interviewId !== form.getValues('interviewId')) {
+      form.reset({
+        ...form.getValues(),
+        interviewId: interviewId || 0,
+      });
     }
-  };
+  }, [initialData.notes, interviewId, form]);
 
+  // Effect to warn user about unsaved changes before leaving the page
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.stopImmediatePropagation();
-      if (interviewId) {
-        // Ensure data is saved before leaving (e.g. on refresh)
-        putRecrutmentInterviewNotes(currentNotes, interviewId);
-        // preventDefault() triggers the confirmation box.
+      // Check if the form has unsaved changes according to react-hook-form
+      if (form.formState.isDirty && interviewId) {
         event.preventDefault();
+        return t(KEY.common_something_went_wrong);
       }
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [currentNotes, interviewId]);
+    // Depend on interviewId and form state (represented by the stable form instance)
+  }, [interviewId, form.formState.isDirty, t]);
+
+  function handleEditStart() {
+    setIsEditing(true);
+  }
+
+  function handleEditEnd() {
+    setIsEditing(false);
+
+    // Check if the notes field specifically was modified
+    const isNotesDirty = form.formState.dirtyFields.notes;
+    const currentNotesValue = form.getValues('notes');
+
+    if (isNotesDirty && interviewId) {
+      updateNotesMutation.mutate({ notes: currentNotesValue, interviewId });
+    }
+  }
 
   return (
     <Form {...form}>
-      <form>
-        <div>
-          <FormField
-            control={form.control}
-            name="notes"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t(KEY.recruitment_interview_notes)}</FormLabel>
-                <FormControl>
-                  <div>
-                    {markdownState ? (
-                      <Textarea
-                        {...field}
-                        ref={textareaRef}
-                        className={styles.textBox}
-                        onBlur={() => {
-                          field.onBlur();
-                          handleNotesChange(form.getValues('notes'));
-                          setMarkdownState(false);
-                        }}
-                      />
-                    ) : (
-                      <MarkdownPreview notes={currentNotes} onFocus={handleFocus} />
-                    )}
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-      </form>
+      <div>
+        <FormField
+          control={form.control}
+          name="notes"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t(KEY.recruitment_interview_notes)}</FormLabel>
+              <FormControl>
+                <div>
+                  {isEditing ? (
+                    <Textarea {...field} ref={textareaRef} className={styles.textBox} onBlur={handleEditEnd} />
+                  ) : (
+                    <MarkdownPreview notes={watchedNotes} onFocus={handleEditStart} />
+                  )}
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
     </Form>
   );
 }
