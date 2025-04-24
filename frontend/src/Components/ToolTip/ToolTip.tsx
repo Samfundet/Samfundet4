@@ -23,7 +23,7 @@ export function ToolTip({ value = 'Jokes on you', display = 'text', alignment = 
         <div
           className={classNames(
             styles.tooltip,
-            alignment === 'top' ? styles.top : styles.left,
+            alignment === 'top' ? styles.top : styles.right,
             !hover && styles.hidden,
           )}
         >
