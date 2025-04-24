@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
@@ -18,7 +18,6 @@ import {
   Input,
   SamfundetLogoSpinner,
 } from '~/Components';
-import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getInterviewRoom, getRecruitmentGangs, postInterviewRoom, putInterviewRoom } from '~/api';
 import type { GangDto } from '~/dto';
@@ -53,12 +52,14 @@ export function CreateInterviewRoomPage() {
     enabled: !!recruitmentId,
   });
 
-  const mapGangs = (gangs: GangDto[]): DropdownOption<number>[] => {
-    return gangs.map((gang: GangDto) => ({
+  const gangOptions = useMemo(() => {
+    if (!recruitmentGangs) return [];
+
+    return recruitmentGangs.map((gang: GangDto) => ({
       label: gang.name_nb,
       value: gang.id,
     }));
-  };
+  }, [recruitmentGangs]);
 
   // Initialize with empty values first
   const form = useForm<FormType>({
@@ -235,7 +236,7 @@ export function CreateInterviewRoomPage() {
                     <FormControl>
                       {recruitmentGangs ? (
                         <Dropdown
-                          options={mapGangs(recruitmentGangs)}
+                          options={gangOptions}
                           onChange={(value) => field.onChange(value)}
                           value={field.value}
                         />
