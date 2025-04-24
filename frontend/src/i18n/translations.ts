@@ -138,6 +138,7 @@ export const nb = prepareTranslations({
   [KEY.common_recruitment]: 'Opptak',
   [KEY.common_information]: 'Informasjon',
   [KEY.common_description]: 'Beskrivelse',
+  [KEY.common_details]: 'Detaljer',
   [KEY.common_reservation]: 'Reservasjon',
   [KEY.common_opening_hours]: 'Åpningstider',
   [KEY.common_general]: 'Generelt',
@@ -244,6 +245,8 @@ export const nb = prepareTranslations({
   [KEY.twenty]: '20 år',
   [KEY.none]: 'Ingen',
   [KEY.mix]: 'Mikset',
+  [KEY.event_external_host_message]:
+    'Arrangeres i regi av ekstern arrangør, ikke gjengene på Samfundet. Henvendelser kan rettes mot',
 
   // Venue Page:
   [KEY.venuepage_title]: 'Kart og lokaler',
@@ -433,6 +436,60 @@ export const nb = prepareTranslations({
   [KEY.recruitment_applet_without_interview_description]: 'Søkere som ikke har noen intervju satt',
   [KEY.recruitment_applet_three_interview_title]: '< 3 intervju',
 
+  // Recruitment application state
+  [KEY.application_needs_processing]: 'Må behandles!',
+  [KEY.do_not_contact]: 'Ikke kontakt!',
+
+  // RecruitmentApplicantState 0
+  [KEY.not_set_short]: 'Ubehandlet',
+  [KEY.not_set_long]: 'Søker ikke behandlet.',
+
+  // RecruitmentApplicantState 1
+  [KEY.top_pri_reserved_here_short]: 'Søkers topprioritet, men satt reserve her.',
+  [KEY.top_pri_reserved_here_long]:
+    'Søkeren er satt på reserve for dette vervet og det er dens topprioritet; Hvis enighet i opptaksforum kan søkeren få tilbud når offisiell ringerunde starter.',
+  [KEY.top_pri_reserved_here_guidance]: 'Gitt klarsignal: kan kontakte, hvis ønskelig.',
+
+  // RecruitmentApplicantState 2
+  [KEY.top_pri_wanted_here_short]: 'Søkers topprioritet og ønsket her.',
+  [KEY.top_pri_wanted_here_long]:
+    'Søkeren er ønsket for vervet og det er dens topprioritet; Bør få tilbud når offisiell ringerunde starter.',
+  [KEY.top_pri_wanted_here_guidance]: 'Gitt klarsignal: kan kontakte.',
+
+  // RecruitmentApplicantState 3
+  [KEY.reserved_elsewhere_unprocessed_here_short]: 'Reserve på annet verv, ubehandlet her.',
+  [KEY.reserved_elsewhere_unprocessed_here_long]:
+    'Søkeren er satt som reserve på andre verv den prioriterer høyere. Søkeren er ubehandlet her.',
+
+  // RecruitmentApplicantState 4
+  [KEY.reserved_elsewhere_reserved_here_short]: 'Reserve på annet verv og på reserve her.',
+  [KEY.reserved_elsewhere_reserved_here_long]:
+    'Søkeren er satt reserve på andre verv den prioriterer høyere, men også reserve for dette vervet',
+
+  // RecruitmentApplicantState 5
+  [KEY.reserved_elsewhere_wanted_here_short]: 'Reserve på annet verv, og ønsket her.',
+  [KEY.reserved_elsewhere_wanted_here_long]:
+    'Søkeren er satt som reserve på andre verv den prioriterer høyere, men ønsket for dette vervet',
+
+  // RecruitmentApplicantState 6
+  [KEY.wanted_elsewhere_unprocessed_here_short]: 'Ønsket for annet verv, og ubehandlet her.',
+  [KEY.wanted_elsewhere_unprocessed_here_long]:
+    'Søkeren er ønsket for andre verv den prioriterer høyere og ubehandlet her.',
+
+  // RecruitmentApplicantState 7
+  [KEY.wanted_elsewhere_reserve_here_short]: 'Ønsket for annet verv, og på reserve her.',
+  [KEY.wanted_elsewhere_reserve_here_long]:
+    'Søkeren er ønsket for andre verv den prioriterer høyere, og satt reserve her.',
+
+  // RecruitmentApplicantState 8
+  [KEY.wanted_elsewhere_wanted_here_short]: 'Ønsket for annet verv og ønsket her.',
+  [KEY.wanted_elsewhere_wanted_here_long]:
+    'Søkeren er ønsket for andre verv den prioriterer høyere, men også ønsket for dette vervet.',
+
+  // RecruitmentApplicantState 10
+  [KEY.not_wanted_short]: 'Ikke ønsket',
+  [KEY.not_wanted_long]: 'Søkeren er ikke ønsket for dette vervet.',
+
   // CommandMenu:
   [KEY.command_menu_label]: 'Global kommando meny',
   [KEY.command_menu_no_results]: 'Ingen resultater',
@@ -469,6 +526,7 @@ export const nb = prepareTranslations({
   [KEY.sulten_dishes]: 'Retter',
   [KEY.sulten_occation_drinks]: 'Drikke',
   [KEY.sulten_occation_eat]: 'Spise',
+  [KEY.sulten_menu_you_are_welcome]: 'Velbekomme!',
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Tilgjenglighet',
@@ -654,6 +712,7 @@ export const en = prepareTranslations({
   [KEY.common_restaurant]: 'Restaurant',
   [KEY.common_contact_us]: 'Contact us',
   [KEY.common_description]: 'Description',
+  [KEY.common_details]: 'Details',
   [KEY.common_information]: 'Information',
   [KEY.common_recruitment]: 'Recruitment',
   [KEY.common_reservation]: 'Reservation',
@@ -758,6 +817,8 @@ export const en = prepareTranslations({
   [KEY.twenty]: '20 years',
   [KEY.none]: 'None',
   [KEY.mix]: 'Mixed',
+  [KEY.event_external_host_message]:
+    'Organized by an external organizer, not the groups at the Samfundet. Inquiries can be directed to',
 
   // VenuePage:
   [KEY.venuepage_title]: 'Map and Venues',
@@ -931,6 +992,51 @@ export const en = prepareTranslations({
   [KEY.recruitment_choose_interview_time]: 'Choose time of interview',
   [KEY.recruitment_choose_interview_location]: 'Choose location of interview',
 
+  // Recruitment application state
+
+  [KEY.application_needs_processing]: 'Needs processing!',
+  [KEY.do_not_contact]: 'Do not contact!',
+
+  [KEY.not_set_short]: 'Unprocessed',
+  [KEY.not_set_long]: 'Applicant not processed.',
+
+  [KEY.top_pri_reserved_here_short]: 'Applicants top priority, but set as reserve here.',
+  [KEY.top_pri_reserved_here_long]:
+    'The applicant is set as reserve for this position and it is their top priority; If there is agreement in the admission forum, the applicant can receive an offer when the official round of calling starts.',
+  [KEY.top_pri_reserved_here_guidance]: 'With goahed signal: can contact, if you want.',
+
+  [KEY.top_pri_wanted_here_short]: 'Applicants top priority and wanted here.',
+  [KEY.top_pri_wanted_here_long]:
+    'The applicant is wanted for the position and it is their top priority; Should receive an offer when the official round of calling starts.',
+  [KEY.top_pri_wanted_here_guidance]: 'With goahed signal: can contact.',
+
+  [KEY.reserved_elsewhere_unprocessed_here_short]: 'Reserve for another position, unprocessed here.',
+  [KEY.reserved_elsewhere_unprocessed_here_long]:
+    'The applicant is set as reserve for other positions they prioritize higher. The applicant is unprocessed here.',
+
+  [KEY.reserved_elsewhere_reserved_here_short]: 'Reserve for another position and reserve here.',
+  [KEY.reserved_elsewhere_reserved_here_long]:
+    'The applicant is set as reserve for other positions they prioritize higher, but also reserve for this position',
+
+  [KEY.reserved_elsewhere_wanted_here_short]: 'Reserve for another position, and wanted here.',
+  [KEY.reserved_elsewhere_wanted_here_long]:
+    'The applicant is set as reserve for other positions they prioritize higher, but wanted for this position',
+
+  [KEY.wanted_elsewhere_unprocessed_here_short]: 'Wanted for another position, and unprocessed here.',
+  [KEY.wanted_elsewhere_unprocessed_here_long]:
+    'The applicant is wanted for other positions they prioritize higher and unprocessed here.',
+
+  [KEY.wanted_elsewhere_reserve_here_short]: 'Wanted for another position, and reserve here.',
+  [KEY.wanted_elsewhere_reserve_here_long]:
+    'The applicant is wanted for other positions they prioritize higher, and set as reserve here.',
+
+  [KEY.wanted_elsewhere_wanted_here_short]: 'Wanted for another position and wanted here.',
+  [KEY.wanted_elsewhere_wanted_here_long]:
+    'The applicant is wanted for other positions they prioritize higher, but also wanted for this position.',
+
+  [KEY.not_wanted_short]: 'Not wanted',
+  [KEY.not_wanted_long]: 'The applicant is not wanted for this position.',
+
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'Case document',
@@ -997,6 +1103,7 @@ export const en = prepareTranslations({
   [KEY.sulten_reservation_form_find_times]: 'Find Available Times',
   [KEY.sulten_occation_drinks]: 'Drinks',
   [KEY.sulten_occation_eat]: 'Eating',
+  [KEY.sulten_menu_you_are_welcome]: "You're welcome!",
 
   // Occupied Recruitment
   [KEY.occupied_title]: 'Availability',
