@@ -236,14 +236,14 @@ export function RecruitmentInterviewAvailabilityForm({ recruitmentId, data }: Pr
                   <FormControl>
                     <Dropdown
                       options={AVAILABILITY_TIMESLOT_INTERVAL_OPTIONS.map((o) => ({
-                        value: String(o),
+                        value: o,
                         label: String(o),
                       }))}
                       onChange={(value) => {
                         onChange(value);
                         updateTimeslotPreview();
                       }}
-                      value={String(value)}
+                      value={value}
                       {...fieldProps}
                     />
                   </FormControl>
