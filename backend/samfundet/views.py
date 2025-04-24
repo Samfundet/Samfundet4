@@ -17,6 +17,7 @@ from rest_framework.request import Request
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
@@ -381,6 +382,21 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
             applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user_id=user_id)
         else:
             applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user)
+
+        serializer = self.get_serializer(applications, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def withdrawn_applications(self, request: Request, **kwargs: Any) -> Response:
+        """Returns a list of all the applications for a user for a specified recruitment"""
+        recruitment_id = request.query_params.get('recruitment')
+
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user, withdrawn=True)
 
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
