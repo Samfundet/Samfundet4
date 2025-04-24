@@ -13,7 +13,7 @@
 .row {
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 1rem;
     @include for-tablet-up {
       flex-direction: row;
     }
