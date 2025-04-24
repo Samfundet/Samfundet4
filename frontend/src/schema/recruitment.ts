@@ -1,0 +1,13 @@
+import { z } from 'zod';
+
+export const AVAILABILITY_TIMESLOT_INTERVAL_MIN = 10;
+export const AVAILABILITY_TIMESLOT_INTERVAL_MAX = 60;
+
+export const AVAILABILITY_TIMESLOT_INTERVAL = z
+  .number()
+  .min(AVAILABILITY_TIMESLOT_INTERVAL_MIN)
+  .max(AVAILABILITY_TIMESLOT_INTERVAL_MAX);
+
+export const AVAILABILITY_TIMESLOT_INTERVAL_OPTIONS = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
+
+export const AVAILABILITY_TIMESLOT_TIME = z.string().regex(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/);
