@@ -1274,3 +1274,92 @@ class ApplicationCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecruitmentApplication
         fields = ['comment']
+
+
+class LimitedGangSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gang
+        fields = [
+            'id',
+            'name_en',
+            'name_nb',
+            'abbreviation',
+        ]
+
+
+class RecruitmentPositionLimitedSerializer(serializers.ModelSerializer):
+    gang = LimitedGangSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentPosition
+        fields = [
+            'id',
+            'name_nb',
+            'name_en',
+            'gang',
+        ]
+
+
+class RecruitmentApplicationForRecruitmentResponsible(CustomBaseSerializer):
+    recruitment_position = RecruitmentPositionLimitedSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentApplication
+        fields = [
+            'id',
+            'recruitment_position',
+            'applicant_priority',
+            'recruiter_priority',
+            'recruiter_status',
+            'applicant_state',
+            'interview',
+            'created_at',
+            'recruitment',
+        ]
+        read_only_fields = [
+            'id',
+            'recruitment_position',
+            'applicant_priority',
+            'recruiter_priority',
+            'recruiter_status',
+            'applicant_state',
+            'interview',
+            'created_at',
+            'recruitment',
+        ]
+
+
+class UserWithApplicationsSerializer(serializers.ModelSerializer):
+    """Serializer that returns users with their grouped applications."""
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'phone_number',
+            'applications',
+        ]
+
+    def to_representation(self, instance: User) -> dict:
+        """Return user with their applications for a specific recruitment."""
+        # Get basic user data
+        data = super().to_representation(instance)
+
+        # Get the recruitment context from the view
+        recruitment = self.context.get('recruitment')
+        if not recruitment:
+            raise serializers.ValidationError('Recruitment context is required')
+
+        # Get applications for this user for the specific recruitment
+        applications = RecruitmentApplication.objects.filter(user=instance, recruitment=recruitment, withdrawn=False).select_related(
+            'recruitment_position', 'interview'
+        )
+
+        # Add applications data
+        data['applications'] = RecruitmentApplicationForRecruitmentResponsible(applications, many=True).data
+
+        return data
