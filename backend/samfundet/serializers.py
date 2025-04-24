@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import datetime
 import itertools
 from typing import TYPE_CHECKING
 from collections import defaultdict
@@ -190,7 +191,6 @@ class EventSerializer(CustomBaseSerializer):
         exclude = ['image', 'registration', 'event_group', 'billig_id']
 
     # Read only properties (computed property, foreign model).
-    end_dt = serializers.DateTimeField(read_only=True)
     total_registrations = serializers.IntegerField(read_only=True)
     image_url = serializers.CharField(read_only=True)
 
@@ -200,6 +200,23 @@ class EventSerializer(CustomBaseSerializer):
 
     # For post/put (change image by id).
     image_id = serializers.IntegerField(write_only=True)
+
+    def validate(self, data: dict) -> dict:
+        # Check if all required fields are present for validation
+        if all(key in data for key in ['start_dt', 'end_dt', 'visibility_from_dt', 'visibility_to_dt']):
+            # Validate start is before end
+            if data['start_dt'] >= data['end_dt']:
+                raise serializers.ValidationError({'start_dt': 'Event start must be before event end'})
+
+            # Validate visibility_from is before or equal to start
+            if data['visibility_from_dt'] > data['start_dt']:
+                raise serializers.ValidationError({'visibility_from_dt': 'Event visibility must start before or at the same time as the event'})
+
+            # Validate visibility_to is after or equal to end
+            if data['visibility_to_dt'] < data['end_dt']:
+                raise serializers.ValidationError({'visibility_to_dt': 'Event visibility must end after or at the same time as the event'})
+
+        return data  # Return the validated data
 
     def create(self, validated_data: dict) -> Event:
         """
@@ -986,12 +1003,24 @@ class RecruitmentApplicationForApplicantSerializer(CustomBaseSerializer):
 
 class RecruitmentInterviewAvailabilitySerializer(CustomBaseSerializer):
     # Set custom format to remove seconds from start/end times, as they are ignored
-    start_time = serializers.DateTimeField(format='%H:%M')
-    end_time = serializers.DateTimeField(format='%H:%M')
+    start_time = serializers.TimeField(format='%H:%M')
+    end_time = serializers.TimeField(format='%H:%M')
 
     class Meta:
         model = RecruitmentInterviewAvailability
         fields = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+
+    def validate(self, data: dict) -> dict:
+        start_date: datetime.date | None = data.get('start_date')
+        end_date: datetime.date | None = data.get('end_date')
+
+        if not start_date or not end_date:
+            raise serializers.ValidationError('start_date and end_date are required')
+
+        if start_date > end_date:
+            raise serializers.ValidationError('end_date must be greater than start_date')
+
+        return super().validate(data)
 
 
 class OccupiedTimeslotSerializer(serializers.ModelSerializer):
@@ -1245,3 +1274,92 @@ class ApplicationCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecruitmentApplication
         fields = ['comment']
+
+
+class LimitedGangSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gang
+        fields = [
+            'id',
+            'name_en',
+            'name_nb',
+            'abbreviation',
+        ]
+
+
+class RecruitmentPositionLimitedSerializer(serializers.ModelSerializer):
+    gang = LimitedGangSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentPosition
+        fields = [
+            'id',
+            'name_nb',
+            'name_en',
+            'gang',
+        ]
+
+
+class RecruitmentApplicationForRecruitmentResponsible(CustomBaseSerializer):
+    recruitment_position = RecruitmentPositionLimitedSerializer(read_only=True)
+
+    class Meta:
+        model = RecruitmentApplication
+        fields = [
+            'id',
+            'recruitment_position',
+            'applicant_priority',
+            'recruiter_priority',
+            'recruiter_status',
+            'applicant_state',
+            'interview',
+            'created_at',
+            'recruitment',
+        ]
+        read_only_fields = [
+            'id',
+            'recruitment_position',
+            'applicant_priority',
+            'recruiter_priority',
+            'recruiter_status',
+            'applicant_state',
+            'interview',
+            'created_at',
+            'recruitment',
+        ]
+
+
+class UserWithApplicationsSerializer(serializers.ModelSerializer):
+    """Serializer that returns users with their grouped applications."""
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'phone_number',
+            'applications',
+        ]
+
+    def to_representation(self, instance: User) -> dict:
+        """Return user with their applications for a specific recruitment."""
+        # Get basic user data
+        data = super().to_representation(instance)
+
+        # Get the recruitment context from the view
+        recruitment = self.context.get('recruitment')
+        if not recruitment:
+            raise serializers.ValidationError('Recruitment context is required')
+
+        # Get applications for this user for the specific recruitment
+        applications = RecruitmentApplication.objects.filter(user=instance, recruitment=recruitment, withdrawn=False).select_related(
+            'recruitment_position', 'interview'
+        )
+
+        # Add applications data
+        data['applications'] = RecruitmentApplicationForRecruitmentResponsible(applications, many=True).data
+
+        return data
