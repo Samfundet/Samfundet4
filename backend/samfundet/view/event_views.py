@@ -22,6 +22,7 @@ from samfundet.serializers import (
     PurchaseFeedbackSerializer,
 )
 from samfundet.models.event import Event, EventGroup, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
+from samfundet.models.model_choices import EventStatus
 
 
 class EventView(ModelViewSet):
@@ -35,7 +36,13 @@ class EventPerDayView(APIView):
 
     def get(self, request: Request) -> Response:
         # Fetch and serialize events.
-        events = Event.objects.filter(start_dt__gt=timezone.now()).order_by('start_dt')
+        now = timezone.now()
+        # Only events:
+        # - with a start date/time that is later than the current time will be included
+        # - where the event's visibility period has already begun
+        # - where  visibility period hasn't ended yet
+        # - where status is "PUBLIC"
+        events = Event.objects.filter(start_dt__gt=now, visibility_from_dt__lte=now, visibility_to_dt__gte=now, status=EventStatus.PUBLIC).order_by('start_dt')
         serialized = EventSerializer(events, many=True).data
 
         # Organize in date dictionary.

@@ -17,7 +17,7 @@ from django.db.models import Prefetch, QuerySet
 from root.utils.mixins import CustomBaseModel
 
 from samfundet.models.billig import BilligEvent, BilligTicketGroup
-from samfundet.models.general import Gang, User, Image
+from samfundet.models.general import Gang, User, Image, Organization
 from samfundet.models.model_choices import EventStatus, EventCategory, EventTicketType, EventAgeRestriction
 
 # ======================== #
@@ -151,8 +151,8 @@ class Event(CustomBaseModel):
     # Event group is used for events occurring multiple times (e.g. a concert repeating twice)
     event_group = models.ForeignKey(EventGroup, on_delete=models.PROTECT, blank=True, null=True)
 
-    # Event status
-    status = models.CharField(max_length=30, choices=EventStatus.choices, blank=False, null=False, default=EventStatus.ACTIVE)
+    # Event status, can be used to override event visibility
+    status = models.CharField(max_length=30, choices=EventStatus.choices, blank=False, null=False, default=EventStatus.PUBLIC)
 
     # Text/images etc
     title_nb = models.CharField(max_length=140, blank=False, null=False)
@@ -163,7 +163,15 @@ class Event(CustomBaseModel):
     description_short_en = models.TextField(blank=False, null=False)
     image = models.ForeignKey(Image, on_delete=models.PROTECT, blank=False, null=False)
     host = models.CharField(max_length=140, blank=False, null=False)
+    organization = models.ForeignKey(Organization, on_delete=models.PROTECT, blank=True, null=True)
     editors = models.ManyToManyField(Gang, blank=True)
+
+    email_contact = models.EmailField(max_length=200, blank=True, null=True)
+
+    host_link = models.URLField(max_length=200, blank=True, null=True)
+    instagram_link = models.URLField(max_length=200, blank=True, null=True)
+    facebook_link = models.URLField(max_length=200, blank=True, null=True)
+    x_link = models.URLField(max_length=200, blank=True, null=True)
 
     # ======================== #
     #       Venue/Entrance     #
@@ -176,11 +184,13 @@ class Event(CustomBaseModel):
     category = models.CharField(max_length=30, choices=EventCategory.choices, blank=False, null=False, default=EventCategory.OTHER)
 
     # ======================== #
-    #    Duration/Timestamps   #
+    #        Timestamps        #
     # ======================== #
     start_dt = models.DateTimeField(blank=False, null=False)
-    duration = models.PositiveIntegerField(blank=False, null=False)
-    publish_dt = models.DateTimeField(blank=False, null=False)
+    end_dt = models.DateTimeField(blank=False, null=False)
+    visibility_from_dt = models.DateTimeField(blank=False, null=False)
+    visibility_to_dt = models.DateTimeField(blank=False, null=False)
+
     doors_time = models.TimeField(blank=True, null=True)
 
     # ======================== #
@@ -212,8 +222,12 @@ class Event(CustomBaseModel):
         return self.image.image.url
 
     @property
-    def end_dt(self) -> timezone.datetime:
-        return self.start_dt + timezone.timedelta(minutes=self.duration)
+    def is_visible(self) -> bool:
+        return (self.visibility_from_dt <= timezone.now() <= self.visibility_to_dt) and self.status == EventStatus.PUBLIC
+
+    @property
+    def is_ongoing(self) -> bool:
+        return self.start_dt <= timezone.now() <= self.end_dt
 
     @property
     def billig(self) -> BilligEvent | None:
