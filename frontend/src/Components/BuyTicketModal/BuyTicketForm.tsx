@@ -25,8 +25,7 @@ import styles from './BuyTicketModal.module.scss';
 // Validation schema
 const buyTicketFormSchema = z
   .object({
-    tickets: z.number().min(0),
-    membershipTickets: z.number().min(0),
+    ticketQuantities: z.record(z.string(), z.number().min(0)),
     membershipNumber: z.string().optional(),
     email: z
       .string()
@@ -38,9 +37,9 @@ const buyTicketFormSchema = z
     message: t(KEY.email_or_membership_number_message),
     path: ['email'],
   })
-  .refine((data) => data.tickets >= 1 || data.membershipTickets >= 1, {
+  .refine((data) => Object.values(data.ticketQuantities ?? {}).some((qty) => qty > 0), {
     message: t(KEY.no_tickets_selected_message),
-    path: ['tickets'],
+    path: ['ticketQuantities'],
   });
 
 type BuyTicketFormType = z.infer<typeof buyTicketFormSchema>;
@@ -57,14 +56,23 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const [totalPrice, setTotalPrice] = useState(0);
   const numberOfTickets = event.numberOfTickets ?? 9;
+  const ticket_groups = event.billig?.ticket_groups;
+
+  const ticketGroupDefaults = ticket_groups?.reduce(
+    (acc, group) => {
+      const name = group.price_groups?.[0]?.name;
+      if (name) acc[name] = 0;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   const form = useForm<BuyTicketFormType>({
     resolver: zodResolver(buyTicketFormSchema),
     defaultValues: {
-      tickets: 0,
-      membershipTickets: 0,
-      membershipNumber: '',
+      ticketQuantities: ticketGroupDefaults,
       email: '',
+      membershipNumber: '',
       ticketType: TICKET_TYPE_EMAIL,
     },
   });
@@ -75,90 +83,63 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
     console.log('Submitted Ticket Form Data:', data);
   }
 
-  const price = event?.price ?? 50; //TODO: fetch from billig (in ISSUE #1797)
-  const price_member = event?.price_member ?? 30;
-
-  const tickets = useWatch({ control: form.control, name: 'tickets' });
-  const membershipTickets = useWatch({ control: form.control, name: 'membershipTickets' });
+  const ticketQuantities = useWatch({ control: form.control, name: 'ticketQuantities' });
 
   useEffect(() => {
-    setTotalPrice(tickets * price + membershipTickets * price_member);
-  }, [tickets, membershipTickets, price, price_member]);
+    if (!ticketQuantities || !ticket_groups) return;
+
+    let total = 0;
+    for (const group of ticket_groups) {
+      const name = group.price_groups?.[0]?.name;
+      const price = group.price_groups?.[0]?.price ?? 0;
+      const qty = ticketQuantities[name] ?? 0;
+
+      total += qty * price;
+    }
+    setTotalPrice(total);
+  }, [ticketQuantities, ticket_groups]);
 
   return (
     <div className={styles.container}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {/* Ticket Selection */}
-          <div className={styles.ticket_selection_container}>
-            {/* Non-Member Tickets */}
-            <div className={styles.ticket_select}>
-              <div className={styles.select_info}>
-                <p className={styles.select_label}>{`${t(KEY.common_not)}-${t(KEY.common_member)}`}</p>
-                <p className={styles.price_label}>
-                  {price} {t(KEY.kr_per_ticket)}
-                </p>
-              </div>
-              <FormField
-                control={form.control}
-                name="tickets"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Dropdown
-                        {...field}
-                        options={[...Array(numberOfTickets).keys()].map((num) => ({
-                          label: `${num}`,
-                          value: num.toString(),
-                        }))}
-                        onChange={(e) => {
-                          if (e) {
-                            form.setValue('tickets', Number(e));
-                          }
-                        }}
-                        value={field.value.toString()}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+          {ticket_groups?.map((group) => {
+            const name = group.price_groups?.[0]?.name;
+            const price = group.price_groups?.[0]?.price ?? 0;
 
-            {/* Member Tickets */}
-            <div className={styles.ticket_select}>
-              <div className={styles.select_info}>
-                <p className={styles.select_label}>{t(KEY.common_member)}</p>
-                <p className={styles.price_label}>
-                  {price_member} {t(KEY.kr_per_ticket)}
-                </p>
+            return (
+              <div key={name} className={styles.ticket_select}>
+                <div className={styles.select_info}>
+                  <p className={styles.select_label}>{name}</p>
+                  <p className={styles.price_label}>
+                    {price} {t(KEY.kr_per_ticket)}
+                  </p>
+                </div>
+                <FormField
+                  control={form.control}
+                  name={`ticketQuantities.${name}`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Dropdown
+                          options={[...Array(numberOfTickets + 1).keys()].map((num) => ({
+                            label: `${num}`,
+                            value: num.toString(),
+                          }))}
+                          value={field.value?.toString() ?? '0'}
+                          onChange={(e) => {
+                            if (e) form.setValue(`ticketQuantities.${name}`, Number(e));
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-              <FormField
-                control={form.control}
-                name="membershipTickets"
-                render={({ field }) => (
-                  <FormItem className={styles.select_item}>
-                    <FormControl>
-                      <Dropdown
-                        {...field}
-                        options={[...Array(numberOfTickets).keys()].map((num) => ({
-                          label: `${num}`,
-                          value: num.toString(),
-                        }))}
-                        onChange={(e) => {
-                          if (e) {
-                            form.setValue('membershipTickets', Number(e));
-                          }
-                        }}
-                        value={field.value.toString()}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
+            );
+          })}
 
           {/* Email / Membership Number Toggle */}
           <div className={styles.ticket_type}>
