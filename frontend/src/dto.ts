@@ -8,6 +8,11 @@ import type {
   HomePageElementVariation,
 } from './types';
 
+export type ApplicationFileAttachmentDto = {
+  application_id: number;
+  application_file: File;
+}
+
 export type UserDto = {
   id: number;
   username: string;

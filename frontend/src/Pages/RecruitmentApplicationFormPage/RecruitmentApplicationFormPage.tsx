@@ -28,6 +28,7 @@ import {
   getRecruitmentPositionForApplicant,
   getRecruitmentPositionsGangForApplicant,
   putRecruitmentApplication,
+  uploadAttachment,
   withdrawRecruitmentApplicationApplicant,
 } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
@@ -167,14 +168,21 @@ export function RecruitmentApplicationFormPage() {
   }
 
   const submitData = useMutation({
-    mutationFn: ({ data, positionId }: { data: FormProps; positionId: number }) => {
+    mutationFn: async ({ data, positionId }: { data: FormProps; positionId: number }) => {
       const fd = new FormData();
       fd.append('application_text', data.application_text);
 
       if (data.video_url) fd.append('application_video_url', data.video_url);
-      if (data.image_file) fd.append('application_image', data.image_file);
 
-      return putRecruitmentApplication(fd, positionId);
+      const { data: application } = await putRecruitmentApplication(
+        fd,
+        positionId,
+      );
+      if (data.image_file) {
+        await uploadAttachment(data.image_file, application.id);
+      }
+
+      return application;
     },
     onSuccess: () => {
       navigate({
@@ -342,7 +350,7 @@ export function RecruitmentApplicationFormPage() {
                     );
                   }}
                 />
-                {recruitmentPosition?.allow_video_url && (
+                {!recruitmentPosition?.allow_video_url && (
                   <FormField
                     control={form.control}
                     name="video_url"
@@ -363,7 +371,7 @@ export function RecruitmentApplicationFormPage() {
                   />
                 )}
                 <div className={styles.button_container}>
-                  {recruitmentPosition?.allow_image_attachment && (
+                  {!recruitmentPosition?.allow_image_attachment && (
                     <FormField
                       control={form.control}
                       name="image_file"

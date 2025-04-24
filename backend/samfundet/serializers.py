@@ -14,8 +14,8 @@ from django.core.files import File
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
-from django.core.files.uploadedfile import UploadedFile
 from django.contrib.auth.models import Group, Permission
+from django.core.files.uploadedfile import UploadedFile
 from django.contrib.auth.password_validation import validate_password
 
 from root.constants import PHONE_NUMBER_REGEX
@@ -48,7 +48,6 @@ from .models.general import (
     UserFeedbackModel,
 )
 from .models.recruitment import (
-    ApplicationFileAttachment,
     Interview,
     Recruitment,
     InterviewRoom,
@@ -60,6 +59,7 @@ from .models.recruitment import (
     RecruitmentCampusStat,
     RecruitmentStatistics,
     RecruitmentApplication,
+    ApplicationFileAttachment,
     RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
     RecruitmentPositionSharedInterviewGroup,
@@ -78,7 +78,7 @@ from rest_framework.utils.serializer_helpers import ReturnList
 class ApplicationFileAttachmentSerializer(CustomBaseSerializer):
     class Meta:
         model = ApplicationFileAttachment
-        fields = ['id', 'application', 'application_file', 'application_file_type', 'created_at']
+        fields = ['id', 'application_file', 'application_file_type', 'created_at']
         read_only_fields = ['id', 'application_file_type', 'created_at']
 
     def validate_application_file(self, value: UploadedFile) -> UploadedFile:
@@ -87,11 +87,33 @@ class ApplicationFileAttachmentSerializer(CustomBaseSerializer):
         return value
 
     def create(self, validated_data: dict[str, Any]) -> ApplicationFileAttachment:
-        application = validated_data.get('application') or self.context.get('application')
+        application = self.context.get('application')
         if not application:
             raise serializers.ValidationError('Application is required to attach a file.')
         validated_data['application'] = application
         return super().create(validated_data)
+
+    def clean(self):
+        super().clean()
+
+        uploaded = self.application_file
+        if not uploaded:
+            return
+
+        content_type = getattr(uploaded, 'content_type', None) or getattr(getattr(uploaded, 'file', None), 'content_type', None)
+        self.application_file_type = content_type or ''
+
+        allowed = {
+            'image/jpeg',
+            'image/png',
+            'video/mp4',
+            'application/pdf',
+        }
+        if content_type not in allowed:
+            raise ValidationError('Wrong filetype')
+
+        if uploaded.size > 10 * 1024 * 1024:  # > 10 MB
+            raise ValidationError('File size must be less than 10 MB.')
 
 
 class TagSerializer(CustomBaseSerializer):

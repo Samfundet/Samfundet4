@@ -12,7 +12,8 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import UserManager
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
-from samfundet.utils import upload_to_application_filepath
+
+from samfundet.models.utils.string_utils import upload_to_application_filepath
 
 from .general import Gang, User, Campus, GangSection, Organization
 from .model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices

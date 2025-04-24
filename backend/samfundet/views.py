@@ -13,6 +13,7 @@ from guardian.shortcuts import get_objects_for_user
 
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.request import Request
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
@@ -38,7 +39,6 @@ from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTE
 
 from .utils import generate_timeslots, get_occupied_timeslots_from_request
 from .serializers import (
-    ApplicationFileAttachmentSerializer,
     InterviewSerializer,
     RecruitmentSerializer,
     InterviewRoomSerializer,
@@ -46,6 +46,7 @@ from .serializers import (
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
     RecruitmentStatisticsSerializer,
+    ApplicationFileAttachmentSerializer,
     RecruitmentSeparatePositionSerializer,
     RecruitmentApplicationForGangSerializer,
     RecruitmentUpdateUserPrioritySerializer,
@@ -63,7 +64,6 @@ from .models.general import (
     User,
 )
 from .models.recruitment import (
-    ApplicationFileAttachment,
     Interview,
     Recruitment,
     InterviewRoom,
@@ -72,6 +72,7 @@ from .models.recruitment import (
     RecruitmentPosition,
     RecruitmentStatistics,
     RecruitmentApplication,
+    ApplicationFileAttachment,
     RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
     RecruitmentPositionSharedInterviewGroup,
@@ -141,6 +142,11 @@ class ApplicationFileAttachmentViewSet(ModelViewSet):
             application = RecruitmentApplication.objects.get(id=application_id, user=request.user)
         except RecruitmentApplication.DoesNotExist:
             return Response({'error': 'Application not found or not authorized'}, status=status.HTTP_404_NOT_FOUND)
+        if ApplicationFileAttachment.objects.filter(application_id=application_id).exists():
+            return Response(
+                {'error': 'An application can only have one attachment'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         serializer = self.get_serializer(data=request.data, context={'application': application})
         serializer.is_valid(raise_exception=True)

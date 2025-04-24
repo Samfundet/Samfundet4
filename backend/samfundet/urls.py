@@ -54,6 +54,7 @@ router.register('recruitment-separateposition', views.RecruitmentSeparatePositio
 router.register('recruitment-position', views.RecruitmentPositionView, 'recruitment_position')
 router.register('recruitment-position-for-applicant', views.RecruitmentPositionForApplicantView, 'recruitment_position_for_applicant')
 router.register('recruitment-applications-for-applicant', views.RecruitmentApplicationForApplicantView, 'recruitment_applications_for_applicant')
+router.register('recruitment-applications-file-attachment', views.ApplicationFileAttachmentViewSet, 'recruitment_applications_file_attachments')
 router.register('recruitment-applications-for-gang', recruitment_views.RecruitmentApplicationForGangView, 'recruitment_applications_for_gang')
 router.register('recruitment-applications-for-position', views.RecruitmentApplicationForRecruitmentPositionView, 'recruitment_applications_for_position')
 router.register('interview', views.InterviewView, 'interview')
