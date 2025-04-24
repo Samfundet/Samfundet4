@@ -95,14 +95,12 @@ class WebhookView(APIView):
     def post(self, request: Request) -> Response:
         WebhookView.verify_signature(
             payload_body=request.stream.body,
-            secret_token=os.environ["WEBHOOK_SECRET"],
+            secret_token=os.environ['WEBHOOK_SECRET'],
             signature_header=request.META[GITHUB_SIGNATURE_HEADER],
         )
         return Response()  # Success.
 
-    def verify_signature(
-        *, payload_body: Any, secret_token: str, signature_header: str
-    ) -> None:
+    def verify_signature(*, payload_body: Any, secret_token: str, signature_header: str) -> None:
         """Verify that the payload was sent from GitHub by validating SHA256.
 
         Raise and return 403 if not authorized.
@@ -113,16 +111,14 @@ class WebhookView(APIView):
             signature_header: header received from GitHub (x-hub-signature-256)
         """
         if not signature_header:
-            raise PermissionDenied(detail="x-hub-signature-256 header is missing!")
+            raise PermissionDenied(detail='x-hub-signature-256 header is missing!')
         hash_object = hmac.new(
             key=force_bytes(secret_token),
             msg=force_bytes(payload_body),
             digestmod=hashlib.sha256,
         )
-        expected_signature = "sha256=" + hash_object.hexdigest()
-        if not hmac.compare_digest(
-            force_bytes(expected_signature), force_bytes(signature_header)
-        ):
+        expected_signature = 'sha256=' + hash_object.hexdigest()
+        if not hmac.compare_digest(force_bytes(expected_signature), force_bytes(signature_header)):
             raise PermissionDenied(detail="Request signatures didn't match!")
 
 
@@ -131,11 +127,9 @@ class WebhookView(APIView):
 # =============================== #
 
 
-@method_decorator(ensure_csrf_cookie, "dispatch")
+@method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentStatisticsView(ModelViewSet):
-    permission_classes = (
-        DjangoModelPermissions,
-    )  # Allow read only to permissions on perms
+    permission_classes = (DjangoModelPermissions,)  # Allow read only to permissions on perms
     serializer_class = RecruitmentStatisticsSerializer
     queryset = RecruitmentStatistics.objects.all()
 
@@ -147,14 +141,14 @@ class RecruitmentStatisticsView(ModelViewSet):
         return Response(serializer.data)
 
 
-@method_decorator(ensure_csrf_cookie, "dispatch")
+@method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentPositionSerializer
     queryset = RecruitmentPosition.objects.all()
 
 
-@method_decorator(ensure_csrf_cookie, "dispatch")
+@method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentSeparatePositionView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentSeparatePositionSerializer
@@ -167,7 +161,7 @@ class RecruitmentApplicationView(ModelViewSet):
     queryset = RecruitmentApplication.objects.all()
 
 
-@method_decorator(ensure_csrf_cookie, "dispatch")
+@method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionsPerRecruitmentView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionSerializer
@@ -177,13 +171,13 @@ class RecruitmentPositionsPerRecruitmentView(ListAPIView):
         Optionally restricts the returned positions to a given recruitment,
         by filtering against a `recruitment` query parameter in the URL.
         """
-        recruitment = self.request.query_params.get("recruitment", None)
+        recruitment = self.request.query_params.get('recruitment', None)
         if recruitment is not None:
             return RecruitmentPosition.objects.filter(recruitment=recruitment)
         return None
 
 
-@method_decorator(ensure_csrf_cookie, "dispatch")
+@method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentPositionsPerGangForGangView(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentPositionSerializer
@@ -193,21 +187,19 @@ class RecruitmentPositionsPerGangForGangView(ListAPIView):
         Optionally restricts the returned positions to a given recruitment,
         by filtering against a `recruitment` query parameter in the URL.
         """
-        recruitment = self.request.query_params.get("recruitment", None)
-        gang = self.request.query_params.get("gang", None)
+        recruitment = self.request.query_params.get('recruitment', None)
+        gang = self.request.query_params.get('gang', None)
         if recruitment is not None and gang is not None:
-            return RecruitmentPosition.objects.filter(
-                gang=gang, recruitment=recruitment
-            )
+            return RecruitmentPosition.objects.filter(gang=gang, recruitment=recruitment)
         return None
 
 
 class SendRejectionMailView(APIView):
     def post(self, request: Request) -> Response:
         try:
-            subject = request.data.get("subject")
-            text = request.data.get("text")
-            recruitment = request.data.get("recruitment")
+            subject = request.data.get('subject')
+            text = request.data.get('text')
+            recruitment = request.data.get('recruitment')
             if recruitment is None:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -229,13 +221,9 @@ class SendRejectionMailView(APIView):
             )
 
             # Remove users who have been contacted with an offer from the rejected users list
-            final_rejected_users = rejected_users.exclude(
-                id__in=contacted_users.values("id")
-            )
+            final_rejected_users = rejected_users.exclude(id__in=contacted_users.values('id'))
 
-            rejected_user_emails = list(
-                final_rejected_users.values_list("email", flat=True)
-            )
+            rejected_user_emails = list(final_rejected_users.values_list('email', flat=True))
 
             email = EmailMessage(
                 subject=subject,
@@ -251,7 +239,7 @@ class SendRejectionMailView(APIView):
             return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@method_decorator(ensure_csrf_cookie, "dispatch")
+@method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentUnprocessedApplicationsPerRecruitment(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentShowUnprocessedApplicationsSerializer
@@ -261,7 +249,7 @@ class RecruitmentUnprocessedApplicationsPerRecruitment(ListAPIView):
         Optionally restricts the returned positions to a given recruitment,
         by filtering against a `recruitment` query parameter in the URL.
         """
-        recruitment = self.request.query_params.get("recruitment", None)
+        recruitment = self.request.query_params.get('recruitment', None)
         if recruitment is not None:
             return RecruitmentApplication.objects.filter(
                 recruitment=recruitment,
@@ -278,11 +266,9 @@ class ApplicantsWithoutThreeInterviewsCriteriaView(APIView):
 
         # Filter based on applications > 3 and with less than 3 interview set
         data = User.objects.annotate(
-            application_count=Count(
-                "applications", filter=Q(applications__recruitment=recruitment)
-            ),
+            application_count=Count('applications', filter=Q(applications__recruitment=recruitment)),
             interview_count=Count(
-                "applications",
+                'applications',
                 filter=Q(
                     applications__recruitment=recruitment,
                     applications__interview__isnull=False,
@@ -291,9 +277,7 @@ class ApplicantsWithoutThreeInterviewsCriteriaView(APIView):
         ).filter(interview_count__lt=3, application_count__gte=3)
 
         return Response(
-            data=UserForRecruitmentSerializer(
-                data, recruitment=recruitment, many=True
-            ).data,
+            data=UserForRecruitmentSerializer(data, recruitment=recruitment, many=True).data,
             status=status.HTTP_200_OK,
         )
 
@@ -303,15 +287,11 @@ class RecruitmentRecruiterDashboardView(APIView):
 
     def get(self, request: Request, pk: int) -> Response:
         recruitment = get_object_or_404(Recruitment, pk=pk)
-        applications = RecruitmentApplication.objects.filter(
-            recruitment=recruitment, interview__interviewers__in=[request.user]
-        )
+        applications = RecruitmentApplication.objects.filter(recruitment=recruitment, interview__interviewers__in=[request.user])
         return Response(
             data={
-                "recruitment": RecruitmentSerializer(recruitment).data,
-                "applications": RecruitmentApplicationForGangSerializer(
-                    applications, many=True
-                ).data,
+                'recruitment': RecruitmentSerializer(recruitment).data,
+                'applications': RecruitmentApplicationForGangSerializer(applications, many=True).data,
             },
             status=status.HTTP_200_OK,
         )
@@ -322,23 +302,17 @@ class ApplicantsWithoutInterviewsView(APIView):
 
     def get(self, request: Request, pk: int) -> Response:
         recruitment = pk
-        gang = self.request.query_params.get("gang", None)
+        gang = self.request.query_params.get('gang', None)
 
         # Filter based on applications
-        applications = RecruitmentApplication.objects.filter(
-            recruitment=recruitment, interview=None
-        )
+        applications = RecruitmentApplication.objects.filter(recruitment=recruitment, interview=None)
         if gang:
             applications = applications.filter(recruitment_position__gang=gang)
-        applications_without_interviews_user_ids = applications.values_list(
-            "user_id", flat=True
-        )
+        applications_without_interviews_user_ids = applications.values_list('user_id', flat=True)
         data = User.objects.filter(id__in=applications_without_interviews_user_ids)
 
         return Response(
-            data=UserForRecruitmentSerializer(
-                data, gang=gang, recruitment=recruitment, many=True
-            ).data,
+            data=UserForRecruitmentSerializer(data, gang=gang, recruitment=recruitment, many=True).data,
             status=status.HTTP_200_OK,
         )
 
@@ -361,31 +335,21 @@ class RecruitmentApplicationSetInterviewView(APIView):
 
     def put(self, request: Request, pk: str) -> Response:
         application = get_object_or_404(RecruitmentApplication, id=pk)
-        data = (
-            request.data.dict() if isinstance(request.data, QueryDict) else request.data
-        )
+        data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
         serializer = self.serializer_class(data=data)
         if serializer.is_valid():
             existing_interview = application.interview
             if existing_interview:
-                existing_interview.interview_location = serializer.validated_data[
-                    "interview_location"
-                ]
-                existing_interview.interview_time = serializer.validated_data[
-                    "interview_time"
-                ]
+                existing_interview.interview_location = serializer.validated_data['interview_location']
+                existing_interview.interview_time = serializer.validated_data['interview_time']
                 existing_interview.save()
-                application_serializer = RecruitmentApplicationForGangSerializer(
-                    RecruitmentApplication.objects.get(id=pk)
-                )
+                application_serializer = RecruitmentApplicationForGangSerializer(RecruitmentApplication.objects.get(id=pk))
                 return Response(application_serializer.data, status=status.HTTP_200_OK)
 
             new_interview = serializer.save()
             application.interview = new_interview
             application.save()
-            application_serializer = RecruitmentApplicationForGangSerializer(
-                RecruitmentApplication.objects.get(id=pk)
-            )
+            application_serializer = RecruitmentApplicationForGangSerializer(RecruitmentApplication.objects.get(id=pk))
             return Response(application_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -396,8 +360,8 @@ class RecruitmentApplicationStateChoicesView(APIView):
     def get(self, request: Request) -> Response:
         return Response(
             {
-                "recruiter_priority": RecruitmentPriorityChoices.choices,
-                "recruiter_status": RecruitmentStatusChoices.choices,
+                'recruiter_priority': RecruitmentPriorityChoices.choices,
+                'recruiter_status': RecruitmentStatusChoices.choices,
             },
             status=status.HTTP_200_OK,
         )
@@ -414,23 +378,17 @@ class RecruitmentApplicationForGangUpdateStateView(APIView):
         update_serializer = self.serializer_class(data=request.data)
         if update_serializer.is_valid():
             # Should return update list of applications on correct
-            if "recruiter_priority" in update_serializer.data:
-                application.recruiter_priority = update_serializer.data[
-                    "recruiter_priority"
-                ]
-            if "recruiter_status" in update_serializer.data:
-                application.recruiter_status = update_serializer.data[
-                    "recruiter_status"
-                ]
+            if 'recruiter_priority' in update_serializer.data:
+                application.recruiter_priority = update_serializer.data['recruiter_priority']
+            if 'recruiter_status' in update_serializer.data:
+                application.recruiter_status = update_serializer.data['recruiter_status']
             application.save()
             applications = RecruitmentApplication.objects.filter(
                 recruitment_position__gang=application.recruitment_position.gang,
                 recruitment=application.recruitment,
             )
             application.update_applicant_state()
-            serializer = RecruitmentApplicationForGangSerializer(
-                applications, many=True
-            )
+            serializer = RecruitmentApplicationForGangSerializer(applications, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -455,19 +413,13 @@ class RecruitmentApplicationForPositionUpdateStateView(APIView):
         update_serializer = self.serializer_class(data=request.data)
         if update_serializer.is_valid():
             # Should return update list of applications on correct
-            if "recruiter_priority" in update_serializer.data:
-                application.recruiter_priority = update_serializer.data[
-                    "recruiter_priority"
-                ]
-            if "recruiter_status" in update_serializer.data:
-                application.recruiter_status = update_serializer.data[
-                    "recruiter_status"
-                ]
+            if 'recruiter_priority' in update_serializer.data:
+                application.recruiter_priority = update_serializer.data['recruiter_priority']
+            if 'recruiter_status' in update_serializer.data:
+                application.recruiter_status = update_serializer.data['recruiter_status']
             application.save()
             application.update_applicant_state()
-            position = get_object_or_404(
-                RecruitmentPosition, pk=application.recruitment_position.id
-            )
+            position = get_object_or_404(RecruitmentPosition, pk=application.recruitment_position.id)
             organized_serializer = RecruitmentPositionOrganizedApplications(position)
             return Response(organized_serializer.data, status=status.HTTP_200_OK)
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -490,9 +442,7 @@ class RecruitmentApplicationForRecruitmentPositionView(ModelViewSet):
         )
 
         # check permissions for each application
-        applications = get_objects_for_user(
-            user=request.user, perms=["view_recruitmentapplication"], klass=applications
-        )
+        applications = get_objects_for_user(user=request.user, perms=['view_recruitmentapplication'], klass=applications)
 
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
@@ -532,14 +482,10 @@ class RecruitmentInterviewGroupView(APIView):
         recruitment_id: int,
     ) -> HttpResponse:
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
-        interview_groups = RecruitmentPositionSharedInterviewGroup.objects.filter(
-            recruitment=recruitment
-        )
+        interview_groups = RecruitmentPositionSharedInterviewGroup.objects.filter(recruitment=recruitment)
 
         return Response(
-            data=RecruitmentPositionSharedInterviewGroupSerializer(
-                interview_groups, many=True
-            ).data,
+            data=RecruitmentPositionSharedInterviewGroupSerializer(interview_groups, many=True).data,
             status=status.HTTP_200_OK,
         )
 
@@ -557,56 +503,44 @@ class DownloadAllRecruitmentApplicationCSV(APIView):
 
         filename = f'opptak_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime("%Y-%m-%d %H.%M")}.csv'
         response = HttpResponse(
-            content_type="text/csv",
-            headers={"Content-Disposition": f'Attachment; filename="{filename}"'},
+            content_type='text/csv',
+            headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
         )
         writer = csv.DictWriter(
             response,
             fieldnames=[
-                "Navn",
-                "Telefon",
-                "Epost",
-                "Campus",
-                "Stilling",
-                "Gjeng",
-                "Seksjon",
-                "Intervjutid",
-                "Intervjusted",
-                "Prioritet",
-                "Status",
-                "Sokers rangering",
-                "Intervjuer satt",
+                'Navn',
+                'Telefon',
+                'Epost',
+                'Campus',
+                'Stilling',
+                'Gjeng',
+                'Seksjon',
+                'Intervjutid',
+                'Intervjusted',
+                'Prioritet',
+                'Status',
+                'Sokers rangering',
+                'Intervjuer satt',
             ],
         )
         writer.writeheader()
         for application in applications:
             writer.writerow(
                 {
-                    "Navn": application.user.get_full_name(),
-                    "Telefon": application.user.phone_number,
-                    "Epost": application.user.email,
-                    "Campus": (
-                        application.user.campus.name_en
-                        if application.user.campus
-                        else ""
-                    ),
-                    "Stilling": application.recruitment_position.name_nb,
-                    "Gjeng": application.recruitment_position.gang.name_nb,
-                    "Seksjon": application.recruitment_position.get_section_name("nb"),
-                    "Intervjutid": (
-                        application.interview.interview_time
-                        if application.interview
-                        else ""
-                    ),
-                    "Intervjusted": (
-                        application.interview.interview_location
-                        if application.interview
-                        else ""
-                    ),
-                    "Prioritet": application.get_recruiter_priority_display(),
-                    "Status": application.get_recruiter_status_display(),
-                    "Sokers rangering": f"{application.applicant_priority}/{application.get_total_applications()}",
-                    "Intervjuer satt": f"{application.get_total_interviews()}/{application.get_total_applications()}",
+                    'Navn': application.user.get_full_name(),
+                    'Telefon': application.user.phone_number,
+                    'Epost': application.user.email,
+                    'Campus': (application.user.campus.name_en if application.user.campus else ''),
+                    'Stilling': application.recruitment_position.name_nb,
+                    'Gjeng': application.recruitment_position.gang.name_nb,
+                    'Seksjon': application.recruitment_position.get_section_name('nb'),
+                    'Intervjutid': (application.interview.interview_time if application.interview else ''),
+                    'Intervjusted': (application.interview.interview_location if application.interview else ''),
+                    'Prioritet': application.get_recruiter_priority_display(),
+                    'Status': application.get_recruiter_status_display(),
+                    'Sokers rangering': f'{application.applicant_priority}/{application.get_total_applications()}',
+                    'Intervjuer satt': f'{application.get_total_interviews()}/{application.get_total_applications()}',
                 }
             )
 
@@ -624,58 +558,44 @@ class DownloadRecruitmentApplicationGangCSV(APIView):
     ) -> HttpResponse:
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
         gang = get_object_or_404(Gang, id=gang_id)
-        applications = RecruitmentApplication.objects.filter(
-            recruitment_position__gang=gang, recruitment=recruitment
-        )
+        applications = RecruitmentApplication.objects.filter(recruitment_position__gang=gang, recruitment=recruitment)
 
         filename = f'opptak_{gang.name_nb}_{recruitment.name_nb}_{recruitment.organization.name}_{timezone.now().strftime("%Y-%m-%d %H.%M")}.csv'
         response = HttpResponse(
-            content_type="text/csv",
-            headers={"Content-Disposition": f'Attachment; filename="{filename}"'},
+            content_type='text/csv',
+            headers={'Content-Disposition': f'Attachment; filename="{filename}"'},
         )
         writer = csv.DictWriter(
             response,
             fieldnames=[
-                "Navn",
-                "Telefon",
-                "Epost",
-                "Campus",
-                "Stilling",
-                "Intervjutid",
-                "Intervjusted",
-                "Prioritet",
-                "Status",
-                "Sokers rangering (Hele Opptak)",
-                "Intervjuer satt (For Gjeng)",
+                'Navn',
+                'Telefon',
+                'Epost',
+                'Campus',
+                'Stilling',
+                'Intervjutid',
+                'Intervjusted',
+                'Prioritet',
+                'Status',
+                'Sokers rangering (Hele Opptak)',
+                'Intervjuer satt (For Gjeng)',
             ],
         )
         writer.writeheader()
         for application in applications:
             writer.writerow(
                 {
-                    "Navn": application.user.get_full_name(),
-                    "Telefon": application.user.phone_number,
-                    "Epost": application.user.email,
-                    "Campus": (
-                        application.user.campus.name_en
-                        if application.user.campus
-                        else ""
-                    ),
-                    "Stilling": application.recruitment_position.name_nb,
-                    "Intervjutid": (
-                        application.interview.interview_time
-                        if application.interview
-                        else ""
-                    ),
-                    "Intervjusted": (
-                        application.interview.interview_location
-                        if application.interview
-                        else ""
-                    ),
-                    "Prioritet": application.get_recruiter_priority_display(),
-                    "Status": application.get_recruiter_status_display(),
-                    "Sokers rangering (Hele Opptak)": f"{application.applicant_priority}/{application.get_total_applications()}",
-                    "Intervjuer satt (For Gjeng)": f"{application.get_total_interviews_for_gang()}/{application.get_total_applications_for_gang()}",
+                    'Navn': application.user.get_full_name(),
+                    'Telefon': application.user.phone_number,
+                    'Epost': application.user.email,
+                    'Campus': (application.user.campus.name_en if application.user.campus else ''),
+                    'Stilling': application.recruitment_position.name_nb,
+                    'Intervjutid': (application.interview.interview_time if application.interview else ''),
+                    'Intervjusted': (application.interview.interview_location if application.interview else ''),
+                    'Prioritet': application.get_recruiter_priority_display(),
+                    'Status': application.get_recruiter_status_display(),
+                    'Sokers rangering (Hele Opptak)': f'{application.applicant_priority}/{application.get_total_applications()}',
+                    'Intervjuer satt (For Gjeng)': f'{application.get_total_interviews_for_gang()}/{application.get_total_applications_for_gang()}',
                 }
             )
 
@@ -696,17 +616,15 @@ class InterviewRoomView(ModelViewSet):
 
     # noinspection PyMethodOverriding
     def list(self, request: Request) -> Response:
-        recruitment = request.query_params.get("recruitment")
+        recruitment = request.query_params.get('recruitment')
         if not recruitment:
             return Response(
-                {"error": "A recruitment parameter is required"},
+                {'error': 'A recruitment parameter is required'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         filtered_rooms = [
-            room
-            for room in InterviewRoom.objects.filter(recruitment__id=recruitment)
-            if request.user.has_perm(SAMFUNDET_VIEW_INTERVIEWROOM, room)
+            room for room in InterviewRoom.objects.filter(recruitment__id=recruitment) if request.user.has_perm(SAMFUNDET_VIEW_INTERVIEWROOM, room)
         ]
         serialized_rooms = self.get_serializer(filtered_rooms, many=True)
         return Response(serialized_rooms.data)
@@ -717,18 +635,12 @@ class RecruitmentApplicationForRecruitersView(APIView):
 
     def get(self, request: Request, application_id: str) -> Response:
         application = get_object_or_404(RecruitmentApplication, id=application_id)
-        other_applications = RecruitmentApplication.objects.filter(
-            user=application.user, recruitment=application.recruitment
-        ).order_by("applicant_priority")
+        other_applications = RecruitmentApplication.objects.filter(user=application.user, recruitment=application.recruitment).order_by('applicant_priority')
         return Response(
             data={
-                "application": RecruitmentApplicationForRecruiterSerializer(
-                    instance=application
-                ).data,
-                "user": UserForRecruitmentSerializer(instance=application.user).data,
-                "other_applications": RecruitmentApplicationForRecruiterSerializer(
-                    other_applications, many=True
-                ).data,
+                'application': RecruitmentApplicationForRecruiterSerializer(instance=application).data,
+                'user': UserForRecruitmentSerializer(instance=application.user).data,
+                'other_applications': RecruitmentApplicationForRecruiterSerializer(other_applications, many=True).data,
             }
         )
 
@@ -747,11 +659,7 @@ class InterviewView(ModelViewSet):
 
     # noinspection PyMethodOverriding
     def list(self, request: Request) -> Response:
-        interviews = [
-            interview
-            for interview in self.get_queryset()
-            if request.user.has_perm(SAMFUNDET_VIEW_INTERVIEW, interview)
-        ]
+        interviews = [interview for interview in self.get_queryset() if request.user.has_perm(SAMFUNDET_VIEW_INTERVIEW, interview)]
         serializer = self.get_serializer(interviews, many=True)
         return Response(serializer.data)
 
@@ -767,10 +675,8 @@ class RecruitmentAvailabilityView(APIView):
     serializer_class = RecruitmentInterviewAvailabilitySerializer
 
     def get(self, request: Request, **kwargs: int) -> Response:
-        recruitment = kwargs.get("id")
-        availability = get_object_or_404(
-            RecruitmentInterviewAvailability, recruitment__id=recruitment
-        )
+        recruitment = kwargs.get('id')
+        availability = get_object_or_404(RecruitmentInterviewAvailability, recruitment__id=recruitment)
 
         start_time = availability.start_time
         end_time = availability.end_time
@@ -780,20 +686,20 @@ class RecruitmentAvailabilityView(APIView):
 
         return Response(
             {
-                "start_date": availability.start_date,
-                "end_date": availability.end_date,
-                "start_time": start_time.strftime("%H:%M"),
-                "end_time": end_time.strftime("%H:%M"),
-                "timeslot_interval": interval,
-                "timeslots": timeslots,
-                "interval": interval,
+                'start_date': availability.start_date,
+                'end_date': availability.end_date,
+                'start_time': start_time.strftime('%H:%M'),
+                'end_time': end_time.strftime('%H:%M'),
+                'timeslot_interval': interval,
+                'timeslots': timeslots,
+                'interval': interval,
             }
         )
 
     def post(self, request: Request, **kwargs: int) -> Response:
-        recruitment_id = kwargs.get("id")
+        recruitment_id = kwargs.get('id')
 
-        data = {"recruitment": recruitment_id, **request.data}
+        data = {'recruitment': recruitment_id, **request.data}
         serializer = self.serializer_class(data=data)
         serializer.is_valid(raise_exception=True)
 
@@ -802,26 +708,22 @@ class RecruitmentAvailabilityView(APIView):
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
 
         try:
-            availability = RecruitmentInterviewAvailability.objects.get(
-                recruitment__id=recruitment_id
-            )
-            availability.start_time = serializer.validated_data["start_time"]
-            availability.end_time = serializer.validated_data["end_time"]
-            availability.start_date = serializer.validated_data["start_date"]
-            availability.end_date = serializer.validated_data["end_date"]
-            availability.timeslot_interval = serializer.validated_data[
-                "timeslot_interval"
-            ]
+            availability = RecruitmentInterviewAvailability.objects.get(recruitment__id=recruitment_id)
+            availability.start_time = serializer.validated_data['start_time']
+            availability.end_time = serializer.validated_data['end_time']
+            availability.start_date = serializer.validated_data['start_date']
+            availability.end_date = serializer.validated_data['end_date']
+            availability.timeslot_interval = serializer.validated_data['timeslot_interval']
             availability.save()
             return Response(status=status.HTTP_200_OK)
         except RecruitmentInterviewAvailability.DoesNotExist:
             RecruitmentInterviewAvailability.objects.create(
                 recruitment=recruitment,
-                start_time=serializer.validated_data["start_time"],
-                end_time=serializer.validated_data["end_time"],
-                start_date=serializer.validated_data["start_date"],
-                end_date=serializer.validated_data["end_date"],
-                timeslot_interval=serializer.validated_data["timeslot_interval"],
+                start_time=serializer.validated_data['start_time'],
+                end_time=serializer.validated_data['end_time'],
+                start_date=serializer.validated_data['start_date'],
+                end_date=serializer.validated_data['end_date'],
+                timeslot_interval=serializer.validated_data['timeslot_interval'],
             )
             return Response(status=status.HTTP_201_CREATED)
 
@@ -832,16 +734,14 @@ class OccupiedTimeslotView(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request, **kwargs: int) -> Response:
-        recruitment_id = self.request.query_params.get("recruitment")
+        recruitment_id = self.request.query_params.get('recruitment')
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
-        occupied_timeslots = OccupiedTimeslot.objects.filter(
-            user=request.user, recruitment__id=recruitment.id
-        )
+        occupied_timeslots = OccupiedTimeslot.objects.filter(user=request.user, recruitment__id=recruitment.id)
 
         dates: dict[str, list[str]] = {}
         for occupied in occupied_timeslots:
-            date_string = occupied.start_dt.strftime("%Y.%m.%d")
-            time_string = occupied.start_dt.strftime("%H:%M")
+            date_string = occupied.start_dt.strftime('%Y.%m.%d')
+            time_string = occupied.start_dt.strftime('%H:%M')
 
             if date_string in dates:
                 dates[date_string].append(time_string)
@@ -850,40 +750,30 @@ class OccupiedTimeslotView(ListCreateAPIView):
 
         return Response(
             {
-                "recruitment": recruitment.id,
-                "dates": dates,
+                'recruitment': recruitment.id,
+                'dates': dates,
             }
         )
 
     def create(self, request: Request) -> Response:
-        if "recruitment" not in request.data or not request.data["recruitment"]:
-            return Response(
-                {"error": "recruitment is required"}, status=status.HTTP_400_BAD_REQUEST
-            )
+        if 'recruitment' not in request.data or not request.data['recruitment']:
+            return Response({'error': 'recruitment is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if "dates" not in request.data or not request.data["recruitment"]:
-            return Response(
-                {"error": "dates is required"}, status=status.HTTP_400_BAD_REQUEST
-            )
+        if 'dates' not in request.data or not request.data['recruitment']:
+            return Response({'error': 'dates is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        recruitment = get_object_or_404(Recruitment, id=request.data["recruitment"])
-        availability = RecruitmentInterviewAvailability.objects.filter(
-            recruitment__id=recruitment.id
-        ).first()
+        recruitment = get_object_or_404(Recruitment, id=request.data['recruitment'])
+        availability = RecruitmentInterviewAvailability.objects.filter(recruitment__id=recruitment.id).first()
 
-        occupied_timeslots = get_occupied_timeslots_from_request(
-            request.data["dates"], request.user, availability, recruitment
-        )
+        occupied_timeslots = get_occupied_timeslots_from_request(request.data['dates'], request.user, availability, recruitment)
 
         # If we've reached this point, all provided timeslots are valid
 
         # First delete all user's previous occupied timeslots
-        OccupiedTimeslot.objects.filter(
-            user=request.user, recruitment__id=recruitment.id
-        ).delete()
+        OccupiedTimeslot.objects.filter(user=request.user, recruitment__id=recruitment.id).delete()
         OccupiedTimeslot.objects.bulk_create(occupied_timeslots)
 
-        return Response({"message": "Successfully updated occupied timeslots"})
+        return Response({'message': 'Successfully updated occupied timeslots'})
 
 
 class OccupiedTimeslotForUserView(APIView):
@@ -893,17 +783,15 @@ class OccupiedTimeslotForUserView(APIView):
 
     # TODO: set correct permission. Must have permissions to see applications for the user
     def get(self, request: Request, **kwargs: int) -> Response:
-        recruitment_id = self.request.query_params.get("recruitment")
+        recruitment_id = self.request.query_params.get('recruitment')
         recruitment = get_object_or_404(Recruitment, id=recruitment_id)
-        user_id = self.request.query_params.get("user")
+        user_id = self.request.query_params.get('user')
         user = get_object_or_404(User, id=user_id)
-        occupied_timeslots = OccupiedTimeslot.objects.filter(
-            user=user.id, recruitment__id=recruitment.id
-        )
+        occupied_timeslots = OccupiedTimeslot.objects.filter(user=user.id, recruitment__id=recruitment.id)
         dates: dict[str, list[str]] = {}
         for occupied in occupied_timeslots:
-            date_string = occupied.start_dt.strftime("%Y.%m.%d")
-            time_string = occupied.start_dt.strftime("%H:%M")
+            date_string = occupied.start_dt.strftime('%Y.%m.%d')
+            time_string = occupied.start_dt.strftime('%H:%M')
 
             if date_string in dates:
                 dates[date_string].append(time_string)
@@ -912,8 +800,8 @@ class OccupiedTimeslotForUserView(APIView):
 
         return Response(
             {
-                "recruitment": recruitment.id,
-                "dates": dates,
+                'recruitment': recruitment.id,
+                'dates': dates,
             }
         )
 
@@ -931,11 +819,11 @@ class GangApplicationCountView(APIView):
 
         return Response(
             {
-                "total_applications": gang_stat.application_count,
-                "total_applicants": gang_stat.applicant_count,
-                "average_priority": gang_stat.average_priority,
-                "total_accepted": gang_stat.total_accepted,
-                "total_rejected": gang_stat.total_rejected,
+                'total_applications': gang_stat.application_count,
+                'total_applicants': gang_stat.applicant_count,
+                'average_priority': gang_stat.average_priority,
+                'total_accepted': gang_stat.total_accepted,
+                'total_rejected': gang_stat.total_rejected,
             }
         )
 
@@ -946,26 +834,22 @@ class InterviewerAvailabilityForDate(APIView):
 
     def get(self, request: Request, recruitment_id: int) -> Response:
         try:
-            date_str = request.query_params.get("date")
+            date_str = request.query_params.get('date')
             if not date_str:
-                return Response({"error": "Date parameter is required"}, status=400)
+                return Response({'error': 'Date parameter is required'}, status=400)
 
             # Parse date in both formats (YYYY-MM-DD or YYYY.MM.DD)
             try:
-                date_format = "%Y-%m-%d" if "-" in date_str else "%Y.%m.%d"
+                date_format = '%Y-%m-%d' if '-' in date_str else '%Y.%m.%d'
                 date = datetime.strptime(date_str, date_format).date()
             except ValueError:
                 return Response(
-                    {"error": "Invalid date format. Use YYYY-MM-DD or YYYY.MM.DD"},
+                    {'error': 'Invalid date format. Use YYYY-MM-DD or YYYY.MM.DD'},
                     status=400,
                 )
 
-            interviewer_str = request.query_params.get("interviewers", "")
-            interviewers = (
-                [int(id_) for id_ in interviewer_str.split(",")]
-                if interviewer_str
-                else []
-            )
+            interviewer_str = request.query_params.get('interviewers', '')
+            interviewers = [int(id_) for id_ in interviewer_str.split(',')] if interviewer_str else []
 
             query = OccupiedTimeslot.objects.filter(recruitment__id=recruitment_id)
             if interviewers:
@@ -974,12 +858,12 @@ class InterviewerAvailabilityForDate(APIView):
             # Filter by date manually
             result = [
                 {
-                    "id": slot.id,
-                    "user": slot.user.id,
-                    "recruitment": slot.recruitment.id,
-                    "time": slot.start_dt.strftime("%H:%M"),
-                    "start_dt": slot.start_dt.isoformat(),
-                    "end_dt": slot.end_dt.isoformat(),
+                    'id': slot.id,
+                    'user': slot.user.id,
+                    'recruitment': slot.recruitment.id,
+                    'time': slot.start_dt.strftime('%H:%M'),
+                    'start_dt': slot.start_dt.isoformat(),
+                    'end_dt': slot.end_dt.isoformat(),
                 }
                 for slot in query
                 if slot.start_dt.date() == date
@@ -988,6 +872,4 @@ class InterviewerAvailabilityForDate(APIView):
             return Response(result)
 
         except Exception as e:
-            return Response(
-                {"error": f"Error processing request: {str(e)}"}, status=500
-            )
+            return Response({'error': f'Error processing request: {str(e)}'}, status=500)
