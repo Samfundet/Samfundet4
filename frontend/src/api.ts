@@ -800,7 +800,7 @@ export async function setRecruitmentApplicationInterview(
 
 export async function getRecruitmentApplicationsForApplicant(
   recruitmentId: string,
-): Promise<AxiosResponse<RecruitmentApplicationDto[]>> {
+): Promise<RecruitmentApplicationDto[]> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -809,7 +809,7 @@ export async function getRecruitmentApplicationsForApplicant(
     });
   const response = await axios.get(url, { withCredentials: true });
 
-  return response;
+  return response.data;
 }
 
 export async function getRecruitmentApplicationsForRecruiter(
@@ -1074,6 +1074,20 @@ export async function withdrawRecruitmentApplicationApplicant(positionId: number
   const response = await axios.put(url, {}, { withCredentials: true });
 
   return response;
+}
+
+export async function getWithdrawnRecruitmentApplicationsApplicant(
+  recruitmentId: number | string,
+): Promise<RecruitmentApplicationDto[]> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_applications_for_applicant_withdrawn_applications,
+      queryParams: { recruitment: recruitmentId },
+    });
+  const response = await axios.get(url, { withCredentials: true });
+
+  return response.data;
 }
 
 export async function withdrawRecruitmentApplicationRecruiter(id: string): Promise<AxiosResponse> {
