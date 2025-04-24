@@ -34,8 +34,7 @@ Samfundet4 is the latest and greatest iteration of samfundet.no. It's built usin
 
 ### Workflow
 
-- [Work Methodology](./docs/work-methodology.md)
-    - How to contribute to the project
+- [Work Methodology](./docs/work-methodology.md) – How to contribute to the project
 - [Useful Commands](./docs/useful-commands.md)
 - [Useful Docker aliases](./docs/docker-project-specific-commands.md)
 - [Common error messages](./docs/common-errors.md)

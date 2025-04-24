@@ -51,6 +51,7 @@ import {
   RecruitmentGangAdminPage,
   RecruitmentGangAllApplicantsAdminPage,
   RecruitmentGangOverviewPage,
+  RecruitmentInterviewAvailabilityAdminPage,
   RecruitmentOpenToOtherPositionsPage,
   RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
@@ -147,12 +148,12 @@ export const router = createBrowserRouter(
         <Route element={<Outlet />} errorElement={<RootErrorBoundary />}>
           <Route
             path={ROUTES.frontend.admin}
-            element={<PermissionRoute requiredPermissions={[PERM.SAMFUNDET_VIEW_GANG]} element={<AdminPage />} />}
+            element={<PermissionRoute requiredPermissions={[]} element={<AdminPage />} />}
           />
           {/* User pages */}
           <Route
             path={ROUTES.frontend.user_change_password}
-            element={<UserChangePasswordPage />}
+            element={<PermissionRoute element={<UserChangePasswordPage />} />}
             handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.change_password)}</Link> }}
           />
           {/* Gangs */}
@@ -163,20 +164,32 @@ export const router = createBrowserRouter(
             <Route
               path={ROUTES.frontend.admin_gangs}
               element={
-                <PermissionRoute requiredPermissions={[PERM.SAMFUNDET_VIEW_GANG]} element={<GangsAdminPage />} />
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_CHANGE_GANG]}
+                  element={<GangsAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
               }
             />
             <Route
               path={ROUTES.frontend.admin_gangs_create}
               handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
               element={
-                <PermissionRoute requiredPermissions={[PERM.SAMFUNDET_ADD_GANG]} element={<GangsFormAdminPage />} />
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_ADD_GANG]}
+                  element={<GangsFormAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
               }
             />
             <Route
               path={ROUTES.frontend.admin_gangs_edit}
               element={
-                <PermissionRoute requiredPermissions={[PERM.SAMFUNDET_CHANGE_GANG]} element={<GangsFormAdminPage />} />
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_CHANGE_GANG]}
+                  element={<GangsFormAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
               }
               loader={gangLoader}
               handle={{
@@ -204,14 +217,22 @@ export const router = createBrowserRouter(
             <Route
               path={ROUTES.frontend.admin_roles}
               element={
-                <PermissionRoute requiredPermissions={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RolesAdminPage />} />
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_CHANGE_ROLE]}
+                  element={<RolesAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
               }
             />
             <Route
               path={ROUTES.frontend.admin_roles_create}
               handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
               element={
-                <PermissionRoute requiredPermissions={[PERM.SAMFUNDET_ADD_ROLE]} element={<RoleFormAdminPage />} />
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_ADD_ROLE]}
+                  element={<RoleFormAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
               }
             />
             <Route
@@ -229,13 +250,21 @@ export const router = createBrowserRouter(
               <Route
                 path={ROUTES.frontend.admin_roles_view}
                 element={
-                  <PermissionRoute requiredPermissions={[PERM.SAMFUNDET_VIEW_ROLE]} element={<RoleAdminPage />} />
+                  <PermissionRoute
+                    requiredPermissions={[PERM.SAMFUNDET_CHANGE_ROLE]}
+                    element={<RoleAdminPage />}
+                    resolveWithRolePermissions={true}
+                  />
                 }
               />
               <Route
                 path={ROUTES.frontend.admin_roles_edit}
                 element={
-                  <PermissionRoute requiredPermissions={[PERM.SAMFUNDET_CHANGE_ROLE]} element={<RoleFormAdminPage />} />
+                  <PermissionRoute
+                    requiredPermissions={[PERM.SAMFUNDET_CHANGE_ROLE]}
+                    element={<RoleFormAdminPage />}
+                    resolveWithRolePermissions={true}
+                  />
                 }
                 handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link> }}
               />
@@ -279,25 +308,18 @@ export const router = createBrowserRouter(
               }
             />
           </Route>
-          {/*
-            Info pages
-            NOTE: edit/create uses custom views
-          */}
-          <Route
-            path={ROUTES.frontend.admin_information}
-            handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.information_page)}</Link> }}
-            element={
-              <PermissionRoute
-                requiredPermissions={[PERM.SAMFUNDET_VIEW_INFORMATIONPAGE]}
-                element={<InformationAdminPage />}
-              />
-            }
-          />
-          {/* Opening hours, TODO ADD OPENING HOURS PERMISSIONS*/}
+
+          {/* Opening hours*/}
           <Route
             path={ROUTES.frontend.admin_opening_hours}
             handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_opening_hours)}</Link> }}
-            element={<PermissionRoute requiredPermissions={[]} element={<OpeningHoursAdminPage />} />}
+            element={
+              <PermissionRoute
+                requiredPermissions={[PERM.SAMFUNDET_CHANGE_VENUE]}
+                element={<OpeningHoursAdminPage />}
+                resolveWithRolePermissions={true}
+              />
+            }
           />
           {/* Closed period */}
           <Route
@@ -310,8 +332,9 @@ export const router = createBrowserRouter(
               path={ROUTES.frontend.admin_closed}
               element={
                 <PermissionRoute
-                  requiredPermissions={[PERM.SAMFUNDET_VIEW_CLOSEDPERIOD]}
+                  requiredPermissions={[PERM.SAMFUNDET_CHANGE_CLOSEDPERIOD]}
                   element={<ClosedPeriodAdminPage />}
+                  resolveWithRolePermissions={true}
                 />
               }
             />
@@ -322,6 +345,7 @@ export const router = createBrowserRouter(
                 <PermissionRoute
                   requiredPermissions={[PERM.SAMFUNDET_ADD_CLOSEDPERIOD]}
                   element={<ClosedPeriodFormAdminPage />}
+                  resolveWithRolePermissions={true}
                 />
               }
             />
@@ -332,6 +356,7 @@ export const router = createBrowserRouter(
                 <PermissionRoute
                   requiredPermissions={[PERM.SAMFUNDET_CHANGE_CLOSEDPERIOD]}
                   element={<ClosedPeriodFormAdminPage />}
+                  resolveWithRolePermissions={true}
                 />
               }
             />
@@ -344,14 +369,22 @@ export const router = createBrowserRouter(
             <Route
               path={ROUTES.frontend.admin_images}
               element={
-                <PermissionRoute requiredPermissions={[PERM.SAMFUNDET_VIEW_IMAGE]} element={<ImageAdminPage />} />
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_VIEW_IMAGE]}
+                  element={<ImageAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
               }
             />
             <Route
               path={ROUTES.frontend.admin_images_create}
               handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
               element={
-                <PermissionRoute requiredPermissions={[PERM.SAMFUNDET_ADD_IMAGE]} element={<ImageFormAdminPage />} />
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_ADD_IMAGE]}
+                  element={<ImageFormAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
               }
             />
           </Route>
@@ -366,8 +399,9 @@ export const router = createBrowserRouter(
               path={ROUTES.frontend.admin_saksdokumenter}
               element={
                 <PermissionRoute
-                  requiredPermissions={[PERM.SAMFUNDET_VIEW_SAKSDOKUMENT]}
+                  requiredPermissions={[PERM.SAMFUNDET_CHANGE_SAKSDOKUMENT]}
                   element={<SaksdokumentAdminPage />}
+                  resolveWithRolePermissions={true}
                 />
               }
             />
@@ -408,7 +442,11 @@ export const router = createBrowserRouter(
             <Route
               path={ROUTES.frontend.admin_sulten_menu}
               element={
-                <PermissionRoute requiredPermissions={[PERM.SAMFUNDET_VIEW_MENU]} element={<SultenMenuAdminPage />} />
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_CHANGE_MENU]}
+                  element={<SultenMenuAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
               }
             />
             <Route
@@ -424,6 +462,7 @@ export const router = createBrowserRouter(
                 <PermissionRoute
                   requiredPermissions={[PERM.SAMFUNDET_ADD_MENUITEM]}
                   element={<SultenMenuItemFormAdminPage />}
+                  resolveWithRolePermissions={true}
                 />
               }
             />
@@ -440,6 +479,7 @@ export const router = createBrowserRouter(
                 <PermissionRoute
                   requiredPermissions={[PERM.SAMFUNDET_CHANGE_MENUITEM]}
                   element={<SultenMenuItemFormAdminPage />}
+                  resolveWithRolePermissions={true}
                 />
               }
             />
@@ -452,7 +492,13 @@ export const router = createBrowserRouter(
           >
             <Route
               path={ROUTES.frontend.admin_recruitment}
-              element={<PermissionRoute element={<RecruitmentAdminPage />} />}
+              element={
+                <PermissionRoute
+                  element={<RecruitmentAdminPage />}
+                  requiredPermissions={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                  resolveWithRolePermissions={true}
+                />
+              }
             />
             <Route
               path={ROUTES.frontend.admin_recruitment_create}
@@ -460,6 +506,7 @@ export const router = createBrowserRouter(
                 <PermissionRoute
                   requiredPermissions={[PERM.SAMFUNDET_ADD_RECRUITMENT]}
                   element={<RecruitmentFormAdminPage />}
+                  resolveWithRolePermissions={true}
                 />
               }
               handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
@@ -468,13 +515,13 @@ export const router = createBrowserRouter(
               path={ROUTES.frontend.admin_recruitment_applicant}
               element={
                 <PermissionRoute
-                  requiredPermissions={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                  requiredPermissions={[PERM.SAMFUNDET_VIEW_RECRUITMENTAPPLICATION]}
                   element={<RecruitmentApplicantAdminPage />}
+                  resolveWithRolePermissions={true}
                 />
               }
             />
             {/* Specific recruitment */}
-            {/* TODO ADD PERMISSIONS */}
             <Route
               element={<Outlet />}
               id="recruitment"
@@ -496,7 +543,7 @@ export const router = createBrowserRouter(
                 path={ROUTES.frontend.admin_recruitment_overview}
                 element={
                   <PermissionRoute
-                    requiredPermissions={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                    requiredPermissions={[PERM.SAMFUNDET_VIEW_RECRUITMENTSTATISTICS]}
                     element={<RecruitmentOverviewPage />}
                   />
                 }
@@ -515,8 +562,9 @@ export const router = createBrowserRouter(
                 path={ROUTES.frontend.admin_recruitment_gang_overview_rejection_email}
                 element={
                   <PermissionRoute
-                    requiredPermissions={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                    requiredPermissions={[PERM.SAMFUNDET_CHANGE_RECRUITMENT, PERM.SAMFUNDET_ADD_RECRUITMENT]}
                     element={<RecruitmentRejectionMailPage />}
+                    resolveWithRolePermissions={true}
                   />
                 }
                 handle={{
@@ -527,7 +575,13 @@ export const router = createBrowserRouter(
               />
               <Route
                 path={ROUTES.frontend.admin_recruitment_recruiter_dashboard}
-                element={<RecruitmentRecruiterDashboardPage />}
+                element={
+                  <PermissionRoute
+                    element={<RecruitmentRecruiterDashboardPage />}
+                    requiredPermissions={[PERM.SAMFUNDET_VIEW_INTERVIEW]}
+                    resolveWithRolePermissions={true}
+                  />
+                }
                 handle={{
                   crumb: ({ pathname }: UIMatch) => (
                     <Link url={pathname}>{t(KEY.recruitment_recruiter_dashboard)}</Link>
@@ -570,7 +624,13 @@ export const router = createBrowserRouter(
               />
               <Route
                 path={ROUTES.frontend.admin_recruitment_show_unprocessed_applicants}
-                element={<RecruitmentUnprocessedApplicantsPage />}
+                element={
+                  <PermissionRoute
+                    requiredPermissions={[PERM.SAMFUNDET_CHANGE_RECRUITMENT, PERM.SAMFUNDET_ADD_RECRUITMENT]}
+                    element={<RecruitmentUnprocessedApplicantsPage />}
+                    resolveWithRolePermissions={true}
+                  />
+                }
                 loader={recruitmentLoader}
                 handle={{
                   crumb: ({ pathname }: UIMatch) => (
@@ -580,7 +640,13 @@ export const router = createBrowserRouter(
               />
               <Route
                 path={ROUTES.frontend.admin_recruitment_users_without_interview}
-                element={<RecruitmentUsersWithoutInterviewGangPage />}
+                element={
+                  <PermissionRoute
+                    requiredPermissions={[PERM.SAMFUNDET_CHANGE_RECRUITMENT, PERM.SAMFUNDET_ADD_RECRUITMENT]}
+                    element={<RecruitmentUsersWithoutInterviewGangPage />}
+                    resolveWithRolePermissions={true}
+                  />
+                }
                 loader={recruitmentLoader}
                 handle={{
                   crumb: ({ pathname }: UIMatch) => (
@@ -590,7 +656,13 @@ export const router = createBrowserRouter(
               />
               <Route
                 path={ROUTES.frontend.admin_recruitment_users_three_interview_criteria}
-                element={<RecruitmentUsersWithoutThreeInterviewCriteriaPage />}
+                element={
+                  <PermissionRoute
+                    requiredPermissions={[PERM.SAMFUNDET_CHANGE_RECRUITMENT, PERM.SAMFUNDET_ADD_RECRUITMENT]}
+                    element={<RecruitmentUsersWithoutThreeInterviewCriteriaPage />}
+                    resolveWithRolePermissions={true}
+                  />
+                }
                 loader={recruitmentLoader}
                 handle={{
                   crumb: ({ pathname }: UIMatch) => (
@@ -599,23 +671,66 @@ export const router = createBrowserRouter(
                 }}
               />
               <Route
+                path={ROUTES.frontend.admin_recruitment_interview_availability}
+                element={<RecruitmentInterviewAvailabilityAdminPage />}
+                handle={{
+                  crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.interview_availability)}</Link>,
+                }}
+              />
+              <Route
                 path={ROUTES.frontend.admin_recruitment_room_overview}
-                element={<RoomAdminPage />}
+                element={
+                  <PermissionRoute
+                    requiredPermissions={[PERM.SAMFUNDET_VIEW_INTERVIEWROOM]}
+                    element={<RoomAdminPage />}
+                    resolveWithRolePermissions={true}
+                  />
+                }
                 handle={{
                   crumb: ({ pathname }: UIMatch) => (
                     <Link url={pathname}>{t(KEY.recruitment_applet_room_overview)}</Link>
                   ),
                 }}
               />
-              <Route path={ROUTES.frontend.admin_recruitment_room_create} element={<CreateInterviewRoomPage />} />
-              <Route path={ROUTES.frontend.admin_recruitment_room_edit} element={<CreateInterviewRoomPage />} />
+              <Route
+                path={ROUTES.frontend.admin_recruitment_room_create}
+                element={
+                  <PermissionRoute
+                    element={<CreateInterviewRoomPage />}
+                    requiredPermissions={[PERM.SAMFUNDET_ADD_INTERVIEWROOM]}
+                    resolveWithRolePermissions={true}
+                  />
+                }
+              />
+              <Route
+                path={ROUTES.frontend.admin_recruitment_room_edit}
+                element={
+                  <PermissionRoute
+                    element={<CreateInterviewRoomPage />}
+                    requiredPermissions={[PERM.SAMFUNDET_CHANGE_INTERVIEWROOM]}
+                    resolveWithRolePermissions={true}
+                  />
+                }
+              />
               <Route
                 path={ROUTES.frontend.admin_recruitment_gang_overview}
-                element={<PermissionRoute requiredPermissions={[]} element={<RecruitmentGangOverviewPage />} />}
+                element={
+                  <PermissionRoute
+                    requiredPermissions={[PERM.SAMFUNDET_VIEW_RECRUITMENTPOSITION]}
+                    element={<RecruitmentGangOverviewPage />}
+                    resolveWithRolePermissions={true}
+                  />
+                }
               />
               <Route
                 path={ROUTES.frontend.admin_recruitment_gang_users_without_interview}
-                element={<RecruitmentUsersWithoutInterviewGangPage />}
+                element={
+                  <PermissionRoute
+                    element={<RecruitmentUsersWithoutInterviewGangPage />}
+                    requiredPermissions={[PERM.SAMFUNDET_CHANGE_RECRUITMENT, PERM.SAMFUNDET_ADD_RECRUITMENT]}
+                    resolveWithRolePermissions={true}
+                  />
+                }
                 loader={recruitmentGangLoader}
                 handle={{
                   crumb: ({ pathname }: UIMatch) => (
@@ -627,8 +742,9 @@ export const router = createBrowserRouter(
                 path={ROUTES.frontend.admin_recruitment_open_to_other_positions}
                 element={
                   <PermissionRoute
-                    requiredPermissions={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                    requiredPermissions={[PERM.SAMFUNDET_CHANGE_RECRUITMENT, PERM.SAMFUNDET_ADD_RECRUITMENT]}
                     element={<RecruitmentOpenToOtherPositionsPage />}
+                    resolveWithRolePermissions={true}
                   />
                 }
                 handle={{
@@ -655,11 +771,23 @@ export const router = createBrowserRouter(
               >
                 <Route
                   path={ROUTES.frontend.admin_recruitment_gang_position_overview}
-                  element={<PermissionRoute requiredPermissions={[]} element={<RecruitmentGangAdminPage />} />}
+                  element={
+                    <PermissionRoute
+                      requiredPermissions={[PERM.SAMFUNDET_VIEW_RECRUITMENTPOSITION]}
+                      element={<RecruitmentGangAdminPage />}
+                      resolveWithRolePermissions={true}
+                    />
+                  }
                 />
                 <Route
                   path={ROUTES.frontend.admin_recruitment_gang_position_create}
-                  element={<PermissionRoute requiredPermissions={[]} element={<RecruitmentPositionFormAdminPage />} />}
+                  element={
+                    <PermissionRoute
+                      requiredPermissions={[PERM.SAMFUNDET_ADD_RECRUITMENTPOSITION]}
+                      element={<RecruitmentPositionFormAdminPage />}
+                      resolveWithRolePermissions={true}
+                    />
+                  }
                   loader={recruitmentGangLoader}
                   handle={{
                     crumb: ({ pathname }: UIMatch) => (
@@ -670,8 +798,28 @@ export const router = createBrowserRouter(
                   }}
                 />
                 <Route
+                  path={ROUTES.frontend.admin_recruitment_gang_position_edit}
+                  element={
+                    <PermissionRoute
+                      requiredPermissions={[PERM.SAMFUNDET_CHANGE_RECRUITMENTPOSITION]}
+                      element={<RecruitmentPositionFormAdminPage />}
+                      resolveWithRolePermissions={true}
+                    />
+                  }
+                  loader={recruitmentGangPositionLoader}
+                  handle={{
+                    crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link>,
+                  }}
+                />
+                <Route
                   path={ROUTES.frontend.admin_recruitment_gang_all_applications}
-                  element={<RecruitmentGangAllApplicantsAdminPage />}
+                  element={
+                    <PermissionRoute
+                      element={<RecruitmentGangAllApplicantsAdminPage />}
+                      requiredPermissions={[PERM.SAMFUNDET_ADD_RECRUITMENTPOSITION]}
+                      resolveWithRolePermissions={true}
+                    />
+                  }
                   handle={{
                     crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.recruitment_all_applications)}</Link>,
                   }}
@@ -695,17 +843,13 @@ export const router = createBrowserRouter(
                 >
                   <Route
                     path={ROUTES.frontend.admin_recruitment_gang_position_applicants_overview}
-                    element={<PermissionRoute requiredPermissions={[]} element={<RecruitmentPositionOverviewPage />} />}
-                  />
-                  <Route
-                    path={ROUTES.frontend.admin_recruitment_gang_position_edit}
                     element={
-                      <PermissionRoute requiredPermissions={[]} element={<RecruitmentPositionFormAdminPage />} />
+                      <PermissionRoute
+                        requiredPermissions={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
+                        element={<RecruitmentPositionOverviewPage />}
+                        resolveWithRolePermissions={true}
+                      />
                     }
-                    loader={recruitmentGangPositionLoader}
-                    handle={{
-                      crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link>,
-                    }}
                   />
                 </Route>
               </Route>
@@ -718,6 +862,7 @@ export const router = createBrowserRouter(
               <PermissionRoute
                 requiredPermissions={[PERM.SAMFUNDET_VIEW_RESERVATION]}
                 element={<SultenReservationAdminPage />}
+                resolveWithRolePermissions={true}
               />
             }
           />
@@ -726,11 +871,23 @@ export const router = createBrowserRouter(
             Custom layout for edit/create
           */}
           <Route
+            path={ROUTES.frontend.admin_information}
+            handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.information_page)}</Link> }}
+            element={
+              <PermissionRoute
+                requiredPermissions={[PERM.SAMFUNDET_VIEW_INFORMATIONPAGE]}
+                element={<InformationAdminPage />}
+                resolveWithRolePermissions={true}
+              />
+            }
+          />
+          <Route
             path={ROUTES.frontend.admin_information_create}
             element={
               <PermissionRoute
                 requiredPermissions={[PERM.SAMFUNDET_ADD_INFORMATIONPAGE]}
                 element={<InformationFormAdminPage />}
+                resolveWithRolePermissions={true}
               />
             }
           />
@@ -740,13 +897,14 @@ export const router = createBrowserRouter(
               <PermissionRoute
                 requiredPermissions={[PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE]}
                 element={<InformationFormAdminPage />}
+                resolveWithRolePermissions={true}
               />
             }
           />
         </Route>
       </Route>
       {/*
-            SULTEN ROUTES
+            PUBLIC SULTEN ROUTES
       */}
       <Route element={<SultenOutlet />}>
         <Route path={ROUTES.frontend.sulten} element={<LycheHomePage />} />
