@@ -15,7 +15,8 @@
   padding: 0.25em;
 
   @include theme-dark {
-    background-color: $black;
+    background-color: $grey-5;
+    color: $black;
   }
 
   /* Position the tooltip */
