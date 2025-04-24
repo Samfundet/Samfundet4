@@ -55,7 +55,6 @@ const TICKET_TYPE_MEMBERSHIP = 'membershipNumber';
 export function BuyTicketForm({ event }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const [totalPrice, setTotalPrice] = useState(0);
-  const numberOfTickets = event.numberOfTickets ?? 9;
   const ticket_groups = event.billig?.ticket_groups;
 
   const ticketGroupDefaults = ticket_groups?.reduce(
@@ -107,6 +106,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
           {ticket_groups?.map((group) => {
             const name = group.price_groups?.[0]?.name;
             const price = group.price_groups?.[0]?.price ?? 0;
+            const ticketLimit = group.ticket_limit ?? 9;
 
             return (
               <div key={name} className={styles.ticket_select}>
@@ -123,7 +123,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                     <FormItem>
                       <FormControl>
                         <Dropdown
-                          options={[...Array(numberOfTickets + 1).keys()].map((num) => ({
+                          options={[...Array(ticketLimit + 1).keys()].map((num) => ({
                             label: `${num}`,
                             value: num.toString(),
                           }))}
