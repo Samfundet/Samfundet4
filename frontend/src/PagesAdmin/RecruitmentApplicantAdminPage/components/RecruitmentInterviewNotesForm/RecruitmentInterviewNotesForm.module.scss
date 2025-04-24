@@ -1,4 +1,4 @@
-@import 'src/constants.scss';
+@use 'src/constants' as *;
 
 .textBox,
 .markdownWrapper {

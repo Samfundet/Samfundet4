@@ -51,6 +51,7 @@ import {
   RecruitmentGangAdminPage,
   RecruitmentGangAllApplicantsAdminPage,
   RecruitmentGangOverviewPage,
+  RecruitmentHistoricStatisticsAdminPage,
   RecruitmentOpenToOtherPositionsPage,
   RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
@@ -496,6 +497,16 @@ export const router = createBrowserRouter(
                   element={<RecruitmentAdminPage />}
                   requiredPermissions={[PERM.SAMFUNDET_VIEW_RECRUITMENT]}
                   resolveWithRolePermissions={true}
+                />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_recruitment_statistics}
+              element={
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_CHANGE_RECRUITMENT, PERM.SAMFUNDET_ADD_RECRUITMENT]}
+                  resolveWithRolePermissions={true}
+                  element={<RecruitmentHistoricStatisticsAdminPage />}
                 />
               }
             />

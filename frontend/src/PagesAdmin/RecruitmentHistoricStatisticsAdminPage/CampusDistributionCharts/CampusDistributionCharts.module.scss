@@ -1,0 +1,21 @@
+.charts_container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.charts_group {
+    display: flex;
+    overflow-x: scroll;
+    gap: 3rem;
+    background-color: rgba(201, 201, 201, 0.25);
+    border: 2px solid black;
+}
+
+.chart_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
