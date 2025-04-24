@@ -51,6 +51,7 @@ import {
   RecruitmentGangAdminPage,
   RecruitmentGangAllApplicantsAdminPage,
   RecruitmentGangOverviewPage,
+  RecruitmentInterviewAvailabilityAdminPage,
   RecruitmentOpenToOtherPositionsPage,
   RecruitmentOverviewPage,
   RecruitmentPositionFormAdminPage,
@@ -667,6 +668,13 @@ export const router = createBrowserRouter(
                   crumb: ({ pathname }: UIMatch) => (
                     <Link url={pathname}>{t(KEY.recruitment_applet_three_interview_title)}</Link>
                   ),
+                }}
+              />
+              <Route
+                path={ROUTES.frontend.admin_recruitment_interview_availability}
+                element={<RecruitmentInterviewAvailabilityAdminPage />}
+                handle={{
+                  crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.interview_availability)}</Link>,
                 }}
               />
               <Route
