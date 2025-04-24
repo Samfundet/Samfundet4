@@ -57,3 +57,19 @@ export const withdrawnApplicationKeys = {
   detail: (id: number) => [...withdrawnApplicationKeys.details(), id] as const,
   users: (id: number) => [...withdrawnApplicationKeys.detail(id), 'users'] as const,
 };
+
+export const interviewRoomKeys = {
+  all: ['interviewroom'] as const,
+  lists: () => [...interviewRoomKeys.all, 'list'] as const,
+  list: (filters: unknown[]) => [...interviewRoomKeys.lists(), { filters }] as const,
+  details: () => [...interviewRoomKeys.all, 'detail'] as const,
+  detail: (id: number) => [...interviewRoomKeys.details(), id] as const,
+};
+
+export const recruitmentGangKeys = {
+  all: ['recruitmentgangs'] as const,
+  lists: () => [...recruitmentGangKeys.all, 'list'] as const,
+  list: (filters: unknown[]) => [...recruitmentGangKeys.lists(), { filters }] as const,
+  details: () => [...recruitmentGangKeys.all, 'detail'] as const,
+  detail: (id: number) => [...recruitmentGangKeys.details(), id] as const,
+};

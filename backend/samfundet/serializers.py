@@ -191,7 +191,6 @@ class EventSerializer(CustomBaseSerializer):
         exclude = ['image', 'registration', 'event_group', 'billig_id']
 
     # Read only properties (computed property, foreign model).
-    end_dt = serializers.DateTimeField(read_only=True)
     total_registrations = serializers.IntegerField(read_only=True)
     image_url = serializers.CharField(read_only=True)
 
@@ -201,6 +200,23 @@ class EventSerializer(CustomBaseSerializer):
 
     # For post/put (change image by id).
     image_id = serializers.IntegerField(write_only=True)
+
+    def validate(self, data: dict) -> dict:
+        # Check if all required fields are present for validation
+        if all(key in data for key in ['start_dt', 'end_dt', 'visibility_from_dt', 'visibility_to_dt']):
+            # Validate start is before end
+            if data['start_dt'] >= data['end_dt']:
+                raise serializers.ValidationError({'start_dt': 'Event start must be before event end'})
+
+            # Validate visibility_from is before or equal to start
+            if data['visibility_from_dt'] > data['start_dt']:
+                raise serializers.ValidationError({'visibility_from_dt': 'Event visibility must start before or at the same time as the event'})
+
+            # Validate visibility_to is after or equal to end
+            if data['visibility_to_dt'] < data['end_dt']:
+                raise serializers.ValidationError({'visibility_to_dt': 'Event visibility must end after or at the same time as the event'})
+
+        return data  # Return the validated data
 
     def create(self, validated_data: dict) -> Event:
         """
