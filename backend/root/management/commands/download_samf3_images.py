@@ -47,7 +47,7 @@ def download_image(*, image_dict, save_path) -> bool:
                 new_img.flush()
         return True
     except Exception as e:
-        print(f"Failed for {image_dict['id']}, error: {e}")
+        print(f'Failed for {image_dict["id"]}, error: {e}')
         return False
 
 

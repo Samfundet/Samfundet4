@@ -13,6 +13,10 @@ import { dbT, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { AppletContainer, RecruitmentInterviewGroupsList } from './components';
 
+/**
+ * Component that displays an overview of all gangs in a recruitment.
+ * It fetches the data from the backend and displays it in a table format.
+ */
 export function RecruitmentGangOverviewPage() {
   const { recruitmentId } = useParams();
   const navigate = useCustomNavigate();
