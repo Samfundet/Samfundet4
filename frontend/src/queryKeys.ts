@@ -22,3 +22,20 @@ export const permissionKeys = {
   details: () => [...permissionKeys.all, 'detail'] as const,
   detail: (id: number) => [...permissionKeys.details(), id] as const,
 };
+
+export const recruitmentKeys = {
+  all: ['recruitment'] as const,
+  lists: () => [...recruitmentKeys.all, 'list'] as const,
+  list: (filters: unknown[]) => [...recruitmentKeys.lists(), { filters }] as const,
+  details: () => [...recruitmentKeys.all, 'detail'] as const,
+  detail: (id: number) => [...recruitmentKeys.details(), id] as const,
+  availability: (id: number) => [...recruitmentKeys.detail(id), 'availability'] as const,
+};
+
+export const eventKeys = {
+  all: ['events'] as const,
+  lists: () => [...eventKeys.all, 'list'] as const,
+  list: (filters: unknown[]) => [...eventKeys.lists(), { filters }] as const,
+  details: () => [...eventKeys.all, 'detail'] as const,
+  detail: (id: number) => [...eventKeys.details(), id] as const,
+};

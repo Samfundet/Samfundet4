@@ -17,6 +17,13 @@ import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentGangAllApplicantsAdminPage.module.scss';
 
+/**
+ * RecruitmentGangAllApplicantsAdminPage displays a list of all recruitment applications
+ * for a specific gang and recruitment period in an admin interface.
+ *
+ * This component fetches and renders:
+ * - The recruitment applications for a given gang and recruitment.
+ */
 export function RecruitmentGangAllApplicantsAdminPage() {
   const { recruitmentId, gangId } = useParams();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();

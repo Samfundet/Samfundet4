@@ -39,7 +39,7 @@ def _create_recruitment_with_dt(*, overrides: dict[str, timezone.datetime]) -> R
     """Override fields with kwargs."""
     future = timezone.now() + timezone.timedelta(days=FUTURE_DAYS)
 
-    fields = {field: future for field in datetime_fields_expecting_error}
+    fields = dict.fromkeys(datetime_fields_expecting_error, future)
     fields['visible_from'] = future
     fields.update(overrides)
 
