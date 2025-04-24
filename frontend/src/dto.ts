@@ -314,17 +314,6 @@ export type TextItemDto = {
   text_nb: string;
 };
 
-export type BookingDto = {
-  name?: string;
-  text?: string;
-
-  tables?: TableDto[];
-  user?: UserDto;
-
-  from_dto?: Date;
-  from_to?: Date;
-};
-
 export type OrganizationDto = {
   id: number;
   name: string;
