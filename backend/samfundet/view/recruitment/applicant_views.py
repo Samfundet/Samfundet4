@@ -31,6 +31,11 @@ from rest_framework.viewsets import ModelViewSet
 
 @method_decorator(ensure_csrf_cookie, "dispatch")
 class RecruitmentPositionForApplicantView(ModelViewSet):
+    """
+    View that allows applicants to see and interact with recruitment positions.
+    Provides CRUD operations for recruitment positions from the applicant perspective.
+    """
+
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionForApplicantSerializer
     queryset = RecruitmentPosition.objects.all()
@@ -38,6 +43,14 @@ class RecruitmentPositionForApplicantView(ModelViewSet):
 
 @method_decorator(ensure_csrf_cookie, "dispatch")
 class RecruitmentPositionsPerGangForApplicantView(ListAPIView):
+    """
+    View that allows applicants to see all recruitment positions for a specific gang.
+
+    Expected query parameters:
+    - recruitment: ID of the recruitment
+    - gang: ID of the gang
+    """
+
     permission_classes = [AllowAny]
     serializer_class = RecruitmentPositionForApplicantSerializer
 
@@ -56,6 +69,14 @@ class RecruitmentPositionsPerGangForApplicantView(ListAPIView):
 
 
 class RecruitmentApplicationForApplicantView(ModelViewSet):
+    """
+    View that handles applicants' recruitment applications.
+    Allows creating, updating, retrieving, and listing applications for positions.
+
+    For list endpoint, requires 'recruitment' query parameter.
+    Optional 'user_id' parameter for listing another user's applications (requires permissions).
+    """
+
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentApplicationForApplicantSerializer
     queryset = RecruitmentApplication.objects.all()
@@ -136,6 +157,12 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
 
 
 class RecruitmentApplicationInterviewNotesView(APIView):
+    """
+    View that allows updating interview notes for an application.
+
+    PUT endpoint requires interview_id in the URL.
+    """
+
     permission_classes = [IsAuthenticated]
     serializer_class = InterviewSerializer
 
@@ -152,6 +179,12 @@ class RecruitmentApplicationInterviewNotesView(APIView):
 
 
 class RecruitmentApplicationWithdrawApplicantView(APIView):
+    """
+    View that allows applicants to withdraw their application for a position.
+
+    PUT endpoint requires position ID (pk) in the URL.
+    """
+
     permission_classes = [IsAuthenticated]
 
     def put(self, request: Request, pk: int) -> Response:
@@ -167,6 +200,13 @@ class RecruitmentApplicationWithdrawApplicantView(APIView):
 
 
 class RecruitmentApplicationApplicantPriorityView(APIView):
+    """
+    View that allows applicants to change the priority of their applications.
+
+    PUT endpoint requires application ID (pk) in the URL and a 'direction' in the request body.
+    Returns all applications for the user in priority order.
+    """
+
     permission_classes = [IsAuthenticated]
     serializer_class = RecruitmentUpdateUserPrioritySerializer
 
@@ -201,9 +241,12 @@ class RecruitmentApplicationApplicantPriorityView(APIView):
 class PositionByTagsView(ListAPIView):
     """
     Fetches recruitment positions by common tags for a specific recruitment.
-    Expects tags as query parameter in format: ?tags=tag1,tag2,tag3
-    Optionally accepts position_id parameter to exclude current position
-    This view expects a string which contains tags separated by comma from the client.
+
+    Expected query parameters:
+    - tags: Comma-separated list of tags (e.g. "tag1,tag2,tag3")
+    - position_id (optional): ID of position to exclude from results
+
+    Returns positions that match any of the provided tags.
     """
 
     permission_classes = [AllowAny]
