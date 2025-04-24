@@ -504,6 +504,9 @@ export type RecruitmentPositionDto = {
   total_applicants?: number;
   processed_applicants?: number;
   accepted_applicants?: number;
+
+  allow_image_attachment?: boolean;
+  allow_video_url?: boolean;
 };
 
 export type RecruitmentPositionForApplicantDto = {
@@ -585,6 +588,8 @@ export type RecruitmentApplicationDto = {
   withdrawn: boolean;
   application_count?: number;
   comment?: string;
+  video_url?: string;
+  image?: File;
 };
 
 export type RecruitmentApplicationRecruiterDto = {
