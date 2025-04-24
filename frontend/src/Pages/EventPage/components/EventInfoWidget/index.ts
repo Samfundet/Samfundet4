@@ -1,0 +1,1 @@
+export { EventInfoWidget } from './EventInfoWidget';

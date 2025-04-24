@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import datetime
 import itertools
 from typing import TYPE_CHECKING
 from collections import defaultdict
@@ -428,14 +429,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_role_permissions(self, user: User) -> list[str]:
         """
-        Retrieve all unique permission codenames for a given user across all their roles
+        Retrieve all unique permission full names for a given user across all their roles
         and role types.
 
         Args:
             user: Django User model instance
 
         Returns:
-            List of unique permission codenames
+            List of unique permission full names
         """
         # Collect all user role relationships
         user_roles = itertools.chain(
@@ -444,8 +445,8 @@ class UserSerializer(serializers.ModelSerializer):
             UserGangSectionRole.objects.filter(user=user),
         )
 
-        # Use a set to collect unique permissions directly
-        permissions = {codename for user_role in user_roles for codename in user_role.role.permissions.values_list('codename', flat=True)}
+        # Use a set to collect unique full permission names
+        permissions = {f'{perm.content_type.app_label}.{perm.codename}' for user_role in user_roles for perm in user_role.role.permissions.all()}
 
         return list(permissions)
 
@@ -986,12 +987,24 @@ class RecruitmentApplicationForApplicantSerializer(CustomBaseSerializer):
 
 class RecruitmentInterviewAvailabilitySerializer(CustomBaseSerializer):
     # Set custom format to remove seconds from start/end times, as they are ignored
-    start_time = serializers.DateTimeField(format='%H:%M')
-    end_time = serializers.DateTimeField(format='%H:%M')
+    start_time = serializers.TimeField(format='%H:%M')
+    end_time = serializers.TimeField(format='%H:%M')
 
     class Meta:
         model = RecruitmentInterviewAvailability
         fields = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
+
+    def validate(self, data: dict) -> dict:
+        start_date: datetime.date | None = data.get('start_date')
+        end_date: datetime.date | None = data.get('end_date')
+
+        if not start_date or not end_date:
+            raise serializers.ValidationError('start_date and end_date are required')
+
+        if start_date > end_date:
+            raise serializers.ValidationError('end_date must be greater than start_date')
+
+        return super().validate(data)
 
 
 class OccupiedTimeslotSerializer(serializers.ModelSerializer):

@@ -16,6 +16,7 @@ import {
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import type { AvailableTimes } from '~/apis/sulten/sultenDtos';
 import { TextItem } from '~/constants/TextItems';
+import { VENUE } from '~/constants/constants';
 import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import styles from '../../LycheReservationPage.module.scss';
@@ -50,7 +51,7 @@ export function ReservationDetailsForm({ findTableData, availableTimes, onSubmit
       email: '',
       additional_info: '',
       agree: false,
-      venue: 8,
+      venue: VENUE.LYCHE,
       ...findTableData,
     },
   });

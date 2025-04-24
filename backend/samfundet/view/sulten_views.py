@@ -3,13 +3,14 @@ from __future__ import annotations
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, DjangoModelPermissionsOrAnonReadOnly
 
 from django.utils import timezone
 
-from samfundet.models.general import Menu, Table, Venue, Booking, MenuItem, Reservation, FoodCategory, FoodPreference
+from samfundet.models.general import Menu, Table, Booking, MenuItem, Reservation, FoodCategory, FoodPreference
 from samfundet.serializer.sulten_serializers import (
     MenuSerializer,
     TableSerializer,
@@ -52,7 +53,7 @@ class TableView(ModelViewSet):
     queryset = Table.objects.all()
 
 
-class ReservationCreateView(ModelViewSet):
+class ReservationCreateView(CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = ReservationSerializer
     queryset = Reservation.objects.all()
@@ -73,9 +74,8 @@ class ReservationCheckAvailabilityView(APIView):
                     },
                     status=status.HTTP_406_NOT_ACCEPTABLE,
                 )
-            venue = self.request.query_params.get('venue', Venue.objects.get(slug='lyche').id)
             available_tables = Reservation.fetch_available_times_for_date(
-                venue=venue,
+                slug='lyche',
                 seating=serializer.validated_data['guest_count'],
                 date=serializer.validated_data['reservation_date'],
             )

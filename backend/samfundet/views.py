@@ -17,6 +17,7 @@ from rest_framework.request import Request
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
@@ -415,6 +416,21 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
             applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user_id=user_id)
         else:
             applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user)
+
+        serializer = self.get_serializer(applications, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def withdrawn_applications(self, request: Request, **kwargs: Any) -> Response:
+        """Returns a list of all the applications for a user for a specified recruitment"""
+        recruitment_id = request.query_params.get('recruitment')
+
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user, withdrawn=True)
 
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
@@ -834,10 +850,44 @@ class RecruitmentAvailabilityView(APIView):
             {
                 'start_date': availability.start_date,
                 'end_date': availability.end_date,
+                'start_time': start_time.strftime('%H:%M'),
+                'end_time': end_time.strftime('%H:%M'),
+                'timeslot_interval': interval,
                 'timeslots': timeslots,
                 'interval': interval,
             }
         )
+
+    def post(self, request: Request, **kwargs: int) -> Response:
+        recruitment_id = kwargs.get('id')
+
+        data = {'recruitment': recruitment_id, **request.data}
+        serializer = self.serializer_class(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        # TODO: Check that user has permission to edit/create availability of this recruitment
+
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        try:
+            availability = RecruitmentInterviewAvailability.objects.get(recruitment__id=recruitment_id)
+            availability.start_time = serializer.validated_data['start_time']
+            availability.end_time = serializer.validated_data['end_time']
+            availability.start_date = serializer.validated_data['start_date']
+            availability.end_date = serializer.validated_data['end_date']
+            availability.timeslot_interval = serializer.validated_data['timeslot_interval']
+            availability.save()
+            return Response(status=status.HTTP_200_OK)
+        except RecruitmentInterviewAvailability.DoesNotExist:
+            RecruitmentInterviewAvailability.objects.create(
+                recruitment=recruitment,
+                start_time=serializer.validated_data['start_time'],
+                end_time=serializer.validated_data['end_time'],
+                start_date=serializer.validated_data['start_date'],
+                end_date=serializer.validated_data['end_date'],
+                timeslot_interval=serializer.validated_data['timeslot_interval'],
+            )
+            return Response(status=status.HTTP_201_CREATED)
 
 
 class OccupiedTimeslotView(ListCreateAPIView):
@@ -886,6 +936,36 @@ class OccupiedTimeslotView(ListCreateAPIView):
         OccupiedTimeslot.objects.bulk_create(occupied_timeslots)
 
         return Response({'message': 'Successfully updated occupied timeslots'})
+
+
+class OccupiedTimeslotForUserView(APIView):
+    model = OccupiedTimeslot
+    serializer_class = OccupiedTimeslotSerializer
+    permission_classes = [IsAuthenticated]
+
+    # TODO: set correct permission. Must have permissions to see applications for the user
+    def get(self, request: Request, **kwargs: int) -> Response:
+        recruitment_id = self.request.query_params.get('recruitment')
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+        user_id = self.request.query_params.get('user')
+        user = get_object_or_404(User, id=user_id)
+        occupied_timeslots = OccupiedTimeslot.objects.filter(user=user.id, recruitment__id=recruitment.id)
+        dates: dict[str, list[str]] = {}
+        for occupied in occupied_timeslots:
+            date_string = occupied.start_dt.strftime('%Y.%m.%d')
+            time_string = occupied.start_dt.strftime('%H:%M')
+
+            if date_string in dates:
+                dates[date_string].append(time_string)
+            else:
+                dates[date_string] = [time_string]
+
+        return Response(
+            {
+                'recruitment': recruitment.id,
+                'dates': dates,
+            }
+        )
 
 
 class GangApplicationCountView(APIView):
