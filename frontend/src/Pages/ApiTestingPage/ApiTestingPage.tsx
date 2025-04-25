@@ -16,7 +16,6 @@ import {
   logout,
 } from '~/api';
 
-import { testBilligPurchase } from '~/apis/billig/billigApi';
 import styles from './ApiTestingPage.module.scss';
 
 /**
@@ -108,13 +107,6 @@ export function ApiTestingPage() {
         onClick={() => getApplicantsWithoutInterviews('1').then(console.log).catch(console.error)}
       >
         get users without interviews
-      </Button>
-      <Button
-        theme="samf"
-        className={styles.btn}
-        onClick={() => testBilligPurchase().then(console.log).catch(console.error)}
-      >
-        Test Billig Purchase
       </Button>
     </div>
   );
