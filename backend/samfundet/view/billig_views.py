@@ -130,7 +130,7 @@ class BilligEventTicketsView(APIView):
         400 Bad Request: { "error": "Error message" }
     """
 
-    permission_classes = [AllowAny]  # Add this line
+    permission_classes = [AllowAny]
 
     def get(self, request, event_id, format=None):
         # Validate event
