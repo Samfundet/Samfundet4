@@ -1,34 +1,5 @@
 from __future__ import annotations
 
-from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.permissions import AllowAny
-
-from samfundet.serializers import BilligEventSerializer, BilligPriceGroupSerializer, BilligTicketGroupSerializer
-from samfundet.models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
-
-# These will probably be depricated when we actually connect to Billig.
-# They are mainly for aiding in development
-
-
-class BilligEventReadOnlyModelViewSet(ReadOnlyModelViewSet):
-    permission_classes = [AllowAny]
-    serializer_class = BilligEventSerializer
-    queryset = BilligEvent.objects.all()
-
-
-class BilligPriceGroupReadOnlyModelViewSet(ReadOnlyModelViewSet):
-    permission_classes = [AllowAny]
-    serializer_class = BilligPriceGroupSerializer
-    queryset = BilligPriceGroup.objects.all()
-
-
-class BilligTicketGroupReadOnlyModelViewSet(ReadOnlyModelViewSet):
-    serializer_class = BilligTicketGroupSerializer
-    queryset = BilligTicketGroup.objects.all()
-
-
-from __future__ import annotations
-
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
