@@ -184,4 +184,5 @@ urlpatterns = [
     path('purchase-feedback/', samfundet.view.event_views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
     path('recruitment/<int:recruitment_id>/gang/<int:gang_id>/stats/', views.GangApplicationCountView.as_view(), name='gang-application-stats'),
     path('recruitment/<int:id>/positions-by-tags/', views.PositionByTagsView.as_view(), name='recruitment_positions_by_tags'),
+    path('recruitment/all-applications/', views.RecruitmentAllApplicationsPerRecruitmentView.as_view(), name='recruitment-all-applications'),
 ]

@@ -543,6 +543,7 @@ export const ROUTES_BACKEND = {
   samfundet__recruitment_position_for_applicant_list: '/api/recruitment-position-for-applicant/',
   samfundet__recruitment_position_for_applicant_detail: '/api/recruitment-position-for-applicant/:pk/',
   samfundet__recruitment_applications_for_applicant_list: '/api/recruitment-applications-for-applicant/',
+  samfundet__recruitment_applications_for_applicant_withdrawn_applications: '/api/recruitment-applications-for-applicant/withdrawn_applications/',
   samfundet__recruitment_applications_for_applicant_detail: '/api/recruitment-applications-for-applicant/:pk/',
   samfundet__recruitment_applications_for_gang_list: '/api/recruitment-applications-for-gang/',
   samfundet__recruitment_applications_for_gang_detail: '/api/recruitment-applications-for-gang/:pk/',
@@ -606,6 +607,7 @@ export const ROUTES_BACKEND = {
   samfundet__purchase_feedback: '/purchase-feedback/',
   samfundet__gang_application_stats: '/recruitment/:recruitmentId/gang/:gangId/stats/',
   samfundet__recruitment_positions_by_tags: '/recruitment/:id/positions-by-tags/',
+  samfundet__recruitment_all_applications: '/recruitment/all-applications/',
   static__path: '/static/:path',
   media__path: '/media/:path',
 } as const;
