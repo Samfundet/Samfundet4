@@ -13,6 +13,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  InputFile,
   Link,
   Modal,
   OccupiedForm,
@@ -27,6 +28,7 @@ import {
   getRecruitmentPositionForApplicant,
   getRecruitmentPositionsGangForApplicant,
   putRecruitmentApplication,
+  uploadAttachment,
   withdrawRecruitmentApplicationApplicant,
 } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
@@ -41,10 +43,19 @@ import styles from './RecruitmentApplicationFormPage.module.scss';
 
 type FormProps = {
   application_text: string;
+  video_url?: string;
+  image_file?: File | null;
 };
 
 const recruitmentApplicationSchema = z.object({
   application_text: z.string(),
+  video_url: z.string(),
+  image_file: z
+    .instanceof(File)
+    .refine((file) => file.size < 1024 * 1024 * 10, {
+      message: "File can't be larger than 10 MB",
+    })
+    .nullable(),
 });
 
 type RecruitmentApplicationFormType = z.infer<typeof recruitmentApplicationSchema>;
@@ -60,6 +71,7 @@ export function RecruitmentApplicationFormPage() {
   const [similarPositions, setSimilarPositions] = useState<PositionsByTagResponse>();
 
   const [recruitmentApplication, setRecruitmentApplication] = useState<RecruitmentApplicationDto>();
+  const [imageAttachment, setImageAttachment] = useState<File>();
   const [openOccupiedForm, setOpenOccupiedForm] = useState(false);
   const [formData, setFormData] = useState<FormProps>();
   const [recruitmentId, setRecruitmentId] = useState(0);
@@ -75,9 +87,14 @@ export function RecruitmentApplicationFormPage() {
   useTitle(recruitmentPosition ? (dbT(recruitmentPosition, 'name') as string) : '');
 
   useEffect(() => {
+    // Populate form fields if application exists
     if (recruitmentApplication?.application_text) {
       form.setValue('application_text', recruitmentApplication.application_text);
     }
+    if (recruitmentApplication?.image) {
+      form.setValue('image_file', recruitmentApplication.image);
+    }
+    if (recruitmentApplication?.video_url) form.setValue('video_url', recruitmentApplication.video_url);
   }, [recruitmentApplication, form]);
 
   useEffect(() => {
@@ -151,8 +168,21 @@ export function RecruitmentApplicationFormPage() {
   }
 
   const submitData = useMutation({
-    mutationFn: ({ data, positionId }: { data: Partial<RecruitmentApplicationDto>; positionId: number }) => {
-      return putRecruitmentApplication(data, positionId);
+    mutationFn: async ({ data, positionId }: { data: FormProps; positionId: number }) => {
+      const fd = new FormData();
+      fd.append('application_text', data.application_text);
+
+      if (data.video_url) fd.append('application_video_url', data.video_url);
+
+      const { data: application } = await putRecruitmentApplication(
+        fd,
+        positionId,
+      );
+      if (data.image_file) {
+        await uploadAttachment(data.image_file, application.id);
+      }
+
+      return application;
     },
     onSuccess: () => {
       navigate({
@@ -280,7 +310,6 @@ export function RecruitmentApplicationFormPage() {
             </h2>
             <p className={styles.text}>{dbT(recruitmentPosition, 'long_description')}</p>
           </div>
-
           {!isMobile && (
             <div className={styles.other_positions}>
               {similarPositionsBtns}
@@ -321,15 +350,50 @@ export function RecruitmentApplicationFormPage() {
                     );
                   }}
                 />
-                <div className={styles.form_buttons}>
-                  <Button type="submit" theme="green" display="basic">
-                    {submitText}
-                  </Button>
-                  {!recruitmentApplication?.withdrawn && recruitmentApplication && (
-                    <Button type="button" theme="samf" display="basic" onClick={() => withdrawApplication()}>
-                      {t(KEY.recruitment_withdraw_application)}
-                    </Button>
+                {!recruitmentPosition?.allow_video_url && (
+                  <FormField
+                    control={form.control}
+                    name="video_url"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormControl>
+                            <Textarea
+                              {...field}
+                              value={field.value}
+                              className={styles.video_url_textarea}
+                              placeholder="YouTube/video URL:"
+                            />
+                          </FormControl>
+                        </FormItem>
+                      );
+                    }}
+                  />
+                )}
+                <div className={styles.button_container}>
+                  {!recruitmentPosition?.allow_image_attachment && (
+                    <FormField
+                      control={form.control}
+                      name="image_file"
+                      render={({ field: { onChange, ...fieldProps } }) => (
+                        <FormItem>
+                          <FormControl>
+                            <InputFile fileType="image" onSelected={onChange} {...fieldProps} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
                   )}
+                  <div className={styles.form_buttons}>
+                    <Button type="submit" theme="green" display="basic">
+                      {submitText}
+                    </Button>
+                    {recruitmentApplication && !recruitmentApplication?.withdrawn && (
+                      <Button type="button" theme="samf" display="basic" onClick={() => withdrawApplication()}>
+                        {t(KEY.recruitment_withdraw_application)}
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </form>
             </Form>

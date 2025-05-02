@@ -16,6 +16,7 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
 from django.contrib.auth.models import Group, Permission
+from django.core.files.uploadedfile import UploadedFile
 from django.contrib.auth.password_validation import validate_password
 
 from root.constants import PHONE_NUMBER_REGEX
@@ -59,6 +60,7 @@ from .models.recruitment import (
     RecruitmentCampusStat,
     RecruitmentStatistics,
     RecruitmentApplication,
+    ApplicationFileAttachment,
     RecruitmentSeparatePosition,
     RecruitmentInterviewAvailability,
     RecruitmentPositionSharedInterviewGroup,
@@ -72,6 +74,47 @@ if TYPE_CHECKING:
     from typing import Any
 
 from rest_framework.utils.serializer_helpers import ReturnList
+
+
+class ApplicationFileAttachmentSerializer(CustomBaseSerializer):
+    class Meta:
+        model = ApplicationFileAttachment
+        fields = ['id', 'application_file', 'application_file_type', 'created_at']
+        read_only_fields = ['id', 'application_file_type', 'created_at']
+
+    def validate_application_file(self, value: UploadedFile) -> UploadedFile:
+        if not value:
+            raise serializers.ValidationError('A file must be provided.')
+        return value
+
+    def create(self, validated_data: dict[str, Any]) -> ApplicationFileAttachment:
+        application = self.context.get('application')
+        if not application:
+            raise serializers.ValidationError('Application is required to attach a file.')
+        validated_data['application'] = application
+        return super().create(validated_data)
+
+    def clean(self):
+        super().clean()
+
+        uploaded = self.application_file
+        if not uploaded:
+            return
+
+        content_type = getattr(uploaded, 'content_type', None) or getattr(getattr(uploaded, 'file', None), 'content_type', None)
+        self.application_file_type = content_type or ''
+
+        allowed = {
+            'image/jpeg',
+            'image/png',
+            'video/mp4',
+            'application/pdf',
+        }
+        if content_type not in allowed:
+            raise ValidationError('Wrong filetype')
+
+        if uploaded.size > 10 * 1024 * 1024:  # > 10 MB
+            raise ValidationError('File size must be less than 10 MB.')
 
 
 class TagSerializer(CustomBaseSerializer):
@@ -1153,6 +1196,7 @@ class RecruitmentApplicationForGangSerializer(CustomBaseSerializer):
     interview = InterviewSerializer(read_only=False)
     interviewers = InterviewerSerializer(many=True, read_only=True)
     recruitment_position = RecruitmentPositionSerializer(read_only=True)
+    application_attachment = ApplicationFileAttachmentSerializer(read_only=True)
     application_count = serializers.SerializerMethodField(method_name='get_application_count', read_only=True)
 
     class Meta:
