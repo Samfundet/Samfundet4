@@ -1743,12 +1743,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/node-logger@npm:^8.6.4":
-  version: 8.6.7
-  resolution: "@storybook/node-logger@npm:8.6.7"
+"@storybook/node-logger@npm:^8.6.12":
+  version: 8.6.12
+  resolution: "@storybook/node-logger@npm:8.6.12"
   peerDependencies:
     storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
-  checksum: 10c0/0eeede67fe17dd42de85b09adaa62384de124955c3f84e468074a4c066725c2cd2ed54b2b6d3051fea0e7df538a59cca03c13c94c1308214fd4c379dc64dd927
+  checksum: 10c0/6ed4cb902dee39747847872bf7381949771565aa5c120931655121ea731ebd8f021af11a7067736b98fbe78b5d7b57c8f876598d849a607be58dab2753f863d1
   languageName: node
   linkType: hard
 
@@ -4230,7 +4230,7 @@ __metadata:
     "@storybook/addon-essentials": "npm:^8.6.4"
     "@storybook/addon-interactions": "npm:^8.6.4"
     "@storybook/addon-links": "npm:^8.6.4"
-    "@storybook/node-logger": "npm:^8.6.4"
+    "@storybook/node-logger": "npm:^8.6.12"
     "@storybook/react": "npm:^8.6.4"
     "@storybook/react-vite": "npm:^8.6.4"
     "@storybook/test": "npm:^8.6.4"
