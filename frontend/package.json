@@ -80,7 +80,7 @@
     "@storybook/addon-essentials": "^8.6.4",
     "@storybook/addon-interactions": "^8.6.4",
     "@storybook/addon-links": "^8.6.4",
-    "@storybook/node-logger": "^8.6.4",
+    "@storybook/node-logger": "^8.6.12",
     "@storybook/react": "^8.6.4",
     "@storybook/react-vite": "^8.6.4",
     "@storybook/test": "^8.6.4",
