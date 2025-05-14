@@ -183,6 +183,7 @@ export const nb = prepareTranslations({
   [KEY.common_list_view]: 'Liste visning',
   [KEY.common_tab_view]: 'Fane visning',
   [KEY.common_available]: 'Tilgjengelig',
+  [KEY.common_comment]: 'Kommentar',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -774,6 +775,7 @@ export const en = prepareTranslations({
   [KEY.common_list_view]: 'List view',
   [KEY.common_tab_view]: 'Tab view',
   [KEY.common_available]: 'Available',
+  [KEY.common_comment]: 'Comment',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
