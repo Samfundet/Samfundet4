@@ -1,5 +1,6 @@
 import axios, { type AxiosResponse } from 'axios';
 import type {
+  ApplicationFileAttachmentDto,
   ClosedPeriodDto,
   EventDto,
   EventGroupDto,
@@ -936,7 +937,7 @@ export async function getRecruitmentApplicationsForRecruitmentPosition(
 
 export async function putRecruitmentApplicationForGang(
   applicationId: string,
-  application: Partial<RecruitmentApplicationDto>,
+  application: FormData,
 ): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN +
@@ -946,6 +947,23 @@ export async function putRecruitmentApplicationForGang(
     });
   const response = await axios.put<RecruitmentApplicationDto>(url, application, { withCredentials: true });
   return response;
+}
+
+export async function uploadAttachment(
+  file: File,
+  applicationId: number | string,
+) {
+  const fd = new FormData();
+  fd.append('application_id', applicationId.toString());
+  fd.append('application_file', file);
+
+  return axios.post<ApplicationFileAttachmentDto>(
+    BACKEND_DOMAIN +
+    ROUTES.backend
+      .samfundet__recruitment_applications_file_attachments_list,
+    fd,
+    { withCredentials: true },
+  );
 }
 
 export async function updateRecruitmentApplicationStateForGang(
@@ -1021,23 +1039,15 @@ export async function getApplicantsWithoutThreeInterviewCriteria(
   return await axios.get(url, { withCredentials: true });
 }
 
-export async function putRecruitmentApplication(
-  application: Partial<RecruitmentApplicationDto>,
-  applicationId: number,
-): Promise<AxiosResponse> {
+export async function putRecruitmentApplication(formData: FormData, applicationId: number) {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_applications_for_applicant_detail,
       urlParams: { pk: applicationId },
     });
-  const data = {
-    application_text: application.application_text,
-    recruitment_position: application.recruitment_position,
-  };
-  const response = await axios.put(url, data, { withCredentials: true });
 
-  return response;
+  return axios.putForm(url, formData, { withCredentials: true });
 }
 
 export async function putRecrutmentInterviewNotes(notes: string, interviewId: number): Promise<AxiosResponse> {
@@ -1238,13 +1248,12 @@ export async function getPositionsByTag(
   tags: string,
   currentPositionId: number,
 ): Promise<PositionsByTagResponse> {
-  const url = `${
-    BACKEND_DOMAIN +
+  const url = `${BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__recruitment_positions_by_tags,
       urlParams: { id: recruitmentId },
     })
-  }?tags=${encodeURIComponent(tags)}&position_id=${currentPositionId}`;
+    }?tags=${encodeURIComponent(tags)}&position_id=${currentPositionId}`;
 
   const response = await axios.get<PositionsByTagResponse>(url, { withCredentials: true });
   return response.data;
