@@ -3063,14 +3063,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chromatic@npm:^7.4.0":
-  version: 7.6.0
-  resolution: "chromatic@npm:7.6.0"
+"chromatic@npm:^13.0.1":
+  version: 13.0.1
+  resolution: "chromatic@npm:13.0.1"
+  peerDependencies:
+    "@chromatic-com/cypress": ^0.*.* || ^1.0.0
+    "@chromatic-com/playwright": ^0.*.* || ^1.0.0
+  peerDependenciesMeta:
+    "@chromatic-com/cypress":
+      optional: true
+    "@chromatic-com/playwright":
+      optional: true
   bin:
     chroma: dist/bin.js
     chromatic: dist/bin.js
     chromatic-cli: dist/bin.js
-  checksum: 10c0/5ed93689daea8ad22fe3a81e7238357933063905cf5f3acb5a2ec54dbcb5f9ae18c0c66b8bc2d7ed0c909144d9620864f97db70427d10f46de6c7960f6612b2b
+  checksum: 10c0/0f0a59964a5ec8b1550247e196ab3f85e84470e2275e44c2d4200e2c0a6f1734e4538d563fff788b126f44e868c16a6af6ebe1f5aefe781ff77b777b6bcb8b47
   languageName: node
   linkType: hard
 
@@ -4244,7 +4252,7 @@ __metadata:
     autoprefixer: "npm:^10.4.21"
     axios: "npm:^1.7.4"
     babel-plugin-named-exports-order: "npm:^0.0.2"
-    chromatic: "npm:^7.4.0"
+    chromatic: "npm:^13.0.1"
     classnames: "npm:^2.3.2"
     cmdk: "npm:^1.1.1"
     cypress: "npm:^13.3.1"
