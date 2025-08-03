@@ -33,7 +33,6 @@ from .models.general import (
     Table,
     Venue,
     Campus,
-    Booking,
     Infobox,
     Profile,
     BlogPost,
@@ -319,7 +318,7 @@ class EventRegistrationAdmin(CustomGuardedModelAdmin):
 class EventAdmin(CustomBaseAdmin):
     # ordering = []
 
-    sortable_by = ['id', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'created_at', 'updated_at', 'start_dt', 'doors_time']
+    sortable_by = ['id', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'created_at', 'updated_at', 'start_dt', 'end_dt', 'doors_time']
     list_filter = ['event_group']
     list_display = [
         'id',
@@ -328,10 +327,12 @@ class EventAdmin(CustomBaseAdmin):
         'title_en',
         'host',
         'location',
-        'event_group',
-        'publish_dt',
-        'doors_time',
         'start_dt',
+        'end_dt',
+        'event_group',
+        'visibility_from_dt',
+        'visibility_to_dt',
+        'doors_time',
         'created_at',
         'updated_at',
     ]
@@ -566,19 +567,6 @@ class SaksdokumentAdmin(CustomBaseAdmin):
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
-
-
-@admin.register(Booking)
-class BookingAdmin(CustomBaseAdmin):
-    # ordering = []
-    # list_filter = []
-    list_display = ['id', '__str__', 'name', 'get_duration', 'table_count', 'created_at', 'updated_at']
-    _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
-    search_fields = ['id', 'name', *_user_search_fields]
-    filter_horizontal = ['tables']
-    list_display_links = ['id', '__str__']
-    autocomplete_fields = ['user']
-    list_select_related = True
 
 
 @admin.register(ClosedPeriod)

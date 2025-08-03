@@ -4,8 +4,7 @@ from rest_framework import serializers
 
 from root.utils.mixins import FullCleanSerializer, CustomBaseSerializer
 
-from samfundet.serializers import UserSerializer
-from samfundet.models.general import Menu, Table, Booking, MenuItem, Reservation, FoodCategory, FoodPreference
+from samfundet.models.general import Menu, Table, MenuItem, Reservation, FoodCategory, FoodPreference
 
 
 class TableSerializer(CustomBaseSerializer):
@@ -24,15 +23,6 @@ class ReservationCheckSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
         fields = ['guest_count', 'occasion', 'reservation_date']
-
-
-class BookingSerializer(serializers.ModelSerializer):
-    tables = TableSerializer(many=True)
-    user = UserSerializer(many=True)
-
-    class Meta:
-        model = Booking
-        fields = '__all__'
 
 
 class FoodCategorySerializer(CustomBaseSerializer):

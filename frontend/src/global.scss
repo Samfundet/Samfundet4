@@ -107,19 +107,6 @@ label {
     color: $white;
   }
 
-  input,
-  textarea,
-  select {
-    background-color: $theme-dark-input-bg;
-    color: inherit;
-    &:focus {
-      outline-color: $grey-1;
-    }
-    &:disabled {
-      background-color: $theme-dark-input-bg-disabled;
-    }
-  }
-
   .button_outlined {
     color: $white;
   }
