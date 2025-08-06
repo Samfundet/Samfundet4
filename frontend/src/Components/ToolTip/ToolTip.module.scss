@@ -1,5 +1,4 @@
 @use 'src/mixins' as *;
-
 @use 'src/constants' as *;
 
 .noMargin {
@@ -13,26 +12,13 @@
   text-align: center;
   border-radius: 0.2em;
   padding: 0.25em;
+  position: absolute;
+  z-index: 1;
 
   @include theme-dark {
     background-color: rgba($grey-5, 0.97);
     color: $black;
   }
-
-  /* Position the tooltip */
-  position: absolute;
-  z-index: 1;
-}
-
-.right {
-  top: -5px;
-  left: 105%;
-}
-
-.top {
-  bottom: 105%;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .hidden {
