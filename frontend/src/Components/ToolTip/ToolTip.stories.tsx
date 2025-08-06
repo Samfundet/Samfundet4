@@ -23,5 +23,6 @@ export const Basic: Story = {
     value: 'You hovered!',
     alignment: 'top',
     children: 'Hover on me!',
+    followCursor: false,
   },
 };
