@@ -15,7 +15,7 @@
   padding: 0.25em;
 
   @include theme-dark {
-    background-color: $grey-5;
+    background-color: rgba($grey-5, 0.97);
     color: $black;
   }
 
