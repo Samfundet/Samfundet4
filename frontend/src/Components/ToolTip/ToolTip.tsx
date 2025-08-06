@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import React, { useState, useRef } from 'react';
-import type { Children } from '~/types';
-import { Image } from '../Image';
+import React, {useState, useRef} from 'react';
+import type {Children} from '~/types';
+import {Image} from '../Image';
 import styles from './ToolTip.module.scss';
-import { useTooltipPosition } from './useToolTipPosition';
+import {useTooltipPosition} from './useToolTipPosition';
 
 type AlignmentOptions = 'top' | 'right' | 'bottom' | 'left';
 type DisplayOptions = 'text' | 'image';
@@ -24,7 +24,7 @@ export function ToolTip({
                           followCursor = false,
                         }: ToolTipProps) {
   const [hover, setHover] = useState<boolean>(false);
-  const [coords, setCoords] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [coords, setCoords] = useState<{ x: number; y: number }>({x: 0, y: 0});
   const containerRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
@@ -51,7 +51,7 @@ export function ToolTip({
   return (
     <div
       ref={containerRef}
-      style={{ position: 'relative' }}
+      style={{position: 'relative'}}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onMouseMove={handleMouseMove}
@@ -62,7 +62,7 @@ export function ToolTip({
         className={classNames(styles.tooltip, !hover && styles.hidden)}
         style={tooltipStyle}
       >
-        {display === 'text' ? <p>{value}</p> : <Image className={styles.noMargin} src={value} />}
+        {display === 'text' ? <p>{value}</p> : <Image className={styles.noMargin} src={value}/>}
       </div>
     </div>
   );

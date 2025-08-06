@@ -1,4 +1,4 @@
-import type {CSSProperties} from 'react';
+import type {RefObject, CSSProperties} from 'react';
 import {useMemo} from 'react';
 
 type AlignmentOptions = 'top' | 'right' | 'bottom' | 'left';
@@ -8,8 +8,8 @@ type UseTooltipPositionProps = {
   followCursor: boolean;
   alignment: AlignmentOptions;
   coords: { x: number; y: number };
-  containerRef: React.RefObject<HTMLDivElement>;
-  tooltipRef: React.RefObject<HTMLDivElement>;
+  containerRef: RefObject<HTMLDivElement>;
+  tooltipRef: RefObject<HTMLDivElement>;
   offset?: number;
 };
 
