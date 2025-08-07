@@ -1,6 +1,6 @@
-import type { AdminAppletCategory } from '~/types.ts'
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
+import type { AdminAppletCategory } from '~/types.ts';
 
 export const appletCategories: AdminAppletCategory[] = [
   {
