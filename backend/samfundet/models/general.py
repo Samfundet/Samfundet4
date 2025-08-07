@@ -673,55 +673,6 @@ class Saksdokument(CustomBaseModel):
         return f'{self.title_nb}'
 
 
-class Booking(CustomBaseModel):
-    name = models.CharField(max_length=64, blank=True, null=True)
-    text = models.TextField(blank=True, null=True)
-    from_dt = models.DateTimeField(blank=True, null=True)
-    to_dt = models.DateTimeField(blank=True, null=True)
-
-    tables = models.ManyToManyField(Table, blank=True)
-
-    user = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
-    first_name = models.CharField(max_length=64, unique=True, blank=True, null=True)
-    last_name = models.CharField(max_length=64, unique=True, blank=True, null=True)
-    email = models.CharField(max_length=64, unique=True, blank=True, null=True)
-    phone_nr = models.CharField(max_length=64, unique=True, blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'Booking'
-        verbose_name_plural = 'Bookings'
-
-    def __str__(self) -> str:
-        return f'Booking: {self.name} - {self.user} - {self.from_dt} ({self.table_count()})'
-
-    def table_count(self) -> int:
-        n: int = self.tables.count()
-        return n
-
-    def get_duration(self) -> timedelta | None:
-        if self.to_dt and self.from_dt:
-            duration: timedelta = self.to_dt - self.from_dt
-            return duration
-        return None
-
-    def clean(self) -> None:
-        errors: dict[str, ValidationError] = {}
-
-        field_to_validate = 'to_dt'
-        duration_constraint_hours = 2
-        duration = self.get_duration()
-        if duration and duration > timedelta(hours=duration_constraint_hours):
-            error = f'Duration cannot be longer than {duration_constraint_hours} hours.'
-            errors.setdefault(field_to_validate, []).append(error)
-
-        if errors:
-            raise ValidationError(errors)
-
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        self.full_clean()
-        super().save(*args, **kwargs)
-
-
 class Infobox(CustomBaseModel):
     title_nb = models.CharField(max_length=60, blank=True, null=True, verbose_name='Tittel (norsk)')
     text_nb = models.CharField(max_length=255, blank=True, null=True, verbose_name='Tekst (norsk)')
