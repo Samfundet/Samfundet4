@@ -1,5 +1,6 @@
 import classNames from 'classnames';
-import React, { useState, useRef } from 'react';
+import type React from 'react';
+import { useRef, useState } from 'react';
 import type { Children } from '~/types';
 import { Image } from '../Image';
 import styles from './ToolTip.module.scss';
@@ -18,15 +19,18 @@ type ToolTipProps = {
 };
 
 export function ToolTip({
-                          value = 'Jokes on you',
-                          display = 'text',
-                          alignment = 'top',
-                          children,
-                          followCursor = false,
-                          showArrow = false,
-                        }: ToolTipProps) {
+  value = 'Jokes on you',
+  display = 'text',
+  alignment = 'top',
+  children,
+  followCursor = false,
+  showArrow = false,
+}: ToolTipProps) {
   const [hover, setHover] = useState<boolean>(false);
-  const [coords, setCoords] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [coords, setCoords] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
   const containerRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
@@ -46,7 +50,7 @@ export function ToolTip({
     coords,
     containerRef,
     tooltipRef,
-    offset: (followCursor ? 20 : 5)
+    offset: followCursor ? 20 : 5,
   });
 
   return (
@@ -60,11 +64,7 @@ export function ToolTip({
       {children}
       <div
         ref={tooltipRef}
-        className={classNames(
-          styles.tooltip,
-          !hover && styles.hidden,
-          showArrow && styles[alignment]
-        )}
+        className={classNames(styles.tooltip, !hover && styles.hidden, showArrow && styles[alignment])}
         style={tooltipStyle}
       >
         {display === 'text' ? <p>{value}</p> : <Image className={styles.noMargin} src={value} />}

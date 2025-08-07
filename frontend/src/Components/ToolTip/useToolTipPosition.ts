@@ -1,5 +1,5 @@
-import type {RefObject, CSSProperties} from 'react';
-import {useMemo} from 'react';
+import type { CSSProperties, RefObject } from 'react';
+import { useMemo } from 'react';
 
 type AlignmentOptions = 'top' | 'right' | 'bottom' | 'left';
 
@@ -14,14 +14,14 @@ type UseTooltipPositionProps = {
 };
 
 export function useTooltipPosition({
-                                     hover,
-                                     followCursor,
-                                     alignment,
-                                     coords,
-                                     containerRef,
-                                     tooltipRef,
-                                     offset = 10, // Default offset
-                                   }: UseTooltipPositionProps): CSSProperties {
+  hover,
+  followCursor,
+  alignment,
+  coords,
+  containerRef,
+  tooltipRef,
+  offset = 10, // Default offset
+}: UseTooltipPositionProps): CSSProperties {
   return useMemo((): CSSProperties => {
     if (!hover || !tooltipRef.current || !containerRef.current) {
       return {};
@@ -29,7 +29,7 @@ export function useTooltipPosition({
 
     // Follow Cursor
     if (followCursor) {
-      const style: CSSProperties = {position: 'absolute'};
+      const style: CSSProperties = { position: 'absolute' };
       switch (alignment) {
         case 'top':
           style.left = `${coords.x}px`;
@@ -56,7 +56,7 @@ export function useTooltipPosition({
     }
 
     // Static pos
-    const staticStyle: CSSProperties = {position: 'absolute'};
+    const staticStyle: CSSProperties = { position: 'absolute' };
     switch (alignment) {
       case 'top':
         staticStyle.bottom = `calc(100% + ${offset}px)`;
@@ -80,6 +80,5 @@ export function useTooltipPosition({
         break;
     }
     return staticStyle;
-
   }, [hover, followCursor, alignment, coords, containerRef, tooltipRef, offset]);
 }
