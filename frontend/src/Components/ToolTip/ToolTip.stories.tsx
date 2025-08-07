@@ -6,12 +6,18 @@ const meta: Meta<typeof ToolTip> = {
   component: ToolTip,
   decorators: [
     (Story) => (
-      <div style={{ margin: '50px', padding: '20px', display: 'inline-block' }}>
+      <div style={{ margin: '100px', padding: '50px', display: 'inline-block' }}>
         <Story />
       </div>
     ),
   ],
-  args: {},
+  argTypes: {
+    showArrow: { control: 'boolean' },
+    alignment: {
+      control: 'select',
+      options: ['top', 'bottom', 'left', 'right'],
+    },
+  },
 };
 
 export default meta;
@@ -24,5 +30,6 @@ export const Basic: Story = {
     alignment: 'top',
     children: 'Hover on me!',
     followCursor: false,
+    showArrow: true,
   },
 };
