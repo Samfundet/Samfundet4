@@ -33,7 +33,6 @@ from .models.general import (
     Table,
     Venue,
     Campus,
-    Booking,
     Infobox,
     Profile,
     BlogPost,
@@ -568,19 +567,6 @@ class SaksdokumentAdmin(CustomBaseAdmin):
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
-
-
-@admin.register(Booking)
-class BookingAdmin(CustomBaseAdmin):
-    # ordering = []
-    # list_filter = []
-    list_display = ['id', '__str__', 'name', 'get_duration', 'table_count', 'created_at', 'updated_at']
-    _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
-    search_fields = ['id', 'name', *_user_search_fields]
-    filter_horizontal = ['tables']
-    list_display_links = ['id', '__str__']
-    autocomplete_fields = ['user']
-    list_select_related = True
 
 
 @admin.register(ClosedPeriod)
