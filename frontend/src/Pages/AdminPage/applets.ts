@@ -1,8 +1,8 @@
-import type { AppletCategory } from '~/Components/AdminBox/types';
+import type { AdminAppletCategory } from '~/types.ts'
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 
-export const appletCategories: AppletCategory[] = [
+export const appletCategories: AdminAppletCategory[] = [
   {
     title_en: 'General',
     title_nb: 'Generelt',

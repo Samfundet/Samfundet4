@@ -4,12 +4,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router';
 import { Button, Link, Navbar } from '~/Components';
-import type { Applet } from '~/Components/AdminBox/types';
 import { appletCategories } from '~/Pages/AdminPage/applets';
 import { useAuthContext } from '~/context/AuthContext';
 import { useMobile } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
+import type { AdminApplet } from '~/types';
 import { dbT } from '~/utils';
 import styles from './AdminLayout.module.scss';
 
@@ -26,7 +26,7 @@ export function AdminLayout() {
   const { loading: authLoading } = useAuthContext();
 
   const makeAppletShortcut = useCallback(
-    (applet: Applet, index: number) => {
+    (applet: AdminApplet, index: number) => {
       // No default url, dont show in navmenu
       if (applet.url === undefined) return <></>;
 
@@ -54,7 +54,7 @@ export function AdminLayout() {
     }
   }, [isMobile]);
 
-  const userApplets: Applet[] = [
+  const userApplets: AdminApplet[] = [
     { url: ROUTES_FRONTEND.admin, icon: 'mdi:person', title_nb: 'Profil', title_en: 'Profile' },
     {
       url: ROUTES_FRONTEND.user_change_password,
