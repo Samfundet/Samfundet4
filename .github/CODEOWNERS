@@ -1,3 +1,11 @@
 * @emilte @Mathias-a @robines @Snorre98 @andsamfu
 backend/ @Mathias-a @robines @Snorre98 @andsamfu
 frontend/ @Mathias-a @robines @Snorre98 @andsamfu
+
+# Dependabot change files (for permitting more weebs to approve dependabot)
+
+**/package.json @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
+**/yarn.lock @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
+
+**/poetry.lock @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
+**/pyproject.toml @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
