@@ -1,6 +1,6 @@
-@use '~/constants' as *;
+@use 'src/constants' as *;
 
-@use '~/mixins' as *;
+@use 'src/mixins' as *;
 
 .file_label {
   pointer-events: none;

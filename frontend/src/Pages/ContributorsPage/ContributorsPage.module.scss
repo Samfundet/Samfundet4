@@ -1,6 +1,6 @@
-@use '~/mixins' as *;
+@use 'src/mixins' as *;
 
-@use '~/constants' as *;
+@use 'src/constants' as *;
 
 .container {
   padding: 2rem 0.75rem;

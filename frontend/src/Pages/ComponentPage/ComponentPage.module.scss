@@ -1,4 +1,4 @@
-@use '~/mixins' as *;
+@use 'src/mixins' as *;
 
 .wrapper {
   @include for-tablet-up {

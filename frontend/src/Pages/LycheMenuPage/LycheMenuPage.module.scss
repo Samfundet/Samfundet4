@@ -1,7 +1,7 @@
 
-@use '~/constants' as *;
+@use 'src/constants' as *;
 
-@use '~/mixins' as *;
+@use 'src/mixins' as *;
 
 .menu_logo {
   width: 50%;
