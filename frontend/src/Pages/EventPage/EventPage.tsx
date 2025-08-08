@@ -51,7 +51,7 @@ export function EventPage() {
             <BuyButton
               eventId={event.id}
               billigId={event.billig.id}
-              ticketSaleState={event.billig.ticket_groups}
+              ticketSaleState={event.billig}
               onClick={() => setShowModal(true)}
             />
             <BuyTicketModal event={event} isOpen={showModal} onClose={() => setShowModal(false)} />
