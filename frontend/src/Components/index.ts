@@ -1,5 +1,4 @@
 export { AccessDenied } from './AccessDenied';
-export { AdminBox } from './AdminBox';
 export { Alert } from './Alert';
 export { BackButton } from './BackButton';
 export { Breadcrumb } from './Breadcrumb';
