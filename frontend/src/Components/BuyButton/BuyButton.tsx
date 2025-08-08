@@ -13,16 +13,15 @@ type BuyButtonProps = {
 };
 
 export function BuyButton({ eventId, billigId, ticketSaleState, onClick }: BuyButtonProps) {
-  const [buttonText, setButtonText] = useState<string>('Kjøp');
   const { t } = useTranslation();
+  const [buttonText, setButtonText] = useState<string>(t(KEY.common_buy));
+
 
   useEffect(() => {
     if (ticketSaleState.is_sold_out) {
       setButtonText(t(KEY.common_sold_out));
-    } else if (ticketSaleState.is_almost_sold_out) {
-      setButtonText(t(KEY.common_almost_sold_out));
     } else {
-      setButtonText(t(KEY.common_buy));
+      setButtonText(t(KEY.common_almost_sold_out));
     }
   }, [ticketSaleState, t]);
 
