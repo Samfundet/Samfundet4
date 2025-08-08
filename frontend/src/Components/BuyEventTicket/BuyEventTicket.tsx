@@ -5,7 +5,7 @@ import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { Button } from '../Button';
-import { BuyTicketModal } from '../BuyTicketModal';
+import { BuyTicketModal } from './components';
 
 type BuyButtonProps = {
   event: EventDto;

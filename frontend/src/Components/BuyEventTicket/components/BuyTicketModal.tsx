@@ -2,8 +2,8 @@ import { logoBlack, logoWhite } from '~/assets';
 import type { EventDto } from '~/dto';
 import { useIsDarkTheme } from '~/hooks';
 import { dbT } from '~/utils';
-import { IconButton } from '../IconButton';
-import { Modal } from '../Modal';
+import { IconButton } from '../../IconButton';
+import { Modal } from '../../Modal';
 import BuyTicketForm from './BuyTicketForm';
 import styles from './BuyTicketModal.module.scss';
 
