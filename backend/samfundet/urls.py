@@ -11,6 +11,7 @@ import samfundet.view.user_views
 import samfundet.view.event_views
 import samfundet.view.sulten_views
 import samfundet.view.general_views
+from samfundet.view import billig_views
 
 from . import views
 from .view import recruitment_views
@@ -35,7 +36,6 @@ router.register('menu', samfundet.view.sulten_views.MenuView, 'menu')
 router.register('menu-items', samfundet.view.sulten_views.MenuItemView, 'menu_items')
 router.register('food-preference', samfundet.view.sulten_views.FoodPreferenceView, 'food_preference')
 router.register('food-category', samfundet.view.sulten_views.FoodCategoryView, 'food_category')
-router.register('booking', samfundet.view.sulten_views.BookingView, 'booking')
 router.register('table', samfundet.view.sulten_views.TableView, 'table')
 router.register('textitem', samfundet.view.general_views.TextItemView, 'text_item')
 router.register('interview-rooms', views.InterviewRoomView, 'interview_rooms')
@@ -56,6 +56,12 @@ router.register('recruitment-applications-for-applicant', views.RecruitmentAppli
 router.register('recruitment-applications-for-gang', recruitment_views.RecruitmentApplicationForGangView, 'recruitment_applications_for_gang')
 router.register('recruitment-applications-for-position', views.RecruitmentApplicationForRecruitmentPositionView, 'recruitment_applications_for_position')
 router.register('interview', views.InterviewView, 'interview')
+
+########## Billig ##########
+# TODO: these will probably be replaced or removed when we actually connect to Billig
+router.register('billig-event', billig_views.BilligEventReadOnlyModelViewSet, 'billig_event')
+router.register('billig-price-group', billig_views.BilligPriceGroupReadOnlyModelViewSet, 'billig_price_group')
+router.register('billig-ticket-group', billig_views.BilligTicketGroupReadOnlyModelViewSet, 'billig_ticket_group')
 
 ######## Lyche #########
 # Lyche routes go here
@@ -178,4 +184,5 @@ urlpatterns = [
     path('purchase-feedback/', samfundet.view.event_views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
     path('recruitment/<int:recruitment_id>/gang/<int:gang_id>/stats/', views.GangApplicationCountView.as_view(), name='gang-application-stats'),
     path('recruitment/<int:id>/positions-by-tags/', views.PositionByTagsView.as_view(), name='recruitment_positions_by_tags'),
+    path('recruitment/all-applications/', views.RecruitmentAllApplicationsPerRecruitmentView.as_view(), name='recruitment-all-applications'),
 ]

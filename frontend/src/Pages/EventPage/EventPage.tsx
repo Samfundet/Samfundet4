@@ -1,57 +1,50 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router';
-import { toast } from 'react-toastify';
-import { Page } from '~/Components';
+import { useParams } from 'react-router';
+import { ExpandableHeader, ExternalHostBox, H1, Image, Page } from '~/Components';
 import { BuyButton } from '~/Components/BuyButton/BuyButton';
 import { BuyTicketModal } from '~/Components/BuyTicketModal';
+import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { getEvent } from '~/api';
-import type { EventDto } from '~/dto';
+import { BACKEND_DOMAIN } from '~/constants';
 import { useTitle } from '~/hooks';
-import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
+import { eventKeys } from '~/queryKeys';
 import { dbT } from '~/utils';
-import { Splash } from '../HomePage/components/Splash/Splash';
 import styles from './EventPage.module.scss';
+import { EventInformation } from './components/EventInformation/EventInformation';
 import { EventTable } from './components/EventTable';
 
 export function EventPage() {
-  const { id } = useParams();
   const { t } = useTranslation();
-  const [event, setEvent] = useState<EventDto>();
-  const navigate = useNavigate();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const [showModal, setShowModal] = useState(false);
+  const { id } = useParams();
+
+  const { data: event, isLoading } = useQuery({
+    queryKey: id ? eventKeys.detail(Number(id)) : ['events', 'no-id'],
+    queryFn: () => getEvent(id as string),
+    enabled: !!id,
+  });
+  
 
   useTitle((event && dbT(event, 'title')) || t(KEY.common_event));
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
-  useEffect(() => {
-    if (id) {
-      getEvent(id)
-        .then((data) => {
-          setEvent(data);
-          setShowSpinner(false);
-        })
-        .catch((error) => {
-          if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.not_found, { replace: true });
-          }
-          toast.error(t(KEY.common_something_went_wrong));
-          console.error(error);
-        });
-    }
-  }, [id]);
-
   return (
-    <Page className={styles.container} loading={showSpinner}>
-      {/* TODO splash should be its own component rather than homepage subcomponent */}
-      <Splash events={event && [event]} />
-      <div className={styles.text_title}>{dbT(event, 'title')}</div>
+    <Page className={styles.container} loading={isLoading}>
+      <div className={styles.image_wrapper}>
+        {event && <Image src={BACKEND_DOMAIN + event.image_url} className={styles.event_image} />}
+      </div>
+
+      <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>
       <div className={styles.content_row}>
-        {/* Info table */}
-        <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
+        {event && <EventInformation event={event} />}
+        {event && (
+          /* Todo: (issue #1865) make this dynamic, after link is added to model and it is possible to add link in event form */
+          /* Should only be rendered if the host is actually external */
+          <ExternalHostBox
+            host={'Gløshaugen Revy- og Teaterlag'}
+            host_link={'https://www.facebook.com/glosrevyteater'}
+          />
+        )}
         {event?.billig && (
           <>
             <BuyButton
@@ -70,9 +63,13 @@ export function EventPage() {
               <p className={styles.text_short}>{dbT(event, 'description_short')}</p>
             </div>
             <div className={styles.description_long}>
-              <p>{dbT(event, 'description_long')}</p>
+              <SamfMarkdown>{dbT(event, 'description_long')}</SamfMarkdown>
             </div>
           </div>
+          <ExpandableHeader label={t(KEY.common_details)} className={styles.expandable_header}>
+            {/* Info table */}
+            <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
+          </ExpandableHeader>
         </div>
       </div>
     </Page>

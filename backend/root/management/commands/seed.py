@@ -55,7 +55,7 @@ def run_seed_script(*, target: tuple, index: int, count: int):  # noqa: C901
             elif type(step) in [int, float]:
                 print_progress(progress=step, prefix=prefix, start_time=start_time)
             else:
-                raise Exception(f"Seed script {target[0]} yielded wrong type '{type(step)}', " 'expected number type or tuple of (number, str)')
+                raise Exception(f"Seed script {target[0]} yielded wrong type '{type(step)}', expected number type or tuple of (number, str)")
 
         # Final output 100%.
         if isinstance(step, tuple):
@@ -76,7 +76,7 @@ class Command(BaseCommand):
         parser.add_argument('target', type=str, nargs='?', default=None)
 
     def handle(self, *args, **options):  # noqa: C901
-        print(f"Running seed script {options['target'] or ''}...\n")
+        print(f'Running seed script {options["target"] or ""}...\n')
 
         # Avoid running seed in production.
         if settings.ENV == Environment.PROD:

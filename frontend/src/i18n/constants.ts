@@ -123,6 +123,8 @@ export const KEY = {
   common_register: 'common_register',
   common_users: 'common_users',
   common_email: 'common_email',
+  common_interval: 'common_interval',
+  common_preview: 'common_preview',
   common_email_subject: 'common_email_subject',
   common_total: 'common_total',
   common_out_of: 'common_out_of',
@@ -155,6 +157,7 @@ export const KEY = {
   common_select_all: 'common_select_all',
   common_information: 'common_information',
   common_description: 'common_description',
+  common_details: 'common_details',
   common_recruitment: 'common_recruitment',
   common_reservation: 'common_reservation',
   common_contributors: 'common_contributors',
@@ -274,6 +277,8 @@ export const KEY = {
   pay_info: 'pay_info',
   sales_conditions: 'sales_conditions',
 
+  event_external_host_message: 'event_external_host_message',
+
   // Venue Page:
   venuepage_title: 'venuepage_title',
 
@@ -303,6 +308,7 @@ export const KEY = {
   sulten_reservation_form_find_times: 'sulten_reservation_form_find_times',
   sulten_occation_drinks: 'sulten_occation_drinks',
   sulten_occation_eat: 'sulten_occation_eat',
+  sulten_menu_you_are_welcome: 'sulten_menu_you_are_welcome',
 
   // Recruitment:
   recruitment_look_at_recipients: 'recruitment_look_at_recipients',
@@ -330,7 +336,9 @@ export const KEY = {
   recruitment_no_active: 'recruitment_no_active',
   recruitment_interview_notes: 'recruitment_interview_notes',
   recruitment_priority: 'recruitment_priority',
+  recruitment_your_priority: 'recruitment_your_priority',
   recruitment_recruiter_priority: 'recruitment_recruiter_priority',
+  recruitment_change_priority: 'recruitment_change_priority',
   recruitment_recruiter_status: 'recruitment_recruiter_status',
   recruitment_recruiter_guide: 'recruitment_recruiter_guide',
   recruitment_guide_offer: 'recruitment_guide_offer',
@@ -352,6 +360,7 @@ export const KEY = {
   recruitment_administrate_applications: 'recruitment_administrate_applications',
   recruitment_unprocessed_applicants: 'recruitment_unprocessed_applicants',
   recruitment_administrate_reservations: 'recruitment_administrate_reservations',
+  recruitment_application_for_position: 'recruitment_application_for_position',
   recruitment_my_applications: 'recruitment_my_applications',
   recruitment_all_applications: 'recruitment_all_applications',
   recruitment_not_applied: 'recruitment_not_applied',
@@ -437,9 +446,54 @@ export const KEY = {
   recruitment_applet_without_interview_title: 'recruitment_applet_without_interview_title',
   recruitment_applet_without_interview_description: 'recruitment_applet_without_interview_description',
   recruitment_applet_three_interview_title: 'recruitment_applet_three_interview_title',
+  recruitment_applet_interview_availability_description: 'recruitment_applet_interview_availability_description',
   recruitment_choose_interview_time_and_location: 'recruitment_choose_interview_time_and_location',
   recruitment_choose_interview_time: 'recruitment_choose_interview_time',
   recruitment_choose_interview_location: 'recruitment_choose_interview_location',
+
+  // Recruitment application state
+  application_needs_processing: 'application_needs_processing',
+  do_not_contact: 'do_not_contact',
+
+  not_set_short: 'not_set_short',
+  not_set_long: 'not_set_long',
+  //not_set_guidance: 'not_set_guidance',
+
+  top_pri_reserved_here_short: 'top_pri_reserved_here_short',
+  top_pri_reserved_here_long: 'top_pri_reserved_here_long',
+  top_pri_reserved_here_guidance: 'top_pri_reserved_here_guidance',
+
+  top_pri_wanted_here_short: 'top_pri_wanted_here_short',
+  top_pri_wanted_here_long: 'top_pri_wanted_here_long',
+  top_pri_wanted_here_guidance: 'top_pri_wanted_here_guidance',
+
+  reserved_elsewhere_unprocessed_here_short: 'reserved_elsewhere_unprocessed_here_short',
+  reserved_elsewhere_unprocessed_here_long: 'reserved_elsewhere_unprocessed_here_long',
+  //reserved_elsewhere_unprocessed_here_guidance: 'reserved_elsewhere_unprocessed_here_guidance',
+
+  reserved_elsewhere_reserved_here_short: 'reserved_elsewhere_reserved_here_short',
+  reserved_elsewhere_reserved_here_long: 'reserved_elsewhere_reserved_here_long',
+  //reserved_elsewhere_reserved_here_guidance: 'reserved_elsewhere_reserved_here_guidance',
+
+  reserved_elsewhere_wanted_here_short: 'reserved_elsewhere_wanted_here_short',
+  reserved_elsewhere_wanted_here_long: 'reserved_elsewhere_wanted_here_long',
+  //reserved_elsewhere_wanted_here_guidance: 'reserved_elsewhere_wanted_here_guidance',
+
+  wanted_elsewhere_unprocessed_here_short: 'wanted_elsewhere_unprocessed_here_short',
+  wanted_elsewhere_unprocessed_here_long: 'wanted_elsewhere_unprocessed_here_long',
+  //wanted_elsewhere_unprocessed_here_guidance: 'wanted_elsewhere_unprocessed_here_guidance',
+
+  wanted_elsewhere_reserve_here_short: 'wanted_elsewhere_reserve_here_short',
+  wanted_elsewhere_reserve_here_long: 'wanted_elsewhere_reserve_here_long',
+  //wanted_elsewhere_reserve_here_guidance: 'wanted_elsewhere_reserve_here_guidance',
+
+  wanted_elsewhere_wanted_here_short: 'wanted_elsewhere_wanted_here_short',
+  wanted_elsewhere_wanted_here_long: 'wanted_elsewhere_wanted_here_long',
+  //wanted_elsewhere_wanted_here_guidance: 'wanted_elsewhere_wanted_here_guidance',
+
+  not_wanted_short: 'not_wanted_short',
+  not_wanted_long: 'not_wanted_long',
+  //not_wanted_guidance: 'not_wanted_guidance',
 
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
@@ -494,6 +548,11 @@ export const KEY = {
   occupied_select_time_text: 'occupied_select_time_text',
   occupied_title: 'occupied_title',
   occupied_show: 'occupied_show',
+  interview_availability: 'interview_availability',
+  interview_availability_description: 'interview_availability_description',
+  interview_availability_interval_description: 'interview_availability_interval_description',
+  interview_availability_error_end_date_before_start_date: 'interview_availability_error_end_date_before_start_date',
+  available_timeslots: 'available_timeslots',
   confirm_occupied_time: 'confirm_occupied_time',
   confirm_occupied_time_text: 'confirm_occupied_time_text',
   confirm_occupied_time_send_application: 'confirm_occupied_time_send_application',
@@ -507,6 +566,8 @@ export const KEY = {
   // No category:
   owner: 'owner',
   end_time: 'end_time',
+  start_date: 'start_date',
+  end_date: 'end_date',
   category: 'category',
   event_type: 'event_type',
   start_time: 'start_time',

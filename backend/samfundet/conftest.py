@@ -186,12 +186,14 @@ def fixture_billig_event() -> Iterator[BilligEvent]:
 
 @pytest.fixture
 def fixture_event(fixture_image: Image) -> Iterator[Event]:
+    now = timezone.now()
     event = Event.objects.create(
         title_nb='Test Event',
         title_en='Test Event',
-        start_dt=timezone.now(),
-        publish_dt=timezone.now() - timezone.timedelta(hours=1),
-        duration=60,
+        start_dt=now,
+        end_dt=now + timezone.timedelta(hours=1),
+        visibility_from_dt=now - timezone.timedelta(hours=24),
+        visibility_to_dt=now + timezone.timedelta(hours=1),
         description_long_nb='description',
         description_long_en='description',
         description_short_nb='description',
