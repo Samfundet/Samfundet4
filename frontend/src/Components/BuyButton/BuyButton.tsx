@@ -2,19 +2,20 @@ import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { BilligEventDto } from '~/apis/billig/billigDtos';
+import { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { Button } from '../Button';
+import { BuyTicketModal } from '../BuyTicketModal';
 
 type BuyButtonProps = {
-  eventId: number;
-  billigId: number;
+  event: EventDto;
   ticketSaleState: Pick<BilligEventDto, 'is_sold_out' | 'is_almost_sold_out'>;
-  onClick?: () => void;
 };
 
-export function BuyButton({ eventId, billigId, ticketSaleState, onClick }: BuyButtonProps) {
+export function BuyButton({ event, ticketSaleState }: BuyButtonProps) {
   const { t } = useTranslation();
   const [buttonText, setButtonText] = useState<string>(t(KEY.common_buy));
+  const [showModal, setShowModal] = useState(false);
 
 
   useEffect(() => {
@@ -25,14 +26,13 @@ export function BuyButton({ eventId, billigId, ticketSaleState, onClick }: BuyBu
     }
   }, [ticketSaleState, t]);
 
-  const handleClick = () => {
-    if (onClick) return onClick();
-  };
-
   return (
-    <Button theme={'samf'} onClick={handleClick}>
+    <>
+      <Button theme={'samf'} onClick={() => setShowModal(true)}>
       <Icon icon="ph:ticket-bold" />
       {buttonText}
-    </Button>
+      </Button>
+      <BuyTicketModal event={event} isOpen={showModal} onClose={() => setShowModal(false)} />
+    </>
   );
 }

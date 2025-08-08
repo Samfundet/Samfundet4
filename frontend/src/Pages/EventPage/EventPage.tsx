@@ -46,15 +46,14 @@ export function EventPage() {
             host_link={'https://www.facebook.com/glosrevyteater'}
           />
         )}
-        {event?.billig && (
+        {event && event.billig && (
           <>
             <BuyButton
-              eventId={event.id}
+              event={event}
               billigId={event.billig.id}
               ticketSaleState={event.billig}
               onClick={() => setShowModal(true)}
             />
-            <BuyTicketModal event={event} isOpen={showModal} onClose={() => setShowModal(false)} />
           </>
         )}
         {/* Text */}
