@@ -8,6 +8,19 @@ If running the project in Docker, many issues are solved by running a `docker sy
 
 If you find something that is not listed, please add it to this document!
 
+## Seeding problems
+
+If you are having problems with seeding the database there is usually one single reason; you current local database is out of date. You can solve it by deleting the current database, then seed again.
+
+``` bash
+# in Samfundet4/backend/database
+rm -f docker.db.sqlite3
+```
+
+If you are still having problems then you might need to recreate the database by recraetingt the database with the Django migrate command. See how to do this [here](./docker-project-specific-commands.md).
+
+Still not seeding? Try `docker compose down`, then `docker compose build` and finally `docker compose up`.
+
 ## Entrypoint.sh
 ### Error message:
 ```
