@@ -1,6 +1,6 @@
-@use 'src/constants' as *;
+@use '~/constants' as *;
 
-@use 'src/mixins' as *;
+@use '~/mixins' as *;
 
 $panel-width: 15em;
 $panel-light-bg: #f6f6f6;

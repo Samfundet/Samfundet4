@@ -1,6 +1,6 @@
-@use 'src/mixins' as *;
+@use '~/mixins' as *;
 
-@use 'src/constants' as *;
+@use '~/constants' as *;
 
 $mobile-width: $primary-content-width-mobile;
 $card-border-radius: 0.5rem;

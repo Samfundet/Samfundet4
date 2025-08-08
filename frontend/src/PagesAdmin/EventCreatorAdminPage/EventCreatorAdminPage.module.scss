@@ -1,8 +1,8 @@
 /* stylelint-disable declaration-block-no-duplicate-properties */
 
-@use 'src/mixins' as *;
+@use '~/mixins' as *;
 
-@use 'src/constants' as *;
+@use '~/constants' as *;
 
 .header {
   font-size: 2em;

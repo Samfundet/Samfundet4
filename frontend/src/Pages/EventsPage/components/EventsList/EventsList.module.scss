@@ -1,6 +1,6 @@
-@use 'src/mixins' as *;
+@use '~/mixins' as *;
 
-@use 'src/constants' as *;
+@use '~/constants' as *;
 
 $event-header-height: 5em;
 $event-header-bg-light: rgba(255, 255, 255, 0.9);

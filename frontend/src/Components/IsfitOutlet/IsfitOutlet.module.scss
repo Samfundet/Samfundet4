@@ -1,4 +1,4 @@
-@use '/src/constants.scss' as *;
+@use '~/constants' as *;
 
 .navbar_outlet {
   padding-top: $isfit-navbar-height;

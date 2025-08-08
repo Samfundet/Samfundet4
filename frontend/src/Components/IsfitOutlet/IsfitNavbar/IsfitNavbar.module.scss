@@ -1,10 +1,10 @@
-@use '/src/_constants.scss' as *;
+@use '~/_constants.scss' as *;
 
-@use '/src/styles/_colors.scss' as *;
+@use '~/styles/_colors.scss' as *;
 
-@use '/src/styles/_z-indexes.scss' as *;
+@use '~/styles/_z-indexes.scss' as *;
 
-@use '/src/styles/_spacing.scss' as *;
+@use '~/styles/_spacing.scss' as *;
 
 .container {
   width: 100vw;

@@ -1,6 +1,6 @@
-@use 'src/mixins' as *;
+@use '~/mixins' as *;
 
-@use 'src/constants' as *;
+@use '~/constants' as *;
 
 $header-border: #f1f1f1;
 $header-border-dark: #000000;

@@ -3,9 +3,9 @@
 /* stylelint-disable selector-max-class */
 /* TODO: fix later */
 
-@use 'src/mixins' as *;
+@use '~/mixins' as *;
 
-@use 'src/constants' as *;
+@use '~/constants' as *;
 
 // Background
 $navbar-bg: white;

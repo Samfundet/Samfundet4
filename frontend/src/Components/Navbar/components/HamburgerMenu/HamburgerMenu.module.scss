@@ -1,7 +1,7 @@
 /* stylelint-disable selector-max-class */
-@use 'src/mixins' as *;
+@use '~/mixins' as *;
 
-@use 'src/constants' as *;
+@use '~/constants' as *;
 
 /* Hamburger menu */
 #navbar_hamburger {

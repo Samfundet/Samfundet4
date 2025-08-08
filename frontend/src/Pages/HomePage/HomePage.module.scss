@@ -1,9 +1,9 @@
 /* stylelint-disable selector-max-type */
 /* TODO: fix later */
 
-@use 'src/constants' as *;
+@use '~/constants' as *;
 
-@use 'src/mixins' as *;
+@use '~/mixins' as *;
 
 .splash_container {
   max-width: 100%;

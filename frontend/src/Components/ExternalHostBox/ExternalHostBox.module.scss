@@ -1,6 +1,6 @@
-@use 'src/mixins' as *;
+@use '~/mixins' as *;
 
-@use 'src/constants' as *;
+@use '~/constants' as *;
 
 .external_host_box_wrapper{
     background-color: $red-samf;

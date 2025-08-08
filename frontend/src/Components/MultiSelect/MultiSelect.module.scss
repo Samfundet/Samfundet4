@@ -1,6 +1,6 @@
-@use 'src/constants' as *;
+@use '~/constants' as *;
 
-@use 'src/mixins' as *;
+@use '~/mixins' as *;
 
 .item {
   margin-bottom: 5px;

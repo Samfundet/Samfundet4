@@ -1,8 +1,8 @@
-@use 'src/mixins' as *;
+@use '~/mixins' as *;
 
 @use 'sass:color';
 
-@use 'src/constants' as *;
+@use '~/constants' as *;
 
 .tab_bar {
   @include flex-row;
