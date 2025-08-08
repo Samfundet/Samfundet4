@@ -4,8 +4,8 @@ frontend/ @Mathias-a @robines @Snorre98 @andsamfu
 
 # Dependabot change files (for permitting more weebs to approve dependabot)
 
-**/package.json @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
-**/yarn.lock @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
+**/package.json @Mathias-a @robines @Snorre98 @andsamfu @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
+**/yarn.lock @Mathias-a @robines @Snorre98 @andsamfu @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
 
-**/poetry.lock @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
-**/pyproject.toml @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
+**/poetry.lock @Mathias-a @robines @Snorre98 @andsamfu @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
+**/pyproject.toml @Mathias-a @robines @Snorre98 @andsamfu @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
