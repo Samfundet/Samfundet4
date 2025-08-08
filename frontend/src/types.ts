@@ -158,6 +158,20 @@ export type CalendarMarker = {
   className?: string;
 };
 
+export type AdminApplet = {
+  title_en: string;
+  title_nb: string;
+  perm?: string;
+  icon: string;
+  url?: string;
+};
+
+export type AdminAppletCategory = {
+  title_en: string;
+  title_nb: string;
+  applets: AdminApplet[];
+};
+
 /*Names must be equal to what is found in the database*/
 export const OrgNameType = {
   SAMFUNDET_NAME: 'Samfundet',
