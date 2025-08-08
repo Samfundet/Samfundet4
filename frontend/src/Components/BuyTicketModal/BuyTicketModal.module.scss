@@ -12,24 +12,22 @@
   }
 }
 
-.samf_logo_black {
-  width: 250px;
-  margin: auto;
-  padding-top: 1rem;
-  padding-bottom: 1.5rem;
-  @include theme-dark {
-    display: none;
-  }
+.buy_ticket_modal_header {
+  display: block;
+  width: 100%;
 }
 
-.samf_logo_white {
+.samf_logo {
   width: 250px;
+  margin: auto;
   padding-top: 1rem;
   padding-bottom: 1.5rem;
-  margin: auto;
-  @include theme-light {
-    display: none;
-  }
+}
+
+.close_btn {
+  position: absolute;
+  top: 20px;
+  right:20px;
 }
 
 .container {
@@ -45,19 +43,6 @@
   font-weight: 700;
   color: $red-samf;
   margin-bottom: 1rem;
-}
-
-.close_btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  @include theme-dark {
-    color: $white;
-  }
 }
 
 .ticket_selection_container {
