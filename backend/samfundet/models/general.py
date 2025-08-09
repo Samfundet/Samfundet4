@@ -493,7 +493,7 @@ class Reservation(FullCleanSaveMixin):
 
     @staticmethod
     def check_time(
-        venue: int,
+        venue: str,
         guest_count: int,
         reservation_date: date,
         start_time: time,
@@ -513,7 +513,7 @@ class Reservation(FullCleanSaveMixin):
 
     @staticmethod
     def find_available_table(
-        venue: int,
+        venue: str,
         guest_count: int,
         reservation_date: date,
         start_time: time,
@@ -539,7 +539,7 @@ class Reservation(FullCleanSaveMixin):
         # Fetch venue with the given id
         venue = Venue.objects.get(slug=slug)
         # Fetch tables that fits size criteria
-        tables = Table.objects.filter(venue=venue.id, seating__gte=seating)
+        tables = Table.objects.filter(venue=venue.slug, seating__gte=seating)
         # fetch all reservations for those tables for that date
         reserved_tables = (
             Reservation.objects.filter(venue=venue.slug, reservation_date=date, table__in=tables)
