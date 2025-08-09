@@ -21,6 +21,7 @@ import { validEmail } from '~/Forms/util';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { COLORS } from '~/types';
 import styles from './BuyTicketModal.module.scss';
 
 // Validation schema
@@ -156,83 +157,86 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                       form.setValue('email', '');
                     }}
                     checked={ticketType === TICKET_TYPE_MEMBERSHIP}
-                  />{' '}
-                  <label>{t(KEY.common_membership_number)}</label>
-                </div>
-                {/* Membership Number Field */}
-                <FormField
-                  control={form.control}
-                  name="membershipNumber"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          className={styles.input_field}
-                          disabled={ticketType !== TICKET_TYPE_MEMBERSHIP}
-                          style={{
-                            backgroundColor: ticketType === TICKET_TYPE_MEMBERSHIP ? 'white' : 'lightgrey',
-                          }}
-                          placeholder={t(KEY.enter_membership_number)}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className={styles.ticket_type_field}>
-                <div className={styles.radio_box}>
-                  <RadioButton
+                  >
+                    {t(KEY.common_membership_number)}
+                  </RadioButton>
+                   <RadioButton
                     name="ticketType"
                     onChange={() => {
                       form.setValue('ticketType', TICKET_TYPE_EMAIL);
                       form.setValue('membershipNumber', '');
                     }}
                     checked={ticketType === TICKET_TYPE_EMAIL}
-                  />{' '}
-                  <label className={styles.email_label}>{t(KEY.common_email)}</label>
+                  >
+                    {t(KEY.common_email)}
+                  </RadioButton>
                 </div>
-                {/* Email Field */}
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem className={styles.email_field}>
-                      <FormControl>
-                        <Input
-                          type={TICKET_TYPE_EMAIL}
-                          className={styles.input_field}
-                          disabled={ticketType !== TICKET_TYPE_EMAIL}
-                          style={{
-                            backgroundColor: ticketType === TICKET_TYPE_EMAIL ? 'white' : 'lightgray',
-                          }}
-                          placeholder={t(KEY.enter_email)}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {
-                  ticketType === TICKET_TYPE_MEMBERSHIP ? 
-                  (
-                    <>
-                    <p className={styles.ticketless_description_p}>{t(KEY.ticketless_description)}</p>
-                      <p className={styles.ticketless_description_p}>
-                        <Trans
-                          i18nKey={KEY.ticketless_description_note}
-                          components={{ strong: <strong /> }}
-                        />
-                      </p>
-                    </>
-                  )
-                  : <p className={styles.ticketless_description_p}>{t(KEY.email_ticket_description)}</p>
-                }
-                               
+                {/* Membership Number Field */}
+                {ticketType === TICKET_TYPE_MEMBERSHIP && (
+                  <div className={styles.ticket_type_field}>
+                  <FormField
+                    control={form.control}
+                    name="membershipNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            className={styles.input_field}
+                            disabled={ticketType !== TICKET_TYPE_MEMBERSHIP}
+                            style={{
+                              backgroundColor: ticketType === TICKET_TYPE_MEMBERSHIP ? COLORS.white : COLORS.grey_2,
+                            }}
+                            placeholder={t(KEY.enter_membership_number)}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  </div>
+                )}
               </div>
+                {ticketType === TICKET_TYPE_EMAIL && (
+                  <div className={styles.ticket_type_field}>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            className={styles.input_field}
+                            disabled={ticketType !== TICKET_TYPE_EMAIL}
+                            style={{
+                              backgroundColor: ticketType === TICKET_TYPE_EMAIL ? COLORS.white : COLORS.grey_2,
+                            }}
+                            placeholder={t(KEY.enter_email)}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                    </div>
+                )}              
+            
+                          {ticketType === TICKET_TYPE_MEMBERSHIP ? (
+                  <>
+                    <p className={styles.ticketless_description_p}>{t(KEY.ticketless_description)}</p>
+                    <p className={styles.ticketless_description_p}>
+                      <Trans
+                        i18nKey={KEY.ticketless_description_note}
+                        components={{ strong: <strong /> }}
+                      />
+                    </p>
+                  </>
+                ) : (
+                  <p className={styles.ticketless_description_p}>{t(KEY.email_ticket_description)}</p>
+                )}
             </div>
           </div>
           {/* Submit Button */}
@@ -242,20 +246,13 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
         </form>
       </Form>
       {/* Terms and Conditions */}
-          <div>
-            <p>{t(KEY.pay_info)}</p>
-            <a href={ROUTES.other.stripe_info} target="_blank" className={styles.link} rel="noreferrer">
-              <p>
-                {t(KEY.stripe_info)}{' '}
-              </p>
-              
-            </a>
-            <Link url="https://www.samfundet.no/informasjon/billetter" target='external' className={styles.terms_link}>
-              <p>
-                {t(KEY.sales_conditions)}
-              </p>
-            </Link>
-          </div>
+      <p>{t(KEY.pay_info)}</p>
+      <a href={ROUTES.other.stripe_info} target="_blank" className={styles.link} rel="noreferrer">
+        {t(KEY.stripe_info)}
+      </a>
+      <Link url="https://www.samfundet.no/informasjon/billetter" target='external' className={styles.terms_link}>
+        {t(KEY.sales_conditions)}
+      </Link>
     </div>
   );
 }

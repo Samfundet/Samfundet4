@@ -76,9 +76,7 @@
 
 .ticket_type_fields {
   display: flex;
-  @include for-tablet-down {
-    flex-direction: column;
-  }
+  flex-direction: column;
 }
 
 .ticket_type_field {
@@ -92,6 +90,7 @@
 .radio_box {
   display: flex;
   align-items: center;
+  justify-content: space-evenly;
   flex-direction: row;
 }
 
