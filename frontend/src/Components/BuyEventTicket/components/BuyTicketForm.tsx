@@ -26,19 +26,23 @@ import styles from './BuyTicketModal.module.scss';
 
 // Validation schema
 const buyTicketFormSchema = z
-  .object({
-    ticketQuantities: z.record(z.string(), z.number().min(0)),
-    membershipNumber: z.string().optional(),
-    email: z
-      .string()
-      .refine(validEmail, { message: t(KEY.invalid_email_message) })
-      .optional(),
-    ticketType: z.enum(['email', 'membershipNumber']),
-  })
-  .refine((data) => data.email || data.membershipNumber, {
-    message: t(KEY.email_or_membership_number_message),
-    path: ['email'],
-  })
+  .discriminatedUnion('ticketType', [
+    z.object({
+      ticketType: z.literal('membershipNumber'),
+      membershipNumber: z.string().min(1, t(KEY.email_or_membership_number_message)),
+      email: z.string().optional(),
+      ticketQuantities: z.record(z.string(), z.number().min(0)),
+    }),
+    z.object({
+      ticketType: z.literal('email'),
+      email: z
+        .string()
+        .min(1, t(KEY.email_or_membership_number_message))
+        .refine(validEmail, { message: t(KEY.invalid_email_message) }),
+      membershipNumber: z.string().optional(),
+      ticketQuantities: z.record(z.string(), z.number().min(0)),
+    }),
+  ])
   .refine((data) => Object.values(data.ticketQuantities ?? {}).some((qty) => qty > 0), {
     message: t(KEY.no_tickets_selected_message),
     path: ['ticketQuantities'],
@@ -80,7 +84,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
 
   const ticketType = useWatch({ control: form.control, name: 'ticketType' });
 
-  function onSubmit(data: BuyTicketFormType): void {
+  function onSubmit(_data: BuyTicketFormType): void {
     confirm("TODO: INTEGRATE WITH REAL BILLIG")
   }
 
