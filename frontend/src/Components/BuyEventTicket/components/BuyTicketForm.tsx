@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
@@ -24,39 +23,48 @@ import { ROUTES } from '~/routes';
 import { COLORS } from '~/types';
 import styles from './BuyTicketModal.module.scss';
 
-// Base schema shared by both forms
-const baseFormSchema = z.object({
-  ticketQuantities: z.record(z.string(), z.number().min(0)),
-});
+// Create schema function that takes the translation function
+const createBuyTicketFormSchema = (t: (key: string) => string) =>
+  z
+    .object({
+      ticketQuantities: z.record(z.string(), z.number().min(0)),
+      ticketType: z.enum(['email', 'membershipNumber']),
+      email: z.string().optional(),
+      membershipNumber: z.string().optional(),
+    })
+    .refine((data) => Object.values(data.ticketQuantities ?? {}).some((qty) => qty > 0), {
+      message: t(KEY.no_tickets_selected_message),
+      path: ['ticketQuantities'],
+    })
+    .superRefine((data, ctx) => {
+      if (data.ticketType === 'email') {
+        if (!data.email || data.email.length === 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t(KEY.email_or_membership_number_message),
+            path: ['email'],
+          });
+        } else if (!validEmail(data.email)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t(KEY.invalid_email_message),
+            path: ['email'],
+          });
+        }
+      }
 
-// Membership form schema
-const membershipFormSchema = baseFormSchema
-  .extend({
-    ticketType: z.literal('membershipNumber'),
-    membershipNumber: z.string().min(1, t(KEY.email_or_membership_number_message)),
-  })
-  .refine((data) => Object.values(data.ticketQuantities ?? {}).some((qty) => qty > 0), {
-    message: t(KEY.no_tickets_selected_message),
-    path: ['ticketQuantities'],
-  });
+      if (data.ticketType === 'membershipNumber') {
+        if (!data.membershipNumber || data.membershipNumber.length === 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t(KEY.email_or_membership_number_message),
+            path: ['membershipNumber'],
+          });
+        }
+      }
+    });
 
-// Email form schema
-const emailFormSchema = baseFormSchema
-  .extend({
-    ticketType: z.literal('email'),
-    email: z
-      .string()
-      .min(1, t(KEY.email_or_membership_number_message))
-      .refine(validEmail, { message: t(KEY.invalid_email_message) }),
-  })
-  .refine((data) => Object.values(data.ticketQuantities ?? {}).some((qty) => qty > 0), {
-    message: t(KEY.no_tickets_selected_message),
-    path: ['ticketQuantities'],
-  });
-
-type MembershipFormType = z.infer<typeof membershipFormSchema>;
-type EmailFormType = z.infer<typeof emailFormSchema>;
-type BuyTicketFormType = MembershipFormType | EmailFormType;
+type BuyTicketFormType = z.infer<ReturnType<typeof createBuyTicketFormSchema>>;
 
 interface BuyTicketFormProps {
   initialData?: Partial<BuyTicketFormType>;
@@ -81,14 +89,13 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
     {} as Record<string, number>,
   );
 
-  const currentSchema = ticketType === TICKET_TYPE_EMAIL ? emailFormSchema : membershipFormSchema;
-
-  const form = useForm({
-    resolver: zodResolver(currentSchema),
+  const form = useForm<BuyTicketFormType>({
+    resolver: zodResolver(createBuyTicketFormSchema(t)),
     defaultValues: {
       ticketQuantities: ticketGroupDefaults,
       ticketType: ticketType,
-      ...(ticketType === TICKET_TYPE_EMAIL ? { email: '' } : { membershipNumber: '' }),
+      email: '',
+      membershipNumber: '',
     },
   });
 
@@ -96,7 +103,8 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
     const newDefaultValues = {
       ticketQuantities: form.getValues('ticketQuantities'),
       ticketType: ticketType,
-      ...(ticketType === TICKET_TYPE_EMAIL ? { email: '' } : { membershipNumber: '' }),
+      email: ticketType === TICKET_TYPE_EMAIL ? form.getValues('email') || '' : '',
+      membershipNumber: ticketType === TICKET_TYPE_MEMBERSHIP ? form.getValues('membershipNumber') || '' : '',
     };
 
     form.reset(newDefaultValues, { keepDefaultValues: false });
