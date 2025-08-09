@@ -23,12 +23,17 @@ import { ROUTES } from '~/routes';
 import { COLORS } from '~/types';
 import styles from './BuyTicketModal.module.scss';
 
+const TICKET_TYPE_EMAIL = 'email';
+const TICKET_TYPE_MEMBERSHIP = 'membershipNumber';
+
+type TicketType = 'email' | 'membershipNumber';
+
 // Create schema function that takes the translation function
 const createBuyTicketFormSchema = (t: (key: string) => string) =>
   z
     .object({
       ticketQuantities: z.record(z.string(), z.number().min(0)),
-      ticketType: z.enum(['email', 'membershipNumber']),
+      ticketType: z.enum([TICKET_TYPE_EMAIL, TICKET_TYPE_MEMBERSHIP]),
       email: z.string().optional(),
       membershipNumber: z.string().optional(),
     })
@@ -42,23 +47,23 @@ const createBuyTicketFormSchema = (t: (key: string) => string) =>
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: t(KEY.email_or_membership_number_message),
-            path: ['email'],
+            path: [TICKET_TYPE_EMAIL],
           });
         } else if (!validEmail(data.email)) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: t(KEY.invalid_email_message),
-            path: ['email'],
+            path: [TICKET_TYPE_EMAIL],
           });
         }
       }
 
-      if (data.ticketType === 'membershipNumber') {
+      if (data.ticketType === TICKET_TYPE_MEMBERSHIP) {
         if (!data.membershipNumber || data.membershipNumber.length === 0) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: t(KEY.email_or_membership_number_message),
-            path: ['membershipNumber'],
+            path: [TICKET_TYPE_MEMBERSHIP],
           });
         }
       }
@@ -71,13 +76,10 @@ interface BuyTicketFormProps {
   event: EventDto;
 }
 
-const TICKET_TYPE_EMAIL = 'email';
-const TICKET_TYPE_MEMBERSHIP = 'membershipNumber';
-
 export function BuyTicketForm({ event }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const [totalPrice, setTotalPrice] = useState(0);
-  const [ticketType, setTicketType] = useState<'membershipNumber' | 'email'>(TICKET_TYPE_MEMBERSHIP);
+  const [ticketType, setTicketType] = useState<TicketType>(TICKET_TYPE_MEMBERSHIP);
   const ticket_groups = event.billig?.ticket_groups;
 
   const ticketGroupDefaults = ticket_groups?.reduce(
@@ -103,15 +105,16 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
     const newDefaultValues = {
       ticketQuantities: form.getValues('ticketQuantities'),
       ticketType: ticketType,
-      email: ticketType === TICKET_TYPE_EMAIL ? form.getValues('email') || '' : '',
-      membershipNumber: ticketType === TICKET_TYPE_MEMBERSHIP ? form.getValues('membershipNumber') || '' : '',
+      email: ticketType === TICKET_TYPE_EMAIL ? form.getValues(TICKET_TYPE_EMAIL) || '' : '',
+      membershipNumber: ticketType === TICKET_TYPE_MEMBERSHIP ? form.getValues(TICKET_TYPE_MEMBERSHIP) || '' : '',
     };
 
     form.reset(newDefaultValues, { keepDefaultValues: false });
   }, [ticketType, form]);
 
-  function onSubmit(): void {
+  function onSubmit(data: BuyTicketFormType): void {
     confirm('TODO: INTEGRATE WITH REAL BILLIG');
+    console.log('Form submitted with data:', data);
   }
 
   const ticketQuantities = useWatch({ control: form.control, name: 'ticketQuantities' });
