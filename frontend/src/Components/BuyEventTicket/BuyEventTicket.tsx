@@ -12,11 +12,10 @@ type BuyButtonProps = {
   ticketSaleState: Pick<BilligEventDto, 'is_sold_out' | 'is_almost_sold_out'>;
 };
 
-export function BuyButton({ event, ticketSaleState }: BuyButtonProps) {
+export function BuyEventTicket({ event, ticketSaleState }: BuyButtonProps) {
   const { t } = useTranslation();
   const [buttonText, setButtonText] = useState<string>(t(KEY.common_buy));
   const [showModal, setShowModal] = useState(false);
-
 
   useEffect(() => {
     if (ticketSaleState.is_sold_out) {
