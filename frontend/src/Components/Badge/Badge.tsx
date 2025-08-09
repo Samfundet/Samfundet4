@@ -6,11 +6,12 @@ type BadgeProps = HTMLAttributes<HTMLDivElement> & {
   text?: string;
   className?: string;
   type?: 'information' | 'success' | 'warning' | 'error';
+  animated: boolean;
 };
 
-export function Badge({ text, className, type, ...props }: BadgeProps) {
+export function Badge({ text, className, type, animated = false, ...props }: BadgeProps) {
   return (
-    <div className={classnames(styles.badge, type && styles[type], className)} {...props}>
+    <div className={classnames(styles.badge, type && styles[type], animated && styles.animated, className)} {...props}>
       {text}
     </div>
   );
