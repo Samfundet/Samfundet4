@@ -23,7 +23,6 @@ export function EventPage() {
     queryFn: () => getEvent(id as string),
     enabled: !!id,
   });
-  
 
   useTitle((event && dbT(event, 'title')) || t(KEY.common_event));
   return (
@@ -43,12 +42,9 @@ export function EventPage() {
             host_link={'https://www.facebook.com/glosrevyteater'}
           />
         )}
-        {event && event.billig && (
+        {event?.billig && (
           <>
-            <BuyEventTicket
-              event={event}
-              ticketSaleState={event.billig}
-            />
+            <BuyEventTicket event={event} ticketSaleState={event.billig} />
           </>
         )}
         {/* Text */}
