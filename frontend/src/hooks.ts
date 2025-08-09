@@ -621,3 +621,6 @@ export function useSearchPaginatedQuery<T>({
     error,
   };
 }
+
+export { useDynamicBadge } from './hooks/useDynamicBadge';
+export type { DynamicBadgeState, DynamicBadgeOptions, UseDynamicBadgeReturn } from './hooks/useDynamicBadge';

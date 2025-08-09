@@ -2,10 +2,12 @@ import classnames from 'classnames';
 import type { HTMLAttributes } from 'react';
 import styles from './Badge.module.scss';
 
+export type BadgeType = 'information' | 'success' | 'warning' | 'error';
+
 type BadgeProps = HTMLAttributes<HTMLDivElement> & {
   text?: string;
   className?: string;
-  type?: 'information' | 'success' | 'warning' | 'error';
+  type?: BadgeType;
   animated: boolean;
 };
 
