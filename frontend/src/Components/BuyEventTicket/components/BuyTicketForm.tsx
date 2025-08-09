@@ -73,7 +73,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
       ticketQuantities: ticketGroupDefaults,
       email: '',
       membershipNumber: '',
-      ticketType: TICKET_TYPE_EMAIL,
+      ticketType: TICKET_TYPE_MEMBERSHIP,
     },
   });
 
@@ -216,6 +216,22 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                     </FormItem>
                   )}
                 />
+                {
+                  ticketType === TICKET_TYPE_MEMBERSHIP ? 
+                  (
+                    <>
+                    <p className={styles.ticketless_description_p}>{t(KEY.ticketless_description)}</p>
+                      <p className={styles.ticketless_description_p}>
+                        <Trans
+                          i18nKey={KEY.ticketless_description_note}
+                          components={{ strong: <strong /> }}
+                        />
+                      </p>
+                    </>
+                  )
+                  : <p className={styles.ticketless_description_p}>{t(KEY.email_ticket_description)}</p>
+                }
+                               
               </div>
             </div>
           </div>
@@ -227,23 +243,19 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
       </Form>
       {/* Terms and Conditions */}
           <div>
-            <a href={ROUTES.other.stripe_info} target="_blank" className={styles.link} rel="noreferrer">
-              {t(KEY.stripe_info)}{' '}
-            </a>
             <p>{t(KEY.pay_info)}</p>
+            <a href={ROUTES.other.stripe_info} target="_blank" className={styles.link} rel="noreferrer">
+              <p>
+                {t(KEY.stripe_info)}{' '}
+              </p>
+              
+            </a>
             <Link url="https://www.samfundet.no/informasjon/billetter" target='external' className={styles.terms_link}>
-              {t(KEY.sales_conditions)}
+              <p>
+                {t(KEY.sales_conditions)}
+              </p>
             </Link>
           </div>
-          <div className={styles.ticket_type_description}>
-              <div style={{ display: ticketType === TICKET_TYPE_MEMBERSHIP ? 'inline' : 'none' }}>
-                <p>{t(KEY.ticketless_description)}</p>
-                <Trans i18nKey={KEY.ticketless_description_note} components={{ strong: <strong /> }} />
-              </div>
-              <div style={{ display: ticketType === TICKET_TYPE_EMAIL ? 'inline' : 'none' }}>
-                <p>{t(KEY.email_ticket_description)}</p>
-              </div>
-            </div>
     </div>
   );
 }

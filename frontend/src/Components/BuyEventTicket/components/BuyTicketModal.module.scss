@@ -66,10 +66,6 @@
   padding-bottom: 0.5rem;
 }
 
-.slect_item {
-  float: right
-}
-
 .ticket_type {
   background-color: $grey-4;
   border-radius: 0.15rem;
@@ -91,11 +87,6 @@
   gap: 0.5rem;
   flex: 0.5;
   padding: 1rem;
-}
-
-.ticket_type_description {
-  padding: 1rem;
-  padding-top: 0;
 }
 
 .radio_box {
@@ -140,4 +131,8 @@
   &:hover {
     filter: brightness(110%);
   }
+}
+
+.ticketless_description_p {
+  font-size: 0.75rem;
 }
