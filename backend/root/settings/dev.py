@@ -62,26 +62,42 @@ CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 # Default database
-DOCKER_DB_NAME = 'docker.db.sqlite3'
-LOCAL_DB_NAME = 'db.sqlite3'
-DB_NAME = DOCKER_DB_NAME if IS_DOCKER else LOCAL_DB_NAME
+# DOCKER_DB_NAME = 'docker.db.sqlite3'
+# LOCAL_DB_NAME = 'db.sqlite3'
+# DB_NAME = DOCKER_DB_NAME if IS_DOCKER else LOCAL_DB_NAME
 
 # Billig
-BILLIG_DOCKER_DB_NAME = 'docker.billig.db.sqlite3'
-BILLIG_LOCAL_DB_NAME = 'billig.db.sqlite3'
-BILLIG_DB_NAME = BILLIG_DOCKER_DB_NAME if IS_DOCKER else BILLIG_LOCAL_DB_NAME
+# BILLIG_DOCKER_DB_NAME = 'docker.billig.db.sqlite3'
+# BILLIG_LOCAL_DB_NAME = 'billig.db.sqlite3'
+# BILLIG_DB_NAME = BILLIG_DOCKER_DB_NAME if IS_DOCKER else BILLIG_LOCAL_DB_NAME
 
 DATABASES = {
     # Default database for all django models
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'database' / DB_NAME,
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('SM4_DEV_DB_USERNAME', 'samfundet4'),
+        'USER': os.environ.get('SM4_DEV_DB_USERNAME', 'postgres'),
+        'PASSWORD': os.environ.get('SM4_DEV_DB_PASSWORD', 'postgres'),
+        'HOST': 'sm4_dev_database' if IS_DOCKER else 'localhost',
+        'PORT': '5432',
     },
+    # } if IS_DOCKER else {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'database' / DB_NAME,
+    # },
     # Database emulating billig
     'billig': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'database' / BILLIG_DB_NAME,
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('BILLIG_DEV_DB_USERNAME', 'billig'),
+        'USER': os.environ.get('BILLIG_DEV_DB_USERNAME', 'postgres'),
+        'PASSWORD': os.environ.get('BILLIG_DEV_DB_PASSWORD', 'postgres'),
+        'HOST': 'billig_dev_database' if IS_DOCKER else 'localhost',
+        'PORT': '5432' if IS_DOCKER else '5433',
     },
+    # } if IS_DOCKER else {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'database' / BILLIG_DB_NAME,
+    # },
 }
 
 # ======================== #
