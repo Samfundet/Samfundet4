@@ -12,9 +12,10 @@ import {
   FormField,
   FormItem,
   FormMessage,
+  H3,
   Input,
   Link,
-  RadioButton,
+  RadioButton
 } from '~/Components';
 import { validEmail } from '~/Forms/util';
 import type { EventDto } from '~/dto';
@@ -140,6 +141,8 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
               </div>
             );
           })}
+            {/* Total Price */}
+            <H3>{t(KEY.common_total)}: {totalPrice} NOK </H3>
 
           {/* Email / Membership Number Toggle */}
           <div className={styles.ticket_type}>
@@ -215,7 +218,24 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 />
               </div>
             </div>
-            <div className={styles.ticket_type_description}>
+          </div>
+          {/* Submit Button */}
+          <Button type="submit" className={styles.pay_button}>
+            {t(KEY.common_to_payment)}
+          </Button>
+        </form>
+      </Form>
+      {/* Terms and Conditions */}
+          <div>
+            <a href={ROUTES.other.stripe_info} target="_blank" className={styles.link} rel="noreferrer">
+              {t(KEY.stripe_info)}{' '}
+            </a>
+            <p>{t(KEY.pay_info)}</p>
+            <Link url="https://www.samfundet.no/informasjon/billetter" target='external' className={styles.terms_link}>
+              {t(KEY.sales_conditions)}
+            </Link>
+          </div>
+          <div className={styles.ticket_type_description}>
               <div style={{ display: ticketType === TICKET_TYPE_MEMBERSHIP ? 'inline' : 'none' }}>
                 <p>{t(KEY.ticketless_description)}</p>
                 <Trans i18nKey={KEY.ticketless_description_note} components={{ strong: <strong /> }} />
@@ -224,33 +244,6 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 <p>{t(KEY.email_ticket_description)}</p>
               </div>
             </div>
-          </div>
-
-          {/* Terms and Conditions */}
-          <div>
-            <a href={ROUTES.other.stripe_info} target="_blank" className={styles.link} rel="noreferrer">
-              {t(KEY.stripe_info)}{' '}
-            </a>
-            <p>{t(KEY.pay_info)}</p>
-            {/* TODO: Add the url when the page is made (in ISSUE #1827)*/}
-            <Link url="#" className={styles.terms_link}>
-              {t(KEY.sales_conditions)}
-            </Link>
-          </div>
-
-          {/* Total Price */}
-          <div className={styles.total_price}>
-            <strong>
-              {t(KEY.common_total)}: {totalPrice} NOK
-            </strong>
-          </div>
-
-          {/* Submit Button */}
-          <Button type="submit" className={styles.pay_button}>
-            {t(KEY.common_to_payment)}
-          </Button>
-        </form>
-      </Form>
     </div>
   );
 }
