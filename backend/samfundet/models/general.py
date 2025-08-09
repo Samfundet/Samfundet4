@@ -567,13 +567,13 @@ class Reservation(FullCleanSaveMixin):
                 # If there are still occupied tables for time
                 if not safe:
                     # Loop through tables and reservation
-                    for key, table_times in occupied_table_times.items():
+                    for table_times in occupied_table_times.values():
                         # If top of stack is over, remove it
 
                         if (c_time.time()) >= table_times[0][1]:  # If greater than end remove element
-                            occupied_table_times[key].pop(0)  # noqa: PLR1733
+                            table_times.pop(0)
                             # if the reservations for a table is empty, drop checking for availability
-                            if len(occupied_table_times[key]) == 0:  # noqa: PLR1733
+                            if not table_times:
                                 safe = True
                                 break
                         # If time next occupancy is in future, drop and set available table,
