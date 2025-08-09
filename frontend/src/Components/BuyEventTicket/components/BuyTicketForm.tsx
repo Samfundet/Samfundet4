@@ -247,8 +247,8 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                   />
                     </div>
                 )}              
-            
-                          {ticketType === TICKET_TYPE_MEMBERSHIP ? (
+            <div className={styles.ticket_type_field}>
+                {ticketType === TICKET_TYPE_MEMBERSHIP ? (
                   <>
                     <p className={styles.ticketless_description_p}>{t(KEY.ticketless_description)}</p>
                     <p className={styles.ticketless_description_p}>
@@ -261,6 +261,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 ) : (
                   <p className={styles.ticketless_description_p}>{t(KEY.email_ticket_description)}</p>
                 )}
+                </div>
             </div>
           {/* Submit Button */}
           <Button type="submit" className={styles.pay_button}>
