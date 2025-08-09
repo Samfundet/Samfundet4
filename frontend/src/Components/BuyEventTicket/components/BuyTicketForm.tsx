@@ -102,7 +102,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
     form.reset(newDefaultValues, { keepDefaultValues: false });
   }, [ticketType, form]);
 
-  function onSubmit(_data: any): void {
+  function onSubmit(): void {
     confirm('TODO: INTEGRATE WITH REAL BILLIG');
   }
 
