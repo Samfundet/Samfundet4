@@ -79,7 +79,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
   const ticketType = useWatch({ control: form.control, name: 'ticketType' });
 
   function onSubmit(data: BuyTicketFormType): void {
-    console.log('Submitted Ticket Form Data:', data);
+    confirm("TODO: INTEGRATE WITH REAL BILLIG")
   }
 
   const ticketQuantities = useWatch({ control: form.control, name: 'ticketQuantities' });
