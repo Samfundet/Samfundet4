@@ -12,6 +12,7 @@ from rest_framework import serializers
 
 from django.db.models import Q, QuerySet
 from django.core.files import File
+from django.utils.text import slugify
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
@@ -240,6 +241,24 @@ class VenueSerializer(CustomBaseSerializer):
     class Meta:
         model = Venue
         fields = '__all__'
+
+    def validate_slug(self, value: str | None) -> str:
+        """Ensure slug is provided during creation."""
+        if not value:
+            raise serializers.ValidationError('Slug is required when creating a venue.')
+        return value
+
+    def create(self, validated_data: dict) -> Venue:
+        """Auto-generate slug from name if not provided."""
+        if not validated_data.get('slug') and validated_data.get('name'):
+            validated_data['slug'] = slugify(validated_data['name'])
+        return super().create(validated_data)
+
+
+class UpdateVenueSerializer(CustomBaseSerializer):
+    class Meta:
+        model = Venue
+        exclude = ('slug',)
 
 
 class ClosedPeriodSerializer(CustomBaseSerializer):

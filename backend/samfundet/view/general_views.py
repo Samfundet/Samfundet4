@@ -35,6 +35,7 @@ from samfundet.serializers import (
     GangTypeSerializer,
     KeyValueSerializer,
     TextItemSerializer,
+    UpdateVenueSerializer,
     UserOrgRoleSerializer,
     ClosedPeriodSerializer,
     OrganizationSerializer,
@@ -109,9 +110,14 @@ class TagView(ModelViewSet):
 
 class VenueView(ModelViewSet):
     permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
-    serializer_class = VenueSerializer
     queryset = Venue.objects.all()
     lookup_field = 'slug'
+
+    def get_serializer_class(self) -> type[UpdateVenueSerializer | VenueSerializer]:
+        """Use UpdateVenueSerializer for updates to exclude slug field"""
+        if self.action in ['update', 'partial_update']:
+            return UpdateVenueSerializer
+        return VenueSerializer
 
 
 class ClosedPeriodView(ModelViewSet):
