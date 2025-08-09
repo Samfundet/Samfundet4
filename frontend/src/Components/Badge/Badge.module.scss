@@ -16,3 +16,27 @@
   gap: 0.5rem;
   font-size: 0.8em;
 }
+
+.information {
+  background-color: #e3f2fd;
+  border-color: #2196f3;
+  color: #1565c0;
+}
+
+.success {
+  background-color: #e8f5e8;
+  border-color: #4caf50;
+  color: #2e7d32;
+}
+
+.warning {
+  background-color: #fff3e0;
+  border-color: #ff9800;
+  color: #ef6c00;
+}
+
+.error {
+  background-color: #ffebee;
+  border-color: #f44336;
+  color: #c62828;
+}
