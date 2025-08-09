@@ -36,7 +36,6 @@ router.register('menu', samfundet.view.sulten_views.MenuView, 'menu')
 router.register('menu-items', samfundet.view.sulten_views.MenuItemView, 'menu_items')
 router.register('food-preference', samfundet.view.sulten_views.FoodPreferenceView, 'food_preference')
 router.register('food-category', samfundet.view.sulten_views.FoodCategoryView, 'food_category')
-router.register('booking', samfundet.view.sulten_views.BookingView, 'booking')
 router.register('table', samfundet.view.sulten_views.TableView, 'table')
 router.register('textitem', samfundet.view.general_views.TextItemView, 'text_item')
 router.register('interview-rooms', views.InterviewRoomView, 'interview_rooms')
@@ -186,4 +185,5 @@ urlpatterns = [
     path('purchase-feedback/', samfundet.view.event_views.PurchaseFeedbackView.as_view(), name='purchase_feedback'),
     path('recruitment/<int:recruitment_id>/gang/<int:gang_id>/stats/', views.GangApplicationCountView.as_view(), name='gang-application-stats'),
     path('recruitment/<int:id>/positions-by-tags/', views.PositionByTagsView.as_view(), name='recruitment_positions_by_tags'),
+    path('recruitment/all-applications/', views.RecruitmentAllApplicationsPerRecruitmentView.as_view(), name='recruitment-all-applications'),
 ]

@@ -1,5 +1,4 @@
 export { AccessDenied } from './AccessDenied';
-export { AdminBox } from './AdminBox';
 export { Alert } from './Alert';
 export { BackButton } from './BackButton';
 export { Breadcrumb } from './Breadcrumb';
@@ -82,7 +81,8 @@ export { TextAreaField } from './TextAreaField';
 export { ThemeSwitch } from './ThemeSwitch';
 export { TimeDisplay } from './TimeDisplay';
 export { TimeDuration } from './TimeDuration';
-export { TimeslotContainer } from './TimeslotContainer';
+export { TimeslotButton } from './TimeslotButton';
+export { TimeslotSelector } from './TimeslotSelector';
 export { ToggleSwitch } from './ToggleSwitch';
 export { ToolTip } from './ToolTip';
 export { UkaOutlet } from './UkaOutlet';

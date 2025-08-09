@@ -95,9 +95,14 @@ def application_on_update_positionstat(sender: RecruitmentApplication, instance:
     if not obj:
         return
     # Check if priority is updated after interview
-    # This will reflect the quality of the interview
-    recruitment_stats = RecruitmentStatistics.objects.filter(recruitment=obj.recruitment).first()
+    # This could reflect the quality of the interview
+
+    recruitment_stats, stats_created = RecruitmentStatistics.objects.get_or_create(recruitment=obj.recruitment)  # Get or create the recruitment statistics
+
+    # Now we can safely use recruitment_stats because it definitely exists
     position_stats, _created = RecruitmentPositionStat.objects.get_or_create(recruitment_position=obj.recruitment_position, recruitment_stats=recruitment_stats)
+
     if obj.applicant_priority != instance.applicant_priority and obj.interview and obj.interview.interview_time < timezone.now():
         position_stats.update_repriorization_stats(value=obj.applicant_priority - instance.applicant_priority)
+
     position_stats.save()

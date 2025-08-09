@@ -8,29 +8,74 @@
 
 .tooltip {
   width: 10em;
-  background-color: $grey-3;
+  background-color: rgba($grey-1, 0.97);
   color: $white;
   text-align: center;
   border-radius: 0.2em;
   padding: 0.25em;
-
-  @include theme-dark {
-    background-color: $black;
-  }
-
-  /* Position the tooltip */
   position: absolute;
   z-index: 1;
+
+  @include theme-dark {
+    background-color: rgba($grey-5, 0.97);
+    color: $black;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent;
+  }
 }
 
-.left {
-  top: -5px;
-  left: 105%;
+// --- Arrow Positioning
+
+.top::after {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-color: rgba($grey-1, 0.97) transparent transparent transparent;
+
+  @include theme-dark {
+    border-color: rgba($grey-5, 0.97) transparent transparent transparent;
+  }
 }
 
-.top {
-  bottom: 105%;
+.right::after {
+  top: 50%;
+  right: 100%;
+  transform: translateY(-50%);
+  border-color: transparent rgba($grey-1, 0.97) transparent transparent;
+
+  @include theme-dark {
+    border-color: transparent rgba($grey-5, 0.97) transparent transparent;
+  }
 }
+
+.bottom::after {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-color: transparent transparent rgba($grey-1, 0.97) transparent;
+
+  @include theme-dark {
+    border-color: transparent transparent rgba($grey-5, 0.97) transparent;
+  }
+}
+
+.left::after {
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  border-color: transparent transparent transparent rgba($grey-1, 0.97);
+
+  @include theme-dark {
+    border-color: transparent transparent transparent rgba($grey-5, 0.97);
+  }
+}
+
 
 .hidden {
   display: none;

@@ -18,6 +18,7 @@ from rest_framework.request import Request
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, IsAuthenticated, DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
@@ -45,6 +46,7 @@ from .serializers import (
     OccupiedTimeslotSerializer,
     UserForRecruitmentSerializer,
     RecruitmentPositionSerializer,
+    UserWithApplicationsSerializer,
     RecruitmentStatisticsSerializer,
     ApplicationFileAttachmentSerializer,
     RecruitmentSeparatePositionSerializer,
@@ -201,6 +203,39 @@ class RecruitmentApplicationView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = RecruitmentApplicationForGangSerializer
     queryset = RecruitmentApplication.objects.all()
+
+
+class RecruitmentAllApplicationsPerRecruitmentView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserWithApplicationsSerializer
+
+    def get_recruitment_id(self) -> dict[str, Any]:
+        """Get recruitment ID from query params."""
+        return self.request.query_params.get('recruitment')
+
+    def get_serializer_context(self) -> dict[str, Any]:
+        """Add recruitment object to context for the serializer to use."""
+        context = super().get_serializer_context()
+        recruitment_id = self.get_recruitment_id()
+        context['recruitment'] = get_object_or_404(Recruitment, id=recruitment_id)
+        return context
+
+    def get_queryset(self) -> QuerySet[User]:
+        """Get all users who have applied to this recruitment."""
+        recruitment_id = self.get_recruitment_id()
+        return User.objects.filter(applications__recruitment__id=recruitment_id).distinct().select_related('campus')
+
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        """Return list of applicants without data wrapping."""
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # If queryset is empty, return an empty list
+        if not queryset.exists():
+            return Response([])
+
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(serializer.data)
 
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
@@ -424,6 +459,21 @@ class RecruitmentApplicationForApplicantView(ModelViewSet):
             applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user_id=user_id)
         else:
             applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user)
+
+        serializer = self.get_serializer(applications, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def withdrawn_applications(self, request: Request, **kwargs: Any) -> Response:
+        """Returns a list of all the applications for a user for a specified recruitment"""
+        recruitment_id = request.query_params.get('recruitment')
+
+        if not recruitment_id:
+            return Response({'error': 'A recruitment parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        applications = RecruitmentApplication.objects.filter(recruitment=recruitment, user=request.user, withdrawn=True)
 
         serializer = self.get_serializer(applications, many=True)
         return Response(serializer.data)
@@ -843,10 +893,44 @@ class RecruitmentAvailabilityView(APIView):
             {
                 'start_date': availability.start_date,
                 'end_date': availability.end_date,
+                'start_time': start_time.strftime('%H:%M'),
+                'end_time': end_time.strftime('%H:%M'),
+                'timeslot_interval': interval,
                 'timeslots': timeslots,
                 'interval': interval,
             }
         )
+
+    def post(self, request: Request, **kwargs: int) -> Response:
+        recruitment_id = kwargs.get('id')
+
+        data = {'recruitment': recruitment_id, **request.data}
+        serializer = self.serializer_class(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        # TODO: Check that user has permission to edit/create availability of this recruitment
+
+        recruitment = get_object_or_404(Recruitment, id=recruitment_id)
+
+        try:
+            availability = RecruitmentInterviewAvailability.objects.get(recruitment__id=recruitment_id)
+            availability.start_time = serializer.validated_data['start_time']
+            availability.end_time = serializer.validated_data['end_time']
+            availability.start_date = serializer.validated_data['start_date']
+            availability.end_date = serializer.validated_data['end_date']
+            availability.timeslot_interval = serializer.validated_data['timeslot_interval']
+            availability.save()
+            return Response(status=status.HTTP_200_OK)
+        except RecruitmentInterviewAvailability.DoesNotExist:
+            RecruitmentInterviewAvailability.objects.create(
+                recruitment=recruitment,
+                start_time=serializer.validated_data['start_time'],
+                end_time=serializer.validated_data['end_time'],
+                start_date=serializer.validated_data['start_date'],
+                end_date=serializer.validated_data['end_date'],
+                timeslot_interval=serializer.validated_data['timeslot_interval'],
+            )
+            return Response(status=status.HTTP_201_CREATED)
 
 
 class OccupiedTimeslotView(ListCreateAPIView):
