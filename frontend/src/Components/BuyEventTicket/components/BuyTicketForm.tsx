@@ -24,31 +24,35 @@ import { ROUTES } from '~/routes';
 import { COLORS } from '~/types';
 import styles from './BuyTicketModal.module.scss';
 
-// Validation schema
-const buyTicketFormSchema = z
-  .discriminatedUnion('ticketType', [
-    z.object({
-      ticketType: z.literal('membershipNumber'),
-      membershipNumber: z.string().min(1, t(KEY.email_or_membership_number_message)),
-      email: z.string().optional(),
-      ticketQuantities: z.record(z.string(), z.number().min(0)),
-    }),
-    z.object({
-      ticketType: z.literal('email'),
-      email: z
-        .string()
-        .min(1, t(KEY.email_or_membership_number_message))
-        .refine(validEmail, { message: t(KEY.invalid_email_message) }),
-      membershipNumber: z.string().optional(),
-      ticketQuantities: z.record(z.string(), z.number().min(0)),
-    }),
-  ])
-  .refine((data) => Object.values(data.ticketQuantities ?? {}).some((qty) => qty > 0), {
-    message: t(KEY.no_tickets_selected_message),
-    path: ['ticketQuantities'],
-  });
+// Base schema shared by both forms
+const baseFormSchema = z.object({
+  ticketQuantities: z.record(z.string(), z.number().min(0)),
+});
 
-type BuyTicketFormType = z.infer<typeof buyTicketFormSchema>;
+// Membership form schema
+const membershipFormSchema = baseFormSchema.extend({
+  ticketType: z.literal('membershipNumber'),
+  membershipNumber: z.string().min(1, t(KEY.email_or_membership_number_message)),
+}).refine((data) => Object.values(data.ticketQuantities ?? {}).some((qty) => qty > 0), {
+  message: t(KEY.no_tickets_selected_message),
+  path: ['ticketQuantities'],
+});
+
+// Email form schema
+const emailFormSchema = baseFormSchema.extend({
+  ticketType: z.literal('email'),
+  email: z
+    .string()
+    .min(1, t(KEY.email_or_membership_number_message))
+    .refine(validEmail, { message: t(KEY.invalid_email_message) }),
+}).refine((data) => Object.values(data.ticketQuantities ?? {}).some((qty) => qty > 0), {
+  message: t(KEY.no_tickets_selected_message),
+  path: ['ticketQuantities'],
+});
+
+type MembershipFormType = z.infer<typeof membershipFormSchema>;
+type EmailFormType = z.infer<typeof emailFormSchema>;
+type BuyTicketFormType = MembershipFormType | EmailFormType;
 
 interface BuyTicketFormProps {
   initialData?: Partial<BuyTicketFormType>;
@@ -61,6 +65,7 @@ const TICKET_TYPE_MEMBERSHIP = 'membershipNumber';
 export function BuyTicketForm({ event }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const [totalPrice, setTotalPrice] = useState(0);
+  const [ticketType, setTicketType] = useState<'membershipNumber' | 'email'>(TICKET_TYPE_MEMBERSHIP);
   const ticket_groups = event.billig?.ticket_groups;
 
   const ticketGroupDefaults = ticket_groups?.reduce(
@@ -72,19 +77,34 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
     {} as Record<string, number>,
   );
 
-  const form = useForm<BuyTicketFormType>({
-    resolver: zodResolver(buyTicketFormSchema),
+  const currentSchema = ticketType === TICKET_TYPE_EMAIL ? emailFormSchema : membershipFormSchema;
+
+  const form = useForm({
+    resolver: zodResolver(currentSchema),
     defaultValues: {
       ticketQuantities: ticketGroupDefaults,
-      email: '',
-      membershipNumber: '',
-      ticketType: TICKET_TYPE_MEMBERSHIP,
+      ticketType: ticketType,
+      ...(ticketType === TICKET_TYPE_EMAIL 
+        ? { email: '' }
+        : { membershipNumber: '' }
+      ),
     },
   });
 
-  const ticketType = useWatch({ control: form.control, name: 'ticketType' });
+  useEffect(() => {
+    const newDefaultValues = {
+      ticketQuantities: form.getValues('ticketQuantities'),
+      ticketType: ticketType,
+      ...(ticketType === TICKET_TYPE_EMAIL 
+        ? { email: '' }
+        : { membershipNumber: '' }
+      ),
+    };
 
-  function onSubmit(_data: BuyTicketFormType): void {
+    form.reset(newDefaultValues, { keepDefaultValues: false });
+  }, [ticketType, form]);
+
+  function onSubmit(_data: any): void {
     confirm("TODO: INTEGRATE WITH REAL BILLIG")
   }
 
@@ -157,8 +177,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                   <RadioButton
                     name="ticketType"
                     onChange={() => {
-                      form.setValue('ticketType', TICKET_TYPE_MEMBERSHIP);
-                      form.setValue('email', '');
+                      setTicketType(TICKET_TYPE_MEMBERSHIP);
                     }}
                     checked={ticketType === TICKET_TYPE_MEMBERSHIP}
                   >
@@ -167,8 +186,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                    <RadioButton
                     name="ticketType"
                     onChange={() => {
-                      form.setValue('ticketType', TICKET_TYPE_EMAIL);
-                      form.setValue('membershipNumber', '');
+                      setTicketType(TICKET_TYPE_EMAIL);
                     }}
                     checked={ticketType === TICKET_TYPE_EMAIL}
                   >
