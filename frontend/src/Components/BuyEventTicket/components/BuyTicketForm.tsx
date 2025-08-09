@@ -20,6 +20,7 @@ import { validEmail } from '~/Forms/util';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { INFORMATION_PAGES } from '~/routes/samf-three';
 import { COLORS } from '~/types';
 import styles from './BuyTicketModal.module.scss';
 
@@ -187,6 +188,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 <div className={styles.radio_box}>
                   <RadioButton
                     name="ticketType"
+                    className={styles.radio_btn}
                     onChange={() => {
                       setTicketType(TICKET_TYPE_MEMBERSHIP);
                     }}
@@ -282,7 +284,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
       <a href={ROUTES.other.stripe_info} target="_blank" className={styles.link} rel="noreferrer">
         {t(KEY.stripe_info)}
       </a>
-      <Link url="https://www.samfundet.no/informasjon/billetter" target="external" className={styles.terms_link}>
+      <Link url={INFORMATION_PAGES.informasjon_billetter} target="external" className={styles.terms_link}>
         {t(KEY.sales_conditions)}
       </Link>
     </div>
