@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .container {
   display: flex;
@@ -12,15 +12,14 @@
   margin: 2rem;
 }
 
-.cardContainer{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap:2rem;
-    width: 720px;
-  @include for-tablet-down{
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 720px;
+  @include for-tablet-down {
     width: 22rem;
   }
 }
-

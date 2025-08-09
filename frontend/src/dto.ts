@@ -1,4 +1,5 @@
 import type { ThemeValue } from '~/constants';
+import type { BilligEventDto } from './apis/billig/billigDtos';
 import type {
   EventAgeRestrictionValue,
   EventCategoryValue,
@@ -24,6 +25,7 @@ export type UserDto = {
   groups: GroupDto[];
   permissions?: string[];
   object_permissions?: ObjectPermissionDto[];
+  role_permissions?: string[];
 };
 
 export type CampusDto = {
@@ -33,9 +35,23 @@ export type CampusDto = {
   abbreviation?: string;
 };
 
+export type RecruitmentInterviewAvailabilityDto = {
+  id: number;
+  start_date: string;
+  end_date: string;
+  start_time: string;
+  end_time: string;
+  timeslot_interval: number;
+  recruitment_id: number;
+  position_id?: number;
+};
+
 export type RecruitmentAvailabilityDto = {
   start_date: string;
   end_date: string;
+  start_time: string;
+  end_time: string;
+  timeslot_interval: number;
   timeslots: string[];
   interval: number;
 };
@@ -154,6 +170,7 @@ export type EventDto = {
   location: string;
   category: EventCategoryValue;
   host: string;
+  billig?: BilligEventDto;
 
   // Timestamps/duration
   image_url: string;
@@ -255,6 +272,7 @@ export type MenuItemDto = {
 };
 
 export type MenuDto = {
+  id?: number;
   name_nb?: string;
   description_nb?: string;
 
@@ -294,17 +312,6 @@ export type TextItemDto = {
   key: string;
   text_en: string;
   text_nb: string;
-};
-
-export type BookingDto = {
-  name?: string;
-  text?: string;
-
-  tables?: TableDto[];
-  user?: UserDto;
-
-  from_dto?: Date;
-  from_to?: Date;
 };
 
 export type OrganizationDto = {
@@ -580,6 +587,7 @@ export type RecruitmentApplicationDto = {
   created_at: string;
   withdrawn: boolean;
   application_count?: number;
+  comment?: string;
 };
 
 export type RecruitmentApplicationRecruiterDto = {

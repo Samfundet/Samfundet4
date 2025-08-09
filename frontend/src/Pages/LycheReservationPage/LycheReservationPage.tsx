@@ -1,47 +1,32 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { z } from 'zod';
-import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
+import { SamfundetLogoSpinner } from '~/Components';
 import { Link } from '~/Components/Link/Link';
 import { SultenPage } from '~/Components/SultenPage';
-import { SamfForm } from '~/Forms/SamfForm';
-import { SamfFormField } from '~/Forms/SamfFormField';
-import { checkReservationAvailability } from '~/apis/sulten/sultenApis';
+import { type ReservationPostData, checkReservationAvailability, reserveTable } from '~/apis/sulten/sultenApis';
 import type { AvailableTimes, ReservationCheckAvailabilityDto } from '~/apis/sulten/sultenDtos';
 import { KV } from '~/constants';
 import { TextItem } from '~/constants/TextItems';
 import { useKeyValue, useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { ReservationFormLine } from './Components';
-import {
-  FindAvailableTablesForm,
-  type findTableSchema,
-} from './Components/FindAvailableTablesForm/FindAvailableTablesForm';
+import { FindAvailableTablesForm } from './Components/FindAvailableTablesForm/FindAvailableTablesForm';
+import type { FindTableData } from './Components/FindAvailableTablesForm/FindAvailableTablesSchema';
+import { ReservationDetailsForm } from './Components/ReserveTableForm/ReserveTableForm';
+import type { ReservationFormData } from './Components/ReserveTableForm/ReserveTableSchema';
 import styles from './LycheReservationPage.module.scss';
 
 export function LycheReservationPage() {
   const { t } = useTranslation();
   useTitle(t(KEY.common_reservation), t(KEY.common_sulten));
   const sultenMail = useKeyValue(KV.SULTEN_MAIL);
-  const [reservation, setReservation] = useState<FormProps>();
   const [availableDate, setAvailableDate] = useState<boolean>(false);
   const [availableTimes, setAvailableTimes] = useState<AvailableTimes[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [findTableData, setFindTableData] = useState<FindTableData | null>(null);
+  const [reservationSuccess, setReservationSuccess] = useState<boolean>(false);
 
-  type FormProps = {
-    occasion: string;
-    guest_count: number;
-    reservation_date: Date;
-    start_time: string;
-    name: string;
-    phonenumber: string;
-    email: string;
-    additional_info: string;
-    agree: boolean;
-  };
-
-  // Use TanStack Query mutation for API call
+  // Use TanStack Query mutation for availability check
   const checkAvailabilityMutation = useMutation({
     mutationFn: (data: ReservationCheckAvailabilityDto) => checkReservationAvailability(data),
     onSuccess: (data) => {
@@ -65,7 +50,25 @@ export function LycheReservationPage() {
     },
   });
 
-  function checkAvailableDate(data: z.infer<typeof findTableSchema>) {
+  // Use TanStack Query mutation for reservation submission
+  const reservationMutation = useMutation({
+    mutationFn: (data: ReservationPostData) => reserveTable(data),
+    onSuccess: () => {
+      // Handle successful reservation
+      setError(null);
+      setReservationSuccess(true);
+    },
+    onError: (error: unknown) => {
+      // Handle reservation errors
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError(t(KEY.error_submitting_reservation));
+      }
+    },
+  });
+
+  function onFindTableSubmit(data: FindTableData) {
     // Format the date for the API (ISO string and extract just the date part)
     const formattedDate = data.reservation_date.toISOString().split('T')[0];
 
@@ -75,76 +78,28 @@ export function LycheReservationPage() {
       guest_count: data.guest_count,
     };
 
-    // Store form data for later use
-    setReservation({
-      ...reservation,
-      occasion: data.occasion,
-      guest_count: data.guest_count,
-      reservation_date: data.reservation_date,
-      start_time: '',
-      name: '',
-      phonenumber: '',
-      email: '',
-      additional_info: '',
-      agree: false,
-    });
+    // Store find table form data
+    setFindTableData(data);
 
     // Call the API
     checkAvailabilityMutation.mutate(apiPayload);
   }
 
-  function submit(data: FormProps) {
-    console.log({ ...reservation, ...data });
+  function onReservationSubmit(data: ReservationFormData) {
+    // Combine data from both forms
+    const formattedDate = data.reservation_date.toISOString().split('T')[0];
+    const completeData: ReservationPostData = {
+      ...data,
+      reservation_date: formattedDate,
+    };
+    // Submit the reservation
+    reservationMutation.mutate(completeData);
   }
 
-  // Generate time options from available times returned by the API
-  const hoursOptions: DropdownOption<string>[] = availableTimes
-    .filter((timeSlot: AvailableTimes) => timeSlot) // Filter out any empty values
-    .map((timeSlot: AvailableTimes) => ({
-      value: timeSlot as unknown as string,
-      label: timeSlot as unknown as string,
-    }));
-
-  const reserveStage = (
-    <SamfForm
-      validateOn="submit"
-      className={styles.formContainer}
-      onSubmit={submit}
-      submitText={t(KEY.sulten_reservation_form_find_times)}
-    >
-      <div className={styles.reservation_info}>
-        <p className={styles.text}>
-          {t(KEY.common_date)} {reservation?.reservation_date?.toLocaleDateString()}
-        </p>
-        <p className={styles.text}>
-          {t(KEY.common_guests)} {reservation?.guest_count}
-        </p>
-      </div>
-      <ReservationFormLine label={`${t(KEY.common_time)}*`}>
-        <SamfFormField<string, FormProps> type="options" options={hoursOptions} field="start_time" required={true} />
-      </ReservationFormLine>
-      <ReservationFormLine label={`${t(KEY.common_name)}*`}>
-        <SamfFormField<string, FormProps> type="text" field="name" required={true} />
-      </ReservationFormLine>
-      <ReservationFormLine label={`${t(KEY.common_phonenumber)}*`}>
-        <SamfFormField<string, FormProps> type="text" field="phonenumber" required={true} />
-      </ReservationFormLine>
-      <ReservationFormLine label={`${t(KEY.common_email)}*`} underline={true}>
-        <SamfFormField<string, FormProps> type="email" field="email" required={true} />
-      </ReservationFormLine>
-      <ReservationFormLine label={t(KEY.common_message)}>
-        <SamfFormField<string, FormProps> type="text" field="additional_info" required={false} />
-      </ReservationFormLine>
-      <div className={styles.check_box}>
-        <SamfFormField<boolean, FormProps>
-          type="checkbox"
-          field="agree"
-          label={`${useTextItem(TextItem.sulten_reservation_policy)}*`}
-          required={true}
-        />
-      </div>
-    </SamfForm>
-  );
+  const isPending = checkAvailabilityMutation.isPending || reservationMutation.isPending;
+  const showSuccessMessage = reservationSuccess;
+  const showReservationForm = !isPending && !reservationSuccess && availableDate && findTableData;
+  const showFindTableForm = !isPending && !reservationSuccess && !availableDate;
 
   return (
     <SultenPage>
@@ -162,10 +117,22 @@ export function LycheReservationPage() {
 
         {error && <div className={styles.errorMessage}>{error}</div>}
 
-        {checkAvailabilityMutation.isPending && <div className={styles.loading}>{t('Checking availability...')}</div>}
+        {isPending && <SamfundetLogoSpinner />}
 
-        {!checkAvailabilityMutation.isPending &&
-          (availableDate ? reserveStage : <FindAvailableTablesForm onSubmit={checkAvailableDate} />)}
+        {showFindTableForm && <FindAvailableTablesForm onSubmit={onFindTableSubmit} />}
+        {showReservationForm && (
+          <ReservationDetailsForm
+            findTableData={findTableData}
+            availableTimes={availableTimes}
+            onSubmit={onReservationSubmit}
+          />
+        )}
+        {showSuccessMessage && (
+          <div className={styles.successMessage}>
+            <h2>{t('Reservation Successful!')}</h2>
+            <p>{t('Your table has been reserved. We look forward to seeing you!')}</p>
+          </div>
+        )}
       </div>
     </SultenPage>
   );

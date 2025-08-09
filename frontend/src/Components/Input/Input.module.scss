@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .date,
 .datetimeLocal,
@@ -22,6 +22,8 @@
   font-weight: initial;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   width: 100%;
+  color: inherit;
+  background: $white;
 
   &:focus {
     border-color: $grey-3;
@@ -34,11 +36,17 @@
   }
 
   @include theme-dark {
+    background: $theme-dark-input-bg;
     border-color: $grey-0;
     &:focus {
       border-color: $grey-1;
       outline: 1px solid rgba(255, 255, 255, 0.6);
     }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 
@@ -47,7 +55,8 @@
 .number {
   -webkit-appearance: textfield;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     -moz-appearance: initial;
   }
 }

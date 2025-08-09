@@ -1,6 +1,6 @@
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
-@import 'src/constants';
+@use 'src/constants' as *;
 
 .box {
   border: 1px solid $grey-4;
@@ -79,6 +79,24 @@
 
 .textBox {
   padding: 1.5em;
+  margin-top: 1.5em;
+}
+
+.map {
+  border: 0.01px solid rgb(248, 248, 248);
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  margin-top: 1.5rem;
+}
+
+.mapContainer {
+  height: 400px;
+  margin: 1.5em 0;
+
+  @include for-mobile-only {
+    height: 88vh;
+  }
 }
 
 .row {

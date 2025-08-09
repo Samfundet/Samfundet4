@@ -1,10 +1,10 @@
 @use 'sass:color';
 
 /* stylelint-disable-next-line no-invalid-position-at-import-rule */
-@import 'constants';
+@use 'constants' as *;
 
 /* stylelint-disable-next-line no-invalid-position-at-import-rule */
-@import 'mixins';
+@use 'mixins' as *;
 
 /* stylelint-disable selector-max-type */
 /* stylelint-disable selector-max-universal */
@@ -105,19 +105,6 @@ label {
 
   label {
     color: $white;
-  }
-
-  input,
-  textarea,
-  select {
-    background-color: $theme-dark-input-bg;
-    color: inherit;
-    &:focus {
-      outline-color: $grey-1;
-    }
-    &:disabled {
-      background-color: $theme-dark-input-bg-disabled;
-    }
   }
 
   .button_outlined {

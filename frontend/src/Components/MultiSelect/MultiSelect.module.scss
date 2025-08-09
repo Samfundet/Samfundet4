@@ -1,6 +1,6 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
-@import 'src/mixins';
+@use 'src/mixins' as *;
 
 .item {
   margin-bottom: 5px;
@@ -13,7 +13,7 @@
 
 .container {
   display: grid;
-  gap: 1rem
+  gap: 1rem;
 }
 
 .box_container {
@@ -21,11 +21,11 @@
   gap: 1rem;
 
   @include for-tablet-down {
-    grid-template-rows: 1fr auto 1fr
+    grid-template-rows: 1fr auto 1fr;
   }
 
   @include for-desktop-up {
-    grid-template-columns: 1fr auto 1fr
+    grid-template-columns: 1fr auto 1fr;
   }
 }
 

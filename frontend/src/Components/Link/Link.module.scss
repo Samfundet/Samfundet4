@@ -1,4 +1,4 @@
-@import 'src/constants';
+@use 'src/constants' as *;
 
 .link {
   color: $red-samf;
