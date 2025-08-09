@@ -2,10 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { type ChangeEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputTime } from '~/Components';
-import { Badge } from '~/Components/Badge';
+import { Badge, useDynamicBadge } from '~/Components/Badge';
 import { getVenues, patchVenue } from '~/api';
 import type { VenueDto } from '~/dto';
-import { useTitle, useDynamicBadge } from '~/hooks';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { venueKeys } from '~/queryKeys';
 import { ALL_DAYS } from '~/types';
@@ -31,14 +31,13 @@ export function OpeningHoursAdminPage() {
   // We need a reference to read changed state inside timeout
   const venueRef = useRef(venues);
 
-
   // Use React Query mutation to update venues
   const updateVenueMutation = useMutation({
     mutationFn: ({ slug, data }: { slug: string; data: Partial<VenueDto> }) => patchVenue(slug, data),
     onSuccess: () => {
       // Invalidate and refetch venues to keep data in sync
       queryClient.invalidateQueries({ queryKey: venueKeys.all });
-      
+
       // Show success badge
       showSuccess(t(KEY.common_save_successful));
     },
@@ -142,14 +141,8 @@ export function OpeningHoursAdminPage() {
   const header = (
     <div>
       <div className={styles.subtitle}>{t(KEY.admin_opening_hours_hint)}</div>
-      
-      {badgeState.show && (
-        <Badge 
-          text={badgeState.text} 
-          type={badgeState.type} 
-          animated={true} 
-        />
-      )}
+
+      {badgeState.show && <Badge text={badgeState.text} type={badgeState.type} animated={true} />}
     </div>
   );
 
