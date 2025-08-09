@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { BilligEventDto } from '~/apis/billig/billigDtos';
-import { EventDto } from '~/dto';
+import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { Button } from '../Button';
 import { BuyTicketModal } from './components';
@@ -28,8 +28,8 @@ export function BuyEventTicket({ event, ticketSaleState }: BuyButtonProps) {
   return (
     <>
       <Button theme={'samf'} onClick={() => setShowModal(true)}>
-      <Icon icon="ph:ticket-bold" />
-      {buttonText}
+        <Icon icon="ph:ticket-bold" />
+        {buttonText}
       </Button>
       <BuyTicketModal event={event} isOpen={showModal} onClose={() => setShowModal(false)} />
     </>

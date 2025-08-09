@@ -1,5 +1,5 @@
-import { logoBlack, logoWhite } from '~/assets';
 import { H2 } from '~/Components/H2';
+import { logoBlack, logoWhite } from '~/assets';
 import type { EventDto } from '~/dto';
 import { useIsDarkTheme } from '~/hooks';
 import { COLORS } from '~/types';
@@ -16,7 +16,6 @@ type BuyTicketModalProps = {
 };
 
 export function BuyTicketModal({ event, isOpen, onClose }: BuyTicketModalProps) {
-
   const isDarkmode = useIsDarkTheme();
 
   return (
@@ -25,15 +24,17 @@ export function BuyTicketModal({ event, isOpen, onClose }: BuyTicketModalProps) 
         <div className={styles.buy_ticket_modal_header}>
           {
             // TODO: add conditional for hiding Samfundet logo (issue #1865)
-            // something like:  
+            // something like:
             // event.external_event_organizer && (
-            //   isDarkmode ?      
-            //   <img src={logoWhite} className={styles.samf_logo} alt="LogoWhite" /> : 
+            //   isDarkmode ?
+            //   <img src={logoWhite} className={styles.samf_logo} alt="LogoWhite" /> :
             //   <img src={logoBlack} className={styles.samf_logo} alt="LogoBlack" />
             // )
-            isDarkmode ?      
-               <img src={logoWhite} className={styles.samf_logo} alt="LogoWhite" /> : 
-               <img src={logoBlack} className={styles.samf_logo} alt="LogoBlack" />
+            isDarkmode ? (
+              <img src={logoWhite} className={styles.samf_logo} alt="LogoWhite" />
+            ) : (
+              <img src={logoBlack} className={styles.samf_logo} alt="LogoBlack" />
+            )
           }
           <IconButton
             title="close"
