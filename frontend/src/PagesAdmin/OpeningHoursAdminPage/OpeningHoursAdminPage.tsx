@@ -141,7 +141,6 @@ export function OpeningHoursAdminPage() {
   const header = (
     <div>
       <div className={styles.subtitle}>{t(KEY.admin_opening_hours_hint)}</div>
-
       {badgeState.show && <Badge text={badgeState.text} type={badgeState.type} animated={true} />}
     </div>
   );
