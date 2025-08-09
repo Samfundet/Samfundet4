@@ -1,5 +1,5 @@
 import { Carousel, IconButton, ImageCard } from '~/Components';
-import { BuyButton } from '~/Components/BuyEventTicket/BuyEventTicket';
+import { BuyEventTicket } from '~/Components/BuyEventTicket/BuyEventTicket';
 import { BACKEND_DOMAIN } from '~/constants';
 import { useAuthContext } from '~/context/AuthContext';
 import type { EventDto, HomePageElementDto } from '~/dto';
@@ -60,7 +60,7 @@ export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps
             host={event.host}
           >
             {event.billig && (
-              <BuyButton event={event} ticketSaleState={event.billig} />
+              <BuyEventTicket event={event} ticketSaleState={event.billig} />
             )}
 
             <div className={styles.button_bar}>
