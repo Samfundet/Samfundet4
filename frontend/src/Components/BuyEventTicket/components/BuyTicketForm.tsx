@@ -175,6 +175,8 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                     {t(KEY.common_email)}
                   </RadioButton>
                 </div>
+                </div>
+                
                 {/* Membership Number Field */}
                 {ticketType === TICKET_TYPE_MEMBERSHIP && (
                   <div className={styles.ticket_type_field}>
@@ -242,7 +244,6 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                   <p className={styles.ticketless_description_p}>{t(KEY.email_ticket_description)}</p>
                 )}
             </div>
-          </div>
           {/* Submit Button */}
           <Button type="submit" className={styles.pay_button}>
             {t(KEY.common_to_payment)}
