@@ -202,6 +202,7 @@ export const KEY = {
   common_membership_number: 'common_membership_number',
   common_to_payment: 'common_to_payment',
 
+  common_comment: 'common_comment',
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',

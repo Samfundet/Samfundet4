@@ -186,6 +186,7 @@ export const nb = prepareTranslations({
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
+  [KEY.common_comment]: 'Kommentar',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -796,6 +797,7 @@ export const en = prepareTranslations({
   [KEY.common_available]: 'Available',
   [KEY.common_membership_number]: 'Membership number',
   [KEY.common_to_payment]: 'To payment',
+  [KEY.common_comment]: 'Comment',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
