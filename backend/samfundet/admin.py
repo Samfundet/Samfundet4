@@ -385,10 +385,10 @@ class EventGroupAdmin(CustomBaseAdmin):
 @admin.register(Venue)
 class VenueAdmin(CustomBaseAdmin):
     # ordering = []
-    sortable_by = ['id', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing', 'created_at', 'updated_at']
+    sortable_by = ['slug', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing', 'created_at', 'updated_at']
     list_filter = ['handicapped_approved']
     list_display = [
-        'id',
+        'slug',
         '__str__',
         'name',
         'floor',
@@ -400,9 +400,9 @@ class VenueAdmin(CustomBaseAdmin):
         'created_at',
         'updated_at',
     ]
-    search_fields = ['id', 'name', 'responsible_crew']
+    search_fields = ['slug', 'name', 'responsible_crew']
     # filter_horizontal = []
-    list_display_links = ['id', '__str__']
+    list_display_links = ['slug', '__str__']
     # autocomplete_fields = []
     list_select_related = True
 
