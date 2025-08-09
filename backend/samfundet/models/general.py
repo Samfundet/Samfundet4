@@ -201,7 +201,7 @@ class Profile(FullCleanSaveMixin):
 
 class Venue(CustomBaseModel):
     name = models.CharField(max_length=140, blank=True, null=True, unique=True)
-    slug = models.SlugField(unique=True, null=False, blank=True)
+    slug = models.SlugField(unique=True, null=True, blank=True)
     description = models.TextField(blank=True, null=True)
     floor = models.IntegerField(blank=True, null=True)
     last_renovated = models.DateTimeField(blank=True, null=True)
@@ -564,9 +564,9 @@ class Reservation(FullCleanSaveMixin):
                         # If top of stack is over, remove it
 
                         if (c_time.time()) >= table_times[0][1]:  # If greater than end remove element
-                            occupied_table_times[key].pop(0)
+                            table_times.pop(0)
                             # if the reservations for a table is empty, drop checking for availability
-                            if len(occupied_table_times[key]) == 0:
+                            if len(table_times) == 0:
                                 safe = True
                                 break
                         # If time next occupancy is in future, drop and set available table,
