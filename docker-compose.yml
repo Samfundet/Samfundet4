@@ -1,9 +1,44 @@
 ### Services ###
 services:
   ### Backend Django ###
+  sm4_dev_database:
+    image: ${SM4_DEV_DB_IMAGE}
+    volumes:
+      - sm4_dev_database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${SM4_DEV_CREDENTIAL}
+      POSTGRES_USER: ${SM4_DEV_CREDENTIAL}
+      POSTGRES_PASSWORD: ${SM4_DEV_CREDENTIAL}
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${SM4_DEV_CREDENTIAL}" ]
+      interval: ${COMMON_HEALTHCHECK_INTERVAL}
+      timeout: ${COMMON_HEALTHCHECK_TIMEOUT}
+      retries: ${COMMON_HEALTHCHECK_RETRIES}
+  billig_dev_database:
+    image: ${BILLIG_DEV_DB_IMAGE}
+    volumes:
+      - billig_dev_database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${BILLIG_DEV_CREDENTIAL}
+      POSTGRES_USER: ${BILLIG_DEV_CREDENTIAL}
+      POSTGRES_PASSWORD: ${BILLIG_DEV_CREDENTIAL}
+    ports:
+      - 5433:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${BILLIG_DEV_CREDENTIAL}" ]
+      interval: ${COMMON_HEALTHCHECK_INTERVAL}
+      timeout: ${COMMON_HEALTHCHECK_TIMEOUT}
+      retries: ${COMMON_HEALTHCHECK_RETRIES}
   backend:
     build: ./backend # Build in the context of this directory (meaning: use Dockerfile, .dockerignore etc.)
     image: samfundet-backend
+    depends_on:
+      sm4_dev_database:
+        condition: service_healthy
+      billig_dev_database:
+        condition: service_healthy
     volumes:
       - ./backend:/app # Mount backend folder to docker image
       - /app/.venv/ # Ignore local virtual environment
@@ -12,6 +47,12 @@ services:
       - ./backend/.docker.env # Environment for backend docker
     environment:
       - IS_DOCKER=yes
+      - SM4_DEV_DB_URL=postgresql://${SM4_DEV_CREDENTIAL}:${SM4_DEV_CREDENTIAL}@sm4_dev_database:5432/${SM4_DEV_CREDENTIAL}
+      - SM4_DEV_DB_USERNAME=${SM4_DEV_CREDENTIAL}
+      - SM4_DEV_DB_PASSWORD=${SM4_DEV_CREDENTIAL}
+      - BILLIG_DEV_DB_URL=postgresql://${BILLIG_DEV_CREDENTIAL}:${BILLIG_DEV_CREDENTIAL}@billig_dev_database:5432/${BILLIG_DEV_CREDENTIAL}
+      - BILLIG_DEV_DB_USERNAME=${BILLIG_DEV_CREDENTIAL}
+      - BILLIG_DEV_DB_PASSWORD=${BILLIG_DEV_CREDENTIAL}
     ports:
       - '8000:8000' # Quotes are required. django
       - '5678:5678' # Quotes are required. debugpy
@@ -26,7 +67,7 @@ services:
       # Share project code between host machine and container to enable reload on changes.
       # Excellent solution when component needs files/folders from outside context.
       - ./biome.jsonc:/biome.jsonc
-      - ./frontend/src:/app/src 
+      - ./frontend/src:/app/src
       - ./frontend/biome.jsonc:/app/biome.jsonc
       - ./frontend/package.json:/app/package.json
       - ./frontend/index.html:/app/index.html
@@ -91,3 +132,8 @@ services:
 
       -------------------------------------------------------------------------------
       "'
+
+### Volumes ###
+volumes:
+  sm4_dev_database:
+  billig_dev_database:
