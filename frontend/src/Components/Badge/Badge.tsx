@@ -8,7 +8,7 @@ type BadgeProps = HTMLAttributes<HTMLDivElement> & {
   text?: string;
   className?: string;
   type?: BadgeType;
-  animated: boolean;
+  animated?: boolean;
 };
 
 export function Badge({ text, className, type, animated = false, ...props }: BadgeProps) {
