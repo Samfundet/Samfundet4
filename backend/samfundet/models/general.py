@@ -200,8 +200,15 @@ class Profile(FullCleanSaveMixin):
 
 
 class Venue(CustomBaseModel):
-    name = models.CharField(max_length=140, blank=True, null=True, unique=True)
-    slug = models.SlugField(unique=True, null=True, blank=True)
+    slug = models.SlugField(
+        max_length=64,
+        blank=True,
+        null=False,
+        unique=True,
+        primary_key=True,
+        help_text='Primary key, this field will identify the object and be used in the URL.',
+    )
+    name = models.CharField(max_length=140, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     floor = models.IntegerField(blank=True, null=True)
     last_renovated = models.DateTimeField(blank=True, null=True)
@@ -452,7 +459,7 @@ class Reservation(FullCleanSaveMixin):
     start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
     end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
 
-    venue = models.ForeignKey(Venue, to_field='slug', on_delete=models.PROTECT, blank=True, null=True, verbose_name='Lokale')
+    venue = models.ForeignKey(Venue, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Lokale')
 
     occasion = models.CharField(max_length=24, choices=ReservationOccasion.choices, default=ReservationOccasion.FOOD)
     guest_count = models.PositiveSmallIntegerField(null=False, verbose_name='Antall gjester')
