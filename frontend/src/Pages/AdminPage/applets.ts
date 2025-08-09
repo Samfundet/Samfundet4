@@ -1,8 +1,8 @@
-import type { AppletCategory } from '~/Components/AdminBox/types';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
+import type { AdminAppletCategory } from '~/types.ts';
 
-export const appletCategories: AppletCategory[] = [
+export const appletCategories: AdminAppletCategory[] = [
   {
     title_en: 'General',
     title_nb: 'Generelt',
@@ -23,7 +23,7 @@ export const appletCategories: AppletCategory[] = [
       },
       {
         title_nb: 'Åpningstider',
-        title_en: 'Open hours',
+        title_en: 'Opening hours',
         perm: PERM.SAMFUNDET_CHANGE_VENUE,
         icon: 'mdi:clock-time-eight-outline',
         url: ROUTES.frontend.admin_opening_hours,

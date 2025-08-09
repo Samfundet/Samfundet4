@@ -200,8 +200,15 @@ class Profile(FullCleanSaveMixin):
 
 
 class Venue(CustomBaseModel):
-    name = models.CharField(max_length=140, blank=True, null=True, unique=True)
-    slug = models.SlugField(unique=True, null=True)
+    slug = models.SlugField(
+        max_length=64,
+        blank=True,
+        null=False,
+        unique=True,
+        primary_key=True,
+        help_text='Primary key, this field will identify the object and be used in the URL.',
+    )
+    name = models.CharField(max_length=140, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     floor = models.IntegerField(blank=True, null=True)
     last_renovated = models.DateTimeField(blank=True, null=True)
@@ -452,7 +459,7 @@ class Reservation(FullCleanSaveMixin):
     start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
     end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
 
-    venue = models.ForeignKey(Venue, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Sted')
+    venue = models.ForeignKey(Venue, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Lokale')
 
     occasion = models.CharField(max_length=24, choices=ReservationOccasion.choices, default=ReservationOccasion.FOOD)
     guest_count = models.PositiveSmallIntegerField(null=False, verbose_name='Antall gjester')
@@ -486,7 +493,7 @@ class Reservation(FullCleanSaveMixin):
 
     @staticmethod
     def check_time(
-        venue: int,
+        venue: str,
         guest_count: int,
         reservation_date: date,
         start_time: time,
@@ -506,7 +513,7 @@ class Reservation(FullCleanSaveMixin):
 
     @staticmethod
     def find_available_table(
-        venue: int,
+        venue: str,
         guest_count: int,
         reservation_date: date,
         start_time: time,
@@ -523,20 +530,25 @@ class Reservation(FullCleanSaveMixin):
 
         return tables.exclude(id__in=reserved_tables.values_list('table_id', flat=True)).order_by('seating').first()
 
-    def fetch_available_times_for_date(*, venue: int, seating: int, date: date) -> list[str]:  # noqa: C901
+    def fetch_available_times_for_date(*, slug: str, seating: int, date: date) -> list[str]:  # noqa: C901
         """
         Method for returning available reservation times for a venue
         Based on the amount of seating and the date
         """
+
+        # Fetch venue with the given id
+        venue = Venue.objects.get(slug=slug)
         # Fetch tables that fits size criteria
-        tables = Table.objects.filter(venue=venue, seating__gte=seating)
+        tables = Table.objects.filter(venue=venue.slug, seating__gte=seating)
         # fetch all reservations for those tables for that date
         reserved_tables = (
-            Reservation.objects.filter(venue=venue, reservation_date=date, table__in=tables).values('table', 'start_time', 'end_time').order_by('start_time')
+            Reservation.objects.filter(venue=venue.slug, reservation_date=date, table__in=tables)
+            .values('table', 'start_time', 'end_time')
+            .order_by('start_time')
         )
 
         # fetch opening hours for the date
-        open_hours = Venue.objects.get(id=venue).get_opening_hours_date(date)
+        open_hours = venue.get_opening_hours_date(date)
         c_time = datetime.combine(date, open_hours[0])
         end_time = datetime.combine(date, open_hours[1]) - timezone.timedelta(hours=1)
 
@@ -555,13 +567,13 @@ class Reservation(FullCleanSaveMixin):
                 # If there are still occupied tables for time
                 if not safe:
                     # Loop through tables and reservation
-                    for key, table_times in occupied_table_times.items():
+                    for table_times in occupied_table_times.values():
                         # If top of stack is over, remove it
 
                         if (c_time.time()) >= table_times[0][1]:  # If greater than end remove element
-                            occupied_table_times[key].pop(0)
+                            table_times.pop(0)
                             # if the reservations for a table is empty, drop checking for availability
-                            if len(occupied_table_times[key]) == 0:
+                            if not table_times:
                                 safe = True
                                 break
                         # If time next occupancy is in future, drop and set available table,
@@ -666,55 +678,6 @@ class Saksdokument(CustomBaseModel):
 
     def __str__(self) -> str:
         return f'{self.title_nb}'
-
-
-class Booking(CustomBaseModel):
-    name = models.CharField(max_length=64, blank=True, null=True)
-    text = models.TextField(blank=True, null=True)
-    from_dt = models.DateTimeField(blank=True, null=True)
-    to_dt = models.DateTimeField(blank=True, null=True)
-
-    tables = models.ManyToManyField(Table, blank=True)
-
-    user = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
-    first_name = models.CharField(max_length=64, unique=True, blank=True, null=True)
-    last_name = models.CharField(max_length=64, unique=True, blank=True, null=True)
-    email = models.CharField(max_length=64, unique=True, blank=True, null=True)
-    phone_nr = models.CharField(max_length=64, unique=True, blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'Booking'
-        verbose_name_plural = 'Bookings'
-
-    def __str__(self) -> str:
-        return f'Booking: {self.name} - {self.user} - {self.from_dt} ({self.table_count()})'
-
-    def table_count(self) -> int:
-        n: int = self.tables.count()
-        return n
-
-    def get_duration(self) -> timedelta | None:
-        if self.to_dt and self.from_dt:
-            duration: timedelta = self.to_dt - self.from_dt
-            return duration
-        return None
-
-    def clean(self) -> None:
-        errors: dict[str, ValidationError] = {}
-
-        field_to_validate = 'to_dt'
-        duration_constraint_hours = 2
-        duration = self.get_duration()
-        if duration and duration > timedelta(hours=duration_constraint_hours):
-            error = f'Duration cannot be longer than {duration_constraint_hours} hours.'
-            errors.setdefault(field_to_validate, []).append(error)
-
-        if errors:
-            raise ValidationError(errors)
-
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        self.full_clean()
-        super().save(*args, **kwargs)
 
 
 class Infobox(CustomBaseModel):

@@ -33,7 +33,6 @@ from .models.general import (
     Table,
     Venue,
     Campus,
-    Booking,
     Infobox,
     Profile,
     BlogPost,
@@ -81,8 +80,12 @@ from .models.recruitment import (
 
 # Unregister User and Group to set new Admins.
 admin.site.unregister(Group)
-# Just for testing TODO remove when done
-admin.site.register(OccupiedTimeslot)
+
+
+@admin.register(OccupiedTimeslot)
+class OccupiedTimeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'recruitment']
+    list_select_related = True
 
 
 @admin.register(User)
@@ -315,7 +318,7 @@ class EventRegistrationAdmin(CustomGuardedModelAdmin):
 class EventAdmin(CustomBaseAdmin):
     # ordering = []
 
-    sortable_by = ['id', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'created_at', 'updated_at', 'start_dt', 'doors_time']
+    sortable_by = ['id', 'title_nb', 'title_en', 'host', 'location', 'event_group', 'created_at', 'updated_at', 'start_dt', 'end_dt', 'doors_time']
     list_filter = ['event_group']
     list_display = [
         'id',
@@ -324,10 +327,12 @@ class EventAdmin(CustomBaseAdmin):
         'title_en',
         'host',
         'location',
-        'event_group',
-        'publish_dt',
-        'doors_time',
         'start_dt',
+        'end_dt',
+        'event_group',
+        'visibility_from_dt',
+        'visibility_to_dt',
+        'doors_time',
         'created_at',
         'updated_at',
     ]
@@ -380,10 +385,10 @@ class EventGroupAdmin(CustomBaseAdmin):
 @admin.register(Venue)
 class VenueAdmin(CustomBaseAdmin):
     # ordering = []
-    sortable_by = ['id', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing', 'created_at', 'updated_at']
+    sortable_by = ['slug', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing', 'created_at', 'updated_at']
     list_filter = ['handicapped_approved']
     list_display = [
-        'id',
+        'slug',
         '__str__',
         'name',
         'floor',
@@ -395,9 +400,9 @@ class VenueAdmin(CustomBaseAdmin):
         'created_at',
         'updated_at',
     ]
-    search_fields = ['id', 'name', 'responsible_crew']
+    search_fields = ['slug', 'name', 'responsible_crew']
     # filter_horizontal = []
-    list_display_links = ['id', '__str__']
+    list_display_links = ['slug', '__str__']
     # autocomplete_fields = []
     list_select_related = True
 
@@ -562,19 +567,6 @@ class SaksdokumentAdmin(CustomBaseAdmin):
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
-
-
-@admin.register(Booking)
-class BookingAdmin(CustomBaseAdmin):
-    # ordering = []
-    # list_filter = []
-    list_display = ['id', '__str__', 'name', 'get_duration', 'table_count', 'created_at', 'updated_at']
-    _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
-    search_fields = ['id', 'name', *_user_search_fields]
-    filter_horizontal = ['tables']
-    list_display_links = ['id', '__str__']
-    autocomplete_fields = ['user']
-    list_select_related = True
 
 
 @admin.register(ClosedPeriod)

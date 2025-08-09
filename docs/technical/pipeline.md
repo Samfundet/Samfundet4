@@ -38,7 +38,7 @@ _Run typescript compiler check_
 yarn tsc:check
 ```
 
-Didnt find what you were looking for? See all backend commands [here](../../frontend/package.json)
+Didnt find what you were looking for? See all frontend commands [here](../../frontend/package.json)
 
 ## Backend
 
@@ -55,7 +55,7 @@ poetry run ruff check
 _Run Ruff fix_
 
 ```
-poetry run ruff check --fix
+poetry run ruff check --fix .
 ```
 
 _Verify migrations_
@@ -88,4 +88,4 @@ _Run seed_
 poetry run python manage.py seed
 ```
 
-Didnt find what you were looking for? See all frontend commands [here](../../backend/aliases.sh)
+Didnt find what you were looking for? See all backend commands [here](../../backend/aliases.sh)

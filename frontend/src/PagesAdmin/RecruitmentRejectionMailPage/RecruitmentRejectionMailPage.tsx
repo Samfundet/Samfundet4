@@ -12,6 +12,15 @@ import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './RecruitmentRejectionMailPage.module.scss';
 
+/**
+ * Component for creating and previewing a recruitment rejection email.
+ *
+ * Form fields include the subject, text before the applicant's name,
+ * the content of the email, and a button to send the email.
+ *
+ * It also provides a preview of the email with the entered subject,
+ *
+ */
 export function RecruitmentRejectionMailPage() {
   const { t } = useTranslation();
   const title = lowerCapitalize(t(KEY.recruitment_rejection_email));

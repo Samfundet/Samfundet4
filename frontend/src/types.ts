@@ -80,6 +80,19 @@ export const COLORS = {
   // Defaults
   background_primary: '#ffffff',
   background_secondary: '#efefef',
+
+  // Applicant state colors (model_choices.py in RecruitmentApplicantStates)
+  // these should communicate possible actions
+  action_needed_here: '#f5f0d5',
+  might_contact: '#63b88f',
+  will_contact: '#046404',
+  do_not_contact: '#e53b2f',
+  not_wanted: '#9f3dd3',
+
+  // Final application result colors
+  rejected_this_offer: '#dee73e',
+  accepted_this_offer: '#4f49eb',
+  withdrawn_application: '#7f7f7f',
 } as const;
 
 export type Color = typeof COLORS;
@@ -143,6 +156,20 @@ export type EventCategoryValue = (typeof EventCategory)[keyof typeof EventCatego
 export type CalendarMarker = {
   date: Date;
   className?: string;
+};
+
+export type AdminApplet = {
+  title_en: string;
+  title_nb: string;
+  perm?: string;
+  icon: string;
+  url?: string;
+};
+
+export type AdminAppletCategory = {
+  title_en: string;
+  title_nb: string;
+  applets: AdminApplet[];
 };
 
 /*Names must be equal to what is found in the database*/

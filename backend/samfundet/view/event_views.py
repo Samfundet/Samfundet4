@@ -3,11 +3,13 @@
 # =============================== #
 from __future__ import annotations
 
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from django.utils import timezone
 
@@ -17,8 +19,10 @@ from samfundet.utils import event_query
 from samfundet.serializers import (
     EventSerializer,
     EventGroupSerializer,
+    PurchaseFeedbackSerializer,
 )
-from samfundet.models.event import Event, EventGroup
+from samfundet.models.event import Event, EventGroup, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
+from samfundet.models.model_choices import EventStatus
 
 
 class EventView(ModelViewSet):
@@ -32,7 +36,13 @@ class EventPerDayView(APIView):
 
     def get(self, request: Request) -> Response:
         # Fetch and serialize events.
-        events = Event.objects.filter(start_dt__gt=timezone.now()).order_by('start_dt')
+        now = timezone.now()
+        # Only events:
+        # - with a start date/time that is later than the current time will be included
+        # - where the event's visibility period has already begun
+        # - where  visibility period hasn't ended yet
+        # - where status is "PUBLIC"
+        events = Event.objects.filter(start_dt__gt=now, visibility_from_dt__lte=now, visibility_to_dt__gte=now, status=EventStatus.PUBLIC).order_by('start_dt')
         serialized = EventSerializer(events, many=True).data
 
         # Organize in date dictionary.
@@ -58,3 +68,31 @@ class EventGroupView(ModelViewSet):
     permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
     serializer_class = EventGroupSerializer
     queryset = EventGroup.objects.all()
+
+
+class PurchaseFeedbackView(CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PurchaseFeedbackSerializer
+
+    def post(self, request: Request) -> Response:
+        request.data['event'] = request.data.pop('eventId')
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        purchase_model = serializer.save(user=request.user)
+
+        alternatives = request.data.get('alternatives', {})
+        for alternative, selected in alternatives.items():
+            PurchaseFeedbackAlternative.objects.create(
+                alternative=alternative,
+                selected=selected,
+                form=purchase_model,
+            )
+
+        questions = request.data.get('questions', {})
+        for question, answer in questions.items():
+            PurchaseFeedbackQuestion.objects.create(
+                question=question,
+                answer=answer,
+                form=purchase_model,
+            )
+        return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})

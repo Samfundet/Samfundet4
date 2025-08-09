@@ -1,11 +1,13 @@
-import { type ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { type ChangeEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { InputTime } from '~/Components';
-import { getVenues, putVenue } from '~/api';
+import { Badge, useDynamicBadge } from '~/Components/Badge';
+import { getVenues, patchVenue } from '~/api';
 import type { VenueDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { venueKeys } from '~/queryKeys';
 import { ALL_DAYS } from '~/types';
 import { getDayKey, lowerCapitalize } from '~/utils';
 import { AdminPage } from '../AdminPageLayout';
@@ -13,70 +15,83 @@ import styles from './OpeningHoursAdminPage.module.scss';
 
 export function OpeningHoursAdminPage() {
   const { t } = useTranslation();
-  const [venues, setVenues] = useState<VenueDto[]>([]);
+  const queryClient = useQueryClient();
   const [saveTimer, setSaveTimer] = useState<Record<string, NodeJS.Timeout>>({});
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { badgeState, showSuccess, showError } = useDynamicBadge({
+    defaultDuration: 3000,
+  });
   useTitle(lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_opening_hours)}`));
+
+  // Use React Query to fetch venues
+  const { data: venues = [], isLoading } = useQuery({
+    queryKey: venueKeys.all,
+    queryFn: getVenues,
+  });
+
   // We need a reference to read changed state inside timeout
   const venueRef = useRef(venues);
 
-  // Get venues
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
-  useEffect(() => {
-    getVenues()
-      .then((venues) => {
-        venueRef.current = venues;
-        setVenues(venues);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
-        setIsLoading(false);
-      });
-  }, []);
+  // Use React Query mutation to update venues
+  const updateVenueMutation = useMutation({
+    mutationFn: ({ slug, data }: { slug: string; data: Partial<VenueDto> }) => patchVenue(slug, data),
+    onSuccess: () => {
+      // Invalidate and refetch venues to keep data in sync
+      queryClient.invalidateQueries({ queryKey: venueKeys.all });
 
-  // Save venue change.
+      // Show success badge
+      showSuccess(t(KEY.common_save_successful));
+    },
+    onError: (error) => {
+      // Show error badge
+      showError(t(KEY.common_something_went_wrong));
+      console.error('Error updating venue:', error);
+    },
+  });
+
+  // Update venueRef when venues data changes
+  venueRef.current = venues;
+
+  // Save venue change using React Query mutation
   function saveVenue(venue: VenueDto, field: keyof VenueDto, value: string) {
-    // Get most recent edits if any
+    // Update optimistic state
     const updatedVenues = venues.map((v) => (v.id === venue.id ? { ...v, [field]: value } : v));
     venueRef.current = updatedVenues;
-    // Send field change to backend
-    putVenue(venue.slug, {
-      [field]: value,
+
+    // Send field change to backend using mutation
+    updateVenueMutation.mutate({
+      slug: venue.slug,
+      data: { [field]: value },
     });
   }
 
-  // Update view model on field.
+  // Update view model on field with optimistic updates
   function handleOnChange(venue: VenueDto, field: keyof VenueDto) {
     return (e: ChangeEvent<HTMLInputElement>) => {
-      // Calculate new venues.
       const value = e.currentTarget.value;
-      const newVenues = venues.map((v) => {
-        if (v.id === venue.id) {
-          return {
-            ...v,
-            [field]: value,
-          };
-        }
-        return v;
-      });
-      // Update state and reference.
-      setVenues(newVenues);
-      venueRef.current = newVenues;
 
-      // Cancel old save timer if any.
+      // Optimistically update the query cache
+      queryClient.setQueryData(venueKeys.all, (oldVenues: VenueDto[] | undefined) => {
+        if (!oldVenues) return [];
+        return oldVenues.map((v) => {
+          if (v.id === venue.id) {
+            return { ...v, [field]: value };
+          }
+          return v;
+        });
+      });
+
+      // Cancel old save timer if any
       const timer_id = `${venue.id}_${field}`;
       if (saveTimer[timer_id] !== undefined) {
         clearTimeout(saveTimer[timer_id]);
       }
 
-      // Start a new save timer.
+      // Start a new save timer
       const timer = setTimeout(() => {
         saveVenue(venue, field, value);
       }, 1000);
 
-      // Store timeout to allow cancel.
+      // Store timeout to allow cancel
       setSaveTimer({
         ...saveTimer,
         [timer_id]: timer,
@@ -123,7 +138,12 @@ export function OpeningHoursAdminPage() {
     );
   }
 
-  const header = <div className={styles.subtitle}>{t(KEY.admin_opening_hours_hint)}</div>;
+  const header = (
+    <div>
+      <div className={styles.subtitle}>{t(KEY.admin_opening_hours_hint)}</div>
+      {badgeState.show && <Badge text={badgeState.text} type={badgeState.type} animated={true} />}
+    </div>
+  );
 
   return (
     <AdminPage title={t(KEY.common_opening_hours)} header={header} loading={isLoading}>

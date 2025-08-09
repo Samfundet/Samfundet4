@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { InputField, MiniCalendar, TimeslotContainer } from '~/Components';
+import { InputField, MiniCalendar, TimeslotSelector } from '~/Components';
 import {
   getInterview,
-  getOccupiedTimeslots,
+  getOccupiedTimeForUser,
   getRecruitmentAvailability,
   setRecruitmentApplicationInterview,
 } from '~/api';
@@ -42,7 +42,7 @@ export function SetInterviewManuallyForm({
   const [location, setLocation] = useState<string>('');
 
   useEffect(() => {
-    if (!recruitmentId) {
+    if (!recruitmentId || !application) {
       return;
     }
     setLoading(true);
@@ -56,7 +56,7 @@ export function SetInterviewManuallyForm({
         setMaxDate(new Date(response.data.end_date));
         setTimeslots(response.data.timeslots);
       }),
-      getOccupiedTimeslots(recruitmentId).then((res) => {
+      getOccupiedTimeForUser(recruitmentId, application.user.id).then((res) => {
         setOccupiedTimeslots(res.data.dates);
       }),
     ])
@@ -66,7 +66,7 @@ export function SetInterviewManuallyForm({
       })
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recruitmentId, t]);
+  }, [recruitmentId, application, t]);
 
   useEffect(() => {
     if (!application.id || !application.interview?.id) {
@@ -112,6 +112,7 @@ export function SetInterviewManuallyForm({
   }
 
   function save() {
+    // TODO: handle deleting interview (if no timeslot/location is selected, or add a "delete" button)
     const data: InterviewDto = {
       interview_time: convertToDateObject(interviewTimeslot).toISOString(),
       interview_location: location,
@@ -171,14 +172,13 @@ export function SetInterviewManuallyForm({
               initialSelectedDate={selectedDate}
             />
 
-            <TimeslotContainer
+            <TimeslotSelector
               selectedDate={selectedDate}
               timeslots={timeslots}
-              onChange={(slots) => setInterviewTimeslot(slots)}
-              selectedTimeslot={interviewTimeslot}
+              onChange={setInterviewTimeslot}
+              selectedTimeslots={interviewTimeslot}
               disabledTimeslots={occupiedTimeslots}
-              hasDisabledTimeslots={true}
-              selectMultiple={false}
+              label={t(KEY.recruitment_choose_interview_time)}
               recruitmentId={recruitmentId}
               application={application}
             />

@@ -3,6 +3,7 @@ import { ApplicationCommentForm, TimeDisplay, ToolTip } from '~/Components';
 import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
+import { getApplicantStateColor, getRecruitmentApplicantStateName } from '~/constants/applicant-state';
 import type { RecruitmentApplicationDto, RecruitmentApplicationStateDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -112,8 +113,6 @@ export function RecruitmentApplicantsStatus({
   }
 
   const data = applicants.map((application) => {
-    const applicationStatusStyle = getStatusStyle(application?.applicant_state);
-    const guideText = getStatusText(application?.recruiter_priority);
     return {
       cells: [
         {
@@ -195,11 +194,20 @@ export function RecruitmentApplicantsStatus({
         {
           value: application.recruiter_status,
           style: styles.pending,
-          content: (
-            <ToolTip value="her skal det stå noe informativt">
-              <Badge className={applicationStatusStyle} text={guideText} />
-            </ToolTip>
-          ),
+          content:
+            application.applicant_state !== undefined ? (
+              <ToolTip value={t(getRecruitmentApplicantStateName(application.applicant_state).long)}>
+                <Badge
+                  style={{
+                    backgroundColor: getApplicantStateColor(application.applicant_state).background,
+                    color: getApplicantStateColor(application.applicant_state).forground,
+                  }}
+                  text={t(getRecruitmentApplicantStateName(application.applicant_state).guidance)}
+                />
+              </ToolTip>
+            ) : (
+              <Badge text={t(KEY.common_missing)} />
+            ),
         },
         {
           value: application.recruiter_status,
