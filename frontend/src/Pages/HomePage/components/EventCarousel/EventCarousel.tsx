@@ -59,9 +59,7 @@ export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps
             ticket_type={event.ticket_type}
             host={event.host}
           >
-            {event.billig && (
-              <BuyEventTicket event={event} ticketSaleState={event.billig} />
-            )}
+            {event.billig && <BuyEventTicket event={event} ticketSaleState={event.billig} />}
 
             <div className={styles.button_bar}>
               {canChangeEvent && (
