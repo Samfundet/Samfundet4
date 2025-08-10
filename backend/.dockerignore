@@ -8,36 +8,3 @@
 *.sqlite3
 Dockerfile
 .dockerignore
-
-# Development databases (huge files - 63MB+)
-database/
-**/docker.*.sqlite3
-
-# Media files (thousands of images, not needed in build)
-mediaroot/
-**/mediaroot/
-
-# Static files (generated at runtime)
-staticroot/
-**/staticroot/
-
-# Development/testing files
-**/logs/
-**/*.pyc
-**/.coverage
-**/htmlcov/
-**/.tox/
-**/.cache/
-**/dist/
-**/*.egg-info/
-
-# IDE files
-**/.vscode/
-**/.idea/
-**/*.swp
-**/*.swo
-*~
-
-# OS files
-.DS_Store
-Thumbs.db
