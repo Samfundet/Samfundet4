@@ -11,7 +11,7 @@ services:
       POSTGRES_USER: ${SM4_DEV_CREDENTIAL}
       POSTGRES_PASSWORD: ${SM4_DEV_CREDENTIAL}
     ports:
-      - 5432:5432
+      - ${SM4_DEV_PORT}:5432
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${SM4_DEV_CREDENTIAL}" ]
       interval: ${COMMON_HEALTHCHECK_INTERVAL}
@@ -26,7 +26,7 @@ services:
       POSTGRES_USER: ${BILLIG_DEV_CREDENTIAL}
       POSTGRES_PASSWORD: ${BILLIG_DEV_CREDENTIAL}
     ports:
-      - 5433:5432
+      - ${BILLIG_DEV_PORT}:5432
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${BILLIG_DEV_CREDENTIAL}" ]
       interval: ${COMMON_HEALTHCHECK_INTERVAL}
@@ -48,12 +48,8 @@ services:
       - ./backend/.docker.env # Environment for backend docker
     environment:
       - IS_DOCKER=yes
-      - SM4_DEV_DB_URL=postgresql://${SM4_DEV_CREDENTIAL}:${SM4_DEV_CREDENTIAL}@sm4_dev_database:5432/${SM4_DEV_CREDENTIAL}
-      - SM4_DEV_DB_USERNAME=${SM4_DEV_CREDENTIAL}
-      - SM4_DEV_DB_PASSWORD=${SM4_DEV_CREDENTIAL}
-      - BILLIG_DEV_DB_URL=postgresql://${BILLIG_DEV_CREDENTIAL}:${BILLIG_DEV_CREDENTIAL}@billig_dev_database:5432/${BILLIG_DEV_CREDENTIAL}
-      - BILLIG_DEV_DB_USERNAME=${BILLIG_DEV_CREDENTIAL}
-      - BILLIG_DEV_DB_PASSWORD=${BILLIG_DEV_CREDENTIAL}
+      - SM4_DEV_CREDENTIAL=${SM4_DEV_CREDENTIAL}
+      - BILLIG_DEV_CREDENTIAL=${BILLIG_DEV_CREDENTIAL}
     ports:
       - '8000:8000' # Quotes are required. django
       - '5678:5678' # Quotes are required. debugpy
