@@ -165,12 +165,11 @@ if [ ! "$(which pyenv)" ]; then
     if [ "$?" == 0 ] ; then # If 'yes'.
         # Install pyenv dependencies to OS.
         if [ $IS_UBUNTU ] ; then
-        # TODO: delete sqlite3 references
             sudo apt install -y make build-essential libssl-dev zlib1g-dev \
-                libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+                libbz2-dev libreadline-dev wget curl llvm \
                 libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
         elif [ $IS_MAC ] ; then
-            brew install openssl readline sqlite3 xz zlib tcl-tk
+            brew install openssl readline xz zlib tcl-tk
         fi
 
         # Install pyenv.
