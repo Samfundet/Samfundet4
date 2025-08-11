@@ -2,7 +2,7 @@
 # Creates and seeds the billig database.
 #
 # This seed script is a bit different because billig_dev
-# is not managed by django, but uses a different sqlite3
+# is not managed by django, but uses a different postgres
 # database simulating the real billig in prod (cirkus).
 #
 #
@@ -35,7 +35,7 @@ SEED_DIRECTORY = os.path.join(os.path.dirname(__file__), 'seed_billig')
 
 
 def get_schema() -> str:
-    # Generate schema (pass schema.sql to sqlite3)
+    # Generate schema (pass schema.sql to postgres)
     seed_schema = os.path.join(SEED_DIRECTORY, 'schema.sql')
     with open(seed_schema) as f:
         schema = f.read()
@@ -43,7 +43,7 @@ def get_schema() -> str:
 
 
 def create_db() -> tuple[bool, str]:
-    """Creates a new sqlite3 database with schema using shell scripts"""
+    """Creates a new postgres database with schema using shell scripts"""
 
     schema = get_schema()
     schema_queries = schema.split(';')

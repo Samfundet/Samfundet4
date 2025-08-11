@@ -30,6 +30,8 @@ jobs:
       DJANGO_SUPERUSER_USERNAME: admin
       DJANGO_SUPERUSER_PASSWORD: Django123
       DJANGO_SUPERUSER_EMAIL: admin@example.com
+      SM4_DEV_CREDENTIAL: sm4DB
+      BILLIG_DEV_CREDENTIAL: billigDB
 
     steps:
       - name: Checkout code
