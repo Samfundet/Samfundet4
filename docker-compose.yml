@@ -11,7 +11,7 @@ services:
       POSTGRES_USER: ${SM4_DEV_CREDENTIAL}
       POSTGRES_PASSWORD: ${SM4_DEV_CREDENTIAL}
     ports:
-      - ${SM4_DEV_PORT}:5432
+      - 5432:5432
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${SM4_DEV_CREDENTIAL}" ]
       interval: ${COMMON_HEALTHCHECK_INTERVAL}
@@ -26,7 +26,7 @@ services:
       POSTGRES_USER: ${BILLIG_DEV_CREDENTIAL}
       POSTGRES_PASSWORD: ${BILLIG_DEV_CREDENTIAL}
     ports:
-      - ${BILLIG_DEV_PORT}:5432
+      - 5433:5432
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${BILLIG_DEV_CREDENTIAL}" ]
       interval: ${COMMON_HEALTHCHECK_INTERVAL}
