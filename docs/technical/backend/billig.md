@@ -12,8 +12,7 @@ a payment form with tickets and showing ticket pdfs.
 
 The billig database is not managed by django. 
 In production, the database router simply routes 
-all Billig models to the production database in cirkus. In local development queries are routed to an sqlite3 file
-in the `/databases/` folder (`billig.db.sqlite3`).
+all Billig models to the production database in cirkus. In local development queries are routed to the billig dev postgres database served as a Docker service.
 
 The database router is implemented in the `db_router.py` file, and 
 added to django in settings (`dev.py`/`prod.py` etc).
