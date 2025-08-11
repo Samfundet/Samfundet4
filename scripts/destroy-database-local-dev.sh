@@ -2,10 +2,14 @@
 
 set -e
 
+CONTAINER_PROJECT_NAME="samfundet4"
+SM4_DEV_VOLUME_NAME="sm4_dev_database"
+BILLIG_DEV_VOLUME_NAME="billig_dev_database"
+
 echo "🗄️ DATABASE VOLUME DESTRUCTION WARNING 🗄️"
 echo "This will destroy ONLY the database volumes:"
-echo "  - sm4_dev_database volume"
-echo "  - billig_dev_database volume"
+echo "  - ${SM4_DEV_VOLUME_NAME} volume"
+echo "  - ${BILLIG_DEV_VOLUME_NAME} volume"
 echo ""
 echo "This will NOT affect:"
 echo "  - Running containers"
@@ -27,33 +31,25 @@ echo "🚀 Starting database volume destruction..."
 
 # Stop and remove database containers first (but leave others running)
 echo "🛑 Stopping and removing database containers..."
-docker compose rm -f sm4_dev_database billig_dev_database || echo "⚠️  Some database containers were not running"
+docker compose rm -f ${SM4_DEV_VOLUME_NAME} ${BILLIG_DEV_VOLUME_NAME} || echo "⚠️  Some database containers were not running"
 
 # Remove only the database volumes
-  # Remove only the database volumes
-  echo "🗑️  Removing database volumes..."
-  VOLUMES_REMOVED=0
+echo "🗑️  Removing database volumes..."
+VOLUMES_REMOVED=0
 
-  if docker volume rm
-  samfundet4_sm4_dev_database 2>/dev/null; then
-      echo "✅ samfundet4_sm4_dev_database 
-  volume removed"
-      VOLUMES_REMOVED=$((VOLUMES_REMOVED + 1))
-  else
-      echo "⚠️  samfundet4_sm4_dev_database 
-  volume not found or couldn't be removed"
-  fi
+if docker volume rm ${CONTAINER_PROJECT_NAME}_${SM4_DEV_VOLUME_NAME} 2>/dev/null; then
+    echo "✅ ${CONTAINER_PROJECT_NAME}_${SM4_DEV_VOLUME_NAME} volume removed"
+    VOLUMES_REMOVED=$((VOLUMES_REMOVED + 1))
+else
+    echo "⚠️  ${CONTAINER_PROJECT_NAME}_${SM4_DEV_VOLUME_NAME} volume not found or couldn't be removed"
+fi
 
-  if docker volume rm
-  samfundet4_billig_dev_database 2>/dev/null;
-  then
-      echo "✅ samfundet4_billig_dev_database 
-  volume removed"
-      VOLUMES_REMOVED=$((VOLUMES_REMOVED + 1))
-  else
-      echo "⚠️  samfundet4_billig_dev_database 
-  volume not found or couldn't be removed"
-  fi
+if docker volume rm ${CONTAINER_PROJECT_NAME}_${SM4_DEV_VOLUME_NAME} 2>/dev/null; then
+    echo "✅ ${CONTAINER_PROJECT_NAME}_${SM4_DEV_VOLUME_NAME} volume removed"
+    VOLUMES_REMOVED=$((VOLUMES_REMOVED + 1))
+else
+    echo "⚠️  ${CONTAINER_PROJECT_NAME}_${SM4_DEV_VOLUME_NAME} volume not found or couldn't be removed"
+fi
 
 echo ""
 if [ $VOLUMES_REMOVED -gt 0 ]; then

@@ -3,11 +3,12 @@
 set -e
 
 echo "☢️ DESTRUCTIVE OPERATION WARNING ☢️"
-echo "This will destroy your local development environment including:"
+echo "This will destroy your ENTIRE local development environment including:"
 echo "  - All containers (backend, frontend, databases, storybook)"
 echo "  - All volumes (sm4_dev_database, billig_dev_database)"
 echo "  - All networks"
 echo "  - All built images"
+echo "  - All Docker-generated media files"
 echo ""
 echo "This action cannot be undone!"
 echo ""
@@ -19,7 +20,7 @@ if [[ ! $REPLY == "yes" ]]; then
     exit 0
 fi
 
-echo "🚀 Starting destruction of development environment..."
+echo "🚀 Starting destruction of entire development environment..."
 
 echo "📦 Stopping and removing containers, volumes, and networks..."
 if docker compose down -v --remove-orphans; then
@@ -32,26 +33,7 @@ fi
 echo "🧹 Removing project-specific images..."
 docker compose down --rmi all 2>/dev/null || echo "⚠️  No images to remove or couldn't remove them"
 
-echo "🗑️  Cleaning up Docker-generated media files..."
-if [ -d "backend/mediaroot/images" ] && [ "$(ls -A backend/mediaroot/images 2>/dev/null)" ]; then
-    if sudo rm -rf backend/mediaroot/images/*; then
-        echo "✅ Images cleaned successfully"
-    else
-        echo "❌ Failed to clean images (may require sudo permissions)"
-    fi
-else
-    echo "⚠️  No images to clean"
-fi
-
-if [ -d "backend/mediaroot/uploads" ] && [ "$(ls -A backend/mediaroot/uploads 2>/dev/null)" ]; then
-    if sudo rm -rf backend/mediaroot/uploads/*; then
-        echo "✅ Uploads cleaned successfully"
-    else
-        echo "❌ Failed to clean uploads (may require sudo permissions)"
-    fi
-else
-    echo "⚠️  No uploads to clean"
-fi
+./scripts/dev-local-destroy-media.sh
 
 echo ""
 echo "✅ Development environment destroyed successfully!"
