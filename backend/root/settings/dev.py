@@ -69,16 +69,16 @@ DATABASES = {
         'NAME': os.environ['SM4_DEV_CREDENTIAL'],  # Required - will fail if not set
         'USER': os.environ['SM4_DEV_CREDENTIAL'],
         'PASSWORD': os.environ['SM4_DEV_CREDENTIAL'],
-        'HOST': 'sm4_dev_database',  # Docker service name
-        'PORT': '5432',
+        'HOST': os.environ.get('SM4_DEV_HOST', 'sm4_dev_database'),  # Docker service name or CI host
+        'PORT': os.environ.get('SM4_DEV_PORT', '5432'),
     },
     'billig': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ['BILLIG_DEV_CREDENTIAL'],  # Required - will fail if not set
         'USER': os.environ['BILLIG_DEV_CREDENTIAL'],
         'PASSWORD': os.environ['BILLIG_DEV_CREDENTIAL'],
-        'HOST': 'billig_dev_database',  # Docker service name
-        'PORT': '5432',  # Both use 5432 inside Docker
+        'HOST': os.environ.get('BILLIG_DEV_HOST', 'billig_dev_database'),  # Docker service name or CI host
+        'PORT': os.environ.get('BILLIG_DEV_PORT', '5432'),  # Docker internal port or CI host port
     },
 }
 

@@ -59,8 +59,8 @@ jobs:
       DJANGO_SUPERUSER_EMAIL: admin@example.com
       SM4_DEV_CREDENTIAL: sm4DB
       BILLIG_DEV_CREDENTIAL: billigDB
-      SM4_DEV_HOST: sm4_dev_database
-      BILLIG_DEV_HOST: billig_dev_database
+      SM4_DEV_HOST: localhost
+      BILLIG_DEV_HOST: localhost
       SM4_DEV_PORT: 5432
       BILLIG_DEV_PORT: 5433
 
