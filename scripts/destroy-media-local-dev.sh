@@ -57,7 +57,7 @@ fi
 echo ""
 if [ $FILES_CLEANED -eq 1 ]; then
     echo "✅ Media files destroyed successfully!"
-    echo "💡 Media files will be regenerated when needed by the application."
+    echo "💡 Media files will have to be seeded again!"
 else
     echo "⚠️  No media files were cleaned"
 fi
