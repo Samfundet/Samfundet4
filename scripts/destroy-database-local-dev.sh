@@ -3,8 +3,12 @@
 set -e
 
 CONTAINER_PROJECT_NAME="samfundet4"
-SM4_DEV_VOLUME_NAME="sm4_dev_database"
-BILLIG_DEV_VOLUME_NAME="billig_dev_database"
+
+SM4_CONTAINER_SERVICE="sm4_dev_database"
+BILLIG_CONTAINER_SERVICE="billig_dev_database"
+
+SM4_DEV_VOLUME_NAME=${SM4_CONTAINER_SERVICE}
+BILLIG_DEV_VOLUME_NAME=${BILLIG_CONTAINER_SERVICE}
 
 echo "🗄️ DATABASE VOLUME DESTRUCTION WARNING 🗄️"
 echo "This will destroy ONLY the database volumes:"
@@ -31,7 +35,8 @@ echo "🚀 Starting database volume destruction..."
 
 # Stop and remove database containers first (but leave others running)
 echo "🛑 Stopping and removing database containers..."
-docker compose rm -f ${SM4_DEV_VOLUME_NAME} ${BILLIG_DEV_VOLUME_NAME} || echo "⚠️  Some database containers were not running"
+docker compose stop ${SM4_CONTAINER_SERVICE} ${BILLIG_CONTAINER_SERVICE} || echo "⚠️  Some database containers were not running"
+docker compose rm -f ${SM4_CONTAINER_SERVICE} ${BILLIG_CONTAINER_SERVICE} || echo "⚠️  Could not remove database containers"
 
 # Remove only the database volumes
 echo "🗑️  Removing database volumes..."
@@ -44,11 +49,11 @@ else
     echo "⚠️  ${CONTAINER_PROJECT_NAME}_${SM4_DEV_VOLUME_NAME} volume not found or couldn't be removed"
 fi
 
-if docker volume rm ${CONTAINER_PROJECT_NAME}_${SM4_DEV_VOLUME_NAME} 2>/dev/null; then
-    echo "✅ ${CONTAINER_PROJECT_NAME}_${SM4_DEV_VOLUME_NAME} volume removed"
+if docker volume rm ${CONTAINER_PROJECT_NAME}_${BILLIG_DEV_VOLUME_NAME} 2>/dev/null; then
+    echo "✅ ${CONTAINER_PROJECT_NAME}_${BILLIG_DEV_VOLUME_NAME} volume removed"
     VOLUMES_REMOVED=$((VOLUMES_REMOVED + 1))
 else
-    echo "⚠️  ${CONTAINER_PROJECT_NAME}_${SM4_DEV_VOLUME_NAME} volume not found or couldn't be removed"
+    echo "⚠️  ${CONTAINER_PROJECT_NAME}_${BILLIG_DEV_VOLUME_NAME} volume not found or couldn't be removed"
 fi
 
 echo ""
