@@ -19,6 +19,33 @@ jobs:
     name: Verify backend
     if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
+    services:
+      sm4_dev_database:
+        image: postgres:15
+        env:
+          POSTGRES_DB: sm4DB
+          POSTGRES_USER: sm4DB
+          POSTGRES_PASSWORD: sm4DB
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      billig_dev_database:
+        image: postgres:15
+        env:
+          POSTGRES_DB: billigDB
+          POSTGRES_USER: billigDB
+          POSTGRES_PASSWORD: billigDB
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5433:5432
     defaults:
       run:
         working-directory: ./backend
