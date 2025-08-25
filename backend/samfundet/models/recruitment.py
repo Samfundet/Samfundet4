@@ -13,6 +13,8 @@ from django.contrib.auth.models import UserManager
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
+from samfundet.models.utils.string_utils import upload_to_application_filepath
+
 from .general import Gang, User, Campus, GangSection, Organization
 from .model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
 
@@ -167,6 +169,7 @@ class RecruitmentPosition(CustomBaseModel):
     # TODO: Implement interviewer functionality
     interviewers = models.ManyToManyField(to=User, help_text='Interviewers for the position', blank=True, related_name='interviewers')
 
+    # FIX: Add functionality for setting allowed attachments for application
     recruitment = models.ForeignKey(
         Recruitment,
         on_delete=models.CASCADE,
@@ -326,7 +329,9 @@ class RecruitmentApplication(CustomBaseModel):
     recruitment_position = models.ForeignKey(
         RecruitmentPosition, on_delete=models.CASCADE, help_text='The position which is recruiting', related_name='applications'
     )
-    recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE, help_text='The recruitment that is recruiting', related_name='applications')
+    recruitment = models.ForeignKey(
+        Recruitment, on_delete=models.CASCADE, null=True, help_text='The recruitment that is recruiting', related_name='applications'
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='The user that is applying', related_name='applications')
     applicant_priority = models.PositiveIntegerField(null=True, blank=True, help_text='The priority of the application')
 
@@ -506,6 +511,39 @@ class RecruitmentApplication(CustomBaseModel):
                 if application.recruiter_priority == RecruitmentPriorityChoices.NOT_WANTED:
                     application.applicant_state = RecruitmentApplicantStates.NOT_WANTED
                 application.save()
+
+
+class ApplicationFileAttachment(CustomBaseModel):
+    application = models.ForeignKey(
+        RecruitmentApplication, on_delete=models.CASCADE, related_name='attachments', help_text='The recruitment application this file is attached to'
+    )
+    application_file = models.FileField(upload_to=upload_to_application_filepath)
+    application_file_type = models.CharField(max_length=50, blank=True)
+
+    def clean(self) -> None:
+        # FIX: this should probably be set by the recruitment position
+        super().clean()
+        if self.application_file:
+            file_type = self.application_file.content_type
+            self.application_file_type = file_type or ''
+            allowed_types = [
+                'image/jpeg',
+                'image/png',  # Images
+                'video/mp4',  # Video
+                'application/pdf',
+            ]
+            if file_type not in allowed_types:
+                raise ValidationError('Wrong filetype')
+            if self.application_file.size > 10 * 1024 * 1024:  # 10MB limit
+                raise ValidationError('File size must be less than 10MB.')
+
+    def __str__(self):
+        return f'Attachment for {self.application} - {self.application_file.name}'
+
+    def delete(self, *args, **kwargs) -> None:
+        storage, path = self.application_file.storage, self.application_file.path
+        super().delete(*args, **kwargs)
+        storage.delete(path)
 
 
 class RecruitmentInterviewAvailability(CustomBaseModel):
