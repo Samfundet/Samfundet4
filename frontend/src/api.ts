@@ -948,6 +948,14 @@ export async function putRecruitmentApplicationForGang(
   return response;
 }
 
+export async function addApplicationComment(applicationId: number, comment: string): Promise<AxiosResponse> {
+  const url = (BACKEND_DOMAIN + ROUTES.backend.samfundet__recruitment_applications_for_gang_application_comment).replace(
+    ':pk',
+    String(applicationId),
+  );
+  return axios.put(url, { comment }, { withCredentials: true });
+}
+
 export async function updateRecruitmentApplicationStateForGang(
   applicationId: string,
   application: Partial<RecruitmentApplicationStateDto>,
