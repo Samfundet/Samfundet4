@@ -57,10 +57,6 @@ export function RecruitmentApplicantsStatus({
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
 
-  const postComment = () => {
-    alert('---TODO--- Comment updated');
-  };
-
   const tableColumns = [
     { content: t(KEY.recruitment_applicant), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_priority), sortable: true, hideSortButton: false },
@@ -224,7 +220,13 @@ export function RecruitmentApplicantsStatus({
         },
         {
           value: application.comment,
-          content: <ApplicationCommentForm commentText={application.comment} handlePost={postComment} />,
+          content: (
+            <ApplicationCommentForm
+              applicationId={application.id}
+              commentText={application.comment}
+              onSuccess={onInterviewChange}
+            />
+          ),
         },
       ],
     };
