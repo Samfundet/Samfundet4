@@ -183,6 +183,7 @@ export const nb = prepareTranslations({
   [KEY.common_list_view]: 'Liste visning',
   [KEY.common_tab_view]: 'Fane visning',
   [KEY.common_available]: 'Tilgjengelig',
+  [KEY.common_comment]: 'Kommentar',
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
@@ -794,6 +795,7 @@ export const en = prepareTranslations({
   [KEY.common_list_view]: 'List view',
   [KEY.common_tab_view]: 'Tab view',
   [KEY.common_available]: 'Available',
+  [KEY.common_comment]: 'Comment',
   [KEY.common_membership_number]: 'Membership number',
   [KEY.common_to_payment]: 'To payment',
 
