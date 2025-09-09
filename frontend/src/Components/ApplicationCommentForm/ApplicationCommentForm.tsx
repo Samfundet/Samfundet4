@@ -3,8 +3,8 @@ import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { addApplicationComment } from '~/api';
 import { Textarea } from '~/Components';
+import { addApplicationComment } from '~/api';
 import { KEY } from '~/i18n/constants';
 
 type CommentFormProps = {
