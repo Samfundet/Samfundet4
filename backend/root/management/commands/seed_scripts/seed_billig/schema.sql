@@ -6,22 +6,22 @@
 */
 
 /* Drop Tables */
-DROP TABLE IF EXISTS [billig.price_group];
-DROP TABLE IF EXISTS [billig.ticket_group];
-DROP TABLE IF EXISTS [billig.event];
+DROP TABLE IF EXISTS "billig.price_group";
+DROP TABLE IF EXISTS "billig.ticket_group";
+DROP TABLE IF EXISTS "billig.event";
 
 /* Billig Event */
-CREATE TABLE [billig.event] (
+CREATE TABLE "billig.event" (
     event int NOT NULL,
     event_name varchar(140) NOT NULL,
-    sale_from datetime NOT NULL,
-    sale_to datetime NOT NULL,
+    sale_from timestamp NOT NULL,
+    sale_to timestamp NOT NULL,
     hidden boolean NOT NULL,
     PRIMARY KEY (event)
 );
 
 /* Ticket Group */
-CREATE TABLE [billig.ticket_group] (
+CREATE TABLE "billig.ticket_group" (
     ticket_group int NOT NULL,
     event int NOT NULL,
     ticket_group_name varchar(140) NOT NULL,
@@ -29,11 +29,11 @@ CREATE TABLE [billig.ticket_group] (
     num_sold int NOT NULL,
     num int NOT NULL,
     PRIMARY KEY (ticket_group),
-    FOREIGN KEY (event) REFERENCES [billig.event](event)
+    FOREIGN KEY (event) REFERENCES "billig.event"(event)
 );
 
 /* Price Group */
-CREATE TABLE [billig.price_group] (
+CREATE TABLE "billig.price_group" (
     price_group int NOT NULL,
     ticket_group int NOT NULL,
     price_group_name varchar(140) NOT NULL,
@@ -42,5 +42,5 @@ CREATE TABLE [billig.price_group] (
     netsale boolean NOT NULL,
     price int NOT NULL,
     PRIMARY KEY (price_group),
-    FOREIGN KEY (ticket_group) REFERENCES [billig.ticket_group](ticket_group)
+    FOREIGN KEY (ticket_group) REFERENCES "billig.ticket_group"(ticket_group)
 );
