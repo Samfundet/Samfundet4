@@ -38,7 +38,7 @@ export function ApplicationCommentForm({ applicationId, commentText, onSuccess }
   }, [commentText]);
 
   // Handle blur event
-  const handleBlur = (event: React.FocusEvent<HTMLTextAreaElement>) => {
+  function handleBlur(event: React.FocusEvent<HTMLTextAreaElement>) {
     const newValue = event.target.value;
 
     // Only update if the value has changed
