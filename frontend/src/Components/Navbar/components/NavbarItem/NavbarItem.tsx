@@ -10,6 +10,7 @@ type NavbarItemProps = {
   route: string;
   label: string;
   icon?: string;
+  new_tab?: boolean;
   labelClassName?: string;
   dropdownLinks?: Children;
   expandedDropdown?: string;
@@ -26,6 +27,7 @@ export function NavbarItem({
   setExpandedDropdown,
   dropdownLinks,
   labelClassName,
+  new_tab,
 }: NavbarItemProps) {
   const { setIsMobileNavigation } = useGlobalContext();
   const isDesktop = useDesktop();
@@ -64,7 +66,7 @@ export function NavbarItem({
   }
   return (
     <div className={itemClasses} ref={clickOutsideRef}>
-      <Link to={route} className={isDesktop ? styles.navbar_link : styles.popup_link_mobile} onClick={handleClick}>
+      <Link target={new_tab ? "_blank" : ""} to={route} className={isDesktop ? styles.navbar_link : styles.popup_link_mobile} onClick={handleClick}>
         {icon && <Icon icon={icon} className={styles.navbar_item_icon} />}
         <span className={labelClassName}>{label}</span>
         {dropdownLinks && (
