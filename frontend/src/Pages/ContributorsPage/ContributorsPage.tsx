@@ -50,6 +50,8 @@ const CONTRIBUTORS: Contributor[] = [
   // V25
   { name: 'Eilif Hjermann Lindblad', github: 'eilifhl', from: 'V25' },
   { name: 'Sondre Erichsen', github: 'Erichseen', from: 'V25' },
+  // H25
+  { name: 'Sten Oskar Halse', github: 'StenOskar', from: 'H25' },
 ];
 
 export function ContributorsPage() {
