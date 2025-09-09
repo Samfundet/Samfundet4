@@ -200,8 +200,15 @@ class Profile(FullCleanSaveMixin):
 
 
 class Venue(CustomBaseModel):
-    name = models.CharField(max_length=140, blank=True, null=True, unique=True)
-    slug = models.SlugField(unique=True, null=True)
+    slug = models.SlugField(
+        max_length=64,
+        blank=True,
+        null=False,
+        unique=True,
+        primary_key=True,
+        help_text='Primary key, this field will identify the object and be used in the URL.',
+    )
+    name = models.CharField(max_length=140, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     floor = models.IntegerField(blank=True, null=True)
     last_renovated = models.DateTimeField(blank=True, null=True)
@@ -452,7 +459,7 @@ class Reservation(FullCleanSaveMixin):
     start_time = models.TimeField(blank=True, null=False, verbose_name='Starttid')
     end_time = models.TimeField(blank=True, null=False, verbose_name='Sluttid')
 
-    venue = models.ForeignKey(Venue, to_field='slug', on_delete=models.PROTECT, blank=True, null=True, verbose_name='Lokale')
+    venue = models.ForeignKey(Venue, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Lokale')
 
     occasion = models.CharField(max_length=24, choices=ReservationOccasion.choices, default=ReservationOccasion.FOOD)
     guest_count = models.PositiveSmallIntegerField(null=False, verbose_name='Antall gjester')
@@ -486,7 +493,7 @@ class Reservation(FullCleanSaveMixin):
 
     @staticmethod
     def check_time(
-        venue: int,
+        venue: str,
         guest_count: int,
         reservation_date: date,
         start_time: time,
@@ -506,7 +513,7 @@ class Reservation(FullCleanSaveMixin):
 
     @staticmethod
     def find_available_table(
-        venue: int,
+        venue: str,
         guest_count: int,
         reservation_date: date,
         start_time: time,
@@ -532,7 +539,7 @@ class Reservation(FullCleanSaveMixin):
         # Fetch venue with the given id
         venue = Venue.objects.get(slug=slug)
         # Fetch tables that fits size criteria
-        tables = Table.objects.filter(venue=venue.id, seating__gte=seating)
+        tables = Table.objects.filter(venue=venue.slug, seating__gte=seating)
         # fetch all reservations for those tables for that date
         reserved_tables = (
             Reservation.objects.filter(venue=venue.slug, reservation_date=date, table__in=tables)
@@ -560,13 +567,13 @@ class Reservation(FullCleanSaveMixin):
                 # If there are still occupied tables for time
                 if not safe:
                     # Loop through tables and reservation
-                    for key, table_times in occupied_table_times.items():
+                    for table_times in occupied_table_times.values():
                         # If top of stack is over, remove it
 
                         if (c_time.time()) >= table_times[0][1]:  # If greater than end remove element
-                            occupied_table_times[key].pop(0)
+                            table_times.pop(0)
                             # if the reservations for a table is empty, drop checking for availability
-                            if len(occupied_table_times[key]) == 0:
+                            if not table_times:
                                 safe = True
                                 break
                         # If time next occupancy is in future, drop and set available table,

@@ -13,13 +13,13 @@ export type BilligTicketGroupDto = {
   is_sold_out: boolean;
   is_almost_sold_out: boolean;
   ticket_limit: number;
-  price_group: BilligPriceGroupDto;
+  price_groups: BilligPriceGroupDto[];
 };
 
 export type BilligEventDto = {
   id: number;
   name: string;
-  ticket_groups: BilligTicketGroupDto;
+  ticket_groups: BilligTicketGroupDto[];
   sale_from: string;
   sale_to: string;
   in_same_period: string;

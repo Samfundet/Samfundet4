@@ -171,6 +171,7 @@ export type EventDto = {
   category: EventCategoryValue;
   host: string;
   billig?: BilligEventDto;
+  numberOfTickets?: number;
 
   // Timestamps/duration
   image_url: string;
