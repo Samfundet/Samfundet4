@@ -66,7 +66,12 @@ export function NavbarItem({
   }
   return (
     <div className={itemClasses} ref={clickOutsideRef}>
-      <Link target={new_tab ? "_blank" : ""} to={route} className={isDesktop ? styles.navbar_link : styles.popup_link_mobile} onClick={handleClick}>
+      <Link
+        target={new_tab ? '_blank' : ''}
+        to={route}
+        className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}
+        onClick={handleClick}
+      >
         {icon && <Icon icon={icon} className={styles.navbar_item_icon} />}
         <span className={labelClassName}>{label}</span>
         {dropdownLinks && (
