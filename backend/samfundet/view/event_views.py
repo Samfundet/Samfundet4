@@ -64,6 +64,7 @@ class EventsUpcomingView(APIView):
         return Response(data=EventSerializer(events, many=True).data)
 
 
+
 class EventGroupView(ModelViewSet):
     permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
     serializer_class = EventGroupSerializer
