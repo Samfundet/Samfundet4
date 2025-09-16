@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { TimeDisplay, ToolTip } from '~/Components';
+import { ApplicationCommentForm, TimeDisplay, ToolTip } from '~/Components';
 import { Dropdown, type DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
@@ -66,7 +66,7 @@ export function RecruitmentApplicantsStatus({
     { content: t(KEY.recruitment_recruiter_priority), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_recruiter_guide), sortable: true, hideSortButton: false },
     { content: t(KEY.recruitment_recruiter_status), sortable: false, hideSortButton: false },
-    { content: t(KEY.recruitment_interview_notes), sortable: false, hideSortButton: true },
+    { content: t(KEY.common_comment), sortable: false, hideSortButton: true },
   ];
 
   function updateApplications(id: string, field: string, value: string | number | undefined) {
@@ -215,6 +215,16 @@ export function RecruitmentApplicantsStatus({
               classNameSelect={styles.dropdown}
               options={statusOptions}
               onChange={(value) => updateApplications(application.id, editChoices.update_recruitment_status, value)}
+            />
+          ),
+        },
+        {
+          value: application.comment,
+          content: (
+            <ApplicationCommentForm
+              applicationId={Number(application.id)}
+              commentText={application.comment}
+              onSuccess={onInterviewChange}
             />
           ),
         },
