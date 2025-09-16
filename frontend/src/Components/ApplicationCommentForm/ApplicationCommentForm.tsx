@@ -26,30 +26,24 @@ export function ApplicationCommentForm({ applicationId, commentText, onSuccess }
       onSuccess();
     },
     onError: () => {
-      toast.error(t(KEY.common_error));
+      toast.error(t(KEY.error_generic));
     },
   });
 
-  // Update state if initialData changes
   useEffect(() => {
     const newCommentText = commentText || '';
     setComment(newCommentText);
     prevCommentRef.current = newCommentText;
   }, [commentText]);
 
-  // Handle blur event
   function handleBlur(event: React.FocusEvent<HTMLTextAreaElement>) {
     const newValue = event.target.value;
 
-    // Only update if the value has changed
     if (newValue !== prevCommentRef.current) {
-      // Update the ref to the current value
       prevCommentRef.current = newValue;
 
-      // Update state
       setComment(newValue);
 
-      // Post comment to backend
       postComment(newValue);
     }
   }

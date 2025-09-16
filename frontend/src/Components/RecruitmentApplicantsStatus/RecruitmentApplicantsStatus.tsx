@@ -222,7 +222,7 @@ export function RecruitmentApplicantsStatus({
           value: application.comment,
           content: (
             <ApplicationCommentForm
-              applicationId={application.id}
+              applicationId={Number(application.id)}
               commentText={application.comment}
               onSuccess={onInterviewChange}
             />
