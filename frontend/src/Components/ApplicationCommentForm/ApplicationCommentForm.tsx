@@ -52,7 +52,7 @@ export function ApplicationCommentForm({ applicationId, commentText, onSuccess }
       // Post comment to backend
       postComment(newValue);
     }
-  };
+  }
 
   return (
     <div>
