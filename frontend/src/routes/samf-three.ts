@@ -28,5 +28,5 @@ export const ROUTES_SAMF_THREE = {
     scene: `${INFORMATION}/scene`,
     club: `${INFORMATION}/klubb`,
   },
-  volunteer: `${BASE_URL}/vulunteer`,
+  volunteer: `${BASE_URL}/opptak`,
 } as const;
