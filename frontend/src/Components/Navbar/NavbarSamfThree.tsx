@@ -18,8 +18,9 @@ import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import styles from './Navbar.module.scss';
-import { HamburgerMenu, LanguageButton, NavbarItem } from './components';
+import styles from './NavbarSamfThree.module.scss';
+import { HamburgerMenu, LanguageButton } from './components';
+import { NavbarItemSamfThree } from './components/NavbarItem';
 
 const scrollDistanceForOpaque = 30;
 
@@ -150,30 +151,35 @@ export function NavbarSamfThree() {
 
   const navbarHeaders = (
     <div className={isDesktop ? styles.navbar_main_links : styles.navbar_main_links_mobile}>
-      <NavbarItem
+      <NavbarItemSamfThree
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
         route={ROUTES.frontend.events}
         label={t(KEY.common_event)}
       />
-      <NavbarItem
+      <NavbarItemSamfThree
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
         route={'#'}
         label={t(KEY.common_information)}
         dropdownLinks={infoLinks}
       />
-      <NavbarItem
+      <NavbarItemSamfThree
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
         route={'#'}
         label={'Lokaler'} //TODO: fix label to common values
         dropdownLinks={venueLinks}
       />
-      <NavbarItem
+    </div>
+  );
+
+  const recruitmentButton = (
+    <div className={isDesktop ? styles.navbar_main_links : styles.navbar_main_links_mobile}>
+      <NavbarItemSamfThree
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
-        route={ROUTES.frontend.recruitment}
+        route={ROUTES.samfThree.volunteer}
         label={t(KEY.common_volunteer)}
         labelClassName={showActiveRecruitments ? styles.active_recruitment : ''}
       />
