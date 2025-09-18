@@ -306,6 +306,7 @@ export function NavbarSamfThree() {
             <img src={logoWhite} id={styles.navbar_logo_img} alt="Logo" />
           </Link>
           {isDesktop && navbarHeaders}
+          {isDesktop && recruitmentButton}
           <div className={styles.navbar_widgets}>
             <LanguageButton />
             {loginButton}
