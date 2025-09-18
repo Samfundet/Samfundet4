@@ -101,7 +101,7 @@ export function NavbarSamfThree() {
         className={styles.navbar_dropdown_link}
         onClick={() => setExpandedDropdown('')}
       >
-        {t(KEY.common_opening_hours)}
+        {t(KEY.navbar_photos)}
       </a>
       <a
         href={ROUTES.samfThree.information.renting}
@@ -127,24 +127,21 @@ export function NavbarSamfThree() {
         className={styles.navbar_dropdown_link}
         onClick={() => setExpandedDropdown('')}
       >
-        {/* TODO: fix label to common values */}
-        {'Bar'}
+        {t(KEY.navbar_bar)}
       </a>
       <a
         href={ROUTES.samfThree.venues.scene}
         className={styles.navbar_dropdown_link}
         onClick={() => setExpandedDropdown('')}
       >
-        {/* TODO: fix label to common values */}
-        {'Scene'}
+        {t(KEY.navbar_stages)}
       </a>
       <a
         href={ROUTES.samfThree.venues.club}
         className={styles.navbar_dropdown_link}
         onClick={() => setExpandedDropdown('')}
       >
-        {/* TODO: fix label to common values */}
-        {'Klubb'}
+        {t(KEY.navbar_club)}
       </a>
     </>
   );
@@ -168,7 +165,7 @@ export function NavbarSamfThree() {
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
         route={'#'}
-        label={'Lokaler'} //TODO: fix label to common values
+        label={t(KEY.common_venues)}
         dropdownLinks={venueLinks}
       />
     </div>
