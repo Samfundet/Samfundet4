@@ -1,7 +1,6 @@
 /* Temporary links to Samfundet3 which can allow us to incrementally ship Samfundet4 */
 
 const BASE_URL = 'https://www.samfundet.no';
-const INFORMATION = BASE_URL + '/informasjon';
 const PHOTO = 'https://foto.samfundet.no';
 
 // Informasjonssider
@@ -16,17 +15,17 @@ export const CASE_DOCUMENTS = {
 
 export const ROUTES_SAMF_THREE = {
   information: {
-    general: `${INFORMATION}`,
-    membership: `${INFORMATION}/medlemskap`,
-    openingHours: `${INFORMATION}/aapningstider`,
+    general: `${BASE_URL}/informasjon`,
+    membership: `${BASE_URL}/informasjon/medlemskap`,
+    openingHours: `${BASE_URL}/informasjon/aapningstider`,
     photos: `${PHOTO}`,
-    renting: `${INFORMATION}/leie-lokaler`,
+    renting: `${BASE_URL}/informasjon/leie-lokaler`,
   },
   venues: {
     restaurant: `${BASE_URL}/lyche`,
-    bar: `${INFORMATION}/bar`,
-    scene: `${INFORMATION}/scene`,
-    club: `${INFORMATION}/klubb`,
+    bar: `${BASE_URL}/informasjon/bar`,
+    scene: `${BASE_URL}/informasjon/scene`,
+    club: `${BASE_URL}/informasjon/klubb`,
   },
   volunteer: `${BASE_URL}/opptak`,
 } as const;
