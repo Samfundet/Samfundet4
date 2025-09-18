@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
-import { Button, Link, ThemeSwitch } from '~/Components';
+import { Button, Link } from '~/Components';
 import { getActiveRecruitments, logout, stopImpersonatingUser } from '~/api';
 import { logoWhite } from '~/assets';
 import { useAuthContext } from '~/context/AuthContext';
@@ -291,7 +291,6 @@ export function NavbarSamfThree() {
             {loginButton}
             {logoutButton}
           </div>
-          <ThemeSwitch />
         </div>
         <br />
         {user && mobileProfileButton}
@@ -308,7 +307,6 @@ export function NavbarSamfThree() {
           </Link>
           {isDesktop && navbarHeaders}
           <div className={styles.navbar_widgets}>
-            <ThemeSwitch />
             <LanguageButton />
             {loginButton}
             {profileButton}
