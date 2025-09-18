@@ -235,7 +235,7 @@ export function NavbarSamfThree() {
 
   const profileButton = user && (
     <div className={classNames(styles.navbar_profile_button, styles.profile_text, styles.dropdown_container_left)}>
-      <NavbarItem
+      <NavbarItemSamfThree
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
         route={'#'}
