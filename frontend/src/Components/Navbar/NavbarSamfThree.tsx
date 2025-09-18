@@ -45,7 +45,7 @@ export function NavbarSamfThree() {
 
   // Navbar style.
   const isRootPath = useLocation().pathname === ROUTES.frontend.home;
-  const isTransparentNavbar = isRootPath && !isScrolledNavbar && !isMobileNavigation;
+  // const isTransparentNavbar = isRootPath && !isScrolledNavbar && !isMobileNavigation;
 
   useEffect(() => {
     // Close expanded dropdown menu whenever mobile navbar is closed, or we switch from mobile to desktop, like when
@@ -300,7 +300,7 @@ export function NavbarSamfThree() {
 
   return (
     <>
-      <nav id={styles.navbar_container} className={classNames(isTransparentNavbar && styles.transparent_navbar)}>
+      <nav id={styles.navbar_container}>
         <div className={styles.navbar_inner}>
           <Link url={ROUTES.frontend.home} className={styles.navbar_logo}>
             <img src={logoWhite} id={styles.navbar_logo_img} alt="Logo" />
@@ -311,7 +311,7 @@ export function NavbarSamfThree() {
             {loginButton}
             {profileButton}
           </div>
-          <HamburgerMenu transparentBackground={isTransparentNavbar} />
+          <HamburgerMenu />
         </div>
       </nav>
       {isMobileNavigation && mobileNavigation}
