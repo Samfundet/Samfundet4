@@ -11,10 +11,10 @@ import samfundet.view.user_views
 import samfundet.view.event_views
 import samfundet.view.sulten_views
 import samfundet.view.general_views
-from samfundet.view import billig_views
+# from samfundet.view import billig_views
 
 from . import views
-from .view import recruitment_views
+# from .view import recruitment_views
 
 # End: imports -----------------------------------------------------------------
 router = routers.DefaultRouter()

@@ -1,6 +1,6 @@
-import { appletCategories } from "~/Pages/AdminPage/applets";
-import { ROUTES_FRONTEND as R } from "~/routes/frontend";
-import { isControlPanelFeatureEnabled } from "./controlPanelFeatures";
+import { appletCategories } from '~/Pages/AdminPage/applets';
+import { ROUTES_FRONTEND as R } from '~/routes/frontend';
+import { isControlPanelFeatureEnabled } from './controlPanelFeatures';
 
 export function firstEnabledAdminPath(): string {
   const all = appletCategories.flatMap(c => c.applets);
