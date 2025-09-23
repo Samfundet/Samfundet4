@@ -14,6 +14,7 @@ import {
   InformationListPage,
   InformationPage,
   LoginPage,
+  LoginPickerPage,
   LycheAboutPage,
   LycheContactPage,
   LycheHomePage,
@@ -110,7 +111,8 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.health} element={<HealthPage />} />
           <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
-            <Route path={ROUTES.frontend.login} element={<LoginPage />} />
+            <Route path={ROUTES.frontend.login} element={<LoginPickerPage newRoute="/new-login" />} />
+            <Route path="/new-login" element={<LoginPage />} />
             <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
           </Route>
           <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
