@@ -5,15 +5,14 @@ import { TimeDuration } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import styles from './OpeningHours.module.scss';
 
-type FakeVenue = {
+type VenueOpeningProp = {
   name: string;
-  url: string;
-  start: string;
-  end: string;
+  opening: string;
+  closing: string;
 };
 
 type OpeningHoursProps = {
-  venues: FakeVenue[];
+  venues: VenueOpeningProp[];
 };
 
 export function OpeningHours({ venues }: OpeningHoursProps) {
@@ -25,12 +24,12 @@ export function OpeningHours({ venues }: OpeningHoursProps) {
         {venues.map((venue) => (
           <tr key={venue.name} className={styles.openingRow}>
             <td>
-              <Link url={venue.url}>
+              <Link url={'information/' + venue.name}>
                 <p className={styles.openingHoursText}>{venue.name}</p>
               </Link>
             </td>
             <td className={styles.startEnd}>
-              <TimeDuration className={styles.openingHoursText} start={venue.start} end={venue.end} />
+              <TimeDuration className={styles.openingHoursText} start={venue.opening} end={venue.closing} />
             </td>
           </tr>
         ))}

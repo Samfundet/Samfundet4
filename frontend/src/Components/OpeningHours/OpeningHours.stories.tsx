@@ -16,13 +16,12 @@ export const Basic: Story = {
     venues: [
       {
         name: 'Daglighallen',
-        url: 'www.google.com',
-        start: '2011-10-05T14:00:00.000Z',
-        end: '2011-10-05T17:00:00.000Z',
+        opening: '2011-10-05T14:00:00.000Z',
+        closing: '2011-10-05T17:00:00.000Z',
       },
-      { name: 'Edgar', url: 'www.google.com', start: '2011-10-05T12:00:00.000Z', end: '2011-10-05T17:00:00.000Z' },
-      { name: 'Klubben', url: 'www.google.com', start: '2011-10-05T16:00:00.000Z', end: '2011-10-05T18:00:00.000Z' },
-      { name: 'Storsalen', url: 'www.google.com', start: '2011-10-05T14:00:00.000Z', end: '2011-10-05T22:00:00.000Z' },
+      { name: 'Edgar', opening: '2011-10-05T12:00:00.000Z', closing: '2011-10-05T17:00:00.000Z' },
+      { name: 'Klubben', opening: '2011-10-05T16:00:00.000Z', closing: '2011-10-05T18:00:00.000Z' },
+      { name: 'Storsalen', opening: '2011-10-05T14:00:00.000Z', closing: '2011-10-05T22:00:00.000Z' },
     ],
   },
 };
