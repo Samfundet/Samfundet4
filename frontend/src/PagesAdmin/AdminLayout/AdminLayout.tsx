@@ -56,7 +56,7 @@ export function AdminLayout() {
   }, [isMobile]);
 
   const userAppletsRaw: AdminApplet[] = [
-    { url: ROUTES_FRONTEND.admin, icon: 'mdi:person', title_nb: 'Profil', title_en: 'Profile', feature: 'profile'},
+    { url: ROUTES_FRONTEND.admin, icon: 'mdi:person', title_nb: 'Profil', title_en: 'Profile', feature: 'profile' },
     {
       url: ROUTES_FRONTEND.user_change_password,
       icon: 'mdi:password',
@@ -66,7 +66,7 @@ export function AdminLayout() {
     },
   ];
 
-  const userApplets = userAppletsRaw.filter(a => !a.feature || isControlPanelFeatureEnabled(a.feature));
+  const userApplets = userAppletsRaw.filter((a) => !a.feature || isControlPanelFeatureEnabled(a.feature));
 
   const panel = (
     <div className={classNames(styles.panel, !panelOpen && styles.mobile_panel_closed)}>
@@ -83,7 +83,7 @@ export function AdminLayout() {
       {appletCategories.map((category) => {
         // Keep only the applets with enabled features visible
         const visibleApplets = category.applets.filter(
-          (applet) => !applet.feature || isControlPanelFeatureEnabled(applet.feature)
+          (applet) => !applet.feature || isControlPanelFeatureEnabled(applet.feature),
         );
 
         if (visibleApplets.length === 0) return null;

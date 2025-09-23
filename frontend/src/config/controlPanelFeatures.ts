@@ -1,4 +1,4 @@
-import { ControlPanelFeature } from '~/types';
+import type { ControlPanelFeature } from '~/types';
 
 const CONTROL_PANEL_FEATURES: Record<ControlPanelFeature, boolean> = {
   profile: false,

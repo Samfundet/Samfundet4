@@ -158,21 +158,21 @@ export type CalendarMarker = {
   className?: string;
 };
 
-export type ControlPanelFeature = 
-  | "profile"
-  | "changePassword"
-  | "events"
-  | "images"
-  | "openingHours"
-  | "closedHours"
-  | "users"
-  | "roles"
-  | "gangs"
-  | "information"
-  | "documents"
-  | "recruitment"
-  | "sulten"
-  | "faq";
+export type ControlPanelFeature =
+  | 'profile'
+  | 'changePassword'
+  | 'events'
+  | 'images'
+  | 'openingHours'
+  | 'closedHours'
+  | 'users'
+  | 'roles'
+  | 'gangs'
+  | 'information'
+  | 'documents'
+  | 'recruitment'
+  | 'sulten'
+  | 'faq';
 
 export type AdminApplet = {
   title_en: string;

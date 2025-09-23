@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { isControlPanelFeatureEnabled } from '~/config/controlPanelFeatures';
 import { firstEnabledAdminPath } from '~/config/controlPanelRouting';
-import { ControlPanelFeature } from '~/types';
+import type { ControlPanelFeature } from '~/types';
 
 export function controlPanelFeatureGate({
   feature,

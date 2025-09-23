@@ -470,9 +470,9 @@ export const router = createBrowserRouter(
           {/* Lyche Menu */}
           <Route
             element={
-            <Gate feature="sulten">
-              <Outlet />
-            </Gate>
+              <Gate feature="sulten">
+                <Outlet />
+              </Gate>
             }
             handle={{
               crumb: () => (
@@ -530,9 +530,9 @@ export const router = createBrowserRouter(
           {/* Recruitment */}
           <Route
             element={
-            <Gate feature="recruitment">
-              <Outlet />
-            </Gate>
+              <Gate feature="recruitment">
+                <Outlet />
+              </Gate>
             }
             path={ROUTES.frontend.admin_recruitment}
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_recruitment}>{t(KEY.common_recruitment)}</Link> }}
@@ -878,9 +878,9 @@ export const router = createBrowserRouter(
                 {/* Position */}
                 <Route
                   element={
-                  <Gate feature="recruitment">
-                    <Outlet />
-                  </Gate>
+                    <Gate feature="recruitment">
+                      <Outlet />
+                    </Gate>
                   }
                   loader={recruitmentGangPositionLoader}
                   handle={{
