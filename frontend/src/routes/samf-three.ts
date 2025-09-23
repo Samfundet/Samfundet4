@@ -16,4 +16,3 @@ export const CASE_DOCUMENTS = {
 export const SAMF3_LOGIN_URL = {
   login: `${BASE_URL}/logg-inn`,
 };
-
