@@ -15,7 +15,7 @@ const CONTROL_PANEL_FEATURES: Record<ControlPanelFeature, boolean> = {
   recruitment: false,
   sulten: false,
   faq: false,
-}
+};
 
 export function isControlPanelFeatureEnabled(f?: ControlPanelFeature) {
   return !!f && CONTROL_PANEL_FEATURES[f] === true;

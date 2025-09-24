@@ -21,7 +21,7 @@ export const appletCategories: AdminAppletCategory[] = [
         perm: PERM.SAMFUNDET_ADD_INFORMATIONPAGE,
         icon: 'ph:note-pencil-light',
         url: ROUTES.frontend.admin_information,
-        feature:'information',
+        feature: 'information',
       },
       {
         title_nb: 'Åpningstider',
