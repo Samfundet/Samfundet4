@@ -189,7 +189,7 @@ export async function patchVenue(slug: string | number, venue: Partial<VenueDto>
 
 export async function getOpenVenues(): Promise<OpenVenuesDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__open_venues;
-  const response = await axios.patch<OpenVenuesDto>(url, { withCredentials: true });
+  const response = await axios.get<OpenVenuesDto>(url, { withCredentials: true });
   return response.data;
 }
 
