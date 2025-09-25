@@ -16,7 +16,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 
 from django.utils import timezone
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from django.shortcuts import get_object_or_404
 
 from root.custom_classes.permission_classes import RoleProtectedOrAnonReadOnlyObjectPermissions
@@ -112,6 +112,22 @@ class VenueView(ModelViewSet):
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
     lookup_field = 'slug'
+
+    @action(detail=False, methods=['get'])
+    def open_venues(self, request: Request) -> Response:
+        now = timezone.now()
+        day_name = now.strftime('%A').lower()
+
+        q = Q(
+            **{
+                f'opening_{day_name}__lte': now.time(),
+                f'closing_{day_name}__gte': now.time(),
+            }
+        )
+
+        open_venues = Venue.objects.filter(q)
+        serializer = self.get_serializer(open_venues, many=True)
+        return Response(serializer.data)
 
 
 class ClosedPeriodView(ModelViewSet):
