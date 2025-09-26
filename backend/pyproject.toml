@@ -101,6 +101,12 @@ ignore = [
 "root/management/commands/*" = ["ANN001", "ANN201", "T201", "S311", "S106"]
 "samfundet/management/commands/*" = ["ANN001", "ANN201", "T201"]
 "root/settings/dev.py" = ["F405"]
+"manage.py" = ["PLC0415"]
+"root/utils/debugpy.py" = ["PLC0415"]
+"samfundet/apps.py" = ["PLC0415"]
+"samfundet/models/general.py" = ["PLR1733"]
+
+
 
 
 
