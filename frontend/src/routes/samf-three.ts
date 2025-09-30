@@ -11,3 +11,8 @@ export const INFORMATION_PAGES = {
 export const CASE_DOCUMENTS = {
   saksdokumenter: `${BASE_URL}/saksdokumenter`,
 };
+
+// Samfundet3 innlogging
+export const SAMF3_LOGIN_URL = {
+  login: `${BASE_URL}/logg-inn`,
+};
