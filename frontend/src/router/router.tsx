@@ -114,6 +114,7 @@ export const router = createBrowserRouter(
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
             <Route path={ROUTES.frontend.login} element={<LoginPickerPage newRoute="/new-login" />} />
             <Route path={SAMF3_LOGIN_URL.login} element={<LoginPage />} />
+            <Route path={ROUTES.frontend.new_login} element={<LoginPage />} />
             <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
           </Route>
           <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
