@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { OpeningHoursContainer } from '~/Components/OpeningHours/OpeningHoursContainer';
 import { EventCarousel, LargeCard } from '~/Pages/HomePage/components';
 import { getHomeData } from '~/api';
 import type { HomePageDto, HomePageElementDto } from '~/dto';
@@ -52,6 +53,7 @@ export function HomePage() {
     <>
       <Splash events={homePage?.splash} showInfo={true} />
       <div className={styles.content}>
+        <OpeningHoursContainer />
         {/*<SplashHeaderBox />*/}
         {isLoading && skeleton}
 
