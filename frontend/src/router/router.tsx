@@ -95,6 +95,7 @@ import {
   roleLoader,
   separatePositionLoader,
 } from '~/router/loaders';
+import { SAMF3_LOGIN_URL } from '~/routes/samf-three';
 import { dbT, lowerCapitalize } from '~/utils';
 
 export const router = createBrowserRouter(
@@ -112,7 +113,7 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
             <Route path={ROUTES.frontend.login} element={<LoginPickerPage newRoute="/new-login" />} />
-            <Route path="/new-login" element={<LoginPage />} />
+            <Route path={SAMF3_LOGIN_URL.login} element={<LoginPage />} />
             <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
           </Route>
           <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />

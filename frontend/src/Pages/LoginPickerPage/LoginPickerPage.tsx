@@ -18,25 +18,23 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
   return (
     <Page>
       <div className={styles.container}>
-        <header className={styles.header}>
-          <h1>Logg inn</h1>
-          <p>Velg hvilket system du vil logge inn på</p>
-        </header>
+        <div className={styles.header}>
+          <h1 className={styles.headerTitle}>Logg inn som intern</h1>
+          <p className={styles.headerSubtitle}>Velg hvilket system du vil logge inn på</p>
+        </div>
 
         <nav aria-label="Velg innlogging" className={styles.picker}>
           <div className={styles.choiceWrapper}>
-            <p className={styles.description}>
-              For å redigere arrangementer, administrere grupper, og andre administrative oppgaver
-            </p>
-            <a href={SAMF3_LOGIN_URL.login} className={styles.choice} role="button" aria-label="Gamle samf (samf3)">
-              <h3>Gamle samf (samf3)</h3>
+            <p className={styles.description}>For å administrere grupper, og andre administrative oppgaver</p>
+            <a href={`${SAMF3_LOGIN_URL}`} className={styles.choice} role="button" aria-label="Gamle samf (samf3)">
+              <h3 className={styles.choiceTitle}>Gamle samf (samf3)</h3>
             </a>
           </div>
 
           <div className={styles.choiceWrapper}>
-            <p className={styles.description}>Den nye plattformen for generell bruk</p>
+            <p className={styles.description}>Den nye plattformen for arrangementer og generell bruk</p>
             <Link to={newRoute} className={styles.choice} role="button" aria-label="Ny samf (samf4)">
-              <h3>Ny samf (samf4)</h3>
+              <h3 className={styles.choiceTitle}>Ny samf (samf4)</h3>
             </Link>
           </div>
         </nav>
