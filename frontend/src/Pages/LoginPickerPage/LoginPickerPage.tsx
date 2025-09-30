@@ -26,7 +26,7 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
         <nav aria-label="Velg innlogging" className={styles.picker}>
           <div className={styles.choiceWrapper}>
             <p className={styles.description}>For å administrere grupper, og andre administrative oppgaver</p>
-            <a href={`${SAMF3_LOGIN_URL}`} className={styles.choice} role="button" aria-label="Gamle samf (samf3)">
+            <a href={SAMF3_LOGIN_URL.login} className={styles.choice} role="button" aria-label="Gamle samf (samf3)">
               <h3 className={styles.choiceTitle}>Gamle samf (samf3)</h3>
             </a>
           </div>
