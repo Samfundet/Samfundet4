@@ -100,6 +100,7 @@ export function EventCreatorAdminPage() {
       description_short_en: '',
       start_dt: '',
       duration: 0,
+      end_dt: '',
       category: eventCategoryOptions[0].value,
       host: '',
       location: '',
@@ -108,6 +109,8 @@ export function EventCreatorAdminPage() {
       ticket_type: 'free',
       image: undefined,
       publish_dt: '',
+      visibility_from_dt: '',
+      visibility_to_dt: '',
     },
   });
 
@@ -126,6 +129,7 @@ export function EventCreatorAdminPage() {
             description_short_en: eventData.description_short_en || '',
             start_dt: eventData.start_dt ? utcTimestampToLocal(eventData.start_dt, false) : '',
             duration: eventData.duration || 0,
+            end_dt: eventData.end_dt ? utcTimestampToLocal(eventData.end_dt, false) : '',
             category: eventData.category || '',
             host: eventData.host || '',
             location: eventData.location || '',
@@ -134,6 +138,8 @@ export function EventCreatorAdminPage() {
             ticket_type: eventData.ticket_type || 'free',
             image: eventData.image,
             publish_dt: eventData.publish_dt ? utcTimestampToLocal(eventData.publish_dt, false) : '',
+            visibility_from_dt: eventData.publish_dt ? utcTimestampToLocal(eventData.publish_dt, false) : '',
+            visibility_to_dt: eventData.visibility_to_dt ? utcTimestampToLocal(eventData.visibility_to_dt, false) : '',
           });
           setShowSpinner(false);
         })

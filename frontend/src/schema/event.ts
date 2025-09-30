@@ -6,6 +6,7 @@ export const EVENT_DESCRIPTION_LONG = z.string().min(1, { message: 'Lang beskriv
 export const EVENT_DESCRIPTION_SHORT = z.string().min(1, { message: 'Kort beskrivelse er påkrevd' });
 export const EVENT_START_DT = z.string().min(1, { message: 'Dato og tid er påkrevd' });
 export const EVENT_DURATION = z.number().min(1, { message: 'Varighet må være større enn 0' });
+export const EVENT_END_DT = z.string().min(1);
 export const EVENT_HOST = z.string().min(1, { message: 'Arrangør er påkrevd' });
 export const EVENT_LOCATION = z.string().min(1, { message: 'Lokale er påkrevd' });
 export const EVENT_CAPACITY = z.number().min(1, { message: 'Kapasitet må være større enn 0' });

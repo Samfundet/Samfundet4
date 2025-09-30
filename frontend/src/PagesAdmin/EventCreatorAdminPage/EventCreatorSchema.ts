@@ -4,6 +4,7 @@ import {
   EVENT_DESCRIPTION_LONG,
   EVENT_DESCRIPTION_SHORT,
   EVENT_DURATION,
+  EVENT_END_DT,
   EVENT_START_DT,
   EVENT_TITLE,
 } from '~/schema/event';
@@ -20,6 +21,7 @@ export const eventSchema = z.object({
   // Date and information
   start_dt: EVENT_START_DT,
   duration: EVENT_DURATION,
+  end_dt: EVENT_END_DT,
   category: EVENT_CATEGORY,
   host: z.string().min(1, { message: 'Arrangør er påkrevd' }),
   location: z.string().min(1, { message: 'Lokale er påkrevd' }),
@@ -31,4 +33,6 @@ export const eventSchema = z.object({
   image: OPTIONAL_IMAGE,
   // Summary/Publication date
   publish_dt: z.string().min(1, { message: 'Publikasjonsdato er påkrevd' }),
+  visibility_from_dt: z.string().min(1),
+  visibility_to_dt: z.string().min(1),
 });
