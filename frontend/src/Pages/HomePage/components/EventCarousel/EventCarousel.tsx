@@ -49,6 +49,7 @@ export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps
         return (
           <ImageCard
             className={styles.image_card}
+            id={event.id}
             key={event.id}
             title={event_title}
             subtitle={event.location}

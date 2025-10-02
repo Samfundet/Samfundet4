@@ -2,10 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { ExpandableHeader, ExternalHostBox, H1, Image, Page } from '~/Components';
+import { Link } from '~/Components';
 import { BuyEventTicket } from '~/Components/BuyEventTicket/BuyEventTicket';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { getEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
+import { useAuthContext } from '~/context/AuthContext';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { eventKeys } from '~/queryKeys';
@@ -17,6 +19,8 @@ import { EventTable } from './components/EventTable';
 export function EventPage() {
   const { t } = useTranslation();
   const { id } = useParams();
+  const { user } = useAuthContext();
+  const isStaff = user?.is_staff;
 
   const { data: event, isLoading } = useQuery({
     queryKey: id ? eventKeys.detail(Number(id)) : ['events', 'no-id'],
@@ -30,6 +34,12 @@ export function EventPage() {
       <div className={styles.image_wrapper}>
         {event && <Image src={BACKEND_DOMAIN + event.image_url} className={styles.event_image} />}
       </div>
+
+      {isStaff && (
+        <Link url={`/control-panel/events/edit/${id}`} className={styles.admin_panel}>
+          Rediger
+        </Link>
+      )}
 
       <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>
       <div className={styles.content_row}>
