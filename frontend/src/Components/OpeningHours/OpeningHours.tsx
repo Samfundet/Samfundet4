@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { TimeDuration } from '~/Components';
 import { Link } from '~/Components/Link/Link';
 import { Text } from '~/Components/Text/Text';
-import { VenueDto } from '~/dto';
+import type { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import styles from './OpeningHours.module.scss';
 
@@ -38,7 +38,7 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
           return (
             <tr key={venue.name} className={styles.openingRow}>
               <td>
-                <Link url={'information/' + venue.name}>
+                <Link url={`information/${venue.name}`}>
                   <p className={styles.openingHoursText}>{venue.name}</p>
                 </Link>
               </td>

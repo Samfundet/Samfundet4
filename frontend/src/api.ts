@@ -19,7 +19,6 @@ import type {
   MenuDto,
   MenuItemDto,
   OccupiedTimeslotDto,
-  OpenVenuesDto,
   OrganizationDto,
   PermissionDto,
   PositionsByTagResponse,
