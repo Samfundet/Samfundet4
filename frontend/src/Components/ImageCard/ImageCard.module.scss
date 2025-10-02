@@ -202,13 +202,13 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
   background: $red_samf;
   cursor: pointer;
   transition: all 200ms ease-in-out;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
   text-decoration: none;
 }
 
 .admin_edit_button:hover {
-  background: lighten($red_samf, 10%);
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 5px 8px;
+  filter: brightness(120%);
+  box-shadow: rgba(0, 0, 0, 0.24) 0 5px 8px;
   text-decoration: none;
   scale: 1.05;
 }
