@@ -3,6 +3,7 @@ import { t } from 'i18next';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '~/Components';
+import { useAuthContext } from '~/context/AuthContext';
 import { KEY } from '~/i18n/constants';
 import { EventTicketType } from '~/types';
 import { backgroundImageFromUrl } from '~/utils';
@@ -10,7 +11,6 @@ import { Badge } from '../Badge';
 import { Link } from '../Link';
 import { TimeDisplay } from '../TimeDisplay';
 import styles from './ImageCard.module.scss';
-import { useAuthContext } from '~/context/AuthContext';
 
 type ImageCardProps = {
   className?: string;
@@ -76,11 +76,11 @@ export function ImageCard({
       <Link url={url} className={classNames(cardStyle, styles.image)} style={backgroundImageFromUrl(imageUrl)}>
         <div className={styles.card_inner}>
           <div className={styles.badges}>
-            {isStaff &&
+            {isStaff && (
               <Link url={`/control-panel/events/edit/${id}`} className={styles.admin_edit_button}>
                 Rediger
               </Link>
-            }
+            )}
             <Badge className={styles.event_host} text={host} />
             {showTicket && <Badge text={displayTicketType} className={styles.ticket_type} />}
           </div>
@@ -89,7 +89,7 @@ export function ImageCard({
             <div className={styles.title}>{title}</div>
             <div className={styles.subtitle}>
               {subtitle}
-              
+
               <div className={styles.date_label}>
                 {date && <TimeDisplay timestamp={date} displayType="event-datetime" />}
               </div>
