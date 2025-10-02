@@ -12,6 +12,7 @@
   transition: all 200ms ease-in-out;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   text-decoration: none;
+  z-index: 10;
 }
 
 .admin_panel:hover {

@@ -10,12 +10,14 @@ import { Badge } from '../Badge';
 import { Link } from '../Link';
 import { TimeDisplay } from '../TimeDisplay';
 import styles from './ImageCard.module.scss';
+import { useAuthContext } from '~/context/AuthContext';
 
 type ImageCardProps = {
   className?: string;
   title?: ReactNode;
   subtitle?: ReactNode;
   description?: ReactNode;
+  id?: number;
   date?: string | Date;
   url?: string;
   imageUrl?: string;
@@ -33,6 +35,7 @@ export function ImageCard({
   subtitle = <Skeleton width={'4em'} />,
   description = <Skeleton width={'100%'} />,
   date,
+  id,
   url = '#',
   imageUrl,
   compact,
@@ -47,6 +50,8 @@ export function ImageCard({
 
   const [displayTicketType, setTicketType] = useState('');
   const [showTicket, setShowTicket] = useState(false);
+  const { user } = useAuthContext();
+  const isStaff = user?.is_staff;
 
   useEffect(() => {
     if (ticket_type === EventTicketType.FREE || ticket_type === EventTicketType.REGISTRATION) {
@@ -70,7 +75,12 @@ export function ImageCard({
     <div className={containerStyle}>
       <Link url={url} className={classNames(cardStyle, styles.image)} style={backgroundImageFromUrl(imageUrl)}>
         <div className={styles.card_inner}>
-          <div>
+          <div className={styles.badges}>
+            {isStaff &&
+              <Link url={`/control-panel/events/edit/${id}`} className={styles.admin_edit_button}>
+                Rediger
+              </Link>
+            }
             <Badge className={styles.event_host} text={host} />
             {showTicket && <Badge text={displayTicketType} className={styles.ticket_type} />}
           </div>
@@ -79,6 +89,7 @@ export function ImageCard({
             <div className={styles.title}>{title}</div>
             <div className={styles.subtitle}>
               {subtitle}
+              
               <div className={styles.date_label}>
                 {date && <TimeDisplay timestamp={date} displayType="event-datetime" />}
               </div>
