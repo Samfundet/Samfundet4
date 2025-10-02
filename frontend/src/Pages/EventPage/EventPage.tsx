@@ -14,6 +14,7 @@ import styles from './EventPage.module.scss';
 import { EventInformation } from './components/EventInformation/EventInformation';
 import { EventTable } from './components/EventTable';
 import { useAuthContext } from '~/context/AuthContext';
+import { Link } from '~/Components';
 
 export function EventPage() {
   const { t } = useTranslation();
@@ -35,9 +36,9 @@ export function EventPage() {
       </div>
 
       { isStaff &&
-        <a href={`/control-panel/events/edit/${id}`} className={styles.admin_panel}>
+        <Link url={`/control-panel/events/edit/${id}`} className={styles.admin_panel}>
           Rediger
-        </a>
+        </Link>
       }
 
       <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>

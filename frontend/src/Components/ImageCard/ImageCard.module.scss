@@ -186,3 +186,30 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
     max-height: 0;
   }
 }
+
+.badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin_edit_button {
+  border-radius: 5px;
+  width: fit-content;
+  padding: 5px;
+  color: white;
+  font-size: 10px;
+  background: $red_samf;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  text-decoration: none;
+  z-index: 10;
+}
+
+.admin_edit_button:hover {
+  background: lighten($red_samf, 10%);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 5px 8px;
+  text-decoration: none;
+  scale: 1.05;
+}
