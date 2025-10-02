@@ -207,12 +207,13 @@ def filter_queryset_by_permissions(queryset: QuerySet, user: User, permission: s
 
     return queryset.filter(id__in=permitted_ids)
 
+
 class FeatureEnabled(BasePermission):
     feature_key = None
-    message = "This feature is not available yet."
+    message = 'This feature is not available yet.'
 
     def has_permission(self, request: Request, view: APIView) -> bool:
-        key = getattr(view, "feature_key", None) or getattr(self, "feature_key", None)
+        key = getattr(view, 'feature_key', None) or getattr(self, 'feature_key', None)
         if key is None:
-            return True # No feature key set, allow access
-        return key in getattr(settings, "CP_ENABLED", set())
+            return True  # No feature key set, allow access
+        return key in getattr(settings, 'CP_ENABLED', set())

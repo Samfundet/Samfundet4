@@ -46,6 +46,7 @@ AUTH_BACKEND = 'django.contrib.auth.backends.ModelBackend'
 
 PHONE_NUMBER_REGEX = r'^\+?\s*(\d\s*){8,15}$'
 
+
 class WebFeatures:
     PROFILE = 'profile'
     CHANGE_P = 'change_p'
@@ -66,11 +67,24 @@ class WebFeatures:
     BLOG = 'blog'
     MERCH = 'merch'
 
+
 CP_FEATURES_ALL = {
-    WebFeatures.PROFILE, WebFeatures.CHANGE_P, WebFeatures.EVENTS,
-    WebFeatures.IMAGES, WebFeatures.OPENING_HOURS, WebFeatures.CLOSED_HOURS,
-    WebFeatures.USERS, WebFeatures.ROLES, WebFeatures.GANGS,
-    WebFeatures.INFORMATION, WebFeatures.DOCUMENTS, WebFeatures.RECRUITMENT,
-    WebFeatures.SULTEN, WebFeatures.FAQ, WebFeatures.ORGANIZATION,
-    WebFeatures.VENUE, WebFeatures.BLOG, WebFeatures.MERCH,
+    WebFeatures.PROFILE,
+    WebFeatures.CHANGE_P,
+    WebFeatures.EVENTS,
+    WebFeatures.IMAGES,
+    WebFeatures.OPENING_HOURS,
+    WebFeatures.CLOSED_HOURS,
+    WebFeatures.USERS,
+    WebFeatures.ROLES,
+    WebFeatures.GANGS,
+    WebFeatures.INFORMATION,
+    WebFeatures.DOCUMENTS,
+    WebFeatures.RECRUITMENT,
+    WebFeatures.SULTEN,
+    WebFeatures.FAQ,
+    WebFeatures.ORGANIZATION,
+    WebFeatures.VENUE,
+    WebFeatures.BLOG,
+    WebFeatures.MERCH,
 }

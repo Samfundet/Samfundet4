@@ -97,7 +97,10 @@ class KeyValueView(ReadOnlyModelViewSet):
 # Images
 class ImageView(ModelViewSet):
     feature_key = WebFeatures.IMAGES
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = ImageSerializer
     queryset = Image.objects.all().order_by('-pk')
 
@@ -105,14 +108,20 @@ class ImageView(ModelViewSet):
 # Image tags
 class TagView(ModelViewSet):
     feature_key = WebFeatures.IMAGES
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = TagSerializer
     queryset = Tag.objects.all()
 
 
 class VenueView(ModelViewSet):
     feature_key = WebFeatures.VENUE
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
     lookup_field = 'slug'
@@ -120,7 +129,10 @@ class VenueView(ModelViewSet):
 
 class ClosedPeriodView(ModelViewSet):
     feature_key = WebFeatures.CLOSED_HOURS
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = ClosedPeriodSerializer
     queryset = ClosedPeriod.objects.all()
 
@@ -138,14 +150,20 @@ class IsClosedView(ListAPIView):
 
 class SaksdokumentView(ModelViewSet):
     feature_key = WebFeatures.DOCUMENTS
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = SaksdokumentSerializer
     queryset = Saksdokument.objects.all()
 
 
 class OrganizationView(ModelViewSet):
     feature_key = WebFeatures.ORGANIZATION
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = OrganizationSerializer
     queryset = Organization.objects.all()
 
@@ -159,14 +177,20 @@ class OrganizationView(ModelViewSet):
 
 class GangView(ModelViewSet):
     feature_key = WebFeatures.GANGS
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = GangSerializer
     queryset = Gang.objects.all()
 
 
 class GangTypeView(ModelViewSet):
     feature_key = WebFeatures.GANGS
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = GangTypeSerializer
     queryset = GangType.objects.all()
 
@@ -182,7 +206,10 @@ class GangTypeOrganizationView(APIView):
 
 class InformationPageView(ModelViewSet):
     feature_key = WebFeatures.INFORMATION
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
 
@@ -195,14 +222,20 @@ class InfoboxView(ModelViewSet):
 
 class BlogPostView(ModelViewSet):
     feature_key = WebFeatures.BLOG
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = BlogPostSerializer
     queryset = BlogPost.objects.all()
 
 
 class RoleView(ModelViewSet):
     feature_key = WebFeatures.ROLES
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = RoleSerializer
     queryset = Role.objects.all()
 
@@ -228,7 +261,10 @@ class RoleView(ModelViewSet):
 # =============================== #
 class MerchView(ModelViewSet):
     feature_key = WebFeatures.MERCH
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = MerchSerializer
     queryset = Merch.objects.all()
 

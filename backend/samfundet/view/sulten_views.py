@@ -27,35 +27,50 @@ from samfundet.serializer.sulten_serializers import (
 
 class MenuView(ModelViewSet):
     feature_key = WebFeatures.SULTEN
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, FeatureEnabled,)
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = MenuSerializer
     queryset = Menu.objects.all()
 
 
 class MenuItemView(ModelViewSet):
     feature_key = WebFeatures.SULTEN
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, FeatureEnabled,)
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = MenuItemSerializer
     queryset = MenuItem.objects.all()
 
 
 class FoodCategoryView(ModelViewSet):
     feature_key = WebFeatures.SULTEN
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, FeatureEnabled,)
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = FoodCategorySerializer
     queryset = FoodCategory.objects.all()
 
 
 class FoodPreferenceView(ModelViewSet):
     feature_key = WebFeatures.SULTEN
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, FeatureEnabled,)
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = FoodPreferenceSerializer
     queryset = FoodPreference.objects.all()
 
 
 class TableView(ModelViewSet):
     feature_key = WebFeatures.SULTEN
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, FeatureEnabled,)
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = TableSerializer
     queryset = Table.objects.all()
 

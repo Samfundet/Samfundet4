@@ -126,7 +126,10 @@ class WebhookView(APIView):
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentStatisticsView(ModelViewSet):
     feature_key = WebFeatures.RECRUITMENT
-    permission_classes = (DjangoModelPermissions, FeatureEnabled,)  # Allow read only to permissions on perms
+    permission_classes = (
+        DjangoModelPermissions,
+        FeatureEnabled,
+    )  # Allow read only to permissions on perms
     serializer_class = RecruitmentStatisticsSerializer
     queryset = RecruitmentStatistics.objects.all()
 
@@ -636,7 +639,10 @@ class ActiveRecruitmentPositionsView(ListAPIView):
 
 class ActiveRecruitmentsView(ListAPIView):
     feature_key = WebFeatures.RECRUITMENT
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly, FeatureEnabled,]
+    permission_classes = [
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    ]
     serializer_class = RecruitmentSerializer
 
     def get_queryset(self) -> Response:

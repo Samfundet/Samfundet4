@@ -120,7 +120,10 @@ class UserView(APIView):
 
 class AllUsersView(ListAPIView):
     feature_key = WebFeatures.USERS
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, FeatureEnabled,)
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -131,7 +134,10 @@ class AllUsersView(ListAPIView):
 
 class PaginatedSearchUsersView(ListAPIView):
     feature_key = WebFeatures.USERS
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, FeatureEnabled,)
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = UserSerializer
     pagination_class = CustomPageNumberPagination
 
@@ -156,7 +162,10 @@ class ImpersonateView(APIView):
 
 class AllGroupsView(ListAPIView):
     feature_key = WebFeatures.USERS
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, FeatureEnabled,)
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = GroupSerializer
     queryset = Group.objects.all()
 
@@ -178,7 +187,10 @@ class UserPreferenceView(ModelViewSet):
 
 class ProfileView(ModelViewSet):
     feature_key = WebFeatures.PROFILE
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, FeatureEnabled,)
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
 

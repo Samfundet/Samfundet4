@@ -36,7 +36,10 @@ It is used to display all recruitments
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentView(ModelViewSet):
     feature_key = WebFeatures.RECRUITMENT
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, FeatureEnabled,)
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = RecruitmentSerializer
     queryset = Recruitment.objects.all()
 
@@ -54,7 +57,10 @@ class RecruitmentView(ModelViewSet):
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentForRecruiterView(ModelViewSet):
     feature_key = WebFeatures.RECRUITMENT
-    permission_classes = (RoleProtectedObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = RecruitmentForRecruiterSerializer
     queryset = Recruitment.objects.all()
 

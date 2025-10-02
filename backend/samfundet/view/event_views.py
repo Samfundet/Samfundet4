@@ -28,7 +28,10 @@ from samfundet.models.model_choices import EventStatus
 
 class EventView(ModelViewSet):
     feature_key = WebFeatures.EVENTS
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = EventSerializer
     queryset = Event.objects.all()
 
@@ -68,7 +71,10 @@ class EventsUpcomingView(APIView):
 
 class EventGroupView(ModelViewSet):
     feature_key = WebFeatures.EVENTS
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions, FeatureEnabled,)
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = EventGroupSerializer
     queryset = EventGroup.objects.all()
 
