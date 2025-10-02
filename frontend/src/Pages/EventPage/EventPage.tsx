@@ -13,10 +13,13 @@ import { dbT } from '~/utils';
 import styles from './EventPage.module.scss';
 import { EventInformation } from './components/EventInformation/EventInformation';
 import { EventTable } from './components/EventTable';
+import { useAuthContext } from '~/context/AuthContext';
 
 export function EventPage() {
   const { t } = useTranslation();
   const { id } = useParams();
+  const { user } = useAuthContext();
+  const isStaff = user?.is_staff;
 
   const { data: event, isLoading } = useQuery({
     queryKey: id ? eventKeys.detail(Number(id)) : ['events', 'no-id'],
@@ -30,6 +33,12 @@ export function EventPage() {
       <div className={styles.image_wrapper}>
         {event && <Image src={BACKEND_DOMAIN + event.image_url} className={styles.event_image} />}
       </div>
+
+      { isStaff &&
+        <a href={`/control-panel/events/edit/${id}`} className={styles.admin_panel}>
+          Rediger
+        </a>
+      }
 
       <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>
       <div className={styles.content_row}>
