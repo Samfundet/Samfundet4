@@ -9,6 +9,7 @@ import { KEY } from '~/i18n/constants';
 import type { Children } from '~/types';
 import styles from './HomePage.module.scss';
 import { Splash } from './components/Splash/Splash';
+import { OpeningHours } from '~/Components';
 
 export function HomePage() {
   const [homePage, setHomePage] = useState<HomePageDto>();
@@ -48,12 +49,26 @@ export function HomePage() {
     </>
   );
 
+  const s = new Date();
+  const e = new Date();
+  s.setHours(16, 0, 0, 0);
+  e.setHours(21, 0, 0, 0);
+
   return (
     <>
       <Splash events={homePage?.splash} showInfo={true} />
       <div className={styles.content}>
         {/*<SplashHeaderBox />*/}
         {isLoading && skeleton}
+
+        <div>
+          <OpeningHours venues={[{
+            name: "house",
+            url: "/",
+            start: s.toString(),
+            end: e.toString(),
+          }]}/>
+        </div>
 
         {/* Render elements for frontpage. */}
         {homePage?.elements.map((el, index) => renderElement(index, el))}
