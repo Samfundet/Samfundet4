@@ -26,6 +26,8 @@ export function OpeningHoursAdminPage() {
   const { data: venues = [], isLoading } = useQuery({
     queryKey: venueKeys.all,
     queryFn: getVenues,
+    // Sort venues by name for a stable order
+    select: (data) => [...data].sort((a, b) => a.name.localeCompare(b.name)),
   });
 
   // We need a reference to read changed state inside timeout
@@ -34,9 +36,11 @@ export function OpeningHoursAdminPage() {
   // Use React Query mutation to update venues
   const updateVenueMutation = useMutation({
     mutationFn: ({ slug, data }: { slug: string; data: Partial<VenueDto> }) => patchVenue(slug, data),
-    onSuccess: () => {
-      // Invalidate and refetch venues to keep data in sync
-      queryClient.invalidateQueries({ queryKey: venueKeys.all });
+    // Update cache in place instead of invalidating
+    onSuccess: (updated: VenueDto, vars) => {
+      queryClient.setQueryData<VenueDto[]>(venueKeys.all, (oldVenues = []) =>
+        oldVenues.map((v) => (v.slug === vars.slug ? { ...v, ...vars.data } : v)),
+      );
 
       // Show success badge
       showSuccess(t(KEY.common_save_successful));
