@@ -37,12 +37,12 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
           const closingTime = venue[`closing_${day}` as keyof VenueDto] as string;
           return (
             <tr key={venue.name} className={styles.openingRow}>
-              <td className="tableCell">
+              <td className={styles.tableCell}>
                 <Link url={`information/${venue.name}`}>
                   <p className={styles.openingHoursText}>{venue.name}</p>
                 </Link>
               </td>
-              <td className="tableCell">
+              <td className={styles.tableCell}>
                 <TimeDuration
                   className={styles.openingHoursText}
                   start={`${today}T${openingTime}`}

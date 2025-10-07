@@ -9,17 +9,20 @@
   flex-direction: column;
   align-items: center;
 
-  .tableCell {
-    border-left: 0;
-    border-right: 0;
-  }
-
   @include theme-dark {
     background-color: $black-2;
     color: $white;
   }
 }
 
+.tableCell {
+  @include theme-dark {
+    border-left: 0;
+    border-right: 0;
+  }
+}
+
 .openingHoursText {
   margin: 0 0.2em;
 }
+
