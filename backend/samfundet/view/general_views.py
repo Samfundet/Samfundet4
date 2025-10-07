@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 from typing import Any
+from datetime import time
 from itertools import chain
 
 from rest_framework import status
@@ -115,13 +116,12 @@ class VenueView(ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def open_venues(self, request: Request) -> Response:
-        now = timezone.now()
-        day_name = now.strftime('%A').lower()
+        day_name = timezone.now().strftime('%A').lower()
 
-        q = Q(
+        q = ~Q(
             **{
-                f'opening_{day_name}__lte': now.time(),
-                f'closing_{day_name}__gte': now.time(),
+                f'opening_{day_name}': time(0, 0, 0),
+                f'closing_{day_name}': time(0, 0, 0),
             }
         )
 
