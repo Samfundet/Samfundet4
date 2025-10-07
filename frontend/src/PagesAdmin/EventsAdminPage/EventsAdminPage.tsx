@@ -25,7 +25,7 @@ export function EventsAdminPage() {
   useTitle(t(KEY.admin_events_administrate));
 
   function getEvents() {
-    getEventsUpcomming()
+    getEventsUpcomming({})
       .then((data) => {
         setEvents(data);
         setAllEvents(data);

@@ -36,6 +36,10 @@ def event_query(*, query: QueryDict, events: QuerySet[Event] = None) -> QuerySet
     if event_group:
         events = events.filter(event_group__id=event_group)
 
+    event_category = query.get('category', None)
+    if event_category:
+        events = events.filter(category__icontains=event_category)
+
     location = query.get('venue', None)
     if location:
         events = events.filter(location__icontains=location)  # TODO should maybe be a foreignKey?
