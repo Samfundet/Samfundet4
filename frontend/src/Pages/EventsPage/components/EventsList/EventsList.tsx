@@ -90,7 +90,7 @@ export function EventsList({ events }: EventsListProps) {
             subtitle={time_display}
             description={dbT(event, 'description_short') ?? ''}
             compact={true}
-            id={event.id}
+            id={event.id.toString()}
             url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
             ticket_type={event.ticket_type}
             host={event.host}
