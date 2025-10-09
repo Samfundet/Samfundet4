@@ -16,9 +16,11 @@ $card-text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.5);
 
 $card-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
+$inner-card-padding: 0.75rem;
 // TODO color variables
 
 .container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -55,7 +57,7 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  padding: 0.75rem;
+  padding: $inner-card-padding;
 }
 
 .card_content {
@@ -193,22 +195,30 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
   justify-content: space-between;
 }
 
-.admin_edit_button {
-  border-radius: 5px;
-  width: fit-content;
-  padding: 5px;
-  color: white;
-  font-size: 10px;
-  background: $red_samf;
-  cursor: pointer;
+.edit_bar {
+  opacity: 0%;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: 10px;
+  padding-right: 13px;
+  align-items: end;
+  width: 100%;
+  height: 55%;
+  pointer-events: none;
+  margin-left: 20px;
+
   transition: all 200ms ease-in-out;
-  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
-  text-decoration: none;
+
+  z-index: 10;
 }
 
-.admin_edit_button:hover {
-  filter: brightness(120%);
-  box-shadow: rgba(0, 0, 0, 0.24) 0 5px 8px;
-  text-decoration: none;
-  scale: 1.05;
+.container:hover {
+  .edit_bar {
+    opacity: 100%;
+    margin-left: 0;
+  }
 }
+
+        

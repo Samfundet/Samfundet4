@@ -3,23 +3,11 @@
 @use 'src/constants' as *;
 
 .admin_panel {
-  margin: 10px 0 10px 0;
-  padding: 10px 20px;
-  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  margin: 15px 0 10px 0;
   color: white;
-  background: $red_samf;
-  cursor: pointer;
-  transition: all 200ms ease-in-out;
-  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
-  text-decoration: none;
-  z-index: 10;
-}
-
-.admin_panel:hover {
-  filter: brightness(120%);
-  box-shadow: rgba(0, 0, 0, 0.24) 0 5px 8px;
-  text-decoration: none;
-  scale: 1.05;
 }
 
 .container {
