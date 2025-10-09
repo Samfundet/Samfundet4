@@ -3,7 +3,6 @@ import { t } from 'i18next';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '~/Components';
-import { useAuthContext } from '~/context/AuthContext';
 import { KEY } from '~/i18n/constants';
 import { EventTicketType } from '~/types';
 import { backgroundImageFromUrl } from '~/utils';
@@ -11,13 +10,14 @@ import { Badge } from '../Badge';
 import { Link } from '../Link';
 import { TimeDisplay } from '../TimeDisplay';
 import styles from './ImageCard.module.scss';
+import { EventEditButtons } from '~/Components';
 
 type ImageCardProps = {
   className?: string;
   title?: ReactNode;
   subtitle?: ReactNode;
   description?: ReactNode;
-  id?: number;
+  id?: string;
   date?: string | Date;
   url?: string;
   imageUrl?: string;
@@ -50,8 +50,8 @@ export function ImageCard({
 
   const [displayTicketType, setTicketType] = useState('');
   const [showTicket, setShowTicket] = useState(false);
-  const { user } = useAuthContext();
-  const isStaff = user?.is_staff;
+
+  const icon_size = compact ? 14 : 17;
 
   useEffect(() => {
     if (ticket_type === EventTicketType.FREE || ticket_type === EventTicketType.REGISTRATION) {
@@ -73,23 +73,22 @@ export function ImageCard({
 
   return (
     <div className={containerStyle}>
+      <div className={styles.edit_bar}>
+        <EventEditButtons title={title} id={id} icon_size={icon_size} /> 
+      </div>
       <Link url={url} className={classNames(cardStyle, styles.image)} style={backgroundImageFromUrl(imageUrl)}>
         <div className={styles.card_inner}>
           <div className={styles.badges}>
-            {isStaff && (
-              <Link url={`/control-panel/events/edit/${id}`} className={styles.admin_edit_button}>
-                Rediger
-              </Link>
-            )}
             <Badge className={styles.event_host} text={host} />
             {showTicket && <Badge text={displayTicketType} className={styles.ticket_type} />}
           </div>
-          <div>{children}</div>
+          <div>
+            {children}
+          </div>
           <div className={styles.card_content}>
             <div className={styles.title}>{title}</div>
             <div className={styles.subtitle}>
               {subtitle}
-
               <div className={styles.date_label}>
                 {date && <TimeDisplay timestamp={date} displayType="event-datetime" />}
               </div>
