@@ -4,11 +4,6 @@
   transition: all 200ms ease-in-out;
 }
 
-.edit_button:hover {
-  .edit_icon {
-    rotate: 15deg;
-  }
-}
 
 .edit_button {
   pointer-events:all;
@@ -24,6 +19,9 @@
 }
 
 .edit_button:hover {
+  .edit_icon {
+    rotate: 15deg;
+  }
   scale: 1.1;
   filter: brightness(110%);
 }

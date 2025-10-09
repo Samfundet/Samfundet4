@@ -3,6 +3,7 @@ import { t } from 'i18next';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '~/Components';
+import { EventEditButtons } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import { EventTicketType } from '~/types';
 import { backgroundImageFromUrl } from '~/utils';
@@ -10,7 +11,6 @@ import { Badge } from '../Badge';
 import { Link } from '../Link';
 import { TimeDisplay } from '../TimeDisplay';
 import styles from './ImageCard.module.scss';
-import { EventEditButtons } from '~/Components';
 
 type ImageCardProps = {
   className?: string;
@@ -74,7 +74,7 @@ export function ImageCard({
   return (
     <div className={containerStyle}>
       <div className={styles.edit_bar}>
-        <EventEditButtons title={title} id={id} icon_size={icon_size} /> 
+        <EventEditButtons title={title} id={id} icon_size={icon_size} />
       </div>
       <Link url={url} className={classNames(cardStyle, styles.image)} style={backgroundImageFromUrl(imageUrl)}>
         <div className={styles.card_inner}>
@@ -82,9 +82,7 @@ export function ImageCard({
             <Badge className={styles.event_host} text={host} />
             {showTicket && <Badge text={displayTicketType} className={styles.ticket_type} />}
           </div>
-          <div>
-            {children}
-          </div>
+          <div>{children}</div>
           <div className={styles.card_content}>
             <div className={styles.title}>{title}</div>
             <div className={styles.subtitle}>
