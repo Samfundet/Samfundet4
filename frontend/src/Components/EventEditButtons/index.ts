@@ -1,1 +1,1 @@
-export { EventEditButtons } from "./EventEditButtons"
+export { EventEditButtons } from './EventEditButtons';
