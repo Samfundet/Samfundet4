@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
-import { Link } from '~/Components';
+import { Link, Logo } from '~/Components';
 import {
   isfit,
   isfitWhite,
@@ -17,6 +17,7 @@ import { THEME } from '~/constants';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { ROUTES_SAMF_THREE } from '~/routes/samf-three';
 import styles from './Footer.module.scss';
 
 export function Footer() {
@@ -24,7 +25,7 @@ export function Footer() {
 
   const { theme } = useGlobalContext();
 
-  const iconColor = theme === THEME.DARK ? 'white' : 'black';
+  const iconColor = theme === THEME.DARK ? 'white' : 'white';
   const trondheimLogo = theme === THEME.DARK ? trondheimWhite : trondheim;
   const kulturromLogo = theme === THEME.DARK ? kulturromWhite : kulturrom;
   const reitanLogo = theme === THEME.DARK ? reitanWhite : reitan;
@@ -61,15 +62,21 @@ export function Footer() {
     </div>
   );
 
+  const logo = (
+    <div className={styles.logo_section}>
+      <Logo organization="Samfundet" color="light" size="xsmall" />
+    </div>
+  );
+
   const contact = (
-    <div className={styles.contact}>
+    <div className={styles.footer_section}>
       <h2 className={styles.header}>{t(KEY.common_contact)}</h2>
-      <div>
-        <p>© Studentersamfundet i Trondhjem 2023</p>
-        <p>Org.nr: 970 088 466</p>
-        <p>Elgeseter gate 1</p>
-        <p>7030</p>
-      </div>
+      <ul>
+        <li>© Studentersamfundet i Trondhjem 2023</li>
+        <li>Org.nr: 970 088 466</li>
+        <li>Elgeseter gate 1</li>
+        <li>7030</li>
+      </ul>
     </div>
   );
 
@@ -105,13 +112,66 @@ export function Footer() {
     </div>
   );
 
+  const shortcuts = (
+    <div className={styles.footer_section}>
+      <h2 className={styles.header}>{t(KEY.common_shortcuts)}</h2>
+      <ul>
+        <li>
+          <Link url={ROUTES_SAMF_THREE.information.general}>{t(KEY.common_general)}</Link>
+        </li>
+        <li>
+          <Link url={ROUTES_SAMF_THREE.information.membership}>{t(KEY.common_membership)}</Link>
+        </li>
+        <li>
+          <Link url={ROUTES_SAMF_THREE.information.openingHours}>{t(KEY.common_opening_hours)}</Link>
+        </li>
+        <li>
+          <Link url={ROUTES_SAMF_THREE.information.photos}>{t(KEY.common_photos)}</Link>
+        </li>
+        <li>
+          <Link url={ROUTES_SAMF_THREE.information.renting}>{t(KEY.common_renting)}</Link>
+        </li>
+      </ul>
+    </div>
+  );
+
+  const venues = (
+    <div className={styles.footer_section}>
+      <h2 className={styles.header}>{t(KEY.common_venues)}</h2>
+      <ul>
+        <li>
+          <Link url={ROUTES_SAMF_THREE.venues.restaurant}>{t(KEY.common_restaurant)}</Link>
+        </li>
+        <li>
+          <Link url={ROUTES_SAMF_THREE.venues.bar}>{t(KEY.common_bar)}</Link>
+        </li>
+        <li>
+          <Link url={ROUTES_SAMF_THREE.venues.scene}>{t(KEY.common_stages)}</Link>
+        </li>
+        <li>
+          <Link url={ROUTES_SAMF_THREE.venues.club}>{t(KEY.common_club)}</Link>
+        </li>
+      </ul>
+    </div>
+  );
+
   return (
     <div className={styles.container}>
       {sponsorsAndOrgs}
 
       <div className={styles.main_footer}>
-        {contact}
-        {socials}
+        <div className={styles.desktop_logo}>{logo}</div>
+        <div className={styles.footer_section_holder}>
+          <div className={styles.contact_and_socials}>
+            {contact}
+            {socials}
+          </div>
+          <div className={styles.shortcuts_and_venues}>
+            {shortcuts}
+            {venues}
+          </div>
+        </div>
+        <div className={styles.mobile_logo}>{logo}</div>
         {extraInfo}
       </div>
     </div>
