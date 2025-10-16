@@ -52,7 +52,7 @@ export function NavbarItemSamfThree({
     [styles.dropdown_open]: isSelected,
   });
 
-  // Toggle dropdown on click
+  // Toggle dropdown on click for mobile
   function handleOnClick() {
     if (!dropdownLinks) {
       // Given no dropdownLinks, the user is about to follow a link -> close the mobileNavigation.
@@ -63,22 +63,24 @@ export function NavbarItemSamfThree({
     }
   }
 
+  // Toggle dropdown on mouse enter for desktop. MouseEnter and mouseLeave is used instead of mouseOver, as mouseOver causes a onHover bug.
   function handleMouseEnter() {
     if (!dropdownLinks) {
       // Given no dropdownLinks, the user is about to follow a link -> close the mobileNavigation.
       setIsMobileNavigation(false);
     } else {
-      // toggle dropdown
+      // show dropdown
       setExpandedDropdown(isSelected ? '' : label);
     }
   }
 
+  // Toggle dropdown on mouse leave for desktop. MouseEnter and mouseLeave is used instead of mouseOver, as mouseOver causes a onHover bug.
   function handleMouseLeave() {
     if (!dropdownLinks) {
       // Given no dropdownLinks, the user is about to follow a link -> close the mobileNavigation.
       setIsMobileNavigation(false);
     } else {
-      // toggle dropdown
+      // clear dropdown
       setExpandedDropdown('');
     }
   }
