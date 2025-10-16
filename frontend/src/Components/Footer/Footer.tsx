@@ -71,11 +71,11 @@ export function Footer() {
   const contact = (
     <div className={styles.footer_section}>
       <h2 className={styles.header}>{t(KEY.common_contact)}</h2>
-      <ul>
-        <li>© Studentersamfundet i Trondhjem 2023</li>
-        <li>Org.nr: 970 088 466</li>
-        <li>Elgeseter gate 1</li>
-        <li>7030</li>
+      <ul className={styles.footer_list}>
+        <li className={styles.footer_list_item}>© Studentersamfundet i Trondhjem 2023</li>
+        <li className={styles.footer_list_item}>Org.nr: 970 088 466</li>
+        <li className={styles.footer_list_item}>Elgeseter gate 1</li>
+        <li className={styles.footer_list_item}>7030</li>
       </ul>
     </div>
   );
@@ -115,21 +115,31 @@ export function Footer() {
   const shortcuts = (
     <div className={styles.footer_section}>
       <h2 className={styles.header}>{t(KEY.common_shortcuts)}</h2>
-      <ul>
-        <li>
-          <Link url={ROUTES_SAMF_THREE.information.general}>{t(KEY.common_general)}</Link>
+      <ul className={styles.footer_list}>
+        <li className={styles.footer_list_item}>
+          <Link className={styles.footer_link} url={ROUTES_SAMF_THREE.information.general}>
+            {t(KEY.common_general)}
+          </Link>
         </li>
-        <li>
-          <Link url={ROUTES_SAMF_THREE.information.membership}>{t(KEY.common_membership)}</Link>
+        <li className={styles.footer_list_item}>
+          <Link className={styles.footer_link} url={ROUTES_SAMF_THREE.information.membership}>
+            {t(KEY.common_membership)}
+          </Link>
         </li>
-        <li>
-          <Link url={ROUTES_SAMF_THREE.information.openingHours}>{t(KEY.common_opening_hours)}</Link>
+        <li className={styles.footer_list_item}>
+          <Link className={styles.footer_link} url={ROUTES_SAMF_THREE.information.openingHours}>
+            {t(KEY.common_opening_hours)}
+          </Link>
         </li>
-        <li>
-          <Link url={ROUTES_SAMF_THREE.information.photos}>{t(KEY.common_photos)}</Link>
+        <li className={styles.footer_list_item}>
+          <Link className={styles.footer_link} url={ROUTES_SAMF_THREE.information.photos}>
+            {t(KEY.common_photos)}
+          </Link>
         </li>
-        <li>
-          <Link url={ROUTES_SAMF_THREE.information.renting}>{t(KEY.common_renting)}</Link>
+        <li className={styles.footer_list_item}>
+          <Link className={styles.footer_link} url={ROUTES_SAMF_THREE.information.renting}>
+            {t(KEY.common_renting)}
+          </Link>
         </li>
       </ul>
     </div>
@@ -138,18 +148,26 @@ export function Footer() {
   const venues = (
     <div className={styles.footer_section}>
       <h2 className={styles.header}>{t(KEY.common_venues)}</h2>
-      <ul>
-        <li>
-          <Link url={ROUTES_SAMF_THREE.venues.restaurant}>{t(KEY.common_restaurant)}</Link>
+      <ul className={styles.footer_list}>
+        <li className={styles.footer_list_item}>
+          <Link className={styles.footer_link} url={ROUTES_SAMF_THREE.venues.restaurant}>
+            {t(KEY.common_restaurant)}
+          </Link>
         </li>
-        <li>
-          <Link url={ROUTES_SAMF_THREE.venues.bar}>{t(KEY.common_bar)}</Link>
+        <li className={styles.footer_list_item}>
+          <Link className={styles.footer_link} url={ROUTES_SAMF_THREE.venues.bar}>
+            {t(KEY.common_bar)}
+          </Link>
         </li>
-        <li>
-          <Link url={ROUTES_SAMF_THREE.venues.scene}>{t(KEY.common_stages)}</Link>
+        <li className={styles.footer_list_item}>
+          <Link className={styles.footer_link} url={ROUTES_SAMF_THREE.venues.scene}>
+            {t(KEY.common_stages)}
+          </Link>
         </li>
-        <li>
-          <Link url={ROUTES_SAMF_THREE.venues.club}>{t(KEY.common_club)}</Link>
+        <li className={styles.footer_list_item}>
+          <Link className={styles.footer_link} url={ROUTES_SAMF_THREE.venues.club}>
+            {t(KEY.common_club)}
+          </Link>
         </li>
       </ul>
     </div>

@@ -1,4 +1,5 @@
 @use 'src/constants' as *;
+
 @use 'src/mixins' as *;
 
 .container {
@@ -125,7 +126,7 @@
   align-items: flex-start;
   text-align: left;
 
-  ul {
+  .footer_list {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -135,13 +136,13 @@
     text-align: left;
   }
 
-  li {
+  .footer_list_item {
     font-size: 0.875rem;
     font-weight: 300;
     line-height: 1.4;
   }
 
-  a {
+  .footer_link {
     color: inherit;
     text-decoration: none;
     opacity: 0.9;
@@ -156,7 +157,7 @@
     align-items: center;
     text-align: center;
 
-    ul {
+    .footer_list {
       text-align: center;
     }
   }
