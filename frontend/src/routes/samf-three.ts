@@ -29,3 +29,7 @@ export const ROUTES_SAMF_THREE = {
   },
   volunteer: `${BASE_URL}/opptak`,
 } as const;
+// Samfundet3 innlogging
+export const SAMF3_LOGIN_URL = {
+  login: `${BASE_URL}/logg-inn`,
+};
