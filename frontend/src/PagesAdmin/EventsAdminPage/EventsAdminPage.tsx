@@ -33,8 +33,10 @@ export function EventsAdminPage() {
   function getEvents(venue?: string | null, category?: EventCategoryValue | null) {
     getEventsUpcomming({ venue: venue ?? undefined, category: category ?? undefined })
       .then((data) => {
-        setEvents(data);
-        setAllEvents(data);
+        setCategories(data.categories as EventCategoryValue[]);
+        setVenues(data.locations);
+        setEvents(data.events);
+        setAllEvents(data.events);
         setShowSpinner(false);
       })
       .catch((error) => {
@@ -46,11 +48,6 @@ export function EventsAdminPage() {
   // Stuff to do on first render.
   // TODO add permissions on render
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    setVenues(['Rundhallen', 'Storsalen', 'Lillebaren', 'Kjelleren', 'Loftet']);
-    setCategories(['other', 'samfundsmote', 'concert', 'debate', 'quiz', 'lecture']);
-  }, []);
-
   useEffect(() => {
     getEvents(selectedVenue, selectedCategory);
   }, [selectedVenue, selectedCategory]);

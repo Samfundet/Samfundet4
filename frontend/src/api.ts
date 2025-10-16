@@ -57,6 +57,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { BACKEND_DOMAIN } from './constants';
 import type { PageNumberPaginationType } from './types';
+import i18next from 'i18next';
 
 export async function getCsrfToken(): Promise<string> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__csrf;
@@ -239,15 +240,21 @@ export async function getEventsPerDay(): Promise<EventDto[]> {
   return response.data;
 }
 
+type EventsUpcomingResponse = {
+  events: EventDto[]; // Array of events
+  categories: string[]; // Categories as value-label pairs
+  locations: string[]; // Locations as value-label pairs
+};
+
 export async function getEventsUpcomming(params: {
   search?: string;
   event_group?: string;
   venue?: string;
   category?: string;
-}): Promise<EventDto[]> {
+}): Promise<EventsUpcomingResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcomming;
 
-  const response = await axios.get<EventDto[]>(url, {
+  const response = await axios.get<EventsUpcomingResponse>(url, {
     withCredentials: true,
     params: {
       ...(params.search ? { search: params.search } : {}), // Add search if provided
@@ -256,6 +263,10 @@ export async function getEventsUpcomming(params: {
       ...(params.category ? { category: params.category } : {}), // Add category if provided
     },
   });
+
+  for (let i = 0; i < response.data.categories.length; i++) {
+    response.data.categories[i] = response.data.categories[i][0];
+  }
 
   return response.data;
 }

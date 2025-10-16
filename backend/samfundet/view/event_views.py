@@ -3,6 +3,7 @@
 # =============================== #
 from __future__ import annotations
 
+from ..models.general import Venue
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
@@ -61,7 +62,19 @@ class EventsUpcomingView(APIView):
     def get(self, request: Request) -> Response:
         events = event_query(query=request.query_params)
         events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')
-        return Response(data=EventSerializer(events, many=True).data)
+        serialized_events = EventSerializer(events, many=True).data
+
+        # Fetch all venue names
+        venue_names = list(Venue.objects.values_list('name', flat=True))
+
+        response_data = {
+            'events': serialized_events,
+            'categories': Event._meta.get_field('category').choices if Event._meta.get_field('category').choices else [],
+            'locations': venue_names if venue_names else [],
+        }
+
+        return Response(data=response_data, status=status.HTTP_200_OK)
+
 
 
 class EventGroupView(ModelViewSet):
