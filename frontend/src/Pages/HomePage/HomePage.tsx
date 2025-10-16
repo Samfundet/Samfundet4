@@ -1,7 +1,6 @@
 import { type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { OpeningHours } from '~/Components';
 import { EventCarousel, LargeCard } from '~/Pages/HomePage/components';
 import { getHomeData } from '~/api';
 import type { HomePageDto, HomePageElementDto } from '~/dto';
@@ -48,30 +47,12 @@ export function HomePage() {
     </>
   );
 
-  const s = new Date();
-  const e = new Date();
-  s.setHours(16, 0, 0, 0);
-  e.setHours(21, 0, 0, 0);
-
   return (
     <>
       <Splash events={homePage?.splash} showInfo={true} />
       <div className={styles.content}>
         {/*<SplashHeaderBox />*/}
         {isLoading && skeleton}
-
-        <div>
-          <OpeningHours
-            venues={[
-              {
-                name: 'house',
-                url: '/',
-                start: s.toString(),
-                end: e.toString(),
-              },
-            ]}
-          />
-        </div>
 
         {/* Render elements for frontpage. */}
         {homePage?.elements.map((el, index) => renderElement(index, el))}
