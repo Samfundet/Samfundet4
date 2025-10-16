@@ -26,7 +26,7 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
       for (const period of periods) {
         if (new Date(period.start_dt) < now && now < new Date(period.end_dt)) {
           setIsClosed(true);
-          setClosedText(dbT(period, 'description'));
+          setClosedText(dbT(period, 'message'));
           break;
         }
       }
