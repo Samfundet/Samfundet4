@@ -27,7 +27,7 @@ export function OpeningHoursAdminPage() {
     queryKey: venueKeys.all,
     queryFn: getVenues,
     // Sort venues by name for a stable order
-    select: (data) => [...data].sort((venueA, venueB) => venueA.name.localeCompare(venueB.name))
+    select: (data) => [...data].sort((venueA, venueB) => venueA.name.localeCompare(venueB.name)),
   });
 
   // We need a reference to read changed state inside timeout
