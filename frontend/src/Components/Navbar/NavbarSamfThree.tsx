@@ -14,7 +14,7 @@ import { logoWhite } from '~/assets';
 import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { RecruitmentDto } from '~/dto';
-import { useDesktop, useScrollY } from '~/hooks';
+import { useDesktop } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
