@@ -53,7 +53,7 @@ export function NavbarItemSamfThree({
   });
 
   // Toggle dropdown on click
-  function handleClick() {
+  function handleOnClick() {
     if (!dropdownLinks) {
       // Given no dropdownLinks, the user is about to follow a link -> close the mobileNavigation.
       setIsMobileNavigation(false);
@@ -62,9 +62,36 @@ export function NavbarItemSamfThree({
       setExpandedDropdown(isSelected ? '' : label);
     }
   }
+
+  function handleMouseEnter() {
+    if (!dropdownLinks) {
+      // Given no dropdownLinks, the user is about to follow a link -> close the mobileNavigation.
+      setIsMobileNavigation(false);
+    } else {
+      // toggle dropdown
+      setExpandedDropdown(isSelected ? '' : label);
+    }
+  }
+
+  function handleMouseLeave() {
+    if (!dropdownLinks) {
+      // Given no dropdownLinks, the user is about to follow a link -> close the mobileNavigation.
+      setIsMobileNavigation(false);
+    } else {
+      // toggle dropdown
+      setExpandedDropdown('');
+    }
+  }
+
   return (
-    <div className={itemClasses} ref={clickOutsideRef}>
-      <Link to={route} className={isDesktop ? styles.navbar_link : styles.popup_link_mobile} onClick={handleClick}>
+    <div
+      className={itemClasses}
+      ref={clickOutsideRef}
+      onMouseEnter={isDesktop ? handleMouseEnter : undefined}
+      onMouseLeave={isDesktop ? handleMouseLeave : undefined}
+      onClick={!isDesktop ? handleOnClick : undefined}
+    >
+      <Link to={route} className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}>
         {icon && <Icon icon={icon} className={styles.navbar_item_icon} />}
         <span className={labelClassName}>{label}</span>
         {dropdownLinks && (
@@ -73,7 +100,7 @@ export function NavbarItemSamfThree({
             width={18}
             className={classNames({
               [styles.chevron]: true,
-              [styles.flip]: isSelected,
+              [styles.flip]: !isDesktop && isSelected,
             })}
           />
         )}

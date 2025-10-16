@@ -39,13 +39,8 @@ export function NavbarSamfThree() {
   // Store the label of the currently selected dropdown.
   const [expandedDropdown, setExpandedDropdown] = useState('');
 
-  // Scroll detection.
-  const scrollY = useScrollY();
-  const isScrolledNavbar = scrollY > scrollDistanceForOpaque;
-
   // Navbar style.
   const isRootPath = useLocation().pathname === ROUTES.frontend.home;
-  // const isTransparentNavbar = isRootPath && !isScrolledNavbar && !isMobileNavigation;
 
   useEffect(() => {
     // Close expanded dropdown menu whenever mobile navbar is closed, or we switch from mobile to desktop, like when
