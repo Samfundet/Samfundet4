@@ -27,7 +27,7 @@ export function OpeningHoursAdminPage() {
     queryKey: venueKeys.all,
     queryFn: getVenues,
     // Sort venues by name for a stable order
-    select: (data) => [...data].sort((a, b) => a.name.localeCompare(b.name)),
+    select: (data) => [...data].sort((venueA, venueB) => venueA.name.localeCompare(venueB.name))
   });
 
   // We need a reference to read changed state inside timeout
@@ -39,7 +39,7 @@ export function OpeningHoursAdminPage() {
     // Update cache in place instead of invalidating
     onSuccess: (updated: VenueDto, vars) => {
       queryClient.setQueryData<VenueDto[]>(venueKeys.all, (oldVenues = []) =>
-        oldVenues.map((v) => (v.slug === vars.slug ? { ...v, ...vars.data } : v)),
+        oldVenues.map((venue) => (venue.slug === vars.slug ? { ...venue, ...vars.data } : venue)),
       );
 
       // Show success badge
