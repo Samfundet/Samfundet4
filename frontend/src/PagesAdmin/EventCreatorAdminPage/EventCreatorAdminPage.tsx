@@ -110,7 +110,7 @@ export function EventCreatorAdminPage() {
       image: undefined,
       publish_dt: '',
       visibility_from_dt: '',
-      visibility_to_dt: '',
+      // visibility_to_dt: '',
     },
   });
 
@@ -139,7 +139,7 @@ export function EventCreatorAdminPage() {
             image: eventData.image,
             publish_dt: eventData.publish_dt ? utcTimestampToLocal(eventData.publish_dt, false) : '',
             visibility_from_dt: eventData.publish_dt ? utcTimestampToLocal(eventData.publish_dt, false) : '',
-            visibility_to_dt: eventData.visibility_to_dt ? utcTimestampToLocal(eventData.visibility_to_dt, false) : '',
+            // visibility_to_dt: eventData.visibility_to_dt ? utcTimestampToLocal(eventData.visibility_to_dt, false) : '',
           });
           setShowSpinner(false);
         })
@@ -182,7 +182,9 @@ export function EventCreatorAdminPage() {
               name="title_nb"
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Tittel (norsk)</FormLabel>
+                  <FormLabel>
+                    {t(KEY.common_title)} ({t(KEY.common_norwegian)})
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -196,7 +198,9 @@ export function EventCreatorAdminPage() {
               key={'title_en'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Tittel (engelsk)</FormLabel>
+                  <FormLabel>
+                    {t(KEY.common_title)} ({t(KEY.common_english)})
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -212,7 +216,9 @@ export function EventCreatorAdminPage() {
               key={'description_short_nb'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Kort beskrivelse (norsk)</FormLabel>
+                  <FormLabel>
+                    {t(KEY.common_short_description)} ({t(KEY.common_norwegian)})
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -226,7 +232,9 @@ export function EventCreatorAdminPage() {
               key={'description_short_en'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Kort beskrivelse (engelsk)</FormLabel>
+                  <FormLabel>
+                    {t(KEY.common_short_description)} ({t(KEY.common_english)})
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -242,7 +250,9 @@ export function EventCreatorAdminPage() {
               key={'description_long_nb'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Lang beskrivelse (norsk)</FormLabel>
+                  <FormLabel>
+                    {t(KEY.common_long_description)} ({t(KEY.common_norwegian)})
+                  </FormLabel>
                   <FormControl>
                     <Textarea className="textarea" {...field} rows={8} />
                   </FormControl>
@@ -256,7 +266,9 @@ export function EventCreatorAdminPage() {
               key={'description_long_en'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Lang beskrivelse (engelsk)</FormLabel>
+                  <FormLabel>
+                    {t(KEY.common_long_description)} ({t(KEY.common_english)})
+                  </FormLabel>
                   <FormControl>
                     <Textarea className="textarea" {...field} rows={8} />
                   </FormControl>
@@ -285,7 +297,9 @@ export function EventCreatorAdminPage() {
               key={'start_dt'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Dato & tid</FormLabel>
+                  <FormLabel>
+                    {t(KEY.common_date)} & {t(KEY.common_time)}
+                  </FormLabel>
                   <FormControl>
                     <Input type="datetime-local" {...field} />
                   </FormControl>
@@ -299,7 +313,9 @@ export function EventCreatorAdminPage() {
               key={'duration'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Varighet (minutter)</FormLabel>
+                  <FormLabel>
+                    {t(KEY.recruitment_duration)} ({t(KEY.common_minutes)})
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -319,7 +335,7 @@ export function EventCreatorAdminPage() {
               key={'category'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Kategori</FormLabel>
+                  <FormLabel>{t(KEY.category)}</FormLabel>
                   <FormControl>
                     <Dropdown options={eventCategoryOptions} {...field} />
                   </FormControl>
@@ -333,7 +349,7 @@ export function EventCreatorAdminPage() {
               key={'host'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Arrangør</FormLabel>
+                  <FormLabel>{t(KEY.admin_organizer)}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -349,7 +365,7 @@ export function EventCreatorAdminPage() {
               key={'location'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Lokale</FormLabel>
+                  <FormLabel>{t(KEY.common_venue)}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -363,7 +379,7 @@ export function EventCreatorAdminPage() {
               key={'capacity'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Kapasitet</FormLabel>
+                  <FormLabel>{t(KEY.common_capacity)}</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -395,7 +411,7 @@ export function EventCreatorAdminPage() {
             key={'age_restriction'}
             render={({ field }) => (
               <FormItem className={styles.form_item}>
-                <FormLabel>Aldersgrense</FormLabel>
+                <FormLabel>{t(KEY.common_age_limit)}</FormLabel>
                 <FormControl>
                   <Dropdown options={ageLimitOptions} {...field} />
                 </FormControl>
@@ -409,7 +425,7 @@ export function EventCreatorAdminPage() {
             key={'ticket_type'}
             render={({ field }) => (
               <FormItem className={styles.form_item}>
-                <FormLabel>Billettype</FormLabel>
+                <FormLabel>{t(KEY.common_the_ticket_type)}</FormLabel>
                 <FormControl>
                   <Dropdown options={ticketTypeOptions} {...field} />
                 </FormControl>
@@ -443,7 +459,7 @@ export function EventCreatorAdminPage() {
           key={'image'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
-              <FormLabel>Bilde</FormLabel>
+              <FormLabel>{t(KEY.common_image)}</FormLabel>
               <FormControl>
                 <ImagePicker
                   onSelected={(image) => {
@@ -587,7 +603,8 @@ export function EventCreatorAdminPage() {
           <b>{t(KEY.category)}:</b> {formValues.category ?? t(KEY.common_missing)}
         </span>
         <span>
-          <strong>Varighet:</strong> {formValues.duration ? `${formValues.duration} min` : t(KEY.common_missing)}
+          <strong>{t(KEY.recruitment_duration)}:</strong>{' '}
+          {formValues.duration ? `${formValues.duration} min` : t(KEY.common_missing)}
         </span>
         <span>
           <b>{t(KEY.admin_organizer)}:</b> {formValues.host ?? t(KEY.common_missing)}

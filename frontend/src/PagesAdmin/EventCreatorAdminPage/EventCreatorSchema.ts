@@ -34,5 +34,5 @@ export const eventSchema = z.object({
   // Summary/Publication date
   publish_dt: z.string().min(1, { message: 'Publikasjonsdato er påkrevd' }),
   visibility_from_dt: z.string().min(1),
-  visibility_to_dt: z.string().min(1),
+  // visibility_to_dt: z.string().min(1),
 });
