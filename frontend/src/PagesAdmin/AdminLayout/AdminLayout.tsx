@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router';
 import { Button, Link, Navbar } from '~/Components';
 import { appletCategories } from '~/Pages/AdminPage/applets';
+import { isControlPanelFeatureEnabled } from '~/config/controlPanelFeatures';
 import { useAuthContext } from '~/context/AuthContext';
 import { useMobile } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -54,15 +55,18 @@ export function AdminLayout() {
     }
   }, [isMobile]);
 
-  const userApplets: AdminApplet[] = [
-    { url: ROUTES_FRONTEND.admin, icon: 'mdi:person', title_nb: 'Profil', title_en: 'Profile' },
+  const userAppletsRaw: AdminApplet[] = [
+    { url: ROUTES_FRONTEND.admin, icon: 'mdi:person', title_nb: 'Profil', title_en: 'Profile', feature: 'profile' },
     {
       url: ROUTES_FRONTEND.user_change_password,
       icon: 'mdi:password',
       title_nb: 'Bytt passord',
       title_en: 'Change password',
+      feature: 'changePassword',
     },
   ];
+
+  const userApplets = userAppletsRaw.filter((a) => !a.feature || isControlPanelFeatureEnabled(a.feature));
 
   const panel = (
     <div className={classNames(styles.panel, !panelOpen && styles.mobile_panel_closed)}>
@@ -77,19 +81,28 @@ export function AdminLayout() {
       <br />
       {/* Applets */}
       {appletCategories.map((category) => {
+        // Keep only the applets with enabled features visible
+        const visibleApplets = category.applets.filter(
+          (applet) => !applet.feature || isControlPanelFeatureEnabled(applet.feature),
+        );
+
+        if (visibleApplets.length === 0) return null;
+
         return (
           <React.Fragment key={category.title_en}>
             <div className={styles.category_header}>{dbT(category, 'title')}</div>
-            {category.applets.map((applet, index) => makeAppletShortcut(applet, index))}
+            {visibleApplets.map((applet, index) => makeAppletShortcut(applet, index))}
           </React.Fragment>
         );
       })}
       <br />
-      {/* TODO help/faq */}
-      <Link className={classNames(styles.panel_item)} url={ROUTES_FRONTEND.admin}>
-        <Icon icon="material-symbols:question-mark-rounded" />
-        {t(KEY.control_panel_faq)}
-      </Link>
+      {/* TODO help/faq (Hidden until ready)*/}
+      {isControlPanelFeatureEnabled('faq') && (
+        <Link className={classNames(styles.panel_item)} url={ROUTES_FRONTEND.admin}>
+          <Icon icon="material-symbols:question-mark-rounded" />
+          {t(KEY.control_panel_faq)}
+        </Link>
+      )}
     </div>
   );
 
