@@ -16,8 +16,6 @@ import styles from './ClosedPeriodFormAdminPage.module.scss';
 type formType = {
   message_no: string;
   message_en: string;
-  description_no: string;
-  description_en: string;
   start_dt: Date;
   end_dt: Date;
 };
@@ -46,11 +44,10 @@ export function ClosedPeriodFormAdminPage() {
     getClosedPeriod(id)
       .then((data) => {
         // setClosedPeriod(data); For posting
+        console.log(data)
         setInitialData({
           message_no: data.message_no,
           message_en: data.message_en,
-          description_no: data.description_no,
-          description_en: data.description_en,
           start_dt: new Date(data.start_dt),
           end_dt: new Date(data.end_dt),
         });
@@ -67,6 +64,7 @@ export function ClosedPeriodFormAdminPage() {
   }, [id]);
 
   function handleOnSubmit(data: formType) {
+    // handle invalid dates, handle conflicting dates, handle short messages
     if (id !== undefined) {
       // TODO patch data
     } else {
@@ -77,7 +75,6 @@ export function ClosedPeriodFormAdminPage() {
   }
 
   const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
-  const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}'`;
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
   useTitle(title);
 
@@ -87,18 +84,6 @@ export function ClosedPeriodFormAdminPage() {
         <div className={styles.row}>
           <SamfFormField field="message_no" type="text_long" label={`${labelMessage} (${t(KEY.common_norwegian)})`} />
           <SamfFormField field="message_en" type="text_long" label={`${labelMessage} (${t(KEY.common_english)})`} />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField
-            field="description_no"
-            type="text_long"
-            label={`${labelDescription} (${t(KEY.common_norwegian)})`}
-          />
-          <SamfFormField
-            field="description_en"
-            type="text_long"
-            label={`${labelDescription} (${t(KEY.common_english)})`}
-          />
         </div>
         <div className={styles.row}>
           <SamfFormField field="start_dt" type="date" label={`${t(KEY.start_time)}`} />
