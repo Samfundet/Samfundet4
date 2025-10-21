@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 from typing import Optional
-from operator import or_  # type: ignore[assignment]
+from operator import or_
 
 ###
 from functools import reduce
