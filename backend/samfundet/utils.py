@@ -18,31 +18,40 @@ from .models.recruitment import Recruitment, OccupiedTimeslot, RecruitmentInterv
 
 
 def event_query(*, query: QueryDict, events: QuerySet[Event] = None) -> QuerySet[Event]:
-    if not events:
+    if events is None:
         events = Event.objects.all()
-    search = query.get('search', None)
+
+    def _build_search_q(search: str) -> Q:
+        fields = [
+            'title_nb__icontains',
+            'title_en__icontains',
+            'description_long_nb__icontains',
+            'description_long_en__icontains',
+            'description_short_en',
+            'description_short_nb',
+            'location__icontains',
+            'event_group__name',
+        ]
+        q = Q()
+        for f in fields:
+            q |= Q(**{f: search})
+        return q
+
+    search = query.get('search')
     if search:
-        events = events.filter(
-            Q(title_nb__icontains=search)
-            | Q(title_en__icontains=search)
-            | Q(description_long_nb__icontains=search)
-            | Q(description_long_en__icontains=search)
-            | Q(description_short_en=search)
-            | Q(description_short_nb=search)
-            | Q(location__icontains=search)
-            | Q(event_group__name=search)
-        )
-    event_group = query.get('event_group', None)
-    if event_group:
-        events = events.filter(event_group__id=event_group)
+        events = events.filter(_build_search_q(search))
 
-    event_category = query.get('category', None)
-    if event_category:
-        events = events.filter(category__icontains=event_category)
+    # Combine the simple scalar filters into a small loop to keep complexity down
+    filter_map = {
+        'event_group': 'event_group__id',
+        'category': 'category__icontains',
+        'venue': 'location__icontains',
+    }
+    for param, lookup in filter_map.items():
+        val = query.get(param)
+        if val:
+            events = events.filter(**{lookup: val})
 
-    location = query.get('venue', None)
-    if location:
-        events = events.filter(location__icontains=location)  # TODO should maybe be a foreignKey?
     return events
 
 
