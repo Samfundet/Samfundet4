@@ -358,8 +358,8 @@ export type ClosedPeriodDto = {
   description_no: string;
   message_en: string;
   description_en: string;
-  start_dt: Date;
-  end_dt: Date;
+  start_dt: string;
+  end_dt: string;
 };
 
 export type TagDto = {

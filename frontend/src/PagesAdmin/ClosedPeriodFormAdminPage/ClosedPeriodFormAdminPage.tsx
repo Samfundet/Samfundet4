@@ -16,8 +16,8 @@ import styles from './ClosedPeriodFormAdminPage.module.scss';
 type formType = {
   message_no: string;
   message_en: string;
-  start_dt: Date;
-  end_dt: Date;
+  start_dt: string;
+  end_dt: string;
 };
 
 export function ClosedPeriodFormAdminPage() {
@@ -48,8 +48,8 @@ export function ClosedPeriodFormAdminPage() {
         setInitialData({
           message_no: data.message_no,
           message_en: data.message_en,
-          start_dt: new Date(data.start_dt),
-          end_dt: new Date(data.end_dt),
+          start_dt: data.start_dt,
+          end_dt: data.end_dt,
         });
         setShowSpinner(false);
       })
@@ -65,6 +65,25 @@ export function ClosedPeriodFormAdminPage() {
 
   function handleOnSubmit(data: formType) {
     // handle invalid dates, handle conflicting dates, handle short messages
+    const start_dt = new Date(data.start_dt)
+    const end_dt = new Date(data.end_dt)
+    const now = new Date()
+    
+    if (end_dt === start_dt) {
+      alert("end is equal to start, please set it to be more")
+      return
+    }
+    if (end_dt > start_dt) {
+      alert("end is less then start")
+      return
+    }
+    if (data.message_no.length <= 4) {
+      alert("message norsk må være lengere")
+    }
+    if (data.message_en.length <= 4) {
+      alert("message engelsk må være lengere")
+    }
+
     if (id !== undefined) {
       // TODO patch data
     } else {
