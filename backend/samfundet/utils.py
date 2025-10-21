@@ -20,27 +20,27 @@ from .models.event import Event
 from .models.recruitment import Recruitment, OccupiedTimeslot, RecruitmentInterviewAvailability
 
 SEARCH_FIELDS = (
-    "title_nb__icontains",
-    "title_en__icontains",
-    "description_long_nb__icontains",
-    "description_long_en__icontains",
-    "description_short_en__icontains",
-    "description_short_nb__icontains",
-    "location__icontains",
-    "event_group__name__icontains",
+    'title_nb__icontains',
+    'title_en__icontains',
+    'description_long_nb__icontains',
+    'description_long_en__icontains',
+    'description_short_en__icontains',
+    'description_short_nb__icontains',
+    'location__icontains',
+    'event_group__name__icontains',
 )
 
 SIMPLE_FILTERS = {
-    "event_group": "event_group__id",
-    "category": "category__icontains",
-    "venue": "location__icontains",
+    'event_group': 'event_group__id',
+    'category': 'category__icontains',
+    'venue': 'location__icontains',
 }
 
 
 def event_query(*, query: QueryDict, events: Optional[QuerySet[Event]] = None) -> QuerySet[Event]:
     qs = events if events is not None else Event.objects.all()
 
-    search = query.get("search")
+    search = query.get('search')
     if search:
         q_parts = (Q(**{f: search}) for f in SEARCH_FIELDS)
         qs = qs.filter(reduce(or_, q_parts, Q()))
