@@ -12,7 +12,7 @@ import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { EventCategoryValue } from '~/types';
+import type { EventCategoryValue } from '~/types';
 import { dbT, getTicketTypeKey, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventsAdminPage.module.scss';

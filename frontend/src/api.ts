@@ -57,7 +57,6 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { BACKEND_DOMAIN } from './constants';
 import type { PageNumberPaginationType } from './types';
-import i18next from 'i18next';
 
 export async function getCsrfToken(): Promise<string> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__csrf;
