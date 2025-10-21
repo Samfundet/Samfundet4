@@ -81,7 +81,6 @@ class EventsUpcomingView(APIView):
         return Response(data=response_data, status=status.HTTP_200_OK)
 
 
-
 class EventGroupView(ModelViewSet):
     permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
     serializer_class = EventGroupSerializer
