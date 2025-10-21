@@ -16,6 +16,7 @@ from rest_framework.views import APIView
 from root.custom_classes.permission_classes import RoleProtectedOrAnonReadOnlyObjectPermissions
 
 from samfundet.models.event import (
+    Event,
     EventGroup,
     PurchaseFeedbackAlternative,
     PurchaseFeedbackQuestion,
