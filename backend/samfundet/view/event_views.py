@@ -3,32 +3,32 @@
 # =============================== #
 from __future__ import annotations
 
-from django.utils import timezone
-
 from rest_framework import status
-from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
 from rest_framework.request import Request
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
+
+from django.utils import timezone
 
 from root.custom_classes.permission_classes import RoleProtectedOrAnonReadOnlyObjectPermissions
 
+from samfundet.utils import event_query
+from samfundet.serializers import (
+    EventSerializer,
+    EventGroupSerializer,
+    PurchaseFeedbackSerializer,
+)
 from samfundet.models.event import (
     Event,
     EventGroup,
-    PurchaseFeedbackAlternative,
     PurchaseFeedbackQuestion,
+    PurchaseFeedbackAlternative,
 )
 from samfundet.models.general import Venue
 from samfundet.models.model_choices import EventStatus
-from samfundet.serializers import (
-    EventGroupSerializer,
-    EventSerializer,
-    PurchaseFeedbackSerializer,
-)
-from samfundet.utils import event_query
 
 
 class EventView(ModelViewSet):

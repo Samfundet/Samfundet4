@@ -1,6 +1,11 @@
 from __future__ import annotations
 
 import datetime
+from typing import Optional
+from operator import or_  # type: ignore[assignment]
+
+###
+from functools import reduce
 
 from django.http import QueryDict
 from django.db.models import Q, Model
@@ -14,45 +19,38 @@ from .models import User
 from .models.event import Event
 from .models.recruitment import Recruitment, OccupiedTimeslot, RecruitmentInterviewAvailability
 
-###
+SEARCH_FIELDS = (
+    "title_nb__icontains",
+    "title_en__icontains",
+    "description_long_nb__icontains",
+    "description_long_en__icontains",
+    "description_short_en__icontains",
+    "description_short_nb__icontains",
+    "location__icontains",
+    "event_group__name__icontains",
+)
+
+SIMPLE_FILTERS = {
+    "event_group": "event_group__id",
+    "category": "category__icontains",
+    "venue": "location__icontains",
+}
 
 
-def event_query(*, query: QueryDict, events: QuerySet[Event] = None) -> QuerySet[Event]:
-    if events is None:
-        events = Event.objects.all()
+def event_query(*, query: QueryDict, events: Optional[QuerySet[Event]] = None) -> QuerySet[Event]:
+    qs = events if events is not None else Event.objects.all()
 
-    def _build_search_q(search: str) -> Q:
-        fields = [
-            'title_nb__icontains',
-            'title_en__icontains',
-            'description_long_nb__icontains',
-            'description_long_en__icontains',
-            'description_short_en',
-            'description_short_nb',
-            'location__icontains',
-            'event_group__name',
-        ]
-        q = Q()
-        for f in fields:
-            q |= Q(**{f: search})
-        return q
-
-    search = query.get('search')
+    search = query.get("search")
     if search:
-        events = events.filter(_build_search_q(search))
+        q_parts = (Q(**{f: search}) for f in SEARCH_FIELDS)
+        qs = qs.filter(reduce(or_, q_parts, Q()))
 
-    # Combine the simple scalar filters into a small loop to keep complexity down
-    filter_map = {
-        'event_group': 'event_group__id',
-        'category': 'category__icontains',
-        'venue': 'location__icontains',
-    }
-    for param, lookup in filter_map.items():
-        val = query.get(param)
-        if val:
-            events = events.filter(**{lookup: val})
+    for param, lookup in SIMPLE_FILTERS.items():
+        value = query.get(param)
+        if value:
+            qs = qs.filter(**{lookup: value})
 
-    return events
+    return qs
 
 
 def get_user_by_search(*, query: QueryDict, users: QuerySet[User] = None) -> QuerySet[User]:
