@@ -139,6 +139,8 @@ export type VenueDto = {
   closing_sunday?: string;
 };
 
+export type OpenVenuesDto = VenueDto[];
+
 // ==================== //
 //        Event         //
 // ==================== //
