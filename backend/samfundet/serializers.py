@@ -6,11 +6,11 @@ import itertools
 from typing import TYPE_CHECKING
 from collections import defaultdict
 
+from PIL import Image as PilImage
+from PIL import UnidentifiedImageError
 from guardian.models import UserObjectPermission, GroupObjectPermission
 
 from rest_framework import serializers
-
-from PIL import Image as PilImage, UnidentifiedImageError
 
 from django.db.models import Q, QuerySet
 from django.core.files import File
@@ -110,8 +110,8 @@ class ImageSerializer(CustomBaseSerializer):
             file.seek(0)
             PilImage.open(file).verify()
             file.seek(0)
-        except (UnidentifiedImageError, Exception):
-            raise serializers.ValidationError({'file': 'Uploaded file is not a valid image.'})
+        except UnidentifiedImageError as error:
+            raise serializers.ValidationError('Invalid image') from error
 
         return attributes
 
@@ -125,7 +125,6 @@ class ImageSerializer(CustomBaseSerializer):
         file = validated_data.pop('file')
         raw_tag_string = validated_data.pop('tag_string', None)
         if raw_tag_string is not None:
-
             # Split on comma, strip whitespace and drop empties
             tag_names = [name.strip() for name in raw_tag_string.split(',')]
             tag_names = [name for name in tag_names if name]
