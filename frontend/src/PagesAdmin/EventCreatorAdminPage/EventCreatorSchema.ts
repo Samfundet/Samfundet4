@@ -1,12 +1,19 @@
 import { z } from 'zod';
 import {
+  EVENT_AGE_RESTRICTION,
+  EVENT_CAPACITY,
   EVENT_CATEGORY,
   EVENT_DESCRIPTION_LONG,
   EVENT_DESCRIPTION_SHORT,
   EVENT_DURATION,
   EVENT_END_DT,
+  EVENT_HOST,
+  EVENT_LOCATION,
   EVENT_START_DT,
+  EVENT_TICKET_TYPE,
   EVENT_TITLE,
+  EVENT_VISIBILITY_FROM_DT,
+  EVENT_VISIBILITY_TO_DT,
 } from '~/schema/event';
 import { OPTIONAL_IMAGE } from '~/schema/samfImage';
 
@@ -23,16 +30,15 @@ export const eventSchema = z.object({
   duration: EVENT_DURATION,
   end_dt: EVENT_END_DT,
   category: EVENT_CATEGORY,
-  host: z.string().min(1, { message: 'Arrangør er påkrevd' }),
-  location: z.string().min(1, { message: 'Lokale er påkrevd' }),
-  capacity: z.number().min(1, { message: 'Kapasitet må være større enn 0' }),
+  host: EVENT_HOST,
+  location: EVENT_LOCATION,
+  capacity: EVENT_CAPACITY,
   // Payment/registration
-  age_restriction: z.enum(['none', 'eighteen', 'twenty', 'mixed']),
-  ticket_type: z.enum(['free', 'included', 'billig', 'registration', 'prepaid', 'custom']),
+  age_restriction: EVENT_AGE_RESTRICTION,
+  ticket_type: EVENT_TICKET_TYPE,
   // Graphics
   image: OPTIONAL_IMAGE,
   // Summary/Publication date
-  publish_dt: z.string().min(1, { message: 'Publikasjonsdato er påkrevd' }),
-  visibility_from_dt: z.string().min(1),
-  // visibility_to_dt: z.string().min(1),
+  visibility_from_dt: EVENT_VISIBILITY_FROM_DT,
+  visibility_to_dt: EVENT_VISIBILITY_TO_DT,
 });

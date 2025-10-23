@@ -23,7 +23,7 @@ import {
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { getEvent, postEvent } from '~/api';
+import { getEvent, getVenues, postEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
@@ -42,6 +42,8 @@ import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { eventSchema } from './EventCreatorSchema';
+import { venueKeys } from '~/queryKeys';
+import { useQuery } from '@tanstack/react-query';
 
 // Define the Zod schema for event validation
 
@@ -62,6 +64,15 @@ export function EventCreatorAdminPage() {
   const [event, setEvent] = useState<Partial<EventDto>>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
+
+  const { data: venues = [], isLoading } = useQuery({
+    queryKey: venueKeys.all,
+    queryFn: getVenues,
+  });
+
+  const locationOptions: DropdownOption<string>[] = [
+    ...venues.map((venue) => ({ value: venue.name, label: venue.name })),
+  ];
 
   // TODO these are temporary and must be fetched from API when implemented.
   const eventCategoryOptions: DropdownOption<EventCategoryValue>[] = [
@@ -103,14 +114,13 @@ export function EventCreatorAdminPage() {
       end_dt: '',
       category: eventCategoryOptions[0].value,
       host: '',
-      location: '',
+      location: locationOptions.length > 0 ? locationOptions[0].value : '',
       capacity: 0,
       age_restriction: 'none',
       ticket_type: 'free',
       image: undefined,
-      publish_dt: '',
       visibility_from_dt: '',
-      // visibility_to_dt: '',
+      visibility_to_dt: '',
     },
   });
 
@@ -137,9 +147,9 @@ export function EventCreatorAdminPage() {
             age_restriction: eventData.age_restriction || 'none',
             ticket_type: eventData.ticket_type || 'free',
             image: eventData.image,
-            publish_dt: eventData.publish_dt ? utcTimestampToLocal(eventData.publish_dt, false) : '',
-            visibility_from_dt: eventData.publish_dt ? utcTimestampToLocal(eventData.publish_dt, false) : '',
-            // visibility_to_dt: eventData.visibility_to_dt ? utcTimestampToLocal(eventData.visibility_to_dt, false) : '',
+            visibility_from_dt: eventData.visibility_from_dt
+              ? utcTimestampToLocal(eventData.visibility_from_dt, false)
+              : '',
           });
           setShowSpinner(false);
         })
@@ -363,15 +373,21 @@ export function EventCreatorAdminPage() {
               control={form.control}
               name="location"
               key={'location'}
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>{t(KEY.common_venue)}</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const selected = locationOptions.find((o) => o.value === field.value) ?? null;
+                return (
+                  <FormItem className={styles.form_item}>
+                    <FormLabel>{t(KEY.common_venue)}</FormLabel>
+                    <FormControl>
+                      <Dropdown
+                        options={venues.map((venue) => ({ value: venue.name, label: venue.name }))}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
             <FormField
               control={form.control}
@@ -481,13 +497,13 @@ export function EventCreatorAdminPage() {
       title_en: 'Summary',
       customIcon: 'ic:outline-remove-red-eye',
       validate: (data) => {
-        return !!data.publish_dt;
+        return !!data.visibility_from_dt;
       },
       template: (
         <FormField
           control={form.control}
-          name="publish_dt"
-          key={'publish_dt'}
+          name="visibility_from_dt"
+          key={'visibility_from_dt'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
               <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
@@ -510,7 +526,15 @@ export function EventCreatorAdminPage() {
   // ================================== //
 
   function onSubmit(values: FormType) {
-    postEvent(values as unknown as EventDto)
+    const start = values.start_dt ? new Date(values.start_dt) : null;
+    const computedEndDt = start ? new Date(start?.getTime() + (values.duration ?? 0) * 60_000) : null;
+    const payload: EventDto = {
+      ...values,
+      visibility_to_dt: computedEndDt ? computedEndDt.toISOString() : '',
+      end_dt: computedEndDt ? computedEndDt.toISOString() : '',
+    } as unknown as EventDto;
+
+    postEvent(payload)
       .then(() => {
         navigate({ url: ROUTES.frontend.admin_events });
         toast.success(t(KEY.common_creation_successful));
