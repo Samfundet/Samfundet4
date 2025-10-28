@@ -30,6 +30,10 @@ type GlobalContextProps = {
   setIsMobileNavigation: SetState<boolean>;
 
   keyValues: KeyValueMap;
+
+  // AdminToggels
+  isClosed: boolean;
+  toggleIsClosed: () => void;
 };
 
 /**
@@ -76,6 +80,8 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
   const [mirrorDimension, setMirrorDimension] = useState<boolean>(false);
   const { isMouseTrail, setIsMouseTrail, toggleMouseTrail } = useMouseTrail();
 
+  const [isClosed, setIsClosed] = useState<boolean>(false);
+
   // =================================== //
   //               Effects               //
   // =================================== //
@@ -85,6 +91,7 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
     if (!user || !enabled) return;
     setMirrorDimension(user.user_preference.mirror_dimension);
   }, [user, enabled]);
+
 
   // Stuff to do on first render.
   useEffect(() => {
@@ -140,6 +147,11 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
     return toggledValue;
   }
 
+
+  function toggleIsClosed() {
+    setIsClosed(v => !v)
+  }
+
   // =================================== //
   //    Finalize context with values     //
   // =================================== //
@@ -158,6 +170,8 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
     toggleMouseTrail,
     toggleMirrorDimension,
     keyValues,
+    isClosed,
+    toggleIsClosed
   };
 
   return <GlobalContext.Provider value={globalContextValues}>{children}</GlobalContext.Provider>;

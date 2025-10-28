@@ -7,6 +7,7 @@ import { getClosedPeriods } from '~/api';
 import type { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
 import styles from './OpeningHours.module.scss';
 
 type OpeningHoursProps = {
@@ -19,8 +20,14 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
   const { t } = useTranslation();
   const [isClosed, setIsClosed] = useState<boolean>(false);
   const [closedText, setClosedText] = useState<string | undefined>('Samf is closed');
+  const globalContext = useGlobalContext()
 
   useEffect(() => {
+    if (globalContext.isClosed) {
+      setIsClosed(true)
+      setClosedText("Samfundet is closed");
+      return
+    }
     getClosedPeriods().then((periods) => {
       const now = new Date();
       for (const period of periods) {
