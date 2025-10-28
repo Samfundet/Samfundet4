@@ -5,13 +5,14 @@ import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { getClosedPeriod } from '~/api';
+import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
+import { reverse } from '~/named-urls';
 
 type formType = {
   message_no: string;
@@ -30,6 +31,8 @@ export function ClosedPeriodFormAdminPage() {
 
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
+
+  const min_length_message = 10;
 
   // Stuff to do on first render.
   // TODO add permissions on render
@@ -64,33 +67,22 @@ export function ClosedPeriodFormAdminPage() {
   }, [id]);
 
   function handleOnSubmit(data: formType) {
-    // handle invalid dates, handle conflicting dates, handle short messages
-    const start_dt = new Date(data.start_dt)
-    const end_dt = new Date(data.end_dt)
-    const now = new Date()
-    
-    if (end_dt === start_dt) {
-      alert("end is equal to start, please set it to be more")
-      return
-    }
-    if (end_dt > start_dt) {
-      alert("end is less then start")
-      return
-    }
-    if (data.message_no.length <= 4) {
-      alert("message norsk må være lengere")
-    }
-    if (data.message_en.length <= 4) {
-      alert("message engelsk må være lengere")
-    }
-
     if (id !== undefined) {
-      // TODO patch data
+      putClosedPeriod(id, data)
+        .then()
+        .catch(err => {
+          alert(err)
+        })
     } else {
-      // TODO post data
+      postClosedPeriod(data)
+        .then(() => {
+          toast.success(t(KEY.common_creation_successful))
+          navigate({url: reverse({pattern: ROUTES.frontend.admin_closed})})
+        })
+        .catch(() => {
+          toast.error(t(KEY.common_something_went_wrong))
+        })
     }
-    alert('TODO Submit');
-    console.log(JSON.stringify(data));
   }
 
   const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
@@ -99,14 +91,14 @@ export function ClosedPeriodFormAdminPage() {
 
   return (
     <AdminPageLayout title={title} loading={showSpinner} header={true}>
-      <SamfForm onSubmit={handleOnSubmit} initialData={initialData}>
+      <SamfForm<formType> onSubmit={handleOnSubmit} initialData={initialData}>
         <div className={styles.row}>
-          <SamfFormField field="message_no" type="text_long" label={`${labelMessage} (${t(KEY.common_norwegian)})`} />
-          <SamfFormField field="message_en" type="text_long" label={`${labelMessage} (${t(KEY.common_english)})`} />
+          <SamfFormField validator={(state: formType) => state.message_no.length > min_length_message} field="message_no" required={true} type="text_long" label={`${labelMessage} (${t(KEY.common_norwegian)})`} />
+          <SamfFormField validator={(state: formType) => state.message_en.length > min_length_message} field="message_en" required={true} type="text_long" label={`${labelMessage} (${t(KEY.common_english)})`} />
         </div>
         <div className={styles.row}>
-          <SamfFormField field="start_dt" type="date" label={`${t(KEY.start_time)}`} />
-          <SamfFormField field="end_dt" type="date" label={`${t(KEY.end_time)}`} />
+          <SamfFormField validator={(state: formType) => state.end_dt ? new Date(state.start_dt) <= new Date(state.end_dt) : true} field="start_dt" type="date" label={`${t(KEY.start_time)}`} />
+          <SamfFormField validator={(state: formType) => state.start_dt ? new Date(state.start_dt) <= new Date(state.end_dt) : true} field="end_dt" type="date" label={`${t(KEY.end_time)}`} />
         </div>
       </SamfForm>
     </AdminPageLayout>
