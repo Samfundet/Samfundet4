@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Button, TimeDisplay } from '~/Components';
+import { Button, TimeDisplay, ToggleSwitch } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteClosedPeriod, getClosedPeriods } from '~/api';
 import type { ClosedPeriodDto } from '~/dto';
@@ -11,11 +11,13 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodAdminPage.module.scss';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
 
 export function ClosedPeriodAdminPage() {
   const [closedPeriods, setClosedPeriods] = useState<ClosedPeriodDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  const globalContext = useGlobalContext();
   useTitle(t(KEY.command_menu_shortcut_closed));
 
   const getAllClosedPeriods = useCallback(() => {
@@ -51,9 +53,15 @@ export function ClosedPeriodAdminPage() {
   }
 
   const header = (
-    <Button theme="success" rounded={true} link={ROUTES.frontend.admin_closed_create}>
-      {t(KEY.admin_closed_period_new_period)}
-    </Button>
+    <>
+      <Button theme="success" rounded={true} link={ROUTES.frontend.admin_closed_create}>
+        {t(KEY.admin_closed_period_new_period)}
+      </Button>
+      <span className={styles.admin_closed_switch}>
+        Admin Closed
+        <ToggleSwitch checked={globalContext.isClosed} onChange={() => globalContext.toggleIsClosed()}/>
+      </span>
+    </>
   );
   const backendUrl = ROUTES.backend.admin__samfundet_closedperiod_changelist;
 
@@ -76,7 +84,6 @@ export function ClosedPeriodAdminPage() {
           data={closedPeriods.map((element) => ({
             cells: [
               element.message_no,
-              element.description_no,
               { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
               { content: <TimeDisplay displayType="date" timestamp={element.end_dt} /> },
               {

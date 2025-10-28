@@ -492,7 +492,6 @@ export async function putGang(id: string | number, data: Partial<GangDto>): Prom
 }
 
 export async function getClosedPeriods(): Promise<ClosedPeriodDto[]> {
-  // start_dt og end_dt er strings ikke Date -_-
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__closedperiods_list;
   const response = await axios.get<ClosedPeriodDto[]>(url, { withCredentials: true });
   return response.data;
