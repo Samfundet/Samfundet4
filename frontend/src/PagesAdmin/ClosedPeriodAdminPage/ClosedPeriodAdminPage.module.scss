@@ -2,11 +2,13 @@
 
 @use 'src/constants' as *;
 
-.admin_closed_switch {
+.admin_closed_override_container {
   display: flex;
   align-items: center;
-  padding: 5px;
+  justify-content: center;
   gap: 10px;
-  border-radius: 10px;
-  border: $red-samf 2px solid;
+}
+
+.admin_closed_radio {
+  margin-top: 10px;
 }

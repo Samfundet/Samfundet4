@@ -23,9 +23,11 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
   const globalContext = useGlobalContext()
 
   useEffect(() => {
-    if (globalContext.isClosed) {
-      setIsClosed(true)
-      setClosedText("Samfundet is closed");
+    if (globalContext.isClosed !== "default") {
+      if (globalContext.isClosed === "closed") {
+        setIsClosed(true)
+        setClosedText("Samfundet is closed");
+      }
       return
     }
     getClosedPeriods().then((periods) => {
