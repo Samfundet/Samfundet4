@@ -146,6 +146,7 @@ export function EventsAdminPage() {
           return (
             <ImageCard
               key={event.id}
+              id={event.id.toString()}
               title={dbT(event, 'title')}
               date={event.start_dt}
               subtitle=""
