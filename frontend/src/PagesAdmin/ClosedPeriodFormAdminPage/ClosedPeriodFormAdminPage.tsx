@@ -15,7 +15,7 @@ import styles from './ClosedPeriodFormAdminPage.module.scss';
 import { reverse } from '~/named-urls';
 
 type formType = {
-  message_no: string;
+  message_nb: string;
   message_en: string;
   start_dt: string;
   end_dt: string;
@@ -49,7 +49,7 @@ export function ClosedPeriodFormAdminPage() {
         // setClosedPeriod(data); For posting
         console.log(data)
         setInitialData({
-          message_no: data.message_no,
+          message_nb: data.message_nb,
           message_en: data.message_en,
           start_dt: data.start_dt,
           end_dt: data.end_dt,
@@ -93,7 +93,7 @@ export function ClosedPeriodFormAdminPage() {
     <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <SamfForm<formType> onSubmit={handleOnSubmit} initialData={initialData}>
         <div className={styles.row}>
-          <SamfFormField validator={(state: formType) => state.message_no.length > min_length_message} field="message_no" required={true} type="text_long" label={`${labelMessage} (${t(KEY.common_norwegian)})`} />
+          <SamfFormField validator={(state: formType) => state.message_nb.length > min_length_message} field="message_nb" required={true} type="text_long" label={`${labelMessage} (${t(KEY.common_norwegian)})`} />
           <SamfFormField validator={(state: formType) => state.message_en.length > min_length_message} field="message_en" required={true} type="text_long" label={`${labelMessage} (${t(KEY.common_english)})`} />
         </div>
         <div className={styles.row}>
