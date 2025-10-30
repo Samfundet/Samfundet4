@@ -83,7 +83,7 @@ export function ClosedPeriodAdminPage() {
           ]}
           data={closedPeriods.map((element) => ({
             cells: [
-              element.message_no,
+              element.message_nb,
               { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
               { content: <TimeDisplay displayType="date" timestamp={element.end_dt} /> },
               {
@@ -105,7 +105,7 @@ export function ClosedPeriodAdminPage() {
                       display="block"
                       className={styles.smallButtons}
                       onClick={() => {
-                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_no}`)) {
+                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_nb}`)) {
                           deleteSelectedEvent(element.id);
                         }
                       }}
