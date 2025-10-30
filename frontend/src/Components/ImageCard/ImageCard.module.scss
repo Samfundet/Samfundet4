@@ -16,9 +16,11 @@ $card-text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.5);
 
 $card-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
+$inner-card-padding: 0.75rem;
 // TODO color variables
 
 .container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -55,7 +57,7 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  padding: 0.75rem;
+  padding: $inner-card-padding;
 }
 
 .card_content {
@@ -150,6 +152,23 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
   float: right;
 }
 
+.edit_bar {
+  opacity: 0%;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: 10px;
+  padding-right: 13px;
+  align-items: end;
+  width: 100%;
+  height: 55%;
+  pointer-events: none;
+  margin-left: 20px;
+  transition: all 200ms ease-in-out;
+  z-index: 10;
+}
+
 // Styling to container and children when it is hovered.
 .container:hover {
   .edit_button {
@@ -173,6 +192,10 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
     opacity: 1;
     max-height: 3.5em;
   }
+  .edit_bar {
+    opacity: 100%;
+    margin-left: 0;
+  }
 }
 
 // Compact doesn't show description on hover
@@ -186,3 +209,11 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
     max-height: 0;
   }
 }
+
+.badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
