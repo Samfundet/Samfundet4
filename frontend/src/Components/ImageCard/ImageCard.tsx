@@ -73,9 +73,7 @@ export function ImageCard({
 
   return (
     <div className={containerStyle}>
-      <div className={styles.edit_bar}>
-        {id && <EventEditButtons title={title} id={id} icon_size={icon_size} />}
-      </div>
+      <div className={styles.edit_bar}>{id && <EventEditButtons title={title} id={id} icon_size={icon_size} />}</div>
       <Link url={url} className={classNames(cardStyle, styles.image)} style={backgroundImageFromUrl(imageUrl)}>
         <div className={styles.card_inner}>
           <div className={styles.badges}>
