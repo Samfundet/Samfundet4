@@ -5,7 +5,7 @@ import { useCustomNavigate } from '~/hooks';
 import type { Children } from '~/types';
 import styles from './Link.module.scss';
 
-export type LinkTarget = 'frontend' | 'backend' | 'external' | 'email';
+export type LinkTarget = 'frontend' | 'backend' | 'external' | 'email' | 'samf3';
 
 export type LinkProps = {
   className?: string;
