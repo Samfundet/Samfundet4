@@ -255,7 +255,7 @@ class Venue(CustomBaseModel):
 
 
 class ClosedPeriod(CustomBaseModel):
-    message_no = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
+    message_nb = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
     message_en = models.TextField(blank=True, null=True, verbose_name='Melding (engelsk)')
 
     #description_no = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
@@ -269,7 +269,7 @@ class ClosedPeriod(CustomBaseModel):
         verbose_name_plural = 'ClosedPeriods'
 
     def __str__(self) -> str:
-        return f'{self.message_no} {self.start_dt}-{self.end_dt}'
+        return f'{self.message_nb} {self.start_dt}-{self.end_dt}'
 
 
 # GANGS ###
