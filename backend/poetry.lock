@@ -241,14 +241,14 @@ files = [
 
 [[package]]
 name = "django"
-version = "5.1.9"
+version = "5.1.13"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
 optional = false
 python-versions = ">=3.10"
 groups = ["main", "dev"]
 files = [
-    {file = "django-5.1.9-py3-none-any.whl", hash = "sha256:2fd1d4a0a66a5ba702699eb692e75b0d828b73cc2f4e1fc4b6a854a918967411"},
-    {file = "django-5.1.9.tar.gz", hash = "sha256:565881bdd0eb67da36442e9ac788bda90275386b549070d70aee86327781a4fc"},
+    {file = "django-5.1.13-py3-none-any.whl", hash = "sha256:06f257f79dc4c17f3f9e23b106a4c5ed1335abecbe731e83c598c941d14fbeed"},
+    {file = "django-5.1.13.tar.gz", hash = "sha256:543ff21679f15e80edfc01fe7ea35f8291b6d4ea589433882913626a7c1cf929"},
 ]
 
 [package.dependencies]
