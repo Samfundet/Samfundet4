@@ -357,7 +357,7 @@ export type GangSectionDto = {
 
 export type ClosedPeriodDto = {
   id: number;
-  message_no: string;
+  message_nb: string;
   message_en: string;
   start_dt: string;
   end_dt: string;
