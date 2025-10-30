@@ -129,6 +129,7 @@ export function Navbar() {
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
         route={ROUTES.frontend.sulten}
+        new_tab={true}
         label={t(KEY.common_restaurant)}
       />
       <NavbarItem
