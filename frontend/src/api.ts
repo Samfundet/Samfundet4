@@ -239,9 +239,33 @@ export async function getEventsPerDay(): Promise<EventDto[]> {
   return response.data;
 }
 
-export async function getEventsUpcomming(): Promise<EventDto[]> {
+type EventsUpcomingResponse = {
+  events: EventDto[]; // Array of events
+  categories: string[]; // Categories as value-label pairs
+  locations: string[]; // Locations as value-label pairs
+};
+
+export async function getEventsUpcomming(params: {
+  search?: string;
+  event_group?: string;
+  venue?: string;
+  category?: string;
+}): Promise<EventsUpcomingResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcomming;
-  const response = await axios.get<EventDto[]>(url, { withCredentials: true });
+
+  const response = await axios.get<EventsUpcomingResponse>(url, {
+    withCredentials: true,
+    params: {
+      ...(params.search ? { search: params.search } : {}), // Add search if provided
+      ...(params.event_group ? { event_group: params.event_group } : {}), // Add event_group if provided
+      ...(params.venue ? { venue: params.venue } : {}), // Add venue if provided
+      ...(params.category ? { category: params.category } : {}), // Add category if provided
+    },
+  });
+
+  for (let i = 0; i < response.data.categories.length; i++) {
+    response.data.categories[i] = response.data.categories[i][0];
+  }
 
   return response.data;
 }
