@@ -228,6 +228,7 @@ export const KEY = {
   // Price groups:
   common_ticket_type: 'common_ticket_type',
   common_ticket_type_free: 'common_ticket_type_free',
+  common_ticket_type_free_with_registration: 'common_ticket_type_free_with_registration',
   common_ticket_type_custom: 'common_ticket_type_custom',
   common_ticket_type_billig: 'common_ticket_type_billig',
   common_ticket_type_included: 'common_ticket_type_included',

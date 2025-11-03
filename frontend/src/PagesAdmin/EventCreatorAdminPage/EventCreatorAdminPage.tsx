@@ -85,18 +85,19 @@ export function EventCreatorAdminPage() {
   ];
 
   const ageLimitOptions: DropdownOption<EventAgeRestrictionValue>[] = [
-    { value: EventAgeRestriction.NONE, label: 'Ingen' },
-    { value: EventAgeRestriction.EIGHTEEN, label: '18 år' },
-    { value: EventAgeRestriction.TWENTY, label: '20 år' },
-    { value: EventAgeRestriction.MIXED, label: '18 år (student), 20 år (ikke student)' },
+    { value: EventAgeRestriction.NONE, label: t(KEY.none) },
+    { value: EventAgeRestriction.EIGHTEEN, label: t(KEY.eighteen) },
+    { value: EventAgeRestriction.TWENTY, label: t(KEY.twenty) },
+    { value: EventAgeRestriction.MIXED, label: t(KEY.mix) },
   ];
 
   const ticketTypeOptions: DropdownOption<EventTicketTypeValue>[] = [
-    { value: EventTicketType.FREE, label: 'Gratis' },
-    { value: EventTicketType.INCLUDED, label: 'Inkludert' },
-    { value: EventTicketType.BILLIG, label: 'Billig' },
-    { value: EventTicketType.REGISTRATION, label: 'Registrering' },
-    { value: EventTicketType.CUSTOM, label: 'Custom' },
+    { value: EventTicketType.FREE, label: t(KEY.common_ticket_type_free) },
+    { value: EventTicketType.FREE_WITH_REGISTRATION, label: t(KEY.common_ticket_type_free_with_registration) },
+    { value: EventTicketType.INCLUDED, label: t(KEY.common_ticket_type_included) },
+    { value: EventTicketType.BILLIG, label: t(KEY.common_ticket_type_billig) },
+    { value: EventTicketType.REGISTRATION, label: t(KEY.common_ticket_type_registration) },
+    { value: EventTicketType.CUSTOM, label: t(KEY.common_ticket_type_custom) },
   ];
 
   // Setup React Hook Form
