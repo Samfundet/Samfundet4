@@ -11,20 +11,24 @@ from rest_framework import status
 
 from django.urls import reverse
 from django.utils import timezone
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 
 from root.utils import routes, permissions
 
-from samfundet.serializers import RegisterSerializer
+from samfundet.serializers import UserSerializer, RegisterSerializer
 from samfundet.models.general import (
     Gang,
     User,
+    Image,
+    Merch,
     Table,
     Venue,
+    BlogPost,
     KeyValue,
     TextItem,
     Reservation,
     Organization,
+    InformationPage,
 )
 from samfundet.models.recruitment import (
     Interview,
@@ -782,6 +786,7 @@ class TestAssignGroupView:
 # =============================== #
 #            Recruitment          #
 # =============================== #
+
 
 @pytest.mark.skip(reason='This feature is temporarily disabled.')
 def test_get_recruitments(
