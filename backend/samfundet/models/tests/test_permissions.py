@@ -296,248 +296,256 @@ class TestRecruitmentForRecruiterView:
         response = fixture_rest_client.delete(self.detail_url)
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    # def test_user_with_view_permission_in_correct_org(self, fixture_rest_client, fixture_user, user_org_role_factory):
-    #     """Test that users with view permission in the correct org can view but not modify."""
-    #     user_org_role_factory(user=fixture_user, organization=self.org1, permissions=SAMFUNDET_VIEW_RECRUITMENT)
-    #     fixture_rest_client.force_authenticate(user=fixture_user)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_user_with_view_permission_in_correct_org(self, fixture_rest_client, fixture_user, user_org_role_factory):
+        """Test that users with view permission in the correct org can view but not modify."""
+        user_org_role_factory(user=fixture_user, organization=self.org1, permissions=SAMFUNDET_VIEW_RECRUITMENT)
+        fixture_rest_client.force_authenticate(user=fixture_user)
 
-    #     # GET list
-    #     response = fixture_rest_client.get(self.recruitment_url)
-    #     assert response.status_code == status.HTTP_200_OK
-    #     assert len(response.data) == 1  # Should return the recruitment
+        # GET list
+        response = fixture_rest_client.get(self.recruitment_url)
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 1  # Should return the recruitment
 
-    #     # GET detail
-    #     response = fixture_rest_client.get(self.detail_url)
-    #     assert response.status_code == status.HTTP_200_OK
-    #     assert response.data['id'] == self.recruitment.pk
+        # GET detail
+        response = fixture_rest_client.get(self.detail_url)
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['id'] == self.recruitment.pk
 
-    #     # POST - Should not have permission
-    #     response = fixture_rest_client.post(self.recruitment_url, {})
-    #     assert response.status_code == status.HTTP_403_FORBIDDEN
+        # POST - Should not have permission
+        response = fixture_rest_client.post(self.recruitment_url, {})
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    #     # PUT - Should not have permission
-    #     response = fixture_rest_client.put(self.detail_url, {'name_nb': 'Updated'})
-    #     assert response.status_code == status.HTTP_403_FORBIDDEN
+        # PUT - Should not have permission
+        response = fixture_rest_client.put(self.detail_url, {'name_nb': 'Updated'})
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    #     # PATCH - Should not have permission
-    #     response = fixture_rest_client.patch(self.detail_url, {'name_nb': 'Updated'})
-    #     assert response.status_code == status.HTTP_403_FORBIDDEN
+        # PATCH - Should not have permission
+        response = fixture_rest_client.patch(self.detail_url, {'name_nb': 'Updated'})
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    #     # DELETE - Should not have permission
-    #     response = fixture_rest_client.delete(self.detail_url)
-    #     assert response.status_code == status.HTTP_403_FORBIDDEN
+        # DELETE - Should not have permission
+        response = fixture_rest_client.delete(self.detail_url)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    # def test_user_with_change_permission_in_correct_org(self, fixture_rest_client, fixture_user, user_org_role_factory):
-    #     """Test that users with change permission in the correct org can modify but not delete."""
-    #     user = fixture_user
-    #     user_org_role_factory(user=user, organization=self.org1, permissions=[SAMFUNDET_VIEW_RECRUITMENT, SAMFUNDET_CHANGE_RECRUITMENT])
-    #     fixture_rest_client.force_authenticate(user=user)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_user_with_change_permission_in_correct_org(self, fixture_rest_client, fixture_user, user_org_role_factory):
+        """Test that users with change permission in the correct org can modify but not delete."""
+        user = fixture_user
+        user_org_role_factory(user=user, organization=self.org1, permissions=[SAMFUNDET_VIEW_RECRUITMENT, SAMFUNDET_CHANGE_RECRUITMENT])
+        fixture_rest_client.force_authenticate(user=user)
 
-    #     # GET list
-    #     response = fixture_rest_client.get(self.recruitment_url)
-    #     assert response.status_code == status.HTTP_200_OK
-    #     assert len(response.data) == 1
+        # GET list
+        response = fixture_rest_client.get(self.recruitment_url)
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 1
 
-    #     # GET detail
-    #     response = fixture_rest_client.get(self.detail_url)
-    #     assert response.status_code == status.HTTP_200_OK
+        # GET detail
+        response = fixture_rest_client.get(self.detail_url)
+        assert response.status_code == status.HTTP_200_OK
 
-    #     # PUT - Should have permission
-    #     response = fixture_rest_client.put(
-    #         self.detail_url,
-    #         {
-    #             'name_nb': 'Updated Recruitment',
-    #             'name_en': 'Updated Recruitment',
-    #             'organization': self.org1.id,
-    #             'visible_from': timezone.now(),
-    #             'shown_application_deadline': (timezone.now() + timezone.timedelta(days=30)),
-    #             'actual_application_deadline': (timezone.now() + timezone.timedelta(days=31)),
-    #             'reprioritization_deadline_for_applicant': (timezone.now() + timezone.timedelta(days=32)),
-    #             'reprioritization_deadline_for_gangs': (timezone.now() + timezone.timedelta(days=33)),
-    #         },
-    #     )
-    #     assert response.status_code == status.HTTP_200_OK
-    #     assert response.data['name_nb'] == 'Updated Recruitment'
+        # PUT - Should have permission
+        response = fixture_rest_client.put(
+            self.detail_url,
+            {
+                'name_nb': 'Updated Recruitment',
+                'name_en': 'Updated Recruitment',
+                'organization': self.org1.id,
+                'visible_from': timezone.now(),
+                'shown_application_deadline': (timezone.now() + timezone.timedelta(days=30)),
+                'actual_application_deadline': (timezone.now() + timezone.timedelta(days=31)),
+                'reprioritization_deadline_for_applicant': (timezone.now() + timezone.timedelta(days=32)),
+                'reprioritization_deadline_for_gangs': (timezone.now() + timezone.timedelta(days=33)),
+            },
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['name_nb'] == 'Updated Recruitment'
 
-    #     # PATCH - Should have permission
-    #     response = fixture_rest_client.patch(
-    #         self.detail_url,
-    #         {
-    #             # Add all fields because validation is poorly implemented
-    #             'name_nb': 'Patched Recruitment',
-    #             'name_en': 'Updated Recruitment',
-    #             'organization': self.org1.id,
-    #             'visible_from': timezone.now(),
-    #             'shown_application_deadline': (timezone.now() + timezone.timedelta(days=30)),
-    #             'actual_application_deadline': (timezone.now() + timezone.timedelta(days=31)),
-    #             'reprioritization_deadline_for_applicant': (timezone.now() + timezone.timedelta(days=32)),
-    #             'reprioritization_deadline_for_gangs': (timezone.now() + timezone.timedelta(days=33)),
-    #         },
-    #     )
-    #     assert response.status_code == status.HTTP_200_OK
-    #     assert response.data['name_nb'] == 'Patched Recruitment'
+        # PATCH - Should have permission
+        response = fixture_rest_client.patch(
+            self.detail_url,
+            {
+                # Add all fields because validation is poorly implemented
+                'name_nb': 'Patched Recruitment',
+                'name_en': 'Updated Recruitment',
+                'organization': self.org1.id,
+                'visible_from': timezone.now(),
+                'shown_application_deadline': (timezone.now() + timezone.timedelta(days=30)),
+                'actual_application_deadline': (timezone.now() + timezone.timedelta(days=31)),
+                'reprioritization_deadline_for_applicant': (timezone.now() + timezone.timedelta(days=32)),
+                'reprioritization_deadline_for_gangs': (timezone.now() + timezone.timedelta(days=33)),
+            },
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['name_nb'] == 'Patched Recruitment'
 
-    #     # POST - Should not have permission
-    #     response = fixture_rest_client.post(self.recruitment_url, {})
-    #     assert response.status_code == status.HTTP_403_FORBIDDEN
+        # POST - Should not have permission
+        response = fixture_rest_client.post(self.recruitment_url, {})
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    #     # DELETE - Should not have permission
-    #     response = fixture_rest_client.delete(self.detail_url)
-    #     assert response.status_code == status.HTTP_403_FORBIDDEN
+        # DELETE - Should not have permission
+        response = fixture_rest_client.delete(self.detail_url)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    # def test_user_with_delete_permission_in_correct_org(self, fixture_rest_client, fixture_user, user_org_role_factory):
-    #     """Test that users with delete permission in the correct org can delete."""
-    #     user = fixture_user
-    #     user_org_role_factory(user=user, organization=self.org1, permissions=[SAMFUNDET_VIEW_RECRUITMENT, SAMFUNDET_DELETE_RECRUITMENT])
-    #     fixture_rest_client.force_authenticate(user=user)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_user_with_delete_permission_in_correct_org(self, fixture_rest_client, fixture_user, user_org_role_factory):
+        """Test that users with delete permission in the correct org can delete."""
+        user = fixture_user
+        user_org_role_factory(user=user, organization=self.org1, permissions=[SAMFUNDET_VIEW_RECRUITMENT, SAMFUNDET_DELETE_RECRUITMENT])
+        fixture_rest_client.force_authenticate(user=user)
 
-    #     # DELETE - Should have permission
-    #     response = fixture_rest_client.delete(self.detail_url)
-    #     assert response.status_code == status.HTTP_204_NO_CONTENT
+        # DELETE - Should have permission
+        response = fixture_rest_client.delete(self.detail_url)
+        assert response.status_code == status.HTTP_204_NO_CONTENT
 
-    #     # Verify it's deleted
-    #     response = fixture_rest_client.get(self.detail_url)
-    #     assert response.status_code == status.HTTP_404_NOT_FOUND
+        # Verify it's deleted
+        response = fixture_rest_client.get(self.detail_url)
+        assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    # def test_user_with_add_permission_in_correct_org(self, fixture_rest_client, fixture_user, user_org_role_factory):
-    #     """Test that users with add permission can create new objects."""
-    #     user = fixture_user
-    #     user_org_role_factory(user=user, organization=self.org1, permissions=[SAMFUNDET_VIEW_RECRUITMENT, SAMFUNDET_ADD_RECRUITMENT])
-    #     fixture_rest_client.force_authenticate(user=user)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_user_with_add_permission_in_correct_org(self, fixture_rest_client, fixture_user, user_org_role_factory):
+        """Test that users with add permission can create new objects."""
+        user = fixture_user
+        user_org_role_factory(user=user, organization=self.org1, permissions=[SAMFUNDET_VIEW_RECRUITMENT, SAMFUNDET_ADD_RECRUITMENT])
+        fixture_rest_client.force_authenticate(user=user)
 
-    #     # POST - Should have permission
-    #     response = fixture_rest_client.post(
-    #         self.recruitment_url,
-    #         {
-    #             'name_nb': 'New Recruitment',
-    #             'name_en': 'New Recruitment',
-    #             'organization': self.org1.id,
-    #             'visible_from': timezone.now(),
-    #             'shown_application_deadline': (timezone.now() + timezone.timedelta(days=30)),
-    #             'actual_application_deadline': (timezone.now() + timezone.timedelta(days=31)),
-    #             'reprioritization_deadline_for_applicant': (timezone.now() + timezone.timedelta(days=32)),
-    #             'reprioritization_deadline_for_gangs': (timezone.now() + timezone.timedelta(days=33)),
-    #         },
-    #     )
-    #     assert response.status_code == status.HTTP_201_CREATED
-    #     assert response.data['name_nb'] == 'New Recruitment'
+        # POST - Should have permission
+        response = fixture_rest_client.post(
+            self.recruitment_url,
+            {
+                'name_nb': 'New Recruitment',
+                'name_en': 'New Recruitment',
+                'organization': self.org1.id,
+                'visible_from': timezone.now(),
+                'shown_application_deadline': (timezone.now() + timezone.timedelta(days=30)),
+                'actual_application_deadline': (timezone.now() + timezone.timedelta(days=31)),
+                'reprioritization_deadline_for_applicant': (timezone.now() + timezone.timedelta(days=32)),
+                'reprioritization_deadline_for_gangs': (timezone.now() + timezone.timedelta(days=33)),
+            },
+        )
+        assert response.status_code == status.HTTP_201_CREATED
+        assert response.data['name_nb'] == 'New Recruitment'
 
-    # def test_user_with_role_in_wrong_org_has_no_permission(self, fixture_rest_client, fixture_user, user_org_role_factory):
-    #     """Test that users with roles in wrong org do not have permission."""
-    #     user = fixture_user
-    #     # Create role in org2, but the test recruitment belongs to org1
-    #     user_org_role_factory(user=user, organization=self.org2, permissions=SAMFUNDET_VIEW_RECRUITMENT)
-    #     fixture_rest_client.force_authenticate(user=user)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_user_with_role_in_wrong_org_has_no_permission(self, fixture_rest_client, fixture_user, user_org_role_factory):
+        """Test that users with roles in wrong org do not have permission."""
+        user = fixture_user
+        # Create role in org2, but the test recruitment belongs to org1
+        user_org_role_factory(user=user, organization=self.org2, permissions=SAMFUNDET_VIEW_RECRUITMENT)
+        fixture_rest_client.force_authenticate(user=user)
 
-    #     # GET list - Should return empty list (filtered by permission)
-    #     response = fixture_rest_client.get(self.recruitment_url)
-    #     assert response.status_code == status.HTTP_200_OK
-    #     assert len(response.data) == 0
+        # GET list - Should return empty list (filtered by permission)
+        response = fixture_rest_client.get(self.recruitment_url)
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 0
 
-    #     # GET detail - Should not find the recruitment from org1
-    #     response = fixture_rest_client.get(self.detail_url)
-    #     assert response.status_code == status.HTTP_404_NOT_FOUND
+        # GET detail - Should not find the recruitment from org1
+        response = fixture_rest_client.get(self.detail_url)
+        assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    #     # PUT - Should not find the recruitment
-    #     response = fixture_rest_client.put(self.detail_url, {'name_nb': 'Updated'})
-    #     assert response.status_code == status.HTTP_403_FORBIDDEN
+        # PUT - Should not find the recruitment
+        response = fixture_rest_client.put(self.detail_url, {'name_nb': 'Updated'})
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    #     # PATCH - Should not find the recruitment
-    #     response = fixture_rest_client.patch(self.detail_url, {'name_nb': 'Updated'})
-    #     assert response.status_code == status.HTTP_403_FORBIDDEN
+        # PATCH - Should not find the recruitment
+        response = fixture_rest_client.patch(self.detail_url, {'name_nb': 'Updated'})
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    #     # DELETE - Should not find the recruitment
-    #     response = fixture_rest_client.delete(self.detail_url)
-    #     assert response.status_code == status.HTTP_403_FORBIDDEN
+        # DELETE - Should not find the recruitment
+        response = fixture_rest_client.delete(self.detail_url)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    # def test_gang_roles_irrelevant_for_recruitment_view(self, fixture_rest_client, fixture_user, user_gang_role_factory):
-    #     """Test that gang roles do not grant permissions for recruitment view."""
-    #     user = fixture_user
-    #     user_gang_role_factory(user=user, permissions=SAMFUNDET_VIEW_RECRUITMENT)
-    #     fixture_rest_client.force_authenticate(user=user)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_gang_roles_irrelevant_for_recruitment_view(self, fixture_rest_client, fixture_user, user_gang_role_factory):
+        """Test that gang roles do not grant permissions for recruitment view."""
+        user = fixture_user
+        user_gang_role_factory(user=user, permissions=SAMFUNDET_VIEW_RECRUITMENT)
+        fixture_rest_client.force_authenticate(user=user)
 
-    #     # GET list - Should return empty list
-    #     response = fixture_rest_client.get(self.recruitment_url)
-    #     assert response.status_code == status.HTTP_200_OK
-    #     assert len(response.data) == 0
+        # GET list - Should return empty list
+        response = fixture_rest_client.get(self.recruitment_url)
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 0
 
-    #     # GET detail - Should not find the recruitment
-    #     response = fixture_rest_client.get(self.detail_url)
-    #     assert response.status_code == status.HTTP_404_NOT_FOUND
+        # GET detail - Should not find the recruitment
+        response = fixture_rest_client.get(self.detail_url)
+        assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    # def test_section_roles_irrelevant_for_recruitment_view(self, fixture_rest_client, fixture_user, user_gang_section_role_factory):
-    #     """Test that section roles do not grant permissions for recruitment view."""
-    #     user = fixture_user
-    #     user_gang_section_role_factory(user=user, permissions=SAMFUNDET_VIEW_RECRUITMENT)
-    #     fixture_rest_client.force_authenticate(user=user)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_section_roles_irrelevant_for_recruitment_view(self, fixture_rest_client, fixture_user, user_gang_section_role_factory):
+        """Test that section roles do not grant permissions for recruitment view."""
+        user = fixture_user
+        user_gang_section_role_factory(user=user, permissions=SAMFUNDET_VIEW_RECRUITMENT)
+        fixture_rest_client.force_authenticate(user=user)
 
-    #     # GET list - Should return empty list
-    #     response = fixture_rest_client.get(self.recruitment_url)
-    #     assert response.status_code == status.HTTP_200_OK
-    #     assert len(response.data) == 0
+        # GET list - Should return empty list
+        response = fixture_rest_client.get(self.recruitment_url)
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 0
 
-    #     # GET detail - Should not find the recruitment
-    #     response = fixture_rest_client.get(self.detail_url)
-    #     assert response.status_code == status.HTTP_404_NOT_FOUND
+        # GET detail - Should not find the recruitment
+        response = fixture_rest_client.get(self.detail_url)
+        assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    # def test_user_with_all_permissions(self, fixture_rest_client, fixture_user, user_org_role_factory):
-    #     """Test that users with all permissions can perform all operations."""
-    #     user = fixture_user
-    #     user_org_role_factory(
-    #         user=user,
-    #         organization=self.org1,
-    #         permissions=[SAMFUNDET_VIEW_RECRUITMENT, SAMFUNDET_CHANGE_RECRUITMENT, SAMFUNDET_DELETE_RECRUITMENT, SAMFUNDET_ADD_RECRUITMENT],
-    #     )
-    #     fixture_rest_client.force_authenticate(user=user)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_user_with_all_permissions(self, fixture_rest_client, fixture_user, user_org_role_factory):
+        """Test that users with all permissions can perform all operations."""
+        user = fixture_user
+        user_org_role_factory(
+            user=user,
+            organization=self.org1,
+            permissions=[SAMFUNDET_VIEW_RECRUITMENT, SAMFUNDET_CHANGE_RECRUITMENT, SAMFUNDET_DELETE_RECRUITMENT, SAMFUNDET_ADD_RECRUITMENT],
+        )
+        fixture_rest_client.force_authenticate(user=user)
 
-    #     # GET list
-    #     response = fixture_rest_client.get(self.recruitment_url)
-    #     assert response.status_code == status.HTTP_200_OK
-    #     assert len(response.data) == 1
+        # GET list
+        response = fixture_rest_client.get(self.recruitment_url)
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 1
 
-    #     # POST - Create new recruitment
-    #     response = fixture_rest_client.post(
-    #         self.recruitment_url,
-    #         {
-    #             'name_nb': 'Updated Recruitment',
-    #             'name_en': 'Updated Recruitment',
-    #             'organization': self.org1.id,
-    #             'visible_from': timezone.now(),
-    #             'shown_application_deadline': (timezone.now() + timezone.timedelta(days=30)),
-    #             'actual_application_deadline': (timezone.now() + timezone.timedelta(days=31)),
-    #             'reprioritization_deadline_for_applicant': (timezone.now() + timezone.timedelta(days=32)),
-    #             'reprioritization_deadline_for_gangs': (timezone.now() + timezone.timedelta(days=33)),
-    #         },
-    #     )
-    #     assert response.status_code == status.HTTP_201_CREATED
-    #     new_recruitment_id = response.data['id']
-    #     new_detail_url = reverse(routes.samfundet__recruitment_for_recruiter_detail, kwargs={'pk': new_recruitment_id})
+        # POST - Create new recruitment
+        response = fixture_rest_client.post(
+            self.recruitment_url,
+            {
+                'name_nb': 'Updated Recruitment',
+                'name_en': 'Updated Recruitment',
+                'organization': self.org1.id,
+                'visible_from': timezone.now(),
+                'shown_application_deadline': (timezone.now() + timezone.timedelta(days=30)),
+                'actual_application_deadline': (timezone.now() + timezone.timedelta(days=31)),
+                'reprioritization_deadline_for_applicant': (timezone.now() + timezone.timedelta(days=32)),
+                'reprioritization_deadline_for_gangs': (timezone.now() + timezone.timedelta(days=33)),
+            },
+        )
+        assert response.status_code == status.HTTP_201_CREATED
+        new_recruitment_id = response.data['id']
+        new_detail_url = reverse(routes.samfundet__recruitment_for_recruiter_detail, kwargs={'pk': new_recruitment_id})
 
-    #     # GET detail - Verify created
-    #     response = fixture_rest_client.get(new_detail_url)
-    #     assert response.status_code == status.HTTP_200_OK
+        # GET detail - Verify created
+        response = fixture_rest_client.get(new_detail_url)
+        assert response.status_code == status.HTTP_200_OK
 
-    #     # PATCH - Modify
-    #     response = fixture_rest_client.patch(
-    #         new_detail_url,
-    #         {
-    #             'name_nb': 'Modified Recruitment',
-    #             'name_en': 'Modified Recruitment',
-    #             'organization': self.org1.id,
-    #             'visible_from': timezone.now(),
-    #             'shown_application_deadline': (timezone.now() + timezone.timedelta(days=30)),
-    #             'actual_application_deadline': (timezone.now() + timezone.timedelta(days=31)),
-    #             'reprioritization_deadline_for_applicant': (timezone.now() + timezone.timedelta(days=32)),
-    #             'reprioritization_deadline_for_gangs': (timezone.now() + timezone.timedelta(days=33)),
-    #         },
-    #     )
-    #     assert response.status_code == status.HTTP_200_OK
-    #     assert response.data['name_nb'] == 'Modified Recruitment'
+        # PATCH - Modify
+        response = fixture_rest_client.patch(
+            new_detail_url,
+            {
+                'name_nb': 'Modified Recruitment',
+                'name_en': 'Modified Recruitment',
+                'organization': self.org1.id,
+                'visible_from': timezone.now(),
+                'shown_application_deadline': (timezone.now() + timezone.timedelta(days=30)),
+                'actual_application_deadline': (timezone.now() + timezone.timedelta(days=31)),
+                'reprioritization_deadline_for_applicant': (timezone.now() + timezone.timedelta(days=32)),
+                'reprioritization_deadline_for_gangs': (timezone.now() + timezone.timedelta(days=33)),
+            },
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['name_nb'] == 'Modified Recruitment'
 
-    #     # DELETE - Remove
-    #     response = fixture_rest_client.delete(new_detail_url)
-    #     assert response.status_code == status.HTTP_204_NO_CONTENT
+        # DELETE - Remove
+        response = fixture_rest_client.delete(new_detail_url)
+        assert response.status_code == status.HTTP_204_NO_CONTENT
 
-    #     # Verify it's deleted
-    #     response = fixture_rest_client.get(new_detail_url)
-    #     assert response.status_code == status.HTTP_404_NOT_FOUND
+        # Verify it's deleted
+        response = fixture_rest_client.get(new_detail_url)
+        assert response.status_code == status.HTTP_404_NOT_FOUND

@@ -80,75 +80,79 @@ class TestUserViews:
         response: Response = fixture_rest_client.post(path=url)
         assert status.is_success(code=response.status_code)
 
-    # def test_get_user(self, fixture_rest_client: APIClient, fixture_user: User):
-    #     ### Arrange ###
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_get_user(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
 
-    #     # Give user an arbitrary permission.
-    #     some_perm = Permission.objects.first()
-    #     fixture_user.user_permissions.add(some_perm)
-    #     some_perm_str = UserSerializer._permission_to_str(permission=some_perm)
+        # Give user an arbitrary permission.
+        some_perm = Permission.objects.first()
+        fixture_user.user_permissions.add(some_perm)
+        some_perm_str = UserSerializer._permission_to_str(permission=some_perm)
 
-    #     fixture_rest_client.force_authenticate(user=fixture_user)
-    #     url = reverse(routes.samfundet__user)
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__user)
 
-    #     ### Act ###
-    #     response: Response = fixture_rest_client.get(path=url)
-    #     data = response.json()
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
 
-    #     ### Assert ###
-    #     assert status.is_success(code=response.status_code)
-    #     assert data['username'] == fixture_user.username
-    #     # All users should have a UserPreference.
-    #     assert data['user_preference']['id'] == fixture_user.userpreference.id
-    #     # All users should have a Profile.
-    #     assert data['profile']['id'] == fixture_user.profile.id
-    #     # Check permission in list.
-    #     assert some_perm_str in data['permissions']
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data['username'] == fixture_user.username
+        # All users should have a UserPreference.
+        assert data['user_preference']['id'] == fixture_user.userpreference.id
+        # All users should have a Profile.
+        assert data['profile']['id'] == fixture_user.profile.id
+        # Check permission in list.
+        assert some_perm_str in data['permissions']
 
-    # def test_get_users(self, fixture_rest_client: APIClient, fixture_user: User):
-    #     ### Arrange ###
-    #     fixture_rest_client.force_authenticate(user=fixture_user)
-    #     url = reverse(routes.samfundet__users)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_get_users(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__users)
 
-    #     ### Act ###
-    #     response: Response = fixture_rest_client.get(path=url)
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
 
-    #     ### Assert ###
-    #     assert status.is_success(code=response.status_code)
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
 
-    # def test_get_groups(self, fixture_rest_client: APIClient, fixture_user: User):
-    #     ### Arrange ###
-    #     fixture_rest_client.force_authenticate(user=fixture_user)
-    #     url = reverse(routes.samfundet__groups)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_get_groups(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__groups)
 
-    #     ### Act ###
-    #     response: Response = fixture_rest_client.get(path=url)
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
 
-    #     ### Assert ###
-    #     assert status.is_success(code=response.status_code)
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
 
-    # def test_register_clean(self, fixture_rest_client: APIClient):
-    #     ### Arrange ###
-    #     url = reverse(routes.samfundet__register)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_register_clean(self, fixture_rest_client: APIClient):
+        ### Arrange ###
+        url = reverse(routes.samfundet__register)
 
-    #     ### Act ###
-    #     response: Response = fixture_rest_client.post(path=url, data=self.post_data)
+        ### Act ###
+        response: Response = fixture_rest_client.post(path=url, data=self.post_data)
 
-    #     ### Assert ###
-    #     assert status.is_success(code=response.status_code)
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
 
-    #     ### Check if logged inn ###
-    #     url = reverse(routes.samfundet__user)
+        ### Check if logged inn ###
+        url = reverse(routes.samfundet__user)
 
-    #     ### Act ###
-    #     response: Response = fixture_rest_client.get(path=url)
-    #     data = response.json()
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
 
-    #     # check if user is correct
-    #     assert status.is_success(code=response.status_code)
-    #     assert data['username'] == self.post_data['username']
-    #     assert data['email'] == self.post_data['email']
-    #     assert data['phone_number'] == self.post_data['phone_number']
+        # check if user is correct
+        assert status.is_success(code=response.status_code)
+        assert data['username'] == self.post_data['username']
+        assert data['email'] == self.post_data['email']
+        assert data['phone_number'] == self.post_data['phone_number']
 
     def test_register_missingfields(self, fixture_rest_client: APIClient):
         ### Arrange ###
@@ -213,216 +217,226 @@ class TestUserViews:
             assert RegisterSerializer.ALREADY_EXISTS_MESSAGE in data[field]
 
 
-# class TestInformationPagesView:
-#     def test_get_informationpage(
-#         self,
-#         fixture_rest_client: APIClient,
-#         fixture_user: User,
-#         fixture_informationpage: InformationPage,
-#     ):
-#         ### Arrange ###
-#         url = reverse(
-#             routes.samfundet__information_detail,
-#             kwargs={'pk': fixture_informationpage.slug_field},
-#         )
+class TestInformationPagesView:
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_get_informationpage(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_informationpage: InformationPage,
+    ):
+        ### Arrange ###
+        url = reverse(
+            routes.samfundet__information_detail,
+            kwargs={'pk': fixture_informationpage.slug_field},
+        )
 
-#         ### Act ###
-#         response: Response = fixture_rest_client.get(path=url)
-#         data = response.json()
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
 
-#         ### Assert ###
-#         assert status.is_success(code=response.status_code)
-#         assert data['slug_field'] == fixture_informationpage.slug_field
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data['slug_field'] == fixture_informationpage.slug_field
 
-#     def test_get_informationpages(
-#         self,
-#         fixture_rest_client: APIClient,
-#         fixture_user: User,
-#         fixture_informationpage: InformationPage,
-#     ):
-#         ### Arrange ###
-#         url = reverse(routes.samfundet__information_list)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_get_informationpages(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_informationpage: InformationPage,
+    ):
+        ### Arrange ###
+        url = reverse(routes.samfundet__information_list)
 
-#         ### Act ###
-#         response: Response = fixture_rest_client.get(path=url)
-#         data = response.json()
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
 
-#         ### Assert ###
-#         assert status.is_success(code=response.status_code)
-#         assert data[0]['slug_field'] == fixture_informationpage.slug_field
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data[0]['slug_field'] == fixture_informationpage.slug_field
 
-#     def test_create_informationpage(self, fixture_rest_client: APIClient, fixture_user: User):
-#         ### Arrange ###
-#         fixture_rest_client.force_authenticate(user=fixture_user)
-#         url = reverse(routes.samfundet__information_list)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_create_informationpage(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__information_list)
 
-#         post_data = {'slug_field': 'lol', 'title_en': 'lol'}
-#         response: Response = fixture_rest_client.post(path=url, data=post_data)
+        post_data = {'slug_field': 'lol', 'title_en': 'lol'}
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
 
-#         assert response.status_code == status.HTTP_403_FORBIDDEN
-#         assign_perm(permissions.SAMFUNDET_ADD_INFORMATIONPAGE, fixture_user)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_ADD_INFORMATIONPAGE, fixture_user)
 
-#         del fixture_user._user_perm_cache
-#         del fixture_user._perm_cache
-#         response: Response = fixture_rest_client.post(path=url, data=post_data)
-#         assert status.is_success(code=response.status_code)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+        assert status.is_success(code=response.status_code)
 
-#         data = response.json()
-#         assert data['slug_field'] == post_data['slug_field']
+        data = response.json()
+        assert data['slug_field'] == post_data['slug_field']
 
-#     def test_delete_informationpage(
-#         self,
-#         fixture_rest_client: APIClient,
-#         fixture_user: User,
-#         fixture_informationpage: InformationPage,
-#     ):
-#         fixture_rest_client.force_authenticate(user=fixture_user)
-#         url = reverse(
-#             routes.samfundet__information_detail,
-#             kwargs={'pk': fixture_informationpage.slug_field},
-#         )
-#         response: Response = fixture_rest_client.delete(path=url)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_delete_informationpage(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_informationpage: InformationPage,
+    ):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(
+            routes.samfundet__information_detail,
+            kwargs={'pk': fixture_informationpage.slug_field},
+        )
+        response: Response = fixture_rest_client.delete(path=url)
 
-#         assert response.status_code == status.HTTP_403_FORBIDDEN
-#         assign_perm(permissions.SAMFUNDET_DELETE_INFORMATIONPAGE, fixture_user)
-#         del fixture_user._user_perm_cache
-#         del fixture_user._perm_cache
-#         response: Response = fixture_rest_client.delete(path=url)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_DELETE_INFORMATIONPAGE, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.delete(path=url)
 
-#         assert status.is_success(code=response.status_code)
+        assert status.is_success(code=response.status_code)
 
-#     def test_put_informationpage(
-#         self,
-#         fixture_rest_client: APIClient,
-#         fixture_user: User,
-#         fixture_informationpage: InformationPage,
-#     ):
-#         fixture_rest_client.force_authenticate(user=fixture_user)
-#         url = reverse(
-#             routes.samfundet__information_detail,
-#             kwargs={'pk': fixture_informationpage.slug_field},
-#         )
-#         put_data = {'title_nb': 'lol'}
-#         response: Response = fixture_rest_client.put(path=url, data=put_data)
-#         assert response.status_code == status.HTTP_403_FORBIDDEN
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_put_informationpage(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_informationpage: InformationPage,
+    ):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(
+            routes.samfundet__information_detail,
+            kwargs={'pk': fixture_informationpage.slug_field},
+        )
+        put_data = {'title_nb': 'lol'}
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
-#         assign_perm(permissions.SAMFUNDET_CHANGE_INFORMATIONPAGE, fixture_user)
-#         del fixture_user._user_perm_cache
-#         del fixture_user._perm_cache
-#         response: Response = fixture_rest_client.put(path=url, data=put_data)
-#         assert status.is_success(code=response.status_code)
+        assign_perm(permissions.SAMFUNDET_CHANGE_INFORMATIONPAGE, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert status.is_success(code=response.status_code)
 
-#         data = response.json()
+        data = response.json()
 
-#         assert data['title_nb'] == put_data['title_nb']
+        assert data['title_nb'] == put_data['title_nb']
 
 
-# class TestMerchView:
-#     def test_get_merch(
-#         self,
-#         fixture_rest_client: APIClient,
-#         fixture_user: User,
-#         fixture_merch: Merch,
-#     ):
-#         ### Arrange ###
-#         url = reverse(routes.samfundet__merch_detail, kwargs={'pk': fixture_merch.id})
+class TestMerchView:
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_get_merch(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_merch: Merch,
+    ):
+        ### Arrange ###
+        url = reverse(routes.samfundet__merch_detail, kwargs={'pk': fixture_merch.id})
 
-#         ### Act ###
-#         response: Response = fixture_rest_client.get(path=url)
-#         data = response.json()
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
 
-#         ### Assert ###
-#         assert status.is_success(code=response.status_code)
-#         assert data['id'] == fixture_merch.id
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data['id'] == fixture_merch.id
 
-#     def test_get_merchs(
-#         self,
-#         fixture_rest_client: APIClient,
-#         fixture_user: User,
-#         fixture_merch: BlogPost,
-#     ):
-#         ### Arrange ###
-#         url = reverse(routes.samfundet__merch_list)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_get_merchs(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_merch: BlogPost,
+    ):
+        ### Arrange ###
+        url = reverse(routes.samfundet__merch_list)
 
-#         ### Act ###
-#         response: Response = fixture_rest_client.get(path=url)
-#         data = response.json()
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
 
-#         ### Assert ###
-#         assert status.is_success(code=response.status_code)
-#         assert data[0]['id'] == fixture_merch.id
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data[0]['id'] == fixture_merch.id
 
-#     def test_create_merch(
-#         self,
-#         fixture_rest_client: APIClient,
-#         fixture_user: User,
-#         fixture_image: Image,
-#     ):
-#         ### Arrange ###
-#         fixture_rest_client.force_authenticate(user=fixture_user)
-#         url = reverse(routes.samfundet__merch_list)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_create_merch(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_image: Image,
+    ):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__merch_list)
 
-#         post_data = {
-#             'name_nb': 'Beanie',
-#             'name_en': 'Beanie',
-#             'description_en': 'For a beanie boy',
-#             'description_nb': 'Beanie Boy trenger en beanie',
-#             'base_price': 69,
-#             'image': fixture_image.id,
-#         }
-#         response: Response = fixture_rest_client.post(path=url, data=post_data)
+        post_data = {
+            'name_nb': 'Beanie',
+            'name_en': 'Beanie',
+            'description_en': 'For a beanie boy',
+            'description_nb': 'Beanie Boy trenger en beanie',
+            'base_price': 69,
+            'image': fixture_image.id,
+        }
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
 
-#         assert response.status_code == status.HTTP_403_FORBIDDEN
-#         assign_perm(permissions.SAMFUNDET_ADD_MERCH, fixture_user)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_ADD_MERCH, fixture_user)
 
-#         del fixture_user._user_perm_cache
-#         del fixture_user._perm_cache
-#         response: Response = fixture_rest_client.post(path=url, data=post_data)
-#         assert status.is_success(code=response.status_code)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+        assert status.is_success(code=response.status_code)
 
-#         data = response.json()
-#         assert data['name_nb'] == post_data['name_nb']
-#         Merch.objects.get(id=data['id']).delete()
+        data = response.json()
+        assert data['name_nb'] == post_data['name_nb']
+        Merch.objects.get(id=data['id']).delete()
 
-#     def test_delete_merch(
-#         self,
-#         fixture_rest_client: APIClient,
-#         fixture_user: User,
-#         fixture_merch: Merch,
-#     ):
-#         fixture_rest_client.force_authenticate(user=fixture_user)
-#         url = reverse(routes.samfundet__merch_detail, kwargs={'pk': fixture_merch.id})
-#         response: Response = fixture_rest_client.delete(path=url)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_delete_merch(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_merch: Merch,
+    ):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__merch_detail, kwargs={'pk': fixture_merch.id})
+        response: Response = fixture_rest_client.delete(path=url)
 
-#         assert response.status_code == status.HTTP_403_FORBIDDEN
-#         assign_perm(permissions.SAMFUNDET_DELETE_MERCH, fixture_user)
-#         del fixture_user._user_perm_cache
-#         del fixture_user._perm_cache
-#         response: Response = fixture_rest_client.delete(path=url)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_DELETE_MERCH, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.delete(path=url)
 
-#         assert status.is_success(code=response.status_code)
+        assert status.is_success(code=response.status_code)
 
-#     def test_put_merch(
-#         self,
-#         fixture_rest_client: APIClient,
-#         fixture_user: User,
-#         fixture_merch: Merch,
-#     ):
-#         fixture_rest_client.force_authenticate(user=fixture_user)
-#         url = reverse(routes.samfundet__merch_detail, kwargs={'pk': fixture_merch.id})
-#         put_data = {'name_nb': 'Apple bottom jeans'}
-#         response: Response = fixture_rest_client.put(path=url, data=put_data)
-#         assert response.status_code == status.HTTP_403_FORBIDDEN
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_put_merch(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_merch: Merch,
+    ):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__merch_detail, kwargs={'pk': fixture_merch.id})
+        put_data = {'name_nb': 'Apple bottom jeans'}
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
-#         assign_perm(permissions.SAMFUNDET_CHANGE_MERCH, fixture_user)
-#         del fixture_user._user_perm_cache
-#         del fixture_user._perm_cache
-#         response: Response = fixture_rest_client.put(path=url, data=put_data)
-#         assert status.is_success(code=response.status_code)
+        assign_perm(permissions.SAMFUNDET_CHANGE_MERCH, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert status.is_success(code=response.status_code)
 
-#         data = response.json()
+        data = response.json()
 
-#         assert data['name_nb'] == put_data['name_nb']
+        assert data['name_nb'] == put_data['name_nb']
 
 
 class TestVersionModel:
@@ -491,99 +505,104 @@ class TestVersionModel:
         assert data['updated_by'] == fixture_user2.__str__()
 
 
-# class TestBlogPostView:
-#     def test_get_blogpost(
-#         self,
-#         fixture_rest_client: APIClient,
-#         fixture_user: User,
-#         fixture_blogpost: BlogPost,
-#     ):
-#         ### Arrange ###
-#         url = reverse(routes.samfundet__blog_detail, kwargs={'pk': fixture_blogpost.id})
+class TestBlogPostView:
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_get_blogpost(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_blogpost: BlogPost,
+    ):
+        ### Arrange ###
+        url = reverse(routes.samfundet__blog_detail, kwargs={'pk': fixture_blogpost.id})
 
-#         ### Act ###
-#         response: Response = fixture_rest_client.get(path=url)
-#         data = response.json()
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
 
-#         ### Assert ###
-#         assert status.is_success(code=response.status_code)
-#         assert data['id'] == fixture_blogpost.id
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data['id'] == fixture_blogpost.id
 
-#     def test_get_blogposts(
-#         self,
-#         fixture_rest_client: APIClient,
-#         fixture_user: User,
-#         fixture_blogpost: BlogPost,
-#     ):
-#         ### Arrange ###
-#         url = reverse(routes.samfundet__blog_list)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_get_blogposts(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_blogpost: BlogPost,
+    ):
+        ### Arrange ###
+        url = reverse(routes.samfundet__blog_list)
 
-#         ### Act ###
-#         response: Response = fixture_rest_client.get(path=url)
-#         data = response.json()
+        ### Act ###
+        response: Response = fixture_rest_client.get(path=url)
+        data = response.json()
 
-#         ### Assert ###
-#         assert status.is_success(code=response.status_code)
-#         assert data[0]['id'] == fixture_blogpost.id
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        assert data[0]['id'] == fixture_blogpost.id
 
-#     def test_create_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_image: Image):
-#         ### Arrange ###
-#         fixture_rest_client.force_authenticate(user=fixture_user)
-#         url = reverse(routes.samfundet__blog_list)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_create_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_image: Image):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__blog_list)
 
-#         post_data = {'title_nb': 'lol', 'title_en': 'lol', 'image': fixture_image.id}
-#         response: Response = fixture_rest_client.post(path=url, data=post_data)
+        post_data = {'title_nb': 'lol', 'title_en': 'lol', 'image': fixture_image.id}
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
 
-#         assert response.status_code == status.HTTP_403_FORBIDDEN
-#         assign_perm(permissions.SAMFUNDET_ADD_BLOGPOST, fixture_user)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_ADD_BLOGPOST, fixture_user)
 
-#         del fixture_user._user_perm_cache
-#         del fixture_user._perm_cache
-#         response: Response = fixture_rest_client.post(path=url, data=post_data)
-#         assert status.is_success(code=response.status_code)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.post(path=url, data=post_data)
+        assert status.is_success(code=response.status_code)
 
-#         data = response.json()
-#         assert data['title_nb'] == post_data['title_nb']
+        data = response.json()
+        assert data['title_nb'] == post_data['title_nb']
 
-#     def test_delete_blogpost(
-#         self,
-#         fixture_rest_client: APIClient,
-#         fixture_user: User,
-#         fixture_blogpost: BlogPost,
-#     ):
-#         fixture_rest_client.force_authenticate(user=fixture_user)
-#         url = reverse(routes.samfundet__blog_detail, kwargs={'pk': fixture_blogpost.id})
-#         response: Response = fixture_rest_client.delete(path=url)
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_delete_blogpost(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_blogpost: BlogPost,
+    ):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__blog_detail, kwargs={'pk': fixture_blogpost.id})
+        response: Response = fixture_rest_client.delete(path=url)
 
-#         assert response.status_code == status.HTTP_403_FORBIDDEN
-#         assign_perm(permissions.SAMFUNDET_DELETE_BLOGPOST, fixture_user)
-#         del fixture_user._user_perm_cache
-#         del fixture_user._perm_cache
-#         response: Response = fixture_rest_client.delete(path=url)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assign_perm(permissions.SAMFUNDET_DELETE_BLOGPOST, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.delete(path=url)
 
-#         assert status.is_success(code=response.status_code)
+        assert status.is_success(code=response.status_code)
 
-#     def test_put_blogpost(
-#         self,
-#         fixture_rest_client: APIClient,
-#         fixture_user: User,
-#         fixture_blogpost: BlogPost,
-#     ):
-#         fixture_rest_client.force_authenticate(user=fixture_user)
-#         url = reverse(routes.samfundet__blog_detail, kwargs={'pk': fixture_blogpost.id})
-#         put_data = {'title_nb': 'Samfundet blir gult!'}
-#         response: Response = fixture_rest_client.put(path=url, data=put_data)
-#         assert response.status_code == status.HTTP_403_FORBIDDEN
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
+    def test_put_blogpost(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_user: User,
+        fixture_blogpost: BlogPost,
+    ):
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__blog_detail, kwargs={'pk': fixture_blogpost.id})
+        put_data = {'title_nb': 'Samfundet blir gult!'}
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
-#         assign_perm(permissions.SAMFUNDET_CHANGE_BLOGPOST, fixture_user)
-#         del fixture_user._user_perm_cache
-#         del fixture_user._perm_cache
-#         response: Response = fixture_rest_client.put(path=url, data=put_data)
-#         assert status.is_success(code=response.status_code)
+        assign_perm(permissions.SAMFUNDET_CHANGE_BLOGPOST, fixture_user)
+        del fixture_user._user_perm_cache
+        del fixture_user._perm_cache
+        response: Response = fixture_rest_client.put(path=url, data=put_data)
+        assert status.is_success(code=response.status_code)
 
-#         data = response.json()
+        data = response.json()
 
-#         assert data['title_nb'] == put_data['title_nb']
+        assert data['title_nb'] == put_data['title_nb']
 
 
 class TestKeyValueView:
@@ -764,23 +783,23 @@ class TestAssignGroupView:
 #            Recruitment          #
 # =============================== #
 
+@pytest.mark.skip(reason='This feature is temporarily disabled.')
+def test_get_recruitments(
+    fixture_rest_client: APIClient,
+    fixture_superuser: User,
+    fixture_recruitment: Recruitment,
+):
+    ### Arrange ###
+    fixture_rest_client.force_authenticate(user=fixture_superuser)
+    url = reverse(routes.samfundet__recruitment_list)
 
-# def test_get_recruitments(
-#     fixture_rest_client: APIClient,
-#     fixture_superuser: User,
-#     fixture_recruitment: Recruitment,
-# ):
-#     ### Arrange ###
-#     fixture_rest_client.force_authenticate(user=fixture_superuser)
-#     url = reverse(routes.samfundet__recruitment_list)
+    ### Act ###
+    response = fixture_rest_client.get(url)
 
-#     ### Act ###
-#     response = fixture_rest_client.get(url)
-
-#     ### Assert ###
-#     assert response.status_code == status.HTTP_200_OK
-#     assert len(response.data) == 1
-#     assert response.data[0]['name_nb'] == fixture_recruitment.name_nb
+    ### Assert ###
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 1
+    assert response.data[0]['name_nb'] == fixture_recruitment.name_nb
 
 
 def test_get_recruitment_positions(
