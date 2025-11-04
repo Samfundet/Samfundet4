@@ -239,6 +239,12 @@ export async function getEventsPerDay(): Promise<EventDto[]> {
   return response.data;
 }
 
+type EventsUpcomingBackendResponse = {
+  events: EventDto[]; // Array of events
+  categories: [string, string][]; // Categories as value-label pairs
+  locations: string[]; // Locations as value-label pairs
+};
+
 type EventsUpcomingResponse = {
   events: EventDto[]; // Array of events
   categories: string[]; // Categories as value-label pairs
@@ -253,7 +259,7 @@ export async function getEventsUpcomming(params: {
 }): Promise<EventsUpcomingResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcomming;
 
-  const response = await axios.get<EventsUpcomingResponse>(url, {
+  const response = await axios.get<EventsUpcomingBackendResponse>(url, {
     withCredentials: true,
     params: {
       ...(params.search ? { search: params.search } : {}), // Add search if provided
@@ -263,11 +269,13 @@ export async function getEventsUpcomming(params: {
     },
   });
 
-  for (let i = 0; i < response.data.categories.length; i++) {
-    response.data.categories[i] = response.data.categories[i][0];
-  }
+  const categories = response.data.categories.map((category: [string, string]) => category[0]);
 
-  return response.data;
+  return {
+    events: response.data.events,
+    categories,
+    locations: response.data.locations,
+  };
 }
 
 export async function getEvents(): Promise<EventDto[]> {
