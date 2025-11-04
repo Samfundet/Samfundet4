@@ -20,7 +20,14 @@ export function OpeningHoursContainer() {
   } = useQuery<ClosedPeriodDto[]>({
     queryKey: ['closedPeriods'],
     queryFn: getClosedPeriods,
-  })
+  });
 
-  return <OpeningHours closedPeriods={closedPeriods} venues={openVenues} isLoading={isLoadingVenues || isLoadingPeriods} isError={isErrorVenues || isErrorPeriods} />;
+  return (
+    <OpeningHours
+      closedPeriods={closedPeriods}
+      venues={openVenues}
+      isLoading={isLoadingVenues || isLoadingPeriods}
+      isError={isErrorVenues || isErrorPeriods}
+    />
+  );
 }

@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { TimeDuration } from '~/Components';
 import { Link } from '~/Components/Link/Link';
 import { Text } from '~/Components/Text/Text';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { ClosedPeriodDto, VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from './OpeningHours.module.scss';
-import { useGlobalContext } from '~/context/GlobalContextProvider';
 
 type OpeningHoursProps = {
   venues: VenueDto[] | undefined;
