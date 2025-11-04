@@ -1,21 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 import { EventEditButtons } from './EventEditButtons';
 
-// Local component config.
 const meta: Meta<typeof EventEditButtons> = {
-  title: 'Components/Video',
+  title: 'Components/EventEditButtons',
   component: EventEditButtons,
   args: {
-    title: 'Approve',
+    title: 'EditButtons',
   },
 };
 
 export default meta;
-
-type Story = StoryObj<typeof EventEditButtons>;
-
-//export const Basic: Story = {
-// args: {
-//  embedId: '88kgbMcDIQ4',
-//},
-//};

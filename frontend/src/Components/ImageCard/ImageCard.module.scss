@@ -16,7 +16,6 @@ $card-text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.5);
 
 $card-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
-$inner-card-padding: 0.75rem;
 // TODO color variables
 
 .container {
@@ -57,7 +56,7 @@ $inner-card-padding: 0.75rem;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  padding: $inner-card-padding;
+  padding: 0.75rem;
 }
 
 .card_content {

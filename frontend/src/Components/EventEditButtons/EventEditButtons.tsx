@@ -15,7 +15,6 @@ type EventEditButtons = {
   icon_size?: number;
 };
 
-/** Component for displaying a youtube video */
 export function EventEditButtons({ title = 'event', id, icon_size = 17 }: EventEditButtons) {
   const { user } = useAuthContext();
   const isStaff = user?.is_staff;
