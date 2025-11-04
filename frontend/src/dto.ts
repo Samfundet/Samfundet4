@@ -139,6 +139,8 @@ export type VenueDto = {
   closing_sunday?: string;
 };
 
+export type OpenVenuesDto = VenueDto[];
+
 // ==================== //
 //        Event         //
 // ==================== //
@@ -352,12 +354,10 @@ export type GangSectionDto = {
 
 export type ClosedPeriodDto = {
   id: number;
-  message_no: string;
-  description_no: string;
+  message_nb: string;
   message_en: string;
-  description_en: string;
-  start_dt: Date;
-  end_dt: Date;
+  start_dt: string;
+  end_dt: string;
 };
 
 export type TagDto = {

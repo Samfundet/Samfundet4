@@ -48,7 +48,7 @@ export { Navbar } from './Navbar';
 export { NotificationBadge } from './NotificationBadge';
 export { NumberInput } from './NumberInput';
 export { OccupiedForm, OccupiedFormModal } from './OccupiedForm';
-export { OpeningHours } from './OpeningHours';
+export { OpeningHours, OpeningHoursContainer } from './OpeningHours';
 export { Page } from './Page';
 export { PagedPagination } from './Pagination';
 export { PermissionRoute } from './PermissionRoute';
