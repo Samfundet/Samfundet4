@@ -1,17 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
-import { getOpenVenues } from '~/api';
-import type { VenueDto } from '~/dto';
+import { getClosedPeriods, getOpenVenues } from '~/api';
+import type { ClosedPeriodDto, VenueDto } from '~/dto';
 import { OpeningHours } from './OpeningHours';
 
 export function OpeningHoursContainer() {
   const {
     data: openVenues,
-    isLoading,
-    isError,
+    isLoading: isLoadingVenues,
+    isError: isErrorVenues,
   } = useQuery<VenueDto[]>({
     queryKey: ['openVenues'],
     queryFn: getOpenVenues,
   });
 
-  return <OpeningHours venues={openVenues} isLoading={isLoading} isError={isError} />;
+  const {
+    data: closedPeriods,
+    isLoading: isLoadingPeriods,
+    isError: isErrorPeriods,
+  } = useQuery<ClosedPeriodDto[]>({
+    queryKey: ['closedPeriods'],
+    queryFn: getClosedPeriods,
+  })
+
+  return <OpeningHours closedPeriods={closedPeriods} venues={openVenues} isLoading={isLoadingVenues || isLoadingPeriods} isError={isErrorVenues || isErrorPeriods} />;
 }

@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { TimeDuration } from '~/Components';
 import { Link } from '~/Components/Link/Link';
 import { Text } from '~/Components/Text/Text';
-import { getClosedPeriods } from '~/api';
-import type { VenueDto } from '~/dto';
+import type { ClosedPeriodDto, VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
@@ -12,11 +11,12 @@ import styles from './OpeningHours.module.scss';
 
 type OpeningHoursProps = {
   venues: VenueDto[] | undefined;
+  closedPeriods: ClosedPeriodDto[] | undefined;
   isLoading: boolean;
   isError: boolean;
 };
 
-export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) {
+export function OpeningHours({ venues, closedPeriods, isLoading, isError }: OpeningHoursProps) {
   const { t } = useTranslation();
   const [isClosed, setIsClosed] = useState<boolean>(false);
   const [closedText, setClosedText] = useState<string | undefined>('Samf is closed');
@@ -30,17 +30,16 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
       }
       return
     }
-    getClosedPeriods().then((periods) => {
+    if (closedPeriods !== undefined) {
       const now = new Date();
-      for (const period of periods) {
+      for (const period of closedPeriods) {
         if (new Date(period.start_dt) < now && now < new Date(period.end_dt)) {
           setIsClosed(true);
-          console.log(period)
           setClosedText(dbT(period, 'message'));
           break;
         }
       }
-    });
+    }
   });
 
   if (isLoading) {
