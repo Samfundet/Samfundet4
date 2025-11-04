@@ -1,5 +1,5 @@
 import { Carousel, ImageCard } from '~/Components';
-// import { BuyEventTicket } from '~/Components/BuyEventTicket/BuyEventTicket';
+import { BuyEventTicket } from '~/Components/BuyEventTicket/BuyEventTicket';
 import { BACKEND_DOMAIN } from '~/constants';
 import { useAuthContext } from '~/context/AuthContext';
 import type { EventDto, HomePageElementDto } from '~/dto';
@@ -51,8 +51,9 @@ export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps
             url={url}
             ticket_type={event.ticket_type}
             host={event.host}
-            // {event.billig && <BuyEventTicket event={event} ticketSaleState={event.billig} />}
-          />
+          >
+            {event.billig && <BuyEventTicket event={event} ticketSaleState={event.billig} />}
+          </ImageCard>
         );
       })}
     </Carousel>
