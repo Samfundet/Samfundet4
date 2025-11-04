@@ -9,10 +9,10 @@ import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
-import { reverse } from '~/named-urls';
 
 type formType = {
   message_nb: string;
@@ -47,7 +47,7 @@ export function ClosedPeriodFormAdminPage() {
     getClosedPeriod(id)
       .then((data) => {
         // setClosedPeriod(data); For posting
-        console.log(data)
+        console.log(data);
         setInitialData({
           message_nb: data.message_nb,
           message_en: data.message_en,
@@ -70,18 +70,18 @@ export function ClosedPeriodFormAdminPage() {
     if (id !== undefined) {
       putClosedPeriod(id, data)
         .then()
-        .catch(err => {
-          alert(err)
-        })
+        .catch((err) => {
+          alert(err);
+        });
     } else {
       postClosedPeriod(data)
         .then(() => {
-          toast.success(t(KEY.common_creation_successful))
-          navigate({url: reverse({pattern: ROUTES.frontend.admin_closed})})
+          toast.success(t(KEY.common_creation_successful));
+          navigate({ url: reverse({ pattern: ROUTES.frontend.admin_closed }) });
         })
         .catch(() => {
-          toast.error(t(KEY.common_something_went_wrong))
-        })
+          toast.error(t(KEY.common_something_went_wrong));
+        });
     }
   }
 
@@ -93,12 +93,36 @@ export function ClosedPeriodFormAdminPage() {
     <AdminPageLayout title={title} loading={showSpinner} header={true}>
       <SamfForm<formType> onSubmit={handleOnSubmit} initialData={initialData}>
         <div className={styles.row}>
-          <SamfFormField validator={(state: formType) => state.message_nb.length > min_length_message} field="message_nb" required={true} type="text_long" label={`${labelMessage} (${t(KEY.common_norwegian)})`} />
-          <SamfFormField validator={(state: formType) => state.message_en.length > min_length_message} field="message_en" required={true} type="text_long" label={`${labelMessage} (${t(KEY.common_english)})`} />
+          <SamfFormField
+            validator={(state: formType) => state.message_nb.length > min_length_message}
+            field="message_nb"
+            required={true}
+            type="text_long"
+            label={`${labelMessage} (${t(KEY.common_norwegian)})`}
+          />
+          <SamfFormField
+            validator={(state: formType) => state.message_en.length > min_length_message}
+            field="message_en"
+            required={true}
+            type="text_long"
+            label={`${labelMessage} (${t(KEY.common_english)})`}
+          />
         </div>
         <div className={styles.row}>
-          <SamfFormField validator={(state: formType) => state.end_dt ? new Date(state.start_dt) <= new Date(state.end_dt) : true} field="start_dt" type="date" label={`${t(KEY.start_time)}`} />
-          <SamfFormField validator={(state: formType) => state.start_dt ? new Date(state.start_dt) <= new Date(state.end_dt) : true} field="end_dt" type="date" label={`${t(KEY.end_time)}`} />
+          <SamfFormField
+            validator={(state: formType) => (state.end_dt ? new Date(state.start_dt) <= new Date(state.end_dt) : true)}
+            field="start_dt"
+            type="date"
+            label={`${t(KEY.start_time)}`}
+          />
+          <SamfFormField
+            validator={(state: formType) =>
+              state.start_dt ? new Date(state.start_dt) <= new Date(state.end_dt) : true
+            }
+            field="end_dt"
+            type="date"
+            label={`${t(KEY.end_time)}`}
+          />
         </div>
       </SamfForm>
     </AdminPageLayout>
