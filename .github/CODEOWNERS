@@ -1,11 +1,11 @@
-* @emilte @Mathias-a @robines @Snorre98 @andsamfu
-backend/ @Mathias-a @robines @Snorre98 @andsamfu
-frontend/ @Mathias-a @robines @Snorre98 @andsamfu
+* @emilte @robines @Snorre98 @andsamfu
+backend/ @robines @Snorre98 @andsamfu
+frontend/ @robines @Snorre98 @andsamfu
 
 # Dependabot change files (for permitting more weebs to approve dependabot)
 
-**/package.json @Mathias-a @robines @Snorre98 @andsamfu @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
-**/yarn.lock @Mathias-a @robines @Snorre98 @andsamfu @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
+**/package.json @robines @Snorre98 @andsamfu @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
+**/yarn.lock @robines @Snorre98 @andsamfu @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
 
-**/poetry.lock @Mathias-a @robines @Snorre98 @andsamfu @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
-**/pyproject.toml @Mathias-a @robines @Snorre98 @andsamfu @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
+**/poetry.lock @robines @Snorre98 @andsamfu @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 
+**/pyproject.toml @robines @Snorre98 @andsamfu @snorrekr @Frenje123 @eilifhl @Lidavic @Erichseen 

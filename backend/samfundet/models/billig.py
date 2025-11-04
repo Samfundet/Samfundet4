@@ -77,7 +77,8 @@ class BilligEvent(models.Model):
 
     @property
     def in_sale_period(self) -> bool:
-        return self.sale_from <= timezone.localtime() <= self.sale_to
+        now = timezone.make_naive(timezone.now())
+        return self.sale_from <= now <= self.sale_to
 
     @property
     def is_sold_out(self) -> bool:
@@ -93,7 +94,7 @@ class BilligEvent(models.Model):
     def get_relevant() -> QuerySet:
         # Exclude events which ended their sale more than a month ago
         # There will be a lot of events here, so very slow to get all of them
-        one_month_ago = timezone.datetime.now() - timezone.timedelta(days=31)
+        one_month_ago = timezone.now() - timezone.timedelta(days=31)
         return BilligEvent.objects.filter(
             sale_to__gt=one_month_ago,
             hidden=False,
