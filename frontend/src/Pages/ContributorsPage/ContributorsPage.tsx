@@ -5,6 +5,7 @@ import amaliejvik from '~/assets/contributors/amaliejvik.jpeg';
 import robines from '~/assets/contributors/robines.jpg';
 import snorre98 from '~/assets/contributors/snorre98.jpg';
 import sygard from '~/assets/contributors/sygard.jpg';
+import marcusaf from '~/assets/contributors/marcusaf.webp';
 import { KEY } from '~/i18n/constants';
 import { ContributorItem } from './ContributorItem';
 import styles from './ContributorsPage.module.scss';
@@ -18,7 +19,7 @@ const CONTRIBUTORS: Contributor[] = [
   { name: 'Emil Telstad', github: 'emilte', from: 'H19' },
   { name: 'Sigve Røkenes', github: 'evgiz', from: 'H19', to: 'H23', websjef: { from: 'H20', to: 'V21' } },
   // V20
-  { name: 'Marcus Frenje', github: 'Frenje123', from: 'V20' },
+  { name: 'Marcus Frenje', github: 'Frenje123', from: 'V20', picture: marcusaf },
   // H20
   { name: 'Magnus Øvre Sygard', github: 'magsyg', picture: sygard, from: 'H20' },
   { name: 'Snorre Skjellestad Kristiansen', github: 'snorrekr', from: 'H20', websjef: { from: 'H21', to: 'V22' } },
