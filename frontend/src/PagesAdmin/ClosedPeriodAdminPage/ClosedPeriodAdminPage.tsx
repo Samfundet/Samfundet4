@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Button, RadioButton, TimeDisplay, ToggleSwitch } from '~/Components';
+import { Button, RadioButton, TimeDisplay } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteClosedPeriod, getClosedPeriods } from '~/api';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { ClosedPeriodDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodAdminPage.module.scss';
-import { useGlobalContext } from '~/context/GlobalContextProvider';
-import { dbT } from '~/utils';
 
 export function ClosedPeriodAdminPage() {
   const [closedPeriods, setClosedPeriods] = useState<ClosedPeriodDto[]>([]);
@@ -59,26 +59,30 @@ export function ClosedPeriodAdminPage() {
         {t(KEY.admin_closed_period_new_period)}
       </Button>
       <span className={styles.admin_closed_override_container}>
-          <span style={{marginRight: 10}}>
-            {dbT({"text_nb": "Stenging status", "text_en": "Closing status"}, "text")}
-          </span>
+        <span style={{ marginRight: 10 }}>
+          {dbT({ text_nb: 'Stenging status', text_en: 'Closing status' }, 'text')}
+        </span>
 
-          <span>
-          {dbT({"text_nb": "standar", "text_en": "default"}, "text")}
-          </span>
-          <span className={styles.admin_closed_radio}>
-            <RadioButton checked={globalContext.isClosed === "default"} onChange={() => globalContext.setIsClosed("default")}/>
-          </span>
+        <span>{dbT({ text_nb: 'standar', text_en: 'default' }, 'text')}</span>
+        <span className={styles.admin_closed_radio}>
+          <RadioButton
+            checked={globalContext.isClosed === 'default'}
+            onChange={() => globalContext.setIsClosed('default')}
+          />
+        </span>
 
-          {dbT({"text_nb": "stengt", "text_en": "closed"}, "text")}
-          <span className={styles.admin_closed_radio}>
-          <RadioButton checked={globalContext.isClosed === "closed"} onChange={() => globalContext.setIsClosed("closed")}/>
-          </span>
+        {dbT({ text_nb: 'stengt', text_en: 'closed' }, 'text')}
+        <span className={styles.admin_closed_radio}>
+          <RadioButton
+            checked={globalContext.isClosed === 'closed'}
+            onChange={() => globalContext.setIsClosed('closed')}
+          />
+        </span>
 
-          {dbT({"text_nb": "åpent", "text_en": "open"}, "text")}
-          <span className={styles.admin_closed_radio}>
-          <RadioButton checked={globalContext.isClosed === "open"} onChange={() => globalContext.setIsClosed("open")}/>
-          </span>
+        {dbT({ text_nb: 'åpent', text_en: 'open' }, 'text')}
+        <span className={styles.admin_closed_radio}>
+          <RadioButton checked={globalContext.isClosed === 'open'} onChange={() => globalContext.setIsClosed('open')} />
+        </span>
       </span>
     </>
   );

@@ -80,7 +80,7 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
   const [mirrorDimension, setMirrorDimension] = useState<boolean>(false);
   const { isMouseTrail, setIsMouseTrail, toggleMouseTrail } = useMouseTrail();
 
-  const [isClosed, setIsClosed] = useState<string>("default");
+  const [isClosed, setIsClosed] = useState<string>('default');
 
   // =================================== //
   //               Effects               //
@@ -91,7 +91,6 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
     if (!user || !enabled) return;
     setMirrorDimension(user.user_preference.mirror_dimension);
   }, [user, enabled]);
-
 
   // Stuff to do on first render.
   useEffect(() => {
@@ -166,7 +165,7 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
     toggleMirrorDimension,
     keyValues,
     isClosed,
-    setIsClosed
+    setIsClosed,
   };
 
   return <GlobalContext.Provider value={globalContextValues}>{children}</GlobalContext.Provider>;
