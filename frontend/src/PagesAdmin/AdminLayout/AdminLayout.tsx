@@ -1,10 +1,15 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router';
+import { useNavigate } from 'react-router';
 import { Button, Link, Navbar } from '~/Components';
 import { appletCategories } from '~/Pages/AdminPage/applets';
+import { logout, stopImpersonatingUser } from '~/api';
+import { STATUS } from '~/http_status_codes';
+import { ROUTES } from '~/routes';
 import { useAuthContext } from '~/context/AuthContext';
 import { useMobile } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -23,7 +28,30 @@ export function AdminLayout() {
   const [panelOpen, setPanelOpen] = useState(false);
   const isMobile = useMobile();
   const location = useLocation();
-  const { loading: authLoading } = useAuthContext();
+  const navigate = useNavigate();
+  const [cookies] = useCookies();
+  const { user, setUser, loading: authLoading } = useAuthContext();
+
+  const isImpersonating = cookies.hasOwnProperty('impersonated_user_id');
+
+  function handleLogout() {
+    logout()
+      .then((response) => {
+        if (response.status === STATUS.HTTP_200_OK) {
+          setUser(undefined);
+          navigate(ROUTES.frontend.home);
+        }
+      })
+      .catch(console.error);
+  }
+
+  function handleStopImpersonating() {
+    stopImpersonatingUser()
+      .then(() => {
+        window.location.reload();
+      })
+      .catch(console.error);
+  }
 
   const makeAppletShortcut = useCallback(
     (applet: AdminApplet, index: number) => {
@@ -90,6 +118,16 @@ export function AdminLayout() {
         <Icon icon="material-symbols:question-mark-rounded" />
         {t(KEY.control_panel_faq)}
       </Link>
+      {isImpersonating && (
+        <button type="button" className={styles.panel_item} onClick={handleStopImpersonating}>
+          <Icon icon="ri:spy-fill" />
+          {t(KEY.admin_stop_impersonate)}
+        </button>
+      )}
+      <button type="button" className={styles.panel_item} onClick={handleLogout}>
+        <Icon icon="material-symbols:logout" />
+        {t(KEY.common_logout)}
+      </button>
     </div>
   );
 
