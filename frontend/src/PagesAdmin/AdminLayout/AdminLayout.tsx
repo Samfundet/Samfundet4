@@ -8,11 +8,11 @@ import { useNavigate } from 'react-router';
 import { Button, Link, Navbar } from '~/Components';
 import { appletCategories } from '~/Pages/AdminPage/applets';
 import { logout, stopImpersonatingUser } from '~/api';
-import { STATUS } from '~/http_status_codes';
-import { ROUTES } from '~/routes';
 import { useAuthContext } from '~/context/AuthContext';
 import { useMobile } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import type { AdminApplet } from '~/types';
 import { dbT } from '~/utils';
@@ -32,7 +32,7 @@ export function AdminLayout() {
   const [cookies] = useCookies();
   const { user, setUser, loading: authLoading } = useAuthContext();
 
-  const isImpersonating = cookies.hasOwnProperty('impersonated_user_id');
+  const isImpersonate = cookies.hasOwnProperty('impersonated_user_id');
 
   function handleLogout() {
     logout()
@@ -118,16 +118,16 @@ export function AdminLayout() {
         <Icon icon="material-symbols:question-mark-rounded" />
         {t(KEY.control_panel_faq)}
       </Link>
-      {isImpersonating && (
-        <button type="button" className={styles.panel_item} onClick={handleStopImpersonating}>
+      {isImpersonate && (
+        <div className={styles.panel_item} onClick={handleStopImpersonating}>
           <Icon icon="ri:spy-fill" />
           {t(KEY.admin_stop_impersonate)}
-        </button>
+        </div>
       )}
-      <button type="button" className={styles.panel_item} onClick={handleLogout}>
+      <div className={styles.panel_item} onClick={handleLogout}>
         <Icon icon="material-symbols:logout" />
         {t(KEY.common_logout)}
-      </button>
+      </div>
     </div>
   );
 
