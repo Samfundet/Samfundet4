@@ -140,7 +140,7 @@ export function Navbar() {
     </div>
   );
 
-  const isImpersonate = cookies.hasOwnProperty('impersonated_user_id');
+  const isImpersonate = Object.hasOwn(cookies, 'impersonated_user_id');
 
   const profileButton = user && (
     <Link url={ROUTES.frontend.admin} className={classNames(styles.navbar_profile_button, styles.profile_text)}>

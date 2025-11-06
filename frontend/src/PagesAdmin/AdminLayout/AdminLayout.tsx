@@ -8,11 +8,11 @@ import { useNavigate } from 'react-router';
 import { Button, Link, Navbar } from '~/Components';
 import { appletCategories } from '~/Pages/AdminPage/applets';
 import { logout, stopImpersonatingUser } from '~/api';
-import { STATUS } from '~/http_status_codes';
-import { ROUTES } from '~/routes';
 import { useAuthContext } from '~/context/AuthContext';
 import { useMobile } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import type { AdminApplet } from '~/types';
 import { dbT } from '~/utils';
@@ -32,7 +32,7 @@ export function AdminLayout() {
   const [cookies] = useCookies();
   const { user, setUser, loading: authLoading } = useAuthContext();
 
-  const isImpersonating = cookies.hasOwnProperty('impersonated_user_id');
+  const isImpersonating = Object.hasOwn(cookies, 'impersonated_user_id');
 
   function handleLogout() {
     logout()
