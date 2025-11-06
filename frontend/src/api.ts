@@ -239,11 +239,43 @@ export async function getEventsPerDay(): Promise<EventDto[]> {
   return response.data;
 }
 
-export async function getEventsUpcomming(): Promise<EventDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcomming;
-  const response = await axios.get<EventDto[]>(url, { withCredentials: true });
+type EventsUpcomingBackendResponse = {
+  events: EventDto[]; // Array of events
+  categories: [string, string][]; // Categories as value-label pairs
+  locations: string[]; // Locations as value-label pairs
+};
 
-  return response.data;
+type EventsUpcomingResponse = {
+  events: EventDto[]; // Array of events
+  categories: string[]; // Categories as value-label pairs
+  locations: string[]; // Locations as value-label pairs
+};
+
+export async function getEventsUpcomming(params: {
+  search?: string;
+  event_group?: string;
+  venue?: string;
+  category?: string;
+}): Promise<EventsUpcomingResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcomming;
+
+  const response = await axios.get<EventsUpcomingBackendResponse>(url, {
+    withCredentials: true,
+    params: {
+      ...(params.search ? { search: params.search } : {}), // Add search if provided
+      ...(params.event_group ? { event_group: params.event_group } : {}), // Add event_group if provided
+      ...(params.venue ? { venue: params.venue } : {}), // Add venue if provided
+      ...(params.category ? { category: params.category } : {}), // Add category if provided
+    },
+  });
+
+  const categories = response.data.categories.map((category: [string, string]) => category[0]);
+
+  return {
+    events: response.data.events,
+    categories,
+    locations: response.data.locations,
+  };
 }
 
 export async function getEvents(): Promise<EventDto[]> {
