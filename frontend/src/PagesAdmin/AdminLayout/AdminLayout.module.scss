@@ -145,6 +145,13 @@ $panel-dark-bg: #333333;
   }
 }
 
+button.panel_item {
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+}
+
 .selected {
   background-color: $red-samf;
   color: white;
