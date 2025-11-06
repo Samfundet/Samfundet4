@@ -77,7 +77,6 @@ $theme-dark-input-bg-disabled: #7b7b7b;
 $background-primary: #ffffff;
 $background-secondary: #efefef;
 
-
 // Applicant state colors (model_choices.py in RecruitmentApplicantStates)
 // these should communicate possible actions
 $action_needed_here: #ebbc7c;
@@ -85,7 +84,6 @@ $might_contact: #63b88f;
 $will_contact: #046404;
 $do_not_contact: #e53b2f;
 $not_wanted: #9f3dd3;
-
 
 // Final application result colors
 $rejected_this_offer: #dee73e;
@@ -103,7 +101,10 @@ $content-max-size: 1200px;
 $content-padding: calc((100vw - 1200px) / 2);
 
 // Navbar size
-$navbar-height: 60px;
+// TODO: Uncomment the following line when samf4 navbar is enabled
+//$navbar-height: 60px;
+// TODO: Remove the following line when samf4 navbar is enabled
+$navbar-height: 64px;
 $sulten-navbar-height: 100px;
 $isfit-navbar-height: 80px;
 

@@ -9,7 +9,6 @@
 
 // Font
 $navbar-font-family: 'futura-pt', 'Lato', sans-serif;
-$navbar-height-samf-three: 64px;
 
 // Background
 $navbar-bg: white;
@@ -34,12 +33,12 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 
 /* Inner container with padding */
 .navbar_outlet {
-  padding-top: $navbar-height-samf-three;
+  padding-top: $navbar-height;
 }
 
 /* Content padding */
 .navbar_padding {
-  margin-top: $navbar-height-samf-three;
+  margin-top: $navbar-height;
 }
 
 /* Main navbar */
@@ -47,7 +46,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   position: fixed;
   top: 0;
   width: 100%;
-  height: $navbar-height-samf-three;
+  height: $navbar-height;
   background: $navbar-bg-dark;
   color: $white;
   display: flex;
@@ -202,7 +201,6 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 
 #navbar_logo_img {
   width: 100%; // QUESTION: Why is this needed?
-  padding: 13px;
 }
 
 /* Widgets with language, theme, login */
@@ -254,10 +252,10 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 /* Mobile popup navigation */
 #mobile_popup_container {
   position: fixed;
-  top: 60px;
+  top: $navbar-height;
   left: 0;
   width: 100vw;
-  height: calc(100vh - 60px);
+  height: calc(100vh - $navbar-height);
   min-height: 400px;
   background: $navbar-bg-dark;
   color: white;
