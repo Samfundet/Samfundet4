@@ -48,7 +48,7 @@ export { Navbar } from './Navbar';
 export { NotificationBadge } from './NotificationBadge';
 export { NumberInput } from './NumberInput';
 export { OccupiedForm, OccupiedFormModal } from './OccupiedForm';
-export { OpeningHours } from './OpeningHours';
+export { OpeningHours, OpeningHoursContainer } from './OpeningHours';
 export { Page } from './Page';
 export { PagedPagination } from './Pagination';
 export { PermissionRoute } from './PermissionRoute';
@@ -89,6 +89,7 @@ export { ToolTip } from './ToolTip';
 export { UkaOutlet } from './UkaOutlet';
 export { UserFeedback } from './UserFeedback';
 export { Video } from './Video';
+export { EventEditButtons } from './EventEditButtons';
 // Props
 export type { ButtonProps } from './Button';
 export type { CheckboxProps } from './Checkbox';
