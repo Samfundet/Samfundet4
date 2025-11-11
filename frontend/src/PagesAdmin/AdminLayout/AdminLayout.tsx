@@ -119,7 +119,11 @@ export function AdminLayout() {
         {t(KEY.control_panel_faq)}
       </Link>
       {isImpersonating && (
-          <button type="button" className={classNames(styles.panel_item, styles.panel_item_button)} onClick={handleStopImpersonating}>
+        <button
+          type="button"
+          className={classNames(styles.panel_item, styles.panel_item_button)}
+          onClick={handleStopImpersonating}
+        >
           <Icon icon="ri:spy-fill" />
           {t(KEY.admin_stop_impersonate)}
         </button>
