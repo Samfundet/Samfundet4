@@ -261,9 +261,11 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   background-color: inherit;
   border-bottom: 1px solid transparent;
   gap: 5px;
+  margin-top: 1em;
 
   @include for-desktop-up {
     height: 100%;
+    margin-top: 0;
   }
 
   .profile_icon {
