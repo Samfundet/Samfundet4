@@ -119,12 +119,12 @@ export function AdminLayout() {
         {t(KEY.control_panel_faq)}
       </Link>
       {isImpersonating && (
-        <button type="button" className={styles.panel_item} onClick={handleStopImpersonating}>
+          <button type="button" className={classNames(styles.panel_item, styles.panel_item_button)} onClick={handleStopImpersonating}>
           <Icon icon="ri:spy-fill" />
           {t(KEY.admin_stop_impersonate)}
         </button>
       )}
-      <button type="button" className={styles.panel_item} onClick={handleLogout}>
+      <button type="button" className={classNames(styles.panel_item, styles.panel_item_button)} onClick={handleLogout}>
         <Icon icon="material-symbols:logout" />
         {t(KEY.common_logout)}
       </button>
