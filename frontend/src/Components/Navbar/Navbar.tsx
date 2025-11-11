@@ -205,9 +205,7 @@ export function Navbar() {
 
         <div className={styles.mobile_widgets}>
           <LanguageButton />
-          <div className={styles.mobile_user}>
-            {memberButton}
-          </div>
+          <div className={styles.mobile_user}>{memberButton}</div>
           <ThemeSwitch />
         </div>
         <br />
