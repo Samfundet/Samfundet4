@@ -14,6 +14,7 @@ import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { SAMF3_MEMBER_URL } from '~/routes/samf-three';
 import styles from './Navbar.module.scss';
 import { HamburgerMenu, LanguageButton, NavbarItem } from './components';
 
@@ -182,6 +183,20 @@ export function Navbar() {
     </Button>
   );
 
+  const memberButton = (
+    <Button
+      theme="samf"
+      rounded={true}
+      className={isDesktop ? styles.login_button : styles.popup_internal_button}
+      onClick={() => {
+        window.location.href = SAMF3_MEMBER_URL.medlem;
+        setIsMobileNavigation(false);
+      }}
+    >
+      {t(KEY.common_member)}
+    </Button>
+  );
+
   // Show mobile popup for navigation.
   const mobileNavigation = (
     <>
@@ -193,6 +208,7 @@ export function Navbar() {
           <div className={styles.mobile_user}>
             {loginButton}
             {logoutButton}
+            {memberButton}
           </div>
           <ThemeSwitch />
         </div>
@@ -213,6 +229,7 @@ export function Navbar() {
           <div className={styles.navbar_widgets}>
             <ThemeSwitch />
             <LanguageButton />
+            {memberButton}
             {loginButton}
             {profileButton}
           </div>
