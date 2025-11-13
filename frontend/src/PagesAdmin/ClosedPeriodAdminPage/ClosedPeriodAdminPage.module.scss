@@ -12,3 +12,9 @@
 .admin_closed_radio {
   margin-top: 10px;
 }
+
+.edit_buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

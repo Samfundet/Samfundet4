@@ -69,9 +69,12 @@ export function ClosedPeriodFormAdminPage() {
   function handleOnSubmit(data: formType) {
     if (id !== undefined) {
       putClosedPeriod(id, data)
-        .then()
-        .catch((err) => {
-          alert(err);
+        .then(() => {
+          toast.success(t(KEY.common_update_successful));
+          navigate({ url: reverse({ pattern: ROUTES.frontend.admin_closed }) });
+        })
+        .catch(() => {
+          toast.error(t(KEY.common_something_went_wrong));
         });
     } else {
       postClosedPeriod(data)
