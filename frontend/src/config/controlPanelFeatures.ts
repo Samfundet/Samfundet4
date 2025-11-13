@@ -18,5 +18,5 @@ const CONTROL_PANEL_FEATURES: Record<ControlPanelFeature, boolean> = {
 };
 
 export function isControlPanelFeatureEnabled(f?: ControlPanelFeature) {
-  return !!f && CONTROL_PANEL_FEATURES[f] === true;
+  return !!f && CONTROL_PANEL_FEATURES[f];
 }

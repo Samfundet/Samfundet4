@@ -1,5 +1,5 @@
 import { appletCategories } from '~/Pages/AdminPage/applets';
-import { ROUTES_FRONTEND as R } from '~/routes/frontend';
+import { ROUTES_FRONTEND as ROUTES_FRONTEND } from '~/routes/frontend';
 import { isControlPanelFeatureEnabled } from './controlPanelFeatures';
 
 export function firstEnabledAdminPath(): string {
@@ -7,5 +7,5 @@ export function firstEnabledAdminPath(): string {
 
   const first = all.find((a) => a.url && (!a.feature || isControlPanelFeatureEnabled(a.feature)));
 
-  return first?.url ?? R.not_found;
+  return first?.url ?? ROUTES_FRONTEND.not_found;
 }

@@ -78,7 +78,7 @@ import { ROUTES } from '~/routes';
 
 import { t } from 'i18next';
 import { App } from '~/App';
-import { controlPanelFeatureGate as Gate } from '~/Components/ControlPanelFeatureGate/ControlPanelFeatureGate';
+import { ControlPanelFeatureGate as Gate } from '~/Components/ControlPanelFeatureGate/ControlPanelFeatureGate';
 import { DynamicOrgOutlet } from '~/Components/DynamicOrgOutlet/DynamicOrgOutlet';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
 import { KEY } from '~/i18n/constants';

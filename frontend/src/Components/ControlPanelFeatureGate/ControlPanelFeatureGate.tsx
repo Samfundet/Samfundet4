@@ -3,7 +3,7 @@ import { isControlPanelFeatureEnabled } from '~/config/controlPanelFeatures';
 import { firstEnabledAdminPath } from '~/config/controlPanelRouting';
 import type { ControlPanelFeature } from '~/types';
 
-export function controlPanelFeatureGate({
+export function ControlPanelFeatureGate({
   feature,
   children,
 }: {
