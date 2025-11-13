@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { Link } from 'react-router';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
-import { useClickOutside, useDesktop } from '~/hooks';
+import { useDesktop } from '~/hooks';
 import type { Children, SetState } from '~/types';
 import styles from '../../NavbarSamfThree.module.scss';
 
@@ -31,13 +31,6 @@ export function NavbarItemSamfThree({
   const isDesktop = useDesktop();
   const isSelected = expandedDropdown === label;
   const otherIsSelected = !isSelected && expandedDropdown !== '';
-
-  // Close when click outside. Need to store this state
-  const clickOutsideRef = useClickOutside<HTMLDivElement>(() => {
-    if (isSelected) {
-      setExpandedDropdown('');
-    }
-  });
 
   const itemClasses = classNames(
     isDesktop ? styles.navbar_item : styles.navbar_mobile_item,
@@ -88,20 +81,15 @@ export function NavbarItemSamfThree({
   return (
     <div
       className={itemClasses}
-      ref={clickOutsideRef}
       onMouseEnter={isDesktop ? handleMouseEnter : undefined}
       onMouseLeave={isDesktop ? handleMouseLeave : undefined}
-      onClick={!isDesktop ? handleOnClick : undefined}
-      onKeyDown={
-        !isDesktop
-          ? (e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handleOnClick();
-              }
-            }
-          : undefined
-      }
+      onClick={handleOnClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleOnClick();
+        }
+      }}
       role="button"
       tabIndex={0}
     >
