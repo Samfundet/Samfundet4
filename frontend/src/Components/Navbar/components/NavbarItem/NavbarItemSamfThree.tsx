@@ -91,7 +91,19 @@ export function NavbarItemSamfThree({
       ref={clickOutsideRef}
       onMouseEnter={isDesktop ? handleMouseEnter : undefined}
       onMouseLeave={isDesktop ? handleMouseLeave : undefined}
-      onKeyDown={!isDesktop ? handleOnClick : undefined}
+      onClick={!isDesktop ? handleOnClick : undefined}
+      onKeyDown={
+        !isDesktop
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleOnClick();
+              }
+            }
+          : undefined
+      }
+      role="button"
+      tabIndex={0}
     >
       <Link to={route} className={isDesktop ? styles.navbar_link : styles.popup_link_mobile}>
         {icon && <Icon icon={icon} className={styles.navbar_item_icon} />}
