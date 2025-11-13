@@ -118,6 +118,11 @@ export function AdminLayout() {
         <Icon icon="material-symbols:question-mark-rounded" />
         {t(KEY.control_panel_faq)}
       </Link>
+
+      <div className={styles.spacer} />
+      <div className={styles.separator} />
+
+      {/* Stop Impersonating */}
       {isImpersonating && (
         <button
           type="button"
@@ -128,6 +133,7 @@ export function AdminLayout() {
           {t(KEY.admin_stop_impersonate)}
         </button>
       )}
+      {/* Logout */}
       <button type="button" className={classNames(styles.panel_item, styles.panel_item_button)} onClick={handleLogout}>
         <Icon icon="material-symbols:logout" />
         {t(KEY.common_logout)}
