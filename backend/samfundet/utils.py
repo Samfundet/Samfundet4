@@ -127,8 +127,10 @@ def register_if_feature_enabled(feature: str, model: type[Model]) -> Callable[[t
     @register_if_feature_enabled(WebFeature.BLOG, BlogPost)
     class BlogPostAdmin(admin.ModelAdmin): ...
     """
+
     def decorator(admin_class: type[ModelAdmin]) -> type[ModelAdmin]:
         if feature in settings.CP_ENABLED:
             return admin.register(model)(admin_class)
         return admin_class
+
     return decorator

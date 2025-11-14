@@ -21,6 +21,7 @@ from root.custom_classes.admin_classes import (
     CustomGuardedGroupAdmin,
     CustomGuardedModelAdmin,
 )
+
 from samfundet.utils import register_if_feature_enabled
 
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
@@ -463,6 +464,7 @@ class InformationPageAdmin(CustomBaseAdmin):
     # autocomplete_fields = []
     list_select_related = True
 
+
 @register_if_feature_enabled(WebFeatures.BLOG, BlogPost)
 class BlogPostAdmin(CustomBaseAdmin):
     # ordering = []
@@ -474,6 +476,7 @@ class BlogPostAdmin(CustomBaseAdmin):
     list_display_links = ['__str__', 'id']
     # autocomplete_fields = []
     list_select_related = True
+
 
 @register_if_feature_enabled(WebFeatures.SULTEN, Table)
 class TableAdmin(CustomBaseAdmin):
@@ -487,6 +490,7 @@ class TableAdmin(CustomBaseAdmin):
     # autocomplete_fields = []
     list_select_related = True
 
+
 @register_if_feature_enabled(WebFeatures.SULTEN, Reservation)
 class ReservationAdmin(CustomGuardedModelAdmin):
     # ordering = []
@@ -498,6 +502,7 @@ class ReservationAdmin(CustomGuardedModelAdmin):
     list_display_links = ['id', '__str__']
     # autocomplete_fields = []
     list_select_related = True
+
 
 @register_if_feature_enabled(WebFeatures.SULTEN, Menu)
 class MenuAdmin(CustomBaseAdmin):

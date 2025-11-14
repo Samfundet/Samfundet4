@@ -1,5 +1,5 @@
 import { appletCategories } from '~/Pages/AdminPage/applets';
-import { ROUTES_FRONTEND as ROUTES_FRONTEND } from '~/routes/frontend';
+import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { isControlPanelFeatureEnabled } from './controlPanelFeatures';
 
 export function firstEnabledAdminPath(): string {
