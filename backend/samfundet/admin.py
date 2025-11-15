@@ -13,6 +13,7 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 
+from root.constants import WebFeatures
 from root.utils.routes import admin__samfundet_gang_change, admin__samfundet_recruitmentapplication_change
 from root.custom_classes.admin_classes import (
     CustomBaseAdmin,
@@ -20,6 +21,8 @@ from root.custom_classes.admin_classes import (
     CustomGuardedGroupAdmin,
     CustomGuardedModelAdmin,
 )
+
+from samfundet.utils import register_if_feature_enabled
 
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .models.event import Event, EventGroup, EventRegistration, PurchaseFeedbackModel
@@ -82,7 +85,7 @@ from .models.recruitment import (
 admin.site.unregister(Group)
 
 
-@admin.register(OccupiedTimeslot)
+@register_if_feature_enabled(WebFeatures.RECRUITMENT, OccupiedTimeslot)
 class OccupiedTimeAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'recruitment']
     list_select_related = True
@@ -166,23 +169,23 @@ class GroupAdmin(CustomGuardedGroupAdmin):
         return n
 
 
-@admin.register(Role)
+@register_if_feature_enabled(WebFeatures.ROLES, Role)
 class RoleAdmin(admin.ModelAdmin):
     list_display = ('name',)
     filter_horizontal = ['permissions']
 
 
-@admin.register(UserOrgRole)
+@register_if_feature_enabled(WebFeatures.ROLES, UserOrgRole)
 class UserOrgRoleAdmin(admin.ModelAdmin):
     list_display = ('user', 'role', 'obj', 'created_at', 'created_by')
 
 
-@admin.register(UserGangRole)
+@register_if_feature_enabled(WebFeatures.ROLES, UserGangRole)
 class UserGangRoleAdmin(admin.ModelAdmin):
     list_display = ('user', 'role', 'obj', 'created_at', 'created_by')
 
 
-@admin.register(UserGangSectionRole)
+@register_if_feature_enabled(WebFeatures.ROLES, UserGangSectionRole)
 class UserGangSectionRoleAdmin(admin.ModelAdmin):
     list_display = ('user', 'role', 'obj', 'created_at', 'created_by')
 
@@ -280,7 +283,7 @@ class CampusAdmin(CustomGuardedModelAdmin):
     list_select_related = True
 
 
-@admin.register(UserPreference)
+@register_if_feature_enabled(WebFeatures.USERS, UserPreference)
 class UserPreferenceAdmin(CustomGuardedModelAdmin):
     # ordering = []
     sortable_by = ['id', 'user', 'theme', 'created_at', 'updated_at']
@@ -294,7 +297,7 @@ class UserPreferenceAdmin(CustomGuardedModelAdmin):
     list_select_related = True
 
 
-@admin.register(Profile)
+@register_if_feature_enabled(WebFeatures.PROFILE, Profile)
 class ProfileAdmin(CustomGuardedModelAdmin):
     # ordering = []
     sortable_by = ['id', 'user', 'nickname', 'created_at', 'updated_at']
@@ -308,13 +311,13 @@ class ProfileAdmin(CustomGuardedModelAdmin):
     list_select_related = True
 
 
-@admin.register(EventRegistration)
+@register_if_feature_enabled(WebFeatures.EVENTS, EventRegistration)
 class EventRegistrationAdmin(CustomGuardedModelAdmin):
     list_display = ['id']
     filter_horizontal = ['registered_users', 'registered_emails']
 
 
-@admin.register(Event)
+@register_if_feature_enabled(WebFeatures.EVENTS, Event)
 class EventAdmin(CustomBaseAdmin):
     # ordering = []
 
@@ -356,7 +359,7 @@ class TagAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(Image)
+@register_if_feature_enabled(WebFeatures.IMAGES, Image)
 class ImageAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id', 'title', 'image']
@@ -369,7 +372,7 @@ class ImageAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(EventGroup)
+@register_if_feature_enabled(WebFeatures.EVENTS, EventGroup)
 class EventGroupAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id']
@@ -382,7 +385,7 @@ class EventGroupAdmin(CustomBaseAdmin):
     # list_select_related = True
 
 
-@admin.register(Venue)
+@register_if_feature_enabled(WebFeatures.VENUE, Venue)
 class VenueAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['slug', 'name', 'floor', 'last_renovated', 'handicapped_approved', 'responsible_crew', 'opening', 'closing', 'created_at', 'updated_at']
@@ -408,7 +411,7 @@ class VenueAdmin(CustomBaseAdmin):
 
 
 # GANGS:
-@admin.register(Gang)
+@register_if_feature_enabled(WebFeatures.GANGS, Gang)
 class GangAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id', 'name_nb', 'abbreviation', 'gang_type', 'created_at', 'updated_at']
@@ -421,7 +424,7 @@ class GangAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(GangType)
+@register_if_feature_enabled(WebFeatures.GANGS, GangType)
 class GangTypeAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id', 'title_nb', 'created_at', 'updated_at']
@@ -434,7 +437,7 @@ class GangTypeAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(GangSection)
+@register_if_feature_enabled(WebFeatures.GANGS, GangSection)
 class GangSectionAdmin(CustomBaseAdmin):
     def gang_link(self, obj: GangSection) -> str:
         link = reverse(admin__samfundet_gang_change, args=(obj.gang.id,))
@@ -449,7 +452,7 @@ class GangSectionAdmin(CustomBaseAdmin):
     related_links = ['gang']
 
 
-@admin.register(InformationPage)
+@register_if_feature_enabled(WebFeatures.INFORMATION, InformationPage)
 class InformationPageAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['slug_field', 'created_at', 'updated_at']
@@ -462,7 +465,7 @@ class InformationPageAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(BlogPost)
+@register_if_feature_enabled(WebFeatures.BLOG, BlogPost)
 class BlogPostAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id', 'title_nb', 'title_en', 'created_at', 'updated_at']
@@ -475,7 +478,7 @@ class BlogPostAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(Table)
+@register_if_feature_enabled(WebFeatures.SULTEN, Table)
 class TableAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id', 'name_nb', 'name_en', 'seating', 'created_at', 'updated_at']
@@ -488,7 +491,7 @@ class TableAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(Reservation)
+@register_if_feature_enabled(WebFeatures.SULTEN, Reservation)
 class ReservationAdmin(CustomGuardedModelAdmin):
     # ordering = []
     sortable_by = ['id', 'name', 'email', 'phonenumber']
@@ -501,7 +504,7 @@ class ReservationAdmin(CustomGuardedModelAdmin):
     list_select_related = True
 
 
-@admin.register(Menu)
+@register_if_feature_enabled(WebFeatures.SULTEN, Menu)
 class MenuAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id', 'name_nb', 'name_en', 'created_at', 'updated_at']
@@ -518,7 +521,7 @@ class MenuAdmin(CustomBaseAdmin):
         return n
 
 
-@admin.register(MenuItem)
+@register_if_feature_enabled(WebFeatures.SULTEN, MenuItem)
 class MenuItemAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id', 'name_nb', 'name_en', 'price', 'price_member', 'order', 'created_at', 'updated_at']
@@ -531,7 +534,7 @@ class MenuItemAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(FoodCategory)
+@register_if_feature_enabled(WebFeatures.SULTEN, FoodCategory)
 class FoodCategoryAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id', 'name_nb', 'name_en', 'order', 'created_at', 'updated_at']
@@ -544,7 +547,7 @@ class FoodCategoryAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(FoodPreference)
+@register_if_feature_enabled(WebFeatures.SULTEN, FoodPreference)
 class FoodPreferenceAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id', 'name_nb', 'name_en', 'created_at', 'updated_at']
@@ -557,7 +560,7 @@ class FoodPreferenceAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(Saksdokument)
+@register_if_feature_enabled(WebFeatures.DOCUMENTS, Saksdokument)
 class SaksdokumentAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id', 'title_nb']
@@ -569,7 +572,7 @@ class SaksdokumentAdmin(CustomBaseAdmin):
     # autocomplete_fields = []
 
 
-@admin.register(ClosedPeriod)
+@register_if_feature_enabled(WebFeatures.CLOSED_HOURS, ClosedPeriod)
 class ClosedPeriodAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id']
@@ -582,7 +585,7 @@ class ClosedPeriodAdmin(CustomBaseAdmin):
     # list_select_related = True
 
 
-@admin.register(Infobox)
+@register_if_feature_enabled(WebFeatures.INFORMATION, Infobox)
 class InfoboxAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id', 'title_nb']
@@ -614,7 +617,7 @@ class KeyValueAdmin(CustomGuardedModelAdmin):
     search_fields = ['id', 'key', 'value']
 
 
-@admin.register(Recruitment)
+@register_if_feature_enabled(WebFeatures.RECRUITMENT, Recruitment)
 class RecruitmentAdmin(CustomBaseAdmin):
     sortable_by = [
         'name_nb',
@@ -641,7 +644,7 @@ class RecruitmentAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(RecruitmentSeparatePosition)
+@register_if_feature_enabled(WebFeatures.RECRUITMENT, RecruitmentSeparatePosition)
 class RecruitmentSeparatePositionAdmin(CustomBaseAdmin):
     sortable_by = ['name_nb', 'recruitment', 'url']
     search_fields = ['name_nb', 'recruitment', 'url']
@@ -666,7 +669,7 @@ class RecruitmentApplicationInline(admin.TabularInline):
         return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.application_text)
 
 
-@admin.register(RecruitmentPosition)
+@register_if_feature_enabled(WebFeatures.RECRUITMENT, RecruitmentPosition)
 class RecruitmentPositionAdmin(CustomBaseAdmin):
     sortable_by = [
         'name_nb',
@@ -687,7 +690,7 @@ class RecruitmentPositionAdmin(CustomBaseAdmin):
         return count
 
 
-@admin.register(RecruitmentApplication)
+@register_if_feature_enabled(WebFeatures.RECRUITMENT, RecruitmentApplication)
 class RecruitmentApplicationAdmin(CustomBaseAdmin):
     sortable_by = [
         'recruitment_position',
@@ -708,7 +711,7 @@ class RecruitmentApplicationAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(RecruitmentPositionSharedInterviewGroup)
+@register_if_feature_enabled(WebFeatures.RECRUITMENT, RecruitmentPositionSharedInterviewGroup)
 class RecruitmentPositionSharedInterviewGroupAdmin(CustomBaseAdmin):
     sortable_by = [
         'recruitment',
@@ -730,7 +733,7 @@ class RecruitmentPositionSharedInterviewGroupAdmin(CustomBaseAdmin):
     ]
 
 
-@admin.register(Organization)
+@register_if_feature_enabled(WebFeatures.ORGANIZATION, Organization)
 class OrganizationAdmin(CustomBaseAdmin):
     sortable_by = ['id', 'name']
     list_display = ['id', 'name']
@@ -738,7 +741,7 @@ class OrganizationAdmin(CustomBaseAdmin):
     list_select_related = True
 
 
-@admin.register(InterviewRoom)
+@register_if_feature_enabled(WebFeatures.RECRUITMENT, InterviewRoom)
 class InterviewRoomAdmin(CustomBaseAdmin):
     list_filter = ['name', 'location', 'recruitment', 'gang', 'start_time', 'end_time']
     list_display = ['name', 'location', 'recruitment', 'gang', 'start_time', 'end_time']
@@ -747,7 +750,7 @@ class InterviewRoomAdmin(CustomBaseAdmin):
     list_select_related = ['recruitment', 'gang']
 
 
-@admin.register(Interview)
+@register_if_feature_enabled(WebFeatures.RECRUITMENT, Interview)
 class InterviewAdmin(CustomBaseAdmin):
     list_filter = ['interview_time', 'interview_location']
     list_display = ['id', 'interview_time', 'interview_location']
@@ -762,14 +765,14 @@ def update_stats(modeladmin: CustomBaseAdmin, request: HttpRequest, queryset: Qu
         q.save()
 
 
-@admin.register(RecruitmentStatistics)
+@register_if_feature_enabled(WebFeatures.RECRUITMENT, RecruitmentStatistics)
 class RecruitmentStatisticsAdmin(CustomGuardedModelAdmin):
     list_display = ['recruitment', 'total_applicants', 'total_applications']
     search_fields = ['recruitment']
     actions = [update_stats]
 
 
-@admin.register(Merch)
+@register_if_feature_enabled(WebFeatures.MERCH, Merch)
 class MerchAdmin(CustomGuardedModelAdmin):
     # ordering = []
     sortable_by = ['id', 'name_nb', 'base_price']
@@ -781,7 +784,7 @@ class MerchAdmin(CustomGuardedModelAdmin):
     # autocomplete_fields = []
 
 
-@admin.register(MerchVariation)
+@register_if_feature_enabled(WebFeatures.MERCH, MerchVariation)
 class MerchVariationAdmin(CustomGuardedModelAdmin):
     # ordering = []
     sortable_by = ['id', 'specification']
@@ -793,13 +796,13 @@ class MerchVariationAdmin(CustomGuardedModelAdmin):
     # autocomplete_fields = []
 
 
-@admin.register(RecruitmentInterviewAvailability)
+@register_if_feature_enabled(WebFeatures.RECRUITMENT, RecruitmentInterviewAvailability)
 class RecruitmentInterviewAvailabilityAdmin(CustomBaseAdmin):
     list_display = ['recruitment', 'position', 'start_date', 'end_date', 'start_time', 'end_time', 'timeslot_interval']
     list_display_links = ['recruitment', 'position']
 
 
-@admin.register(UserFeedbackModel)
+@register_if_feature_enabled(WebFeatures.USERS, UserFeedbackModel)
 class UserFeedbackAdmin(CustomGuardedModelAdmin):
     sortable_by = ['date', 'path']
     list_display = ['id', 'date', 'path', 'text', 'user', 'contact_email']

@@ -84,6 +84,7 @@ class TestUserViews:
         response: Response = fixture_rest_client.post(path=url)
         assert status.is_success(code=response.status_code)
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_user(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
 
@@ -109,6 +110,7 @@ class TestUserViews:
         # Check permission in list.
         assert some_perm_str in data['permissions']
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_users(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_user)
@@ -120,6 +122,7 @@ class TestUserViews:
         ### Assert ###
         assert status.is_success(code=response.status_code)
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_groups(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_user)
@@ -131,6 +134,7 @@ class TestUserViews:
         ### Assert ###
         assert status.is_success(code=response.status_code)
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_register_clean(self, fixture_rest_client: APIClient):
         ### Arrange ###
         url = reverse(routes.samfundet__register)
@@ -218,6 +222,7 @@ class TestUserViews:
 
 
 class TestInformationPagesView:
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_informationpage(
         self,
         fixture_rest_client: APIClient,
@@ -238,6 +243,7 @@ class TestInformationPagesView:
         assert status.is_success(code=response.status_code)
         assert data['slug_field'] == fixture_informationpage.slug_field
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_informationpages(
         self,
         fixture_rest_client: APIClient,
@@ -255,6 +261,7 @@ class TestInformationPagesView:
         assert status.is_success(code=response.status_code)
         assert data[0]['slug_field'] == fixture_informationpage.slug_field
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_create_informationpage(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_user)
@@ -274,6 +281,7 @@ class TestInformationPagesView:
         data = response.json()
         assert data['slug_field'] == post_data['slug_field']
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_delete_informationpage(
         self,
         fixture_rest_client: APIClient,
@@ -295,6 +303,7 @@ class TestInformationPagesView:
 
         assert status.is_success(code=response.status_code)
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_put_informationpage(
         self,
         fixture_rest_client: APIClient,
@@ -322,6 +331,7 @@ class TestInformationPagesView:
 
 
 class TestMerchView:
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_merch(
         self,
         fixture_rest_client: APIClient,
@@ -339,6 +349,7 @@ class TestMerchView:
         assert status.is_success(code=response.status_code)
         assert data['id'] == fixture_merch.id
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_merchs(
         self,
         fixture_rest_client: APIClient,
@@ -356,6 +367,7 @@ class TestMerchView:
         assert status.is_success(code=response.status_code)
         assert data[0]['id'] == fixture_merch.id
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_create_merch(
         self,
         fixture_rest_client: APIClient,
@@ -388,6 +400,7 @@ class TestMerchView:
         assert data['name_nb'] == post_data['name_nb']
         Merch.objects.get(id=data['id']).delete()
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_delete_merch(
         self,
         fixture_rest_client: APIClient,
@@ -406,6 +419,7 @@ class TestMerchView:
 
         assert status.is_success(code=response.status_code)
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_put_merch(
         self,
         fixture_rest_client: APIClient,
@@ -496,6 +510,7 @@ class TestVersionModel:
 
 
 class TestBlogPostView:
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_blogpost(
         self,
         fixture_rest_client: APIClient,
@@ -513,6 +528,7 @@ class TestBlogPostView:
         assert status.is_success(code=response.status_code)
         assert data['id'] == fixture_blogpost.id
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_blogposts(
         self,
         fixture_rest_client: APIClient,
@@ -530,6 +546,7 @@ class TestBlogPostView:
         assert status.is_success(code=response.status_code)
         assert data[0]['id'] == fixture_blogpost.id
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_create_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_image: Image):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_user)
@@ -549,6 +566,7 @@ class TestBlogPostView:
         data = response.json()
         assert data['title_nb'] == post_data['title_nb']
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_delete_blogpost(
         self,
         fixture_rest_client: APIClient,
@@ -567,6 +585,7 @@ class TestBlogPostView:
 
         assert status.is_success(code=response.status_code)
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_put_blogpost(
         self,
         fixture_rest_client: APIClient,
@@ -769,6 +788,7 @@ class TestAssignGroupView:
 # =============================== #
 
 
+@pytest.mark.skip(reason='This feature is temporarily disabled.')
 def test_get_recruitments(
     fixture_rest_client: APIClient,
     fixture_superuser: User,
