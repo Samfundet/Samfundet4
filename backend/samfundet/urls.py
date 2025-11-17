@@ -1,11 +1,13 @@
 # imports
 from __future__ import annotations
 
+from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from rest_framework import routers
 
 from django.urls import path, include
+from django.conf import settings
 
 import samfundet.view.user_views
 import samfundet.view.event_views
@@ -14,7 +16,9 @@ import samfundet.view.general_views
 from samfundet.view import billig_views
 
 from . import views
+from .routing.views import react_view, react_event_view
 from .view import recruitment_views
+from .routing import frontend_routes
 
 # End: imports -----------------------------------------------------------------
 router = routers.DefaultRouter()
@@ -68,7 +72,11 @@ router.register('billig-ticket-group', billig_views.BilligTicketGroupReadOnlyMod
 
 app_name = 'samfundet'
 
-urlpatterns = [
+def frontend_path(route_path, view, name):
+    return path(route_path.lstrip('/'), view, name=name)
+
+
+urlpatterns = ([
     path('api/', include(router.urls)),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='samfundet:schema'), name='swagger_ui'),
@@ -185,4 +193,12 @@ urlpatterns = [
     path('recruitment/<int:recruitment_id>/gang/<int:gang_id>/stats/', views.GangApplicationCountView.as_view(), name='gang-application-stats'),
     path('recruitment/<int:id>/positions-by-tags/', views.PositionByTagsView.as_view(), name='recruitment_positions_by_tags'),
     path('recruitment/all-applications/', views.RecruitmentAllApplicationsPerRecruitmentView.as_view(), name='recruitment-all-applications'),
-]
+
+    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + [
+    # Serve React frontend
+    frontend_path(frontend_routes.EVENT, react_event_view, name='reactapp_event'),
+
+    path("", react_view, name="reactapp"),
+    path("<path:resource>", react_view),#
+])

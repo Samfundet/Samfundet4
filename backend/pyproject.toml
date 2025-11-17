@@ -154,6 +154,7 @@ pillow = "11.*"
 gunicorn = "23.*"
 django-admin-autocomplete-filter = "0.*"
 psycopg = { extras = ["c"], version = "*" }
+whitenoise = "^6.11.0"
 
 
 [tool.poetry.group.dev.dependencies]

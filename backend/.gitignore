@@ -12,6 +12,9 @@ __pycache__
 .log
 tmp/
 
+# Frontend, which we serve from Django
+reactapp/
+
 # Script for debugging purposes.
 root/scripts/testing.py
 
