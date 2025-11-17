@@ -22,6 +22,13 @@ $width: 420px;
   width: $width;
 }
 
+.container a {
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
 .card {
   border-radius: 10px;
   position: relative;
@@ -68,17 +75,12 @@ $width: 420px;
 
 .call_to_action {
   color: $white;
-  text-decoration: none;
   border-bottom: 1px solid $white;
   padding-bottom: 3px;
   display: flex;
   align-items: center;
   gap: 0.25rem;
   white-space: nowrap;
-
-  &:hover {
-    text-decoration: none;
-  }
 }
 
 .image {
@@ -94,15 +96,9 @@ $width: 420px;
   transform: scale(1.05);
 }
 
-
 .title {
   font-size: 36px;
   font-weight: 500;
   margin-top: 0.5rem;
   color: $black;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: none;
-  }
 }
