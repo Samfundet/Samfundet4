@@ -180,9 +180,9 @@ export async function getVenue(id: string | number): Promise<VenueDto> {
   return response.data;
 }
 
-export async function putVenue(slug: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
+export async function patchVenue(slug: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { slug: slug } });
-  const response = await axios.put<VenueDto>(url, venue, { withCredentials: true });
+  const response = await axios.patch<VenueDto>(url, venue, { withCredentials: true });
   return response.data;
 }
 
@@ -946,6 +946,16 @@ export async function putRecruitmentApplicationForGang(
     });
   const response = await axios.put<RecruitmentApplicationDto>(url, application, { withCredentials: true });
   return response;
+}
+
+export async function addApplicationComment(applicationId: number, comment: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_applications_for_gang_application_comment,
+      urlParams: { pk: applicationId },
+    });
+  return axios.put(url, { comment }, { withCredentials: true });
 }
 
 export async function updateRecruitmentApplicationStateForGang(
