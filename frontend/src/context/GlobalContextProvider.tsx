@@ -30,6 +30,10 @@ type GlobalContextProps = {
   setIsMobileNavigation: SetState<boolean>;
 
   keyValues: KeyValueMap;
+
+  // AdminToggels
+  isClosed: string;
+  setIsClosed: React.Dispatch<React.SetStateAction<string>>;
 };
 
 /**
@@ -75,6 +79,8 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
 
   const [mirrorDimension, setMirrorDimension] = useState<boolean>(false);
   const { isMouseTrail, setIsMouseTrail, toggleMouseTrail } = useMouseTrail();
+
+  const [isClosed, setIsClosed] = useState<string>('default');
 
   // =================================== //
   //               Effects               //
@@ -158,6 +164,8 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
     toggleMouseTrail,
     toggleMirrorDimension,
     keyValues,
+    isClosed,
+    setIsClosed,
   };
 
   return <GlobalContext.Provider value={globalContextValues}>{children}</GlobalContext.Provider>;
