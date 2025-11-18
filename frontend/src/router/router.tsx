@@ -78,6 +78,7 @@ import { ROUTES } from '~/routes';
 
 import { t } from 'i18next';
 import { App } from '~/App';
+import { ControlPanelFeatureGate as Gate } from '~/Components/ControlPanelFeatureGate/ControlPanelFeatureGate';
 import { DynamicOrgOutlet } from '~/Components/DynamicOrgOutlet/DynamicOrgOutlet';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
 import { KEY } from '~/i18n/constants';
@@ -152,17 +153,29 @@ export const router = createBrowserRouter(
         <Route element={<Outlet />} errorElement={<RootErrorBoundary />}>
           <Route
             path={ROUTES.frontend.admin}
-            element={<PermissionRoute requiredPermissions={[]} element={<AdminPage />} />}
+            element={
+              <Gate feature="profile">
+                <PermissionRoute requiredPermissions={[]} element={<AdminPage />} />
+              </Gate>
+            }
           />
           {/* User pages */}
           <Route
             path={ROUTES.frontend.user_change_password}
-            element={<PermissionRoute element={<UserChangePasswordPage />} />}
+            element={
+              <Gate feature="changePassword">
+                <PermissionRoute element={<UserChangePasswordPage />} />
+              </Gate>
+            }
             handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.change_password)}</Link> }}
           />
           {/* Gangs */}
           <Route
-            element={<Outlet />}
+            element={
+              <Gate feature="gangs">
+                <Outlet />
+              </Gate>
+            }
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_gangs}>{t(KEY.common_gangs)}</Link> }}
           >
             <Route
@@ -203,7 +216,11 @@ export const router = createBrowserRouter(
           </Route>
           {/* Users */}
           <Route
-            element={<Outlet />}
+            element={
+              <Gate feature="users">
+                <Outlet />
+              </Gate>
+            }
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_users}>{t(KEY.common_users)}</Link> }}
           >
             <Route
@@ -215,7 +232,11 @@ export const router = createBrowserRouter(
           </Route>
           {/* Roles */}
           <Route
-            element={<Outlet />}
+            element={
+              <Gate feature="roles">
+                <Outlet />
+              </Gate>
+            }
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_roles}>{t(KEY.common_roles)}</Link> }}
           >
             <Route
@@ -276,7 +297,11 @@ export const router = createBrowserRouter(
           </Route>
           {/* Events */}
           <Route
-            element={<Outlet />}
+            element={
+              <Gate feature="events">
+                <Outlet />
+              </Gate>
+            }
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_events}>{t(KEY.common_events)}</Link> }}
           >
             <Route
@@ -318,16 +343,22 @@ export const router = createBrowserRouter(
             path={ROUTES.frontend.admin_opening_hours}
             handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_opening_hours)}</Link> }}
             element={
-              <PermissionRoute
-                requiredPermissions={[PERM.SAMFUNDET_CHANGE_VENUE]}
-                element={<OpeningHoursAdminPage />}
-                resolveWithRolePermissions={true}
-              />
+              <Gate feature="openingHours">
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_CHANGE_VENUE]}
+                  element={<OpeningHoursAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
+              </Gate>
             }
           />
           {/* Closed period */}
           <Route
-            element={<Outlet />}
+            element={
+              <Gate feature="closedHours">
+                <Outlet />
+              </Gate>
+            }
             handle={{
               crumb: () => <Link url={ROUTES.frontend.admin_closed}>{t(KEY.command_menu_shortcut_closed)}</Link>,
             }}
@@ -367,7 +398,11 @@ export const router = createBrowserRouter(
           </Route>
           {/* Images */}
           <Route
-            element={<Outlet />}
+            element={
+              <Gate feature="images">
+                <Outlet />
+              </Gate>
+            }
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_images}>{t(KEY.admin_images_title)}</Link> }}
           >
             <Route
@@ -394,7 +429,11 @@ export const router = createBrowserRouter(
           </Route>
           {/* Saksdokumenter */}
           <Route
-            element={<Outlet />}
+            element={
+              <Gate feature="documents">
+                <Outlet />
+              </Gate>
+            }
             handle={{
               crumb: () => <Link url={ROUTES.frontend.admin_saksdokumenter}>{t(KEY.admin_saksdokument)}</Link>,
             }}
@@ -434,7 +473,11 @@ export const router = createBrowserRouter(
           </Route>
           {/* Lyche Menu */}
           <Route
-            element={<Outlet />}
+            element={
+              <Gate feature="sulten">
+                <Outlet />
+              </Gate>
+            }
             handle={{
               crumb: () => (
                 <Link url={ROUTES.frontend.admin_sulten_menu}>
@@ -490,7 +533,11 @@ export const router = createBrowserRouter(
           </Route>
           {/* Recruitment */}
           <Route
-            element={<Outlet />}
+            element={
+              <Gate feature="recruitment">
+                <Outlet />
+              </Gate>
+            }
             path={ROUTES.frontend.admin_recruitment}
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_recruitment}>{t(KEY.common_recruitment)}</Link> }}
           >
@@ -527,7 +574,11 @@ export const router = createBrowserRouter(
             />
             {/* Specific recruitment */}
             <Route
-              element={<Outlet />}
+              element={
+                <Gate feature="recruitment">
+                  <Outlet />
+                </Gate>
+              }
               id="recruitment"
               loader={recruitmentLoader}
               handle={{
@@ -830,7 +881,11 @@ export const router = createBrowserRouter(
                 />
                 {/* Position */}
                 <Route
-                  element={<Outlet />}
+                  element={
+                    <Gate feature="recruitment">
+                      <Outlet />
+                    </Gate>
+                  }
                   loader={recruitmentGangPositionLoader}
                   handle={{
                     crumb: ({ params }: UIMatch, { position }: RecruitmentLoader & GangLoader & PositionLoader) => (
@@ -863,11 +918,13 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_sulten_reservations}
             element={
-              <PermissionRoute
-                requiredPermissions={[PERM.SAMFUNDET_VIEW_RESERVATION]}
-                element={<SultenReservationAdminPage />}
-                resolveWithRolePermissions={true}
-              />
+              <Gate feature="sulten">
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_VIEW_RESERVATION]}
+                  element={<SultenReservationAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
+              </Gate>
             }
           />
           {/*
@@ -878,11 +935,13 @@ export const router = createBrowserRouter(
             path={ROUTES.frontend.admin_information}
             handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.information_page)}</Link> }}
             element={
-              <PermissionRoute
-                requiredPermissions={[PERM.SAMFUNDET_VIEW_INFORMATIONPAGE]}
-                element={<InformationAdminPage />}
-                resolveWithRolePermissions={true}
-              />
+              <Gate feature="information">
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_VIEW_INFORMATIONPAGE]}
+                  element={<InformationAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
+              </Gate>
             }
           />
           <Route
