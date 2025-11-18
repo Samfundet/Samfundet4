@@ -158,12 +158,29 @@ export type CalendarMarker = {
   className?: string;
 };
 
+export type ControlPanelFeature =
+  | 'profile'
+  | 'changePassword'
+  | 'events'
+  | 'images'
+  | 'openingHours'
+  | 'closedHours'
+  | 'users'
+  | 'roles'
+  | 'gangs'
+  | 'information'
+  | 'documents'
+  | 'recruitment'
+  | 'sulten'
+  | 'faq';
+
 export type AdminApplet = {
   title_en: string;
   title_nb: string;
   perm?: string;
   icon: string;
   url?: string;
+  feature?: ControlPanelFeature; // hidden in control panel if not enabled
 };
 
 export type AdminAppletCategory = {
