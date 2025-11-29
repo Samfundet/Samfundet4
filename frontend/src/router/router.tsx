@@ -138,11 +138,26 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.contact} element={<div />} />
           <Route path={ROUTES.frontend.luka} element={<div />} />
           {/* Recruitment */}
-          <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
+          <Route
+            path={ROUTES.frontend.recruitment}
+            element={
+              <SiteFeatureGate feature="recruitment">
+                <RecruitmentPage />
+              </SiteFeatureGate>
+            }
+          />
         </Route>
       </Route>
       {/* Specific recruitment */}
-      <Route element={<DynamicOrgOutlet />} id="publicRecruitment" loader={recruitmentLoader}>
+      <Route
+        element={
+          <SiteFeatureGate feature="recruitment">
+            <DynamicOrgOutlet />
+          </SiteFeatureGate>
+        }
+        id="publicRecruitment"
+        loader={recruitmentLoader}
+      >
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentApplicationFormPage />} />
         <Route
           path={ROUTES.frontend.recruitment_application_overview}
