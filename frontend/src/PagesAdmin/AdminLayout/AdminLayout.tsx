@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router';
 import { Button, Link, Navbar } from '~/Components';
 import { appletCategories } from '~/Pages/AdminPage/applets';
-import { isControlPanelFeatureEnabled } from '~/config/controlPanelFeatures';
+import { isSiteFeatureEnabled } from '~/config/controlPanelFeatures';
 import { useAuthContext } from '~/context/AuthContext';
 import { useMobile } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -66,7 +66,7 @@ export function AdminLayout() {
     },
   ];
 
-  const userApplets = userAppletsRaw.filter((a) => !a.feature || isControlPanelFeatureEnabled(a.feature));
+  const userApplets = userAppletsRaw.filter((a) => !a.feature || isSiteFeatureEnabled(a.feature));
 
   const panel = (
     <div className={classNames(styles.panel, !panelOpen && styles.mobile_panel_closed)}>
@@ -83,7 +83,7 @@ export function AdminLayout() {
       {appletCategories.map((category) => {
         // Keep only the applets with enabled features visible
         const visibleApplets = category.applets.filter(
-          (applet) => !applet.feature || isControlPanelFeatureEnabled(applet.feature),
+          (applet) => !applet.feature || isSiteFeatureEnabled(applet.feature),
         );
 
         if (visibleApplets.length === 0) return null;
@@ -97,7 +97,7 @@ export function AdminLayout() {
       })}
       <br />
       {/* TODO help/faq (Hidden until ready)*/}
-      {isControlPanelFeatureEnabled('faq') && (
+      {isSiteFeatureEnabled('faq') && (
         <Link className={classNames(styles.panel_item)} url={ROUTES_FRONTEND.admin}>
           <Icon icon="material-symbols:question-mark-rounded" />
           {t(KEY.control_panel_faq)}

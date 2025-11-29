@@ -158,7 +158,7 @@ export type CalendarMarker = {
   className?: string;
 };
 
-export type ControlPanelFeature =
+export type SiteFeature =
   | 'profile'
   | 'changePassword'
   | 'events'
@@ -180,7 +180,7 @@ export type AdminApplet = {
   perm?: string;
   icon: string;
   url?: string;
-  feature?: ControlPanelFeature; // hidden in control panel if not enabled
+  feature?: SiteFeature; // hidden in control panel if not enabled
 };
 
 export type AdminAppletCategory = {

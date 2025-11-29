@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { Button, Link, ThemeSwitch } from '~/Components';
 import { getActiveRecruitments, logout, stopImpersonatingUser } from '~/api';
 import { logoWhite } from '~/assets';
-import { firstEnabledAdminPath } from '~/config/controlPanelRouting';
+import { firstEnabledAdminPath } from '~/constants/site-features';
 import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { RecruitmentDto } from '~/dto';
