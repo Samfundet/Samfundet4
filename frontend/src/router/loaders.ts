@@ -1,6 +1,7 @@
 import type { LoaderFunctionArgs } from 'react-router';
 import { getGang, getRecruitment, getRecruitmentPosition, getRecruitmentSeparatePosition, getRole } from '~/api';
 import type { GangDto, RecruitmentDto, RecruitmentPositionDto, RecruitmentSeparatePositionDto, RoleDto } from '~/dto';
+import { isSiteFeatureEnabled } from "~/constants/site-features";
 
 export type RecruitmentLoader = {
   recruitment: RecruitmentDto | undefined;
@@ -27,6 +28,9 @@ export async function roleLoader({ params }: LoaderFunctionArgs): Promise<RoleLo
 }
 
 export async function recruitmentLoader({ params }: LoaderFunctionArgs): Promise<RecruitmentLoader> {
+  if (!isSiteFeatureEnabled("recruitment")) {
+    return { recruitment: undefined };
+  }
   return { recruitment: (await getRecruitment(params.recruitmentId as string)).data };
 }
 
