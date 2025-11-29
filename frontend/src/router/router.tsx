@@ -131,10 +131,18 @@ export const router = createBrowserRouter(
             <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
             <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
           </Route>
-          <Route path={ROUTES.frontend.gangs} element={<GangsPage />} />
-          <Route path={ROUTES.frontend.events} element={<EventsPage />} />
-          <Route path={ROUTES.frontend.event} element={<EventPage />} />
-          <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route element={<SiteFeatureGate feature="gangs"><Outlet /></SiteFeatureGate>}>
+            <Route path={ROUTES.frontend.gangs} element={<GangsPage />} />
+          </Route>
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route element={<SiteFeatureGate feature="events"><Outlet /></SiteFeatureGate>}>
+            <Route path={ROUTES.frontend.events} element={<EventsPage />} />
+            <Route path={ROUTES.frontend.event} element={<EventPage />} />
+          </Route>
+          <Route element={<SiteFeatureGate feature="documents"><Outlet /></SiteFeatureGate>}>
+            <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
+          </Route>
           <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
           <Route path={ROUTES.frontend.contributors} element={<ContributorsPage />} />
           <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
