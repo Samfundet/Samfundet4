@@ -1,0 +1,1 @@
+export { NewEventCard } from "./NewEventCard";
