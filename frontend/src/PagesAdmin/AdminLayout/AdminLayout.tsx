@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router';
 import { Button, Link, Navbar } from '~/Components';
 import { appletCategories } from '~/Pages/AdminPage/applets';
-import { isSiteFeatureEnabled } from '~/config/controlPanelFeatures';
+import { isSiteFeatureEnabled } from '~/constants/site-features';
 import { useAuthContext } from '~/context/AuthContext';
 import { useMobile } from '~/hooks';
 import { KEY } from '~/i18n/constants';
