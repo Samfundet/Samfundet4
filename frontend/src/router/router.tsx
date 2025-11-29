@@ -126,13 +126,8 @@ export const router = createBrowserRouter(
             <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
           </Route>
           <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
-          <Route
-            element={
-              <SiteFeatureGate feature="information">
-                <Outlet />
-              </SiteFeatureGate>
-            }
-          >
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route element={ <SiteFeatureGate feature="information"><Outlet /></SiteFeatureGate>}>
             <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
             <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
           </Route>
