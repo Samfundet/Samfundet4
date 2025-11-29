@@ -63,6 +63,7 @@ export { RootErrorBoundary } from './RootErrorBoundary';
 export { SamfOutlet } from './SamfOutlet';
 export { SamfundetLogo } from './SamfundetLogo';
 export { SamfundetLogoSpinner } from './SamfundetLogoSpinner';
+export { SiteFeatureGate } from './SiteFeatureGate';
 export { useScrollToTop } from './ScrollToTop';
 export { Select } from './Select';
 export { Skeleton } from './Skeleton';
