@@ -978,9 +978,9 @@ export const router = createBrowserRouter(
       */}
       <Route
         element={
-          <Gate feature="sulten">
+          <SiteFeatureGate feature="sulten">
             <SultenOutlet />
-          </Gate>
+          </SiteFeatureGate>
         }
       >
         <Route path={ROUTES.frontend.sulten} element={<LycheHomePage />} />
