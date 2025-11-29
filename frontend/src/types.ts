@@ -174,7 +174,8 @@ export type SiteFeature =
   | 'sulten'
   | 'faq'
   // Frontend-exclusive features
-  | 'venues';
+  | 'venues'
+  | 'membership';
 
 export type AdminApplet = {
   title_en: string;

@@ -143,7 +143,8 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.saksdokumenter} element={<SiteFeatureGate feature="documents"><SaksdokumenterPage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
           <Route path={ROUTES.frontend.contributors} element={<ContributorsPage />} />
-          <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route path={ROUTES.frontend.membership} element={<SiteFeatureGate feature="membership"><MembershipPage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.contact} element={<div />} />
           <Route path={ROUTES.frontend.luka} element={<div />} />
           {/* Recruitment */}
