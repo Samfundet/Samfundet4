@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { isSiteFeatureEnabled, firstEnabledAdminPath } from '~/constants/site-features';
+import { isSiteFeatureEnabled } from '~/constants/site-features';
 import type { SiteFeature } from '~/types';
 
 export function SiteFeatureGate({
@@ -9,5 +9,5 @@ export function SiteFeatureGate({
   feature: SiteFeature;
   children: JSX.Element;
 }) {
-  return isSiteFeatureEnabled(feature) ? children : <Navigate to={firstEnabledAdminPath()} replace />;
+  return isSiteFeatureEnabled(feature) ? children : <Navigate to="/" replace />;
 }
