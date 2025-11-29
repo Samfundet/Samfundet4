@@ -116,14 +116,8 @@ export const router = createBrowserRouter(
         <Route element={<Outlet />} errorElement={<RootErrorBoundary />}>
           <Route path={ROUTES.frontend.home} element={<HomePage />} />
           <Route path={ROUTES.frontend.about} element={<AboutPage />} />
-          <Route
-            path={ROUTES.frontend.venues}
-            element={
-              <SiteFeatureGate feature="venues">
-                <VenuePage />
-              </SiteFeatureGate>
-            }
-          />
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route path={ROUTES.frontend.venues} element={<SiteFeatureGate feature="venues"><VenuePage /></SiteFeatureGate>}/>
           <Route path={ROUTES.frontend.health} element={<HealthPage />} />
           <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
@@ -139,18 +133,14 @@ export const router = createBrowserRouter(
             <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
           </Route>
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
-          <Route element={<SiteFeatureGate feature="gangs"><Outlet /></SiteFeatureGate>}>
-            <Route path={ROUTES.frontend.gangs} element={<GangsPage />} />
-          </Route>
+          <Route path={ROUTES.frontend.gangs} element={<SiteFeatureGate feature="gangs"><GangsPage /></SiteFeatureGate>} />
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route element={<SiteFeatureGate feature="events"><Outlet /></SiteFeatureGate>}>
             <Route path={ROUTES.frontend.events} element={<EventsPage />} />
             <Route path={ROUTES.frontend.event} element={<EventPage />} />
           </Route>
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
-          <Route element={<SiteFeatureGate feature="documents"><Outlet /></SiteFeatureGate>}>
-            <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
-          </Route>
+          <Route path={ROUTES.frontend.saksdokumenter} element={<SiteFeatureGate feature="documents"><SaksdokumenterPage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
           <Route path={ROUTES.frontend.contributors} element={<ContributorsPage />} />
           <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
