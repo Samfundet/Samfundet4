@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { Button, Link, ThemeSwitch } from '~/Components';
 import { getActiveRecruitments, logout, stopImpersonatingUser } from '~/api';
 import { logoWhite } from '~/assets';
-import { firstEnabledAdminPath } from '~/config/controlPanelRouting';
+import { firstEnabledAdminPath } from '~/constants/site-features';
 import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { RecruitmentDto } from '~/dto';
@@ -142,7 +142,6 @@ export function Navbar() {
     </div>
   );
 
-  // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
   const isImpersonate = Object.prototype.hasOwnProperty.call(cookies, 'impersonated_user_id');
 
   const userDropdownLinks = (
