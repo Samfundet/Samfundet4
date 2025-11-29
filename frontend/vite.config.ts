@@ -14,10 +14,9 @@ export default defineConfig({
     svgr(),
   ],
   css: {
-    // TODO: When we upgrade to Vite 7, we can no longer use legacy API
     preprocessorOptions: {
       scss: {
-        api: 'legacy'
+        loadPaths: ['.']
       }
     },
     postcss: {
