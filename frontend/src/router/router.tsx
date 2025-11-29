@@ -969,11 +969,13 @@ export const router = createBrowserRouter(
       {/*
             PUBLIC SULTEN ROUTES
       */}
-      <Route element={
-        <Gate feature="sulten">
-          <SultenOutlet />
-        </Gate>
-      }>
+      <Route
+        element={
+          <Gate feature="sulten">
+            <SultenOutlet />
+          </Gate>
+        }
+      >
         <Route path={ROUTES.frontend.sulten} element={<LycheHomePage />} />
         <Route path={ROUTES.frontend.sulten_about} element={<LycheAboutPage />} />
         <Route path={ROUTES.frontend.sulten_menu} element={<LycheMenuPage />} />
