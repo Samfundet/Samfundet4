@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { Button, Link, ThemeSwitch } from '~/Components';
 import { getActiveRecruitments, logout, stopImpersonatingUser } from '~/api';
 import { logoWhite } from '~/assets';
+import { firstEnabledAdminPath } from '~/constants/site-features';
 import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { RecruitmentDto } from '~/dto';
@@ -63,7 +64,7 @@ export function Navbar() {
   const mobileProfileButton = (
     <div className={styles.navbar_profile_button}>
       <Icon icon="material-symbols:person" />
-      <Link url={ROUTES.frontend.admin} className={styles.profile_text}>
+      <Link url={firstEnabledAdminPath()} className={styles.profile_text}>
         {user?.username}
       </Link>
     </div>
@@ -141,12 +142,11 @@ export function Navbar() {
     </div>
   );
 
-  // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
   const isImpersonate = Object.prototype.hasOwnProperty.call(cookies, 'impersonated_user_id');
 
   const userDropdownLinks = (
     <>
-      <Link url={ROUTES.frontend.admin} className={styles.navbar_dropdown_link}>
+      <Link url={firstEnabledAdminPath()} className={styles.navbar_dropdown_link}>
         <Icon icon="material-symbols:settings" />
         {t(KEY.control_panel_title)}
       </Link>

@@ -158,12 +158,32 @@ export type CalendarMarker = {
   className?: string;
 };
 
+export type SiteFeature =
+  | 'profile'
+  | 'changePassword'
+  | 'events'
+  | 'images'
+  | 'openingHours'
+  | 'closedHours'
+  | 'users'
+  | 'roles'
+  | 'gangs'
+  | 'information'
+  | 'documents'
+  | 'recruitment'
+  | 'sulten'
+  | 'faq'
+  // Frontend-exclusive features
+  | 'venues'
+  | 'membership';
+
 export type AdminApplet = {
   title_en: string;
   title_nb: string;
   perm?: string;
   icon: string;
   url?: string;
+  feature?: SiteFeature; // hidden in control panel if not enabled
 };
 
 export type AdminAppletCategory = {

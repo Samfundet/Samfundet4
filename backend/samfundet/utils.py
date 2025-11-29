@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 import datetime
+from collections.abc import Callable
 
+from django.conf import settings
 from django.http import QueryDict
+from django.contrib import admin
 from django.db.models import Q, Model
+from django.contrib.admin import ModelAdmin
 from django.utils.timezone import make_aware
 from django.core.exceptions import ValidationError
 from django.db.models.query import QuerySet
@@ -115,3 +119,18 @@ def get_perm(*, perm: str, model: type[Model]) -> Permission:
     content_type = ContentType.objects.get_for_model(model=model)
     permission = Permission.objects.get(codename=codename, content_type=content_type)
     return permission
+
+
+def register_if_feature_enabled(feature: str, model: type[Model]) -> Callable[[type[ModelAdmin]], type[ModelAdmin]]:
+    """
+    Use this as a decorator like this:
+    @register_if_feature_enabled(WebFeature.BLOG, BlogPost)
+    class BlogPostAdmin(admin.ModelAdmin): ...
+    """
+
+    def decorator(admin_class: type[ModelAdmin]) -> type[ModelAdmin]:
+        if feature in settings.CP_ENABLED:
+            return admin.register(model)(admin_class)
+        return admin_class
+
+    return decorator
