@@ -1,6 +1,6 @@
+import { appletCategories } from '~/Pages/AdminPage/applets';
+import { ROUTES_FRONTEND } from '~/routes/frontend';
 import type { SiteFeature } from '~/types';
-import { appletCategories } from "~/Pages/AdminPage/applets";
-import { ROUTES_FRONTEND } from "~/routes/frontend";
 
 const SITE_FEATURES: Record<SiteFeature, boolean> = {
   profile: false,

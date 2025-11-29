@@ -142,7 +142,6 @@ export function Navbar() {
     </div>
   );
 
-  // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
   const isImpersonate = Object.prototype.hasOwnProperty.call(cookies, 'impersonated_user_id');
 
   const userDropdownLinks = (

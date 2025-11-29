@@ -1,1 +1,1 @@
-export { SiteFeatureGate } from "./SiteFeatureGate";
+export { SiteFeatureGate } from './SiteFeatureGate';
