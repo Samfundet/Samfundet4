@@ -17,6 +17,8 @@ const SITE_FEATURES: Record<SiteFeature, boolean> = {
   recruitment: false,
   sulten: false,
   faq: false,
+  venues: false,
+  membership: false,
 };
 
 export function isSiteFeatureEnabled(f: SiteFeature) {

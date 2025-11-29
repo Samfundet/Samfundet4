@@ -116,7 +116,8 @@ export const router = createBrowserRouter(
         <Route element={<Outlet />} errorElement={<RootErrorBoundary />}>
           <Route path={ROUTES.frontend.home} element={<HomePage />} />
           <Route path={ROUTES.frontend.about} element={<AboutPage />} />
-          <Route path={ROUTES.frontend.venues} element={<VenuePage />} />
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route path={ROUTES.frontend.venues} element={<SiteFeatureGate feature="venues"><VenuePage /></SiteFeatureGate>}/>
           <Route path={ROUTES.frontend.health} element={<HealthPage />} />
           <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
@@ -126,23 +127,41 @@ export const router = createBrowserRouter(
             <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
           </Route>
           <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
-          <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
-          <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
-          <Route path={ROUTES.frontend.gangs} element={<GangsPage />} />
-          <Route path={ROUTES.frontend.events} element={<EventsPage />} />
-          <Route path={ROUTES.frontend.event} element={<EventPage />} />
-          <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route element={ <SiteFeatureGate feature="information"><Outlet /></SiteFeatureGate>}>
+            <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
+            <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
+          </Route>
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route path={ROUTES.frontend.gangs} element={<SiteFeatureGate feature="gangs"><GangsPage /></SiteFeatureGate>} />
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route element={<SiteFeatureGate feature="events"><Outlet /></SiteFeatureGate>}>
+            <Route path={ROUTES.frontend.events} element={<EventsPage />} />
+            <Route path={ROUTES.frontend.event} element={<EventPage />} />
+          </Route>
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route path={ROUTES.frontend.saksdokumenter} element={<SiteFeatureGate feature="documents"><SaksdokumenterPage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
           <Route path={ROUTES.frontend.contributors} element={<ContributorsPage />} />
-          <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route path={ROUTES.frontend.membership} element={<SiteFeatureGate feature="membership"><MembershipPage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.contact} element={<div />} />
           <Route path={ROUTES.frontend.luka} element={<div />} />
           {/* Recruitment */}
-          <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route path={ROUTES.frontend.recruitment} element={<SiteFeatureGate feature="recruitment"><RecruitmentPage /></SiteFeatureGate> }/>
         </Route>
       </Route>
       {/* Specific recruitment */}
-      <Route element={<DynamicOrgOutlet />} id="publicRecruitment" loader={recruitmentLoader}>
+      <Route
+        element={
+          <SiteFeatureGate feature="recruitment">
+            <DynamicOrgOutlet />
+          </SiteFeatureGate>
+        }
+        id="publicRecruitment"
+        loader={recruitmentLoader}
+      >
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentApplicationFormPage />} />
         <Route
           path={ROUTES.frontend.recruitment_application_overview}
