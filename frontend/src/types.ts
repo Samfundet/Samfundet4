@@ -172,7 +172,9 @@ export type SiteFeature =
   | 'documents'
   | 'recruitment'
   | 'sulten'
-  | 'faq';
+  | 'faq'
+  // Frontend-exclusive features
+  | 'venues';
 
 export type AdminApplet = {
   title_en: string;

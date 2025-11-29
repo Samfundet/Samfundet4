@@ -116,7 +116,14 @@ export const router = createBrowserRouter(
         <Route element={<Outlet />} errorElement={<RootErrorBoundary />}>
           <Route path={ROUTES.frontend.home} element={<HomePage />} />
           <Route path={ROUTES.frontend.about} element={<AboutPage />} />
-          <Route path={ROUTES.frontend.venues} element={<VenuePage />} />
+          <Route
+            path={ROUTES.frontend.venues}
+            element={
+              <SiteFeatureGate feature="venues">
+                <VenuePage />
+              </SiteFeatureGate>
+            }
+          />
           <Route path={ROUTES.frontend.health} element={<HealthPage />} />
           <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
@@ -140,6 +147,7 @@ export const router = createBrowserRouter(
             <Route path={ROUTES.frontend.events} element={<EventsPage />} />
             <Route path={ROUTES.frontend.event} element={<EventPage />} />
           </Route>
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route element={<SiteFeatureGate feature="documents"><Outlet /></SiteFeatureGate>}>
             <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
           </Route>
