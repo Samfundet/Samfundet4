@@ -148,14 +148,8 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.contact} element={<div />} />
           <Route path={ROUTES.frontend.luka} element={<div />} />
           {/* Recruitment */}
-          <Route
-            path={ROUTES.frontend.recruitment}
-            element={
-              <SiteFeatureGate feature="recruitment">
-                <RecruitmentPage />
-              </SiteFeatureGate>
-            }
-          />
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route path={ROUTES.frontend.recruitment} element={<SiteFeatureGate feature="recruitment"><RecruitmentPage /></SiteFeatureGate> }/>
         </Route>
       </Route>
       {/* Specific recruitment */}
