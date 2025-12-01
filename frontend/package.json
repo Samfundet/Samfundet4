@@ -99,7 +99,7 @@
     "react-i18next": "^13.3.0",
     "sass": "^1.94.2",
     "storybook": "^8.6.4",
-    "stylelint": "^15.10.3",
+    "stylelint": "^16.26.1",
     "stylelint-config-sass-guidelines": "^10.0.0",
     "stylelint-config-standard": "^34.0.0",
     "stylelint-config-standard-scss": "^11.0.0",
