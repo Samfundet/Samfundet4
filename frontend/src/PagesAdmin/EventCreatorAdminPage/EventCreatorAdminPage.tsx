@@ -44,6 +44,7 @@ import styles from './EventCreatorAdminPage.module.scss';
 import { eventSchema } from './EventCreatorSchema';
 import { venueKeys } from '~/queryKeys';
 import { useQuery } from '@tanstack/react-query';
+import { PaymentForm } from './components/PaymentForm';
 
 // Define the Zod schema for event validation
 
@@ -436,7 +437,7 @@ export function EventCreatorAdminPage() {
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="ticket_type"
             key={'ticket_type'}
@@ -446,18 +447,44 @@ export function EventCreatorAdminPage() {
                 <FormControl>
                   <Dropdown options={ticketTypeOptions} {...field} />
                 </FormControl>
+                if (ticket_type === 'custom') {<Input {...field} />}
                 <FormMessage />
               </FormItem>
             )}
-          />
-          {/* <PaymentForm
+          /> */}
+          {/* <FormField
+            control={form.control}
+            name="ticket_type"
+            key={'ticket_type'}
+            render={({ field }) => (
+              <FormItem className={styles.form_item}>
+                <FormLabel>{t(KEY.common_the_ticket_type)}</FormLabel>
+                <FormControl>
+                  <Dropdown options={ticketTypeOptions} {...field} />
+                </FormControl>
+                if (ticket_type === 'custom') {<Input {...field} />}
+                <FormMessage />
+              </FormItem>
+            )}
+          /> */}
+          {/* {form. === 'custom' && (
+            <FormItem className={styles.form_item}>
+              <FormLabel>{t(KEY.common_ticket_type_custom)}</FormLabel>
+              <FormControl>
+
+              </FormControl>
+            </FormItem>
+          )
+
+          } */}
+          <PaymentForm
             event={form.getValues()}
             onChange={(partial) => {
               // Update form values with payment data
               const updatedValues = { ...form.getValues(), ...partial };
               form.reset(updatedValues);
             }}
-          /> */}
+          />
         </>
       ),
     },

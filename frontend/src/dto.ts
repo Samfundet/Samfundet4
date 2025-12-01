@@ -173,6 +173,8 @@ export type EventDto = {
   billig?: BilligEventDto;
   numberOfTickets?: number;
 
+  registration_url?: string;
+
   // Timestamps/duration
   image_url: string;
   start_dt: string;
