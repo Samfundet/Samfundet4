@@ -1,6 +1,6 @@
+import { Icon } from '@iconify/react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { NewBadge } from './NewBadge';
-import { Icon } from '@iconify/react';
 
 const meta: Meta<typeof NewBadge> = {
   title: 'Components/NewBadge',
@@ -89,7 +89,7 @@ export const AllThemes: Story = {
       <NewBadge theme="gray">Gray Badge</NewBadge>
       <NewBadge theme="outline">Outline Badge</NewBadge>
       <NewBadge theme="red">
-        <Icon icon="humbleicons:exclamation"  />
+        <Icon icon="humbleicons:exclamation" />
         With Icon
       </NewBadge>
     </div>
