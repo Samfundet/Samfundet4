@@ -50,7 +50,7 @@ export function ComponentPage() {
     },
     host: 'KLST',
     id: 1,
-    image_url: '/media/images/img_28_XFx46XT',
+    image_url: '',
     location: 'Vuelie',
     publish_dt: new Date().toISOString(),
     start_dt: new Date().toISOString(),

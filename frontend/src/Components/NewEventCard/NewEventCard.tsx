@@ -1,12 +1,14 @@
 import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
 import { NewBadge } from '~/Components';
-import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { dbT } from '~/utils';
 import styles from './NewEventCard.module.scss';
+import { BACKEND_DOMAIN } from "~/constants";
+import { useMemo } from "react";
+import eventPlaceholder from '~/assets/event_placeholder.jpg';
 
 type Props = {
   event: EventDto;
@@ -19,6 +21,16 @@ export function NewEventCard({ event }: Props) {
     pattern: ROUTES_FRONTEND.event,
     urlParams: { id: event.id },
   });
+
+  const imageUrl = useMemo(() => {
+    if (event.image_url) {
+      if (event.image_url.startsWith('http')) {
+        return event.image_url;
+      }
+      return BACKEND_DOMAIN + event.image_url;
+    }
+    return eventPlaceholder;
+  }, [event]);
 
   return (
     <div className={styles.container}>
@@ -40,7 +52,7 @@ export function NewEventCard({ event }: Props) {
         </a>
         <div className={styles.gradient_overlay} />
         <div className={styles.image_container}>
-          <img src={BACKEND_DOMAIN + event.image_url} className={styles.image} alt="" />
+          <img src={imageUrl} className={styles.image} alt="" />
         </div>
       </div>
 
