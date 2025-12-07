@@ -1,1 +1,1 @@
-export { NewEventCard } from "./NewEventCard";
+export { NewEventCard } from './NewEventCard';

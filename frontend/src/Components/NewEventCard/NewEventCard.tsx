@@ -1,12 +1,12 @@
-import styles from "./NewEventCard.module.scss";
-import { EventDto } from "~/dto";
-import { dbT } from "~/utils";
-import { BACKEND_DOMAIN } from "~/constants";
-import { useTranslation } from "react-i18next";
-import { Icon } from "@iconify/react";
-import React from "react";
-import { reverse } from "~/named-urls";
-import { ROUTES_FRONTEND } from "~/routes/frontend";
+import { Icon } from '@iconify/react';
+import { useTranslation } from 'react-i18next';
+import { NewBadge } from '~/Components';
+import { BACKEND_DOMAIN } from '~/constants';
+import type { EventDto } from '~/dto';
+import { reverse } from '~/named-urls';
+import { ROUTES_FRONTEND } from '~/routes/frontend';
+import { dbT } from '~/utils';
+import styles from './NewEventCard.module.scss';
 
 type Props = {
   event: EventDto;
@@ -17,7 +17,7 @@ export function NewEventCard({ event }: Props) {
 
   const eventUrl = reverse({
     pattern: ROUTES_FRONTEND.event,
-    urlParams: { id: event.id }
+    urlParams: { id: event.id },
   });
 
   return (
@@ -25,11 +25,10 @@ export function NewEventCard({ event }: Props) {
       <div className={styles.card}>
         <a href={eventUrl} className={styles.card_inner}>
           <div className={styles.card_info}>
-            {/* TODO: Make new badge components */}
-            <div className={styles.red_badge}>
+            <NewBadge theme="red">
               <Icon icon="humbleicons:exclamation" />
               Snart utsolgt
-            </div>
+            </NewBadge>
           </div>
           <div className={styles.card_info}>
             <div>22. aug kl. 23:59</div>
@@ -45,8 +44,9 @@ export function NewEventCard({ event }: Props) {
         </div>
       </div>
 
-      <a href={eventUrl} className={styles.title}>{dbT(event, 'title')}</a>
+      <a href={eventUrl} className={styles.title}>
+        {dbT(event, 'title')}
+      </a>
     </div>
-
   );
 }

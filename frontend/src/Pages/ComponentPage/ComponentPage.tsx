@@ -24,8 +24,8 @@ import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOver
 import { ExampleForm } from '~/Pages/ComponentPage/ExampleForm';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
+import type { EventDto } from '~/dto';
 import styles from './ComponentPage.module.scss';
-import { EventDto } from "~/dto";
 
 /**
  * Page to render all components for easy overview and debug purposes.
@@ -35,38 +35,37 @@ export function ComponentPage() {
   const [showShrimpFishing, setShowShrimpFishing] = useState(false);
 
   const x: EventDto = {
-    age_restriction: "eighteen",
-    category: "concert",
+    age_restriction: 'eighteen',
+    category: 'concert',
     custom_tickets: [],
-    description_long_en: "",
-    description_long_nb: "",
-    description_short_en: "Von August kommer til Samfundet med sin drømmende synth og indelige vokalharmonier!",
-    description_short_nb: "Von August kommer til Samfundet med sin drømmende synth og indelige vokalharmonier!",
+    description_long_en: '',
+    description_long_nb: '',
+    description_short_en: 'Von August kommer til Samfundet med sin drømmende synth og indelige vokalharmonier!',
+    description_short_nb: 'Von August kommer til Samfundet med sin drømmende synth og indelige vokalharmonier!',
     duration: 60,
     end_dt: new Date().toISOString(),
     event_group: {
       id: 1,
-      name: "foobar",
+      name: 'foobar',
     },
-    host: "KLST",
+    host: 'KLST',
     id: 1,
-    image_url: "/media/images/img_28_XFx46XT",
-    location: "Vuelie",
+    image_url: '/media/images/img_28_XFx46XT',
+    location: 'Vuelie',
     publish_dt: new Date().toISOString(),
     start_dt: new Date().toISOString(),
-    status: "active",
-    ticket_type: "free",
-    title_en: "Von August with a very long title just like this // 23:59",
-    title_nb: "Von August // 23:59"
+    status: 'active',
+    ticket_type: 'free',
+    title_en: 'Von August with a very long title just like this // 23:59',
+    title_nb: 'Von August // 23:59',
   };
 
   return (
     <Page className={styles.wrapper}>
-
-      <div style={{display: 'flex', gap: '1.5rem'}}>
-        <NewEventCard event={x}/>
-        <NewEventCard event={x}/>
-        <NewEventCard event={x}/>
+      <div style={{ display: 'flex', gap: '1.5rem' }}>
+        <NewEventCard event={x} />
+        <NewEventCard event={x} />
+        <NewEventCard event={x} />
       </div>
 
       <div>

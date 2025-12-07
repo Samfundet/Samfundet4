@@ -16,7 +16,7 @@ export { DatePicker } from './DatePicker';
 export { Dropdown } from './Dropdown';
 export { ErrorDisplay } from './ErrorDisplay';
 export { EventCard } from './EventCard';
-export { NewEventCard } from "./NewEventCard";
+export { NewEventCard } from './NewEventCard';
 export { EventQuery } from './EventQuery';
 export { ExpandableHeader } from './ExpandableHeader';
 export { ExpandableList } from './ExpandableList';
