@@ -25,7 +25,7 @@ export function NewEventCard({ event }: Props) {
       <div className={styles.card}>
         <a href={eventUrl} className={styles.card_inner}>
           <div className={styles.card_info}>
-            <NewBadge theme="red">
+            <NewBadge theme="red" className={styles.badge}>
               <Icon icon="humbleicons:exclamation" />
               Snart utsolgt
             </NewBadge>
