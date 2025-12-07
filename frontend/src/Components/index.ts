@@ -43,6 +43,7 @@ export { IsfitOutlet } from './IsfitOutlet';
 export { Link } from './Link';
 export { List } from './List';
 export { Logo } from './Logo';
+export { NewBadge } from './NewBadge';
 export { MiniCalendar } from './MiniCalendar';
 export { Modal } from './Modal';
 export { Navbar } from './Navbar';
