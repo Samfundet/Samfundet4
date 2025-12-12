@@ -269,6 +269,10 @@ export const KEY = {
   none: 'none',
   mix: 'mix',
 
+  // EventPage:
+  event_registration_url: 'event_registration_url',
+  event_add_ticket: 'event_add_ticket',
+
   // Purchase Ticket Info:
   invalid_email_message: 'invalid_email_message',
   email_or_membership_number_message: 'email_or_membership_number_message',

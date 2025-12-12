@@ -135,12 +135,11 @@ export const ALL_TICKET_TYPES: EventTicketTypeValue[] = [
   EventTicketType.INCLUDED,
   EventTicketType.FREE_WITH_REGISTRATION,
   EventTicketType.BILLIG,
-  EventTicketType.REGISTRATION,
   EventTicketType.CUSTOM,
 ];
 export const PAID_TICKET_TYPES: EventTicketTypeValue[] = [
+  EventTicketType.FREE_WITH_REGISTRATION,
   EventTicketType.BILLIG,
-  EventTicketType.REGISTRATION,
   EventTicketType.CUSTOM,
 ];
 

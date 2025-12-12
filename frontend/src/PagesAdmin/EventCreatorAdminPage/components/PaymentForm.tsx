@@ -9,6 +9,7 @@ import { CustomTicketEditor } from './CustomTicketEditor';
 import { Dropdown, FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/Components';
 import { formToJSON } from 'axios';
 import { useFormContext } from 'react-hook-form';
+import { EventFormType } from '../EventCreatorSchema';
 
 type PaymentFormProps = {
   // The event being edited
@@ -19,7 +20,9 @@ type PaymentFormProps = {
 
 export function PaymentForm({ event, onChange }: PaymentFormProps) {
   const { t } = useTranslation();
-  const form = useFormContext<any>();
+  const form = useFormContext<EventFormType>();
+  const ticketType = form.watch('ticket_type');
+  const customTickets = form.watch('custom_tickets') ?? [];
 
   // Dropdown for price group
   const ticketTypeOptions: DropdownOption<EventTicketTypeValue>[] = ALL_TICKET_TYPES.map((ticketType) => {
@@ -51,8 +54,6 @@ export function PaymentForm({ event, onChange }: PaymentFormProps) {
   //   });
   // }
 
-  const ticketType = form.watch('ticket_type');
-
   return (
     <>
       <FormField
@@ -75,9 +76,9 @@ export function PaymentForm({ event, onChange }: PaymentFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>registration url</FormLabel>
+              <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
               <FormControl>
-                <input placeholder="http://..." />
+                <input {...field} placeholder="http://..." />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -85,19 +86,12 @@ export function PaymentForm({ event, onChange }: PaymentFormProps) {
         />
       )}
 
-      {ticketType === 'free_with_registration' && (
-        <FormField
-          name="spots"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>registration url</FormLabel>
-              <FormControl>
-                <input placeholder="http://..." />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+      {ticketType === 'custom' && (
+        <CustomTicketEditor
+          customTickets={customTickets}
+          onSetCustomTickets={(ticket) => {
+            form.setValue('custom_tickets', ticket, { shouldDirty: true });
+          }}
         />
       )}
 

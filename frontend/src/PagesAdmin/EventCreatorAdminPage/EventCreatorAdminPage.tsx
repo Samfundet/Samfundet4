@@ -97,7 +97,6 @@ export function EventCreatorAdminPage() {
     { value: EventTicketType.FREE_WITH_REGISTRATION, label: t(KEY.common_ticket_type_free_with_registration) },
     { value: EventTicketType.INCLUDED, label: t(KEY.common_ticket_type_included) },
     { value: EventTicketType.BILLIG, label: t(KEY.common_ticket_type_billig) },
-    { value: EventTicketType.REGISTRATION, label: t(KEY.common_ticket_type_registration) },
     { value: EventTicketType.CUSTOM, label: t(KEY.common_ticket_type_custom) },
   ];
 
@@ -120,6 +119,7 @@ export function EventCreatorAdminPage() {
       capacity: 0,
       age_restriction: 'none',
       ticket_type: 'free',
+      custom_tickets: [],
       image: undefined,
       visibility_from_dt: '',
       visibility_to_dt: '',
@@ -148,6 +148,7 @@ export function EventCreatorAdminPage() {
             capacity: eventData.capacity || 0,
             age_restriction: eventData.age_restriction || 'none',
             ticket_type: eventData.ticket_type || 'free',
+            custom_tickets: eventData.custom_tickets || [],
             image: eventData.image,
             visibility_from_dt: eventData.visibility_from_dt
               ? utcTimestampToLocal(eventData.visibility_from_dt, false)

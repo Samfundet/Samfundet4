@@ -9,6 +9,7 @@ import {
   EVENT_END_DT,
   EVENT_HOST,
   EVENT_LOCATION,
+  EVENT_REGISTRATION_URL,
   EVENT_START_DT,
   EVENT_TICKET_TYPE,
   EVENT_TITLE,
@@ -16,6 +17,15 @@ import {
   EVENT_VISIBILITY_TO_DT,
 } from '~/schema/event';
 import { OPTIONAL_IMAGE } from '~/schema/samfImage';
+
+const event_custom_ticket = z.object({
+  id: z.number(),
+  name_nb: z.string().min(1, 'Name (Norwegian) is required'),
+  name_en: z.string().min(1, 'Name (English) is required'),
+  price: z
+    .number({ invalid_type_error: 'Price must be a number' })
+    .min(0, 'Price must be at least 0'),
+})
 
 export const eventSchema = z.object({
   // text and description
@@ -36,9 +46,13 @@ export const eventSchema = z.object({
   // Payment/registration
   age_restriction: EVENT_AGE_RESTRICTION,
   ticket_type: EVENT_TICKET_TYPE,
+  custom_tickets: z.array(event_custom_ticket).optional(),
+  registration_url: EVENT_REGISTRATION_URL,
   // Graphics
   image: OPTIONAL_IMAGE,
   // Summary/Publication date
   visibility_from_dt: EVENT_VISIBILITY_FROM_DT,
   visibility_to_dt: EVENT_VISIBILITY_TO_DT,
 });
+
+export type EventFormType = z.infer<typeof eventSchema>;

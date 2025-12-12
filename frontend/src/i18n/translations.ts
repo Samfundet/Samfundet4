@@ -257,6 +257,10 @@ export const nb = prepareTranslations({
   [KEY.mix]: 'Mikset',
   [KEY.event_external_host_message]:
     'Arrangeres i regi av ekstern arrangør, ikke gjengene på Samfundet. Henvendelser kan rettes mot',
+  
+  // EventPage:
+  [KEY.event_registration_url]: 'Registreringslenke',
+  [KEY.event_add_ticket]: 'Legg til billett',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',
@@ -869,6 +873,10 @@ export const en = prepareTranslations({
   [KEY.mix]: 'Mixed',
   [KEY.event_external_host_message]:
     'Organized by an external organizer, not the groups at the Samfundet. Inquiries can be directed to',
+
+  // EventPage:
+  [KEY.event_registration_url]: 'Registration URL',
+  [KEY.event_add_ticket]: 'Add ticket',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',
