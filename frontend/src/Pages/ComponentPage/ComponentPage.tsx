@@ -33,6 +33,7 @@ import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
 import type { EventDto } from '~/dto';
+import { EventCategory } from '~/types';
 import styles from './ComponentPage.module.scss';
 
 /**
@@ -42,57 +43,69 @@ import styles from './ComponentPage.module.scss';
 export function ComponentPage() {
   const [showShrimpFishing, setShowShrimpFishing] = useState(false);
 
-  const event: EventDto = {
-    age_restriction: 'eighteen',
-    category: 'concert',
-    custom_tickets: [],
-    description_long_en: '',
-    description_long_nb: '',
-    description_short_en: "Von August's coming to Samfundet with their dreamy synth and heartfelt vocal harmonies!",
-    description_short_nb: 'Von August kommer til Samfundet med sin drømmende synth og indelige vokalharmonier!',
-    duration: 60,
-    end_dt: new Date().toISOString(),
-    event_group: {
+  function createFakeEvent(override: Partial<EventDto>, billig?: Partial<BilligEventDto>): EventDto {
+    return {
+      age_restriction: 'eighteen',
+      category: 'concert',
+      custom_tickets: [],
+      description_long_en: '',
+      description_long_nb: '',
+      description_short_en: "Von August's coming to Samfundet with their dreamy synth and heartfelt vocal harmonies!",
+      description_short_nb: 'Von August kommer til Samfundet med sin drømmende synth og indelige vokalharmonier!',
+      duration: 60,
+      end_dt: new Date().toISOString(),
+      event_group: {
+        id: 1,
+        name: 'foobar',
+      },
+      host: 'KLST',
       id: 1,
-      name: 'foobar',
-    },
-    host: 'KLST',
-    id: 1,
-    image_url: '',
-    location: 'Vuelie',
-    publish_dt: new Date().toISOString(),
-    start_dt: new Date().toISOString(),
-    status: 'active',
-    ticket_type: 'free',
-    title_en: 'Von August with a very long title just like this // 23:59',
-    title_nb: 'Von August // 23:59',
-  };
-
-  const billigEvent: BilligEventDto = {
-    is_almost_sold_out: false,
-    id: 0,
-    in_same_period: '',
-    is_sold_out: false,
-    name: '',
-    sale_from: '',
-    sale_to: '',
-    ticket_groups: [],
-  };
+      image_url: '',
+      location: 'Vuelie',
+      publish_dt: new Date().toISOString(),
+      start_dt: new Date().toISOString(),
+      status: 'active',
+      ticket_type: 'free',
+      title_en: 'Von August with a very long title just like this // 23:59',
+      title_nb: 'Von August // 23:59',
+      billig: billig
+        ? {
+            is_almost_sold_out: false,
+            id: 0,
+            in_same_period: '',
+            is_sold_out: false,
+            name: '',
+            sale_from: '',
+            sale_to: '',
+            ticket_groups: [],
+            ...billig,
+          }
+        : undefined,
+      ...override,
+    };
+  }
 
   return (
     <Page className={styles.wrapper}>
       <div style={{ display: 'flex', gap: '1.5rem' }}>
-        <EventCard event={{ ...event, billig: { ...billigEvent, is_almost_sold_out: true } }} />
+        <EventCard event={createFakeEvent({ category: EventCategory.FOOTBALL_MATCH }, { is_almost_sold_out: true })} />
         <EventCard
-          event={{
-            ...event,
-            start_dt: addDays(new Date(), 1).toISOString(),
-            location: 'Storsalen',
-            billig: { ...billigEvent, is_sold_out: true },
-          }}
+          event={createFakeEvent(
+            {
+              start_dt: addDays(new Date(), 1).toISOString(),
+              image_url: '/media/images/img_7_Cj7HE9w',
+              location: 'Storsalen',
+            },
+            { is_sold_out: true },
+          )}
         />
         <EventCard
-          event={{ ...event, start_dt: addDays(addMinutes(new Date(), 87), 5).toISOString(), location: 'Hele huset' }}
+          event={createFakeEvent({
+            image_url: '/media/images/img_1_LFzT7HJ',
+            category: EventCategory.QUIZ,
+            start_dt: addDays(addMinutes(new Date(), 87), 5).toISOString(),
+            location: 'Hele huset',
+          })}
         />
       </div>
 
