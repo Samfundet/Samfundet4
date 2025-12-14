@@ -1,8 +1,7 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { Fragment, useState } from 'react';
+import { Fragment, type ReactNode, useState } from 'react';
 import { Skeleton, TimeDisplay } from '~/Components';
-import type { Children } from '~/types';
 import styles from './Table.module.scss';
 
 // Supported cell values for sorting
@@ -12,7 +11,7 @@ type TableCellValue = string | number | Date | boolean;
 type TableColumn = {
   sortable?: boolean;
   hideSortButton?: boolean;
-  content: Children;
+  content: ReactNode;
 };
 
 type TableCell = {
@@ -20,7 +19,7 @@ type TableCell = {
   value?: TableCellValue;
   // Content in cell, eg <b>24 hours</b>
   // If missing, uses value instead.
-  content?: Children;
+  content?: ReactNode;
   style?: string;
 };
 
