@@ -254,6 +254,30 @@ export const nb = prepareTranslations({
   [KEY.event_external_host_message]:
     'Arrangeres i regi av ekstern arrangør, ikke gjengene på Samfundet. Henvendelser kan rettes mot',
 
+  // Event categories
+  [KEY.event_category_art]: 'Kunst',
+  [KEY.event_category_concert]: 'Konsert',
+  [KEY.event_category_course]: 'Kurs',
+  [KEY.event_category_debate]: 'Debatt',
+  [KEY.event_category_dj]: 'DJ',
+  [KEY.event_category_excenteraften]: 'Excenteraften',
+  [KEY.event_category_football_match]: 'Fotballkamp',
+  [KEY.event_category_happening]: 'Happening',
+  [KEY.event_category_lecture]: 'Forelesning',
+  [KEY.event_category_luka_event]: 'LUKA-arrangement',
+  [KEY.event_category_meeting]: 'Møte',
+  [KEY.event_category_movie]: 'Film',
+  [KEY.event_category_music]: 'Musikk',
+  [KEY.event_category_other]: 'Annet',
+  [KEY.event_category_party_meeting]: 'Festmøte',
+  [KEY.event_category_performance]: 'Performance',
+  [KEY.event_category_quiz]: 'Quiz',
+  [KEY.event_category_samfundet_meeting]: 'Samfundsmøte',
+  [KEY.event_category_show]: 'Show',
+  [KEY.event_category_theater]: 'Teater',
+  [KEY.event_category_theme_party]: 'Temafest',
+  [KEY.event_category_uka_event]: 'UKE-arrangement',
+
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',
   [KEY.email_or_membership_number_message]: 'Du må oppgi enten en e-post eller et medlemsnummer',
@@ -860,6 +884,30 @@ export const en = prepareTranslations({
   [KEY.mix]: 'Mixed',
   [KEY.event_external_host_message]:
     'Organized by an external organizer, not the groups at the Samfundet. Inquiries can be directed to',
+
+  // Event categories
+  [KEY.event_category_art]: 'Art',
+  [KEY.event_category_concert]: 'Concert',
+  [KEY.event_category_course]: 'Course',
+  [KEY.event_category_debate]: 'Debate',
+  [KEY.event_category_dj]: 'DJ',
+  [KEY.event_category_excenteraften]: 'Excenteraften',
+  [KEY.event_category_football_match]: 'Football match',
+  [KEY.event_category_happening]: 'Happening',
+  [KEY.event_category_lecture]: 'Lecture',
+  [KEY.event_category_luka_event]: 'LUKA event',
+  [KEY.event_category_meeting]: 'Meeting',
+  [KEY.event_category_movie]: 'Movie',
+  [KEY.event_category_music]: 'Music',
+  [KEY.event_category_other]: 'Other',
+  [KEY.event_category_party_meeting]: 'Party meeting',
+  [KEY.event_category_performance]: 'Performance',
+  [KEY.event_category_quiz]: 'Quiz',
+  [KEY.event_category_samfundet_meeting]: 'Samfundet meeting',
+  [KEY.event_category_show]: 'Show',
+  [KEY.event_category_theater]: 'Theater',
+  [KEY.event_category_theme_party]: 'Theme party',
+  [KEY.event_category_uka_event]: 'UKA event',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',
