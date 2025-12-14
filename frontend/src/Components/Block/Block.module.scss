@@ -147,7 +147,8 @@ $inner-title-font-size: 58px;
 }
 
 .image {
-  object-fit: cover;
+  background-size: cover;
+  background-position: center center;
   transition: transform 0.4s cubic-bezier(.25, 0.75, 0.25, 1);
   display: block;
   height: 100%;

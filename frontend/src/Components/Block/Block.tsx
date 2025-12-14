@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import type { HTMLAttributes, ImgHTMLAttributes, PropsWithChildren } from 'react';
 import styles from './Block.module.scss';
+import { backgroundImageFromUrl } from "~/utils";
 
 // Container
 
@@ -87,18 +88,16 @@ export function BlockFooter({ className, gradient, children, ...props }: BlockFo
 
 type BlockImageProps = {
   src: string;
-  alt?: string;
   disableZoomEffect?: boolean;
-} & ImgHTMLAttributes<HTMLImageElement>;
+} & HTMLAttributes<HTMLDivElement>;
 
-export function BlockImage({ className, src, alt, disableZoomEffect, ...props }: BlockImageProps) {
+export function BlockImage({ className, src, disableZoomEffect, ...props }: BlockImageProps) {
   return (
     <div className={styles.image_container}>
-      <img
+      <div
         className={classNames(styles.image, { [styles.disable_zoom_effect]: disableZoomEffect }, className)}
-        src={src}
+        style={backgroundImageFromUrl(src)}
         {...props}
-        alt={alt}
       />
     </div>
   );
