@@ -1,4 +1,4 @@
-import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import type { themeToStyleMap } from '~/Components/Button/utils';
 import type { KV } from '~/constants';
 /** Module for global generic types. */
@@ -14,9 +14,6 @@ export type KeyValueMap = Map<string, string>;
 
 /** Type for the constant of KeyValue keys in the database. */
 export type Key = (typeof KV)[keyof typeof KV];
-
-/** Synonym for ReactNode, but easier to remember. */
-export type Children = ReactNode;
 
 /**Duplicate of colors and hex from _constants.scss */
 export const COLORS = {
@@ -143,7 +140,23 @@ export const PAID_TICKET_TYPES: EventTicketTypeValue[] = [
 ];
 
 export const EventCategory = {
-  SAMFUNDET_MEETING: 'samfundsmote',
+  ART: 'art',
+  COURSE: 'course',
+  DJ: 'dj',
+  EXCENTERAFTEN: 'excenteraften',
+  FOOTBALL_MATCH: 'football_match',
+  HAPPENING: 'happening',
+  LUKA_EVENT: 'luka_event',
+  MEETING: 'meeting',
+  MOVIE: 'movie',
+  MUSIC: 'music',
+  PERFORMANCE: 'performance',
+  SHOW: 'show',
+  THEATER: 'theater',
+  THEME_PARTY: 'theme_party',
+  UKA_EVENT: 'uka_event',
+  PARTY_MEETING: 'party_meeting',
+  SAMFUNDET_MEETING: 'samfundet_meeting',
   CONCERT: 'concert',
   DEBATE: 'debate',
   QUIZ: 'quiz',
