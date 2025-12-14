@@ -84,7 +84,9 @@ export function EventCard({ event }: Props) {
           <BlockFooter className={styles.footer} gradient>
             <div>
               <TimeDisplay timestamp={event.start_dt} displayType="event-datetime" />
-              <div className={styles.category_and_location}>{event.category} // {event.location}</div>
+              <div className={styles.category_and_location}>
+                {event.category} // {event.location}
+              </div>
             </div>
             {callToAction}
           </BlockFooter>
