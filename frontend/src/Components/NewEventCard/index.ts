@@ -1,1 +1,0 @@
-export { NewEventCard } from './NewEventCard';

@@ -10,13 +10,13 @@ import { reverse } from '~/named-urls';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { EventTicketType } from '~/types';
 import { dbT } from '~/utils';
-import styles from './NewEventCard.module.scss';
+import styles from './EventCard.module.scss';
 
 type Props = {
   event: EventDto;
 };
 
-export function NewEventCard({ event }: Props) {
+export function EventCard({ event }: Props) {
   const { t } = useTranslation(); // Necessary in order for dbT to work in this component
 
   const eventUrl = reverse({

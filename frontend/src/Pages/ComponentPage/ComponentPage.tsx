@@ -10,7 +10,7 @@ import {
   H5,
   H6,
   InputField,
-  NewEventCard,
+  EventCard,
   Page,
   ProgressBar,
   RadioButton,
@@ -77,8 +77,8 @@ export function ComponentPage() {
     <Page className={styles.wrapper}>
       <div style={{ display: 'flex', gap: '1.5rem' }}>
         {/* @formatter:off */}
-        <NewEventCard event={{ ...event, billig: { ...billigEvent, is_almost_sold_out: true } }} />
-        <NewEventCard
+        <EventCard event={{ ...event, billig: { ...billigEvent, is_almost_sold_out: true } }} />
+        <EventCard
           event={{
             ...event,
             start_dt: addDays(new Date(), 1).toISOString(),
@@ -86,7 +86,7 @@ export function ComponentPage() {
             billig: { ...billigEvent, is_sold_out: true },
           }}
         />
-        <NewEventCard
+        <EventCard
           event={{ ...event, start_dt: addDays(addMinutes(new Date(), 87), 5).toISOString(), location: 'Hele huset' }}
         />
         {/* @formatter:on */}
