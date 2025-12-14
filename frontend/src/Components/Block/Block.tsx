@@ -21,7 +21,7 @@ export function BlockTitle({ className, ...props }: BlockTitleProps) {
 
 // Block
 
-export type BlockTheme = 'red' | 'purple' | 'green' | 'blue' | 'gold';
+export type BlockTheme = 'red' | 'purple' | 'green' | 'blue' | 'gold' | 'white';
 
 const blockThemeClassMap: Record<BlockTheme, string> = {
   red: styles.red,
@@ -29,6 +29,7 @@ const blockThemeClassMap: Record<BlockTheme, string> = {
   green: styles.green,
   blue: styles.blue,
   gold: styles.gold,
+  white: styles.white,
 };
 
 type BlockProps = {

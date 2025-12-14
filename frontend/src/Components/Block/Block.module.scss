@@ -207,6 +207,11 @@ $inner-title-font-size: 58px;
   }
 }
 
+.white {
+  background-color: c.$white-50;
+  color: c.$gray-900;
+}
+
 .container a {
   &, &:hover {
     text-decoration: none;
