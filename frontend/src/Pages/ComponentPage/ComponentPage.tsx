@@ -82,7 +82,6 @@ export function ComponentPage() {
   return (
     <Page className={styles.wrapper}>
       <div style={{ display: 'flex', gap: '1.5rem' }}>
-        {/* @formatter:off */}
         <EventCard event={{ ...event, billig: { ...billigEvent, is_almost_sold_out: true } }} />
         <EventCard
           event={{
@@ -95,8 +94,37 @@ export function ComponentPage() {
         <EventCard
           event={{ ...event, start_dt: addDays(addMinutes(new Date(), 87), 5).toISOString(), location: 'Hele huset' }}
         />
-        {/* @formatter:on */}
       </div>
+
+      <br />
+
+      <BlockContainer>
+        <Block theme="green">
+          <a href="/" style={{ color: 'inherit' }}>
+            <BlockContent>
+              <BlockTitle>
+                Samfundet
+                <br /> har
+                <br /> opptak!
+              </BlockTitle>
+            </BlockContent>
+            <BlockFooter
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                width: '100%',
+              }}
+            >
+              <div>Frist i dag</div>
+              <a href="/" style={{ color: 'inherit', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                Les mer
+                <Icon icon="line-md:arrow-up" width={16} rotate={1} />
+              </a>
+            </BlockFooter>
+          </a>
+        </Block>
+      </BlockContainer>
 
       <br />
 
