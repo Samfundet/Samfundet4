@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import { default as classNames } from 'classnames';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
@@ -43,6 +43,8 @@ export function Navbar() {
   // Navbar style.
   const isRootPath = useLocation().pathname === ROUTES.frontend.home;
   const isTransparentNavbar = isRootPath && !isScrolledNavbar && !isMobileNavigation;
+
+  const isDecember = useMemo(() => new Date().getMonth() === 11, []);
 
   useEffect(() => {
     // Close expanded dropdown menu whenever mobile navbar is closed, or we switch from mobile to desktop, like when
@@ -274,6 +276,7 @@ export function Navbar() {
       <nav id={styles.navbar_container} className={classNames(isTransparentNavbar && styles.transparent_navbar)}>
         <div className={styles.navbar_inner}>
           <Link url={ROUTES.frontend.home} className={styles.navbar_logo}>
+            {isDecember && <div className={styles.santa_hat} />}
             <img src={logoWhite} id={styles.navbar_logo_img} alt="Logo" />
           </Link>
           {isDesktop && navbarHeaders}
