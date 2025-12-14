@@ -1,5 +1,6 @@
 export { AccessDenied } from './AccessDenied';
 export { Alert } from './Alert';
+export { BlockContainer, BlockTitle, Block, BlockContent, BlockHeader, BlockFooter, BlockImage } from './Block';
 export { ApplicationCommentForm } from './ApplicationCommentForm';
 export { BackButton } from './BackButton';
 export { Breadcrumb } from './Breadcrumb';
