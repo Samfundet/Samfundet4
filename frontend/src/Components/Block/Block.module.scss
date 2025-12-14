@@ -131,7 +131,7 @@ $inner-title-font-size: 58px;
   background-color: c.$samf-red-900;
   color: c.$samf-red-500;
 
-  .title, a {
+  .title {
     color: c.$samf-red-500;
   }
 }
@@ -140,7 +140,7 @@ $inner-title-font-size: 58px;
   background-color: c.$purple-900;
   color: c.$fuchsia-200;
 
-  .title, a {
+  .title {
     color: c.$fuchsia-200;
   }
 }
@@ -149,7 +149,7 @@ $inner-title-font-size: 58px;
   background-color: c.$green-800;
   color: c.$green-300;
 
-  .title, a {
+  .title {
     color: c.$green-300;
   }
 }
@@ -158,7 +158,7 @@ $inner-title-font-size: 58px;
   background-color: c.$blue-900;
   color: c.$blue-300;
 
-  .title, a {
+  .title {
     color: c.$blue-300;
   }
 }
@@ -167,7 +167,7 @@ $inner-title-font-size: 58px;
   background-color: c.$gold-600;
   color: c.$yellow-200;
 
-  .title, a {
+  .title {
     color: c.$yellow-200;
   }
 }
