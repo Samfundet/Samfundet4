@@ -1,3 +1,4 @@
+import { addDays, addMinutes } from 'date-fns';
 import { useState } from 'react';
 import {
   Button,
@@ -22,6 +23,7 @@ import { MultiSelect } from '~/Components/MultiSelect';
 import { ShrimpFishing } from '~/Components/ShrimpFishing/ShrimpFishing';
 import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOverlay';
 import { ExampleForm } from '~/Pages/ComponentPage/ExampleForm';
+import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
 import type { EventDto } from '~/dto';
@@ -34,13 +36,13 @@ import styles from './ComponentPage.module.scss';
 export function ComponentPage() {
   const [showShrimpFishing, setShowShrimpFishing] = useState(false);
 
-  const x: EventDto = {
+  const event: EventDto = {
     age_restriction: 'eighteen',
     category: 'concert',
     custom_tickets: [],
     description_long_en: '',
     description_long_nb: '',
-    description_short_en: 'Von August kommer til Samfundet med sin drømmende synth og indelige vokalharmonier!',
+    description_short_en: "Von August's coming to Samfundet with their dreamy synth and heartfelt vocal harmonies!",
     description_short_nb: 'Von August kommer til Samfundet med sin drømmende synth og indelige vokalharmonier!',
     duration: 60,
     end_dt: new Date().toISOString(),
@@ -60,13 +62,37 @@ export function ComponentPage() {
     title_nb: 'Von August // 23:59',
   };
 
+  const billigEvent: BilligEventDto = {
+    is_almost_sold_out: false,
+    id: 0,
+    in_same_period: '',
+    is_sold_out: false,
+    name: '',
+    sale_from: '',
+    sale_to: '',
+    ticket_groups: [],
+  };
+
   return (
     <Page className={styles.wrapper}>
       <div style={{ display: 'flex', gap: '1.5rem' }}>
-        <NewEventCard event={x} />
-        <NewEventCard event={x} />
-        <NewEventCard event={x} />
+        {/* @formatter:off */}
+        <NewEventCard event={{ ...event, billig: { ...billigEvent, is_almost_sold_out: true } }} />
+        <NewEventCard
+          event={{
+            ...event,
+            start_dt: addDays(new Date(), 1).toISOString(),
+            location: 'Storsalen',
+            billig: { ...billigEvent, is_sold_out: true },
+          }}
+        />
+        <NewEventCard
+          event={{ ...event, start_dt: addDays(addMinutes(new Date(), 87), 5).toISOString(), location: 'Hele huset' }}
+        />
+        {/* @formatter:on */}
       </div>
+
+      <br />
 
       <div>
         <H1>Example form</H1>

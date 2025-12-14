@@ -1,11 +1,14 @@
 @use 'src/mixins' as *;
 @use 'src/constants' as *;
 
+@use 'src/styles/colors' as c;
 
 $width: 420px;
+$min-width: 280px;
 
 .container {
   width: $width;
+  min-width: $min-width;
 }
 
 .container a {
@@ -44,7 +47,8 @@ $width: 420px;
 .card_info {
   display: flex;
   justify-content: space-between;
-  color: $white;
+  align-items: flex-end;
+  color: c.$white-50;
 }
 
 .image_container {
@@ -54,8 +58,8 @@ $width: 420px;
 }
 
 .gradient_overlay {
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.80) 100%);
-  height: 50%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.90) 100%);
+  height: 35%;
   width: 100%;
   position: absolute;
   bottom: 0;
@@ -65,12 +69,17 @@ $width: 420px;
 
 .call_to_action {
   color: $white;
-  border-bottom: 1px solid $white;
+  border-bottom: 1px solid c.$white-50;
   padding-bottom: 3px;
   display: flex;
   align-items: center;
   gap: 0.25rem;
   white-space: nowrap;
+}
+
+.location {
+  font-size: 14px;
+  color: c.$gray-100;
 }
 
 .image {
