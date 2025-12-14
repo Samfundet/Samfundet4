@@ -1,4 +1,4 @@
-import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import type { themeToStyleMap } from '~/Components/Button/utils';
 import type { KV } from '~/constants';
 /** Module for global generic types. */
@@ -14,9 +14,6 @@ export type KeyValueMap = Map<string, string>;
 
 /** Type for the constant of KeyValue keys in the database. */
 export type Key = (typeof KV)[keyof typeof KV];
-
-/** Synonym for ReactNode, but easier to remember. */
-export type Children = ReactNode;
 
 /**Duplicate of colors and hex from _constants.scss */
 export const COLORS = {
