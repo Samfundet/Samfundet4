@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import type { HTMLAttributes, ImgHTMLAttributes, PropsWithChildren } from 'react';
+import type { HTMLAttributes, PropsWithChildren } from 'react';
+import { backgroundImageFromUrl } from '~/utils';
 import styles from './Block.module.scss';
-import { backgroundImageFromUrl } from "~/utils";
 
 // Container
 

@@ -1,74 +1,14 @@
-@use 'src/mixins' as *;
-@use 'src/constants' as *;
-
 @use 'src/styles/colors' as c;
 
-$width: 420px;
-$min-width: 280px;
-
-.container {
-  width: $width;
-  min-width: $min-width;
-}
-
-.container a {
-  text-decoration: none;
-  &:hover {
-    text-decoration: none;
-  }
-}
-
-.badge {
-  box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.5);
-}
-
-.card {
-  border-radius: 10px;
-  position: relative;
-
-  aspect-ratio: 1;
-  overflow: hidden;
-}
-
-.card_inner {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 1rem;
-  z-index: 2;
-}
-
-.card_info {
+.footer {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   color: c.$white-50;
 }
 
-.image_container {
-  overflow: hidden;
-  height: 100%;
-  width: 100%;
-}
-
-.gradient_overlay {
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.90) 100%);
-  height: 35%;
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  z-index: 1;
-}
-
 .call_to_action {
-  color: $white;
+  color: c.$white-50;
   border-bottom: 1px solid c.$white-50;
   padding-bottom: 3px;
   display: flex;
@@ -80,24 +20,4 @@ $min-width: 280px;
 .location {
   font-size: 14px;
   color: c.$gray-100;
-}
-
-.image {
-  object-fit: cover;
-  transition: transform 0.4s cubic-bezier(.25, 0.75, 0.25, 1);
-  display: block;
-  height: 100%;
-  width: 100%;
-  cursor: pointer;
-}
-
-.card:hover .image {
-  transform: scale(1.05);
-}
-
-.title {
-  font-size: 36px;
-  font-weight: 500;
-  margin-top: 0.5rem;
-  color: $black;
 }

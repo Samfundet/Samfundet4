@@ -1,7 +1,16 @@
 import { Icon } from '@iconify/react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NewBadge, TimeDisplay } from '~/Components';
+import {
+  Block,
+  BlockContainer,
+  BlockFooter,
+  BlockHeader,
+  BlockImage,
+  BlockTitle,
+  NewBadge,
+  TimeDisplay,
+} from '~/Components';
 import eventPlaceholder from '~/assets/event_placeholder.jpg';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
@@ -36,26 +45,18 @@ export function EventCard({ event }: Props) {
 
   const badges = useMemo(() => {
     if (event.billig?.is_sold_out) {
-      return (
-        <NewBadge theme="gray" className={styles.badge}>
-          {t(KEY.common_sold_out)}
-        </NewBadge>
-      );
+      return <NewBadge theme="gray">{t(KEY.common_sold_out)}</NewBadge>;
     }
     if (event.billig?.is_almost_sold_out) {
       return (
-        <NewBadge theme="red" className={styles.badge}>
+        <NewBadge theme="red">
           <Icon icon="humbleicons:exclamation" />
           {t(KEY.common_almost_sold_out)}
         </NewBadge>
       );
     }
-    if (event.ticket_type === EventTicketType.FREE) {
-      return (
-        <NewBadge theme="blue" className={styles.badge}>
-          {t(KEY.common_ticket_type_free)}
-        </NewBadge>
-      );
+    if (event.ticket_type === EventTicketType.FREE || event.ticket_type === EventTicketType.REGISTRATION) {
+      return <NewBadge theme="blue">{t(KEY.common_ticket_type_free)}</NewBadge>;
     }
 
     return null;
@@ -68,37 +69,31 @@ export function EventCard({ event }: Props) {
     // TODO: implement actual CTA logic here
 
     return (
-      <>
+      <a href={eventUrl} className={styles.call_to_action}>
         {t(KEY.common_buy_ticket)}
         <Icon icon="line-md:arrow-up" width={16} rotate={1} />
-      </>
+      </a>
     );
-  }, [event, t]);
+  }, [event, eventUrl, t]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.card}>
-        <a href={eventUrl} className={styles.card_inner}>
-          <div className={styles.card_info}>{badges}</div>
-          <div className={styles.card_info}>
+    <BlockContainer className={styles.event_card}>
+      <Block>
+        <a href={eventUrl} tabIndex={-1}>
+          <BlockHeader gradient>{badges}</BlockHeader>
+          <BlockFooter className={styles.footer} gradient>
             <div>
               <TimeDisplay timestamp={event.start_dt} displayType="event-datetime" />
               <div className={styles.location}>{event.location}</div>
             </div>
-            <a href={eventUrl} className={styles.call_to_action}>
-              {callToAction}
-            </a>
-          </div>
+            {callToAction}
+          </BlockFooter>
+          <BlockImage src={imageUrl} />
         </a>
-        <div className={styles.gradient_overlay} />
-        <div className={styles.image_container}>
-          <img src={imageUrl} className={styles.image} alt="" />
-        </div>
-      </div>
-
-      <a href={eventUrl} className={styles.title}>
-        {dbT(event, 'title')}
-      </a>
-    </div>
+      </Block>
+      <BlockTitle>
+        <a href={eventUrl}>{dbT(event, 'title')}</a>
+      </BlockTitle>
+    </BlockContainer>
   );
 }
