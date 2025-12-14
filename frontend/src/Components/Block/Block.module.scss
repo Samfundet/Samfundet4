@@ -14,10 +14,6 @@ $inner-title-font-size: 58px;
 .container {
   width: $width;
   min-width: $min-width;
-
-  a, a:hover {
-    text-decoration: none;
-  }
 }
 
 // Content
@@ -173,5 +169,11 @@ $inner-title-font-size: 58px;
 
   .title, a {
     color: c.$yellow-200;
+  }
+}
+
+.container a {
+  &, &:hover {
+    text-decoration: none;
   }
 }
