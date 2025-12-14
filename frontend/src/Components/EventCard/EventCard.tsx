@@ -18,7 +18,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { EventTicketType } from '~/types';
-import { dbT } from '~/utils';
+import { dbT, getEventCategoryKey } from '~/utils';
 import styles from './EventCard.module.scss';
 
 type Props = {
@@ -85,7 +85,7 @@ export function EventCard({ event }: Props) {
             <div>
               <TimeDisplay timestamp={event.start_dt} displayType="event-datetime" />
               <div className={styles.category_and_location}>
-                {event.category} // {event.location}
+                {t(getEventCategoryKey(event.category))} // {event.location}
               </div>
             </div>
             {callToAction}
