@@ -1,0 +1,177 @@
+@use 'src/mixins' as m;
+
+@use 'src/styles/colors' as c;
+
+$width: 420px;
+$min-width: 280px;
+$border-radius: 10px;
+
+$title-font-size: 36px;
+$inner-title-font-size: 58px;
+
+// Container
+
+.container {
+  width: $width;
+  min-width: $min-width;
+
+  a, a:hover {
+    text-decoration: none;
+  }
+}
+
+// Content
+
+.block {
+  border-radius: $border-radius;
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.content {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  margin-top: 1.25rem;
+  z-index: 2;
+}
+
+.inner_content {
+  padding: 1rem;
+  z-index: 2;
+  position: relative;
+}
+
+// Title
+
+.title {
+  font-size: $title-font-size;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  line-height: 130%;
+
+  &, a {
+    color: c.$gray-950;
+  }
+
+  @include m.theme-dark {
+    color: c.$white-50;
+
+    a {
+      color: c.$white-50;
+    }
+  }
+}
+
+.content .title {
+  // Increase font size of BlockTitles inside Blocks
+  font-size: $inner-title-font-size;
+}
+
+// Header and footer
+
+.header {
+  top: 0;
+  z-index: 3;
+}
+
+.footer {
+  bottom: 0;
+  z-index: 2;
+}
+
+.header, .footer {
+  position: absolute;
+  width: 100%;
+}
+
+.header_gradient, .footer_gradient {
+  height: 35%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  z-index: 1;
+}
+
+.header_gradient {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.90) 100%);
+  top: 0;
+}
+
+.footer_gradient {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.90) 100%);
+  bottom: 0;
+}
+
+
+// Image
+
+.image_container {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(.25, 0.75, 0.25, 1);
+  display: block;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+}
+
+.block:hover .image:not(.disable_zoom_effect) {
+  transform: scale(1.05);
+}
+
+// Block themes
+
+.red {
+  background-color: c.$samf-red-900;
+  color: c.$samf-red-500;
+
+  .title, a {
+    color: c.$samf-red-500;
+  }
+}
+
+.purple {
+  background-color: c.$purple-900;
+  color: c.$fuchsia-200;
+
+  .title, a {
+    color: c.$fuchsia-200;
+  }
+}
+
+.green {
+  background-color: c.$green-800;
+  color: c.$green-300;
+
+  .title, a {
+    color: c.$green-300;
+  }
+}
+
+.blue {
+  background-color: c.$blue-900;
+  color: c.$blue-300;
+
+  .title, a {
+    color: c.$blue-300;
+  }
+}
+
+.gold {
+  background-color: c.$gold-600;
+  color: c.$yellow-200;
+
+  .title, a {
+    color: c.$yellow-200;
+  }
+}

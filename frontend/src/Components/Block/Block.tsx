@@ -1,0 +1,105 @@
+import classNames from 'classnames';
+import type { HTMLAttributes, ImgHTMLAttributes, PropsWithChildren } from 'react';
+import styles from './Block.module.scss';
+
+// Container
+
+type BlockContainerProps = PropsWithChildren & HTMLAttributes<HTMLDivElement>;
+
+export function BlockContainer({ className, ...props }: BlockContainerProps) {
+  return <div className={classNames(styles.container, className)} {...props} />;
+}
+
+// Title
+
+type BlockTitleProps = PropsWithChildren & HTMLAttributes<HTMLDivElement>;
+
+export function BlockTitle({ className, ...props }: BlockTitleProps) {
+  return <div className={classNames(styles.title, className)} {...props} />;
+}
+
+// Block
+
+export type BlockTheme = 'red' | 'purple' | 'green' | 'blue' | 'gold';
+
+const blockThemeClassMap: Record<BlockTheme, string> = {
+  red: styles.red,
+  purple: styles.purple,
+  green: styles.green,
+  blue: styles.blue,
+  gold: styles.gold,
+};
+
+type BlockProps = {
+  theme?: BlockTheme;
+} & PropsWithChildren &
+  HTMLAttributes<HTMLDivElement>;
+
+export function Block({ className, theme, ...props }: BlockProps) {
+  return <div className={classNames(styles.block, blockThemeClassMap[theme ?? 'red'], className)} {...props} />;
+}
+
+// Content
+
+type BlockContentProps = PropsWithChildren & HTMLAttributes<HTMLDivElement>;
+
+export function BlockContent({ className, ...props }: BlockContentProps) {
+  return <div className={classNames(styles.content, className)} {...props} />;
+}
+
+// Header
+
+type BlockHeaderProps = {
+  gradient?: boolean;
+} & PropsWithChildren &
+  HTMLAttributes<HTMLDivElement>;
+
+export function BlockHeader({ className, gradient, ...props }: BlockHeaderProps) {
+  return (
+    <div>
+      <div className={classNames(styles.header, styles.inner_content, className)} {...props} />
+      {gradient && <div className={styles.header_gradient} />}
+    </div>
+  );
+}
+
+// Footer
+
+type BlockFooterProps = {
+  gradient?: boolean;
+} & PropsWithChildren &
+  HTMLAttributes<HTMLDivElement>;
+
+export function BlockFooter({ className, gradient, children, ...props }: BlockFooterProps) {
+  return (
+    <div>
+      <div className={styles.footer}>
+        <div className={classNames(styles.inner_content, className)} {...props}>
+          {children}
+        </div>
+      </div>
+      {gradient && <div className={styles.footer_gradient} />}
+    </div>
+  );
+}
+
+// Image
+
+type BlockImageProps = {
+  src: string;
+  alt?: string;
+  disableZoomEffect?: boolean;
+} & ImgHTMLAttributes<HTMLImageElement>;
+
+export function BlockImage({ className, src, alt, disableZoomEffect, ...props }: BlockImageProps) {
+  return (
+    <div className={styles.image_container}>
+      <img
+        className={classNames(styles.image, { [styles.disable_zoom_effect]: disableZoomEffect }, className)}
+        src={src}
+        {...props}
+        alt={alt}
+      />
+    </div>
+  );
+}
