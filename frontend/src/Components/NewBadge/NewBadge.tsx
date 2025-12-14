@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import type { HTMLAttributes, PropsWithChildren } from 'react';
 import styles from './NewBadge.module.scss';
 
-export type BadgeTheme = 'red' | 'purple' | 'green' | 'blue' | 'gold' | 'gray' | 'outline';
+export type BadgeTheme = 'red' | 'purple' | 'green' | 'blue' | 'gold' | 'gray' | 'outline' | 'outline-white';
 
 type Props = {
   theme: BadgeTheme;
@@ -17,6 +17,7 @@ const classMap: Record<BadgeTheme, string> = {
   gold: styles.gold,
   gray: styles.gray,
   outline: styles.outline,
+  'outline-white': styles.outline_white,
 };
 
 export function NewBadge({ theme, className, ...props }: Props) {
