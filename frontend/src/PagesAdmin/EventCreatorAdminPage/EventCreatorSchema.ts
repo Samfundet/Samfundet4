@@ -15,6 +15,7 @@ import {
   EVENT_TITLE,
   EVENT_VISIBILITY_FROM_DT,
   EVENT_VISIBILITY_TO_DT,
+  EVENT_BILLIG_ID,
 } from '~/schema/event';
 import { OPTIONAL_IMAGE } from '~/schema/samfImage';
 
@@ -48,6 +49,7 @@ export const eventSchema = z.object({
   ticket_type: EVENT_TICKET_TYPE,
   custom_tickets: z.array(event_custom_ticket).optional(),
   registration_url: EVENT_REGISTRATION_URL,
+  billig_id: EVENT_BILLIG_ID,
   // Graphics
   image: OPTIONAL_IMAGE,
   // Summary/Publication date

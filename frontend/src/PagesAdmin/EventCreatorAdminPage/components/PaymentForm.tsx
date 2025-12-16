@@ -10,6 +10,9 @@ import { Dropdown, FormControl, FormField, FormItem, FormLabel, FormMessage } fr
 import { formToJSON } from 'axios';
 import { useFormContext } from 'react-hook-form';
 import { EventFormType } from '../EventCreatorSchema';
+import { getBilligEvents } from '~/api';
+import { useQuery } from '@tanstack/react-query';
+import { BilligEventDto } from '~/apis/billig/billigDtos';
 
 type PaymentFormProps = {
   // The event being edited
@@ -37,6 +40,12 @@ export function PaymentForm({ event, onChange }: PaymentFormProps) {
     { value: 'ikke-medlem', label: 'Ikke-medlem' },
   ];
 
+  const { data: billigEvents = [] } = useQuery<BilligEventDto[]>({
+    queryKey: ['billigEvents'],
+    queryFn: getBilligEvents,
+    enabled: ticketType === 'billig',
+  });
+
   // Billig payment setup
   // const billigTicketOptions = (
   //   <SamfFormField
@@ -47,12 +56,6 @@ export function PaymentForm({ event, onChange }: PaymentFormProps) {
   //     hidden={event.ticket_type !== 'billig'}
   //   />
   // );
-
-  // function handleCustomTicketChanged(customTickets: EventCustomTicketDto[]) {
-  //   onChange?.({
-  //     custom_tickets: customTickets,
-  //   });
-  // }
 
   return (
     <>
@@ -95,32 +98,27 @@ export function PaymentForm({ event, onChange }: PaymentFormProps) {
         />
       )}
 
-      {/* Free with registration */}
-      {/* <SamfFormField
-        field="registration_url"
-        type="text"
-        label={'registration_url'}
-        // placeholder="https://..."
-        required={event.ticket_type === 'free_with_registration'}
-        hidden={event.ticket_type !== 'free_with_registration'}
-      /> */}
-
-      {/* Billig */}
-      {/* <SamfFormField
-        field="billig"
-        type="options"
-        options={billigOptions}
-        label={'payment_options'}
-        required={event.ticket_type === 'billig'}
-        hidden={event.ticket_type !== 'billig'}
-      /> */}
-
-      {/* Custom  */}
-      {/* {event.ticket_type === 'custom' && (
-        <div style={{ marginTop: 8 }}>
-          <CustomTicketEditor customTickets={event.custom_tickets} onSetCustomTickets={handleCustomTicketChanged} />
-        </div>
-      )} */}
+      {ticketType === 'billig' && (
+        <FormField
+          name="billig_id"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Billig Event</FormLabel>
+              <FormControl>
+                <Dropdown
+                  options={billigEvents.map((e) => ({
+                    value: e.id,
+                    label: e.name,
+                  }))}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
     </>
   );
 }

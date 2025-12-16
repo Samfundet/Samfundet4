@@ -120,6 +120,7 @@ export function EventCreatorAdminPage() {
       age_restriction: 'none',
       ticket_type: 'free',
       custom_tickets: [],
+      billig_id: undefined,
       image: undefined,
       visibility_from_dt: '',
       visibility_to_dt: '',
@@ -149,6 +150,7 @@ export function EventCreatorAdminPage() {
             age_restriction: eventData.age_restriction || 'none',
             ticket_type: eventData.ticket_type || 'free',
             custom_tickets: eventData.custom_tickets || [],
+            billig_id: eventData.billig?.id,
             image: eventData.image,
             visibility_from_dt: eventData.visibility_from_dt
               ? utcTimestampToLocal(eventData.visibility_from_dt, false)

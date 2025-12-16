@@ -13,6 +13,7 @@ export const EVENT_CAPACITY = z.number().min(1, { message: 'Kapasitet må være 
 export const EVENT_VISIBILITY_FROM_DT = z.string().min(1, { message: 'Synlig fra dato er påkrevd' });
 export const EVENT_VISIBILITY_TO_DT = z.string().optional();
 export const EVENT_PAID_OPTION = z.string().url().optional();
+export const EVENT_BILLIG_ID = z.number().optional();
 
 export const EVENT_REGISTRATION_URL = z.string().url().optional();
 export const EVENT_HOST_LINK = z.string().url().optional();
