@@ -46,17 +46,6 @@ export function PaymentForm({ event, onChange }: PaymentFormProps) {
     enabled: ticketType === 'billig',
   });
 
-  // Billig payment setup
-  // const billigTicketOptions = (
-  //   <SamfFormField
-  //     type="options"
-  //     field="billig_event"
-  //     label="TODO Billig event"
-  //     required={event.ticket_type === 'billig'}
-  //     hidden={event.ticket_type !== 'billig'}
-  //   />
-  // );
-
   return (
     <>
       <FormField

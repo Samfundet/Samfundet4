@@ -37,7 +37,14 @@ import {
   EventTicketType,
   type EventTicketTypeValue,
 } from '~/types';
-import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
+import {
+  dbT,
+  getAgeRestrictionKey,
+  getEventCategoryKey,
+  getTicketTypeKey,
+  lowerCapitalize,
+  utcTimestampToLocal,
+} from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { eventSchema } from './EventCreatorSchema';
@@ -74,30 +81,15 @@ export function EventCreatorAdminPage() {
     ...venues.map((venue) => ({ value: venue.name, label: venue.name })),
   ];
 
-  // TODO these are temporary and must be fetched from API when implemented.
-  const eventCategoryOptions: DropdownOption<EventCategoryValue>[] = [
-    { value: EventCategory.SAMFUNDET_MEETING, label: 'Samfundsmøte' },
-    { value: EventCategory.CONCERT, label: 'Konsert' },
-    { value: EventCategory.DEBATE, label: 'Debatt' },
-    { value: EventCategory.QUIZ, label: 'Quiz' },
-    { value: EventCategory.LECTURE, label: 'Foredrag' },
-    { value: EventCategory.OTHER, label: 'Annet' },
-  ];
+  const eventCategoryOptions: DropdownOption<EventCategoryValue>[] = Object.values(EventCategory).map((category) => ({
+    value: category,
+    label: t(getEventCategoryKey(category)),
+  }));
 
-  const ageLimitOptions: DropdownOption<EventAgeRestrictionValue>[] = [
-    { value: EventAgeRestriction.NONE, label: t(KEY.none) },
-    { value: EventAgeRestriction.EIGHTEEN, label: t(KEY.eighteen) },
-    { value: EventAgeRestriction.TWENTY, label: t(KEY.twenty) },
-    { value: EventAgeRestriction.MIXED, label: t(KEY.mix) },
-  ];
-
-  const ticketTypeOptions: DropdownOption<EventTicketTypeValue>[] = [
-    { value: EventTicketType.FREE, label: t(KEY.common_ticket_type_free) },
-    { value: EventTicketType.FREE_WITH_REGISTRATION, label: t(KEY.common_ticket_type_free_with_registration) },
-    { value: EventTicketType.INCLUDED, label: t(KEY.common_ticket_type_included) },
-    { value: EventTicketType.BILLIG, label: t(KEY.common_ticket_type_billig) },
-    { value: EventTicketType.CUSTOM, label: t(KEY.common_ticket_type_custom) },
-  ];
+  const ageLimitOptions: DropdownOption<EventAgeRestrictionValue>[] = Object.values(EventAgeRestriction).map((age) => ({
+    value: age,
+    label: t(getAgeRestrictionKey(age)),
+  }));
 
   // Setup React Hook Form
   const form = useForm<FormType>({
@@ -439,46 +431,7 @@ export function EventCreatorAdminPage() {
               </FormItem>
             )}
           />
-          {/* <FormField
-            control={form.control}
-            name="ticket_type"
-            key={'ticket_type'}
-            render={({ field }) => (
-              <FormItem className={styles.form_item}>
-                <FormLabel>{t(KEY.common_the_ticket_type)}</FormLabel>
-                <FormControl>
-                  <Dropdown options={ticketTypeOptions} {...field} />
-                </FormControl>
-                if (ticket_type === 'custom') {<Input {...field} />}
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
-          {/* <FormField
-            control={form.control}
-            name="ticket_type"
-            key={'ticket_type'}
-            render={({ field }) => (
-              <FormItem className={styles.form_item}>
-                <FormLabel>{t(KEY.common_the_ticket_type)}</FormLabel>
-                <FormControl>
-                  <Dropdown options={ticketTypeOptions} {...field} />
-                </FormControl>
-                if (ticket_type === 'custom') {<Input {...field} />}
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
-          {/* {form. === 'custom' && (
-            <FormItem className={styles.form_item}>
-              <FormLabel>{t(KEY.common_ticket_type_custom)}</FormLabel>
-              <FormControl>
 
-              </FormControl>
-            </FormItem>
-          )
-
-          } */}
           <PaymentForm
             event={form.getValues()}
             onChange={(partial) => {
