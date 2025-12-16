@@ -13,8 +13,8 @@ $navbar-bg-transparent: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, transp
 $navbar-bg-dark: black;
 $navbar-bg-dark-transparent: $navbar-bg-transparent;
 $navbar-dropdown-bg: rgba(255, 255, 255, 0.6);
-$navbar-dropdown-bg-dark: rgba(0, 0, 0, 0.6);
-$navbar-dropdown-border-radius: 0 0 0.5em 0.5em;
+$navbar-dropdown-bg-dark: rgba(0, 0, 0, 0.95);
+$navbar-dropdown-border-radius: 0.5em;
 
 // Link
 $navbar-link-blur-light-bg: rgba(255, 255, 255, 0.4);
@@ -95,6 +95,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
     max-height: 0;
     opacity: 0;
   }
+
   100% {
     max-height: 20em;
     opacity: 1;
@@ -119,7 +120,8 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   transform: scaleY(0);
   transform-origin: 50% 0%;
   opacity: 0;
-  border-radius: 0 0 0.5em 0.5em;
+  border-radius: 0.5em;
+  margin: 0.1em;
 
   @include for-desktop-up {
     border-radius: $navbar-dropdown-border-radius;
@@ -157,7 +159,8 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 
   &:last-child {
     @include for-desktop-up {
-      border-radius: $navbar-dropdown-border-radius;
+      border-radius: 0 0 0.5rem 0.5rem;
+      padding-bottom: 0.8rem;
     }
   }
 
@@ -197,6 +200,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   background: transparent;
   z-index: 2;
   font-size: inherit;
+  border-radius: 0 0 0.5rem 0.5rem;
 
   @include for-tablet-down {
     display: none;
@@ -297,8 +301,10 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
     text-decoration: none;
     color: inherit;
   }
+
   .navbar_profile_button {
     color: inherit;
+
     &:hover {
       color: $grey-4;
     }
@@ -320,6 +326,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   justify-content: center;
   flex-direction: column;
   z-index: 100;
+
   @include for-desktop-up {
     display: none;
   }
@@ -342,6 +349,7 @@ offsets the text by 18px, the size of the chevron-icon */
   cursor: pointer;
   display: flex;
   transition: transform 0.2s ease-in-out;
+
   &:hover {
     text-decoration: none;
     transform: scale(1.05);
@@ -392,6 +400,7 @@ offsets the text by 18px, the size of the chevron-icon */
 .selected {
   background: $navbar-bg-dark;
   color: $white;
+  border-radius: 0 0 0.5rem 0.5rem;
 }
 
 .active_recruitment {
