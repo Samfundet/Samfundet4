@@ -119,25 +119,29 @@ export function AdminLayout() {
         {t(KEY.control_panel_faq)}
       </Link>
 
-      <div className={styles.spacer} />
-      <div className={styles.separator} />
-
-      {/* Stop Impersonating */}
-      {isImpersonating && (
+      <div className={styles.bottom_items}>
+        <div className={styles.separator} />
+        {/* Stop Impersonating */}
+        {isImpersonating && (
+          <button
+            type="button"
+            className={classNames(styles.panel_item, styles.panel_item_button)}
+            onClick={handleStopImpersonating}
+          >
+            <Icon icon="ri:spy-fill" />
+            {t(KEY.admin_stop_impersonate)}
+          </button>
+        )}
+        {/* Logout */}
         <button
           type="button"
           className={classNames(styles.panel_item, styles.panel_item_button)}
-          onClick={handleStopImpersonating}
+          onClick={handleLogout}
         >
-          <Icon icon="ri:spy-fill" />
-          {t(KEY.admin_stop_impersonate)}
+          <Icon icon="material-symbols:logout" />
+          {t(KEY.common_logout)}
         </button>
-      )}
-      {/* Logout */}
-      <button type="button" className={classNames(styles.panel_item, styles.panel_item_button)} onClick={handleLogout}>
-        <Icon icon="material-symbols:logout" />
-        {t(KEY.common_logout)}
-      </button>
+      </div>
     </div>
   );
 
