@@ -248,14 +248,12 @@ export function getTicketTypeKey(ticketType: EventTicketTypeValue): TranslationK
       return KEY.common_ticket_type_free;
     case EventTicketType.INCLUDED:
         return KEY.common_ticket_type_included;
-    case EventTicketType.FREE_WITH_REGISTRATION:
+    case EventTicketType.REGISTRATION:
       return KEY.common_ticket_type_free_with_registration;
     case EventTicketType.BILLIG:
       return KEY.common_ticket_type_billig;
     case EventTicketType.CUSTOM:
       return KEY.common_ticket_type_custom;
-    case EventTicketType.REGISTRATION:
-      return KEY.common_ticket_type_registration;
   }
 }
 
