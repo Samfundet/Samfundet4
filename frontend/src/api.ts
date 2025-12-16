@@ -55,9 +55,9 @@ import type {
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import type { BilligEventDto } from './apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from './constants';
 import type { PageNumberPaginationType } from './types';
-import { BilligEventDto } from './apis/billig/billigDtos';
 
 export async function getCsrfToken(): Promise<string> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__csrf;

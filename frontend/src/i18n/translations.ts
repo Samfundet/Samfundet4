@@ -257,7 +257,7 @@ export const nb = prepareTranslations({
   [KEY.mix]: 'Mikset',
   [KEY.event_external_host_message]:
     'Arrangeres i regi av ekstern arrangør, ikke gjengene på Samfundet. Henvendelser kan rettes mot',
-  
+
   // EventPage:
   [KEY.event_registration_url]: 'Registreringslenke',
   [KEY.event_add_ticket]: 'Legg til billett',
@@ -285,7 +285,6 @@ export const nb = prepareTranslations({
   [KEY.event_category_theater]: 'Teater',
   [KEY.event_category_theme_party]: 'Temafest',
   [KEY.event_category_uka_event]: 'UKE-arrangement',
-
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',

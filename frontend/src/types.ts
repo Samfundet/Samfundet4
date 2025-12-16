@@ -118,7 +118,6 @@ export type EventAgeRestrictionValue = (typeof EventAgeRestriction)[keyof typeof
 
 export const EventTicketType = {
   FREE: 'free',
-  FREE_WITH_REGISTRATION: 'free_with_registration',
   INCLUDED: 'included',
   BILLIG: 'billig',
   REGISTRATION: 'registration',
@@ -135,7 +134,7 @@ export const ALL_TICKET_TYPES: EventTicketTypeValue[] = [
   EventTicketType.CUSTOM,
 ];
 export const PAID_TICKET_TYPES: EventTicketTypeValue[] = [
-  EventTicketType.FREE_WITH_REGISTRATION,
+  EventTicketType.REGISTRATION,
   EventTicketType.BILLIG,
   EventTicketType.CUSTOM,
 ];

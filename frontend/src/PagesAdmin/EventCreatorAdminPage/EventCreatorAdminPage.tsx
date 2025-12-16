@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
+import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -28,28 +29,13 @@ import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { venueKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
-import {
-  EventAgeRestriction,
-  type EventAgeRestrictionValue,
-  EventCategory,
-  type EventCategoryValue,
-  EventTicketType,
-  type EventTicketTypeValue,
-} from '~/types';
-import {
-  dbT,
-  getAgeRestrictionKey,
-  getEventCategoryKey,
-  getTicketTypeKey,
-  lowerCapitalize,
-  utcTimestampToLocal,
-} from '~/utils';
+import { EventAgeRestriction, type EventAgeRestrictionValue, EventCategory, type EventCategoryValue } from '~/types';
+import { dbT, getAgeRestrictionKey, getEventCategoryKey, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { eventSchema } from './EventCreatorSchema';
-import { venueKeys } from '~/queryKeys';
-import { useQuery } from '@tanstack/react-query';
 import { PaymentForm } from './components/PaymentForm';
 
 // Define the Zod schema for event validation

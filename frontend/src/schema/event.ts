@@ -24,4 +24,3 @@ export const EVENT_X_LINK = z.string().url().optional();
 export const EVENT_CATEGORY = z.nativeEnum(EventCategory);
 export const EVENT_AGE_RESTRICTION = z.nativeEnum(EventAgeRestriction);
 export const EVENT_TICKET_TYPE = z.nativeEnum(EventTicketType);
-
