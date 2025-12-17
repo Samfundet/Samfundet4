@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
+import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -23,24 +24,19 @@ import {
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { getEvent, postEvent } from '~/api';
+import { getEvent, getVenues, postEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { venueKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
-import {
-  EventAgeRestriction,
-  type EventAgeRestrictionValue,
-  EventCategory,
-  type EventCategoryValue,
-  EventTicketType,
-  type EventTicketTypeValue,
-} from '~/types';
-import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
+import { EventAgeRestriction, type EventAgeRestrictionValue, EventCategory, type EventCategoryValue } from '~/types';
+import { dbT, getAgeRestrictionKey, getEventCategoryKey, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { eventSchema } from './EventCreatorSchema';
+import { PaymentForm } from './components/PaymentForm';
 
 // Define the Zod schema for event validation
 
@@ -62,30 +58,24 @@ export function EventCreatorAdminPage() {
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
 
-  // TODO these are temporary and must be fetched from API when implemented.
-  const eventCategoryOptions: DropdownOption<EventCategoryValue>[] = [
-    { value: EventCategory.SAMFUNDET_MEETING, label: 'Samfundsmøte' },
-    { value: EventCategory.CONCERT, label: 'Konsert' },
-    { value: EventCategory.DEBATE, label: 'Debatt' },
-    { value: EventCategory.QUIZ, label: 'Quiz' },
-    { value: EventCategory.LECTURE, label: 'Foredrag' },
-    { value: EventCategory.OTHER, label: 'Annet' },
+  const { data: venues = [], isLoading } = useQuery({
+    queryKey: venueKeys.all,
+    queryFn: getVenues,
+  });
+
+  const locationOptions: DropdownOption<string>[] = [
+    ...venues.map((venue) => ({ value: venue.name, label: venue.name })),
   ];
 
-  const ageLimitOptions: DropdownOption<EventAgeRestrictionValue>[] = [
-    { value: EventAgeRestriction.NONE, label: 'Ingen' },
-    { value: EventAgeRestriction.EIGHTEEN, label: '18 år' },
-    { value: EventAgeRestriction.TWENTY, label: '20 år' },
-    { value: EventAgeRestriction.MIXED, label: '18 år (student), 20 år (ikke student)' },
-  ];
+  const eventCategoryOptions: DropdownOption<EventCategoryValue>[] = Object.values(EventCategory).map((category) => ({
+    value: category,
+    label: t(getEventCategoryKey(category)),
+  }));
 
-  const ticketTypeOptions: DropdownOption<EventTicketTypeValue>[] = [
-    { value: EventTicketType.FREE, label: 'Gratis' },
-    { value: EventTicketType.INCLUDED, label: 'Inkludert' },
-    { value: EventTicketType.BILLIG, label: 'Billig' },
-    { value: EventTicketType.REGISTRATION, label: 'Registrering' },
-    { value: EventTicketType.CUSTOM, label: 'Custom' },
-  ];
+  const ageLimitOptions: DropdownOption<EventAgeRestrictionValue>[] = Object.values(EventAgeRestriction).map((age) => ({
+    value: age,
+    label: t(getAgeRestrictionKey(age)),
+  }));
 
   // Setup React Hook Form
   const form = useForm<FormType>({
@@ -99,14 +89,18 @@ export function EventCreatorAdminPage() {
       description_short_en: '',
       start_dt: '',
       duration: 0,
+      end_dt: '',
       category: eventCategoryOptions[0].value,
       host: '',
-      location: '',
+      location: locationOptions.length > 0 ? locationOptions[0].value : '',
       capacity: 0,
       age_restriction: 'none',
       ticket_type: 'free',
+      custom_tickets: [],
+      billig_id: undefined,
       image: undefined,
-      publish_dt: '',
+      visibility_from_dt: '',
+      visibility_to_dt: '',
     },
   });
 
@@ -125,14 +119,19 @@ export function EventCreatorAdminPage() {
             description_short_en: eventData.description_short_en || '',
             start_dt: eventData.start_dt ? utcTimestampToLocal(eventData.start_dt, false) : '',
             duration: eventData.duration || 0,
+            end_dt: eventData.end_dt ? utcTimestampToLocal(eventData.end_dt, false) : '',
             category: eventData.category || '',
             host: eventData.host || '',
             location: eventData.location || '',
             capacity: eventData.capacity || 0,
             age_restriction: eventData.age_restriction || 'none',
             ticket_type: eventData.ticket_type || 'free',
+            custom_tickets: eventData.custom_tickets || [],
+            billig_id: eventData.billig?.id,
             image: eventData.image,
-            publish_dt: eventData.publish_dt ? utcTimestampToLocal(eventData.publish_dt, false) : '',
+            visibility_from_dt: eventData.visibility_from_dt
+              ? utcTimestampToLocal(eventData.visibility_from_dt, false)
+              : '',
           });
           setShowSpinner(false);
         })
@@ -175,7 +174,9 @@ export function EventCreatorAdminPage() {
               name="title_nb"
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Tittel (norsk)</FormLabel>
+                  <FormLabel>
+                    {t(KEY.common_title)} ({t(KEY.common_norwegian)})
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -189,7 +190,9 @@ export function EventCreatorAdminPage() {
               key={'title_en'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Tittel (engelsk)</FormLabel>
+                  <FormLabel>
+                    {t(KEY.common_title)} ({t(KEY.common_english)})
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -205,7 +208,9 @@ export function EventCreatorAdminPage() {
               key={'description_short_nb'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Kort beskrivelse (norsk)</FormLabel>
+                  <FormLabel>
+                    {t(KEY.common_short_description)} ({t(KEY.common_norwegian)})
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -219,7 +224,9 @@ export function EventCreatorAdminPage() {
               key={'description_short_en'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Kort beskrivelse (engelsk)</FormLabel>
+                  <FormLabel>
+                    {t(KEY.common_short_description)} ({t(KEY.common_english)})
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -235,7 +242,9 @@ export function EventCreatorAdminPage() {
               key={'description_long_nb'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Lang beskrivelse (norsk)</FormLabel>
+                  <FormLabel>
+                    {t(KEY.common_long_description)} ({t(KEY.common_norwegian)})
+                  </FormLabel>
                   <FormControl>
                     <Textarea className="textarea" {...field} rows={8} />
                   </FormControl>
@@ -249,7 +258,9 @@ export function EventCreatorAdminPage() {
               key={'description_long_en'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Lang beskrivelse (engelsk)</FormLabel>
+                  <FormLabel>
+                    {t(KEY.common_long_description)} ({t(KEY.common_english)})
+                  </FormLabel>
                   <FormControl>
                     <Textarea className="textarea" {...field} rows={8} />
                   </FormControl>
@@ -278,7 +289,9 @@ export function EventCreatorAdminPage() {
               key={'start_dt'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Dato & tid</FormLabel>
+                  <FormLabel>
+                    {t(KEY.common_date)} & {t(KEY.common_time)}
+                  </FormLabel>
                   <FormControl>
                     <Input type="datetime-local" {...field} />
                   </FormControl>
@@ -292,7 +305,9 @@ export function EventCreatorAdminPage() {
               key={'duration'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Varighet (minutter)</FormLabel>
+                  <FormLabel>
+                    {t(KEY.recruitment_duration)} ({t(KEY.common_minutes)})
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -312,7 +327,7 @@ export function EventCreatorAdminPage() {
               key={'category'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Kategori</FormLabel>
+                  <FormLabel>{t(KEY.category)}</FormLabel>
                   <FormControl>
                     <Dropdown options={eventCategoryOptions} {...field} />
                   </FormControl>
@@ -326,7 +341,7 @@ export function EventCreatorAdminPage() {
               key={'host'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Arrangør</FormLabel>
+                  <FormLabel>{t(KEY.admin_organizer)}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -340,15 +355,21 @@ export function EventCreatorAdminPage() {
               control={form.control}
               name="location"
               key={'location'}
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>Lokale</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const selected = locationOptions.find((o) => o.value === field.value) ?? null;
+                return (
+                  <FormItem className={styles.form_item}>
+                    <FormLabel>{t(KEY.common_venue)}</FormLabel>
+                    <FormControl>
+                      <Dropdown
+                        options={venues.map((venue) => ({ value: venue.name, label: venue.name }))}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
             <FormField
               control={form.control}
@@ -356,7 +377,7 @@ export function EventCreatorAdminPage() {
               key={'capacity'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>Kapasitet</FormLabel>
+                  <FormLabel>{t(KEY.common_capacity)}</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -388,7 +409,7 @@ export function EventCreatorAdminPage() {
             key={'age_restriction'}
             render={({ field }) => (
               <FormItem className={styles.form_item}>
-                <FormLabel>Aldersgrense</FormLabel>
+                <FormLabel>{t(KEY.common_age_limit)}</FormLabel>
                 <FormControl>
                   <Dropdown options={ageLimitOptions} {...field} />
                 </FormControl>
@@ -396,28 +417,15 @@ export function EventCreatorAdminPage() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="ticket_type"
-            key={'ticket_type'}
-            render={({ field }) => (
-              <FormItem className={styles.form_item}>
-                <FormLabel>Billettype</FormLabel>
-                <FormControl>
-                  <Dropdown options={ticketTypeOptions} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {/* <PaymentForm
+
+          <PaymentForm
             event={form.getValues()}
             onChange={(partial) => {
               // Update form values with payment data
               const updatedValues = { ...form.getValues(), ...partial };
               form.reset(updatedValues);
             }}
-          /> */}
+          />
         </>
       ),
     },
@@ -436,7 +444,7 @@ export function EventCreatorAdminPage() {
           key={'image'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
-              <FormLabel>Bilde</FormLabel>
+              <FormLabel>{t(KEY.common_image)}</FormLabel>
               <FormControl>
                 <ImagePicker
                   onSelected={(image) => {
@@ -458,13 +466,13 @@ export function EventCreatorAdminPage() {
       title_en: 'Summary',
       customIcon: 'ic:outline-remove-red-eye',
       validate: (data) => {
-        return !!data.publish_dt;
+        return !!data.visibility_from_dt;
       },
       template: (
         <FormField
           control={form.control}
-          name="publish_dt"
-          key={'publish_dt'}
+          name="visibility_from_dt"
+          key={'visibility_from_dt'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
               <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
@@ -487,7 +495,15 @@ export function EventCreatorAdminPage() {
   // ================================== //
 
   function onSubmit(values: FormType) {
-    postEvent(values as unknown as EventDto)
+    const start = values.start_dt ? new Date(values.start_dt) : null;
+    const computedEndDt = start ? new Date(start?.getTime() + (values.duration ?? 0) * 60_000) : null;
+    const payload: EventDto = {
+      ...values,
+      visibility_to_dt: computedEndDt ? computedEndDt.toISOString() : '',
+      end_dt: computedEndDt ? computedEndDt.toISOString() : '',
+    } as unknown as EventDto;
+
+    postEvent(payload)
       .then(() => {
         navigate({ url: ROUTES.frontend.admin_events });
         toast.success(t(KEY.common_creation_successful));
@@ -580,7 +596,8 @@ export function EventCreatorAdminPage() {
           <b>{t(KEY.category)}:</b> {formValues.category ?? t(KEY.common_missing)}
         </span>
         <span>
-          <strong>Varighet:</strong> {formValues.duration ? `${formValues.duration} min` : t(KEY.common_missing)}
+          <strong>{t(KEY.recruitment_duration)}:</strong>{' '}
+          {formValues.duration ? `${formValues.duration} min` : t(KEY.common_missing)}
         </span>
         <span>
           <b>{t(KEY.admin_organizer)}:</b> {formValues.host ?? t(KEY.common_missing)}

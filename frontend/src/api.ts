@@ -55,6 +55,7 @@ import type {
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import type { BilligEventDto } from './apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from './constants';
 import type { PageNumberPaginationType } from './types';
 
@@ -284,6 +285,20 @@ export async function getEventGroups(): Promise<EventGroupDto[]> {
   const response = await axios.get<EventGroupDto[]>(url, { withCredentials: true });
 
   return response.data;
+}
+
+export async function getBilligEvents(): Promise<BilligEventDto[]> {
+  const BILLIG_EVENT_LIST_URL = '/api/billig-event/';
+  const url = `${BACKEND_DOMAIN}/${BILLIG_EVENT_LIST_URL}`;
+  const response = await axios.get<BilligEventDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function getActiveBilligEvents(): Promise<BilligEventDto[]> {
+  const BILLIG_EVENT_LIST_URL = '/api/billig-event/';
+  const url = `${BACKEND_DOMAIN}/${BILLIG_EVENT_LIST_URL}`;
+  const response = await axios.get<BilligEventDto[]>(url, { withCredentials: true });
+  return response.data.filter((e) => e.in_sale_period && !e.is_sold_out);
 }
 
 export async function getMenus(): Promise<MenuDto[]> {
