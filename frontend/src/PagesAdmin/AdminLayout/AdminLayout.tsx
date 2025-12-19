@@ -1,14 +1,19 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router';
+import { useNavigate } from 'react-router';
 import { Button, Link, Navbar } from '~/Components';
 import { appletCategories } from '~/Pages/AdminPage/applets';
+import { logout, stopImpersonatingUser } from '~/api';
 import { isSiteFeatureEnabled } from '~/constants/site-features';
 import { useAuthContext } from '~/context/AuthContext';
 import { useMobile } from '~/hooks';
+import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import type { AdminApplet } from '~/types';
 import { dbT } from '~/utils';
@@ -24,7 +29,30 @@ export function AdminLayout() {
   const [panelOpen, setPanelOpen] = useState(false);
   const isMobile = useMobile();
   const location = useLocation();
-  const { loading: authLoading } = useAuthContext();
+  const navigate = useNavigate();
+  const [cookies] = useCookies();
+  const { user, setUser, loading: authLoading } = useAuthContext();
+
+  const isImpersonating = Object.hasOwn(cookies, 'impersonated_user_id');
+
+  function handleLogout() {
+    logout()
+      .then((response) => {
+        if (response.status === STATUS.HTTP_200_OK) {
+          setUser(undefined);
+          navigate(ROUTES.frontend.home);
+        }
+      })
+      .catch(console.error);
+  }
+
+  function handleStopImpersonating() {
+    stopImpersonatingUser()
+      .then(() => {
+        window.location.reload();
+      })
+      .catch(console.error);
+  }
 
   const makeAppletShortcut = useCallback(
     (applet: AdminApplet, index: number) => {
@@ -96,6 +124,7 @@ export function AdminLayout() {
         );
       })}
       <br />
+
       {/* TODO help/faq (Hidden until ready)*/}
       {isSiteFeatureEnabled('faq') && (
         <Link className={classNames(styles.panel_item)} url={ROUTES_FRONTEND.admin}>
@@ -103,6 +132,30 @@ export function AdminLayout() {
           {t(KEY.control_panel_faq)}
         </Link>
       )}
+
+      <div className={styles.bottom_items}>
+        <div className={styles.separator} />
+        {/* Stop Impersonating */}
+        {isImpersonating && (
+          <button
+            type="button"
+            className={classNames(styles.panel_item, styles.panel_item_button)}
+            onClick={handleStopImpersonating}
+          >
+            <Icon icon="ri:spy-fill" />
+            {t(KEY.admin_stop_impersonate)}
+          </button>
+        )}
+        {/* Logout */}
+        <button
+          type="button"
+          className={classNames(styles.panel_item, styles.panel_item_button)}
+          onClick={handleLogout}
+        >
+          <Icon icon="material-symbols:logout" />
+          {t(KEY.common_logout)}
+        </button>
+      </div>
     </div>
   );
 

@@ -5,7 +5,7 @@ import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 import { Button, Link, ThemeSwitch } from '~/Components';
-import { getActiveRecruitments, logout, stopImpersonatingUser } from '~/api';
+import { getActiveRecruitments, logout } from '~/api';
 import { logoWhite } from '~/assets';
 import { firstEnabledAdminPath } from '~/constants/site-features';
 import { useAuthContext } from '~/context/AuthContext';
@@ -144,63 +144,13 @@ export function Navbar() {
     </div>
   );
 
-  const isImpersonate = Object.prototype.hasOwnProperty.call(cookies, 'impersonated_user_id');
-
-  const userDropdownLinks = (
-    <>
-      <Link url={firstEnabledAdminPath()} className={styles.navbar_dropdown_link}>
-        <Icon icon="material-symbols:settings" />
-        {t(KEY.control_panel_title)}
-      </Link>
-      {isImpersonate && (
-        <button
-          type="button"
-          className={classNames(styles.navbar_dropdown_link, styles.navbar_logout_button)}
-          onClick={() => {
-            stopImpersonatingUser()
-              .then(() => {
-                window.location.reload();
-              })
-              .catch(console.error);
-            setIsMobileNavigation(false);
-          }}
-        >
-          <Icon icon="ri:spy-fill" />
-          {t(KEY.admin_stop_impersonate)}
-        </button>
-      )}
-      <button
-        type="button"
-        className={classNames(styles.navbar_dropdown_link, styles.navbar_logout_button)}
-        onClick={(e) => {
-          e.preventDefault();
-          setExpandedDropdown('');
-          logout()
-            .then((response) => {
-              response.status === STATUS.HTTP_200_OK && setUser(undefined);
-            })
-            .catch(console.error);
-
-          setIsMobileNavigation(false);
-        }}
-      >
-        <Icon icon="material-symbols:logout" />
-        {t(KEY.common_logout)}
-      </button>
-    </>
-  );
+  const isImpersonate = Object.hasOwn(cookies, 'impersonated_user_id');
 
   const profileButton = user && (
-    <div className={classNames(styles.navbar_profile_button, styles.profile_text, styles.dropdown_container_left)}>
-      <NavbarItem
-        setExpandedDropdown={setExpandedDropdown}
-        expandedDropdown={expandedDropdown}
-        route={'#'}
-        label={user.username}
-        icon={isImpersonate ? 'mdi:eye' : 'material-symbols:person'}
-        dropdownLinks={userDropdownLinks}
-      />
-    </div>
+    <Link url={firstEnabledAdminPath()} className={classNames(styles.navbar_profile_button, styles.profile_text)}>
+      <Icon icon={isImpersonate ? 'ri:spy-fill' : 'material-symbols:person'} />
+      {user.username}
+    </Link>
   );
 
   const loginButton = !user && (
@@ -259,9 +209,8 @@ export function Navbar() {
         <div className={styles.mobile_widgets}>
           <LanguageButton />
           <div className={styles.mobile_user}>
-            {loginButton}
-            {logoutButton}
             {memberButton}
+            {loginButton}
           </div>
           <ThemeSwitch />
         </div>
