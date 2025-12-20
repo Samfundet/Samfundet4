@@ -217,7 +217,7 @@ export const nb = prepareTranslations({
   // Billig
   [KEY.common_buy_ticket]: 'Kjøp billett',
   [KEY.common_sold_out]: 'Utsolgt',
-  [KEY.common_almost_sold_out]: 'Nesten utsolgt',
+  [KEY.common_almost_sold_out]: 'Få billetter igjen',
 
   // ==================== //
   //        Others        //
@@ -855,7 +855,7 @@ export const en = prepareTranslations({
   // Billig
   [KEY.common_buy_ticket]: 'Buy ticket',
   [KEY.common_sold_out]: 'Sold out',
-  [KEY.common_almost_sold_out]: 'Almost sold out',
+  [KEY.common_almost_sold_out]: 'Few tickets left',
   // ==================== //
   //        Others        //
   // ==================== //
