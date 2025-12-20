@@ -113,6 +113,21 @@ export function ComponentPage() {
 
       <br />
 
+      <div>
+        <H1>Example form</H1>
+
+        <ExampleForm />
+      </div>
+
+      <H1>Heading 1</H1>
+      <H2>Heading 2</H2>
+      <H3>Heading 3</H3>
+      <H4>Heading 4</H4>
+      <H5>Heading 5</H5>
+      <H6>Heading 6</H6>
+
+      <br />
+
       <BlockContainer>
         <Block theme="green">
           <a href="/" style={{ color: 'inherit' }}>
@@ -138,49 +153,6 @@ export function ComponentPage() {
               </a>
             </BlockFooter>
           </a>
-        </Block>
-      </BlockContainer>
-
-      <br />
-
-      <div>
-        <H1>Example form</H1>
-
-        <ExampleForm />
-      </div>
-
-      <H1>Heading 1</H1>
-      <H2>Heading 2</H2>
-      <H3>Heading 3</H3>
-      <H4>Heading 4</H4>
-      <H5>Heading 5</H5>
-      <H6>Heading 6</H6>
-
-      <br />
-
-      <BlockContainer>
-        <Block theme="green">
-          <BlockContent>
-            <BlockTitle>
-              Samfundet
-              <br /> har
-              <br /> opptak!
-            </BlockTitle>
-          </BlockContent>
-          <BlockFooter
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              width: '100%',
-            }}
-          >
-            <div>Frist i dag</div>
-            <span style={{ color: 'inherit', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-              Les mer
-              <Icon icon="line-md:arrow-up" width={16} rotate={1} />
-            </span>
-          </BlockFooter>
         </Block>
       </BlockContainer>
 
