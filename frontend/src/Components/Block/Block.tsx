@@ -34,11 +34,13 @@ const blockThemeClassMap: Record<BlockTheme, string> = {
 
 type BlockProps = {
   theme?: BlockTheme;
+  square?: boolean;
 } & PropsWithChildren &
   HTMLAttributes<HTMLDivElement>;
 
-export function Block({ className, theme, ...props }: BlockProps) {
-  return <div className={classNames(styles.block, blockThemeClassMap[theme ?? 'red'], className)} {...props} />;
+export function Block({ className, theme, square = true, ...props }: BlockProps) {
+  return <div
+    className={classNames(styles.block, blockThemeClassMap[theme ?? 'red'], { [styles.square]: square }, className)} {...props} />;
 }
 
 // Content

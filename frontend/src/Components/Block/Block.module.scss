@@ -24,13 +24,17 @@ $transition-duration: 0.4s;
 .block {
   border-radius: $border-radius;
   position: relative;
-  aspect-ratio: 1;
+  min-height: 150px;
   overflow: hidden;
   transition: border-radius $transition-duration $transition-function;
 
   &:hover {
     border-radius: 8px;
   }
+}
+
+.square {
+  aspect-ratio: 1;
 }
 
 .content {
