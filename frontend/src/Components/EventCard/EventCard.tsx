@@ -71,7 +71,7 @@ export function EventCard({ event }: Props) {
     return (
       <a href={eventUrl} className={styles.call_to_action}>
         {t(KEY.common_buy_ticket)}
-        <Icon icon="line-md:arrow-up" width={16} rotate={1} />
+        <Icon icon="mingcute:arrow-up-line" width={16} rotate={1} />
       </a>
     );
   }, [event, eventUrl, t]);
