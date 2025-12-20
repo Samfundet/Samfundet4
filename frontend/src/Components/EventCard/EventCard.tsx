@@ -56,7 +56,7 @@ export function EventCard({ event }: Props) {
       );
     }
     if (event.ticket_type === EventTicketType.FREE || event.ticket_type === EventTicketType.REGISTRATION) {
-      return <NewBadge theme="blue">{t(KEY.common_ticket_type_free)}</NewBadge>;
+      return <NewBadge theme="green">{t(KEY.common_ticket_type_free)}</NewBadge>;
     }
 
     return null;
