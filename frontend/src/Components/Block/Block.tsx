@@ -1,5 +1,6 @@
 import classNames from 'classnames';
-import type { HTMLAttributes, ImgHTMLAttributes, PropsWithChildren } from 'react';
+import type { HTMLAttributes, PropsWithChildren } from 'react';
+import { backgroundImageFromUrl } from '~/utils';
 import styles from './Block.module.scss';
 
 // Container
@@ -20,7 +21,7 @@ export function BlockTitle({ className, ...props }: BlockTitleProps) {
 
 // Block
 
-export type BlockTheme = 'red' | 'purple' | 'green' | 'blue' | 'gold';
+export type BlockTheme = 'red' | 'purple' | 'green' | 'blue' | 'gold' | 'white';
 
 const blockThemeClassMap: Record<BlockTheme, string> = {
   red: styles.red,
@@ -28,15 +29,22 @@ const blockThemeClassMap: Record<BlockTheme, string> = {
   green: styles.green,
   blue: styles.blue,
   gold: styles.gold,
+  white: styles.white,
 };
 
 type BlockProps = {
   theme?: BlockTheme;
+  square?: boolean;
 } & PropsWithChildren &
   HTMLAttributes<HTMLDivElement>;
 
-export function Block({ className, theme, ...props }: BlockProps) {
-  return <div className={classNames(styles.block, blockThemeClassMap[theme ?? 'red'], className)} {...props} />;
+export function Block({ className, theme, square = true, ...props }: BlockProps) {
+  return (
+    <div
+      className={classNames(styles.block, blockThemeClassMap[theme ?? 'red'], { [styles.square]: square }, className)}
+      {...props}
+    />
+  );
 }
 
 // Content
@@ -87,18 +95,16 @@ export function BlockFooter({ className, gradient, children, ...props }: BlockFo
 
 type BlockImageProps = {
   src: string;
-  alt?: string;
   disableZoomEffect?: boolean;
-} & ImgHTMLAttributes<HTMLImageElement>;
+} & HTMLAttributes<HTMLDivElement>;
 
-export function BlockImage({ className, src, alt, disableZoomEffect, ...props }: BlockImageProps) {
+export function BlockImage({ className, src, disableZoomEffect, ...props }: BlockImageProps) {
   return (
     <div className={styles.image_container}>
-      <img
+      <div
         className={classNames(styles.image, { [styles.disable_zoom_effect]: disableZoomEffect }, className)}
-        src={src}
+        style={backgroundImageFromUrl(src)}
         {...props}
-        alt={alt}
       />
     </div>
   );
