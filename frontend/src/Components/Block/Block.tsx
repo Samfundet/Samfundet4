@@ -39,8 +39,12 @@ type BlockProps = {
   HTMLAttributes<HTMLDivElement>;
 
 export function Block({ className, theme, square = true, ...props }: BlockProps) {
-  return <div
-    className={classNames(styles.block, blockThemeClassMap[theme ?? 'red'], { [styles.square]: square }, className)} {...props} />;
+  return (
+    <div
+      className={classNames(styles.block, blockThemeClassMap[theme ?? 'red'], { [styles.square]: square }, className)}
+      {...props}
+    />
+  );
 }
 
 // Content
