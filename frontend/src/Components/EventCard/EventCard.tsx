@@ -67,10 +67,17 @@ export function EventCard({ event, containerClassName, squareCard, cardClassName
   }, [event, t]);
 
   const callToAction = useMemo(() => {
+    if (
+      event.ticket_type === EventTicketType.FREE ||
+      event.ticket_type === EventTicketType.INCLUDED ||
+      event.ticket_type === EventTicketType.REGISTRATION // TODO: make own CTA for registrations, something like "Sign up now!"
+    ) {
+      return null;
+    }
     if (!event.billig) return null;
     if (event.billig.is_sold_out) return null;
 
-    // TODO: implement actual CTA logic here
+    // TODO: implement more comprehensive CTA logic here
 
     return (
       <a href={eventUrl} className={styles.call_to_action}>
