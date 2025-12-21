@@ -33,7 +33,7 @@ import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
 import type { EventDto } from '~/dto';
-import { EventCategory } from '~/types';
+import { EventCategory, EventTicketType } from '~/types';
 import styles from './ComponentPage.module.scss';
 
 /**
@@ -88,7 +88,12 @@ export function ComponentPage() {
   return (
     <Page className={styles.wrapper}>
       <div style={{ display: 'flex', gap: '1.5rem' }}>
-        <EventCard event={createFakeEvent({ category: EventCategory.FOOTBALL_MATCH }, { is_almost_sold_out: true })} />
+        <EventCard
+          event={createFakeEvent(
+            { category: EventCategory.FOOTBALL_MATCH, ticket_type: EventTicketType.BILLIG },
+            { is_almost_sold_out: true },
+          )}
+        />
         <EventCard
           event={createFakeEvent(
             {
