@@ -1,37 +1,112 @@
+import { Icon } from '@iconify/react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Link, TimeDisplay } from '~/Components';
+import {
+  Block,
+  BlockContainer,
+  BlockFooter,
+  BlockHeader,
+  BlockImage,
+  BlockTitle,
+  NewBadge,
+  TimeDisplay,
+} from '~/Components';
+import eventPlaceholder from '~/assets/event_placeholder.jpg';
+import { BACKEND_DOMAIN } from '~/constants';
+import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
+import { ROUTES_FRONTEND } from '~/routes/frontend';
+import { EventTicketType } from '~/types';
+import { dbT, getEventCategoryKey } from '~/utils';
 import styles from './EventCard.module.scss';
 
-type EventCardProps = {
-  event: {
-    title: string;
-    venue: string;
-    startTime: string;
-    category: string;
-    img: string;
-  };
+type Props = {
+  event: EventDto;
+  containerClassName?: string;
+  squareCard?: boolean;
+  cardClassName?: string;
+  titleClassName?: string;
 };
-export function EventCard({ event }: EventCardProps) {
-  const { t } = useTranslation();
+
+export function EventCard({ event, containerClassName, squareCard, cardClassName, titleClassName }: Props) {
+  const { t } = useTranslation(); // Necessary in order for dbT to work in this component
+
+  const eventUrl = reverse({
+    pattern: ROUTES_FRONTEND.event,
+    urlParams: { id: event.id },
+  });
+
+  const imageUrl = useMemo(() => {
+    if (event.image_url) {
+      if (event.image_url.startsWith('http')) {
+        return event.image_url;
+      }
+      return BACKEND_DOMAIN + event.image_url;
+    }
+    return eventPlaceholder;
+  }, [event]);
+
+  const badges = useMemo(() => {
+    if (event.billig?.is_sold_out) {
+      return <NewBadge theme="gray">{t(KEY.common_sold_out)}</NewBadge>;
+    }
+    if (event.billig?.is_almost_sold_out) {
+      return (
+        <NewBadge theme="red">
+          <Icon icon="humbleicons:exclamation" />
+          {t(KEY.common_almost_sold_out)}
+        </NewBadge>
+      );
+    }
+    if (event.ticket_type === EventTicketType.FREE || event.ticket_type === EventTicketType.REGISTRATION) {
+      return <NewBadge theme="green">{t(KEY.common_ticket_type_free)}</NewBadge>;
+    }
+
+    return null;
+  }, [event, t]);
+
+  const callToAction = useMemo(() => {
+    if (
+      event.ticket_type === EventTicketType.FREE ||
+      event.ticket_type === EventTicketType.INCLUDED ||
+      event.ticket_type === EventTicketType.REGISTRATION // TODO: make own CTA for registrations, something like "Sign up now!"
+    ) {
+      return null;
+    }
+    if (!event.billig) return null;
+    if (event.billig.is_sold_out) return null;
+
+    // TODO: implement more comprehensive CTA logic here
+
+    return (
+      <a href={eventUrl} className={styles.call_to_action}>
+        {t(KEY.common_buy_ticket)}
+        <Icon icon="mingcute:arrow-up-line" width={16} rotate={1} />
+      </a>
+    );
+  }, [event, eventUrl, t]);
 
   return (
-    <div className={styles.eventCard}>
-      <Link url={event.title}>
-        <div className={styles.img} style={{ backgroundImage: `url(${event.img})` }} />
-      </Link>
-      <div className={styles.row}>
-        <p>{`${event.category} // ${event.venue}`}</p>
-        <TimeDisplay timestamp={event.startTime} />
-      </div>
-      <div className={styles.row}>
-        <Link className={styles.title} url={event.title}>
-          {event.title}
-        </Link>
-        <Button theme="samf" className={styles.button}>
-          {t(KEY.common_buy)}
-        </Button>
-      </div>
-    </div>
+    <BlockContainer className={containerClassName}>
+      <Block className={cardClassName} square={squareCard}>
+        <a href={eventUrl} tabIndex={-1}>
+          <BlockHeader gradient>{badges}</BlockHeader>
+          <BlockFooter className={styles.footer} gradient>
+            <div>
+              <TimeDisplay timestamp={event.start_dt} displayType="event-datetime" />
+              <div className={styles.category_and_location}>
+                {t(getEventCategoryKey(event.category))} // {event.location}
+              </div>
+            </div>
+            {callToAction}
+          </BlockFooter>
+          <BlockImage src={imageUrl} />
+        </a>
+      </Block>
+      <BlockTitle className={titleClassName}>
+        <a href={eventUrl}>{dbT(event, 'title')}</a>
+      </BlockTitle>
+    </BlockContainer>
   );
 }
