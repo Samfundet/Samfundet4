@@ -141,7 +141,6 @@ export function Navbar() {
     </div>
   );
 
-  // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
   const isImpersonate = Object.prototype.hasOwnProperty.call(cookies, 'impersonated_user_id');
 
   const userDropdownLinks = (
@@ -236,9 +235,7 @@ export function Navbar() {
 
   const memberButton = (
     <Button
-      
       theme="samf"
-        
       rounded={true}
       className={isDesktop ? styles.login_button : styles.popup_internal_button}
       onClick={() => {
