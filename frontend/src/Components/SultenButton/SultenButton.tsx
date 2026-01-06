@@ -1,6 +1,7 @@
 import { default as classnames } from 'classnames';
+import type { ReactNode } from 'react';
 import { Link } from 'react-router';
-import type { ButtonType, Children } from '~/types';
+import type { ButtonType } from '~/types';
 import styles from './SultenButton.module.scss';
 
 type ButtonProps = {
@@ -9,7 +10,7 @@ type ButtonProps = {
   type?: ButtonType;
   className?: string;
   disabled?: boolean;
-  children?: Children;
+  children?: ReactNode;
   onClick?: () => void;
 };
 

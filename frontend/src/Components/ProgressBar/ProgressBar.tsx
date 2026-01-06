@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import type { Children } from '~/types';
+import type { ReactNode } from 'react';
 import styles from './ProgressBar.module.scss';
 
 type ProgressBarProps = {
   className?: string;
-  children?: Children;
+  children?: ReactNode;
   value?: number;
   max?: number;
   fullWidth?: boolean;
