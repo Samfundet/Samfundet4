@@ -638,7 +638,7 @@ export function EventCreatorAdminPage() {
     </div>
   );
 
-  const title = lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`);
+  const title = lowerCapitalize(`${t(id ? KEY.common_edit : KEY.common_create)} ${t(KEY.common_event)}`);
   useTitle(title);
 
   return (
