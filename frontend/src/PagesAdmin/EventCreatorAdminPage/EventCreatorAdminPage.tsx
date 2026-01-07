@@ -178,7 +178,7 @@ export function EventCreatorAdminPage() {
                     {t(KEY.common_title)} ({t(KEY.common_norwegian)})
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -194,7 +194,7 @@ export function EventCreatorAdminPage() {
                     {t(KEY.common_title)} ({t(KEY.common_english)})
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -212,7 +212,7 @@ export function EventCreatorAdminPage() {
                     {t(KEY.common_short_description)} ({t(KEY.common_norwegian)})
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -228,7 +228,7 @@ export function EventCreatorAdminPage() {
                     {t(KEY.common_short_description)} ({t(KEY.common_english)})
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -343,7 +343,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.admin_organizer)}</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -472,7 +472,7 @@ export function EventCreatorAdminPage() {
         <FormField
           control={form.control}
           name="visibility_from_dt"
-          key={'visibility_from_dt'}
+          key="visibility_from_dt"
           render={({ field }) => (
             <FormItem className={styles.form_item}>
               <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
@@ -497,7 +497,7 @@ export function EventCreatorAdminPage() {
   function onSubmit(values: FormType) {
     const start = values.start_dt ? new Date(values.start_dt) : null;
     const computedEndDt = start ? new Date(start?.getTime() + (values.duration ?? 0) * 60_000) : null;
-    const payload: EventDto = {
+    const payload: Partial<EventDto> = {
       ...values,
       visibility_to_dt: computedEndDt ? computedEndDt.toISOString() : '',
       end_dt: computedEndDt ? computedEndDt.toISOString() : '',

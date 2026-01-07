@@ -68,7 +68,7 @@ export function PaymentForm({ event, onChange }: PaymentFormProps) {
             <FormItem>
               <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
               <FormControl>
-                <input {...field} placeholder="http://..." />
+                <input type="text" {...field} placeholder="http://..." />
               </FormControl>
               <FormMessage />
             </FormItem>

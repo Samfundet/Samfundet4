@@ -254,7 +254,7 @@ export async function getEvents(): Promise<EventDto[]> {
   return response.data;
 }
 
-export async function postEvent(data: EventDto): Promise<AxiosResponse<EventDto>> {
+export async function postEvent(data: Partial<EventDto>): Promise<AxiosResponse<EventDto>> {
   const transformed = { ...data, image_id: data.image?.id };
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_list;
   const response = await axios.post<EventDto>(url, transformed, { withCredentials: true });
@@ -288,14 +288,14 @@ export async function getEventGroups(): Promise<EventGroupDto[]> {
 }
 
 export async function getBilligEvents(): Promise<BilligEventDto[]> {
-  const BILLIG_EVENT_LIST_URL = '/api/billig-event/';
+  const BILLIG_EVENT_LIST_URL = '/api/billig-event/'; // TODO: hvordan gjøre det med api endepunkt som ikke finnes i backend.ts
   const url = `${BACKEND_DOMAIN}/${BILLIG_EVENT_LIST_URL}`;
   const response = await axios.get<BilligEventDto[]>(url, { withCredentials: true });
   return response.data;
 }
 
 export async function getActiveBilligEvents(): Promise<BilligEventDto[]> {
-  const BILLIG_EVENT_LIST_URL = '/api/billig-event/';
+  const BILLIG_EVENT_LIST_URL = '/api/billig-event/'; // TODO: hvordan gjøre det med api endepunkt som ikke finnes i backend.ts
   const url = `${BACKEND_DOMAIN}/${BILLIG_EVENT_LIST_URL}`;
   const response = await axios.get<BilligEventDto[]>(url, { withCredentials: true });
   return response.data.filter((e) => e.in_sale_period && !e.is_sold_out);

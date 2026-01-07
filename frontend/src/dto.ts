@@ -181,6 +181,7 @@ export type EventDto = {
   duration: number;
   end_dt: string;
   visibility_from_dt: string;
+  visibility_to_dt: string;
   doors_time?: string;
 
   // Ticket type for event (billig, free, custom, registration etc.)

@@ -214,7 +214,7 @@ export const nb = prepareTranslations({
   [KEY.common_ticket_type_free]: 'Gratis',
   [KEY.common_ticket_type_free_with_registration]: 'Gratis med registrering',
   [KEY.common_ticket_type_custom]: 'Tilpasset',
-  [KEY.common_ticket_type_billig]: 'Betalt',
+  [KEY.common_ticket_type_billig]: 'Billig',
   [KEY.common_ticket_type_included]: 'Inkludert i inngang',
   [KEY.common_ticket_type_registration]: 'Påmelding',
 

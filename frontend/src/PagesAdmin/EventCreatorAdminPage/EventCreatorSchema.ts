@@ -21,9 +21,9 @@ import { OPTIONAL_IMAGE } from '~/schema/samfImage';
 
 const event_custom_ticket = z.object({
   id: z.number(),
-  name_nb: z.string().min(1, 'Name (Norwegian) is required'),
-  name_en: z.string().min(1, 'Name (English) is required'),
-  price: z.number({ invalid_type_error: 'Price must be a number' }).min(0, 'Price must be at least 0'),
+  name_nb: z.string().min(1),
+  name_en: z.string().min(1),
+  price: z.number().min(0),
 });
 
 export const eventSchema = z.object({

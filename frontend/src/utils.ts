@@ -261,10 +261,6 @@ export function getTicketTypeKey(ticketType: EventTicketTypeValue): TranslationK
       return KEY.common_ticket_type_billig;
     case EventTicketType.CUSTOM:
       return KEY.common_ticket_type_custom;
-    default: {
-      const _exhaustiveCheck: never = ticketType;
-      return _exhaustiveCheck;
-    }
   }
 }
 
