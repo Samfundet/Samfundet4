@@ -93,7 +93,8 @@ $accepted_this_offer: #4f49eb;
 $withdrawn_application: #7f7f7f;
 
 // Typography
-$primary-font-family: "obviously-variable", -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, oxygen, ubuntu, cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+$primary-font-family: system-ui, 'Helvetica Neue', 'Avenir Next', Avenir, 'Adwaita Sans', Cantarell, sans-serif;
+$special-font-family: "obviously-variable", $primary-font-family;
 
 /* Screen sizes, breakpoint (bp) */
 $large-desktop-bp-lower: 1201px;
