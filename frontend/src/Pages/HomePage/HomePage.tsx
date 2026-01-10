@@ -35,7 +35,7 @@ export function HomePage() {
       case 'carousel': {
         if (element.events.length > 0) {
           return (
-            <EventCardContainer title={dbT(element, 'title')} events={element.events} key={key} squareCards={false} />
+            <EventCardContainer title={dbT(element, 'title')} events={element.events} key={key} />
           );
         }
         return <div key={key} />;
