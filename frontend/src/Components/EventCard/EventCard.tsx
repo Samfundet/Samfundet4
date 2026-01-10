@@ -24,12 +24,9 @@ import styles from './EventCard.module.scss';
 type Props = {
   event: EventDto;
   containerClassName?: string;
-  squareCard?: boolean;
-  cardClassName?: string;
-  titleClassName?: string;
 };
 
-export function EventCard({ event, containerClassName, squareCard, cardClassName, titleClassName }: Props) {
+export function EventCard({ event, containerClassName }: Props) {
   const { t } = useTranslation(); // Necessary in order for dbT to work in this component
 
   const eventUrl = reverse({
@@ -89,7 +86,7 @@ export function EventCard({ event, containerClassName, squareCard, cardClassName
 
   return (
     <BlockContainer className={containerClassName}>
-      <Block className={cardClassName} square={squareCard}>
+      <Block square={false}>
         <a href={eventUrl} tabIndex={-1}>
           <BlockHeader gradient={badges !== null}>{badges}</BlockHeader>
           <BlockFooter className={styles.footer} gradient={callToAction !== null}>
@@ -98,7 +95,7 @@ export function EventCard({ event, containerClassName, squareCard, cardClassName
           <BlockImage src={imageUrl} />
         </a>
       </Block>
-      <BlockTitle className={titleClassName}>
+      <BlockTitle>
         <a href={eventUrl}>{dbT(event, 'title')}</a>
       </BlockTitle>
       <div className={styles.details}>
