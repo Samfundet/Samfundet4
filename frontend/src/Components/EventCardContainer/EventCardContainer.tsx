@@ -7,17 +7,13 @@ type Props = {
   title?: string;
 };
 
-export function EventCardContainer({ events, title  }: Props) {
+export function EventCardContainer({ events, title }: Props) {
   return (
     <div className={styles.wrapper}>
       {title && <H4>{title}</H4>}
       <div className={styles.container}>
         {events.map((event) => (
-          <EventCard
-            event={event}
-            key={event.id}
-            containerClassName={styles.card_container}
-          />
+          <EventCard event={event} key={event.id} containerClassName={styles.card_container} />
         ))}
       </div>
     </div>

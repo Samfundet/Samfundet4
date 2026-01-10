@@ -46,7 +46,11 @@ export function EventCard({ event, containerClassName }: Props) {
 
   const badges = useMemo(() => {
     if (event.billig?.is_sold_out) {
-      return <NewBadge theme="gray" className={styles.badge}>{t(KEY.common_sold_out)}</NewBadge>;
+      return (
+        <NewBadge theme="gray" className={styles.badge}>
+          {t(KEY.common_sold_out)}
+        </NewBadge>
+      );
     }
     if (event.billig?.is_almost_sold_out) {
       return (
@@ -57,7 +61,11 @@ export function EventCard({ event, containerClassName }: Props) {
       );
     }
     if (event.ticket_type === EventTicketType.FREE || event.ticket_type === EventTicketType.REGISTRATION) {
-      return <NewBadge theme="green" className={styles.badge}>{t(KEY.common_ticket_type_free)}</NewBadge>;
+      return (
+        <NewBadge theme="green" className={styles.badge}>
+          {t(KEY.common_ticket_type_free)}
+        </NewBadge>
+      );
     }
 
     return null;
