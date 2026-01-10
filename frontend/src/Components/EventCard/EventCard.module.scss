@@ -1,4 +1,5 @@
 @use 'src/styles/colors' as c;
+@use 'src/constants' as v;
 
 .footer {
   display: flex;
@@ -8,7 +9,14 @@
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
+.badge {
+  font-family: v.$special-font-family;
+  letter-spacing: v.$special-letter-spacing;
+}
+
 .call_to_action {
+  font-family: v.$special-font-family;
+  letter-spacing: v.$special-letter-spacing;
   color: c.$white-50;
   border-bottom: 1px solid c.$white-50;
   padding-bottom: 3px;

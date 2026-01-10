@@ -95,6 +95,7 @@ $withdrawn_application: #7f7f7f;
 // Typography
 $primary-font-family: system-ui, 'Helvetica Neue', 'Avenir Next', Avenir, 'Adwaita Sans', Cantarell, sans-serif;
 $special-font-family: "obviously-variable", $primary-font-family;
+$special-letter-spacing: -0.05rem;
 
 /* Screen sizes, breakpoint (bp) */
 $large-desktop-bp-lower: 1201px;
