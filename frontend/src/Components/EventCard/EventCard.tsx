@@ -91,14 +91,8 @@ export function EventCard({ event, containerClassName, squareCard, cardClassName
     <BlockContainer className={containerClassName}>
       <Block className={cardClassName} square={squareCard}>
         <a href={eventUrl} tabIndex={-1}>
-          <BlockHeader gradient>{badges}</BlockHeader>
-          <BlockFooter className={styles.footer} gradient>
-            <div>
-              <TimeDisplay timestamp={event.start_dt} displayType="event-datetime" />
-              <div className={styles.category_and_location}>
-                {t(getEventCategoryKey(event.category))} // {event.location}
-              </div>
-            </div>
+          <BlockHeader gradient={badges !== null}>{badges}</BlockHeader>
+          <BlockFooter className={styles.footer} gradient={callToAction !== null}>
             {callToAction}
           </BlockFooter>
           <BlockImage src={imageUrl} />
@@ -107,6 +101,12 @@ export function EventCard({ event, containerClassName, squareCard, cardClassName
       <BlockTitle className={titleClassName}>
         <a href={eventUrl}>{dbT(event, 'title')}</a>
       </BlockTitle>
+      <div className={styles.details}>
+        <div>
+          {t(getEventCategoryKey(event.category))} // {event.location}
+        </div>
+        <TimeDisplay timestamp={event.start_dt} displayType="event-datetime" />
+      </div>
     </BlockContainer>
   );
 }

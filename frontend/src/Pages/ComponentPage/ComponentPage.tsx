@@ -93,6 +93,7 @@ export function ComponentPage() {
             { category: EventCategory.FOOTBALL_MATCH, ticket_type: EventTicketType.BILLIG },
             { is_almost_sold_out: true },
           )}
+          squareCard={false}
         />
         <EventCard
           event={createFakeEvent(
@@ -104,6 +105,7 @@ export function ComponentPage() {
             },
             { is_sold_out: true },
           )}
+          squareCard={false}
         />
         <EventCard
           event={createFakeEvent({
@@ -113,6 +115,7 @@ export function ComponentPage() {
             start_dt: addDays(addMinutes(new Date(), 87), 5).toISOString(),
             location: 'Hele huset',
           })}
+          squareCard={false}
         />
       </div>
 
