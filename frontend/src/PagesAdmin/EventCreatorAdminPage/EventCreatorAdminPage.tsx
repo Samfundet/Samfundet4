@@ -504,7 +504,7 @@ export function EventCreatorAdminPage() {
       ...values,
       visibility_to_dt: computedEndDt ? computedEndDt.toISOString() : '',
       end_dt: computedEndDt ? computedEndDt.toISOString() : '',
-    } as unknown as EventDto;
+    };
 
     postEvent(payload)
       .then(() => {
