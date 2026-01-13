@@ -58,6 +58,7 @@ import { ROUTES } from '~/routes';
 import type { BilligEventDto } from './apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from './constants';
 import type { PageNumberPaginationType } from './types';
+import { Routes } from 'react-router-dom';
 
 export async function getCsrfToken(): Promise<string> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__csrf;
@@ -288,17 +289,9 @@ export async function getEventGroups(): Promise<EventGroupDto[]> {
 }
 
 export async function getBilligEvents(): Promise<BilligEventDto[]> {
-  const BILLIG_EVENT_LIST_URL = '/api/billig-event/'; // TODO: hvordan gjøre det med api endepunkt som ikke finnes i backend.ts
-  const url = `${BACKEND_DOMAIN}/${BILLIG_EVENT_LIST_URL}`;
+  const url = `${BACKEND_DOMAIN}/${ROUTES.backend.samfundet__billig_event_list}`;
   const response = await axios.get<BilligEventDto[]>(url, { withCredentials: true });
   return response.data;
-}
-
-export async function getActiveBilligEvents(): Promise<BilligEventDto[]> {
-  const BILLIG_EVENT_LIST_URL = '/api/billig-event/'; // TODO: hvordan gjøre det med api endepunkt som ikke finnes i backend.ts
-  const url = `${BACKEND_DOMAIN}/${BILLIG_EVENT_LIST_URL}`;
-  const response = await axios.get<BilligEventDto[]>(url, { withCredentials: true });
-  return response.data.filter((e) => e.in_sale_period && !e.is_sold_out);
 }
 
 export async function getMenus(): Promise<MenuDto[]> {
