@@ -25,6 +25,7 @@ export const ROUTES_SAMF_THREE = {
     openingHours: `${BASE_URL}/informasjon/aapningstider`,
     photos: `${PHOTO}`,
     renting: `${BASE_URL}/informasjon/leie-lokaler`,
+    contact: `${BASE_URL}/informasjon/kontaktinfo`,
   },
   venues: {
     restaurant: `${BASE_URL}/lyche`,

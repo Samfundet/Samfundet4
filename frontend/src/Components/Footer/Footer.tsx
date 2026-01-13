@@ -70,29 +70,45 @@ export function Footer() {
 
   const contact = (
     <div className={styles.footer_section}>
-      <h2 className={styles.header}>{t(KEY.common_contact)}</h2>
-      <ul className={styles.footer_list}>
-        <li className={styles.footer_list_item}>© Studentersamfundet i Trondhjem 2023</li>
-        <li className={styles.footer_list_item}>Org.nr: 970 088 466</li>
-        <li className={styles.footer_list_item}>Elgeseter gate 1</li>
-        <li className={styles.footer_list_item}>7030</li>
+      <h2 className={styles.contact_title}>
+        {t(KEY.footer_have_questions)}{' '}
+        <Link className={styles.contact_link} target="samf3" url={ROUTES_SAMF_THREE.information.contact}>
+          {t(KEY.common_contact_us)}
+        </Link>
+      </h2>
+      <ul className={styles.contact_list}>
+        <li className={styles.contact_item}>
+          <Icon icon="mdi:map-marker" width={18} className={styles.contact_icon} />
+          <Link
+            className={styles.footer_link}
+            target="external"
+            url="https://maps.google.com/?q=Elgeseter+gate+1,+7030+Trondheim"
+          >
+            Elgeseter gate 1, 7030 Trondheim
+          </Link>
+        </li>
+        <li className={styles.contact_item}>
+          <Icon icon="mdi:domain" width={18} className={styles.contact_icon} />
+          <span>Org.nr: 970 088 466</span>
+        </li>
       </ul>
+      <div className={styles.copyright}>© Studentersamfundet i Trondhjem 2024</div>
     </div>
   );
 
   const socials = (
     <div className={styles.socials}>
-      <Link target="external" url="https://www.facebook.com/samfundet">
-        <Icon color={iconColor} icon="bi:facebook" width={20} />
+      <Link className={styles.social_link} target="external" url="https://www.facebook.com/samfundet">
+        <Icon color={iconColor} icon="bi:facebook" width={24} />
       </Link>
-      <Link target="external" url="https://www.instagram.com/samfundet/">
-        <Icon color={iconColor} icon="bi:instagram" width={20} />
+      <Link className={styles.social_link} target="external" url="https://www.instagram.com/samfundet/">
+        <Icon color={iconColor} icon="bi:instagram" width={24} />
       </Link>
-      <Link target="external" url="https://www.tiktok.com/@samfundet">
-        <Icon color={iconColor} icon="bi:tiktok" width={20} />
+      <Link className={styles.social_link} target="external" url="https://www.tiktok.com/@samfundet">
+        <Icon color={iconColor} icon="bi:tiktok" width={24} />
       </Link>
-      <Link target="external" url="https://www.snapchat.com/add/samfundet">
-        <Icon color={iconColor} icon="bi:snapchat" width={20} />
+      <Link className={styles.social_link} target="external" url="https://www.snapchat.com/add/samfundet">
+        <Icon color={iconColor} icon="bi:snapchat" width={24} />
       </Link>
     </div>
   );
@@ -114,7 +130,7 @@ export function Footer() {
 
   const shortcuts = (
     <div className={styles.footer_section}>
-      <h2 className={styles.header}>{t(KEY.common_shortcuts)}</h2>
+      <h2 className={styles.section_title}>{t(KEY.common_shortcuts)}</h2>
       <ul className={styles.footer_list}>
         <li className={styles.footer_list_item}>
           <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.information.general}>
@@ -147,7 +163,7 @@ export function Footer() {
 
   const venues = (
     <div className={styles.footer_section}>
-      <h2 className={styles.header}>{t(KEY.common_venues)}</h2>
+      <h2 className={styles.section_title}>{t(KEY.common_venues)}</h2>
       <ul className={styles.footer_list}>
         <li className={styles.footer_list_item}>
           <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.venues.restaurant}>

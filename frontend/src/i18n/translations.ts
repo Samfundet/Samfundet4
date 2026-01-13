@@ -303,6 +303,7 @@ export const nb = prepareTranslations({
   [KEY.common_club]: 'Klubb',
 
   [KEY.footer_developed_by]: 'Utviklet av MG::Web',
+  [KEY.footer_have_questions]: 'Lurer du på noe?',
 
   // Recruitment:
   [KEY.recruitment_look_at_recipients]: 'Gå videre og se gjennom mottakere',
@@ -927,6 +928,7 @@ export const en = prepareTranslations({
   [KEY.common_club]: 'Club',
 
   [KEY.footer_developed_by]: 'Developed by MG::Web',
+  [KEY.footer_have_questions]: 'Have questions?',
 
   // Recruitment:
   [KEY.recruitment_look_at_recipients]: 'Go ahead and look through recipients',

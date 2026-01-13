@@ -306,6 +306,7 @@ export const KEY = {
   navbar_nybygg: 'navbar_nybygg',
 
   footer_developed_by: 'footer_developed_by',
+  footer_have_questions: 'footer_have_questions',
 
   // Sulten / Lyche:
   sulten_dishes: 'sulten_dishes',
