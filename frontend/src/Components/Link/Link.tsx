@@ -1,8 +1,7 @@
 import classNames from 'classnames';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { BACKEND_DOMAIN } from '~/constants';
 import { useCustomNavigate } from '~/hooks';
-import type { Children } from '~/types';
 import styles from './Link.module.scss';
 
 export type LinkTarget = 'frontend' | 'backend' | 'external' | 'email';
@@ -16,7 +15,7 @@ export type LinkProps = {
   plain?: boolean;
   target?: LinkTarget;
   onAfterClick?: () => void;
-  children?: Children;
+  children?: ReactNode;
 };
 
 export function Link({

@@ -1,12 +1,13 @@
 import { Icon } from '@iconify/react';
 import { default as classNames } from 'classnames';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 import { Button, Link, ThemeSwitch } from '~/Components';
 import { getActiveRecruitments, logout, stopImpersonatingUser } from '~/api';
 import { logoWhite } from '~/assets';
+import { firstEnabledAdminPath } from '~/constants/site-features';
 import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { RecruitmentDto } from '~/dto';
@@ -14,6 +15,7 @@ import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { SAMF3_MEMBER_URL } from '~/routes/samf-three';
 import styles from './Navbar.module.scss';
 import { HamburgerMenu, LanguageButton, NavbarItem } from './components';
 
@@ -42,6 +44,8 @@ export function Navbar() {
   const isRootPath = useLocation().pathname === ROUTES.frontend.home;
   const isTransparentNavbar = isRootPath && !isScrolledNavbar && !isMobileNavigation;
 
+  const isDecember = useMemo(() => new Date().getMonth() === 11, []);
+
   useEffect(() => {
     // Close expanded dropdown menu whenever mobile navbar is closed, or we switch from mobile to desktop, like when
     // switching from portrait to landscape on iPad.
@@ -62,7 +66,7 @@ export function Navbar() {
   const mobileProfileButton = (
     <div className={styles.navbar_profile_button}>
       <Icon icon="material-symbols:person" />
-      <Link url={ROUTES.frontend.admin} className={styles.profile_text}>
+      <Link url={firstEnabledAdminPath()} className={styles.profile_text}>
         {user?.username}
       </Link>
     </div>
@@ -140,12 +144,11 @@ export function Navbar() {
     </div>
   );
 
-  // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
-  const isImpersonate = cookies.hasOwnProperty('impersonated_user_id');
+  const isImpersonate = Object.prototype.hasOwnProperty.call(cookies, 'impersonated_user_id');
 
   const userDropdownLinks = (
     <>
-      <Link url={ROUTES.frontend.admin} className={styles.navbar_dropdown_link}>
+      <Link url={firstEnabledAdminPath()} className={styles.navbar_dropdown_link}>
         <Icon icon="material-symbols:settings" />
         {t(KEY.control_panel_title)}
       </Link>
@@ -233,6 +236,20 @@ export function Navbar() {
     </Button>
   );
 
+  const memberButton = (
+    <Button
+      theme="samf"
+      rounded={true}
+      className={isDesktop ? styles.login_button : styles.popup_internal_button}
+      onClick={() => {
+        window.location.href = SAMF3_MEMBER_URL.medlem;
+        setIsMobileNavigation(false);
+      }}
+    >
+      {t(KEY.common_member)}
+    </Button>
+  );
+
   // Show mobile popup for navigation.
   const mobileNavigation = (
     <>
@@ -244,6 +261,7 @@ export function Navbar() {
           <div className={styles.mobile_user}>
             {loginButton}
             {logoutButton}
+            {memberButton}
           </div>
           <ThemeSwitch />
         </div>
@@ -258,12 +276,14 @@ export function Navbar() {
       <nav id={styles.navbar_container} className={classNames(isTransparentNavbar && styles.transparent_navbar)}>
         <div className={styles.navbar_inner}>
           <Link url={ROUTES.frontend.home} className={styles.navbar_logo}>
+            {isDecember && <div className={styles.santa_hat} />}
             <img src={logoWhite} id={styles.navbar_logo_img} alt="Logo" />
           </Link>
           {isDesktop && navbarHeaders}
           <div className={styles.navbar_widgets}>
             <ThemeSwitch />
             <LanguageButton />
+            {memberButton}
             {loginButton}
             {profileButton}
           </div>
