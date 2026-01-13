@@ -114,11 +114,13 @@ export function EventCreatorAdminPage() {
   // Fetch event data using the event ID
   useEffect(() => {
     if (id) {
-      console.log(getEvent(id))
+      console.log(getEvent(id));
       getEvent(id)
         .then((eventData) => {
-          const eventDuration = new Date(eventData.end_dt).getTime() - new Date(eventData.start_dt).getTime()
-          const imageObject: ImageDto | undefined = eventData.image_url ? {id: eventData.id, title: "", url: eventData.image_url, tags: []}: undefined
+          const eventDuration = new Date(eventData.end_dt).getTime() - new Date(eventData.start_dt).getTime();
+          const imageObject: ImageDto | undefined = eventData.image_url
+            ? { id: eventData.id, title: '', url: eventData.image_url, tags: [] }
+            : undefined;
           setEvent(eventData);
           form.reset({
             title_nb: eventData.title_nb || '',
