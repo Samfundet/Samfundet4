@@ -93,7 +93,7 @@ export function EventCreatorAdminPage() {
       category: eventCategoryOptions[0].value,
       host: '',
       location: locationOptions.length > 0 ? locationOptions[0].value : '',
-      capacity: 0,
+      capacity: undefined,
       age_restriction: 'none',
       ticket_type: 'free',
       custom_tickets: [],
@@ -123,7 +123,7 @@ export function EventCreatorAdminPage() {
             category: eventData.category || '',
             host: eventData.host || '',
             location: eventData.location || '',
-            capacity: eventData.capacity || 0,
+            capacity: eventData.capacity || undefined,
             age_restriction: eventData.age_restriction || 'none',
             ticket_type: eventData.ticket_type || 'free',
             custom_tickets: eventData.custom_tickets || [],
@@ -278,7 +278,7 @@ export function EventCreatorAdminPage() {
       title_nb: 'Dato og informasjon',
       title_en: 'Date & info',
       validate: (data) => {
-        return !!(data.start_dt && data.duration && data.category && data.host && data.location && data.capacity);
+        return !!(data.start_dt && data.duration > 0 && data.category && data.host && data.location);
       },
       template: (
         <>
@@ -382,7 +382,10 @@ export function EventCreatorAdminPage() {
                     <Input
                       type="number"
                       {...field}
-                      onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        field.onChange(v === '' ? undefined : Number.parseInt(v, 10));
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
