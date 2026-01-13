@@ -25,7 +25,7 @@ import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getEvent, postEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
-import type { EventDto } from '~/dto';
+import type { EventDto, ImageDto } from '~/dto';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -114,8 +114,11 @@ export function EventCreatorAdminPage() {
   // Fetch event data using the event ID
   useEffect(() => {
     if (id) {
+      console.log(getEvent(id))
       getEvent(id)
         .then((eventData) => {
+          const eventDuration = new Date(eventData.end_dt).getTime() - new Date(eventData.start_dt).getTime()
+          const imageObject: ImageDto | undefined = eventData.image_url ? {id: eventData.id, title: "", url: eventData.image_url, tags: []}: undefined
           setEvent(eventData);
           form.reset({
             title_nb: eventData.title_nb || '',
@@ -125,14 +128,14 @@ export function EventCreatorAdminPage() {
             description_short_nb: eventData.description_short_nb || '',
             description_short_en: eventData.description_short_en || '',
             start_dt: eventData.start_dt ? utcTimestampToLocal(eventData.start_dt, false) : '',
-            duration: eventData.duration || 0,
+            duration: eventDuration || 0,
             category: eventData.category || '',
             host: eventData.host || '',
             location: eventData.location || '',
             capacity: eventData.capacity || 0,
             age_restriction: eventData.age_restriction || 'none',
             ticket_type: eventData.ticket_type || 'free',
-            image: eventData.image,
+            image: imageObject,
             publish_dt: eventData.publish_dt ? utcTimestampToLocal(eventData.publish_dt, false) : '',
           });
           setShowSpinner(false);
