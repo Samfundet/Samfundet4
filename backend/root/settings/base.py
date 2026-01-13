@@ -18,7 +18,7 @@ from pathlib import Path
 
 import environ
 
-from root.constants import Environment
+from root.constants import CP_FEATURES_ALL, Environment
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -325,3 +325,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'mg-web@samfundet.no'
+
+# For enabled features in the control panel
+CP_ENABLED = {s.strip() for s in os.getenv('CP_ENABLED', 'events,images,opening_hours,closed_hours,venue').split(',') if s.strip()} & CP_FEATURES_ALL

@@ -1,13 +1,12 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import type { ChangeEvent } from 'react';
-import type { Children } from '~/types';
+import type { ChangeEvent, ReactNode } from 'react';
 import styles from './InputField.module.scss';
 
 export type InputFieldType = 'text' | 'number' | 'email' | 'password' | 'datetime-local' | 'date' | 'time';
 
 export type InputFieldProps<T> = {
-  children?: Children;
+  children?: ReactNode;
   labelClassName?: string;
   inputClassName?: string;
   onChange?: (value: T) => void;
