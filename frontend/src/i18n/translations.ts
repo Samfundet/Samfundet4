@@ -214,7 +214,7 @@ export const nb = prepareTranslations({
   [KEY.common_ticket_type_free]: 'Gratis',
   [KEY.common_ticket_type_free_with_registration]: 'Gratis med registrering',
   [KEY.common_ticket_type_custom]: 'Tilpasset',
-  [KEY.common_ticket_type_billig]: 'Billig',
+  [KEY.common_ticket_type_billig]: 'Betalt (billig)',
   [KEY.common_ticket_type_included]: 'Inkludert i inngang',
   [KEY.common_ticket_type_registration]: 'Påmelding',
 
@@ -860,7 +860,7 @@ export const en = prepareTranslations({
   [KEY.common_ticket_type]: 'Ticket',
   [KEY.common_ticket_type_free]: 'Free',
   [KEY.common_ticket_type_free_with_registration]: 'Free with registration',
-  [KEY.common_ticket_type_billig]: 'Paid',
+  [KEY.common_ticket_type_billig]: 'Paid (billig)',
   [KEY.common_ticket_type_custom]: 'Custom',
   [KEY.common_ticket_type_included]: 'Included with entrance',
   [KEY.common_ticket_type_registration]: 'Registration',
