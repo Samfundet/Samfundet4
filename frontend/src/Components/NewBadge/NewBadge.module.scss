@@ -1,0 +1,60 @@
+@use 'src/styles/colors' as c;
+
+@use 'src/mixins' as m;
+
+.badge {
+  border-radius: 50vh;
+  min-width: 50px;
+  width: auto;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 14px;
+}
+
+.red {
+  background-color: c.$samf-red-900;
+  color: c.$samf-red-500;
+}
+
+.purple {
+  background-color: c.$purple-900;
+  color: c.$fuchsia-200;
+}
+
+.green {
+  background-color: c.$green-800;
+  color: c.$green-300;
+}
+
+.blue {
+  background-color: c.$blue-900;
+  color: c.$blue-300;
+}
+
+.gold {
+  background-color: c.$gold-600;
+  color: c.$yellow-200;
+}
+
+.gray {
+  background-color: c.$gray-100;
+  color: c.$gray-950;
+}
+
+.outline {
+  border: 1px solid c.$gray-950;
+  color: c.$gray-950;
+
+  @include m.theme-dark {
+    border-color: c.$gray-100;
+    color: c.$gray-100;
+  }
+}
+
+.outline_white {
+  border: 1px solid c.$white-100;
+  color: c.$white-100;
+}
