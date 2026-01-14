@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import type { ReactNode } from 'react';
+import type { Children } from '~/types';
 import styles from './Select.module.scss';
 
 type Option = {
@@ -16,7 +16,7 @@ type SelectProps = {
   onChange?: (e?: React.ChangeEvent<HTMLSelectElement>) => void;
   value?: string;
   error?: string;
-  children?: ReactNode;
+  children?: Children;
 };
 
 export function Select({

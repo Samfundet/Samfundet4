@@ -9,7 +9,6 @@ export const ROUTES_FRONTEND = {
   about: '/about/',
   venues: '/venues/',
   login: '/login/',
-  new_login: '/new-login/',
   signup: '/signup/',
   events: '/events/',
   event: '/events/:id/',

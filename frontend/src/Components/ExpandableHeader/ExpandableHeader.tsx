@@ -1,5 +1,6 @@
 import classnames from 'classnames';
-import { type ReactNode, useState } from 'react';
+import { useState } from 'react';
+import type { Children } from '~/types';
 import styles from './ExpandableHeader.module.scss';
 
 type HeaderThemes = 'parent' | 'child';
@@ -7,7 +8,7 @@ type HeaderThemes = 'parent' | 'child';
 type ExpandableHeaderProps = {
   className?: string;
   label?: string;
-  children?: ReactNode;
+  children?: Children;
   showByDefault?: boolean;
   theme?: HeaderThemes;
 };

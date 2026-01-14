@@ -1,1 +1,0 @@
-export { EventCardContainer } from './EventCardContainer';

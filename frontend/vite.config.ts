@@ -1,11 +1,8 @@
-import react from "@vitejs/plugin-react-swc";
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import svgr from 'vite-plugin-svgr';
-import * as path from 'path';
-import { fileURLToPath } from 'node:url';
-import autoprefixer from "autoprefixer";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const path = require('path');
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,19 +10,6 @@ export default defineConfig({
     react(),
     svgr(),
   ],
-  css: {
-    preprocessorOptions: {
-      scss: {
-        loadPaths: ['.']
-      }
-    },
-    postcss: {
-      plugins: [
-        // @ts-ignore it works.
-        autoprefixer({}),
-      ]
-    }
-  },
   resolve: {
     alias: [
       {

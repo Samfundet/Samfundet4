@@ -1,10 +1,9 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { useClickOutside, useDesktop } from '~/hooks';
-import type { SetState } from '~/types';
+import type { Children, SetState } from '~/types';
 import styles from '../../Navbar.module.scss';
 
 type NavbarItemProps = {
@@ -12,7 +11,7 @@ type NavbarItemProps = {
   label: string;
   icon?: string;
   labelClassName?: string;
-  dropdownLinks?: ReactNode;
+  dropdownLinks?: Children;
   expandedDropdown?: string;
   setExpandedDropdown: SetState<string>;
 };

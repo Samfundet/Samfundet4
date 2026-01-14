@@ -1,5 +1,4 @@
 import { format, isToday, isTomorrow } from 'date-fns';
-import nb from 'date-fns/locale/nb';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 
@@ -48,17 +47,21 @@ export function TimeDisplay({ timestamp, className, displayType = 'datetime' }: 
   ];
 
   function getEventString() {
-    if (new Date() > date) {
-      return t(KEY.common_now);
+    // Time string
+    let timeStr = '';
+    if (displayType === 'event-datetime') {
+      timeStr = `, ${date.toLocaleTimeString('no-NO', { timeStyle: 'short' })}`;
     }
-    const timeStr = `, ${format(date, 'HH:mm', { locale: nb })}`;
+    // Today
     if (isToday(date)) {
       return `${t(KEY.common_today)}${timeStr}`;
     }
+    // Tomorrow
     if (isTomorrow(date)) {
-      return `${t(KEY.common_tomorrow)}${timeStr}`;
+      return `${t(KEY.common_today)}${timeStr}`;
     }
-    return format(date, 'd. MMM, HH:mm', { locale: nb });
+    // Default
+    return `${format(date, 'd. MMM')}${timeStr}`;
   }
 
   function getString() {
@@ -76,8 +79,11 @@ export function TimeDisplay({ timestamp, className, displayType = 'datetime' }: 
         return getEventString();
       case 'nice-month-year':
         return `${niceMonths[date.getMonth()]} ${date.getFullYear()}`;
-      case 'nice-date-time':
+      case 'nice-date-time': {
+        const dateString = date.toISOString();
+        const splitTime = dateString.split('T');
         return `${date.toTimeString().slice(0, 5)} || ${niceDays[date.getDay()]} ${date.getDate()}. ${niceMonths[date.getMonth()]}`;
+      }
     }
   }
 

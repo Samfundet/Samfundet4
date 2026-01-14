@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { type ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { getCsrfToken, getKeyValues, putUserPreference } from '~/api';
 import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, type ThemeValue, XCSRFTOKEN } from '~/constants';
 import { useMouseTrail, useTheme } from '~/hooks';
-import type { KeyValueMap, SetState } from '~/types';
+import type { Children, KeyValueMap, SetState } from '~/types';
 import { useAuthContext } from './AuthContext';
 
 /**
@@ -56,7 +56,7 @@ export function useGlobalContext() {
 
 type GlobalContextProviderProps = {
   enabled?: boolean; // Enable/disable all side-effects, useful when used in Storybook.
-  children: ReactNode;
+  children: Children;
 };
 
 export function GlobalContextProvider({ children, enabled = true }: GlobalContextProviderProps) {

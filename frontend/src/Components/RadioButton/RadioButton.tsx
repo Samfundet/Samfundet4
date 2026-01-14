@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import type { ReactNode } from 'react';
+import type { Children } from '~/types';
 import styles from './RadioButton.module.scss';
 
 type RadioButtonProps = {
@@ -10,7 +10,7 @@ type RadioButtonProps = {
   disabled?: boolean;
   defaultValue?: string | number;
   defaultChecked?: boolean;
-  children?: ReactNode;
+  children?: Children;
   onChange?: () => void;
 };
 

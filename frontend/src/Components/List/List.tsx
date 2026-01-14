@@ -1,11 +1,11 @@
 import classnames from 'classnames';
-import type { ReactNode } from 'react';
+import type { Children } from '~/types';
 import styles from './List.module.scss';
 
 type ListType = 'ordered' | 'unordered' | 'no_bullets';
 
 type ListProps = {
-  items: Array<ReactNode>;
+  items: Array<Children>;
   type: ListType;
   classNameList?: string;
   classNameListEntries?: string;

@@ -4,12 +4,10 @@ from guardian.shortcuts import assign_perm
 
 from rest_framework.status import HTTP_403_FORBIDDEN, is_success, is_redirect
 
-from django.conf import settings
 from django.urls import reverse
 from django.test.client import Client
 
 from root.utils import routes, permissions
-from root.constants import WebFeatures
 
 from samfundet.models.general import User
 
@@ -71,61 +69,11 @@ ROUTES_TO_SUCCEED_ON_GET_REQUEST_WITH_SUPERUSER = [
     routes.admin__sessions_session_changelist,
 ]
 
-ROUTE_FEATURES = {
-    # USERS
-    routes.admin__samfundet_user_add: WebFeatures.USERS,
-    routes.admin__samfundet_user_changelist: WebFeatures.USERS,
-    routes.admin__samfundet_userpreference_add: WebFeatures.USERS,
-    routes.admin__samfundet_userpreference_changelist: WebFeatures.USERS,
-    # IMAGES
-    routes.admin__samfundet_image_add: WebFeatures.IMAGES,
-    routes.admin__samfundet_image_changelist: WebFeatures.IMAGES,
-    # CLOSED PERIODS
-    routes.admin__samfundet_closedperiod_add: WebFeatures.CLOSED_HOURS,
-    routes.admin__samfundet_closedperiod_changelist: WebFeatures.CLOSED_HOURS,
-    # SULTEN
-    routes.admin__samfundet_foodpreference_add: WebFeatures.SULTEN,
-    routes.admin__samfundet_foodpreference_changelist: WebFeatures.SULTEN,
-    routes.admin__samfundet_foodcategory_add: WebFeatures.SULTEN,
-    routes.admin__samfundet_foodcategory_changelist: WebFeatures.SULTEN,
-    routes.admin__samfundet_menuitem_add: WebFeatures.SULTEN,
-    routes.admin__samfundet_menuitem_changelist: WebFeatures.SULTEN,
-    routes.admin__samfundet_menu_add: WebFeatures.SULTEN,
-    routes.admin__samfundet_menu_changelist: WebFeatures.SULTEN,
-    routes.admin__samfundet_table_add: WebFeatures.SULTEN,
-    routes.admin__samfundet_table_changelist: WebFeatures.SULTEN,
-    # EVENTS
-    routes.admin__samfundet_event_add: WebFeatures.EVENTS,
-    routes.admin__samfundet_event_changelist: WebFeatures.EVENTS,
-    routes.admin__samfundet_eventgroup_add: WebFeatures.EVENTS,
-    routes.admin__samfundet_eventgroup_changelist: WebFeatures.EVENTS,
-    # GANGS
-    routes.admin__samfundet_gang_add: WebFeatures.GANGS,
-    routes.admin__samfundet_gang_changelist: WebFeatures.GANGS,
-    routes.admin__samfundet_gangtype_add: WebFeatures.GANGS,
-    routes.admin__samfundet_gangtype_changelist: WebFeatures.GANGS,
-    # INFORMATION
-    routes.admin__samfundet_informationpage_add: WebFeatures.INFORMATION,
-    routes.admin__samfundet_informationpage_changelist: WebFeatures.INFORMATION,
-    # PROFILES
-    routes.admin__samfundet_profile_add: WebFeatures.PROFILE,
-    routes.admin__samfundet_profile_changelist: WebFeatures.PROFILE,
-    # VENUES
-    routes.admin__samfundet_venue_add: WebFeatures.VENUE,
-    routes.admin__samfundet_venue_changelist: WebFeatures.VENUE,
-    # DOCUMENTS
-    routes.admin__samfundet_saksdokument_add: WebFeatures.DOCUMENTS,
-    routes.admin__samfundet_saksdokument_changelist: WebFeatures.DOCUMENTS,
-}
-
 
 def test_admin_routes(fixture_django_client: Client, fixture_superuser: User):
     """Test if a set of routes simply works."""
     fixture_django_client.force_login(user=fixture_superuser)
     for route in ROUTES_TO_SUCCEED_ON_GET_REQUEST_WITH_SUPERUSER:
-        feature = ROUTE_FEATURES.get(route)
-        if feature is not None and feature not in settings.CP_ENABLED:
-            continue
         url = reverse(route)
         response = fixture_django_client.get(path=url)
         assert is_success(code=response.status_code)

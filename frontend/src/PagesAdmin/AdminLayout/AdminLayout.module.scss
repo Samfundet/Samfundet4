@@ -11,8 +11,8 @@ $panel-dark-bg: #333333;
 .wrapper {
   display: flex;
   flex-direction: row;
-  max-height: calc(100vh - $navbar-height);
-  height: calc(100vh - $navbar-height);
+  max-height: 100vh;
+  height: 100vh;
   margin-top: $navbar-height;
 
   @include for-mobile-down {

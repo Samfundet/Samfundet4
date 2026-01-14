@@ -10,8 +10,6 @@ export function MembershipPage() {
   const { t } = useTranslation();
   useTitle(t(KEY.common_membership));
 
-  // TODO: This page is completely bonkers and needs to be removed, it can easily just be an info page.
-  //  when removing, also remove 'membership' from SiteFeatures
   return (
     <Page>
       <div>

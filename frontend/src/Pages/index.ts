@@ -27,4 +27,3 @@ export { SignUpPage } from './SignUpPage';
 export { UserChangePasswordPage } from './UserChangePasswordPage';
 export { VenuePage } from './VenuePage';
 export { OrganizationRecruitmentPage } from './OrganizationRecruitmentPage';
-export { LoginPickerPage } from './LoginPickerPage/LoginPickerPage';

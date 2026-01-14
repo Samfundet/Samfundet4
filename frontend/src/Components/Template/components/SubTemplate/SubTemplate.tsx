@@ -1,10 +1,10 @@
 import classnames from 'classnames';
-import type { ReactNode } from 'react';
+import type { Children } from '~/types';
 import styles from './SubTemplate.module.scss';
 
 type SubTemplateProps = {
   className?: string;
-  children?: ReactNode;
+  children?: Children;
   onClick?: () => void;
 };
 

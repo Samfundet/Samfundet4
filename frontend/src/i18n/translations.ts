@@ -183,7 +183,6 @@ export const nb = prepareTranslations({
   [KEY.common_list_view]: 'Liste visning',
   [KEY.common_tab_view]: 'Fane visning',
   [KEY.common_available]: 'Tilgjengelig',
-  [KEY.common_comment]: 'Kommentar',
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
@@ -215,9 +214,8 @@ export const nb = prepareTranslations({
   [KEY.common_ticket_type_registration]: 'Påmelding',
 
   // Billig
-  [KEY.common_buy_ticket]: 'Kjøp billett',
   [KEY.common_sold_out]: 'Utsolgt',
-  [KEY.common_almost_sold_out]: 'Få billetter igjen',
+  [KEY.common_almost_sold_out]: 'Nesten utsolgt',
 
   // ==================== //
   //        Others        //
@@ -254,30 +252,6 @@ export const nb = prepareTranslations({
   [KEY.mix]: 'Mikset',
   [KEY.event_external_host_message]:
     'Arrangeres i regi av ekstern arrangør, ikke gjengene på Samfundet. Henvendelser kan rettes mot',
-
-  // Event categories
-  [KEY.event_category_art]: 'Kunst',
-  [KEY.event_category_concert]: 'Konsert',
-  [KEY.event_category_course]: 'Kurs',
-  [KEY.event_category_debate]: 'Debatt',
-  [KEY.event_category_dj]: 'DJ',
-  [KEY.event_category_excenteraften]: 'Excenteraften',
-  [KEY.event_category_football_match]: 'Fotballkamp',
-  [KEY.event_category_happening]: 'Happening',
-  [KEY.event_category_lecture]: 'Forelesning',
-  [KEY.event_category_luka_event]: 'LUKA-arrangement',
-  [KEY.event_category_meeting]: 'Møte',
-  [KEY.event_category_movie]: 'Film',
-  [KEY.event_category_music]: 'Musikk',
-  [KEY.event_category_other]: 'Annet',
-  [KEY.event_category_party_meeting]: 'Festmøte',
-  [KEY.event_category_performance]: 'Performance',
-  [KEY.event_category_quiz]: 'Quiz',
-  [KEY.event_category_samfundet_meeting]: 'Samfundsmøte',
-  [KEY.event_category_show]: 'Show',
-  [KEY.event_category_theater]: 'Teater',
-  [KEY.event_category_theme_party]: 'Temafest',
-  [KEY.event_category_uka_event]: 'UKE-arrangement',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',
@@ -820,7 +794,6 @@ export const en = prepareTranslations({
   [KEY.common_list_view]: 'List view',
   [KEY.common_tab_view]: 'Tab view',
   [KEY.common_available]: 'Available',
-  [KEY.common_comment]: 'Comment',
   [KEY.common_membership_number]: 'Membership number',
   [KEY.common_to_payment]: 'To payment',
 
@@ -853,9 +826,8 @@ export const en = prepareTranslations({
   [KEY.common_ticket_type_registration]: 'Registration',
 
   // Billig
-  [KEY.common_buy_ticket]: 'Buy ticket',
   [KEY.common_sold_out]: 'Sold out',
-  [KEY.common_almost_sold_out]: 'Few tickets left',
+  [KEY.common_almost_sold_out]: 'Almost sold out',
   // ==================== //
   //        Others        //
   // ==================== //
@@ -886,30 +858,6 @@ export const en = prepareTranslations({
   [KEY.mix]: 'Mixed',
   [KEY.event_external_host_message]:
     'Organized by an external organizer, not the groups at the Samfundet. Inquiries can be directed to',
-
-  // Event categories
-  [KEY.event_category_art]: 'Art',
-  [KEY.event_category_concert]: 'Concert',
-  [KEY.event_category_course]: 'Course',
-  [KEY.event_category_debate]: 'Debate',
-  [KEY.event_category_dj]: 'DJ',
-  [KEY.event_category_excenteraften]: 'Excenteraften',
-  [KEY.event_category_football_match]: 'Football match',
-  [KEY.event_category_happening]: 'Happening',
-  [KEY.event_category_lecture]: 'Lecture',
-  [KEY.event_category_luka_event]: 'LUKA event',
-  [KEY.event_category_meeting]: 'Meeting',
-  [KEY.event_category_movie]: 'Movie',
-  [KEY.event_category_music]: 'Music',
-  [KEY.event_category_other]: 'Other',
-  [KEY.event_category_party_meeting]: 'Party meeting',
-  [KEY.event_category_performance]: 'Performance',
-  [KEY.event_category_quiz]: 'Quiz',
-  [KEY.event_category_samfundet_meeting]: 'Samfundet meeting',
-  [KEY.event_category_show]: 'Show',
-  [KEY.event_category_theater]: 'Theater',
-  [KEY.event_category_theme_party]: 'Theme party',
-  [KEY.event_category_uka_event]: 'UKA event',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',

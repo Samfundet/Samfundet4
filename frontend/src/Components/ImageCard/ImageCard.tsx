@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '~/Components';
 import { KEY } from '~/i18n/constants';
-import { EventTicketType } from '~/types';
+import { type Children, EventTicketType } from '~/types';
 import { backgroundImageFromUrl } from '~/utils';
 import { Badge } from '../Badge';
 import { Link } from '../Link';
@@ -22,7 +22,7 @@ type ImageCardProps = {
   localImage?: boolean; // Local image in frontend assets.
   compact?: boolean;
   isSkeleton?: boolean;
-  children?: ReactNode;
+  children?: Children;
   ticket_type?: string;
   host?: string;
 };

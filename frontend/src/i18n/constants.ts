@@ -199,7 +199,6 @@ export const KEY = {
   common_list_view: 'common_list_view',
   common_tab_view: 'common_tab_view',
   common_available: 'common_available',
-  common_comment: 'common_comment',
   common_membership_number: 'common_membership_number',
   common_to_payment: 'common_to_payment',
 
@@ -231,7 +230,6 @@ export const KEY = {
 
   // Billig
 
-  common_buy_ticket: 'common_buy_ticket',
   common_sold_out: 'common_sold_out',
   common_almost_sold_out: 'common_almost_sold_out',
   // ==================== //
@@ -280,30 +278,6 @@ export const KEY = {
   sales_conditions: 'sales_conditions',
 
   event_external_host_message: 'event_external_host_message',
-
-  // Event categories
-  event_category_art: 'event_category_art',
-  event_category_concert: 'event_category_concert',
-  event_category_course: 'event_category_course',
-  event_category_debate: 'event_category_debate',
-  event_category_dj: 'event_category_dj',
-  event_category_excenteraften: 'event_category_excenteraften',
-  event_category_football_match: 'event_category_football_match',
-  event_category_happening: 'event_category_happening',
-  event_category_lecture: 'event_category_lecture',
-  event_category_luka_event: 'event_category_luka_event',
-  event_category_meeting: 'event_category_meeting',
-  event_category_movie: 'event_category_movie',
-  event_category_music: 'event_category_music',
-  event_category_other: 'event_category_other',
-  event_category_party_meeting: 'event_category_party_meeting',
-  event_category_performance: 'event_category_performance',
-  event_category_quiz: 'event_category_quiz',
-  event_category_samfundet_meeting: 'event_category_samfundet_meeting',
-  event_category_show: 'event_category_show',
-  event_category_theater: 'event_category_theater',
-  event_category_theme_party: 'event_category_theme_party',
-  event_category_uka_event: 'event_category_uka_event',
 
   // Venue Page:
   venuepage_title: 'venuepage_title',

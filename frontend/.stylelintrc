@@ -94,7 +94,7 @@
     "selector-max-id": 1,
     "selector-max-pseudo-class": 2,
     "selector-max-specificity": null,
-    "selector-max-type": 1,
+    "selector-max-type": 0,
     "selector-max-universal": 0,
     "time-min-milliseconds": null,
     "alpha-value-notation": null,

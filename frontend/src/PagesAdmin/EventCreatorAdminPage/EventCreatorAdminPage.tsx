@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
+import { type ReactElement, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
@@ -30,6 +30,7 @@ import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import {
+  type Children,
   EventAgeRestriction,
   type EventAgeRestrictionValue,
   EventCategory,
@@ -564,7 +565,7 @@ export function EventCreatorAdminPage() {
   const formValues = form.getValues();
 
   // Event preview on final step
-  const eventPreview: ReactNode = (
+  const eventPreview: Children = (
     <div className={styles.preview}>
       <ImageCard
         title={dbT(formValues, 'title') ?? ''}
@@ -617,7 +618,7 @@ export function EventCreatorAdminPage() {
   ) : null;
 
   // Navigation buttons
-  const navigationButtons: ReactNode = (
+  const navigationButtons: Children = (
     <div className={styles.button_row}>
       {currentFormTab.key !== createSteps[0].key ? (
         <Button theme="blue" rounded={true} onClick={navigateTabs(-1)}>

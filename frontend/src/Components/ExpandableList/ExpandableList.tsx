@@ -1,9 +1,9 @@
-import type { ReactNode } from 'react';
+import type { Children } from '~/types';
 import styles from './ExpandableList.module.scss';
 import { useExpandableListContext } from './components/ExpandableListContextProvider/ExpandableListContextProvider';
 
 type ExpandableListProps = {
-  children: ReactNode;
+  children: Children;
   header: string;
   depth: number;
 };

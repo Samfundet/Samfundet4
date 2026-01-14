@@ -227,7 +227,6 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   margin: 0 1rem;
   width: 250px;
   cursor: pointer;
-  position: relative;
 }
 
 #navbar_logo_img {
@@ -372,19 +371,6 @@ offsets the text by 18px, the size of the chevron-icon */
 
 .chevron.flip {
   transform: scaleY(-1);
-}
-
-.santa_hat {
-  background-image: url('../../assets/santa_hat.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-  transform: rotate(-14deg);
-  width: 32px;
-  height: 32px;
-  position: absolute;
-  top: 3px;
-  left: -4px;
-  pointer-events: none;
 }
 
 // When this dropdown menu item is open and navbar is transparent

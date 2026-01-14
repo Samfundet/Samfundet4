@@ -1,11 +1,11 @@
 import classnames from 'classnames';
-import type { ReactNode } from 'react';
+import type { Children } from '~/types';
 import styles from './ReservationFormLine.module.scss';
 
 type ReservationFormLineProps = {
   label: string;
   help_text?: string;
-  children: ReactNode;
+  children: Children;
   underline?: boolean;
 };
 

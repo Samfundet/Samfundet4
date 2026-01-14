@@ -1,11 +1,11 @@
 import classnames from 'classnames';
-import type { ReactNode } from 'react';
 import { THEME } from '~/constants';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
+import type { Children } from '~/types';
 import styles from './PulseEffect.module.scss';
 
 type PulseEffectProps = {
-  children: ReactNode;
+  children: Children;
   className?: string;
 };
 

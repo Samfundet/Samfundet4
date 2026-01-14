@@ -1,6 +1,5 @@
 import classnames from 'classnames';
-import type { ReactNode } from 'react';
-import { COLORS } from '~/types';
+import { COLORS, type Children } from '~/types';
 import { getGlobalBackgroundColor } from '~/utils';
 import styles from './SpinningBorder.module.scss';
 
@@ -12,7 +11,7 @@ type SpinningBorderProps = {
   radius?: string;
   colors?: string[];
   className?: string;
-  children?: ReactNode;
+  children?: Children;
 };
 
 export function SpinningBorder({

@@ -1,9 +1,10 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { type ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getImages } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
+import type { Children } from '~/types';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './ImagePicker.module.scss';
 
@@ -27,7 +28,7 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
     onSelected?.(image);
   }
 
-  function renderImage(image: ImageDto): ReactNode {
+  function renderImage(image: ImageDto): Children {
     const isSelected = selected?.id === image.id;
     return (
       <button

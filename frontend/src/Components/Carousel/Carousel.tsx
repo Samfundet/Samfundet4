@@ -1,10 +1,11 @@
 import classNames from 'classnames';
 import type { ReactNode } from 'react';
 import { Skeleton } from '~/Components/Skeleton';
+import type { Children } from '~/types';
 import styles from './Carousel.module.scss';
 
 type CarouselProps = {
-  children: Array<ReactNode>;
+  children: Array<Children>;
   header?: ReactNode;
   spacing?: number;
   className?: string;
@@ -20,7 +21,7 @@ export function Carousel({
   header = <Skeleton width={'8em'} />,
   spacing,
 }: CarouselProps) {
-  const wrappedChildren = children.map((child: ReactNode, idx: number) => {
+  const wrappedChildren = children.map((child: Children, idx: number) => {
     return (
       // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
       <div className={classNames(styles.itemContainer, itemContainerClass)} key={idx}>

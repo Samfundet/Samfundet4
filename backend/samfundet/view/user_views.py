@@ -18,8 +18,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group, Permission
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
-from root.constants import XCSRFTOKEN, AUTH_BACKEND, REQUESTED_IMPERSONATE_USER, WebFeatures
-from root.custom_classes.permission_classes import FeatureEnabled
+from root.constants import XCSRFTOKEN, AUTH_BACKEND, REQUESTED_IMPERSONATE_USER
 
 from samfundet.utils import get_user_by_search
 from samfundet.pagination import CustomPageNumberPagination
@@ -119,11 +118,7 @@ class UserView(APIView):
 
 
 class AllUsersView(ListAPIView):
-    feature_key = WebFeatures.USERS
-    permission_classes = (
-        DjangoModelPermissionsOrAnonReadOnly,
-        FeatureEnabled,
-    )
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -133,11 +128,7 @@ class AllUsersView(ListAPIView):
 
 
 class PaginatedSearchUsersView(ListAPIView):
-    feature_key = WebFeatures.USERS
-    permission_classes = (
-        DjangoModelPermissionsOrAnonReadOnly,
-        FeatureEnabled,
-    )
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = UserSerializer
     pagination_class = CustomPageNumberPagination
 
@@ -161,11 +152,7 @@ class ImpersonateView(APIView):
 
 
 class AllGroupsView(ListAPIView):
-    feature_key = WebFeatures.USERS
-    permission_classes = (
-        DjangoModelPermissionsOrAnonReadOnly,
-        FeatureEnabled,
-    )
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = GroupSerializer
     queryset = Group.objects.all()
 
@@ -186,11 +173,7 @@ class UserPreferenceView(ModelViewSet):
 
 
 class ProfileView(ModelViewSet):
-    feature_key = WebFeatures.PROFILE
-    permission_classes = (
-        DjangoModelPermissionsOrAnonReadOnly,
-        FeatureEnabled,
-    )
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
 

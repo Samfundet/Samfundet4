@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import type { ReactNode } from 'react';
+import type { Children } from '~/types';
 import styles from './Child.module.scss';
 
 type ChildProps = {
-  children: ReactNode;
+  children: Children;
 };
 
 export function Child({ children }: ChildProps) {

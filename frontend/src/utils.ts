@@ -9,7 +9,7 @@ import { CURSOR_TRAIL_CLASS, THEME_KEY, type ThemeValue } from '~/constants';
 import type { UserDto } from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
-import { type Day, type EventCategoryValue, EventTicketType, type EventTicketTypeValue } from './types';
+import { type Day, EventTicketType, type EventTicketTypeValue } from './types';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -206,38 +206,6 @@ export const SHORT_DAY_I18N_KEYS = [
   KEY.common_day_saturday_short,
   KEY.common_day_sunday_short,
 ];
-
-/**
- * Gets the translation key for a given event category
- */
-export function getEventCategoryKey(category: EventCategoryValue): TranslationKeys {
-  // This ensures all event categories are mapped to a translation key at compile time
-  const map: Record<EventCategoryValue, TranslationKeys> = {
-    art: KEY.event_category_art,
-    concert: KEY.event_category_concert,
-    course: KEY.event_category_course,
-    debate: KEY.event_category_debate,
-    dj: KEY.event_category_dj,
-    excenteraften: KEY.event_category_excenteraften,
-    football_match: KEY.event_category_football_match,
-    happening: KEY.event_category_happening,
-    lecture: KEY.event_category_lecture,
-    luka_event: KEY.event_category_luka_event,
-    meeting: KEY.event_category_meeting,
-    movie: KEY.event_category_movie,
-    music: KEY.event_category_music,
-    other: KEY.event_category_other,
-    party_meeting: KEY.event_category_party_meeting,
-    performance: KEY.event_category_performance,
-    quiz: KEY.event_category_quiz,
-    samfundet_meeting: KEY.event_category_samfundet_meeting,
-    show: KEY.event_category_show,
-    theater: KEY.event_category_theater,
-    theme_party: KEY.event_category_theme_party,
-    uka_event: KEY.event_category_uka_event,
-  };
-  return map[category];
-}
 
 /**
  * Gets the translation key for a given price group

@@ -1,5 +1,5 @@
-import { type ReactNode, createContext, useContext, useState } from 'react';
-import type { SetState } from '~/types';
+import { createContext, useContext, useState } from 'react';
+import type { Children, SetState } from '~/types';
 
 type ExpandableListContextProps = {
   depth: number;
@@ -19,7 +19,7 @@ export function useExpandableListContext() {
 }
 
 type ExpandableListContextProviderProps = {
-  children: ReactNode;
+  children: Children;
 };
 
 export function ExpandableListContextProvider({ children }: ExpandableListContextProviderProps) {

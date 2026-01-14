@@ -13,8 +13,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from django.utils import timezone
 
-from root.constants import WebFeatures
-from root.custom_classes.permission_classes import FeatureEnabled, RoleProtectedOrAnonReadOnlyObjectPermissions
+from root.custom_classes.permission_classes import RoleProtectedOrAnonReadOnlyObjectPermissions
 
 from samfundet.utils import event_query
 from samfundet.serializers import (
@@ -27,11 +26,7 @@ from samfundet.models.model_choices import EventStatus
 
 
 class EventView(ModelViewSet):
-    feature_key = WebFeatures.EVENTS
-    permission_classes = (
-        RoleProtectedOrAnonReadOnlyObjectPermissions,
-        FeatureEnabled,
-    )
+    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
     serializer_class = EventSerializer
     queryset = Event.objects.all()
 
@@ -70,11 +65,7 @@ class EventsUpcomingView(APIView):
 
 
 class EventGroupView(ModelViewSet):
-    feature_key = WebFeatures.EVENTS
-    permission_classes = (
-        RoleProtectedOrAnonReadOnlyObjectPermissions,
-        FeatureEnabled,
-    )
+    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
     serializer_class = EventGroupSerializer
     queryset = EventGroup.objects.all()
 

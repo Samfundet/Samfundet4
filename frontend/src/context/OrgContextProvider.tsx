@@ -1,13 +1,5 @@
-import {
-  type Dispatch,
-  type ReactNode,
-  type SetStateAction,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import { COLORS, OrgNameType, type OrgNameTypeValue, type OrganizationTheme } from '~/types';
+import { type Dispatch, type SetStateAction, createContext, useContext, useEffect, useState } from 'react';
+import { COLORS, type Children, OrgNameType, type OrgNameTypeValue, type OrganizationTheme } from '~/types';
 
 export const organizationThemes: Record<OrgNameTypeValue, OrganizationTheme> = {
   [OrgNameType.SAMFUNDET_NAME]: {
@@ -53,7 +45,7 @@ export function useOrganizationContext() {
 
 type OrganizationContextProviderProps = {
   enabled?: boolean;
-  children: ReactNode;
+  children: Children;
   organization?: OrgNameTypeValue;
 };
 

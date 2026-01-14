@@ -30,7 +30,6 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
 
   const rows = data.map((application) => {
     const applicantName = `${application.user.first_name} ${application.user.last_name}`;
-    const applicationComment = application.comment;
     return {
       cells: [
         {

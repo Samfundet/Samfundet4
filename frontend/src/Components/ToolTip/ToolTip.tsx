@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import type React from 'react';
-import type { ReactNode } from 'react';
 import { useRef, useState } from 'react';
+import type { Children } from '~/types';
 import { Image } from '../Image';
 import styles from './ToolTip.module.scss';
 import { useTooltipPosition } from './useToolTipPosition';
@@ -13,7 +13,7 @@ type ToolTipProps = {
   alignment?: AlignmentOptions;
   display?: DisplayOptions;
   value?: string;
-  children: ReactNode;
+  children: Children;
   followCursor?: boolean;
   showArrow?: boolean;
 };

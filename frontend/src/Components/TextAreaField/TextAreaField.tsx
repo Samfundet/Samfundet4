@@ -1,9 +1,10 @@
 import classNames from 'classnames';
-import type { ChangeEvent, ReactNode } from 'react';
+import type { ChangeEvent } from 'react';
+import type { Children } from '~/types';
 import styles from './TextAreaField.module.scss';
 
 export type TextAreaFieldProps = {
-  children?: ReactNode;
+  children?: Children;
   className?: string;
   inputClassName?: string;
   labelClassName?: string;

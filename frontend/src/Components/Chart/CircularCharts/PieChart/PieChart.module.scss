@@ -1,6 +1,6 @@
-@use 'src/constants' as *;
+@use '/src/constants' as *;
 
-@use 'src/mixins' as *;
+@use '/src/mixins' as *;
 
 .chartContainer {
   @include flex-column-center;
