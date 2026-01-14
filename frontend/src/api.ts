@@ -58,7 +58,6 @@ import { ROUTES } from '~/routes';
 import type { BilligEventDto } from './apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from './constants';
 import type { PageNumberPaginationType } from './types';
-import { Routes } from 'react-router-dom';
 
 export async function getCsrfToken(): Promise<string> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__csrf;

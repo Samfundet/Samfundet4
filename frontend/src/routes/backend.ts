@@ -277,7 +277,6 @@ export const ROUTES_BACKEND = {
   samfundet__billig_ticket_group_list: '/api/billig-ticket-group/',
   samfundet__billig_ticket_group_detail: '/api/billig-ticket-group/:pk/',
   samfundet__api_root: '/api/',
-  samfundet__api_root: '/api/:format',
   samfundet__schema: '/schema/',
   samfundet__swagger_ui: '/schema/swagger-ui/',
   samfundet__redoc: '/schema/redoc/',

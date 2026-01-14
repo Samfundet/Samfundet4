@@ -43,7 +43,8 @@ export function SultenReservationAdminPage() {
   }
 
   const title = t(KEY.common_sulten);
-  const backendUrl = ROUTES.backend.admin__samfundet_reservation_changelist;
+  // const backendUrl = ROUTES.backend.admin__samfundet_reservation_changelist;
+  const backendUrl = undefined;
 
   const header = (
     <Button theme="success" rounded={true} onClick={() => alert('TODO add reservationadmin')}>
