@@ -1,3 +1,14 @@
 @use 'src/mixins' as *;
 
 @use 'src/constants' as *;
+
+.admin_closed_override_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.admin_closed_radio {
+  margin-top: 10px;
+}
