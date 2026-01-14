@@ -4,7 +4,6 @@ import { Button } from '~/Components';
 import type { SultenReservationDayDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { ReservationTable } from './components/ReservationTable';
 import { TABLES_TEST_DATA } from './utils';
