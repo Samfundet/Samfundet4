@@ -14,7 +14,6 @@ from django.contrib.sessions.models import Session
 from django.contrib.contenttypes.models import ContentType
 
 from root.constants import WebFeatures
-from root.utils.routes import admin__samfundet_gang_change, admin__samfundet_recruitmentapplication_change
 from root.custom_classes.admin_classes import (
     CustomBaseAdmin,
     CustomGuardedUserAdmin,
@@ -440,7 +439,7 @@ class GangTypeAdmin(CustomBaseAdmin):
 @register_if_feature_enabled(WebFeatures.GANGS, GangSection)
 class GangSectionAdmin(CustomBaseAdmin):
     def gang_link(self, obj: GangSection) -> str:
-        link = reverse(admin__samfundet_gang_change, args=(obj.gang.id,))
+        link = reverse("admin:samfundet_gang_change", args=(obj.gang.id,))
         return format_html('<a href="{}">{}</a>', link, obj.gang.name_nb)
 
     sortable_by = ['id', 'name_nb', 'gang', 'created_at', 'updated_at']
@@ -665,7 +664,7 @@ class RecruitmentApplicationInline(admin.TabularInline):
 
     def linked_application_text(self, obj: RecruitmentApplication) -> str:
         """Returns a clickable link leading to the admin change page of the RecruitmentApplication instance."""
-        url = reverse(admin__samfundet_recruitmentapplication_change, args=[obj.pk])
+        url = reverse("admin:samfundet_recruitmentapplication_change", args=[obj.pk])
         return format_html('<a href="{url}">{obj}</a>', url=url, obj=obj.application_text)
 
 
