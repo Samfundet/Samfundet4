@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import datetime
+from typing import Optional
+from operator import or_
+from functools import reduce
 from collections.abc import Callable
 
 from django.conf import settings
@@ -18,32 +21,38 @@ from .models import User
 from .models.event import Event
 from .models.recruitment import Recruitment, OccupiedTimeslot, RecruitmentInterviewAvailability
 
-###
+SEARCH_FIELDS = (
+    'title_nb__icontains',
+    'title_en__icontains',
+    'description_long_nb__icontains',
+    'description_long_en__icontains',
+    'description_short_en__icontains',
+    'description_short_nb__icontains',
+    'location__icontains',
+    'event_group__name__icontains',
+)
+
+SIMPLE_FILTERS = {
+    'event_group': 'event_group__id',
+    'category': 'category__icontains',
+    'venue': 'location__icontains',
+}
 
 
-def event_query(*, query: QueryDict, events: QuerySet[Event] = None) -> QuerySet[Event]:
-    if not events:
-        events = Event.objects.all()
-    search = query.get('search', None)
+def event_query(*, query: QueryDict, events: Optional[QuerySet[Event]] = None) -> QuerySet[Event]:
+    qs = events if events is not None else Event.objects.all()
+
+    search = query.get('search')
     if search:
-        events = events.filter(
-            Q(title_nb__icontains=search)
-            | Q(title_en__icontains=search)
-            | Q(description_long_nb__icontains=search)
-            | Q(description_long_en__icontains=search)
-            | Q(description_short_en=search)
-            | Q(description_short_nb=search)
-            | Q(location__icontains=search)
-            | Q(event_group__name=search)
-        )
-    event_group = query.get('event_group', None)
-    if event_group:
-        events = events.filter(event_group__id=event_group)
+        q_parts = (Q(**{f: search}) for f in SEARCH_FIELDS)
+        qs = qs.filter(reduce(or_, q_parts, Q()))
 
-    location = query.get('venue', None)
-    if location:
-        events = events.filter(location__icontains=location)  # TODO should maybe be a foreignKey?
-    return events
+    for param, lookup in SIMPLE_FILTERS.items():
+        value = query.get(param)
+        if value:
+            qs = qs.filter(**{lookup: value})
+
+    return qs
 
 
 def get_user_by_search(*, query: QueryDict, users: QuerySet[User] = None) -> QuerySet[User]:
