@@ -24,12 +24,9 @@ import styles from './EventCard.module.scss';
 type Props = {
   event: EventDto;
   containerClassName?: string;
-  squareCard?: boolean;
-  cardClassName?: string;
-  titleClassName?: string;
 };
 
-export function EventCard({ event, containerClassName, squareCard, cardClassName, titleClassName }: Props) {
+export function EventCard({ event, containerClassName }: Props) {
   const { t } = useTranslation(); // Necessary in order for dbT to work in this component
 
   const eventUrl = reverse({
@@ -49,18 +46,26 @@ export function EventCard({ event, containerClassName, squareCard, cardClassName
 
   const badges = useMemo(() => {
     if (event.billig?.is_sold_out) {
-      return <NewBadge theme="gray">{t(KEY.common_sold_out)}</NewBadge>;
+      return (
+        <NewBadge theme="gray" className={styles.badge}>
+          {t(KEY.common_sold_out)}
+        </NewBadge>
+      );
     }
     if (event.billig?.is_almost_sold_out) {
       return (
-        <NewBadge theme="red">
+        <NewBadge theme="red" className={styles.badge}>
           <Icon icon="humbleicons:exclamation" />
           {t(KEY.common_almost_sold_out)}
         </NewBadge>
       );
     }
     if (event.ticket_type === EventTicketType.FREE || event.ticket_type === EventTicketType.REGISTRATION) {
-      return <NewBadge theme="green">{t(KEY.common_ticket_type_free)}</NewBadge>;
+      return (
+        <NewBadge theme="green" className={styles.badge}>
+          {t(KEY.common_ticket_type_free)}
+        </NewBadge>
+      );
     }
 
     return null;
@@ -89,24 +94,24 @@ export function EventCard({ event, containerClassName, squareCard, cardClassName
 
   return (
     <BlockContainer className={containerClassName}>
-      <Block className={cardClassName} square={squareCard}>
+      <Block square={false}>
         <a href={eventUrl} tabIndex={-1}>
-          <BlockHeader gradient>{badges}</BlockHeader>
-          <BlockFooter className={styles.footer} gradient>
-            <div>
-              <TimeDisplay timestamp={event.start_dt} displayType="event-datetime" />
-              <div className={styles.category_and_location}>
-                {t(getEventCategoryKey(event.category))} // {event.location}
-              </div>
-            </div>
+          <BlockHeader gradient={badges !== null}>{badges}</BlockHeader>
+          <BlockFooter className={styles.footer} gradient={callToAction !== null}>
             {callToAction}
           </BlockFooter>
           <BlockImage src={imageUrl} />
         </a>
       </Block>
-      <BlockTitle className={titleClassName}>
+      <BlockTitle>
         <a href={eventUrl}>{dbT(event, 'title')}</a>
       </BlockTitle>
+      <div className={styles.details}>
+        <div>
+          {t(getEventCategoryKey(event.category))} // {event.location}
+        </div>
+        <TimeDisplay timestamp={event.start_dt} displayType="event-datetime" />
+      </div>
     </BlockContainer>
   );
 }
