@@ -18,6 +18,10 @@ export const SAMF3_LOGIN_URL = {
   login: `${BASE_URL}/logg-inn`,
 };
 
+export const SAMF3_MEMBER_URL = {
+  medlem: 'https://medlem.samfundet.no/',
+};
+
 export const ROUTES_SAMF_THREE = {
   information: {
     general: `${BASE_URL}/informasjon`,
