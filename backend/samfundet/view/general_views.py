@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 from typing import Any
+from datetime import time, timedelta
 from itertools import chain
 
 from rest_framework import status
@@ -16,7 +17,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 
 from django.utils import timezone
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from django.shortcuts import get_object_or_404
 
 from root.constants import WebFeatures
@@ -125,6 +126,21 @@ class VenueView(ModelViewSet):
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
     lookup_field = 'slug'
+
+    @action(detail=False, methods=['get'])
+    def open_venues(self, request: Request) -> Response:
+        day_name = (timezone.now() - timedelta(hours=4)).strftime('%A').lower()
+
+        q = ~Q(
+            **{
+                f'opening_{day_name}': time(0, 0, 0),
+                f'closing_{day_name}': time(0, 0, 0),
+            }
+        )
+
+        open_venues = Venue.objects.filter(q)
+        serializer = self.get_serializer(open_venues, many=True)
+        return Response(serializer.data)
 
 
 class ClosedPeriodView(ModelViewSet):

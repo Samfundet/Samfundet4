@@ -166,6 +166,7 @@ requests = "2.*"
 pytest = "8.*"
 pytest-django = "4.*"
 drf-spectacular = "0.29.*"
+freezegun = "^1.5.5"
 
 [build-system]
 requires = ["poetry-core"]
