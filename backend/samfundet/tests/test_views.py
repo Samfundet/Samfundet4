@@ -246,7 +246,7 @@ class TestVenueOpenViews:
             'opening_friday': dt_time(8, 0),
             'closing_friday': dt_time(20, 0),
             'opening_saturday': dt_time(8, 0),
-            'closing_saturday': dt_time(20, 0),
+            'closing_saturday': dt_time(1, 0),
             'opening_sunday': zero_time,
             'closing_sunday': zero_time,  # closed on Sunday
         }
@@ -256,11 +256,8 @@ class TestVenueOpenViews:
     @pytest.mark.parametrize(
         'day_of_week, open_slug, closed_slug, test_date',
         [
-            # Monday (0)
             ('monday', 'open_mon', 'closed_mon', '2023-10-23 12:00:00'),
-            # Thursday (3)
             ('thursday', 'open_thu', 'closed_thu', '2023-10-26 12:00:00'),
-            # Sunday (6)
             ('sunday', 'open_sun', 'closed_sun', '2023-10-29 12:00:00'),
         ],
     )
@@ -358,6 +355,30 @@ class TestVenueOpenViews:
             # Expected to be included
             assert len(data) == 1
             assert data[0]['slug'] == open_venue_slug
+
+def test_open_venues_late_night_shows_previous_day(self, fixture_rest_client: APIClient):
+        """
+        Test that accessing the API at 03:00 AM on Sunday returns the venue 
+        based on Saturday's hours (03:00 - 4h = Saturday 23:00).
+        """
+        slug = 'saturday_night_venue'
+        self._create_venue(slug=slug)
+
+        with freezegun.freeze_time('2023-10-29 03:00:00'):
+            response = fixture_rest_client.get(self.url)
+
+            assert status.is_success(response.status_code)
+            data = response.json()
+
+            assert len(data) == 1
+            assert data[0]['slug'] == slug
+
+            # 4. Verify the opening times correspond to Saturday (not Sunday)
+            assert data[0]['opening_saturday'] == '08:00:00'
+            assert data[0]['closing_saturday'] == '01:00:00'
+            
+            # Verify Sunday is explicitly closed (00:00:00), confirming we didn't fetch Sunday logic
+            assert data[0]['opening_sunday'] == '00:00:00'
 
 
 class TestInformationPagesView:
