@@ -8,6 +8,23 @@ If running the project in Docker, many issues are solved by running a `docker sy
 
 If you find something that is not listed, please add it to this document!
 
+## Seeding problems
+
+If you are having problems with seeding the database there is usually one single reason; your current local database is out of date. You can solve it by deleting the current database, then seeding again.
+
+Delete volumes:
+``` bash
+docker compose down --volumes
+```
+
+Build, migrate and seed:
+``` bash
+docker compose up -d --build
+docker compose exec backend bash
+migrate
+seed
+```
+
 ## Entrypoint.sh
 ### Error message:
 ```
