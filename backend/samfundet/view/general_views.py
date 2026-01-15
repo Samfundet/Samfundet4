@@ -129,7 +129,7 @@ class VenueView(ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def open_venues(self, request: Request) -> Response:
-        day_name = (datetime.now(timezone) - timedelta(hours=4)).strftime('%A').lower()
+        day_name = (timezone.now() - timedelta(hours=4)).strftime('%A').lower()
 
         q = ~Q(
             **{
