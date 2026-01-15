@@ -10,7 +10,7 @@ export function OpeningHoursContainer() {
     isLoading,
     isError,
   } = useQuery<VenueDto[]>({
-    queryKey: venueKeys.list(['open']),
+    queryKey: venueKeys.open(),
     queryFn: getOpenVenues,
   });
 
