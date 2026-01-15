@@ -31,11 +31,6 @@ export function EventQuery({ venues, categories, setSelectedVenue, setSelectedCa
     return { label: category, value: category } as DropdownOption<string>;
   });
 
-  // // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  // useEffect(() => {
-  //   setEvents(eventQuery(allEvents, search, selectedVenue));
-  // }, [search, selectedVenue, selectedCategory]);
-
   return (
     <div className={styles.queryBar}>
       <InputField
