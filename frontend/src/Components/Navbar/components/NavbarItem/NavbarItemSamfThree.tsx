@@ -1,11 +1,11 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
+import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { useDesktop } from '~/hooks';
 import type { SetState } from '~/types';
 import styles from '../../NavbarSamfThree.module.scss';
-import { ReactNode } from 'react';
 
 type NavbarItemSamfThreeProps = {
   route: string;
