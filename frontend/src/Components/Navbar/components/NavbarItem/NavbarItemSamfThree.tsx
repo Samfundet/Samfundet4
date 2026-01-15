@@ -3,15 +3,16 @@ import classNames from 'classnames';
 import { Link } from 'react-router';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { useDesktop } from '~/hooks';
-import type { Children, SetState } from '~/types';
+import type { SetState } from '~/types';
 import styles from '../../NavbarSamfThree.module.scss';
+import { ReactNode } from 'react';
 
 type NavbarItemSamfThreeProps = {
   route: string;
   label: string;
   icon?: string;
   labelClassName?: string;
-  dropdownLinks?: Children;
+  dropdownLinks?: ReactNode;
   expandedDropdown?: string;
   setExpandedDropdown: SetState<string>;
 };
