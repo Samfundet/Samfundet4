@@ -113,7 +113,6 @@ export function EventCreatorAdminPage() {
   // Fetch event data using the event ID
   useEffect(() => {
     if (id) {
-      console.log(getEvent(id));
       getEvent(id)
         .then((eventData) => {
           const eventDuration = new Date(eventData.end_dt).getTime() - new Date(eventData.start_dt).getTime();
