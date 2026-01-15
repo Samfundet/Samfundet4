@@ -26,7 +26,7 @@ import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getEvent, getVenues, postEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
-import type { EventDto } from '~/dto';
+import type { EventDto, ImageDto } from '~/dto';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { venueKeys } from '~/queryKeys';
@@ -109,6 +109,10 @@ export function EventCreatorAdminPage() {
     if (id) {
       getEvent(id)
         .then((eventData) => {
+          const eventDuration = new Date(eventData.end_dt).getTime() - new Date(eventData.start_dt).getTime();
+          const imageObject: ImageDto | undefined = eventData.image_url
+            ? { id: eventData.id, title: '', url: eventData.image_url, tags: [] }
+            : undefined;
           setEvent(eventData);
           form.reset({
             title_nb: eventData.title_nb || '',
@@ -118,7 +122,7 @@ export function EventCreatorAdminPage() {
             description_short_nb: eventData.description_short_nb || '',
             description_short_en: eventData.description_short_en || '',
             start_dt: eventData.start_dt ? utcTimestampToLocal(eventData.start_dt, false) : '',
-            duration: eventData.duration || 0,
+            duration: eventDuration || 0,
             end_dt: eventData.end_dt ? utcTimestampToLocal(eventData.end_dt, false) : '',
             category: eventData.category || '',
             host: eventData.host || '',
@@ -128,7 +132,7 @@ export function EventCreatorAdminPage() {
             ticket_type: eventData.ticket_type || 'free',
             custom_tickets: eventData.custom_tickets || [],
             billig_id: eventData.billig?.id,
-            image: eventData.image,
+            image: imageObject,
             visibility_from_dt: eventData.visibility_from_dt
               ? utcTimestampToLocal(eventData.visibility_from_dt, false)
               : '',
