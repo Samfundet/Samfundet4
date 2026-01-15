@@ -35,7 +35,7 @@ export function Footer() {
   const sponsorsAndOrgs = (
     <div className={styles.sponsors_and_orgs}>
       <div>
-        <h2 className={styles.header}>{t(KEY.common_sponsor)}</h2>
+        <h2 className={styles.sponsors_header}>{t(KEY.common_sponsor)}</h2>
         <div className={styles.logo_row}>
           <Link className={styles.logo_link} target="external" url="https://www.trondheim.kommune.no/">
             <img src={trondheimLogo} className={styles.logo} alt="Trondheim Kommune" />
@@ -49,7 +49,7 @@ export function Footer() {
         </div>
       </div>
       <div>
-        <h2 className={styles.header}>{t(KEY.common_festivals)}</h2>
+        <h2 className={styles.sponsors_header}>{t(KEY.common_festivals)}</h2>
         <div className={styles.logo_row}>
           <Link className={styles.logo_link} target="external" url="https://www.uka.no/">
             <img src={ukaLogo} className={styles.logo} style={{ padding: '0.75rem 0' }} alt="UKA" />
@@ -70,7 +70,7 @@ export function Footer() {
 
   const contact = (
     <div className={styles.footer_section}>
-      <h2 className={styles.contact_title}>
+      <h2 className={styles.section_title}>
         {t(KEY.footer_have_questions)}{' '}
         <Link className={styles.contact_link} target="samf3" url={ROUTES_SAMF_THREE.information.contact}>
           {t(KEY.common_contact_us)}
