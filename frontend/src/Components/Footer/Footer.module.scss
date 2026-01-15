@@ -142,20 +142,20 @@
 }
 
 .contact_link {
-  color: $white !important;
-  text-decoration: none !important;
+  color: $white;
+  text-decoration: none;
   font-weight: 700;
   text-transform: none;
   letter-spacing: normal;
   font-size: 1.1rem;
-  border-bottom: 2px solid $white !important;
+  border-bottom: 2px solid $white;
   padding-bottom: 2px;
   transition: border-color 0.2s ease;
 
   &:hover {
-    color: $white !important;
-    border-bottom-color: $red-samf !important;
-    text-decoration: none !important;
+    color: $white;
+    border-bottom-color: $red-samf;
+    text-decoration: none;
   }
 }
 
