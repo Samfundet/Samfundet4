@@ -356,30 +356,29 @@ class TestVenueOpenViews:
             assert len(data) == 1
             assert data[0]['slug'] == open_venue_slug
 
+    def test_open_venues_late_night_shows_previous_day(self, fixture_rest_client: APIClient):
+        """
+        Test that accessing the API at 03:00 AM on Sunday returns the venue
+        based on Saturday's hours (03:00 - 4h = Saturday 23:00).
+        """
+        slug = 'saturday_night_venue'
+        self._create_venue(slug=slug)
 
-def test_open_venues_late_night_shows_previous_day(self, fixture_rest_client: APIClient):
-    """
-    Test that accessing the API at 03:00 AM on Sunday returns the venue
-    based on Saturday's hours (03:00 - 4h = Saturday 23:00).
-    """
-    slug = 'saturday_night_venue'
-    self._create_venue(slug=slug)
+        with freezegun.freeze_time('2023-10-29 03:00:00'):
+            response = fixture_rest_client.get(self.url)
 
-    with freezegun.freeze_time('2023-10-29 03:00:00'):
-        response = fixture_rest_client.get(self.url)
+            assert status.is_success(response.status_code)
+            data = response.json()
 
-        assert status.is_success(response.status_code)
-        data = response.json()
+            assert len(data) == 1
+            assert data[0]['slug'] == slug
 
-        assert len(data) == 1
-        assert data[0]['slug'] == slug
+            # 4. Verify the opening times correspond to Saturday (not Sunday)
+            assert data[0]['opening_saturday'] == '08:00:00'
+            assert data[0]['closing_saturday'] == '01:00:00'
 
-        # 4. Verify the opening times correspond to Saturday (not Sunday)
-        assert data[0]['opening_saturday'] == '08:00:00'
-        assert data[0]['closing_saturday'] == '01:00:00'
-
-        # Verify Sunday is explicitly closed (00:00:00), confirming we didn't fetch Sunday logic
-        assert data[0]['opening_sunday'] == '00:00:00'
+            # Verify Sunday is explicitly closed (00:00:00), confirming we didn't fetch Sunday logic
+            assert data[0]['opening_sunday'] == '00:00:00'
 
 
 class TestInformationPagesView:
