@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { type ReactElement, useEffect, useState } from 'react';
+import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
@@ -25,12 +25,11 @@ import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getEvent, postEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
-import type { EventDto } from '~/dto';
+import type { EventDto, ImageDto } from '~/dto';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import {
-  type Children,
   EventAgeRestriction,
   type EventAgeRestrictionValue,
   EventCategory,
@@ -116,6 +115,10 @@ export function EventCreatorAdminPage() {
     if (id) {
       getEvent(id)
         .then((eventData) => {
+          const eventDuration = new Date(eventData.end_dt).getTime() - new Date(eventData.start_dt).getTime();
+          const imageObject: ImageDto | undefined = eventData.image_url
+            ? { id: eventData.id, title: '', url: eventData.image_url, tags: [] }
+            : undefined;
           setEvent(eventData);
           form.reset({
             title_nb: eventData.title_nb || '',
@@ -125,14 +128,14 @@ export function EventCreatorAdminPage() {
             description_short_nb: eventData.description_short_nb || '',
             description_short_en: eventData.description_short_en || '',
             start_dt: eventData.start_dt ? utcTimestampToLocal(eventData.start_dt, false) : '',
-            duration: eventData.duration || 0,
+            duration: eventDuration || 0,
             category: eventData.category || '',
             host: eventData.host || '',
             location: eventData.location || '',
             capacity: eventData.capacity || 0,
             age_restriction: eventData.age_restriction || 'none',
             ticket_type: eventData.ticket_type || 'free',
-            image: eventData.image,
+            image: imageObject,
             publish_dt: eventData.publish_dt ? utcTimestampToLocal(eventData.publish_dt, false) : '',
           });
           setShowSpinner(false);
@@ -565,7 +568,7 @@ export function EventCreatorAdminPage() {
   const formValues = form.getValues();
 
   // Event preview on final step
-  const eventPreview: Children = (
+  const eventPreview: ReactNode = (
     <div className={styles.preview}>
       <ImageCard
         title={dbT(formValues, 'title') ?? ''}
@@ -618,7 +621,7 @@ export function EventCreatorAdminPage() {
   ) : null;
 
   // Navigation buttons
-  const navigationButtons: Children = (
+  const navigationButtons: ReactNode = (
     <div className={styles.button_row}>
       {currentFormTab.key !== createSteps[0].key ? (
         <Button theme="blue" rounded={true} onClick={navigateTabs(-1)}>
