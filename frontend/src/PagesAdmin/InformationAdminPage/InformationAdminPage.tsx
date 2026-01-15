@@ -77,7 +77,8 @@ export function InformationAdminPage() {
   });
 
   const title = t(KEY.admin_information_manage_title);
-  const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
+  // const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
+  const backendUrl = undefined;
   const header = (
     <Button theme="success" rounded={true} link={ROUTES.frontend.admin_information_create}>
       {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.information_page_short)}`)}

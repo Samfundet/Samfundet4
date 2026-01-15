@@ -76,7 +76,8 @@ export function GangsAdminPage() {
   }));
 
   const title = t(KEY.adminpage_gangs_title);
-  const backendUrl = ROUTES.backend.admin__samfundet_gang_changelist;
+  // const backendUrl = ROUTES.backend.admin__samfundet_gang_changelist;
+  const backendUrl = undefined;
   const header = (
     <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_gangs_create)}>
       {t(KEY.adminpage_gangs_create)}
