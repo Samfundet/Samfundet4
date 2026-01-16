@@ -428,6 +428,7 @@ export function useCustomNavigate(): CustomNavigateFn {
     }
     // Normal change of href to trigger reload.
     else if (linkTarget === 'backend' && !isCmdClick) window.location.href = finalUrl;
+    else if (linkTarget === 'samf3' && !isCmdClick) window.location.href = finalUrl;
     else if (linkTarget === 'email') window.location.href = finalUrl;
     // Open in new tab.
     else window.open(finalUrl, '_blank');
