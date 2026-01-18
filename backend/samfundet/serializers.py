@@ -6,6 +6,8 @@ import itertools
 from typing import TYPE_CHECKING
 from collections import defaultdict
 
+from PIL import Image as PilImage
+from PIL import UnidentifiedImageError
 from guardian.models import UserObjectPermission, GroupObjectPermission
 
 from rest_framework import serializers
@@ -94,19 +96,53 @@ class ImageSerializer(CustomBaseSerializer):
         model = Image
         exclude = ['image']
 
-    def create(self, validated_data: dict) -> Event:
+    def validate(self, attributes: dict) -> dict:
+        title = attributes.get('title')
+        if not title:
+            raise serializers.ValidationError({'title': 'This field is required.'})
+
+        file = attributes.get('file')
+        if not file:
+            raise serializers.ValidationError({'file': 'An image file is required.'})
+
+        # Validate that the uploaded file is a valid image
+        try:
+            file.seek(0)
+            PilImage.open(file).verify()
+            file.seek(0)
+        except UnidentifiedImageError as error:
+            raise serializers.ValidationError('Invalid image') from error
+
+        return attributes
+
+    def create(self, validated_data: dict) -> Image:
         """
         Uses the write_only file field to create new image file.
         Automatically finds/creates new tags based on comma-separated string.
+        Strips whitespace and drops empty tag names
+        and preserves the original filename when saving the image
         """
         file = validated_data.pop('file')
-        if 'tag_string' in validated_data:
-            tag_names = validated_data.pop('tag_string').split(',')
-            tags = [Tag.objects.get_or_create(name=name)[0] for name in tag_names]
+        raw_tag_string = validated_data.pop('tag_string', None)
+        if raw_tag_string is not None:
+            # Split on comma, strip whitespace and drop empties
+            tag_names = [name.strip() for name in raw_tag_string.split(',')]
+            tag_names = [name for name in tag_names if name]
+
+            # De-duplicate while preserving order
+            seen: set[str] = set()
+            unique_tag_names = []
+            for name in tag_names:
+                if name not in seen:
+                    seen.add(name)
+                    unique_tag_names.append(name)
+            tags = [Tag.objects.get_or_create(name=name)[0] for name in unique_tag_names]
         else:
             tags = []
+        # Preserve original filename if available; fallback to title
+        original_name = getattr(file, 'name', None) or validated_data.get('title')
         image = Image.objects.create(
-            image=ImageFile(file, validated_data['title']),
+            image=ImageFile(file, original_name),
             **validated_data,
         )
         image.tags.set(tags)
