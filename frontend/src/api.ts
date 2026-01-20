@@ -186,6 +186,12 @@ export async function patchVenue(slug: string | number, venue: Partial<VenueDto>
   return response.data;
 }
 
+export async function getOpenVenues(): Promise<VenueDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__venues_open_venues;
+  const response = await axios.get<VenueDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
 export async function getPermissions(): Promise<PermissionDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__permissions_list;
   const response = await axios.get<PermissionDto[]>(url, { withCredentials: true });
@@ -537,7 +543,7 @@ export async function putClosedPeriod(id: string | number, data: Partial<ClosedP
   return response;
 }
 
-export async function postClosedPeriod(data: ClosedPeriodDto): Promise<ClosedPeriodDto> {
+export async function postClosedPeriod(data: Partial<ClosedPeriodDto>): Promise<ClosedPeriodDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__closedperiods_list;
   const response = await axios.post<ClosedPeriodDto>(url, data, { withCredentials: true });
   return response.data;
