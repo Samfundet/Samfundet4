@@ -1,6 +1,7 @@
 import { default as classnames } from 'classnames';
+import type { ReactNode } from 'react';
 import { Link } from 'react-router';
-import type { ButtonType, Children } from '~/types';
+import type { ButtonType } from '~/types';
 import styles from './Button.module.scss';
 import type { ButtonDisplay, ButtonTheme } from './types';
 import { displayToStyleMap, themeToStyleMap } from './utils';
@@ -15,7 +16,7 @@ export type ButtonProps = {
   className?: string;
   disabled?: boolean;
   tabIndex?: number;
-  children?: Children;
+  children?: ReactNode;
   preventDefault?: boolean;
   onClick?: () => void;
   title?: string;

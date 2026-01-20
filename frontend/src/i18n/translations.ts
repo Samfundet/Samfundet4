@@ -90,6 +90,7 @@ export const nb = prepareTranslations({
   [KEY.common_event]: 'Arrangement',
   [KEY.common_repeat]: 'Repeter',
   [KEY.common_venues]: 'Lokaler',
+  [KEY.common_shortcuts]: 'Snareveier',
   [KEY.common_events]: 'Arrangementer',
   [KEY.common_create]: 'Opprett',
   [KEY.common_delete]: 'Slett',
@@ -143,7 +144,6 @@ export const nb = prepareTranslations({
   [KEY.common_details]: 'Detaljer',
   [KEY.common_reservation]: 'Reservasjon',
   [KEY.common_opening_hours]: 'Åpningstider',
-  [KEY.common_general]: 'Generelt',
   [KEY.common_long_description]: 'Lang beskrivelse',
   [KEY.common_short_description]: 'Kort beskrivelse',
   [KEY.common_back_to_samfundet]: 'Tilbake til samfundet.no',
@@ -215,8 +215,9 @@ export const nb = prepareTranslations({
   [KEY.common_ticket_type_registration]: 'Påmelding',
 
   // Billig
+  [KEY.common_buy_ticket]: 'Kjøp billett',
   [KEY.common_sold_out]: 'Utsolgt',
-  [KEY.common_almost_sold_out]: 'Nesten utsolgt',
+  [KEY.common_almost_sold_out]: 'Få billetter igjen',
 
   // ==================== //
   //        Others        //
@@ -254,6 +255,30 @@ export const nb = prepareTranslations({
   [KEY.event_external_host_message]:
     'Arrangeres i regi av ekstern arrangør, ikke gjengene på Samfundet. Henvendelser kan rettes mot',
 
+  // Event categories
+  [KEY.event_category_art]: 'Kunst',
+  [KEY.event_category_concert]: 'Konsert',
+  [KEY.event_category_course]: 'Kurs',
+  [KEY.event_category_debate]: 'Debatt',
+  [KEY.event_category_dj]: 'DJ',
+  [KEY.event_category_excenteraften]: 'Excenteraften',
+  [KEY.event_category_football_match]: 'Fotballkamp',
+  [KEY.event_category_happening]: 'Happening',
+  [KEY.event_category_lecture]: 'Forelesning',
+  [KEY.event_category_luka_event]: 'LUKA-arrangement',
+  [KEY.event_category_meeting]: 'Møte',
+  [KEY.event_category_movie]: 'Film',
+  [KEY.event_category_music]: 'Musikk',
+  [KEY.event_category_other]: 'Annet',
+  [KEY.event_category_party_meeting]: 'Festmøte',
+  [KEY.event_category_performance]: 'Performance',
+  [KEY.event_category_quiz]: 'Quiz',
+  [KEY.event_category_samfundet_meeting]: 'Samfundsmøte',
+  [KEY.event_category_show]: 'Show',
+  [KEY.event_category_theater]: 'Teater',
+  [KEY.event_category_theme_party]: 'Temafest',
+  [KEY.event_category_uka_event]: 'UKE-arrangement',
+
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',
   [KEY.email_or_membership_number_message]: 'Du må oppgi enten en e-post eller et medlemsnummer',
@@ -290,7 +315,20 @@ export const nb = prepareTranslations({
   [KEY.navbar_photos]: 'Foto',
   [KEY.navbar_nybygg]: 'Nybygg',
 
+  // Common navigation - links for samf 3 (used in navbar and footer):
+
+  //Shortcuts
+  [KEY.common_general]: 'Generelt',
+  [KEY.common_photos]: 'Foto',
+  [KEY.common_renting]: 'Utleie',
+
+  //Venues
+  [KEY.common_bar]: 'Bar',
+  [KEY.common_stages]: 'Scener',
+  [KEY.common_club]: 'Klubb',
+
   [KEY.footer_developed_by]: 'Utviklet av MG::Web',
+  [KEY.footer_have_questions]: 'Lurer du på noe?',
 
   // Recruitment:
   [KEY.recruitment_look_at_recipients]: 'Gå videre og se gjennom mottakere',
@@ -704,6 +742,7 @@ export const en = prepareTranslations({
   [KEY.common_active]: 'Active',
   [KEY.common_cancel]: 'Cancel',
   [KEY.common_venues]: 'Venues',
+  [KEY.common_shortcuts]: 'Shortcuts',
   [KEY.common_events]: 'Events',
   [KEY.common_repeat]: 'Repeat',
   [KEY.common_create]: 'Create',
@@ -730,11 +769,12 @@ export const en = prepareTranslations({
   [KEY.common_lastname]: 'Last name',
   [KEY.common_password]: 'password',
   [KEY.common_current]: 'Current',
+  [KEY.common_about_us]: 'About us',
   [KEY.common_select_all]: 'Select all',
   [KEY.common_unselect_all]: 'Unselect all',
   [KEY.common_overview]: 'Overview',
   [KEY.common_recruitmentposition]: 'Position',
-  [KEY.common_about_us]: 'About us',
+  [KEY.common_general]: 'General',
   [KEY.common_previous]: 'Previous',
   [KEY.common_required]: 'Required',
   [KEY.common_age_limit]: 'Age Limit',
@@ -756,7 +796,6 @@ export const en = prepareTranslations({
   [KEY.common_reservation]: 'Reservation',
   [KEY.common_contributors]: 'Contributors',
   [KEY.common_opening_hours]: 'Opening hours',
-  [KEY.common_general]: 'General',
   [KEY.common_doors_date]: 'Doors',
   [KEY.common_permissions]: 'Permissions',
   [KEY.common_long_description]: 'Long description',
@@ -801,6 +840,7 @@ export const en = prepareTranslations({
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
+
   [KEY.common_press]: 'Press',
   [KEY.common_film_club]: 'Film club',
   [KEY.common_privacy_policy]: 'Privacy policy',
@@ -828,8 +868,9 @@ export const en = prepareTranslations({
   [KEY.common_ticket_type_registration]: 'Registration',
 
   // Billig
+  [KEY.common_buy_ticket]: 'Buy ticket',
   [KEY.common_sold_out]: 'Sold out',
-  [KEY.common_almost_sold_out]: 'Almost sold out',
+  [KEY.common_almost_sold_out]: 'Few tickets left',
   // ==================== //
   //        Others        //
   // ==================== //
@@ -860,6 +901,30 @@ export const en = prepareTranslations({
   [KEY.mix]: 'Mixed',
   [KEY.event_external_host_message]:
     'Organized by an external organizer, not the groups at the Samfundet. Inquiries can be directed to',
+
+  // Event categories
+  [KEY.event_category_art]: 'Art',
+  [KEY.event_category_concert]: 'Concert',
+  [KEY.event_category_course]: 'Course',
+  [KEY.event_category_debate]: 'Debate',
+  [KEY.event_category_dj]: 'DJ',
+  [KEY.event_category_excenteraften]: 'Excenteraften',
+  [KEY.event_category_football_match]: 'Football match',
+  [KEY.event_category_happening]: 'Happening',
+  [KEY.event_category_lecture]: 'Lecture',
+  [KEY.event_category_luka_event]: 'LUKA event',
+  [KEY.event_category_meeting]: 'Meeting',
+  [KEY.event_category_movie]: 'Movie',
+  [KEY.event_category_music]: 'Music',
+  [KEY.event_category_other]: 'Other',
+  [KEY.event_category_party_meeting]: 'Party meeting',
+  [KEY.event_category_performance]: 'Performance',
+  [KEY.event_category_quiz]: 'Quiz',
+  [KEY.event_category_samfundet_meeting]: 'Samfundet meeting',
+  [KEY.event_category_show]: 'Show',
+  [KEY.event_category_theater]: 'Theater',
+  [KEY.event_category_theme_party]: 'Theme party',
+  [KEY.event_category_uka_event]: 'UKA event',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',
@@ -901,7 +966,19 @@ export const en = prepareTranslations({
   [KEY.navbar_nybygg]: 'New building',
   [KEY.navbar_map]: 'Map and venues',
 
+  // Common navigation (used in navbar and footer):
+
+  // Shortcuts
+  [KEY.common_photos]: 'Photos',
+  [KEY.common_renting]: 'Renting',
+
+  // venus
+  [KEY.common_bar]: 'Bar',
+  [KEY.common_stages]: 'Stages',
+  [KEY.common_club]: 'Club',
+
   [KEY.footer_developed_by]: 'Developed by MG::Web',
+  [KEY.footer_have_questions]: 'Have questions?',
 
   // Recruitment:
   [KEY.recruitment_look_at_recipients]: 'Go ahead and look through recipients',
