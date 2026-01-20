@@ -1,4 +1,5 @@
 #+title: Emacs
+[[../introduction.md][<- Back: Getting started]]
 
 * Emacs setup
 ** Doom
