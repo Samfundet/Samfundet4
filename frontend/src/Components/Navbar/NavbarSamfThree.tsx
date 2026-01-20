@@ -18,6 +18,7 @@ import { useDesktop } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { SAMF3_MEMBER_URL } from '~/routes/samf-three';
 import styles from './NavbarSamfThree.module.scss';
 import { HamburgerMenu, LanguageButton } from './components';
 import { NavbarItemSamfThree } from './components/NavbarItem';
@@ -248,7 +249,7 @@ export function NavbarSamfThree() {
         setIsMobileNavigation(false);
       }}
     >
-      {t(KEY.common_login)}
+      {t(KEY.loginpage_internal_login)}
     </Button>
   );
 
@@ -271,18 +272,33 @@ export function NavbarSamfThree() {
     </Button>
   );
 
+  const memberButton = (
+    <Button
+      theme="samf"
+      rounded={true}
+      className={isDesktop ? styles.login_button : styles.popup_internal_button}
+      onClick={() => {
+        window.location.href = SAMF3_MEMBER_URL.medlem;
+        setIsMobileNavigation(false);
+      }}
+    >
+      {t(KEY.common_member)}
+    </Button>
+  );
+
   // Show mobile popup for navigation.
   const mobileNavigation = (
     <>
       <nav id={styles.mobile_popup_container}>
         {navbarHeaders}
-
+        {recruitmentButton}
         <div className={styles.mobile_widgets}>
-          <LanguageButton />
+          <ThemeSwitch />
           <div className={styles.mobile_user}>
+            {memberButton}
             {loginButton}
-            {logoutButton}
           </div>
+          <LanguageButton />
         </div>
         <br />
         {user && mobileProfileButton}
@@ -302,6 +318,7 @@ export function NavbarSamfThree() {
           <div className={styles.navbar_widgets}>
             <ThemeSwitch />
             <LanguageButton />
+            {memberButton}
             {loginButton}
             {profileButton}
           </div>
