@@ -1,0 +1,33 @@
+#+title: Emacs
+
+* Emacs setup
+** Doom
+In =init.el=, (usually =~/.config/doom/init.el=) 
+
+*** :lang
+
+#+begin_src elisp
+:lang
+;; Frontend (React)
+(javascript +lsp +tree-sitter)  ; JS/TS
+(web +lsp)                      ; HTML, React, SCSS/CSS.
+
+(python
+  +lsp                          
+  +tree-sitter)
+
+;; Not essential
+(yaml)
+(sh)
+#+end_src
+
+*** :tools
+
+#+begin_src elisp
+:tools
+(magit)           ; Best emacs package ever made
+
+(docker +lsp)     ; Container management & syntax highlighting for Dockerfiles 
+(format +onsave)
+(lsp +peek)
+#+end_src
