@@ -46,8 +46,6 @@ export function ClosedPeriodFormAdminPage() {
 
     getClosedPeriod(id)
       .then((data) => {
-        // setClosedPeriod(data); For posting
-        console.log(data);
         setInitialData({
           message_nb: data.message_nb,
           message_en: data.message_en,
@@ -57,7 +55,6 @@ export function ClosedPeriodFormAdminPage() {
         setShowSpinner(false);
       })
       .catch((data: AxiosError) => {
-        // TODO add error pop up message?
         if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
           navigate({ url: ROUTES.frontend.admin_closed, replace: true });
         }
