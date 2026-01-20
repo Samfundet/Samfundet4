@@ -14,7 +14,6 @@ $side-padding: 1em;
 
   // Limit max content size for large screens.
   max-width: $content-max-size;
-
   margin: 0;
 
   @include for-mobile-only {
