@@ -253,25 +253,6 @@ export function NavbarSamfThree() {
     </Button>
   );
 
-  const logoutButton = user && (
-    <Button
-      theme={'white'}
-      rounded={true}
-      className={isDesktop ? undefined : styles.popup_internal_button}
-      onClick={() => {
-        logout()
-          .then((response) => {
-            response.status === STATUS.HTTP_200_OK && setUser(undefined);
-          })
-          .catch(console.error);
-
-        setIsMobileNavigation(false);
-      }}
-    >
-      {t(KEY.common_logout)}
-    </Button>
-  );
-
   const memberButton = (
     <Button
       theme="samf"
