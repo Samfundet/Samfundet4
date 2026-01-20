@@ -18,6 +18,7 @@ export function AboutPage() {
 
   return (
     <Page>
+
       <div className={styles.row}>
         <img src={runderode} alt="Runderode" className={classNames(styles.runderode, styles.box)} />
         <div className={styles.textBox}>
