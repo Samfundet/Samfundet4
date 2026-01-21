@@ -41,6 +41,7 @@ import { dbT, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { eventSchema } from './EventCreatorSchema';
+import { CustomTicketEditor } from './components/CustomTicketEditor';
 
 // Define the Zod schema for event validation
 
@@ -416,14 +417,10 @@ export function EventCreatorAdminPage() {
               </FormItem>
             )}
           />
-          {/* <PaymentForm
-            event={form.getValues()}
-            onChange={(partial) => {
-              // Update form values with payment data
-              const updatedValues = { ...form.getValues(), ...partial };
-              form.reset(updatedValues);
-            }}
-          /> */}
+          <div>
+            TODO: add Billig integration, registration and actuall form implemtentation of CustomTicketEditor
+            <CustomTicketEditor />
+          </div>
         </>
       ),
     },
