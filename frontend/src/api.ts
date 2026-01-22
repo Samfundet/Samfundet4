@@ -3,6 +3,7 @@ import type {
   ClosedPeriodDto,
   EventDto,
   EventGroupDto,
+  EventsPerDayDto,
   FeedbackDto,
   FoodCategoryDto,
   FoodPreferenceDto,
@@ -239,9 +240,9 @@ export async function putInformationPage(
   return response;
 }
 
-export async function getEventsPerDay(): Promise<EventDto[]> {
+export async function getEventsPerDay(): Promise<EventsPerDayDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsperday;
-  const response = await axios.get<EventDto[]>(url, { withCredentials: true });
+  const response = await axios.get<EventsPerDayDto>(url, { withCredentials: true });
 
   return response.data;
 }

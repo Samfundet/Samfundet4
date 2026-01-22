@@ -1,0 +1,43 @@
+@use 'src/constants' as *;
+
+.event_day_table {
+    width: 100%;
+    table-layout: fixed;
+    border: 2px solid $red-samf;
+}
+
+.event_title_link{
+    text-align: left;
+}
+
+.event_buy{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    z-index: 999; // the button should be at the top, so that it always is clickable
+}
+
+.event_day_item_wrapper{
+    display: flex;
+    flex-direction: column;
+    box-shadow: 1px 1px 7px $black-t25;
+}
+
+.event_day_item_header {
+    background-color:$red-samf;
+    color: $white;
+    padding: 0.25rem;
+    border-radius: 0.25rem 0.25rem 0 0;
+    text-align: center;
+}
+
+.free_badge {
+    opacity: 0.50;
+    background-color: $blue-lighter;
+}
+
+.included_badge {
+    opacity: 0.50;
+    background-color: $blue-lighter;
+}
