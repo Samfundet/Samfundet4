@@ -66,7 +66,7 @@
 
 .logo_row {
   display: flex;
-  gap: 2rem;
+  gap: 1.25rem;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
@@ -82,6 +82,8 @@
   width: auto;
   height: 55px;
   transition: opacity 0.2s ease;
+  max-width: 180px;
+  object-fit: contain;
 
   &:hover {
     opacity: 0.7;

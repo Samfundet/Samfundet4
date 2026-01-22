@@ -12,6 +12,8 @@ import {
   trondheimWhite,
   uka,
   ukaWhite,
+  sit,
+  sparebank1,
 } from '~/assets';
 import { THEME } from '~/constants';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
@@ -45,6 +47,12 @@ export function Footer() {
           </Link>
           <Link className={styles.logo_link} target="external" url="https://reitan.no/no">
             <img src={reitanLogo} className={styles.logo} alt="Reitan" />
+          </Link>
+          <Link className={styles.logo_link} target="external" url="https://www.sit.no/">
+            <img src={sit} className={styles.logo} alt="Sit" />
+          </Link>
+          <Link className={styles.logo_link} target="external" url="https://www.sparebank1.no/nb/smn/privat.html">
+            <img src={sparebank1} className={styles.logo} alt="SpareBank 1 SMN" />
           </Link>
         </div>
       </div>
