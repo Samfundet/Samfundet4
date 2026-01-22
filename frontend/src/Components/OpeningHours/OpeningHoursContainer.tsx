@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getOpenVenues } from '~/api';
 import type { VenueDto } from '~/dto';
-import { venueKeys } from '~/queryKeys';
 import { OpeningHours } from './OpeningHours';
 
 export function OpeningHoursContainer() {
@@ -10,7 +9,7 @@ export function OpeningHoursContainer() {
     isLoading,
     isError,
   } = useQuery<VenueDto[]>({
-    queryKey: venueKeys.open(),
+    queryKey: ['openVenues'],
     queryFn: getOpenVenues,
   });
 

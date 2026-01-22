@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { Button, TimeDisplay } from '~/Components';
+import { Button, RadioButton, TimeDisplay } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteClosedPeriod, getClosedPeriods } from '~/api';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { ClosedPeriodDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodAdminPage.module.scss';
 
@@ -16,6 +18,7 @@ export function ClosedPeriodAdminPage() {
   const [closedPeriods, setClosedPeriods] = useState<ClosedPeriodDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
+  const globalContext = useGlobalContext();
   useTitle(t(KEY.command_menu_shortcut_closed));
 
   const getAllClosedPeriods = useCallback(() => {
@@ -51,9 +54,37 @@ export function ClosedPeriodAdminPage() {
   }
 
   const header = (
-    <Button theme="success" rounded={true} link={ROUTES.frontend.admin_closed_create}>
-      {t(KEY.admin_closed_period_new_period)}
-    </Button>
+    <>
+      <Button theme="success" rounded={true} link={ROUTES.frontend.admin_closed_create}>
+        {t(KEY.admin_closed_period_new_period)}
+      </Button>
+      <span className={styles.admin_closed_override_container}>
+        <span style={{ marginRight: 10 }}>
+          {dbT({ text_nb: 'Stenging status', text_en: 'Closing status' }, 'text')}
+        </span>
+
+        <span>{dbT({ text_nb: 'standar', text_en: 'default' }, 'text')}</span>
+        <span className={styles.admin_closed_radio}>
+          <RadioButton
+            checked={globalContext.isClosed === 'default'}
+            onChange={() => globalContext.setIsClosed('default')}
+          />
+        </span>
+
+        {dbT({ text_nb: 'stengt', text_en: 'closed' }, 'text')}
+        <span className={styles.admin_closed_radio}>
+          <RadioButton
+            checked={globalContext.isClosed === 'closed'}
+            onChange={() => globalContext.setIsClosed('closed')}
+          />
+        </span>
+
+        {dbT({ text_nb: 'åpent', text_en: 'open' }, 'text')}
+        <span className={styles.admin_closed_radio}>
+          <RadioButton checked={globalContext.isClosed === 'open'} onChange={() => globalContext.setIsClosed('open')} />
+        </span>
+      </span>
+    </>
   );
   const backendUrl = ROUTES.backend.admin__samfundet_closedperiod_changelist;
 
@@ -75,8 +106,7 @@ export function ClosedPeriodAdminPage() {
           ]}
           data={closedPeriods.map((element) => ({
             cells: [
-              element.message_no,
-              element.description_no,
+              element.message_nb,
               { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
               { content: <TimeDisplay displayType="date" timestamp={element.end_dt} /> },
               {
@@ -98,7 +128,7 @@ export function ClosedPeriodAdminPage() {
                       display="block"
                       className={styles.smallButtons}
                       onClick={() => {
-                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_no}`)) {
+                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_nb}`)) {
                           deleteSelectedEvent(element.id);
                         }
                       }}
