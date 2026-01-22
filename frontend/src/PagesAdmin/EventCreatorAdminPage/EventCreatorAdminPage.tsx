@@ -109,7 +109,9 @@ export function EventCreatorAdminPage() {
     if (id) {
       getEvent(id)
         .then((eventData) => {
-          const eventDuration = new Date(eventData.end_dt).getTime() - new Date(eventData.start_dt).getTime();
+          const eventDuration = Math.round(
+            (new Date(eventData.end_dt).getTime() - new Date(eventData.start_dt).getTime()) / 60000,
+          );
           const imageObject: ImageDto | undefined = eventData.image_url
             ? { id: eventData.id, title: '', url: eventData.image_url, tags: [] }
             : undefined;
@@ -662,7 +664,7 @@ export function EventCreatorAdminPage() {
     </div>
   );
 
-  const title = lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`);
+  const title = lowerCapitalize(`${t(id ? KEY.common_edit : KEY.common_create)} ${t(KEY.common_event)}`);
   useTitle(title);
 
   return (

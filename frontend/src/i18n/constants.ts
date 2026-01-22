@@ -102,6 +102,7 @@ export const KEY = {
   common_events: 'common_events',
   common_repeat: 'common_repeat',
   common_venues: 'common_venues',
+  common_shortcuts: 'common_shortcuts',
   common_sulten: 'common_sulten',
   common_logout: 'common_logout',
   common_go_back: 'common_go_back',
@@ -164,7 +165,6 @@ export const KEY = {
   common_contributors: 'common_contributors',
   common_unselect_all: 'common_unselect_all',
   common_opening_hours: 'common_opening_hours',
-  common_general: 'common_general',
   common_long_description: 'common_long_description',
   common_short_description: 'common_short_description',
   common_back_to_samfundet: 'common_back_to_samfundet',
@@ -321,12 +321,26 @@ export const KEY = {
   information_page: 'information_page',
   information_page_short: 'information_page_short',
 
-  // Navbar:
+  // Navigation links (used in both navbar and footer):
+  // Links for samf 3
+
+  // Shortcuts
+  common_general: 'common_general',
+  common_renting: 'common_renting',
+  common_photos: 'common_photos',
+
+  //Venues
+  common_bar: 'common_bar',
+  common_stages: 'common_stages',
+  common_club: 'common_club',
+
+  // Navbar only:
   navbar_map: 'navbar_map',
   navbar_photos: 'navbar_photos',
   navbar_nybygg: 'navbar_nybygg',
 
   footer_developed_by: 'footer_developed_by',
+  footer_have_questions: 'footer_have_questions',
 
   // Sulten / Lyche:
   sulten_dishes: 'sulten_dishes',

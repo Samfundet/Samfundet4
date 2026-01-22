@@ -29,15 +29,15 @@
 9. Owner of the PR merges it.
 
 
-# Approving pull requests
+# Reviewing pull requests
 
-## Approving pull requests from dependabot
+## Reviewing pull requests from dependabot
 
 - [Read about](./approving-dependabot-prs.md) how to go about approving dependabot pull requests.
 
 
-## Approving Web pull requests
+## Reviewing Web pull requests
 
-Many of the principles for reviewing pull requests created by someone in Web are the same as those for [approving pull requests from Dependabot](./approving-dependabot-prs.md). The main goals are to avoid breaking functionality, help improve code quality, and validate that the code additions and changes are necessary and actually solve the intended issue.
+Many of the principles for reviewing pull requests created by someone in Web are the same as those for [reviewing pull requests from Dependabot](./approving-dependabot-prs.md). The main goals are to avoid breaking functionality, help improve code quality, and validate that the code additions and changes are necessary and actually solve the intended issue.
 
 This is done by reading the code, pulling the branch and manually verifying the the changes or additions are doing what they are indended to do. In some cases you might want to make temporary changes to the code to check for potential imporvements.
