@@ -72,6 +72,7 @@ export const KEY = {
   common_not: 'common_not',
   common_now: 'common_now',
   common_time: 'common_time',
+  common_minutes: 'common_minutes',
   common_here: 'common_here',
   common_name: 'common_name',
   common_save: 'common_save',
@@ -200,6 +201,8 @@ export const KEY = {
   common_tab_view: 'common_tab_view',
   common_available: 'common_available',
   common_comment: 'common_comment',
+  common_capacity: 'common_capacity',
+
   common_membership_number: 'common_membership_number',
   common_to_payment: 'common_to_payment',
 
@@ -219,11 +222,13 @@ export const KEY = {
   common_about_the_organisation: 'common_about_the_organisation',
   common_the_society_meeting: 'common_the_society_meeting',
   common_tickets: 'common_tickets',
+  common_the_ticket_type: 'common_the_ticket_type',
   common_contact_information: 'common_contact_information',
   common_about_samfundet: 'common_about_samfundet',
   // Price groups:
   common_ticket_type: 'common_ticket_type',
   common_ticket_type_free: 'common_ticket_type_free',
+  common_ticket_type_free_with_registration: 'common_ticket_type_free_with_registration',
   common_ticket_type_custom: 'common_ticket_type_custom',
   common_ticket_type_billig: 'common_ticket_type_billig',
   common_ticket_type_included: 'common_ticket_type_included',
@@ -264,6 +269,10 @@ export const KEY = {
   twenty: 'twenty',
   none: 'none',
   mix: 'mix',
+
+  // EventPage:
+  event_registration_url: 'event_registration_url',
+  event_add_ticket: 'event_add_ticket',
 
   // Purchase Ticket Info:
   invalid_email_message: 'invalid_email_message',
@@ -541,6 +550,7 @@ export const KEY = {
   admin_saksdokument: 'admin_saksdokument',
   admin_images_title: 'admin_images_title',
   admin_images_create: 'admin_images_create',
+  admin_no_image_selected: 'admin_no_image_selected',
   admin_steal_identity: 'admin_steal_identity',
   adminpage_gangs_title: 'adminpage_gangs_title',
   adminpage_gangs_create: 'adminpage_gangs_create',

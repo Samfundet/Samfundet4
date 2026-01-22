@@ -95,7 +95,8 @@ export function SaksdokumentAdminPage() {
   }
 
   const title = t(KEY.admin_saksdokumenter_title);
-  const backendUrl = ROUTES.backend.admin__samfundet_saksdokument_changelist;
+  // const backendUrl = ROUTES.backend.admin__samfundet_saksdokument_changelist;
+  const backendUrl = undefined;
   const header = (
     <Button theme="success" rounded={true} link={ROUTES.frontend.admin_saksdokumenter_create}>
       {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_saksdokument)}`)}
