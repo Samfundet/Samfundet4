@@ -1,6 +1,7 @@
 // Colors:
 // When adding new colors, types.ts must be updated to reflect all colors
 $red-samf: #a03033;
+$red-samf-dark: #640606;
 $red_samf_hover: #732225;
 $red-samf-faded: #fac7c8;
 $red-lighter: #fff2f0;
@@ -22,6 +23,7 @@ $turquoise: #5accb9;
 $turquoise-deep: #288474;
 $yellow: #e0a014;
 $white: #ffffff;
+$white-muted: rgba(255, 255, 255, 0.85);
 $black: #000000;
 $black-1: #161616; // small contrast to black
 $black-2: #222222;
@@ -77,7 +79,6 @@ $theme-dark-input-bg-disabled: #7b7b7b;
 $background-primary: #ffffff;
 $background-secondary: #efefef;
 
-
 // Applicant state colors (model_choices.py in RecruitmentApplicantStates)
 // these should communicate possible actions
 $action_needed_here: #ebbc7c;
@@ -86,14 +87,15 @@ $will_contact: #046404;
 $do_not_contact: #e53b2f;
 $not_wanted: #9f3dd3;
 
-
 // Final application result colors
 $rejected_this_offer: #dee73e;
 $accepted_this_offer: #4f49eb;
 $withdrawn_application: #7f7f7f;
 
 // Typography
-$primary-font-family: "obviously-variable", -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, oxygen, ubuntu, cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+$primary-font-family: system-ui, 'Helvetica Neue', 'Avenir Next', avenir, 'Adwaita Sans', cantarell, sans-serif;
+$special-font-family: 'obviously-variable', $primary-font-family;
+$special-letter-spacing: -0.05rem;
 
 /* Screen sizes, breakpoint (bp) */
 $large-desktop-bp-lower: 1201px;

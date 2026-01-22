@@ -1,6 +1,7 @@
 log
 tmp/**
 *cache*
+*.sqlite3
 
 nbproject
 *.idea

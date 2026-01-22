@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Any
 
 from rest_framework.permissions import SAFE_METHODS, BasePermission, DjangoModelPermissions, DjangoObjectPermissions
 
+from django.conf import settings
 from django.http import Http404
 
 from samfundet.models.role import UserOrgRole, UserGangRole, UserGangSectionRole
@@ -205,3 +206,14 @@ def filter_queryset_by_permissions(queryset: QuerySet, user: User, permission: s
     permitted_ids = [obj.id for obj in queryset if user.has_perm(permission, obj)]
 
     return queryset.filter(id__in=permitted_ids)
+
+
+class FeatureEnabled(BasePermission):
+    feature_key = None
+    message = 'This feature is not available yet.'
+
+    def has_permission(self, request: Request, view: APIView) -> bool:
+        key = getattr(view, 'feature_key', None) or getattr(self, 'feature_key', None)
+        if key is None:
+            return True  # No feature key set, allow access
+        return key in getattr(settings, 'CP_ENABLED', set())

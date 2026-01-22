@@ -26,6 +26,8 @@ export { default as kulturrom } from './logos/kulturrom.png';
 export { default as kulturromWhite } from './logos/kulturrom_white.png';
 export { default as trondheim } from './logos/trondheim_kommune.svg';
 export { default as trondheimWhite } from './logos/trondheim_kommune_white.svg';
+export { default as sit } from './logos/sit.png';
+export { default as sparebank1 } from './logos/sparebank1.png';
 
 // Festivals
 export { default as uka } from './logos/uka.png';
