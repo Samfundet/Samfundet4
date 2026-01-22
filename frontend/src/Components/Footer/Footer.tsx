@@ -8,12 +8,12 @@ import {
   kulturromWhite,
   reitan,
   reitanWhite,
+  sit,
+  sparebank1,
   trondheim,
   trondheimWhite,
   uka,
   ukaWhite,
-  sit,
-  sparebank1,
 } from '~/assets';
 import { THEME } from '~/constants';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
@@ -79,8 +79,7 @@ export function Footer() {
   const contact = (
     <div className={styles.footer_section}>
       <h2 className={styles.section_title}>
-        {t(KEY.footer_have_questions)}{' '}
-        {/*TODO: Replace samf3 contact link with samf4 */}
+        {t(KEY.footer_have_questions)} {/*TODO: Replace samf3 contact link with samf4 */}
         <Link plain className={styles.contact_link} target="samf3" url={ROUTES_SAMF_THREE.information.contact}>
           {t(KEY.common_contact_us)}
         </Link>
