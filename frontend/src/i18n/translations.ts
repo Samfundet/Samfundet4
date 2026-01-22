@@ -90,7 +90,7 @@ export const nb = prepareTranslations({
   [KEY.common_event]: 'Arrangement',
   [KEY.common_repeat]: 'Repeter',
   [KEY.common_venues]: 'Lokaler',
-  [KEY.common_shortcuts]: 'Snareveier',
+  [KEY.common_shortcuts]: 'Snarveier',
   [KEY.common_events]: 'Arrangementer',
   [KEY.common_create]: 'Opprett',
   [KEY.common_delete]: 'Slett',
