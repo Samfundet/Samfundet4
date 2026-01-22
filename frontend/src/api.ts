@@ -187,6 +187,12 @@ export async function patchVenue(slug: string | number, venue: Partial<VenueDto>
   return response.data;
 }
 
+export async function getOpenVenues(): Promise<VenueDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__venues_open_venues;
+  const response = await axios.get<VenueDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
 export async function getPermissions(): Promise<PermissionDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__permissions_list;
   const response = await axios.get<PermissionDto[]>(url, { withCredentials: true });
