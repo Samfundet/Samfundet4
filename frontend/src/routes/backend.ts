@@ -202,6 +202,7 @@ export const ROUTES_BACKEND = {
   samfundet__eventgroups_list: '/api/eventgroups/',
   samfundet__eventgroups_detail: '/api/eventgroups/:pk/',
   samfundet__venues_list: '/api/venues/',
+  samfundet__venues_open_venues: '/api/venues/open_venues/',
   samfundet__venues_detail: '/api/venues/:slug/',
   samfundet__closedperiods_list: '/api/closed/',
   samfundet__closedperiods_detail: '/api/closed/:pk/',
