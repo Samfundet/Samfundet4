@@ -59,11 +59,27 @@ class EventAgeRestriction(models.TextChoices):
 class EventCategory(models.TextChoices):
     """Used for sorting, filtering and organizing stuff in frontend"""
 
-    SAMFUNDET_MEETING = 'samfundsmote', _('Samfundsmøte')
+    ART = 'art', _('Kunst')
     CONCERT = 'concert', _('Konsert')
+    COURSE = 'course', _('Kurs')
     DEBATE = 'debate', _('Debatt')
+    DJ = 'dj', _('DJ')
+    EXCENTERAFTEN = 'excenteraften', _('Excenteraften')
+    FOOTBALL_MATCH = 'football_match', _('Fotballkamp')
+    HAPPENING = 'happening', _('Happening')
+    LECTURE = 'lecture', _('Forelesning')
+    LUKA_EVENT = 'luka_event', _('LUKA-arrangement')
+    MEETING = 'meeting', _('Møte')
+    MOVIE = 'movie', _('Film')
+    MUSIC = 'music', _('Musikk')
+    PARTY_MEETING = 'party_meeting', _('Festmøte')
+    PERFORMANCE = 'performance', _('Performance')
     QUIZ = 'quiz', _('Quiz')
-    LECTURE = 'lecture', _('Kurs')
+    SAMFUNDET_MEETING = 'samfundet_meeting', _('Samfundsmøte')
+    SHOW = 'show', _('Show')
+    THEATER = 'theater', _('Teater')
+    THEME_PARTY = 'theme_party', _('Temafest')
+    UKA_EVENT = 'uka_event', _('UKE-arrangement')
     OTHER = 'other', _('Annet')
 
 

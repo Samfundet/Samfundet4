@@ -129,13 +129,13 @@ export type EventTicketTypeValue = (typeof EventTicketType)[keyof typeof EventTi
 export const ALL_TICKET_TYPES: EventTicketTypeValue[] = [
   EventTicketType.FREE,
   EventTicketType.INCLUDED,
-  EventTicketType.BILLIG,
   EventTicketType.REGISTRATION,
+  EventTicketType.BILLIG,
   EventTicketType.CUSTOM,
 ];
 export const PAID_TICKET_TYPES: EventTicketTypeValue[] = [
-  EventTicketType.BILLIG,
   EventTicketType.REGISTRATION,
+  EventTicketType.BILLIG,
   EventTicketType.CUSTOM,
 ];
 

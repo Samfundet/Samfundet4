@@ -62,7 +62,8 @@ export function ComponentPage() {
       id: 1,
       image_url: '',
       location: 'Vuelie',
-      publish_dt: new Date().toISOString(),
+      visibility_from_dt: new Date().toISOString(),
+      visibility_to_dt: '',
       start_dt: new Date().toISOString(),
       status: 'active',
       ticket_type: 'free',
@@ -72,7 +73,7 @@ export function ComponentPage() {
         ? {
             is_almost_sold_out: false,
             id: 0,
-            in_same_period: '',
+            in_sale_period: '',
             is_sold_out: false,
             name: '',
             sale_from: '',

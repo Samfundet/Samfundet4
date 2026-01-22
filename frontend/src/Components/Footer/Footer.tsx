@@ -8,6 +8,8 @@ import {
   kulturromWhite,
   reitan,
   reitanWhite,
+  sit,
+  sparebank1,
   trondheim,
   trondheimWhite,
   uka,
@@ -46,6 +48,12 @@ export function Footer() {
           <Link className={styles.logo_link} target="external" url="https://reitan.no/no">
             <img src={reitanLogo} className={styles.logo} alt="Reitan" />
           </Link>
+          <Link className={styles.logo_link} target="external" url="https://www.sit.no/">
+            <img src={sit} className={styles.logo} alt="Sit" />
+          </Link>
+          <Link className={styles.logo_link} target="external" url="https://www.sparebank1.no/nb/smn/privat.html">
+            <img src={sparebank1} className={styles.logo} alt="SpareBank 1 SMN" />
+          </Link>
         </div>
       </div>
       <div>
@@ -71,7 +79,7 @@ export function Footer() {
   const contact = (
     <div className={styles.footer_section}>
       <h2 className={styles.section_title}>
-        {t(KEY.footer_have_questions)}{' '}
+        {t(KEY.footer_have_questions)} {/*TODO: Replace samf3 contact link with samf4 */}
         <Link plain className={styles.contact_link} target="samf3" url={ROUTES_SAMF_THREE.information.contact}>
           {t(KEY.common_contact_us)}
         </Link>
@@ -133,26 +141,31 @@ export function Footer() {
       <h2 className={styles.section_title}>{t(KEY.common_shortcuts)}</h2>
       <ul className={styles.footer_list}>
         <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
           <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.information.general}>
             {t(KEY.common_general)}
           </Link>
         </li>
         <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
           <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.information.membership}>
             {t(KEY.common_membership)}
           </Link>
         </li>
         <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
           <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.information.openingHours}>
             {t(KEY.common_opening_hours)}
           </Link>
         </li>
         <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
           <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.information.photos}>
             {t(KEY.common_photos)}
           </Link>
         </li>
         <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
           <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.information.renting}>
             {t(KEY.common_renting)}
           </Link>
@@ -166,21 +179,25 @@ export function Footer() {
       <h2 className={styles.section_title}>{t(KEY.common_venues)}</h2>
       <ul className={styles.footer_list}>
         <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
           <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.venues.restaurant}>
             {t(KEY.common_restaurant)}
           </Link>
         </li>
         <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
           <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.venues.bar}>
             {t(KEY.common_bar)}
           </Link>
         </li>
         <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
           <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.venues.scene}>
             {t(KEY.common_stages)}
           </Link>
         </li>
         <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
           <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.venues.club}>
             {t(KEY.common_club)}
           </Link>
