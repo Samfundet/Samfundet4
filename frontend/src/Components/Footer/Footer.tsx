@@ -80,6 +80,7 @@ export function Footer() {
     <div className={styles.footer_section}>
       <h2 className={styles.section_title}>
         {t(KEY.footer_have_questions)}{' '}
+        {/*TODO: Replace samf3 contact link with samf4 */}
         <Link plain className={styles.contact_link} target="samf3" url={ROUTES_SAMF_THREE.information.contact}>
           {t(KEY.common_contact_us)}
         </Link>
