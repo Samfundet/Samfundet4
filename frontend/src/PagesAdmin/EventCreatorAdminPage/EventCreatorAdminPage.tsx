@@ -24,7 +24,7 @@ import {
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { getEvent, getVenues, postEvent } from '~/api';
+import { getEvent, getImages, getVenues, postEvent, putEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto, ImageDto } from '~/dto';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
@@ -99,6 +99,7 @@ export function EventCreatorAdminPage() {
       custom_tickets: [],
       billig_id: undefined,
       image: undefined,
+      image_id: undefined,
       visibility_from_dt: '',
       visibility_to_dt: '',
     },
@@ -107,14 +108,14 @@ export function EventCreatorAdminPage() {
   // Fetch event data using the event ID
   useEffect(() => {
     if (id) {
-      getEvent(id)
-        .then((eventData) => {
+      Promise.all([getEvent(id), getImages()])
+        .then(([eventData, images]) => {
           const eventDuration = Math.round(
             (new Date(eventData.end_dt).getTime() - new Date(eventData.start_dt).getTime()) / 60000,
           );
-          const imageObject: ImageDto | undefined = eventData.image_url
-            ? { id: eventData.id, title: '', url: eventData.image_url, tags: [] }
-            : undefined;
+          const normalise = (u: string) => u.replace(BACKEND_DOMAIN, '').replace(/\/+$/, '');
+          const eventUrl = normalise(eventData.image_url ?? '');
+          const matchedImage = images.find((img) => eventData.image_url?.endsWith(img.url)) ?? undefined;
           setEvent(eventData);
           form.reset({
             title_nb: eventData.title_nb || '',
@@ -134,7 +135,7 @@ export function EventCreatorAdminPage() {
             ticket_type: eventData.ticket_type || 'free',
             custom_tickets: eventData.custom_tickets || [],
             billig_id: eventData.billig?.id,
-            image: imageObject,
+            image: matchedImage,
             visibility_from_dt: eventData.visibility_from_dt
               ? utcTimestampToLocal(eventData.visibility_from_dt, false)
               : '',
@@ -512,10 +513,12 @@ export function EventCreatorAdminPage() {
       end_dt: computedEndDt ? computedEndDt.toISOString() : '',
     };
 
-    postEvent(payload)
+    const request = id ? putEvent(id, payload) : postEvent(payload);
+
+    request
       .then(() => {
         navigate({ url: ROUTES.frontend.admin_events });
-        toast.success(t(KEY.common_creation_successful));
+        toast.success(t(id ? KEY.common_save_successful : KEY.common_creation_successful));
       })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));

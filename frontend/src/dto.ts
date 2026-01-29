@@ -162,6 +162,7 @@ export type EventDto = {
 
   // General info
   id: number;
+  image_id: number;
   title_nb: string;
   title_en: string;
   description_long_nb: string;

@@ -229,6 +229,7 @@ class EventSerializer(CustomBaseSerializer):
     # Read only properties (computed property, foreign model).
     total_registrations = serializers.IntegerField(read_only=True)
     image_url = serializers.CharField(read_only=True)
+    image = serializers.SerializerMethodField(read_only=True)
 
     # Custom tickets/billig
     custom_tickets = EventCustomTicketSerializer(many=True, read_only=True)
@@ -236,6 +237,30 @@ class EventSerializer(CustomBaseSerializer):
 
     # For post/put (change image by id).
     image_id = serializers.IntegerField(write_only=True)
+
+    def get_image(self, obj: Event) -> dict:
+        img = obj.image
+        return {
+            "id": img.id,
+            "url": img.image.url,
+            "title": img.title,
+            "tags": list(img.tags.values.list("id", flat=True))
+        }
+
+    def update(self, instance, validated_data) -> Event:
+        image_id = validated_data.pop("image_id", None)
+        if image_id is not None:
+            try:
+                instance.image = Image.objects.get(pk=image_id)
+            except Image.DoesNotExist:
+                raise serializers.ValidationError({"image_id": "Invalid image id"})    
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
+
 
     def validate(self, data: dict) -> dict:
         # Check if all required fields are present for validation
@@ -260,7 +285,8 @@ class EventSerializer(CustomBaseSerializer):
         and sets it in the new event. Read/write only fields enable
         us to use the same serializer for both reading and writing.
         """
-        validated_data['image'] = Image.objects.get(pk=validated_data['image_id'])
+        image_id = validated_data.pop("image_id")
+        validated_data['image'] = Image.objects.get(pk=image_id)
         event = Event(**validated_data)
         event.save()
         return event
