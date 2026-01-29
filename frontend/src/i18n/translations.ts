@@ -58,6 +58,7 @@ export const nb = prepareTranslations({
   [KEY.common_not]: 'Ikke',
   [KEY.common_now]: 'Nå',
   [KEY.common_time]: 'Tid',
+  [KEY.common_minutes]: 'minutter',
   [KEY.common_from]: 'Fra',
   [KEY.common_here]: 'her',
   [KEY.common_show]: 'Vis',
@@ -90,6 +91,7 @@ export const nb = prepareTranslations({
   [KEY.common_event]: 'Arrangement',
   [KEY.common_repeat]: 'Repeter',
   [KEY.common_venues]: 'Lokaler',
+  [KEY.common_shortcuts]: 'Snarveier',
   [KEY.common_events]: 'Arrangementer',
   [KEY.common_create]: 'Opprett',
   [KEY.common_delete]: 'Slett',
@@ -143,7 +145,6 @@ export const nb = prepareTranslations({
   [KEY.common_details]: 'Detaljer',
   [KEY.common_reservation]: 'Reservasjon',
   [KEY.common_opening_hours]: 'Åpningstider',
-  [KEY.common_general]: 'Generelt',
   [KEY.common_long_description]: 'Lang beskrivelse',
   [KEY.common_short_description]: 'Kort beskrivelse',
   [KEY.common_back_to_samfundet]: 'Tilbake til samfundet.no',
@@ -184,6 +185,7 @@ export const nb = prepareTranslations({
   [KEY.common_tab_view]: 'Fane visning',
   [KEY.common_available]: 'Tilgjengelig',
   [KEY.common_comment]: 'Kommentar',
+  [KEY.common_capacity]: 'Kapasitet',
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
@@ -203,14 +205,16 @@ export const nb = prepareTranslations({
   [KEY.common_about_the_organisation]: 'Samfundet som organisasjon',
   [KEY.common_the_society_meeting]: 'Samfundsmøtet',
   [KEY.common_tickets]: 'billetter',
+  [KEY.common_the_ticket_type]: 'Billettype',
   [KEY.common_contact_information]: 'Kontaktinfo',
   [KEY.common_about_samfundet]: 'Om Samfundet',
 
   // Price groups:
   [KEY.common_ticket_type]: 'Billett',
   [KEY.common_ticket_type_free]: 'Gratis',
+  [KEY.common_ticket_type_free_with_registration]: 'Gratis med registrering',
   [KEY.common_ticket_type_custom]: 'Tilpasset',
-  [KEY.common_ticket_type_billig]: 'Betalt',
+  [KEY.common_ticket_type_billig]: 'Betalt (billig)',
   [KEY.common_ticket_type_included]: 'Inkludert i inngang',
   [KEY.common_ticket_type_registration]: 'Påmelding',
 
@@ -254,6 +258,10 @@ export const nb = prepareTranslations({
   [KEY.mix]: 'Mikset',
   [KEY.event_external_host_message]:
     'Arrangeres i regi av ekstern arrangør, ikke gjengene på Samfundet. Henvendelser kan rettes mot',
+
+  // EventPage:
+  [KEY.event_registration_url]: 'Registreringslenke',
+  [KEY.event_add_ticket]: 'Legg til billett',
 
   // Event categories
   [KEY.event_category_art]: 'Kunst',
@@ -318,7 +326,20 @@ export const nb = prepareTranslations({
   [KEY.navbar_stages]: 'Scener',
   [KEY.navbar_club]: 'Klubb',
 
+  // Common navigation - links for samf 3 (used in navbar and footer):
+
+  //Shortcuts
+  [KEY.common_general]: 'Generelt',
+  [KEY.common_photos]: 'Foto',
+  [KEY.common_renting]: 'Utleie',
+
+  //Venues
+  [KEY.common_bar]: 'Bar',
+  [KEY.common_stages]: 'Scener',
+  [KEY.common_club]: 'Klubb',
+
   [KEY.footer_developed_by]: 'Utviklet av MG::Web',
+  [KEY.footer_have_questions]: 'Lurer du på noe?',
 
   // Recruitment:
   [KEY.recruitment_look_at_recipients]: 'Gå videre og se gjennom mottakere',
@@ -460,6 +481,7 @@ export const nb = prepareTranslations({
   [KEY.admin_saksdokument]: 'Saksdokument',
   [KEY.admin_images_title]: 'Bildearkiv',
   [KEY.admin_images_create]: 'Nytt Bilde',
+  [KEY.admin_no_image_selected]: 'Ingen bilde valgt',
   [KEY.admin_steal_identity]: 'Stjel identitet',
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
@@ -701,6 +723,7 @@ export const en = prepareTranslations({
   [KEY.common_not]: 'Not',
   [KEY.common_now]: 'Now',
   [KEY.common_time]: 'Time',
+  [KEY.common_minutes]: 'minutes',
   [KEY.common_here]: 'here',
   [KEY.common_save]: 'Save',
   [KEY.common_from]: 'From',
@@ -732,6 +755,7 @@ export const en = prepareTranslations({
   [KEY.common_active]: 'Active',
   [KEY.common_cancel]: 'Cancel',
   [KEY.common_venues]: 'Venues',
+  [KEY.common_shortcuts]: 'Shortcuts',
   [KEY.common_events]: 'Events',
   [KEY.common_repeat]: 'Repeat',
   [KEY.common_create]: 'Create',
@@ -758,11 +782,12 @@ export const en = prepareTranslations({
   [KEY.common_lastname]: 'Last name',
   [KEY.common_password]: 'password',
   [KEY.common_current]: 'Current',
+  [KEY.common_about_us]: 'About us',
   [KEY.common_select_all]: 'Select all',
   [KEY.common_unselect_all]: 'Unselect all',
   [KEY.common_overview]: 'Overview',
   [KEY.common_recruitmentposition]: 'Position',
-  [KEY.common_about_us]: 'About us',
+  [KEY.common_general]: 'General',
   [KEY.common_previous]: 'Previous',
   [KEY.common_required]: 'Required',
   [KEY.common_age_limit]: 'Age Limit',
@@ -784,7 +809,6 @@ export const en = prepareTranslations({
   [KEY.common_reservation]: 'Reservation',
   [KEY.common_contributors]: 'Contributors',
   [KEY.common_opening_hours]: 'Opening hours',
-  [KEY.common_general]: 'General',
   [KEY.common_doors_date]: 'Doors',
   [KEY.common_permissions]: 'Permissions',
   [KEY.common_long_description]: 'Long description',
@@ -824,11 +848,13 @@ export const en = prepareTranslations({
   [KEY.common_tab_view]: 'Tab view',
   [KEY.common_available]: 'Available',
   [KEY.common_comment]: 'Comment',
+  [KEY.common_capacity]: 'Capacity',
   [KEY.common_membership_number]: 'Membership number',
   [KEY.common_to_payment]: 'To payment',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
+
   [KEY.common_press]: 'Press',
   [KEY.common_film_club]: 'Film club',
   [KEY.common_privacy_policy]: 'Privacy policy',
@@ -842,6 +868,7 @@ export const en = prepareTranslations({
   [KEY.common_about_the_organisation]: 'About the organisation',
   [KEY.common_the_society_meeting]: 'The Society Meeting',
   [KEY.common_tickets]: 'tickets',
+  [KEY.common_the_ticket_type]: 'Ticket type',
   [KEY.common_contact_information]: 'Contact information',
   [KEY.common_about_samfundet]: 'About Samfundet',
   [KEY.common_processed]: 'Processed',
@@ -850,7 +877,8 @@ export const en = prepareTranslations({
   // Price groups:
   [KEY.common_ticket_type]: 'Ticket',
   [KEY.common_ticket_type_free]: 'Free',
-  [KEY.common_ticket_type_billig]: 'Paid',
+  [KEY.common_ticket_type_free_with_registration]: 'Free with registration',
+  [KEY.common_ticket_type_billig]: 'Paid (billig)',
   [KEY.common_ticket_type_custom]: 'Custom',
   [KEY.common_ticket_type_included]: 'Included with entrance',
   [KEY.common_ticket_type_registration]: 'Registration',
@@ -914,6 +942,10 @@ export const en = prepareTranslations({
   [KEY.event_category_theme_party]: 'Theme party',
   [KEY.event_category_uka_event]: 'UKA event',
 
+  // EventPage:
+  [KEY.event_registration_url]: 'Registration URL',
+  [KEY.event_add_ticket]: 'Add ticket',
+
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',
   [KEY.email_or_membership_number_message]: 'You must provide either an email or a membership number',
@@ -957,7 +989,19 @@ export const en = prepareTranslations({
   [KEY.navbar_stages]: 'Stages',
   [KEY.navbar_club]: 'Club',
 
+  // Common navigation (used in navbar and footer):
+
+  // Shortcuts
+  [KEY.common_photos]: 'Photos',
+  [KEY.common_renting]: 'Renting',
+
+  // venus
+  [KEY.common_bar]: 'Bar',
+  [KEY.common_stages]: 'Stages',
+  [KEY.common_club]: 'Club',
+
   [KEY.footer_developed_by]: 'Developed by MG::Web',
+  [KEY.footer_have_questions]: 'Have questions?',
 
   // Recruitment:
   [KEY.recruitment_look_at_recipients]: 'Go ahead and look through recipients',
@@ -1160,6 +1204,7 @@ export const en = prepareTranslations({
   [KEY.admin_saksdokument]: 'Case document',
   [KEY.admin_images_title]: 'Image Archive',
   [KEY.admin_images_create]: 'New Image',
+  [KEY.admin_no_image_selected]: 'No image selected',
   [KEY.admin_steal_identity]: 'Steal identity',
   [KEY.adminpage_gangs_title]: 'Groups administration',
   [KEY.adminpage_gangs_create]: 'Create group',

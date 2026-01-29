@@ -1,6 +1,7 @@
 // Colors:
 // When adding new colors, types.ts must be updated to reflect all colors
 $red-samf: #a03033;
+$red-samf-dark: #640606;
 $red_samf_hover: #732225;
 $red-samf-faded: #fac7c8;
 $red-lighter: #fff2f0;
@@ -22,6 +23,7 @@ $turquoise: #5accb9;
 $turquoise-deep: #288474;
 $yellow: #e0a014;
 $white: #ffffff;
+$white-muted: rgba(255, 255, 255, 0.85);
 $black: #000000;
 $black-1: #161616; // small contrast to black
 $black-2: #222222;
@@ -92,7 +94,7 @@ $withdrawn_application: #7f7f7f;
 
 // Typography
 $primary-font-family: system-ui, 'Helvetica Neue', 'Avenir Next', avenir, 'Adwaita Sans', cantarell, sans-serif;
-$special-font-family: "obviously-variable", $primary-font-family;
+$special-font-family: 'obviously-variable', $primary-font-family;
 $special-letter-spacing: -0.05rem;
 
 /* Screen sizes, breakpoint (bp) */

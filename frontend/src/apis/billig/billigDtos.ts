@@ -22,7 +22,7 @@ export type BilligEventDto = {
   ticket_groups: BilligTicketGroupDto[];
   sale_from: string;
   sale_to: string;
-  in_same_period: string;
+  in_sale_period: string;
   is_almost_sold_out: boolean;
   is_sold_out: boolean;
 };
