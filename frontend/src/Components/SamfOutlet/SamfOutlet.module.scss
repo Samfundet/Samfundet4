@@ -1,9 +1,6 @@
 @use 'src/constants' as *;
 
 .navbar_outlet {
-  // TODO: Original navbar styling, change back to this when samf4 navbar is used.
-  //padding-top: $navbar-height;
-  //TODO: remove following line when samf4 navbar is used.
   padding-top: $navbar-height;
   flex: 1;
 }
