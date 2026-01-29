@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Outlet } from 'react-router';
-import { NavbarSamfThree } from '~/Components//Navbar/NavbarSamfThree';
+import { NavbarSamfThree } from '~/Components/Navbar/NavbarSamfThree';
 import { Footer } from '../Footer';
 import styles from './SamfOutlet.module.scss';
 
