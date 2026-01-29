@@ -43,6 +43,9 @@ $event-header-bg-dark: rgba(31, 31, 31, 0.9);
   top: $navbar-height;
   z-index: 1;
 
+  left: 0;
+  right: 0;
+
   @include for-mobile-only {
     position: absolute;
     flex-direction: column;
