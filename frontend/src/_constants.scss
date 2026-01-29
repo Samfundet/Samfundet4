@@ -100,8 +100,11 @@ $special-letter-spacing: -0.05rem;
 /* Screen sizes, breakpoint (bp) */
 $large-desktop-bp-lower: 1201px;
 $desktop-bp-upper: 1200px;
-$desktop-bp-lower: 993px;
-$tablet-bp-upper: 992px;
+// TODO: old breakpióints commented below, dont remove, fix breakpoints later (temparery navbar fix)
+// $desktop-bp-lower: 993px;
+// $tablet-bp-upper: 992px;
+$desktop-bp-lower: 1200px;
+$tablet-bp-upper: 1199px;
 $tablet-bp-lower: 769px;
 $mobile-bp-upper: 768px;
 $content-max-size: 1200px;

@@ -249,7 +249,7 @@ export function NavbarSamfThree() {
         setIsMobileNavigation(false);
       }}
     >
-      {t(KEY.loginpage_internal_login)}
+      {t(KEY.common_login)}
     </Button>
   );
 
