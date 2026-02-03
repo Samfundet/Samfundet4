@@ -9,7 +9,6 @@ import type { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from './OpeningHours.module.scss';
-import { t } from 'i18next';
 
 type OpeningHoursProps = {
   venues: VenueDto[] | undefined;
