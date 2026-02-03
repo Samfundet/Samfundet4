@@ -143,7 +143,7 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "3.11.2"
-django = "5.1.*"
+django = "5.2.*"
 django-extensions = "4.*"
 django-environ = "0.*"
 djangorestframework = "3.*"
@@ -165,7 +165,8 @@ debugpy = "1.*"
 requests = "2.*"
 pytest = "8.*"
 pytest-django = "4.*"
-drf-spectacular = "0.28.*"
+drf-spectacular = "0.29.*"
+freezegun = "^1.5.5"
 
 [build-system]
 requires = ["poetry-core"]

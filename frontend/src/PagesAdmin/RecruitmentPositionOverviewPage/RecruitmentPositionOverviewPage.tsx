@@ -74,12 +74,14 @@ export function RecruitmentPositionOverviewPage() {
   const title = t(KEY.recruitment_administrate_applications);
   useTitle(title);
 
-  const backendUrl = reverse({
-    pattern: ROUTES.backend.admin__samfundet_recruitmentposition_change,
-    urlParams: {
-      objectId: positionId,
-    },
-  });
+  const backendUrl = undefined;
+
+  // const backendUrl = reverse({
+  //   pattern: ROUTES.backend.admin__samfundet_recruitmentposition_change,
+  //   urlParams: {
+  //     objectId: positionId,
+  //   },
+  // });
 
   const header = (
     <Button
