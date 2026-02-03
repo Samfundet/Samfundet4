@@ -10,8 +10,8 @@
   align-items: center;
 
   @include theme-dark {
-    background-color: $black-2;
-    color: $white;
+    background-color: $theme-dark-bg;
+    color: $theme-dark-color;
   }
 }
 
@@ -30,7 +30,6 @@
   border: 2px $red_samf solid;
   border-radius: 10px;
   padding: 20px;
-  margin-bottom: 2rem; 
-  margin-top: 1rem; 
+  margin-bottom: 2rem;
+  margin-top: 1rem;
 }
-
