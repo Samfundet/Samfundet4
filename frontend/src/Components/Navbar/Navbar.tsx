@@ -31,9 +31,7 @@ export function Navbar() {
   const [cookies, setCookie, removeCookie] = useCookies();
 
   // Each NavbarItem can have a dropdown menu.
-  // We want only one of them to be extended at any time, therefore this parent component
-  // is given the responsibility of managing this.
-  // Store the label of the currently selected dropdown.
+  // We want only one of them to be extended at any time.
   const [expandedDropdown, setExpandedDropdown] = useState('');
 
   // Scroll detection.
@@ -47,8 +45,7 @@ export function Navbar() {
   const isDecember = useMemo(() => new Date().getMonth() === 11, []);
 
   useEffect(() => {
-    // Close expanded dropdown menu whenever mobile navbar is closed, or we switch from mobile to desktop, like when
-    // switching from portrait to landscape on iPad.
+    // Close expanded dropdown menu whenever mobile navbar is closed or switching to desktop
     if (!isMobileNavigation || isDesktop) {
       setExpandedDropdown('');
     }
@@ -62,7 +59,7 @@ export function Navbar() {
 
   const showActiveRecruitments = activeRecruitments !== undefined && activeRecruitments?.length > 0;
 
-  // Return profile button for navbar if logged in.
+  // Return profile button for mobile
   const mobileProfileButton = (
     <div className={styles.navbar_profile_button}>
       <Icon icon="material-symbols:person" />
@@ -79,6 +76,7 @@ export function Navbar() {
         className={styles.navbar_dropdown_link}
         onAfterClick={() => setExpandedDropdown('')}
       >
+        <Icon icon="mdi:information-outline" />
         {t(KEY.common_general)}
       </Link>
       <Link
@@ -86,10 +84,12 @@ export function Navbar() {
         className={styles.navbar_dropdown_link}
         onAfterClick={() => setExpandedDropdown('')}
       >
+        <Icon icon="mdi:card-account-details-outline" />
         {t(KEY.common_membership)}
       </Link>
       {/* biome-ignore lint/a11y/useValidAnchor: will point to actual route later */}
       <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
+        <Icon icon="mdi:clock-outline" />
         {t(KEY.common_opening_hours)}
       </a>
       <Link
@@ -97,6 +97,7 @@ export function Navbar() {
         className={styles.navbar_dropdown_link}
         onAfterClick={() => setExpandedDropdown('')}
       >
+        <Icon icon="mdi:map-marker-outline" />
         {t(KEY.navbar_map)}
       </Link>
       <a
@@ -104,10 +105,12 @@ export function Navbar() {
         className={styles.navbar_dropdown_link}
         onClick={() => setExpandedDropdown('')}
       >
+        <Icon icon="mdi:camera-outline" />
         {t(KEY.navbar_photos)}
       </a>
       {/* biome-ignore lint/a11y/useValidAnchor: will point to actual route later */}
       <a href="#" className={styles.navbar_dropdown_link} onClick={() => setExpandedDropdown('')}>
+        <Icon icon="mdi:domain" />
         {t(KEY.navbar_nybygg)}
       </a>
     </>
@@ -191,7 +194,7 @@ export function Navbar() {
   );
 
   const profileButton = user && (
-    <div className={classNames(styles.navbar_profile_button, styles.profile_text, styles.dropdown_container_left)}>
+    <div className={classNames(styles.navbar_profile_button, styles.dropdown_container_left)}>
       <NavbarItem
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}

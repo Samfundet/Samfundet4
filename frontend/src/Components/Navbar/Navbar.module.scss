@@ -8,25 +8,22 @@
 @use 'src/constants' as *;
 
 // Background
-$navbar-bg: white;
-$navbar-bg-transparent: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, transparent);
-$navbar-bg-dark: black;
-$navbar-bg-dark-transparent: $navbar-bg-transparent;
-$navbar-dropdown-bg: rgba(255, 255, 255, 0.6);
-$navbar-dropdown-bg-dark: rgba(0, 0, 0, 0.95);
-$navbar-dropdown-border-radius: 0.5em;
+$navbar-bg-dark: #161616; // Gray 100
+$navbar-bg-transparent: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, transparent);
 
-// Link
-$navbar-link-blur-light-bg: rgba(255, 255, 255, 0.4);
-$navbar-link-blur-dark-bg: rgba(0, 0, 0, 0.4);
-$navbar-link-light-hover-gradient-top: #f4f4f4;
-$navbar-dropdown-link-light-hover: #202020;
-$navbar-dropdown-link-dark-hover: #f4f4f4;
-$navbar-link-light-hover-gradient-bottom: #ffffff;
-$navbar-link-dark-hover-gradient-top: #151515;
-$navbar-link-dark-hover-gradient-bottom: #000000;
-$navbar-link-transparent-hover-gradient-top: rgba(255, 255, 255, 0.1);
-$navbar-link-transparent-hover-gradient-bottom: transparent;
+$dropdown-bg-light: #ffffff;
+$dropdown-border-light: #e0e0e0;
+$dropdown-text-light: #161616;
+$dropdown-hover-light: #f4f4f4;
+
+$dropdown-bg-dark: #262626; // Gray 90
+$dropdown-border-dark: #393939; // Gray 80
+$dropdown-text-dark: #f4f4f4;
+$dropdown-hover-dark: #353535; // Gray 80 hover
+
+// Dimensions
+$dropdown-radius: 4px;
+$dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 
 /* Inner container with padding */
 .navbar_outlet {
@@ -46,14 +43,15 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   height: $navbar-height;
   background: $navbar-bg-dark;
   color: $white;
-  transition: 0.2s;
-  transition-timing-function: ease-in-out;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 12;
+  z-index: 1000;
   white-space: nowrap;
-  box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid $dropdown-border-dark;
 }
 
 .navbar_inner {
@@ -73,105 +71,105 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 }
 
 .navbar_item_icon {
-  margin-right: 0.25rem;
+  margin-right: 0.5rem;
+  font-size: 1.1em;
 }
 
 .hidden {
   display: none;
 }
 
-.navbar_mobile_item {
-  position: relative;
-}
-
-.mobile_dropdown_container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-@keyframes anim-dropdown {
-  0% {
-    max-height: 0;
-    opacity: 0;
-  }
-
-  100% {
-    max-height: 20em;
-    opacity: 1;
-  }
-}
+/* ------------------------------------------------ */
+/* DROPDOWN STYLES (Modernized)                     */
+/* ------------------------------------------------ */
 
 .dropdown_container {
   position: absolute;
-  pointer-events: none;
-  transition: 0.15s;
   top: 100%;
-  min-width: 130%;
-  z-index: 1;
+  left: 0;
+  min-width: 220px;
+  z-index: 100;
   display: flex;
   flex-direction: column;
-  background-color: $grey_0;
-  color: $white;
-  box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0.06);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  overflow: hidden;
-  transform: scaleY(0);
-  transform-origin: 50% 0%;
-  opacity: 0;
-  border-radius: 0.5em;
-  margin: 0.2em;
 
-  @include for-desktop-up {
-    border-radius: $navbar-dropdown-border-radius;
+  // Visuals
+  background-color: $dropdown-bg-dark;
+  border: 1px solid $dropdown-border-dark;
+  box-shadow: $dropdown-shadow;
+  border-radius: 0 0 $dropdown-radius $dropdown-radius;
+  color: $dropdown-text-dark;
+
+  // Animation State: Closed
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  visibility: hidden;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s cubic-bezier(0.2, 0, 0.38, 0.9),
+    visibility 0.15s;
+
+  overflow: hidden;
+  padding: 4px 0;
+
+  @include theme-light {
+    background-color: $dropdown-bg-light;
+    border-color: $dropdown-border-light;
+    color: $dropdown-text-light;
   }
 }
 
+// Modifier to align dropdown to the right (for profile menu)
 .dropdown_container_left .dropdown_container {
+  left: auto;
   right: 0;
+  border-radius: $dropdown-radius;
+  margin-top: 8px; // Slight separation for floating look on profile
 }
 
 .dropdown_open {
-  pointer-events: all;
-  overflow: visible;
-  transform: scaleY(1);
   opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+  visibility: visible;
 }
 
 .navbar_dropdown_link,
 .navbar_logout_button {
-  padding: 0.5rem 1rem;
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 14px;
   text-decoration: none;
-  transition: 0.1s;
-  color: $white;
+  transition: background-color 0.1s ease;
+  color: inherit;
   cursor: pointer;
-  font-size: inherit;
   display: flex;
   align-items: center;
-  gap: 0.3rem;
-  background: none;
+  gap: 12px;
+  background: transparent;
   border: none;
+  text-align: left;
 
   @include theme-dark {
-    color: $white;
-  }
-
-  &:last-child {
-    @include for-desktop-up {
-      border-radius: 0 0 0.5rem 0.5rem;
-      padding-bottom: 0.8rem;
-    }
+    color: $dropdown-text-dark;
   }
 
   &:hover {
-    background: $navbar-dropdown-link-dark-hover;
-    color: $black;
+    background-color: $dropdown-hover-dark;
+    color: $white;
     text-decoration: none;
+
+    @include theme-light {
+      background-color: $dropdown-hover-light;
+      color: $black;
+    }
   }
 }
 
-/* Desktop navigation items */
+/* ------------------------------------------------ */
+/* NAVBAR ITEMS                                     */
+/* ------------------------------------------------ */
+
 .navbar_main_links {
   display: flex;
   height: 100%;
@@ -186,40 +184,32 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 }
 
 .navbar_link {
-  color: inherit;
+  color: #c6c6c6; // Slightly muted text for inactive
   display: flex;
   align-items: center;
   text-decoration: none;
-  padding: 0 1rem;
+  padding: 0 1.25rem;
   height: 100%;
   cursor: pointer;
-  transition: 0.1s;
+  transition:
+    color 0.2s,
+    background-color 0.2s;
   flex: 1;
   text-align: center;
   justify-content: center;
   background: transparent;
   z-index: 2;
   font-size: inherit;
-  border-radius: 0 0 0.5rem 0.5rem;
+  font-weight: 500;
 
   @include for-tablet-down {
     display: none;
   }
 
-  // This ensures navbar dropdown shadow does not lie
-  // on top of the navbar item
-  &.selected {
-    background-color: $navbar-bg-dark;
-  }
-
-  /* Link hover for regular navbar */
+  &.selected,
   &:hover {
-    background: linear-gradient(
-      to bottom,
-      $navbar-link-dark-hover-gradient-top,
-      $navbar-link-dark-hover-gradient-bottom
-    );
-    color: #eeeeee;
+    color: $white;
+    background-color: $dropdown-hover-dark;
     text-decoration: none;
   }
 }
@@ -235,7 +225,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 }
 
 #navbar_logo_img {
-  width: 100%; // QUESTION: Why is this needed?
+  width: 100%;
   padding: 13px;
 }
 
@@ -261,57 +251,49 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   align-items: center;
   white-space: nowrap;
   cursor: pointer;
-  padding-left: 6px;
-  padding-right: 6px;
-  background-color: inherit;
-  border-bottom: 1px solid transparent;
-  gap: 5px;
-
-  @include for-desktop-up {
-    height: 100%;
-  }
-
-  .profile_icon {
-    width: 16px;
-    height: 16px;
-  }
+  height: 100%;
+  position: relative; // Needed for positioning the absolute dropdown
 
   .profile_text {
     text-decoration: none;
     color: inherit;
+    font-weight: 500;
   }
 
+  // Reuse navbar link hover style
   &:hover {
-    color: $red-samf;
+    color: $white;
   }
 }
 
 /* Transparent navbar (on top of page) */
 #navbar_container.transparent_navbar {
-  background: $navbar-bg-dark-transparent;
-  color: white;
+  background: $navbar-bg-transparent;
   box-shadow: none;
+  border-bottom: transparent;
 
-  .navbar_link:hover {
-    background: linear-gradient(
-      to bottom,
-      $navbar-link-transparent-hover-gradient-top,
-      $navbar-link-transparent-hover-gradient-bottom
-    );
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .navbar_profile_button {
-    color: inherit;
-
+  .navbar_link {
+    color: $white;
     &:hover {
-      color: $grey-4;
+      background: rgba(255, 255, 255, 0.1);
     }
   }
 }
 
-/* Mobile popup navigation */
+/* ------------------------------------------------ */
+/* MOBILE STYLES                                    */
+/* ------------------------------------------------ */
+
+.navbar_mobile_item {
+  position: relative;
+}
+
+.mobile_dropdown_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 #mobile_popup_container {
   position: fixed;
   top: 60px;
@@ -319,7 +301,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   width: 100vw;
   height: calc(100vh - 60px);
   min-height: 400px;
-  background: $navbar-bg-dark;
+  background: #161616;
   color: white;
   display: flex;
   align-items: center;
@@ -332,13 +314,11 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   }
 }
 
-/* A way to make the "Information" text look more centered
-offsets the text by 18px, the size of the chevron-icon */
+/* A way to make the "Information" text look more centered */
 #mobile_popup_container > .navbar_mobile_item:nth-child(2) {
   margin-left: 18px;
 }
 
-/* Navbar link mobile */
 .popup_link_mobile {
   color: inherit;
   font-size: 1.5em;
@@ -395,18 +375,14 @@ offsets the text by 18px, the size of the chevron-icon */
   pointer-events: none;
 }
 
-// When this dropdown menu item is open and navbar is transparent
-// we add backdrop filter to the dropdown itself as well
-.selected {
-  background: $navbar-bg-dark;
-  color: $white;
-  border-radius: 0 0 0.5rem 0.5rem;
-}
-
 .active_recruitment {
   background-color: $red-samf;
   font-weight: 700;
   color: $white;
   border-radius: 0.25rem;
   padding: 0.5rem 0.75rem;
+
+  &:hover {
+    background-color: lighten($red-samf, 5%);
+  }
 }
