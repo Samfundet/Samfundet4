@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 import datetime
 import itertools
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from collections import defaultdict
 
 from PIL import Image as PilImage
@@ -247,13 +247,13 @@ class EventSerializer(CustomBaseSerializer):
             "tags": list(img.tags.values_list("id", flat=True))
         }
 
-    def update(self, instance, validated_data) -> Event:
+    def update(self, instance: Event, validated_data: dict[str, Any]) -> Event:
         image_id = validated_data.pop("image_id", None)
         if image_id is not None:
             try:
                 instance.image = Image.objects.get(pk=image_id)
-            except Image.DoesNotExist:
-                raise serializers.ValidationError({"image_id": "Invalid image id"})    
+            except Image.DoesNotExist as err:
+                raise serializers.ValidationError({"image_id": "Invalid image id"}) from err
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)

@@ -24,9 +24,9 @@ import {
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { getEvent, getImages, getVenues, postEvent, putEvent } from '~/api';
+import { getEvent, getVenues, postEvent, putEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
-import type { EventDto, ImageDto } from '~/dto';
+import type { EventDto } from '~/dto';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { venueKeys } from '~/queryKeys';
