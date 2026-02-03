@@ -99,7 +99,6 @@ export function EventCreatorAdminPage() {
       custom_tickets: [],
       billig_id: undefined,
       image: undefined,
-      image_id: undefined,
       visibility_from_dt: '',
       visibility_to_dt: '',
     },
@@ -113,8 +112,6 @@ export function EventCreatorAdminPage() {
           const eventDuration = Math.round(
             (new Date(eventData.end_dt).getTime() - new Date(eventData.start_dt).getTime()) / 60000,
           );
-          const normalise = (u: string) => u.replace(BACKEND_DOMAIN, '').replace(/\/+$/, '');
-          const eventUrl = normalise(eventData.image_url ?? '');
           const matchedImage = images.find((img) => eventData.image_url?.endsWith(img.url)) ?? undefined;
           setEvent(eventData);
           form.reset({
