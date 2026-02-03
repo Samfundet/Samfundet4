@@ -1,4 +1,5 @@
 import { Icon } from '@iconify/react';
+import { addDays, addMinutes } from 'date-fns';
 import { useState } from 'react';
 import {
   Block,
@@ -8,6 +9,7 @@ import {
   BlockTitle,
   Button,
   Countdown,
+  EventCard,
   H1,
   H2,
   H3,
@@ -27,8 +29,11 @@ import { MultiSelect } from '~/Components/MultiSelect';
 import { ShrimpFishing } from '~/Components/ShrimpFishing/ShrimpFishing';
 import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOverlay';
 import { ExampleForm } from '~/Pages/ComponentPage/ExampleForm';
+import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
+import type { EventDto } from '~/dto';
+import { EventCategory, EventTicketType } from '~/types';
 import styles from './ComponentPage.module.scss';
 
 /**
@@ -38,8 +43,82 @@ import styles from './ComponentPage.module.scss';
 export function ComponentPage() {
   const [showShrimpFishing, setShowShrimpFishing] = useState(false);
 
+  function createFakeEvent(override: Partial<EventDto>, billig?: Partial<BilligEventDto>): EventDto {
+    return {
+      age_restriction: 'eighteen',
+      category: 'concert',
+      custom_tickets: [],
+      description_long_en: '',
+      description_long_nb: '',
+      description_short_en: "Von August's coming to Samfundet with their dreamy synth and heartfelt vocal harmonies!",
+      description_short_nb: 'Von August kommer til Samfundet med sin drømmende synth og indelige vokalharmonier!',
+      duration: 60,
+      end_dt: new Date().toISOString(),
+      event_group: {
+        id: 1,
+        name: 'foobar',
+      },
+      host: 'KLST',
+      id: 1,
+      image_url: '',
+      location: 'Vuelie',
+      visibility_from_dt: new Date().toISOString(),
+      visibility_to_dt: '',
+      start_dt: new Date().toISOString(),
+      status: 'active',
+      ticket_type: 'free',
+      title_en: 'Von August with a very long title just like this // 23:59',
+      title_nb: 'Von August // 23:59',
+      billig: billig
+        ? {
+            is_almost_sold_out: false,
+            id: 0,
+            in_sale_period: '',
+            is_sold_out: false,
+            name: '',
+            sale_from: '',
+            sale_to: '',
+            ticket_groups: [],
+            ...billig,
+          }
+        : undefined,
+      ...override,
+    };
+  }
+
   return (
     <Page className={styles.wrapper}>
+      <div style={{ display: 'flex', gap: '1.5rem' }}>
+        <EventCard
+          event={createFakeEvent(
+            { category: EventCategory.FOOTBALL_MATCH, ticket_type: EventTicketType.BILLIG },
+            { is_almost_sold_out: true },
+          )}
+        />
+        <EventCard
+          event={createFakeEvent(
+            {
+              title_nb: 'Richard Layout',
+              start_dt: addDays(new Date(), 1).toISOString(),
+              image_url: '/media/images/img_7_Cj7HE9w',
+              location: 'Storsalen',
+            },
+            { is_sold_out: true },
+          )}
+        />
+        <EventCard
+          event={createFakeEvent({
+            title_nb: 'Villmarksforedrag med Lars Monsen',
+            image_url: '/media/images/img_1_LFzT7HJ',
+            category: EventCategory.QUIZ,
+            start_dt: addDays(addMinutes(new Date(), 87), 5).toISOString(),
+            location: 'Hele huset',
+          })}
+        />
+      </div>
+
+      <br />
+
       <div>
         <H1>Example form</H1>
 
@@ -57,27 +136,29 @@ export function ComponentPage() {
 
       <BlockContainer>
         <Block theme="green">
-          <BlockContent>
-            <BlockTitle>
-              Samfundet
-              <br /> har
-              <br /> opptak!
-            </BlockTitle>
-          </BlockContent>
-          <BlockFooter
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              width: '100%',
-            }}
-          >
-            <div>Frist i dag</div>
-            <span style={{ color: 'inherit', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-              Les mer
-              <Icon icon="line-md:arrow-up" width={16} rotate={1} />
-            </span>
-          </BlockFooter>
+          <a href="/" style={{ color: 'inherit' }}>
+            <BlockContent>
+              <BlockTitle>
+                Samfundet
+                <br /> har
+                <br /> opptak!
+              </BlockTitle>
+            </BlockContent>
+            <BlockFooter
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                width: '100%',
+              }}
+            >
+              <div>Frist i dag</div>
+              <a href="/" style={{ color: 'inherit', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                Les mer
+                <Icon icon="line-md:arrow-up" width={16} rotate={1} />
+              </a>
+            </BlockFooter>
+          </a>
         </Block>
       </BlockContainer>
 

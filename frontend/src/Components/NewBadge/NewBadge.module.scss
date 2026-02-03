@@ -6,7 +6,7 @@
   border-radius: 50vh;
   min-width: 50px;
   width: auto;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   gap: 0.25rem;
@@ -26,7 +26,12 @@
 
 .green {
   background-color: c.$green-800;
-  color: c.$green-300
+  color: c.$green-300;
+}
+
+.blue {
+  background-color: c.$blue-900;
+  color: c.$blue-300;
 }
 
 .gold {
@@ -47,4 +52,9 @@
     border-color: c.$gray-100;
     color: c.$gray-100;
   }
+}
+
+.outline_white {
+  border: 1px solid c.$white-100;
+  color: c.$white-100;
 }
