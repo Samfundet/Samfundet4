@@ -9,6 +9,7 @@ import type { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from './OpeningHours.module.scss';
+import { t } from 'i18next';
 
 type OpeningHoursProps = {
   venues: VenueDto[] | undefined;
@@ -26,7 +27,7 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
     if (globalContext.isClosed !== 'default') {
       if (globalContext.isClosed === 'closed') {
         setIsClosed(true);
-        setClosedText('Samfundet is closed');
+        setClosedText(t(KEY.admin_closed_message));
       }
       return;
     }

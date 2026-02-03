@@ -59,7 +59,6 @@ export function ClosedPeriodFormAdminPage() {
           navigate({ url: ROUTES.frontend.admin_closed, replace: true });
         }
         toast.error(t(KEY.common_something_went_wrong));
-        console.error(data);
       });
   }, [id]);
 

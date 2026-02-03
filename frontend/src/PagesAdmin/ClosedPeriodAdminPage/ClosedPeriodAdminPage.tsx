@@ -123,6 +123,7 @@ export function ClosedPeriodAdminPage() {
                       display="block"
                       className={styles.smallButtons}
                       onClick={() => {
+                        // :TODO: window.comfirm should be replaced with a non-browser implementation (not built-in popup)
                         if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_nb}`)) {
                           deleteSelectedEvent(element.id);
                         }

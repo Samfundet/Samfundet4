@@ -556,6 +556,7 @@ export const KEY = {
   adminpage_gangs_create: 'adminpage_gangs_create',
   admin_opening_hours_hint: 'admin_opening_hours_hint',
   admin_closed_period_title: 'admin_closed_period_title',
+  admin_closed_message: 'admin_closed_message',
   admin_saksdokumenter_title: 'admin_saksdokumenter_title',
   admin_sultenmenu_title: 'admin_sultenmenu_title',
   admin_gangsadminpage_webpage: 'admin_gangsadminpage_webpage',
