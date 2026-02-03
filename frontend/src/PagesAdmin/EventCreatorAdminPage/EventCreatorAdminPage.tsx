@@ -107,12 +107,11 @@ export function EventCreatorAdminPage() {
   // Fetch event data using the event ID
   useEffect(() => {
     if (id) {
-      Promise.all([getEvent(id), getImages()])
-        .then(([eventData, images]) => {
+      getEvent(id)
+        .then((eventData) => {
           const eventDuration = Math.round(
             (new Date(eventData.end_dt).getTime() - new Date(eventData.start_dt).getTime()) / 60000,
           );
-          const matchedImage = images.find((img) => eventData.image_url?.endsWith(img.url)) ?? undefined;
           setEvent(eventData);
           form.reset({
             title_nb: eventData.title_nb || '',
@@ -132,7 +131,7 @@ export function EventCreatorAdminPage() {
             ticket_type: eventData.ticket_type || 'free',
             custom_tickets: eventData.custom_tickets || [],
             billig_id: eventData.billig?.id,
-            image: matchedImage,
+            image: eventData.image || undefined,
             visibility_from_dt: eventData.visibility_from_dt
               ? utcTimestampToLocal(eventData.visibility_from_dt, false)
               : '',

@@ -224,7 +224,7 @@ class EventSerializer(CustomBaseSerializer):
         model = Event
         list_serializer_class = EventListSerializer
         # Warning: registration object contains sensitive data, don't include it!
-        exclude = ['image', 'registration', 'event_group', 'billig_id']
+        exclude = ['registration', 'event_group', 'billig_id']
 
     # Read only properties (computed property, foreign model).
     total_registrations = serializers.IntegerField(read_only=True)
@@ -236,7 +236,7 @@ class EventSerializer(CustomBaseSerializer):
     billig = BilligEventSerializer(read_only=True)
 
     # For post/put (change image by id).
-    image_id = serializers.IntegerField(write_only=True)
+    image_id = serializers.IntegerField(write_only=True, required=True)
 
     def get_image(self, obj: Event) -> dict:
         img = obj.image
@@ -244,7 +244,7 @@ class EventSerializer(CustomBaseSerializer):
             "id": img.id,
             "url": img.image.url,
             "title": img.title,
-            "tags": list(img.tags.values.list("id", flat=True))
+            "tags": list(img.tags.values_list("id", flat=True))
         }
 
     def update(self, instance, validated_data) -> Event:
