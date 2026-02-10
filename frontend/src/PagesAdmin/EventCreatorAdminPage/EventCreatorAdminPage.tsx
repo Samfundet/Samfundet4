@@ -98,6 +98,16 @@ export function EventCreatorAdminPage() {
       ticket_type: 'free',
       custom_tickets: [],
       billig_id: undefined,
+      spotify_uri: '',
+      youtube_link: '',
+      youtube_embed: '',
+      soundcloud_link: '',
+      instagram_link: '',
+      facebook_link: '',
+      x_link: '',
+      lastfm_link: '',
+      vimeo_link: '',
+      general_link: '',
       image: undefined,
       visibility_from_dt: '',
       visibility_to_dt: '',
@@ -435,6 +445,157 @@ export function EventCreatorAdminPage() {
               form.reset(updatedValues);
             }}
           />
+        </>
+      ),
+    },
+    // Social media links
+    {
+      key: 'socialmedia',
+      title_nb: 'Sosiale medier',
+      title_en: 'Social media',
+      validate: (data) => {
+        return !!data.age_restriction && !!data.ticket_type;
+      },
+      template: (
+        <>
+          <div className={styles.input_row}>
+            <FormField
+              name="registration_url"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
+                  <FormControl>
+                    <input type="text" {...field} placeholder="http://..." />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="registration_url"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
+                  <FormControl>
+                    <input type="text" {...field} placeholder="http://..." />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="registration_url"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
+                  <FormControl>
+                    <input type="text" {...field} placeholder="http://..." />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className={styles.input_row}>
+            <FormField
+              name="registration_url"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
+                  <FormControl>
+                    <input type="text" {...field} placeholder="http://..." />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="registration_url"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
+                  <FormControl>
+                    <input type="text" {...field} placeholder="http://..." />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="registration_url"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
+                  <FormControl>
+                    <input type="text" {...field} placeholder="http://..." />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className={styles.input_row}>
+            <FormField
+              name="registration_url"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
+                  <FormControl>
+                    <input type="text" {...field} placeholder="http://..." />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="registration_url"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
+                  <FormControl>
+                    <input type="text" {...field} placeholder="http://..." />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="registration_url"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
+                  <FormControl>
+                    <input type="text" {...field} placeholder="http://..." />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className={styles.input_row}>
+            <FormField
+              name="registration_url"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
+                  <FormControl>
+                    <input type="text" {...field} placeholder="http://..." />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </>
       ),
     },
