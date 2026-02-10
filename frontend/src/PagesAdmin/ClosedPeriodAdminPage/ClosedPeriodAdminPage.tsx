@@ -56,7 +56,7 @@ export function ClosedPeriodAdminPage() {
 
   const header = (
     <>
-      <Button theme="success" rounded={true} link={ROUTES.frontend.admin_closed_create}>
+      <Button theme="success" rounded link={ROUTES.frontend.admin_closed_create}>
         {t(KEY.admin_closed_period_new_period)}
       </Button>
       <span style={{ marginRight: 10 }}>{dbT({ text_nb: 'Stenging status', text_en: 'Closing status' }, 'text')}</span>
