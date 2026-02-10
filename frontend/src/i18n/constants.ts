@@ -563,6 +563,7 @@ export const KEY = {
   admin_events_recently_edited: 'admin_events_recently_edited',
   admin_events_administrate: 'admin_events_administrate',
   admin_closed_period_new_period: 'admin_closed_period_new_period',
+  admin_closed_period_closing_status: 'admin_closed_period_closing_status',
   admin_information_manage_title: 'admin_information_manage_title',
   admin_closed_period_edit_period: 'admin_closed_period_edit_period',
   admin_information_confirm_delete: 'admin_information_confirm_delete',

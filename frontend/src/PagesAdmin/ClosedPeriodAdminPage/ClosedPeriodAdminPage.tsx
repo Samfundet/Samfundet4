@@ -11,7 +11,6 @@ import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodAdminPage.module.scss';
 
@@ -59,7 +58,7 @@ export function ClosedPeriodAdminPage() {
       <Button theme="success" rounded link={ROUTES.frontend.admin_closed_create}>
         {t(KEY.admin_closed_period_new_period)}
       </Button>
-      <span style={{ marginRight: 10 }}>{dbT({ text_nb: 'Stenging status', text_en: 'Closing status' }, 'text')}</span>
+      <span style={{ marginRight: 10 }}>{t(KEY.admin_closed_period_closing_status)}</span>
       <Dropdown
         options={[
           {

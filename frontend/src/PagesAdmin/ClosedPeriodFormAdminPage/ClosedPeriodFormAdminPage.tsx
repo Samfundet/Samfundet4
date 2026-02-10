@@ -1,9 +1,9 @@
-import type { AxiosError } from 'axios';
-import { useEffect, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { SamfForm } from '~/Forms/SamfForm';
+import { type FormType, SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
 import { useCustomNavigate, useTitle } from '~/hooks';
@@ -24,63 +24,61 @@ type formType = {
 export function ClosedPeriodFormAdminPage() {
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
-
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  // const [closedPeriod, setClosedPeriod] = useState<ClosedPeriodDto | undefined>(undefined); For posting
-  const [initialData, setInitialData] = useState<formType | undefined>(undefined);
-
-  // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
 
   const min_length_message = 10;
 
-  // Stuff to do on first render.
-  // TODO add permissions on render
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
-  useEffect(() => {
-    // TODO add fix on no id on editpage
-    if (id === undefined) {
-      setShowSpinner(false);
-      return;
-    }
+  const {
+    data: initialData,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['closed-period', id],
+    queryFn: () => getClosedPeriod(id as string),
+    enabled: !!id,
+    select: (data) => ({
+      message_nb: data.message_nb,
+      message_en: data.message_en,
+      start_dt: data.start_dt,
+      end_dt: data.end_dt,
+    }),
+  });
 
-    getClosedPeriod(id)
-      .then((data) => {
-        setInitialData({
-          message_nb: data.message_nb,
-          message_en: data.message_en,
-          start_dt: data.start_dt,
-          end_dt: data.end_dt,
-        });
-        setShowSpinner(false);
-      })
-      .catch((data: AxiosError) => {
-        if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-          navigate({ url: ROUTES.frontend.admin_closed, replace: true });
-        }
-        toast.error(t(KEY.common_something_went_wrong));
-      });
-  }, [id]);
+  useEffect(() => {
+    if (isError) {
+      navigate({ url: ROUTES.frontend.admin_closed, replace: true });
+      toast.error(t(KEY.common_something_went_wrong));
+    }
+  }, [isError, t, navigate]);
+
+  const updateMutation = useMutation({
+    mutationFn: (data: FormType) => putClosedPeriod(id as string, data),
+    onSuccess: () => {
+      toast.success(t(KEY.common_update_successful));
+      navigate({ url: reverse({ pattern: ROUTES.frontend.admin_closed }) });
+    },
+    onError: () => {
+      toast.error(t(KEY.common_something_went_wrong));
+    },
+  });
+
+  const createMutation = useMutation({
+    mutationFn: (data: formType) => postClosedPeriod(data),
+    onSuccess: () => {
+      toast.success(t(KEY.common_creation_successful));
+      navigate({ url: reverse({ pattern: ROUTES.frontend.admin_closed }) });
+    },
+    onError: () => {
+      toast.error(t(KEY.common_something_went_wrong));
+    },
+  });
 
   function handleOnSubmit(data: formType) {
-    if (id !== undefined) {
-      putClosedPeriod(id, data)
-        .then(() => {
-          toast.success(t(KEY.common_update_successful));
-          navigate({ url: reverse({ pattern: ROUTES.frontend.admin_closed }) });
-        })
-        .catch(() => {
-          toast.error(t(KEY.common_something_went_wrong));
-        });
+    if (id) {
+      updateMutation.mutate(data);
     } else {
-      postClosedPeriod(data)
-        .then(() => {
-          toast.success(t(KEY.common_creation_successful));
-          navigate({ url: reverse({ pattern: ROUTES.frontend.admin_closed }) });
-        })
-        .catch(() => {
-          toast.error(t(KEY.common_something_went_wrong));
-        });
+      createMutation.mutate(data);
     }
   }
 
@@ -89,7 +87,7 @@ export function ClosedPeriodFormAdminPage() {
   useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true}>
+    <AdminPageLayout title={title} loading={isLoading} header={true}>
       <SamfForm<formType> onSubmit={handleOnSubmit} initialData={initialData}>
         <div className={styles.row}>
           <SamfFormField
