@@ -1,0 +1,236 @@
+@use 'src/mixins' as m;
+
+@use 'src/styles/colors' as c;
+
+@use 'src/constants' as v;
+
+$width: 420px;
+$min-width: 280px;
+$border-radius: 20px;
+
+$title-font-size: 24px;
+$inner-title-font-size: 58px;
+
+$transition-function: cubic-bezier(.25, 0.75, 0.25, 1);
+$transition-duration: 0.4s;
+
+// Container
+
+.container {
+  width: $width;
+  min-width: $min-width;
+}
+
+// Content
+
+.block {
+  border-radius: $border-radius;
+  position: relative;
+  min-height: 150px;
+  overflow: hidden;
+  transition: border-radius $transition-duration $transition-function;
+  aspect-ratio: 3/2;
+
+  &:hover {
+    border-radius: 8px;
+  }
+}
+
+.square {
+  aspect-ratio: 1;
+}
+
+.content {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  margin-top: 1.25rem;
+  z-index: 2;
+}
+
+.inner_content {
+  padding: 1rem;
+  z-index: 2;
+  position: relative;
+}
+
+// Title
+
+.title {
+  font-family: v.$special-font-family;
+  font-size: $title-font-size;
+  letter-spacing: -0.05rem;
+  font-weight: 500;
+  margin-top: 0.25rem;
+  line-height: 130%;
+
+  &, a {
+    color: c.$gray-950;
+  }
+
+  @include m.theme-dark {
+    color: c.$white-50;
+
+    a {
+      color: c.$white-50;
+    }
+  }
+}
+
+.content .title {
+  // Increase font size of BlockTitles inside Blocks
+  font-size: $inner-title-font-size;
+}
+
+// Header and footer
+
+.header {
+  top: 0;
+  z-index: 3;
+}
+
+.footer {
+  bottom: 0;
+  z-index: 2;
+}
+
+.header, .footer {
+  position: absolute;
+  width: 100%;
+}
+
+.header_gradient, .footer_gradient {
+  height: 35%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  z-index: 1;
+}
+
+.header_gradient {
+  top: 0;
+  background: linear-gradient(to top,
+    hsla(0, 0%, 0%, 0) 0%,
+    hsla(0, 0%, 0%, 0.004) 8.1%,
+    hsla(0, 0%, 0%, 0.015) 15.5%,
+    hsla(0, 0%, 0%, 0.031) 22.5%,
+    hsla(0, 0%, 0%, 0.053) 29%,
+    hsla(0, 0%, 0%, 0.078) 35.3%,
+    hsla(0, 0%, 0%, 0.106) 41.2%,
+    hsla(0, 0%, 0%, 0.135) 47.1%,
+    hsla(0, 0%, 0%, 0.165) 52.9%,
+    hsla(0, 0%, 0%, 0.194) 58.8%,
+    hsla(0, 0%, 0%, 0.222) 64.7%,
+    hsla(0, 0%, 0%, 0.247) 71%,
+    hsla(0, 0%, 0%, 0.269) 77.5%,
+    hsla(0, 0%, 0%, 0.285) 84.5%,
+    hsla(0, 0%, 0%, 0.296) 91.9%,
+    hsla(0, 0%, 0%, 0.3) 100%
+  );
+}
+
+.footer_gradient {
+  bottom: 0;
+  background: linear-gradient(to bottom,
+    hsla(0, 0%, 0%, 0) 0%,
+    hsla(0, 0%, 0%, 0.01) 8.1%,
+    hsla(0, 0%, 0%, 0.039) 15.5%,
+    hsla(0, 0%, 0%, 0.083) 22.5%,
+    hsla(0, 0%, 0%, 0.14) 29%,
+    hsla(0, 0%, 0%, 0.207) 35.3%,
+    hsla(0, 0%, 0%, 0.282) 41.2%,
+    hsla(0, 0%, 0%, 0.36) 47.1%,
+    hsla(0, 0%, 0%, 0.44) 52.9%,
+    hsla(0, 0%, 0%, 0.518) 58.8%,
+    hsla(0, 0%, 0%, 0.593) 64.7%,
+    hsla(0, 0%, 0%, 0.66) 71%,
+    hsla(0, 0%, 0%, 0.717) 77.5%,
+    hsla(0, 0%, 0%, 0.761) 84.5%,
+    hsla(0, 0%, 0%, 0.79) 91.9%,
+    hsla(0, 0%, 0%, 0.8) 100%
+  );
+}
+
+
+// Image
+
+.image_container {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+.image {
+  background-size: cover;
+  background-position: center center;
+  transition: transform $transition-duration $transition-function;
+  display: block;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+}
+
+.block:hover .image:not(.disable_zoom_effect) {
+  transform: scale(1.05);
+}
+
+// Block themes
+
+.red {
+  background-color: c.$samf-red-900;
+  color: c.$samf-red-500;
+
+  .title {
+    color: c.$samf-red-500;
+  }
+}
+
+.purple {
+  background-color: c.$purple-900;
+  color: c.$fuchsia-200;
+
+  .title {
+    color: c.$fuchsia-200;
+  }
+}
+
+.green {
+  background-color: c.$green-800;
+  color: c.$green-300;
+
+  .title {
+    color: c.$green-300;
+  }
+}
+
+.blue {
+  background-color: c.$blue-900;
+  color: c.$blue-300;
+
+  .title {
+    color: c.$blue-300;
+  }
+}
+
+.gold {
+  background-color: c.$gold-600;
+  color: c.$yellow-200;
+
+  .title {
+    color: c.$yellow-200;
+  }
+}
+
+.white {
+  background-color: c.$white-50;
+  color: c.$gray-900;
+}
+
+.container a {
+  &, &:hover {
+    text-decoration: none;
+  }
+}

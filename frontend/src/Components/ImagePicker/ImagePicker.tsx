@@ -1,10 +1,11 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getImages } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
-import type { Children } from '~/types';
+import { KEY } from '~/i18n/constants';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './ImagePicker.module.scss';
 
@@ -14,6 +15,7 @@ export type ImagePickerProps = {
 };
 
 export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState<ImageDto | undefined>(selectedImage);
   const [images, setImages] = useState<ImageDto[]>([]);
 
@@ -28,7 +30,7 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
     onSelected?.(image);
   }
 
-  function renderImage(image: ImageDto): Children {
+  function renderImage(image: ImageDto): ReactNode {
     const isSelected = selected?.id === image.id;
     return (
       <button
@@ -49,7 +51,7 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
           {selected === undefined && (
             <>
               <Icon icon="ic:outline-image" width={24} />
-              <p>Ingen bilde valgt</p>
+              <p>{t(KEY.admin_no_image_selected)}</p>
             </>
           )}
         </div>
