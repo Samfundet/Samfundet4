@@ -7,7 +7,6 @@ import { type FormType, SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
 import { useCustomNavigate, useTitle } from '~/hooks';
-import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
