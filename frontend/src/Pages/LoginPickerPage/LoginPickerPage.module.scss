@@ -11,17 +11,21 @@
   max-width: 640px;
 }
 
+.caption {
+  display: block;
+  font-size: 1.25rem;
+  color: $grey-1;
+  margin-bottom: 5px;
+  font-weight: 400;
+}
+
 .headerTitle {
   color: $black-1;
   font-size: 3rem;
   font-weight: 700;
+  margin-top: 0;
   margin-bottom: 30px;
-}
-
-.headerSubtitle {
-  color: $grey-1;
-  font-size: 1.25rem;
-  margin-bottom: 20px;
+  line-height: 1.1;
 }
 
 .picker {

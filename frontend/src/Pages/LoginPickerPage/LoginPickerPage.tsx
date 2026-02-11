@@ -31,6 +31,7 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
           Tilbake
         </button>
         <form onSubmit={onSubmit} className={styles.formWrapper}>
+          <span className={styles.caption}>Innlogging for interne</span>
           <h1 className={styles.headerTitle}>Hvordan vil du logge inn?</h1>
 
           <div className={styles.picker}>
