@@ -128,6 +128,12 @@ class User(AbstractUser):
         on_delete=models.PROTECT,
     )
 
+    mdb_medlem_id = models.PositiveIntegerField(
+        null=True,
+        blank=False,
+        unique=True,
+        verbose_name='medlem_id in mdb2')
+
     class Meta:
         permissions = [
             ('debug', 'Can view debug mode'),
