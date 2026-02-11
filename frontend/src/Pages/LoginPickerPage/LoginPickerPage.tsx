@@ -1,9 +1,9 @@
-import { Icon } from '@iconify/react';
 import { type FC, type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Page } from '~/Components';
 import { SAMF3_LOGIN_URL } from '~/routes/samf-three';
 import styles from './LoginPickerPage.module.scss';
+import { Icon } from '@iconify/react';
 
 type Props = { newRoute: string };
 
@@ -30,40 +30,35 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
           <Icon icon="mdi:chevron-left" className={styles.backIcon} />
           Tilbake
         </button>
+
         <form onSubmit={onSubmit} className={styles.formWrapper}>
           <span className={styles.caption}>Innlogging for interne</span>
           <h1 className={styles.headerTitle}>Hvordan vil du logge inn?</h1>
 
           <div className={styles.picker}>
-            <div className={styles.choiceWrapper}>
+            <label className={styles.choiceWrapper}>
               <input
                 type="radio"
-                id="n"
                 name="c"
                 value="new"
                 onChange={() => setChoice('new')}
                 className={styles.radioInput}
               />
-              <label htmlFor="n" className={styles.radioLabel}>
-                Logg inn på ny plattform (samf4)
-              </label>
+              <span className={styles.radioLabel}>Logg inn på ny plattform (samf4)</span>
               <p className={styles.description}>Den nye plattformen for arrangementer og generell bruk</p>
-            </div>
+            </label>
 
-            <div className={styles.choiceWrapper}>
+            <label className={styles.choiceWrapper}>
               <input
                 type="radio"
-                id="o"
                 name="c"
                 value="old"
                 onChange={() => setChoice('old')}
                 className={styles.radioInput}
               />
-              <label htmlFor="o" className={styles.radioLabel}>
-                Logg inn på eldre plattform (samf3)
-              </label>
+              <span className={styles.radioLabel}>Logg inn på eldre plattform (samf3)</span>
               <p className={styles.description}>Gruppeadministrasjon og andre administrative oppgaver</p>
-            </div>
+            </label>
           </div>
 
           <button type="submit" className={styles.button}>

@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 @use 'src/constants' as *;
 
 @use 'src/mixins' as *;
@@ -32,19 +34,34 @@
 .picker {
   display: flex;
   flex-direction: column;
-  gap: 15px;
   margin-bottom: 30px;
 }
 
 .choiceWrapper {
   position: relative;
-  padding-left: 40px;
+  display: block;
+  padding: 20px 20px 20px 60px;
+  border: 2px solid $grey-35;
+  background-color: $white;
+  cursor: pointer;
+  margin-bottom: 15px;
+
+  &:hover {
+    border-color: $black-1;
+    background-color: $grey-5;
+  }
+
+  &:has(.radioInput:checked) {
+    border-color: $will_contact;
+    background-color: $green-lighter;
+    box-shadow: 0 0 0 1px $will_contact;
+  }
 }
 
 .radioInput {
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 20px;
+  top: 24px;
   width: 24px;
   height: 24px;
   cursor: pointer;
@@ -72,34 +89,44 @@
 }
 
 .radioLabel {
+  display: block;
   color: $black-1;
   font-size: 1.25rem;
-  font-weight: 400;
+  font-weight: 700;
   cursor: pointer;
+  margin-bottom: 4px;
 }
 
 .description {
   color: $grey-1;
   font-size: 1rem;
-  margin: 5px 0 0 0;
+  margin: 0;
+  line-height: 1.5;
 }
 
 .button {
   background: $will_contact;
   color: $white;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
   font-size: 1.2rem;
+  font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 2px 0 $black_2;
+  box-shadow: 0 2px 0 color.adjust($will_contact, $lightness: -15%);
 
   &:hover {
     filter: brightness(0.9);
   }
+
   &:active {
     position: relative;
     top: 2px;
     box-shadow: none;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $orange-light;
+    outline-offset: 2px;
   }
 }
 
@@ -112,7 +139,7 @@
   display: inline-flex;
   align-items: center;
   margin-top: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   color: $black-1;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -129,8 +156,7 @@
 }
 
 .backIcon {
-  margin-right: 2px;
+  margin-right: 4px;
   font-size: 1.2rem;
   text-decoration: none;
-  display: inline-block;
 }
