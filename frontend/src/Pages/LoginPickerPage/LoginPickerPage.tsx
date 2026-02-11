@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { type FC, type FormEvent, useState } from 'react';
+import { type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Page } from '~/Components';
 import { SAMF3_LOGIN_URL } from '~/routes/samf-three';
@@ -14,11 +14,9 @@ type Props = { newRoute: string };
  * @constructor
  */
 export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
-  const [choice, setChoice] = useState('');
   const navigate = useNavigate();
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const handleChoice = (choice: 'new' | 'old') => {
     if (choice === 'new') navigate(newRoute);
     else if (choice === 'old') window.location.href = SAMF3_LOGIN_URL.login;
   };
@@ -31,40 +29,36 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
           Tilbake
         </button>
 
-        <form onSubmit={onSubmit} className={styles.formWrapper}>
+        <div className={styles.formWrapper}>
           <span className={styles.caption}>Innlogging for interne</span>
           <h1 className={styles.headerTitle}>Hvordan vil du logge inn?</h1>
 
           <div className={styles.picker}>
-            <label className={styles.choiceWrapper}>
-              <input
-                type="radio"
-                name="c"
-                value="new"
-                onChange={() => setChoice('new')}
-                className={styles.radioInput}
-              />
-              <span className={styles.radioLabel}>Logg inn på ny plattform (samf4)</span>
-              <p className={styles.description}>Den nye plattformen for arrangementer og generell bruk</p>
-            </label>
+            <button
+              type="button"
+              className={styles.choiceWrapper}
+              onClick={() => handleChoice('new')}
+            >
+              <div className={styles.textWrapper}>
+                <span className={styles.radioLabel}>Logg inn på ny plattform (samf4)</span>
+                <p className={styles.description}>Den nye plattformen for arrangementer og generell bruk</p>
+              </div>
+              <Icon icon="mdi:arrow-right" className={styles.arrowIcon} />
+            </button>
 
-            <label className={styles.choiceWrapper}>
-              <input
-                type="radio"
-                name="c"
-                value="old"
-                onChange={() => setChoice('old')}
-                className={styles.radioInput}
-              />
-              <span className={styles.radioLabel}>Logg inn på eldre plattform (samf3)</span>
-              <p className={styles.description}>Gruppeadministrasjon og andre administrative oppgaver</p>
-            </label>
+            <button
+              type="button"
+              className={styles.choiceWrapper}
+              onClick={() => handleChoice('old')}
+            >
+              <div className={styles.textWrapper}>
+                <span className={styles.radioLabel}>Logg inn på eldre plattform (samf3)</span>
+                <p className={styles.description}>Gruppeadministrasjon og andre administrative oppgaver</p>
+              </div>
+              <Icon icon="mdi:arrow-right" className={styles.arrowIcon} />
+            </button>
           </div>
-
-          <button type="submit" className={styles.button}>
-            Fortsett
-          </button>
-        </form>
+        </div>
       </div>
     </Page>
   );

@@ -49,78 +49,37 @@
 
 .choiceWrapper {
   position: relative;
-  display: block;
-  padding: 22px 20px 22px 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 22px 30px;
   border: 2px solid $grey-35;
   background-color: $white;
   cursor: pointer;
   margin-bottom: 15px;
-
-  &:hover {
-    border-color: $red_samf_hover;
-    background-color: $grey-5;
-  }
-
-  &:has(.radioInput:checked) {
-    border-color: $red_samf;
-    background-color: color.mix($red_samf, $white, 3%);
-    box-shadow: 0 0 0 1px $red_samf;
-  }
+  text-align: left;
+  font-family: inherit;
 
   @include theme-dark {
     background-color: $theme_dark_input_bg;
     border-color: $grey-1;
+  }
 
-    &:hover {
+  &:hover {
+    border-color: $red_samf_hover;
+    background-color: $grey-5;
+
+    @include theme-dark {
       background-color: $black-2;
       border-color: $red_samf_faded;
-    }
-
-    &:has(.radioInput:checked) {
-      background-color: $black-1;
-      border-color: $red_samf;
-      box-shadow: 0 0 0 1px $red_samf;
     }
   }
 }
 
-.radioInput {
-  position: absolute;
-  left: 20px;
-  top: 24px;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  appearance: none;
-  border: 2px solid $black;
-  border-radius: 50%;
-  background: $white;
-
-  &:checked::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    background: $black;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  @include theme-dark {
-    border-color: $white;
-    background: $theme_dark_input_bg;
-
-    &:checked::after {
-      background: $white;
-    }
-  }
-
-  &:focus-visible {
-    outline: 3px solid $orange-light;
-    outline-offset: 3px;
-  }
+.textWrapper {
+  display: flex;
+  flex-direction: column;
 }
 
 .radioLabel {
@@ -147,30 +106,14 @@
   }
 }
 
-.button {
-  align-self: flex-end;
-  background: $will_contact;
-  color: $white;
-  padding: 12px 24px;
-  border: none;
-  font-size: 1.2rem;
-  font-weight: 500;
-  cursor: pointer;
-  box-shadow: 0 2px 0 color.adjust($will_contact, $lightness: -15%);
+.arrowIcon {
+  font-size: 2.5rem;
+  color: $black-1;
+  margin-left: 20px;
+  flex-shrink: 0;
 
-  &:hover {
-    filter: brightness(0.9);
-  }
-
-  &:active {
-    position: relative;
-    top: 2px;
-    box-shadow: none;
-  }
-
-  &:focus-visible {
-    outline: 3px solid $orange-light;
-    outline-offset: 2px;
+  @include theme-dark {
+    color: $white;
   }
 }
 
