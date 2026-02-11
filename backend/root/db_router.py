@@ -28,6 +28,8 @@ MDB_MODELS: list[type[models.Model]] = [
     MedlemsInfo,
 ]
 
+DISALLOWED_MODELS = {m._meta.model_name for m in BILLIG_MODELS + MDB_MODELS}
+
 
 class SamfundetDatabaseRouter:
     def db_for_read(self, model: type[models.Model], **hints: dict[str, Any]) -> str | None:
@@ -51,4 +53,4 @@ class SamfundetDatabaseRouter:
         model_name: str | None = None,
         **hints: dict[str, Any],
     ) -> bool:
-        return model_name not in [m._meta.model_name for m in BILLIG_MODELS] and model_name not in [m._meta.model_name for m in MDB_MODELS]
+        return model_name not in DISALLOWED_MODELS
