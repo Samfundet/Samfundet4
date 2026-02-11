@@ -12,12 +12,14 @@
 }
 
 .headerTitle {
+  color: $black-1;
   font-size: 3rem;
   font-weight: 700;
   margin-bottom: 30px;
 }
 
 .headerSubtitle {
+  color: $grey-1;
   font-size: 1.25rem;
   margin-bottom: 20px;
 }
@@ -42,9 +44,9 @@
   height: 24px;
   cursor: pointer;
   appearance: none;
-  border: 2px solid black;
+  border: 2px solid $black;
   border-radius: 50%;
-  background: white;
+  background: $white;
 
   &:checked::after {
     content: '';
@@ -53,39 +55,40 @@
     left: 4px;
     width: 12px;
     height: 12px;
-    background: black;
+    background: $black;
     border-radius: 50%;
   }
 
   &:focus-visible {
-    outline: 3px solid #ffdd00;
+    outline: 3px solid $orange-light;
     outline-offset: 3px;
   }
 }
 
 .radioLabel {
+  color: $black-1;
   font-size: 1.25rem;
   font-weight: 400;
   cursor: pointer;
 }
 
 .description {
-  color: #505a5f;
+  color: $grey-1;
   font-size: 1rem;
   margin: 5px 0 0 0;
 }
 
 .button {
-  background: #00703c;
-  color: white;
+  background: $will_contact;
+  color: $white;
   padding: 10px 20px;
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  box-shadow: 0 2px 0 #002d18;
+  box-shadow: 0 2px 0 darken($will_contact, 10%);
 
   &:hover {
-    background: #005a30;
+    filter: brightness(0.9);
   }
   &:active {
     position: relative;
@@ -100,14 +103,14 @@
   margin-top: 15px;
   margin-bottom: 20px;
 
-  color: #0b0c0c;
+  color: $black-1;
   text-decoration: underline;
   text-underline-offset: 3px;
   font-size: 1rem;
   cursor: pointer;
 
   &:hover {
-    color: #505a5f;
+    color: $grey-1;
     text-decoration-thickness: 2px;
   }
 }
