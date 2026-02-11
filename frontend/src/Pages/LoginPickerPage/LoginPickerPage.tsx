@@ -1,9 +1,9 @@
+import { Icon } from '@iconify/react';
 import { type FC, type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Page } from '~/Components';
 import { SAMF3_LOGIN_URL } from '~/routes/samf-three';
 import styles from './LoginPickerPage.module.scss';
-import { Icon } from '@iconify/react';
 
 type Props = { newRoute: string };
 
