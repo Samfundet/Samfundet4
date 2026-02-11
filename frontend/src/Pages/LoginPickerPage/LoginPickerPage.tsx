@@ -1,7 +1,7 @@
-import { type FC, type FormEvent, useState } from 'react';
 import { Icon } from '@iconify/react';
+import { type FC, type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link, Page } from '~/Components';
+import { Page } from '~/Components';
 import { SAMF3_LOGIN_URL } from '~/routes/samf-three';
 import styles from './LoginPickerPage.module.scss';
 
@@ -26,10 +26,10 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
   return (
     <Page>
       <div className={styles.container}>
-        <Link url="#" plain className={styles.backLink} onAfterClick={() => navigate(-1)}>
+        <button type="button" className={styles.backLink} onClick={() => navigate(-1)}>
           <Icon icon="mdi:chevron-left" className={styles.backIcon} />
           Tilbake
-        </Link>
+        </button>
         <form onSubmit={onSubmit} className={styles.formWrapper}>
           <h1 className={styles.headerTitle}>Hvordan vil du logge inn?</h1>
 
