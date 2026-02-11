@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 @use 'src/constants' as *;
 
 @use 'src/mixins' as *;
@@ -10,6 +12,8 @@
 
 .formWrapper {
   max-width: 640px;
+  display: flex;
+  flex-direction: column;
 }
 
 .caption {
@@ -46,11 +50,12 @@
 .choiceWrapper {
   position: relative;
   display: block;
-  padding: 20px 20px 20px 60px;
+  padding: 22px 20px 22px 80px;
   border: 2px solid $grey-35;
   background-color: $white;
   cursor: pointer;
   margin-bottom: 15px;
+  transition: all 0.2s ease-in-out;
 
   &:hover {
     border-color: $red_samf_hover;
@@ -59,7 +64,7 @@
 
   &:has(.radioInput:checked) {
     border-color: $red_samf;
-    background-color: $red_lighter;
+    background-color: color.mix($red_samf, $white, 5%);
     box-shadow: 0 0 0 1px $red_samf;
   }
 
@@ -84,8 +89,8 @@
   position: absolute;
   left: 20px;
   top: 24px;
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   appearance: none;
   border: 2px solid $black;
@@ -97,8 +102,8 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 12px;
-    height: 12px;
+    width: 20px;
+    height: 20px;
     background: $black;
     border-radius: 50%;
     transform: translate(-50%, -50%);
@@ -122,7 +127,7 @@
 .radioLabel {
   display: block;
   color: $black-1;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   cursor: pointer;
   margin-bottom: 4px;
@@ -134,7 +139,7 @@
 
 .description {
   color: $grey-1;
-  font-size: 1rem;
+  font-size: 1.1rem;
   margin: 0;
   line-height: 1.5;
 
@@ -143,8 +148,8 @@
   }
 }
 
-/* --- Knapper --- */
 .button {
+  align-self: flex-end;
   background: $will_contact;
   color: $white;
   padding: 12px 24px;
@@ -152,7 +157,7 @@
   font-size: 1.2rem;
   font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 2px 0 $black_2;
+  box-shadow: 0 2px 0 color.adjust($will_contact, $lightness: -15%);
 
   &:hover {
     filter: brightness(0.9);
@@ -170,7 +175,6 @@
   }
 }
 
-/* --- Tilbake-lenke --- */
 .backLink {
   background: none;
   border: none;
