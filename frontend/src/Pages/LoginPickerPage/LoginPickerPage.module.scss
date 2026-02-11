@@ -95,32 +95,26 @@
 }
 
 .backLink {
-  display: inline-block;
-  position: relative;
+  display: inline-flex;
+  align-items: center;
   margin-top: 15px;
   margin-bottom: 20px;
-  padding-left: 14px;
-  font-size: 1rem;
+
   color: #0b0c0c;
   text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: 1rem;
   cursor: pointer;
-
-  // arrow
-  &::before {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 7px;
-    height: 7px;
-    margin-top: -4px;
-    border-width: 0 0 2px 2px;
-    border-style: solid;
-    transform: rotate(45deg);
-  }
 
   &:hover {
     color: #505a5f;
+    text-decoration-thickness: 2px;
   }
+}
+
+.backIcon {
+  margin-right: 2px;
+  font-size: 1.2rem;
+  text-decoration: none;
+  display: inline-block;
 }
