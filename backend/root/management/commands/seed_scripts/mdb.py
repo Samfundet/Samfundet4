@@ -75,6 +75,7 @@ MEMBERS = [
     ),
 ]
 
+
 def seed_tables() -> Iterable[tuple[int, str]]:
     # Create a few fake members
     with transaction.atomic():

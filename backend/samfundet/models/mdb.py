@@ -16,4 +16,3 @@ class MedlemsInfo(models.Model):
     skole = models.CharField(null=True, blank=True)
     studie = models.CharField(null=True, blank=True)
     brukernavn = models.CharField(max_length=14, null=False, blank=False)
-
