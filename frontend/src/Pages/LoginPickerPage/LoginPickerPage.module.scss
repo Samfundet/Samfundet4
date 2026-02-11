@@ -47,13 +47,13 @@
   margin-bottom: 15px;
 
   &:hover {
-    border-color: $black-1;
+    border-color: $red_samf_hover;
     background-color: $grey-5;
   }
 
   &:has(.radioInput:checked) {
-    border-color: $will_contact;
-    background-color: $green-lighter;
+    border-color: $red_samf;
+    background-color: $red_lighter;
     box-shadow: 0 0 0 1px $will_contact;
   }
 }
