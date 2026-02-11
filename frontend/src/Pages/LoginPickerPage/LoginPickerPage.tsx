@@ -47,7 +47,7 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
               <label htmlFor="n" className={styles.radioLabel}>
                 Logg inn på ny plattform (samf4)
               </label>
-              <p className={styles.description}>Brukes for arrangementer og generell bruk</p>
+              <p className={styles.description}>Den nye plattformen for arrangementer og generell bruk</p>
             </div>
 
             <div className={styles.choiceWrapper}>
@@ -62,7 +62,7 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
               <label htmlFor="o" className={styles.radioLabel}>
                 Logg inn på eldre plattform (samf3)
               </label>
-              <p className={styles.description}>Brukes for å administrere grupper og andre administrative oppgaver</p>
+              <p className={styles.description}>For å administrere grupper, og andre administrative oppgaver</p>
             </div>
           </div>
 
