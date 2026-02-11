@@ -9,12 +9,12 @@ from typing import Any
 
 from django.db import models
 
+from samfundet.models.mdb import MedlemsInfo
 from samfundet.models.billig import (
     BilligEvent,
     BilligPriceGroup,
     BilligTicketGroup,
 )
-from samfundet.models.mdb import MedlemsInfo
 
 # List of models routed to billig database.
 BILLIG_MODELS: list[type[models.Model]] = [
