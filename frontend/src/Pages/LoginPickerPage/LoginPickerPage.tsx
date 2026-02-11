@@ -62,7 +62,7 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
               <label htmlFor="o" className={styles.radioLabel}>
                 Logg inn på eldre plattform (samf3)
               </label>
-              <p className={styles.description}>For å administrere grupper, og andre administrative oppgaver</p>
+              <p className={styles.description}>Gruppeadministrasjon og andre administrative oppgaver</p>
             </div>
           </div>
 
