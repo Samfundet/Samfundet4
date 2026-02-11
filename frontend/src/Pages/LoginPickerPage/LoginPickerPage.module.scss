@@ -1,5 +1,3 @@
-@use 'sass:color';
-
 @use 'src/constants' as *;
 
 @use 'src/mixins' as *;
@@ -20,6 +18,10 @@
   color: $grey-1;
   margin-bottom: 5px;
   font-weight: 400;
+
+  @include theme-dark {
+    color: $grey-3;
+  }
 }
 
 .headerTitle {
@@ -29,6 +31,10 @@
   margin-top: 0;
   margin-bottom: 30px;
   line-height: 1.1;
+
+  @include theme-dark {
+    color: $theme_dark_color;
+  }
 }
 
 .picker {
@@ -54,7 +60,23 @@
   &:has(.radioInput:checked) {
     border-color: $red_samf;
     background-color: $red_lighter;
-    box-shadow: 0 0 0 1px $will_contact;
+    box-shadow: 0 0 0 1px $red_samf;
+  }
+
+  @include theme-dark {
+    background-color: $theme_dark_input_bg;
+    border-color: $grey-1;
+
+    &:hover {
+      background-color: $black-2;
+      border-color: $red_samf_faded;
+    }
+
+    &:has(.radioInput:checked) {
+      background-color: $black-1;
+      border-color: $red_samf;
+      box-shadow: 0 0 0 1px $red_samf;
+    }
   }
 }
 
@@ -82,6 +104,15 @@
     transform: translate(-50%, -50%);
   }
 
+  @include theme-dark {
+    border-color: $white;
+    background: $theme_dark_input_bg;
+
+    &:checked::after {
+      background: $white;
+    }
+  }
+
   &:focus-visible {
     outline: 3px solid $orange-light;
     outline-offset: 3px;
@@ -95,6 +126,10 @@
   font-weight: 700;
   cursor: pointer;
   margin-bottom: 4px;
+
+  @include theme-dark {
+    color: $white;
+  }
 }
 
 .description {
@@ -102,8 +137,13 @@
   font-size: 1rem;
   margin: 0;
   line-height: 1.5;
+
+  @include theme-dark {
+    color: $grey-3;
+  }
 }
 
+/* --- Knapper --- */
 .button {
   background: $will_contact;
   color: $white;
@@ -112,7 +152,7 @@
   font-size: 1.2rem;
   font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 2px 0 color.adjust($will_contact, $lightness: -15%);
+  box-shadow: 0 2px 0 $black_2;
 
   &:hover {
     filter: brightness(0.9);
@@ -130,6 +170,7 @@
   }
 }
 
+/* --- Tilbake-lenke --- */
 .backLink {
   background: none;
   border: none;
@@ -144,9 +185,17 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 
+  @include theme-dark {
+    color: $theme_dark_color;
+  }
+
   &:hover {
     color: $grey-1;
     text-decoration-thickness: 2px;
+
+    @include theme-dark {
+      color: $white;
+    }
   }
 
   &:focus-visible {
