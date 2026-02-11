@@ -93,3 +93,34 @@
     box-shadow: none;
   }
 }
+
+.backLink {
+  display: inline-block;
+  position: relative;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  padding-left: 14px;
+  font-size: 1rem;
+  color: #0b0c0c;
+  text-decoration: underline;
+  cursor: pointer;
+
+  // arrow
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 7px;
+    height: 7px;
+    margin-top: -4px;
+    border-width: 0 0 2px 2px;
+    border-style: solid;
+    transform: rotate(45deg);
+  }
+
+  &:hover {
+    color: #505a5f;
+  }
+}

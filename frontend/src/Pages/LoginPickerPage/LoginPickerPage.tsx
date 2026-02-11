@@ -25,6 +25,9 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
   return (
     <Page>
       <div className={styles.container}>
+        <a href="#" onClick={() => navigate(-1)} className={styles.backLink}>
+          Tilbake
+        </a>
         <form onSubmit={onSubmit} className={styles.formWrapper}>
           <h1 className={styles.headerTitle}>Hvordan vil du logge inn?</h1>
 
