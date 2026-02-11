@@ -1,4 +1,5 @@
 @use 'src/constants' as *;
+
 @use 'src/mixins' as *;
 
 .container {
@@ -90,7 +91,7 @@
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  box-shadow: 0 2px 0 darken($will_contact, 10%);
+  box-shadow: 0 2px 0 $black_2;
 
   &:hover {
     filter: brightness(0.9);
@@ -108,12 +109,10 @@
   padding: 0;
   font: inherit;
   cursor: pointer;
-
   display: inline-flex;
   align-items: center;
   margin-top: 15px;
   margin-bottom: 20px;
-
   color: $black-1;
   text-decoration: underline;
   text-underline-offset: 3px;
