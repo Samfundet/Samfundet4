@@ -85,7 +85,7 @@ DATABASES = {
         'NAME': os.environ['MDB_DEV_CREDENTIAL'],
         'USER': os.environ['MDB_DEV_CREDENTIAL'],
         'PASSWORD': os.environ['MDB_DEV_CREDENTIAL'],
-        'HOST': os.environ.get('MDB_DEV_HOST', 'mdb_dev_database'),  # Docker service name or CI host
+        'HOST': os.environ.get('MDB_DEV_HOST', 'mdb_dev'),  # Docker service name or CI host
         'PORT': os.environ.get('MDB_DEV_PORT', '5432'),  # Docker internal port or CI host port
     },
 }
