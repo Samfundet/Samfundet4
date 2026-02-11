@@ -123,9 +123,7 @@ export const router = createBrowserRouter(
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
             <Route path={ROUTES.frontend.login} element={<LoginPickerPage newRoute="/new-login" />} />
             <Route path={SAMF3_LOGIN_URL.login} element={<LoginPage />} />
-            <Route
-              handle={{ crumb: () => <Link url={ROUTES.frontend.login}>{t(KEY.common_login)}</Link> }}
-            >
+            <Route handle={{ crumb: () => <Link url={ROUTES.frontend.login}>{t(KEY.common_login)}</Link> }}>
               <Route
                 path={ROUTES.frontend.new_login}
                 element={<LoginPage />}

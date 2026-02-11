@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { type FC } from 'react';
+import type { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Page } from '~/Components';
 import { SAMF3_LOGIN_URL } from '~/routes/samf-three';
@@ -34,11 +34,7 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
           <h1 className={styles.headerTitle}>Hvordan vil du logge inn?</h1>
 
           <div className={styles.picker}>
-            <button
-              type="button"
-              className={styles.choiceWrapper}
-              onClick={() => handleChoice('new')}
-            >
+            <button type="button" className={styles.choiceWrapper} onClick={() => handleChoice('new')}>
               <div className={styles.textWrapper}>
                 <span className={styles.radioLabel}>Logg inn på ny plattform (samf4)</span>
                 <p className={styles.description}>Den nye plattformen for arrangementer og generell bruk</p>
@@ -46,11 +42,7 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
               <Icon icon="mdi:arrow-right" className={styles.arrowIcon} />
             </button>
 
-            <button
-              type="button"
-              className={styles.choiceWrapper}
-              onClick={() => handleChoice('old')}
-            >
+            <button type="button" className={styles.choiceWrapper} onClick={() => handleChoice('old')}>
               <div className={styles.textWrapper}>
                 <span className={styles.radioLabel}>Logg inn på eldre plattform (samf3)</span>
                 <p className={styles.description}>Gruppeadministrasjon og andre administrative oppgaver</p>
