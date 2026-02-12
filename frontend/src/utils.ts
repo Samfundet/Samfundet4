@@ -9,7 +9,14 @@ import { CURSOR_TRAIL_CLASS, THEME_KEY, type ThemeValue } from '~/constants';
 import type { UserDto } from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
-import { type Day, type EventCategoryValue, EventTicketType, type EventTicketTypeValue } from './types';
+import {
+  type Day,
+  EventAgeRestriction,
+  type EventAgeRestrictionValue,
+  type EventCategoryValue,
+  EventTicketType,
+  type EventTicketTypeValue,
+} from './types';
 
 export type hasPerm = {
   user: UserDto | undefined;
@@ -248,12 +255,28 @@ export function getTicketTypeKey(ticketType: EventTicketTypeValue): TranslationK
       return KEY.common_ticket_type_free;
     case EventTicketType.INCLUDED:
       return KEY.common_ticket_type_included;
+    case EventTicketType.REGISTRATION:
+      return KEY.common_ticket_type_free_with_registration;
     case EventTicketType.BILLIG:
       return KEY.common_ticket_type_billig;
     case EventTicketType.CUSTOM:
       return KEY.common_ticket_type_custom;
-    case EventTicketType.REGISTRATION:
-      return KEY.common_ticket_type_registration;
+  }
+}
+
+/**
+ * Gets the translation key for a given age restriction
+ */
+export function getAgeRestrictionKey(age: EventAgeRestrictionValue): TranslationKeys {
+  switch (age) {
+    case EventAgeRestriction.NONE:
+      return KEY.none;
+    case EventAgeRestriction.EIGHTEEN:
+      return KEY.eighteen;
+    case EventAgeRestriction.TWENTY:
+      return KEY.twenty;
+    case EventAgeRestriction.MIXED:
+      return KEY.mix;
   }
 }
 

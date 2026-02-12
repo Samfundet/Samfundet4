@@ -150,7 +150,7 @@ djangorestframework = "3.*"
 django-cors-headers = "4.*"
 dataclasses-json = "0.*"
 django-guardian = "2.*"
-pillow = "11.*"
+pillow = "12.*"
 gunicorn = "23.*"
 django-admin-autocomplete-filter = "0.*"
 psycopg = { extras = ["c"], version = "*" }
@@ -160,12 +160,13 @@ psycopg = { extras = ["c"], version = "*" }
 mypy = "1.*"
 ruff = "0.*"
 bandit = "1.*"
-pillow = "11.*"
+pillow = "12.*"
 debugpy = "1.*"
 requests = "2.*"
 pytest = "8.*"
 pytest-django = "4.*"
 drf-spectacular = "0.29.*"
+freezegun = "^1.5.5"
 
 [build-system]
 requires = ["poetry-core"]

@@ -139,6 +139,8 @@ export type VenueDto = {
   closing_sunday?: string;
 };
 
+export type OpenVenuesDto = VenueDto[];
+
 // ==================== //
 //        Event         //
 // ==================== //
@@ -173,12 +175,15 @@ export type EventDto = {
   billig?: BilligEventDto;
   numberOfTickets?: number;
 
+  registration_url?: string;
+
   // Timestamps/duration
   image_url: string;
   start_dt: string;
   duration: number;
   end_dt: string;
-  publish_dt: string;
+  visibility_from_dt: string;
+  visibility_to_dt: string;
   doors_time?: string;
 
   // Ticket type for event (billig, free, custom, registration etc.)

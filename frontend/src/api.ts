@@ -55,6 +55,7 @@ import type {
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import type { BilligEventDto } from './apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from './constants';
 import type { PageNumberPaginationType } from './types';
 
@@ -186,6 +187,12 @@ export async function patchVenue(slug: string | number, venue: Partial<VenueDto>
   return response.data;
 }
 
+export async function getOpenVenues(): Promise<VenueDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__venues_open_venues;
+  const response = await axios.get<VenueDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
 export async function getPermissions(): Promise<PermissionDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__permissions_list;
   const response = await axios.get<PermissionDto[]>(url, { withCredentials: true });
@@ -285,7 +292,7 @@ export async function getEvents(): Promise<EventDto[]> {
   return response.data;
 }
 
-export async function postEvent(data: EventDto): Promise<AxiosResponse<EventDto>> {
+export async function postEvent(data: Partial<EventDto>): Promise<AxiosResponse<EventDto>> {
   const transformed = { ...data, image_id: data.image?.id };
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_list;
   const response = await axios.post<EventDto>(url, transformed, { withCredentials: true });
@@ -315,6 +322,12 @@ export async function getEventGroups(): Promise<EventGroupDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventgroups_list;
   const response = await axios.get<EventGroupDto[]>(url, { withCredentials: true });
 
+  return response.data;
+}
+
+export async function getBilligEvents(): Promise<BilligEventDto[]> {
+  const url = `${BACKEND_DOMAIN}/${ROUTES.backend.samfundet__billig_event_list}`;
+  const response = await axios.get<BilligEventDto[]>(url, { withCredentials: true });
   return response.data;
 }
 
