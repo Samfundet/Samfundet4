@@ -31,7 +31,7 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
           <nav aria-label="Velg innlogging" className={styles.picker}>
             <a href={newRoute} className={styles.choiceWrapper}>
               <div className={styles.textWrapper}>
-                <span className={styles.radioLabel}>Logg inn på ny plattform (samf4)</span>
+                <span className={styles.radioLabel}>Ny plattform (samf4)</span>
                 <p className={styles.description}>Den nye plattformen for arrangementer og generell bruk</p>
               </div>
               <Icon icon="mdi:arrow-right" className={styles.arrowIcon} />
@@ -39,7 +39,7 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
 
             <a href={SAMF3_LOGIN_URL.login} target="samf3" className={styles.choiceWrapper}>
               <div className={styles.textWrapper}>
-                <span className={styles.radioLabel}>Logg inn på eldre plattform (samf3)</span>
+                <span className={styles.radioLabel}>Eldre plattform (samf3)</span>
                 <p className={styles.description}>Gruppeadministrasjon og andre administrative oppgaver</p>
               </div>
               <Icon icon="mdi:arrow-right" className={styles.arrowIcon} />
