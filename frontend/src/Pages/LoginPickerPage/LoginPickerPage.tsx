@@ -28,7 +28,7 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
           <span className={styles.caption}>Innlogging for interne</span>
           <h1 className={styles.headerTitle}>Hvordan vil du logge inn?</h1>
 
-          <div className={styles.picker}>
+          <nav aria-label="Velg innlogging" className={styles.picker}>
             <a href={newRoute} className={styles.choiceWrapper}>
               <div className={styles.textWrapper}>
                 <span className={styles.radioLabel}>Logg inn på ny plattform (samf4)</span>
@@ -44,7 +44,7 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
               </div>
               <Icon icon="mdi:arrow-right" className={styles.arrowIcon} />
             </a>
-          </div>
+          </nav>
         </div>
       </div>
     </Page>
