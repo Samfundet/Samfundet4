@@ -26,6 +26,7 @@ export const Basic: Story = {
   render: (args) => {
     const [selectedVenue, setSelectedVenue] = useState<string | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<EventCategoryValue | null>(null);
+    const [search, setSearch] = useState<string>('');
 
     return (
       <EventQuery
@@ -35,6 +36,8 @@ export const Basic: Story = {
         setSelectedVenue={setSelectedVenue}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
+        search={search}
+        setSearch={setSearch}
       />
     );
   },
