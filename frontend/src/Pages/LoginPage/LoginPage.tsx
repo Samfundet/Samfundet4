@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router';
-import { Page } from '~/Components';
+import { Breadcrumb, Page } from '~/Components';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getUser, login } from '~/api';
@@ -57,6 +57,9 @@ export function LoginPage() {
     <Page>
       <div className={styles.login_container}>
         <div className={styles.content_container}>
+          <div style={{ paddingBottom: '1rem' }}>
+            <Breadcrumb />
+          </div>
           <SamfForm onSubmit={handleLogin} isDisabled={submitting} submitText={t(KEY.common_login) ?? ''}>
             <h1 className={styles.header_text}>{t(KEY.loginpage_internal_login)}</h1>
             <SamfFormField<string, FormProps>
