@@ -42,12 +42,11 @@ export function EventsList({ events }: EventsListProps) {
     const normalizedSearch = query.trim().toLowerCase();
     const keywords = normalizedSearch.split(' ');
 
-    if (query === "") return eventQuery(allEvents, query);
-    return allEvents.filter((event)=>{
+    if (query === '') return eventQuery(allEvents, query);
+    return allEvents.filter((event) => {
       const title = (dbT(event, 'title', i18n.language) as string)?.toLowerCase() ?? '';
-      return keywords.every((kw)=> title.includes(kw))
-    })
-    
+      return keywords.every((kw) => title.includes(kw));
+    });
   }
 
   // TODO improve table view for events
