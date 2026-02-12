@@ -67,13 +67,22 @@
     border-color: $grey-1;
   }
 
+  &:link,
+  &:visited {
+    color: inherit;
+  }
+
+  @include theme-dark {
+    color: $white;
+  }
+
   &:hover {
     border-color: $red_samf_hover;
     background-color: $grey-5;
 
     @include theme-dark {
       background-color: $black-2;
-      border-color: $red_samf_faded;
+      border-color: $red_samf;
     }
   }
 }
