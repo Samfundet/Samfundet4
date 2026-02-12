@@ -98,7 +98,8 @@ export function SultenMenuAdminPage() {
   }
 
   const title = t(KEY.admin_sultenmenu_title);
-  const backendUrl = ROUTES.backend.admin__samfundet_menuitem_changelist;
+  // const backendUrl = ROUTES.backend.admin__samfundet_menuitem_changelist;
+  const backendUrl = undefined;
   const header = (
     <div className={styles.headerRow}>
       <Button theme="success" rounded={true} link={ROUTES.frontend.admin_sulten_menuitem_create}>

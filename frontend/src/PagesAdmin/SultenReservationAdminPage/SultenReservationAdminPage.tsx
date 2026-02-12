@@ -4,7 +4,6 @@ import { Button } from '~/Components';
 import type { SultenReservationDayDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { ReservationTable } from './components/ReservationTable';
 import { TABLES_TEST_DATA } from './utils';
@@ -43,7 +42,8 @@ export function SultenReservationAdminPage() {
   }
 
   const title = t(KEY.common_sulten);
-  const backendUrl = ROUTES.backend.admin__samfundet_reservation_changelist;
+  // const backendUrl = ROUTES.backend.admin__samfundet_reservation_changelist;
+  const backendUrl = undefined;
 
   const header = (
     <Button theme="success" rounded={true} onClick={() => alert('TODO add reservationadmin')}>
