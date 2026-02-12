@@ -338,6 +338,9 @@ export const KEY = {
   navbar_map: 'navbar_map',
   navbar_photos: 'navbar_photos',
   navbar_nybygg: 'navbar_nybygg',
+  navbar_bar: 'navbar_bar',
+  navbar_stages: 'navbar_stages',
+  navbar_club: 'navbar_club',
 
   footer_developed_by: 'footer_developed_by',
   footer_have_questions: 'footer_have_questions',
