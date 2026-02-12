@@ -20,7 +20,7 @@ type EventsListProps = {
 };
 
 export function EventsList({ events }: EventsListProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [tableView, setTableView] = useState(false);
   const [query, setQuery] = useState('');
   const isDesktop = useDesktop();
@@ -39,7 +39,15 @@ export function EventsList({ events }: EventsListProps) {
   // TODO debounce and move header/filtering stuff to a separate component
   function filteredEvents() {
     const allEvents = Object.keys(events).flatMap((k: string) => events[k]);
-    return eventQuery(allEvents, query);
+    const normalizedSearch = query.trim().toLowerCase();
+    const keywords = normalizedSearch.split(' ');
+
+    if (query === "") return eventQuery(allEvents, query);
+    return allEvents.filter((event)=>{
+      const title = (dbT(event, 'title', i18n.language) as string)?.toLowerCase() ?? '';
+      return keywords.every((kw)=> title.includes(kw))
+    })
+    
   }
 
   // TODO improve table view for events
