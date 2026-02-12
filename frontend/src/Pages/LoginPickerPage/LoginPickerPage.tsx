@@ -16,11 +16,6 @@ type Props = { newRoute: string };
 export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
   const navigate = useNavigate();
 
-  const handleChoice = (choice: 'new' | 'old') => {
-    if (choice === 'new') navigate(newRoute);
-    else if (choice === 'old') window.location.href = SAMF3_LOGIN_URL.login;
-  };
-
   return (
     <Page>
       <div className={styles.container}>
@@ -34,21 +29,21 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
           <h1 className={styles.headerTitle}>Hvordan vil du logge inn?</h1>
 
           <div className={styles.picker}>
-            <button type="button" className={styles.choiceWrapper} onClick={() => handleChoice('new')}>
+            <a href={newRoute} className={styles.choiceWrapper}>
               <div className={styles.textWrapper}>
                 <span className={styles.radioLabel}>Logg inn på ny plattform (samf4)</span>
                 <p className={styles.description}>Den nye plattformen for arrangementer og generell bruk</p>
               </div>
               <Icon icon="mdi:arrow-right" className={styles.arrowIcon} />
-            </button>
+            </a>
 
-            <button type="button" className={styles.choiceWrapper} onClick={() => handleChoice('old')}>
+            <a href={SAMF3_LOGIN_URL.login} target="samf3" className={styles.choiceWrapper}>
               <div className={styles.textWrapper}>
                 <span className={styles.radioLabel}>Logg inn på eldre plattform (samf3)</span>
                 <p className={styles.description}>Gruppeadministrasjon og andre administrative oppgaver</p>
               </div>
               <Icon icon="mdi:arrow-right" className={styles.arrowIcon} />
-            </button>
+            </a>
           </div>
         </div>
       </div>
