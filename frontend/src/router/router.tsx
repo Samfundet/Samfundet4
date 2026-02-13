@@ -80,6 +80,7 @@ import {
   SultenMenuItemFormAdminPage,
   SultenReservationAdminPage,
   UsersAdminPage,
+  MDBConnectFormAdminPage,
 } from '~/PagesAdmin';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
@@ -986,6 +987,16 @@ export const router = createBrowserRouter(
               <PermissionRoute
                 requiredPermissions={[PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE]}
                 element={<InformationFormAdminPage />}
+                resolveWithRolePermissions={true}
+              />
+            }
+          />
+          {/* MDB Connect Form */}
+          <Route
+            path={ROUTES.frontend.admin_mdb_connect_form}
+            element={
+              <PermissionRoute 
+                element={<MDBConnectFormAdminPage/>}
                 resolveWithRolePermissions={true}
               />
             }

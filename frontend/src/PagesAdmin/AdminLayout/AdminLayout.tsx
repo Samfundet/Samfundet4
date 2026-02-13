@@ -146,6 +146,10 @@ export function AdminLayout() {
             {t(KEY.admin_stop_impersonate)}
           </button>
         )}
+        {/** Connect to MDB button */}
+        <Link 
+          url={ROUTES.frontend.admin_mdb_connect_form} 
+          className={classNames(styles.panel_item)}>TEKST</Link>
         {/* Logout */}
         <button
           type="button"
