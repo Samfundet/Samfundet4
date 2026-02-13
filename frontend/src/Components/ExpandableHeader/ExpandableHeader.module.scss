@@ -25,33 +25,23 @@
   background-color: $grey-4;
   color: $black-2;
   border: none;
-  border-bottom: 1px solid $grey-35;
   cursor: pointer;
   outline: none;
   text-align: left;
   transition:
-    background-color 0.1s ease,
-    color 0.1s ease;
+    background-color 0.05s ease,
+    color 0.05s ease;
 
   &:hover {
     background-color: $grey-35;
   }
 
-  &.closed {
-    border-bottom-color: transparent;
-  }
-
   @include theme-dark {
-    background-color: $theme-dark-input-bg;
+    background-color: $grey-0;
     color: $white;
-    border-bottom-color: $grey-0;
 
     &:hover {
-      background-color: $grey-0;
-    }
-
-    &.closed {
-      border-bottom-color: transparent;
+      background-color: $grey-1;
     }
   }
 }
