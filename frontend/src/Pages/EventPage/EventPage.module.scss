@@ -2,6 +2,14 @@
 
 @use 'src/constants' as *;
 
+.admin_panel {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  margin: 15px 0 10px 0;
+  color: white;
+}
+
 .container {
   width: 100%;
   height: 100%;

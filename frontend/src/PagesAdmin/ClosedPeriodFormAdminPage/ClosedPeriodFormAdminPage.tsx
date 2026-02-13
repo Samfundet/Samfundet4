@@ -5,21 +5,20 @@ import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
-import { getClosedPeriod } from '~/api';
+import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
 
 type formType = {
-  message_no: string;
+  message_nb: string;
   message_en: string;
-  description_no: string;
-  description_en: string;
-  start_dt: Date;
-  end_dt: Date;
+  start_dt: string;
+  end_dt: string;
 };
 
 export function ClosedPeriodFormAdminPage() {
@@ -32,6 +31,8 @@ export function ClosedPeriodFormAdminPage() {
 
   // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
+
+  const min_length_message = 10;
 
   // Stuff to do on first render.
   // TODO add permissions on render
@@ -46,13 +47,12 @@ export function ClosedPeriodFormAdminPage() {
     getClosedPeriod(id)
       .then((data) => {
         // setClosedPeriod(data); For posting
+        console.log(data);
         setInitialData({
-          message_no: data.message_no,
+          message_nb: data.message_nb,
           message_en: data.message_en,
-          description_no: data.description_no,
-          description_en: data.description_en,
-          start_dt: new Date(data.start_dt),
-          end_dt: new Date(data.end_dt),
+          start_dt: data.start_dt,
+          end_dt: data.end_dt,
         });
         setShowSpinner(false);
       })
@@ -68,41 +68,61 @@ export function ClosedPeriodFormAdminPage() {
 
   function handleOnSubmit(data: formType) {
     if (id !== undefined) {
-      // TODO patch data
+      putClosedPeriod(id, data)
+        .then()
+        .catch((err) => {
+          alert(err);
+        });
     } else {
-      // TODO post data
+      postClosedPeriod(data)
+        .then(() => {
+          toast.success(t(KEY.common_creation_successful));
+          navigate({ url: reverse({ pattern: ROUTES.frontend.admin_closed }) });
+        })
+        .catch(() => {
+          toast.error(t(KEY.common_something_went_wrong));
+        });
     }
-    alert('TODO Submit');
-    console.log(JSON.stringify(data));
   }
 
   const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
-  const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}'`;
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
   useTitle(title);
 
   return (
     <AdminPageLayout title={title} loading={showSpinner} header={true}>
-      <SamfForm onSubmit={handleOnSubmit} initialData={initialData}>
+      <SamfForm<formType> onSubmit={handleOnSubmit} initialData={initialData}>
         <div className={styles.row}>
-          <SamfFormField field="message_no" type="text_long" label={`${labelMessage} (${t(KEY.common_norwegian)})`} />
-          <SamfFormField field="message_en" type="text_long" label={`${labelMessage} (${t(KEY.common_english)})`} />
+          <SamfFormField
+            validator={(state: formType) => state.message_nb.length > min_length_message}
+            field="message_nb"
+            required={true}
+            type="text_long"
+            label={`${labelMessage} (${t(KEY.common_norwegian)})`}
+          />
+          <SamfFormField
+            validator={(state: formType) => state.message_en.length > min_length_message}
+            field="message_en"
+            required={true}
+            type="text_long"
+            label={`${labelMessage} (${t(KEY.common_english)})`}
+          />
         </div>
         <div className={styles.row}>
           <SamfFormField
-            field="description_no"
-            type="text_long"
-            label={`${labelDescription} (${t(KEY.common_norwegian)})`}
+            validator={(state: formType) => (state.end_dt ? new Date(state.start_dt) <= new Date(state.end_dt) : true)}
+            field="start_dt"
+            type="date"
+            label={`${t(KEY.start_time)}`}
           />
           <SamfFormField
-            field="description_en"
-            type="text_long"
-            label={`${labelDescription} (${t(KEY.common_english)})`}
+            validator={(state: formType) =>
+              state.start_dt ? new Date(state.start_dt) <= new Date(state.end_dt) : true
+            }
+            field="end_dt"
+            type="date"
+            label={`${t(KEY.end_time)}`}
           />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField field="start_dt" type="date" label={`${t(KEY.start_time)}`} />
-          <SamfFormField field="end_dt" type="date" label={`${t(KEY.end_time)}`} />
         </div>
       </SamfForm>
     </AdminPageLayout>
