@@ -33,7 +33,7 @@ export function EventsList({ events }: EventsListProps) {
     { content: t(KEY.common_venue), sortable: true },
     { content: t(KEY.category), sortable: true },
     { content: t(KEY.admin_organizer), sortable: true },
-    t(KEY.common_buy),
+    { content: t(KEY.common_buy), sortable: true },
   ];
 
   // TODO debounce and move header/filtering stuff to a separate component
