@@ -53,6 +53,7 @@ import {
   ImageFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
+  MDBConnectFormAdminPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
   RecruitmentApplicantAdminPage,
@@ -80,7 +81,6 @@ import {
   SultenMenuItemFormAdminPage,
   SultenReservationAdminPage,
   UsersAdminPage,
-  MDBConnectFormAdminPage,
 } from '~/PagesAdmin';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
@@ -995,9 +995,9 @@ export const router = createBrowserRouter(
           <Route //#NoClue ka eg holde på med her
             path={ROUTES.frontend.admin_mdb_connect_form}
             element={
-              <PermissionRoute 
+              <PermissionRoute
                 //Kan være fint å faktisk legge te permissions
-                element={<MDBConnectFormAdminPage/>}
+                element={<MDBConnectFormAdminPage />}
               />
             }
           />
