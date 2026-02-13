@@ -21,6 +21,5 @@ import styles from './AdminLayout.module.scss';
 import { AdminLayout } from '../AdminLayout';
 
 export function MDBConnectFormAdminPage() {
-    
-    return <div>Test</div>
+    return <div>Her ska en vakker form komme</div>
 }
