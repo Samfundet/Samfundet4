@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from django.db import models
+from django.db import models, connections
 
 
 class MedlemsInfo(models.Model):
@@ -21,3 +21,20 @@ class MedlemsInfo(models.Model):
 
     def __str__(self) -> str:
         return self.medlem_id
+
+
+def sett_lim_utvidet_medlemsinfo(email: str, password: str) -> int | None:
+    """
+    Calls the sett_lim_utvidet_medlemsinfo database function.
+
+    This function checks if the email and password are valid. If they are,
+    a flag is set in the `member` table allowing the user to appear in the
+    MedlemsInfo database view, and the function returns the member's ID.
+    """
+
+    with connections['mdb'].cursor() as cursor:
+        cursor.execute('SELECT * FROM sett_lim_utvidet_medlemsinfo(%s, %s)', (email, password))
+        row = cursor.fetchone()
+        if row:
+            return row[0]
+    return None
