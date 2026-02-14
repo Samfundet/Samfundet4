@@ -11,7 +11,7 @@ services:
       POSTGRES_USER: ${SM4_DEV_CREDENTIAL}
       POSTGRES_PASSWORD: ${SM4_DEV_CREDENTIAL}
     ports:
-      - 5432:5432
+      - "5432:5432"
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${SM4_DEV_CREDENTIAL}" ]
       interval: ${COMMON_HEALTHCHECK_INTERVAL}
@@ -26,9 +26,24 @@ services:
       POSTGRES_USER: ${BILLIG_DEV_CREDENTIAL}
       POSTGRES_PASSWORD: ${BILLIG_DEV_CREDENTIAL}
     ports:
-      - 5433:5432
+      - "5433:5432"
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${BILLIG_DEV_CREDENTIAL}" ]
+      interval: ${COMMON_HEALTHCHECK_INTERVAL}
+      timeout: ${COMMON_HEALTHCHECK_TIMEOUT}
+      retries: ${COMMON_HEALTHCHECK_RETRIES}
+  mdb_dev:
+    image: ${MDB_DEV_DB_IMAGE}
+    volumes:
+      - mdb_dev:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${MDB_DEV_CREDENTIAL}
+      POSTGRES_USER: ${MDB_DEV_CREDENTIAL}
+      POSTGRES_PASSWORD: ${MDB_DEV_CREDENTIAL}
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${MDB_DEV_CREDENTIAL}" ]
       interval: ${COMMON_HEALTHCHECK_INTERVAL}
       timeout: ${COMMON_HEALTHCHECK_TIMEOUT}
       retries: ${COMMON_HEALTHCHECK_RETRIES}
@@ -40,6 +55,8 @@ services:
         condition: service_healthy
       billig_dev_database:
         condition: service_healthy
+      mdb_dev:
+        condition: service_healthy
     volumes:
       - ./backend:/app # Mount backend folder to docker image
       - /app/.venv/ # Ignore local virtual environment
@@ -50,6 +67,9 @@ services:
       - IS_DOCKER=yes
       - SM4_DEV_CREDENTIAL=${SM4_DEV_CREDENTIAL}
       - BILLIG_DEV_CREDENTIAL=${BILLIG_DEV_CREDENTIAL}
+      - MDB_DEV_CREDENTIAL=${MDB_DEV_CREDENTIAL}
+      - BILLIG_DEV_HOST=billig_dev_database
+      - MDB_DEV_HOST=mdb_dev
     ports:
       - '8000:8000' # Quotes are required. django
       - '5678:5678' # Quotes are required. debugpy
@@ -134,3 +154,4 @@ services:
 volumes:
   sm4_dev_database:
   billig_dev_database:
+  mdb_dev:
