@@ -5,13 +5,25 @@
 .container {
   width: 100%;
   border-radius: 0;
-  overflow: hidden;
   margin-bottom: 1rem;
-  border: 1px solid transparent;
+  position: relative;
+  border: 1px solid $grey-35;
 
   @include theme-dark {
-    border-color: $grey-0;
+    border: 1px solid $grey-0;
   }
+}
+
+// accent border
+.with_branding.open::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  left: -1px;
+  width: 5px;
+  background-color: $red-samf;
+  z-index: 10;
 }
 
 .extendable_header_wrapper {
@@ -25,15 +37,18 @@
   background-color: $grey-4;
   color: $black-2;
   border: none;
+  border-bottom: 1px solid transparent;
   cursor: pointer;
   outline: none;
   text-align: left;
-  transition:
-    background-color 0.05s ease,
-    color 0.05s ease;
+  transition: background-color 0.2s ease;
 
   &:hover {
     background-color: $grey-35;
+  }
+
+  &.open {
+    border-bottom-color: $grey-35;
   }
 
   @include theme-dark {
@@ -42,6 +57,11 @@
 
     &:hover {
       background-color: $grey-1;
+    }
+
+    &.open {
+      background-color: $theme-dark-input-bg;
+      border-bottom-color: $grey-0;
     }
   }
 }

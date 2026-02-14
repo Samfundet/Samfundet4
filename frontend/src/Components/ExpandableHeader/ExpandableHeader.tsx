@@ -10,6 +10,7 @@ type ExpandableHeaderProps = {
   children?: ReactNode;
   showByDefault?: boolean;
   theme?: HeaderThemes;
+  borderBranding?: boolean;
 };
 
 export function ExpandableHeader({
@@ -18,10 +19,14 @@ export function ExpandableHeader({
   children,
   theme = 'parent',
   showByDefault = false,
+  borderBranding = false,
 }: ExpandableHeaderProps) {
   const [isOpen, setIsOpen] = useState(showByDefault);
 
-  const containerClasses = classnames(styles.container, className, { [styles.open]: isOpen });
+  const containerClasses = classnames(styles.container, className, {
+    [styles.open]: isOpen,
+    [styles.with_branding]: borderBranding,
+  });
 
   const buttonClasses = classnames(styles.extendable_header_wrapper, isOpen ? styles.open : styles.closed);
 
@@ -31,7 +36,6 @@ export function ExpandableHeader({
     <div className={containerClasses}>
       <button type="button" className={buttonClasses} onClick={() => setIsOpen(!isOpen)} aria-expanded={isOpen}>
         <span className={styles.extendable_header_title}>{label}</span>
-
         <div className={arrowClasses} aria-hidden="true">
           <span className={styles.chevron} />
         </div>
