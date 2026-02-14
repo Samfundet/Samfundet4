@@ -294,14 +294,17 @@ export async function getEvents(): Promise<EventDto[]> {
 
 export async function postEvent(data: Partial<EventDto>): Promise<AxiosResponse<EventDto>> {
   const transformed = { ...data, image_id: data.image?.id };
+  transformed.image = undefined;
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_list;
   const response = await axios.post<EventDto>(url, transformed, { withCredentials: true });
   return response;
 }
 
 export async function putEvent(id: string | number, data: Partial<EventDto>): Promise<AxiosResponse<EventDto>> {
+  const transformed = { ...data, image_id: data.image?.id };
+  transformed.image = undefined;
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
-  const response = await axios.put<EventDto>(url, data, { withCredentials: true });
+  const response = await axios.put<EventDto>(url, transformed, { withCredentials: true });
   return response;
 }
 

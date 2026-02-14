@@ -24,9 +24,9 @@ import {
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { getEvent, getVenues, postEvent } from '~/api';
+import { getEvent, getVenues, postEvent, putEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
-import type { EventDto, ImageDto } from '~/dto';
+import type { EventDto } from '~/dto';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { venueKeys } from '~/queryKeys';
@@ -112,9 +112,6 @@ export function EventCreatorAdminPage() {
           const eventDuration = Math.round(
             (new Date(eventData.end_dt).getTime() - new Date(eventData.start_dt).getTime()) / 60000,
           );
-          const imageObject: ImageDto | undefined = eventData.image_url
-            ? { id: eventData.id, title: '', url: eventData.image_url, tags: [] }
-            : undefined;
           setEvent(eventData);
           form.reset({
             title_nb: eventData.title_nb || '',
@@ -134,7 +131,7 @@ export function EventCreatorAdminPage() {
             ticket_type: eventData.ticket_type || 'free',
             custom_tickets: eventData.custom_tickets || [],
             billig_id: eventData.billig?.id,
-            image: imageObject,
+            image: eventData.image || undefined,
             visibility_from_dt: eventData.visibility_from_dt
               ? utcTimestampToLocal(eventData.visibility_from_dt, false)
               : '',
@@ -512,10 +509,12 @@ export function EventCreatorAdminPage() {
       end_dt: computedEndDt ? computedEndDt.toISOString() : '',
     };
 
-    postEvent(payload)
+    const request = id ? putEvent(id, payload) : postEvent(payload);
+
+    request
       .then(() => {
         navigate({ url: ROUTES.frontend.admin_events });
-        toast.success(t(KEY.common_creation_successful));
+        toast.success(t(id ? KEY.common_save_successful : KEY.common_creation_successful));
       })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
