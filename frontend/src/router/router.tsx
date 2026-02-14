@@ -53,6 +53,7 @@ import {
   ImageFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
+  MDBConnectFormAdminPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
   RecruitmentApplicantAdminPage,
@@ -995,6 +996,16 @@ export const router = createBrowserRouter(
                 requiredPermissions={[PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE]}
                 element={<InformationFormAdminPage />}
                 resolveWithRolePermissions={true}
+              />
+            }
+          />
+          {/* MDB Connect Form */}
+          <Route //#NoClue ka eg holde på med her
+            path={ROUTES.frontend.admin_mdb_connect_form}
+            element={
+              <PermissionRoute
+                //Kan være fint å faktisk legge te permissions
+                element={<MDBConnectFormAdminPage />}
               />
             }
           />
