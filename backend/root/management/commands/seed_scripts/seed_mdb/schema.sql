@@ -19,3 +19,34 @@ CREATE TABLE "lim_medlemsinfo" (
     brukernavn varchar(14) NOT NULL,
     PRIMARY KEY (medlem_id)
 );
+
+/*
+ This is a mock-function of the
+ */
+CREATE OR REPLACE FUNCTION sett_lim_utvidet_medlemsinfo(
+    p_email_or_id TEXT,
+    p_password TEXT
+)
+RETURNS SETOF INTEGER AS $$
+BEGIN
+    IF p_password <> 'password' THEN
+        RETURN;
+    END IF;
+
+    IF p_email_or_id ~ '^\d+$' THEN
+        RETURN QUERY
+            SELECT medlem_id
+            FROM lim_medlemsinfo
+            WHERE medlem_id = p_email_or_id::INTEGER
+            LIMIT 1;
+    ELSIF p_email_or_id LIKE '%@%' THEN
+        RETURN QUERY
+            SELECT medlem_id
+            FROM lim_medlemsinfo
+            WHERE mail = p_email_or_id
+            LIMIT 1;
+    END IF;
+
+    RETURN;
+END;
+$$ LANGUAGE plpgsql;

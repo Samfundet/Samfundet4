@@ -38,10 +38,8 @@ def create_db() -> tuple[bool, str]:
     """Creates a new postgres database with schema using shell scripts"""
 
     schema = get_schema()
-    schema_queries = schema.split(';')
     with django.db.connections['mdb'].cursor() as cursor, transaction.atomic():
-        for query in schema_queries:
-            cursor.execute(query)
+        cursor.execute(schema)
 
     return True, 'Created database and schema'
 
