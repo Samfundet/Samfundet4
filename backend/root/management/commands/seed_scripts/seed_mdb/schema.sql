@@ -21,7 +21,9 @@ CREATE TABLE "lim_medlemsinfo" (
 );
 
 /*
- This is a mock-function of the
+ This is a mock-function of the sett_lim_utvidet_medlemsinfo function.
+ Returns medlem_id on success, otherwise no result.
+ Password must be 'password'
  */
 CREATE OR REPLACE FUNCTION sett_lim_utvidet_medlemsinfo(
     p_email_or_id TEXT,
