@@ -52,7 +52,7 @@
   }
 
   @include theme-dark {
-    background-color: $grey-0;
+    background-color: $theme-dark-input-bg;
     color: $white;
 
     &:hover {
