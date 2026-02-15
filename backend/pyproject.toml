@@ -151,7 +151,7 @@ django-cors-headers = "4.*"
 dataclasses-json = "0.*"
 django-guardian = "2.*"
 pillow = "12.*"
-gunicorn = "23.*"
+gunicorn = "25.*"
 django-admin-autocomplete-filter = "0.*"
 psycopg = { extras = ["c"], version = "*" }
 
