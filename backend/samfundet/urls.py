@@ -7,6 +7,7 @@ from rest_framework import routers
 
 from django.urls import path, include
 
+import samfundet.view.mdb_views
 import samfundet.view.user_views
 import samfundet.view.event_views
 import samfundet.view.sulten_views
@@ -93,6 +94,8 @@ urlpatterns = [
     ########## Lyche ##########
     path('check-reservation/', samfundet.view.sulten_views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
     path('reservations/', samfundet.view.sulten_views.ReservationCreateView.as_view(), name='reservation-create'),
+    ######## MDB ########
+    path('mdb/connect', samfundet.view.mdb_views.ConnectToMDBView.as_view(), name='mdb_connect'),
     ########## Recruitment ##########
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
