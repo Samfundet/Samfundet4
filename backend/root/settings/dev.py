@@ -80,6 +80,14 @@ DATABASES = {
         'HOST': os.environ.get('BILLIG_DEV_HOST', 'billig_dev_database'),  # Docker service name or CI host
         'PORT': os.environ.get('BILLIG_DEV_PORT', '5432'),  # Docker internal port or CI host port
     },
+    'mdb': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['MDB_DEV_CREDENTIAL'],
+        'USER': os.environ['MDB_DEV_CREDENTIAL'],
+        'PASSWORD': os.environ['MDB_DEV_CREDENTIAL'],
+        'HOST': os.environ.get('MDB_DEV_HOST', 'mdb_dev'),  # Docker service name or CI host
+        'PORT': os.environ.get('MDB_DEV_PORT', '5432'),  # Docker internal port or CI host port
+    },
 }
 
 # ======================== #
