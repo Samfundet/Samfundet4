@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, ImageQuery } from '~/Components';
+import { PagedPagination } from '~/Components/Pagination';
 import { getImages } from '~/api';
 import type { ImageDto } from '~/dto';
 import { useTitle } from '~/hooks';
@@ -11,10 +12,13 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageAdminPage.module.scss';
 import { AdminImage } from './components';
 
+const PAGE_SIZE = 20;
+
 export function ImageAdminPage() {
   const [images, setImages] = useState<ImageDto[]>([]);
   const [allImages, setAllImages] = useState<ImageDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const { t } = useTranslation();
   useTitle(t(KEY.admin_images_title));
 
@@ -30,6 +34,11 @@ export function ImageAdminPage() {
       .catch(console.error);
   }, []);
 
+  // Reset to page 1 when filtered images change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [images]);
+
   const title = t(KEY.admin_images_title);
   const backendUrl = ROUTES.backend.admin__samfundet_image_changelist;
   const header = (
@@ -38,9 +47,10 @@ export function ImageAdminPage() {
     </Button>
   );
 
-  // Limit maximum number of rendered images
-  // TODO pagination & lazy load
-  const displayImages = images.slice(0, Math.min(images.length, 64));
+  // Calculate paginated images
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const endIndex = startIndex + PAGE_SIZE;
+  const displayImages = images.slice(startIndex, endIndex);
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
@@ -51,8 +61,14 @@ export function ImageAdminPage() {
         {displayImages.map((element) => (
           <AdminImage key={element.id} image={element} className={styles.imageBox} />
         ))}
-        {/* TODO pagination or translation */}
-        {images.length > displayImages.length && <i>And {images.length - displayImages.length} more...</i>}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+        <PagedPagination
+          currentPage={currentPage}
+          totalItems={images.length}
+          pageSize={PAGE_SIZE}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </AdminPageLayout>
   );
