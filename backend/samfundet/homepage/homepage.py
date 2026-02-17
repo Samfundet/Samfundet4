@@ -82,7 +82,7 @@ def generate() -> dict[str, Any]:  # noqa: C901
             carousel(
                 title_nb='Hva skjer?',
                 title_en="What's happening?",
-                events=list(upcoming_events[:10]),
+                events=list(upcoming_events[:4]),
             )
         )
 
