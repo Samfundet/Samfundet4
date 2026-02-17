@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Carousel, EventQuery, ImageCard, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
+import { PagedPagination } from '~/Components/Pagination';
 import { Table } from '~/Components/Table';
 import { deleteEvent, getEventsUpcomming } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
@@ -17,11 +18,14 @@ import { dbT, getTicketTypeKey, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventsAdminPage.module.scss';
 
+const PAGE_SIZE = 20;
+
 export function EventsAdminPage() {
   const navigate = useNavigate();
   const [events, setEvents] = useState<EventDto[]>([]);
   const [allEvents, setAllEvents] = useState<EventDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const { t, i18n } = useTranslation();
   useTitle(t(KEY.admin_events_administrate));
 
@@ -64,6 +68,11 @@ export function EventsAdminPage() {
     getEvents(selectedVenue, selectedCategory);
   }, [selectedVenue, selectedCategory]);
 
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [events, search]);
+
   function deleteSelectedEvent(id: number) {
     deleteEvent(id)
       .then(() => {
@@ -88,7 +97,12 @@ export function EventsAdminPage() {
 
   const filteredEvents = filterEvents();
 
-  const data = filteredEvents.map((event: EventDto) => ({
+  // Calculate paginated events
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const endIndex = startIndex + PAGE_SIZE;
+  const paginatedEvents = filteredEvents.slice(startIndex, endIndex);
+
+  const data = paginatedEvents.map((event: EventDto) => ({
     cells: [
       dbT(event, 'title', i18n.language) as string,
       { content: <TimeDisplay timestamp={event.start_dt} />, value: event.start_dt },
@@ -169,6 +183,14 @@ export function EventsAdminPage() {
       />
       <div className={styles.tableContainer}>
         <Table columns={tableColumns} data={data} />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+        <PagedPagination
+          currentPage={currentPage}
+          totalItems={filteredEvents.length}
+          pageSize={PAGE_SIZE}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </AdminPageLayout>
   );
