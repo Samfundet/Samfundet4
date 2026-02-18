@@ -1,55 +1,40 @@
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputField } from '~/Components';
-import { getEventGroups, getVenues } from '~/api';
-import type { EventDto, EventGroupDto, VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import type { SetState } from '~/types';
+import type { EventCategoryValue, SetState } from '~/types';
 import { lowerCapitalize } from '~/utils';
 import { Dropdown } from '../Dropdown';
 import type { DropdownOption } from '../Dropdown/Dropdown';
 import styles from './EventQuery.module.scss';
-import { eventQuery } from './utils';
 
 type EventQueryProps = {
-  allEvents: EventDto[];
-  setEvents: SetState<EventDto[]>;
+  venues: string[] | null;
+  categories: EventCategoryValue[] | null;
+  selectedVenue: string | null;
+  setSelectedVenue: SetState<string | null>;
+  selectedCategory: EventCategoryValue | null;
+  setSelectedCategory: SetState<EventCategoryValue | null>;
+  search: string;
+  setSearch: SetState<string>;
 };
 
-export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
+export function EventQuery({
+  venues,
+  categories,
+  setSelectedVenue,
+  setSelectedCategory,
+  search,
+  setSearch,
+}: EventQueryProps) {
   const { t } = useTranslation();
 
-  // Data
-  const [venues, setVenues] = useState<VenueDto[]>([]);
-  const [eventGroups, setEventGroups] = useState<EventGroupDto[]>([]);
-
-  // Search
-  const [search, setSearch] = useState<string>('');
-  const [selectedVenue, setSelectedVenue] = useState<VenueDto | null>();
-  const [selectedEventGroup, setSelectedEventGroup] = useState<EventGroupDto | null>();
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    getVenues()
-      .then((data) => setVenues(data))
-      .catch(console.error);
-    getEventGroups() // TODO event groups are not categories. We don't have a datamodel for this yet
-      .then((data) => setEventGroups(data))
-      .catch(console.error);
-  }, [allEvents]);
-
-  const venueOptions: DropdownOption<number | null>[] = venues.map((venue) => {
-    return { label: venue.name ?? '', value: venue.id } as DropdownOption<number>;
+  const venueOptions: DropdownOption<string | null>[] = (venues ?? []).map((venue) => {
+    return { label: venue ?? '', value: venue } as DropdownOption<string | null>;
   });
 
-  const eventGroupOptions: DropdownOption<number | null>[] = eventGroups.map((group) => {
-    return { label: group.name ?? '', value: group.id };
+  const categoryOptions: DropdownOption<string | null>[] = (categories ?? []).map((category) => {
+    return { label: category, value: category } as DropdownOption<string>;
   });
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    setEvents(eventQuery(allEvents, search, selectedVenue));
-  }, [search, selectedVenue, selectedEventGroup]);
 
   return (
     <div className={styles.queryBar}>
@@ -61,14 +46,14 @@ export function EventQuery({ allEvents, setEvents }: EventQueryProps) {
       />
       <Dropdown
         options={venueOptions}
-        onChange={(val) => setSelectedVenue(venues.find((v) => v.id === val))}
+        onChange={(val) => setSelectedVenue(val as string)}
         className={styles.element}
         nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_venue)}`) }}
       />
 
       <Dropdown
-        options={eventGroupOptions}
-        onChange={(val) => setSelectedEventGroup(eventGroups.find((eg) => eg.id === val))}
+        options={categoryOptions}
+        onChange={(val) => setSelectedCategory(val as EventCategoryValue)}
         className={styles.element}
         nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.event_type)}`) }}
       />

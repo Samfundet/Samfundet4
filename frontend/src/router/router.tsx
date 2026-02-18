@@ -1,5 +1,13 @@
 import { Outlet, Route, type UIMatch, createBrowserRouter, createRoutesFromElements } from 'react-router';
-import { Link, PermissionRoute, ProtectedRoute, RootErrorBoundary, SamfOutlet, SultenOutlet } from '~/Components';
+import {
+  Link,
+  PermissionRoute,
+  ProtectedRoute,
+  RootErrorBoundary,
+  SamfOutlet,
+  SiteFeatureGate,
+  SultenOutlet,
+} from '~/Components';
 import {
   AboutPage,
   AdminPage,
@@ -14,6 +22,7 @@ import {
   InformationListPage,
   InformationPage,
   LoginPage,
+  LoginPickerPage,
   LycheAboutPage,
   LycheContactPage,
   LycheHomePage,
@@ -94,6 +103,7 @@ import {
   roleLoader,
   separatePositionLoader,
 } from '~/router/loaders';
+import { SAMF3_LOGIN_URL } from '~/routes/samf-three';
 import { dbT, lowerCapitalize } from '~/utils';
 
 export const router = createBrowserRouter(
@@ -106,31 +116,60 @@ export const router = createBrowserRouter(
         <Route element={<Outlet />} errorElement={<RootErrorBoundary />}>
           <Route path={ROUTES.frontend.home} element={<HomePage />} />
           <Route path={ROUTES.frontend.about} element={<AboutPage />} />
-          <Route path={ROUTES.frontend.venues} element={<VenuePage />} />
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route path={ROUTES.frontend.venues} element={<SiteFeatureGate feature="venues"><VenuePage /></SiteFeatureGate>}/>
           <Route path={ROUTES.frontend.health} element={<HealthPage />} />
           <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
-            <Route path={ROUTES.frontend.login} element={<LoginPage />} />
+            <Route path={ROUTES.frontend.login} element={<LoginPickerPage newRoute="/new-login" />} />
+            <Route path={SAMF3_LOGIN_URL.login} element={<LoginPage />} />
+            <Route handle={{ crumb: () => <Link url={ROUTES.frontend.login}>{t(KEY.common_login)}</Link> }}>
+              <Route
+                path={ROUTES.frontend.new_login}
+                element={<LoginPage />}
+                handle={{
+                  crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.loginpage_internal_login)}</Link>,
+                }}
+              />
+            </Route>
             <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
           </Route>
           <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
-          <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
-          <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
-          <Route path={ROUTES.frontend.gangs} element={<GangsPage />} />
-          <Route path={ROUTES.frontend.events} element={<EventsPage />} />
-          <Route path={ROUTES.frontend.event} element={<EventPage />} />
-          <Route path={ROUTES.frontend.saksdokumenter} element={<SaksdokumenterPage />} />
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route element={ <SiteFeatureGate feature="information"><Outlet /></SiteFeatureGate>}>
+            <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
+            <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
+          </Route>
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route path={ROUTES.frontend.gangs} element={<SiteFeatureGate feature="gangs"><GangsPage /></SiteFeatureGate>} />
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route element={<SiteFeatureGate feature="events"><Outlet /></SiteFeatureGate>}>
+            <Route path={ROUTES.frontend.events} element={<EventsPage />} />
+            <Route path={ROUTES.frontend.event} element={<EventPage />} />
+          </Route>
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route path={ROUTES.frontend.saksdokumenter} element={<SiteFeatureGate feature="documents"><SaksdokumenterPage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
           <Route path={ROUTES.frontend.contributors} element={<ContributorsPage />} />
-          <Route path={ROUTES.frontend.membership} element={<MembershipPage />} />
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route path={ROUTES.frontend.membership} element={<SiteFeatureGate feature="membership"><MembershipPage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.contact} element={<div />} />
           <Route path={ROUTES.frontend.luka} element={<div />} />
           {/* Recruitment */}
-          <Route path={ROUTES.frontend.recruitment} element={<RecruitmentPage />} />
+          {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
+          <Route path={ROUTES.frontend.recruitment} element={<SiteFeatureGate feature="recruitment"><RecruitmentPage /></SiteFeatureGate> }/>
         </Route>
       </Route>
       {/* Specific recruitment */}
-      <Route element={<DynamicOrgOutlet />} id="publicRecruitment" loader={recruitmentLoader}>
+      <Route
+        element={
+          <SiteFeatureGate feature="recruitment">
+            <DynamicOrgOutlet />
+          </SiteFeatureGate>
+        }
+        id="publicRecruitment"
+        loader={recruitmentLoader}
+      >
         <Route path={ROUTES.frontend.recruitment_application} element={<RecruitmentApplicationFormPage />} />
         <Route
           path={ROUTES.frontend.recruitment_application_overview}
@@ -148,17 +187,29 @@ export const router = createBrowserRouter(
         <Route element={<Outlet />} errorElement={<RootErrorBoundary />}>
           <Route
             path={ROUTES.frontend.admin}
-            element={<PermissionRoute requiredPermissions={[]} element={<AdminPage />} />}
+            element={
+              <SiteFeatureGate feature="profile">
+                <PermissionRoute requiredPermissions={[]} element={<AdminPage />} />
+              </SiteFeatureGate>
+            }
           />
           {/* User pages */}
           <Route
             path={ROUTES.frontend.user_change_password}
-            element={<PermissionRoute element={<UserChangePasswordPage />} />}
+            element={
+              <SiteFeatureGate feature="changePassword">
+                <PermissionRoute element={<UserChangePasswordPage />} />
+              </SiteFeatureGate>
+            }
             handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.change_password)}</Link> }}
           />
           {/* Gangs */}
           <Route
-            element={<Outlet />}
+            element={
+              <SiteFeatureGate feature="gangs">
+                <Outlet />
+              </SiteFeatureGate>
+            }
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_gangs}>{t(KEY.common_gangs)}</Link> }}
           >
             <Route
@@ -199,7 +250,11 @@ export const router = createBrowserRouter(
           </Route>
           {/* Users */}
           <Route
-            element={<Outlet />}
+            element={
+              <SiteFeatureGate feature="users">
+                <Outlet />
+              </SiteFeatureGate>
+            }
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_users}>{t(KEY.common_users)}</Link> }}
           >
             <Route
@@ -211,7 +266,11 @@ export const router = createBrowserRouter(
           </Route>
           {/* Roles */}
           <Route
-            element={<Outlet />}
+            element={
+              <SiteFeatureGate feature="roles">
+                <Outlet />
+              </SiteFeatureGate>
+            }
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_roles}>{t(KEY.common_roles)}</Link> }}
           >
             <Route
@@ -272,7 +331,11 @@ export const router = createBrowserRouter(
           </Route>
           {/* Events */}
           <Route
-            element={<Outlet />}
+            element={
+              <SiteFeatureGate feature="events">
+                <Outlet />
+              </SiteFeatureGate>
+            }
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_events}>{t(KEY.common_events)}</Link> }}
           >
             <Route
@@ -314,16 +377,22 @@ export const router = createBrowserRouter(
             path={ROUTES.frontend.admin_opening_hours}
             handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_opening_hours)}</Link> }}
             element={
-              <PermissionRoute
-                requiredPermissions={[PERM.SAMFUNDET_CHANGE_VENUE]}
-                element={<OpeningHoursAdminPage />}
-                resolveWithRolePermissions={true}
-              />
+              <SiteFeatureGate feature="openingHours">
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_CHANGE_VENUE]}
+                  element={<OpeningHoursAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
+              </SiteFeatureGate>
             }
           />
           {/* Closed period */}
           <Route
-            element={<Outlet />}
+            element={
+              <SiteFeatureGate feature="closedHours">
+                <Outlet />
+              </SiteFeatureGate>
+            }
             handle={{
               crumb: () => <Link url={ROUTES.frontend.admin_closed}>{t(KEY.command_menu_shortcut_closed)}</Link>,
             }}
@@ -363,7 +432,11 @@ export const router = createBrowserRouter(
           </Route>
           {/* Images */}
           <Route
-            element={<Outlet />}
+            element={
+              <SiteFeatureGate feature="images">
+                <Outlet />
+              </SiteFeatureGate>
+            }
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_images}>{t(KEY.admin_images_title)}</Link> }}
           >
             <Route
@@ -390,7 +463,11 @@ export const router = createBrowserRouter(
           </Route>
           {/* Saksdokumenter */}
           <Route
-            element={<Outlet />}
+            element={
+              <SiteFeatureGate feature="documents">
+                <Outlet />
+              </SiteFeatureGate>
+            }
             handle={{
               crumb: () => <Link url={ROUTES.frontend.admin_saksdokumenter}>{t(KEY.admin_saksdokument)}</Link>,
             }}
@@ -430,7 +507,11 @@ export const router = createBrowserRouter(
           </Route>
           {/* Lyche Menu */}
           <Route
-            element={<Outlet />}
+            element={
+              <SiteFeatureGate feature="sulten">
+                <Outlet />
+              </SiteFeatureGate>
+            }
             handle={{
               crumb: () => (
                 <Link url={ROUTES.frontend.admin_sulten_menu}>
@@ -486,7 +567,11 @@ export const router = createBrowserRouter(
           </Route>
           {/* Recruitment */}
           <Route
-            element={<Outlet />}
+            element={
+              <SiteFeatureGate feature="recruitment">
+                <Outlet />
+              </SiteFeatureGate>
+            }
             path={ROUTES.frontend.admin_recruitment}
             handle={{ crumb: () => <Link url={ROUTES.frontend.admin_recruitment}>{t(KEY.common_recruitment)}</Link> }}
           >
@@ -523,7 +608,11 @@ export const router = createBrowserRouter(
             />
             {/* Specific recruitment */}
             <Route
-              element={<Outlet />}
+              element={
+                <SiteFeatureGate feature="recruitment">
+                  <Outlet />
+                </SiteFeatureGate>
+              }
               id="recruitment"
               loader={recruitmentLoader}
               handle={{
@@ -826,7 +915,11 @@ export const router = createBrowserRouter(
                 />
                 {/* Position */}
                 <Route
-                  element={<Outlet />}
+                  element={
+                    <SiteFeatureGate feature="recruitment">
+                      <Outlet />
+                    </SiteFeatureGate>
+                  }
                   loader={recruitmentGangPositionLoader}
                   handle={{
                     crumb: ({ params }: UIMatch, { position }: RecruitmentLoader & GangLoader & PositionLoader) => (
@@ -859,11 +952,13 @@ export const router = createBrowserRouter(
           <Route
             path={ROUTES.frontend.admin_sulten_reservations}
             element={
-              <PermissionRoute
-                requiredPermissions={[PERM.SAMFUNDET_VIEW_RESERVATION]}
-                element={<SultenReservationAdminPage />}
-                resolveWithRolePermissions={true}
-              />
+              <SiteFeatureGate feature="sulten">
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_VIEW_RESERVATION]}
+                  element={<SultenReservationAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
+              </SiteFeatureGate>
             }
           />
           {/*
@@ -874,11 +969,13 @@ export const router = createBrowserRouter(
             path={ROUTES.frontend.admin_information}
             handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.information_page)}</Link> }}
             element={
-              <PermissionRoute
-                requiredPermissions={[PERM.SAMFUNDET_VIEW_INFORMATIONPAGE]}
-                element={<InformationAdminPage />}
-                resolveWithRolePermissions={true}
-              />
+              <SiteFeatureGate feature="information">
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_VIEW_INFORMATIONPAGE]}
+                  element={<InformationAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
+              </SiteFeatureGate>
             }
           />
           <Route
@@ -906,7 +1003,13 @@ export const router = createBrowserRouter(
       {/*
             PUBLIC SULTEN ROUTES
       */}
-      <Route element={<SultenOutlet />}>
+      <Route
+        element={
+          <SiteFeatureGate feature="sulten">
+            <SultenOutlet />
+          </SiteFeatureGate>
+        }
+      >
         <Route path={ROUTES.frontend.sulten} element={<LycheHomePage />} />
         <Route path={ROUTES.frontend.sulten_about} element={<LycheAboutPage />} />
         <Route path={ROUTES.frontend.sulten_menu} element={<LycheMenuPage />} />

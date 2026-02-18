@@ -13,7 +13,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from django.utils import timezone
 
-from root.custom_classes.permission_classes import RoleProtectedOrAnonReadOnlyObjectPermissions
+from root.constants import WebFeatures
+from root.custom_classes.permission_classes import FeatureEnabled, RoleProtectedOrAnonReadOnlyObjectPermissions
 
 from samfundet.utils import event_query
 from samfundet.serializers import (
@@ -21,12 +22,22 @@ from samfundet.serializers import (
     EventGroupSerializer,
     PurchaseFeedbackSerializer,
 )
-from samfundet.models.event import Event, EventGroup, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
+from samfundet.models.event import (
+    Event,
+    EventGroup,
+    PurchaseFeedbackQuestion,
+    PurchaseFeedbackAlternative,
+)
+from samfundet.models.general import Venue
 from samfundet.models.model_choices import EventStatus
 
 
 class EventView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.EVENTS
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = EventSerializer
     queryset = Event.objects.all()
 
@@ -61,11 +72,26 @@ class EventsUpcomingView(APIView):
     def get(self, request: Request) -> Response:
         events = event_query(query=request.query_params)
         events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')
-        return Response(data=EventSerializer(events, many=True).data)
+        serialized_events = EventSerializer(events, many=True).data
+
+        # Fetch all venue names
+        venue_names = list(Venue.objects.values_list('name', flat=True))
+
+        response_data = {
+            'events': serialized_events,
+            'categories': Event._meta.get_field('category').choices if Event._meta.get_field('category').choices else [],
+            'locations': venue_names if venue_names else [],
+        }
+
+        return Response(data=response_data, status=status.HTTP_200_OK)
 
 
 class EventGroupView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.EVENTS
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = EventGroupSerializer
     queryset = EventGroup.objects.all()
 

@@ -55,6 +55,7 @@ import type {
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import type { BilligEventDto } from './apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from './constants';
 import type { PageNumberPaginationType } from './types';
 
@@ -180,9 +181,15 @@ export async function getVenue(id: string | number): Promise<VenueDto> {
   return response.data;
 }
 
-export async function putVenue(slug: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
+export async function patchVenue(slug: string | number, venue: Partial<VenueDto>): Promise<VenueDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { slug: slug } });
-  const response = await axios.put<VenueDto>(url, venue, { withCredentials: true });
+  const response = await axios.patch<VenueDto>(url, venue, { withCredentials: true });
+  return response.data;
+}
+
+export async function getOpenVenues(): Promise<VenueDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__venues_open_venues;
+  const response = await axios.get<VenueDto[]>(url, { withCredentials: true });
   return response.data;
 }
 
@@ -239,11 +246,43 @@ export async function getEventsPerDay(): Promise<EventDto[]> {
   return response.data;
 }
 
-export async function getEventsUpcomming(): Promise<EventDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcomming;
-  const response = await axios.get<EventDto[]>(url, { withCredentials: true });
+type EventsUpcomingBackendResponse = {
+  events: EventDto[]; // Array of events
+  categories: [string, string][]; // Categories as value-label pairs
+  locations: string[]; // Locations as value-label pairs
+};
 
-  return response.data;
+type EventsUpcomingResponse = {
+  events: EventDto[]; // Array of events
+  categories: string[]; // Categories as value-label pairs
+  locations: string[]; // Locations as value-label pairs
+};
+
+export async function getEventsUpcomming(params: {
+  search?: string;
+  event_group?: string;
+  venue?: string;
+  category?: string;
+}): Promise<EventsUpcomingResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcomming;
+
+  const response = await axios.get<EventsUpcomingBackendResponse>(url, {
+    withCredentials: true,
+    params: {
+      ...(params.search ? { search: params.search } : {}), // Add search if provided
+      ...(params.event_group ? { event_group: params.event_group } : {}), // Add event_group if provided
+      ...(params.venue ? { venue: params.venue } : {}), // Add venue if provided
+      ...(params.category ? { category: params.category } : {}), // Add category if provided
+    },
+  });
+
+  const categories = response.data.categories.map((category: [string, string]) => category[0]);
+
+  return {
+    events: response.data.events,
+    categories,
+    locations: response.data.locations,
+  };
 }
 
 export async function getEvents(): Promise<EventDto[]> {
@@ -253,7 +292,7 @@ export async function getEvents(): Promise<EventDto[]> {
   return response.data;
 }
 
-export async function postEvent(data: EventDto): Promise<AxiosResponse<EventDto>> {
+export async function postEvent(data: Partial<EventDto>): Promise<AxiosResponse<EventDto>> {
   const transformed = { ...data, image_id: data.image?.id };
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_list;
   const response = await axios.post<EventDto>(url, transformed, { withCredentials: true });
@@ -283,6 +322,12 @@ export async function getEventGroups(): Promise<EventGroupDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventgroups_list;
   const response = await axios.get<EventGroupDto[]>(url, { withCredentials: true });
 
+  return response.data;
+}
+
+export async function getBilligEvents(): Promise<BilligEventDto[]> {
+  const url = `${BACKEND_DOMAIN}/${ROUTES.backend.samfundet__billig_event_list}`;
+  const response = await axios.get<BilligEventDto[]>(url, { withCredentials: true });
   return response.data;
 }
 
@@ -946,6 +991,16 @@ export async function putRecruitmentApplicationForGang(
     });
   const response = await axios.put<RecruitmentApplicationDto>(url, application, { withCredentials: true });
   return response;
+}
+
+export async function addApplicationComment(applicationId: number, comment: string): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__recruitment_applications_for_gang_application_comment,
+      urlParams: { pk: applicationId },
+    });
+  return axios.put(url, { comment }, { withCredentials: true });
 }
 
 export async function updateRecruitmentApplicationStateForGang(

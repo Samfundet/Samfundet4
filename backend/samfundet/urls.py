@@ -7,6 +7,7 @@ from rest_framework import routers
 
 from django.urls import path, include
 
+import samfundet.view.mdb_views
 import samfundet.view.user_views
 import samfundet.view.event_views
 import samfundet.view.sulten_views
@@ -36,7 +37,6 @@ router.register('menu', samfundet.view.sulten_views.MenuView, 'menu')
 router.register('menu-items', samfundet.view.sulten_views.MenuItemView, 'menu_items')
 router.register('food-preference', samfundet.view.sulten_views.FoodPreferenceView, 'food_preference')
 router.register('food-category', samfundet.view.sulten_views.FoodCategoryView, 'food_category')
-router.register('booking', samfundet.view.sulten_views.BookingView, 'booking')
 router.register('table', samfundet.view.sulten_views.TableView, 'table')
 router.register('textitem', samfundet.view.general_views.TextItemView, 'text_item')
 router.register('interview-rooms', views.InterviewRoomView, 'interview_rooms')
@@ -99,6 +99,8 @@ urlpatterns = [
     ########## Lyche ##########
     path('check-reservation/', samfundet.view.sulten_views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
     path('reservations/', samfundet.view.sulten_views.ReservationCreateView.as_view(), name='reservation-create'),
+    ######## MDB ########
+    path('mdb/connect', samfundet.view.mdb_views.ConnectToMDBView.as_view(), name='mdb_connect'),
     ########## Recruitment ##########
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),
