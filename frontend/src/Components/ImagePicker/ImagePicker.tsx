@@ -20,6 +20,10 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
   const [images, setImages] = useState<ImageDto[]>([]);
 
   useEffect(() => {
+    setSelected(selectedImage);
+  }, [selectedImage]);
+
+  useEffect(() => {
     getImages()
       .then((imgs) => setImages(imgs))
       .catch(() => console.error);
@@ -47,7 +51,10 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
     <div className={styles.container}>
       <div className={styles.selected_container}>
         {selected && <h1 className={styles.image_title}>{selected.title}</h1>}
-        <div className={styles.selected} style={backgroundImageFromUrl(BACKEND_DOMAIN + selected?.url)}>
+        <div
+          className={styles.selected}
+          style={backgroundImageFromUrl(selected?.url ? BACKEND_DOMAIN + selected.url : undefined)}
+        >
           {selected === undefined && (
             <>
               <Icon icon="ic:outline-image" width={24} />
