@@ -1,0 +1,12 @@
+@use 'src/mixins' as *;
+
+@use 'src/constants' as *;
+
+.wrapper {
+    margin: 10vh 20vw 0 20vw;
+    text-align: center;
+}
+.wrapper h1 {
+    font-size: 200%;
+    margin: 0 0 3vh 0;
+}
