@@ -58,9 +58,9 @@ export function ImageAdminPage() {
   }, [currentPage, debouncedSearch, isInitialLoad]);
 
   // Reset to page 1 when search changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Need to trigger on debouncedSearch change
   useEffect(() => {
     setCurrentPage(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
 
   const title = t(KEY.admin_images_title);
