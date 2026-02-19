@@ -56,6 +56,7 @@ const CONTRIBUTORS: Contributor[] = [
   { name: 'Tor Madsen', github: 'madt2', from: 'H25' },
   // V26
   { name: 'Brage Sebastian Brevik', github: 'BragonSB', from: 'V26'},
+  { name: 'Lea Emilie Schjoll', github: 'leaesc', from: 'V26'},
 ];
 // @formatter:on
 
