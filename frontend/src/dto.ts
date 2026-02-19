@@ -178,7 +178,6 @@ export type EventDto = {
   registration_url?: string;
 
   // Timestamps/duration
-  image_url: string;
   start_dt: string;
   duration: number;
   end_dt: string;
@@ -194,6 +193,8 @@ export type EventDto = {
 
   // Write only:
   // Used to create new event with using id of existing imagedto
+  image_id?: number;
+  image_url: string;
   image?: ImageDto;
   capacity?: number;
 };
