@@ -116,7 +116,7 @@ export const nb = prepareTranslations({
   [KEY.common_email_subject]: 'Emne',
   [KEY.common_phonenumber]: 'Telefonnummer',
   [KEY.common_register]: 'Registrer',
-  [KEY.common_password]: 'passord',
+  [KEY.common_password]: 'Passord',
   [KEY.common_current]: 'Nåværende',
   [KEY.common_about_us]: 'Om oss',
   [KEY.common_previous]: 'Forrige',
@@ -310,6 +310,9 @@ export const nb = prepareTranslations({
   // AdminPage:
   [KEY.adminpage_gangs_title]: 'Administrer gjenger',
   [KEY.adminpage_gangs_create]: 'Opprett gjeng',
+
+  //MDB Connect AdminPage
+  [KEY.adminpage_connect_mdb]: 'Koble til MDB',
 
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
@@ -777,7 +780,7 @@ export const en = prepareTranslations({
   [KEY.common_email_subject]: 'Subject',
   [KEY.common_phonenumber]: 'Phone number',
   [KEY.common_lastname]: 'Last name',
-  [KEY.common_password]: 'password',
+  [KEY.common_password]: 'Password',
   [KEY.common_current]: 'Current',
   [KEY.common_about_us]: 'About us',
   [KEY.common_select_all]: 'Select all',
@@ -1284,6 +1287,9 @@ export const en = prepareTranslations({
   [KEY.feedback_type_heading]: 'We want to hear what you think of samfundet.no',
   [KEY.feedback_your_feedback]: 'Your feedback',
   [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
+
+  //MDB Connect AdminPage
+  [KEY.adminpage_connect_mdb]: 'Connect to MDB',
 
   // No category:
   [KEY.owner]: 'Owner',

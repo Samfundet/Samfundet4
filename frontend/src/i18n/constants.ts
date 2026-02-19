@@ -573,6 +573,7 @@ export const KEY = {
   admin_role_page_orggangsection: 'admin_role_page_orggangsection',
   admin_role_page_role_since: 'admin_role_page_role_since',
   admin_role_page_given_by: 'admin_role_page_given_by',
+  adminpage_connect_mdb: 'adminpage_connect_mdb',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
