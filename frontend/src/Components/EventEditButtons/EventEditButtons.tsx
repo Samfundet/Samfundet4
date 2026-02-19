@@ -13,12 +13,13 @@ type EventEditButtons = {
   title?: ReactNode;
   id?: string;
   icon_size?: number;
+  is_staff?: boolean;
 };
 
-export function EventEditButtons({ title = 'event', id, icon_size = 17 }: EventEditButtons) {
+export function EventEditButtons({ title = 'event', id, icon_size = 17, is_staff = false }: EventEditButtons) {
   const { user } = useAuthContext();
-  const isStaff = user?.is_staff;
-  const canChangeEvent = hasPerm({ user: user, permission: PERM.SAMFUNDET_CHANGE_EVENT, obj: id });
+  const isStaff = user?.is_staff || is_staff;
+  const canChangeEvent = hasPerm({ user: user, permission: PERM.SAMFUNDET_CHANGE_EVENT, obj: id }) || is_staff;
 
   const editUrl = reverse({ pattern: ROUTES.frontend.admin_events_edit, urlParams: { id: id } });
   const detailUrl = reverse({
