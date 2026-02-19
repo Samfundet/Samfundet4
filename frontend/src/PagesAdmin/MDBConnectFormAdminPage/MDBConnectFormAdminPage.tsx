@@ -24,7 +24,7 @@ export function MDBConnectFormAdminPage() {
   return (
     <div className={styles.wrapper}>
       <h1>{t(KEY.adminpage_connect_mdb)}</h1>
-      <SamfForm onSubmit={handleSubmit} isDisabled={submitting}>
+      <SamfForm onSubmit={handleSubmit} isDisabled={submitting} className={styles.Form}>
         <h2>{t(KEY.common_email)}</h2>
         <SamfFormField<string, FormProps> required={true} field="email" type="text" />
         <h2>{t(KEY.common_password)}</h2>
