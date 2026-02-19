@@ -60,6 +60,7 @@ export function ImageAdminPage() {
   // Reset to page 1 when search changes
   useEffect(() => {
     setCurrentPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
 
   const title = t(KEY.admin_images_title);
