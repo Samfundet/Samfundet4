@@ -519,11 +519,11 @@ export function buildPaginatedUrl(
 ): string {
   const params = new URLSearchParams();
   params.append('page', page.toString());
-  
+
   if (pageSize !== undefined) {
     params.append('page_size', pageSize.toString());
   }
-  
+
   if (additionalParams) {
     for (const [key, value] of Object.entries(additionalParams)) {
       if (value !== undefined) {
@@ -531,6 +531,6 @@ export function buildPaginatedUrl(
       }
     }
   }
-  
+
   return `${baseUrl}?${params.toString()}`;
 }

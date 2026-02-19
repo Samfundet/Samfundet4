@@ -55,13 +55,11 @@ export function ImageAdminPage() {
           setShowSpinner(false);
         }
       });
-  }, [currentPage, debouncedSearch]);
+  }, [currentPage, debouncedSearch, isInitialLoad]);
 
   // Reset to page 1 when search changes
   useEffect(() => {
-    if (currentPage !== 1) {
-      setCurrentPage(1);
-    }
+    setCurrentPage(1);
   }, [debouncedSearch]);
 
   const title = t(KEY.admin_images_title);
