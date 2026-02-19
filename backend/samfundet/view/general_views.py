@@ -15,6 +15,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
+from rest_framework.filters import SearchFilter
 
 from django.utils import timezone
 from django.db.models import Q, QuerySet
@@ -24,6 +25,7 @@ from root.constants import WebFeatures
 from root.custom_classes.permission_classes import FeatureEnabled, RoleProtectedOrAnonReadOnlyObjectPermissions
 
 from samfundet.homepage import homepage
+from samfundet.pagination import CustomPageNumberPagination
 from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from samfundet.serializers import (
     TagSerializer,
@@ -104,6 +106,9 @@ class ImageView(ModelViewSet):
     )
     serializer_class = ImageSerializer
     queryset = Image.objects.all().order_by('-pk')
+    pagination_class = CustomPageNumberPagination
+    filter_backends = [SearchFilter]
+    search_fields = ['title']
 
 
 # Image tags
