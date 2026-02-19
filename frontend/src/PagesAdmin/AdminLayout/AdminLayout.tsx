@@ -148,7 +148,8 @@ export function AdminLayout() {
         )}
         {/** Connect to MDB button */}
         <Link url={ROUTES.frontend.admin_mdb_connect_form} className={classNames(styles.panel_item)}>
-          TEKST
+          <Icon icon='mdi:connection'/>
+          {t(KEY.adminpage_connect_mdb)}
         </Link>
         {/* Logout */}
         <button
