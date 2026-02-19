@@ -499,3 +499,38 @@ export function handleServerFormErrors<T extends z.ZodType>(
     toast.error(i18next.t(KEY.error_generic_description));
   }
 }
+
+/**
+ * Build URL with pagination query parameters
+ * @param baseUrl - The base URL for the API endpoint
+ * @param page - Current page number (1-indexed)
+ * @param pageSize - Number of items per page (optional, defaults to backend default)
+ * @param additionalParams - Additional query parameters as key-value pairs
+ * @returns Complete URL with pagination parameters
+ * @example
+ * buildPaginatedUrl('/api/images', 1, 20, { search: 'test' })
+ * // Returns: '/api/images?page=1&page_size=20&search=test'
+ */
+export function buildPaginatedUrl(
+  baseUrl: string,
+  page: number,
+  pageSize?: number,
+  additionalParams?: Record<string, string | number | boolean | undefined>,
+): string {
+  const params = new URLSearchParams();
+  params.append('page', page.toString());
+  
+  if (pageSize !== undefined) {
+    params.append('page_size', pageSize.toString());
+  }
+  
+  if (additionalParams) {
+    for (const [key, value] of Object.entries(additionalParams)) {
+      if (value !== undefined) {
+        params.append(key, value.toString());
+      }
+    }
+  }
+  
+  return `${baseUrl}?${params.toString()}`;
+}
