@@ -4,6 +4,7 @@
 
 .container {
   @include flex-row-center;
+  justify-content: space-evenly;
   gap: 0.5em;
 }
 
