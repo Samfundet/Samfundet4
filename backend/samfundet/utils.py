@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import datetime
-from typing import Optional
 from operator import or_
 from functools import reduce
 from collections.abc import Callable
@@ -39,7 +38,7 @@ SIMPLE_FILTERS = {
 }
 
 
-def event_query(*, query: QueryDict, events: Optional[QuerySet[Event]] = None) -> QuerySet[Event]:
+def event_query(*, query: QueryDict, events: QuerySet[Event] | None = None) -> QuerySet[Event]:
     qs = events if events is not None else Event.objects.all()
 
     search = query.get('search')
