@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, InputField } from '~/Components';
 import { PagedPagination } from '~/Components/Pagination';
@@ -47,7 +47,7 @@ export function ImageAdminPage() {
 
   const images = data?.results ?? [];
   const totalCount = data?.count ?? 0;
-  
+
   const title = t(KEY.admin_images_title);
   const backendUrl = ROUTES.backend.admin__samfundet_image_changelist;
   const header = (
