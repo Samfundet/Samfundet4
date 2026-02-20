@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Button, InputField } from '~/Components';
 import { PagedPagination } from '~/Components/Pagination';
 import { getImagesPaginated } from '~/api';
-import type { ImageDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -15,11 +15,7 @@ import { AdminImage } from './components';
 const PAGE_SIZE = 20;
 
 export function ImageAdminPage() {
-  const [images, setImages] = useState<ImageDto[]>([]);
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true); // Prevents reaload of whole page on querry changes
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalCount, setTotalCount] = useState<number>(0);
   const [searchInput, setSearchInput] = useState<string>('');
   const [debouncedSearch, setDebouncedSearch] = useState<string>('');
   const debounceTimeout = useRef<NodeJS.Timeout>();
@@ -36,33 +32,22 @@ export function ImageAdminPage() {
     return () => clearTimeout(debounceTimeout.current);
   }, [searchInput]);
 
-  // Fetch images when page or search changes
-  useEffect(() => {
-    if (isInitialLoad) {
-      setShowSpinner(true);
-    }
-    getImagesPaginated(currentPage, PAGE_SIZE, debouncedSearch || undefined)
-      .then((data) => {
-        setImages(data.results);
-        setTotalCount(data.count);
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(() => {
-        if (isInitialLoad) {
-          setIsInitialLoad(false);
-          setShowSpinner(false);
-        }
-      });
-  }, [currentPage, debouncedSearch, isInitialLoad]);
-
   // Reset to page 1 when search changes
   // biome-ignore lint/correctness/useExhaustiveDependencies: Need to trigger on debouncedSearch change
   useEffect(() => {
     setCurrentPage(1);
   }, [debouncedSearch]);
 
+  // Fetch images using React Query
+  const { data, isLoading } = useQuery({
+    queryKey: ['images', currentPage, debouncedSearch],
+    queryFn: () => getImagesPaginated(currentPage, PAGE_SIZE, debouncedSearch || undefined),
+    placeholderData: keepPreviousData,
+  });
+
+  const images = data?.results ?? [];
+  const totalCount = data?.count ?? 0;
+  
   const title = t(KEY.admin_images_title);
   const backendUrl = ROUTES.backend.admin__samfundet_image_changelist;
   const header = (
@@ -76,7 +61,7 @@ export function ImageAdminPage() {
   }, []);
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={isLoading}>
       <div className={styles.action_row}>
         <InputField
           icon="mdi:search"
