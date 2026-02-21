@@ -1,0 +1,11 @@
+@use 'src/mixins' as *;
+
+@use 'src/constants' as *;
+
+.wrapper {
+    margin: 0 20vw 0 20vw;
+    text-align: center;
+}
+.Form {
+    text-align: left;
+}

@@ -1,0 +1,1 @@
+export { MDBConnectFormAdminPage } from './MDBConnectFormAdminPage';
