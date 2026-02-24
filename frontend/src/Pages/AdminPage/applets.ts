@@ -4,6 +4,20 @@ import type { AdminAppletCategory } from '~/types.ts';
 
 export const appletCategories: AdminAppletCategory[] = [
   {
+    title_en: 'Navigation',
+    title_nb: 'Navigering',
+    applets: [
+      {
+        title_nb: 'Gamle kontroll panel',
+        title_en: 'Old control panel',
+        icon: 'bx:link-external',
+        url: ROUTES.samfThree.controllPanel,
+        target: 'samf3',
+        feature: 'navigation',
+      },
+    ],
+  },
+  {
     title_en: 'General',
     title_nb: 'Generelt',
     applets: [
