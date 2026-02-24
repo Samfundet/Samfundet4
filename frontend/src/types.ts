@@ -173,6 +173,7 @@ export type CalendarMarker = {
 };
 
 export type SiteFeature =
+  | 'navigation' // used to rout to Samf3
   | 'profile'
   | 'changePassword'
   | 'events'

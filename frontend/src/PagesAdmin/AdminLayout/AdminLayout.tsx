@@ -66,6 +66,7 @@ export function AdminLayout() {
           key={index}
           className={classNames(styles.panel_item, selected && styles.selected)}
           url={applet.url}
+          target={applet.target}
           onAfterClick={() => isMobile && panelOpen && setPanelOpen(false)}
           plain={true}
         >
