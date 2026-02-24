@@ -9,6 +9,7 @@ from itertools import chain
 
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.filters import SearchFilter
 from rest_framework.request import Request
 from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.response import Response
@@ -24,6 +25,7 @@ from root.constants import WebFeatures
 from root.custom_classes.permission_classes import FeatureEnabled, RoleProtectedOrAnonReadOnlyObjectPermissions
 
 from samfundet.homepage import homepage
+from samfundet.pagination import CustomPageNumberPagination
 from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from samfundet.serializers import (
     TagSerializer,
@@ -104,6 +106,9 @@ class ImageView(ModelViewSet):
     )
     serializer_class = ImageSerializer
     queryset = Image.objects.all().order_by('-pk')
+    pagination_class = CustomPageNumberPagination
+    filter_backends = [SearchFilter]
+    search_fields = ['title']
 
 
 # Image tags
