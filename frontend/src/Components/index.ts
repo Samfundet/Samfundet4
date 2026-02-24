@@ -93,6 +93,7 @@ export { ToolTip } from './ToolTip';
 export { UkaOutlet } from './UkaOutlet';
 export { UserFeedback } from './UserFeedback';
 export { Video } from './Video';
+export { EventEditButtons } from './EventEditButtons';
 // Props
 export type { ButtonProps } from './Button';
 export type { CheckboxProps } from './Checkbox';

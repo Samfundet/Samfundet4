@@ -1,0 +1,46 @@
+.edit_icon {
+  color: white;
+  filter: brightness(1000%);
+  transition: all 200ms ease-in-out;
+}
+
+
+.edit_button {
+  pointer-events:all;
+  z-index: 10;
+  border-radius: 30%;
+  width: fit-content;
+  padding: 4px;
+  color: white;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+  text-decoration: none;
+}
+
+.edit_button:hover {
+  .edit_icon {
+    rotate: 15deg;
+  }
+  scale: 1.1;
+  filter: brightness(110%);
+}
+
+.default_edit {
+  @extend .edit_button;
+  background: #3498db;
+}
+
+.detail_edit {
+  @extend .edit_button;
+  background: teal;
+}                      
+
+.delete_edit {
+  @extend .edit_button;
+  background: crimson;
+  appearance: none;
+  border: none;
+}              
+
+
