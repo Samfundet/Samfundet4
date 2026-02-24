@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { themeToStyleMap } from '~/Components/Button/utils';
+import type { LinkTarget } from '~/Components/Link';
 import type { KV } from '~/constants';
 /** Module for global generic types. */
 
@@ -196,6 +197,7 @@ export type AdminApplet = {
   perm?: string;
   icon: string;
   url?: string;
+  target?: LinkTarget;
   feature?: SiteFeature; // hidden in control panel if not enabled
 };
 
