@@ -49,8 +49,8 @@ export function useEventCreatorForm(params: {
     },
   });
 
-  const resetValues = useMemo<FormType | null>(() => {
-    if (!event?.id) return null;
+  const resetValues = useMemo<FormType | undefined>(() => {
+    if (!event?.id) return undefined;
 
     const duration = computeDurationMinutes(event.start_dt, event.end_dt);
 
@@ -72,7 +72,7 @@ export function useEventCreatorForm(params: {
       ticket_type: event.ticket_type || 'free',
       custom_tickets: event.custom_tickets || [],
       billig_id: event.billig?.id,
-      image: event.image || undefined,
+      image: event.image ?? undefined,
       visibility_from_dt: event.visibility_from_dt ? utcTimestampToLocal(event.visibility_from_dt, false) : '',
       visibility_to_dt: event.visibility_to_dt ? utcTimestampToLocal(event.visibility_to_dt, false) : '',
     };
@@ -88,12 +88,13 @@ export function useEventCreatorForm(params: {
   function buildPayload(values: FormType) {
     const start = values.start_dt ? new Date(values.start_dt) : null;
     const computedEndDt = start ? new Date(start?.getTime() + (values.duration ?? 0) * 60_000) : null;
-
+    const { image, ...rest } = values;
     return {
-      ...values,
+      ...rest,
       visibility_to_dt: computedEndDt ? computedEndDt.toISOString() : '',
       end_dt: computedEndDt ? computedEndDt.toISOString() : '',
-    } satisfies Partial<EventDto>;
+      ...(image?.id ? { image_id: image.id } : {}),
+    };
   }
 
   return { form, watchedValues, buildPayload };

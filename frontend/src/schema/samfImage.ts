@@ -8,7 +8,7 @@ export const IMAGE = z.object({
   url: z.string(),
   id: z.number(),
   title: z.string(),
-  tags: z.array(TAG),
-});
+  tags: z.any().optional(),
+}).passthrough();
 
 export const OPTIONAL_IMAGE = IMAGE.optional();

@@ -76,11 +76,7 @@ export function EventCreatorAdminPage() {
     if (id) {
       getEvent(id)
         .then((eventData) => {
-          const eventDuration = Math.round(
-            (new Date(eventData.end_dt).getTime() - new Date(eventData.start_dt).getTime()) / 60000,
-          );
           setEvent(eventData);
-
           setShowSpinner(false);
         })
         .catch((error) => {
@@ -128,7 +124,12 @@ export function EventCreatorAdminPage() {
   // ================================== //
 
   function onSubmit(values: FormType) {
-    const payload: Partial<EventDto> = buildPayload(values);
+    let payload: Partial<EventDto> = buildPayload(values);
+
+    if ( id && values.image === undefined ) {
+      const { image, ...rest } = payload as Partial<EventDto> & { image?: unknown };
+      payload = rest;
+    }
 
     if (id) {
       editEventMutation.mutate({ id, payload });
@@ -182,13 +183,11 @@ export function EventCreatorAdminPage() {
     </>
   ) : null;
 
-  const onInvalid = (_errors: FieldErrors<FormType>) => {
-    // Make validation errors visible in the UI and show user feedback
+  const onInvalid = (errors: FieldErrors<FormType>) => {
+    console.log('INVALID ERRORS', errors);
     toast.error('Form contains validation errors. Please check highlighted fields.');
     const allVisited: Record<string, boolean> = {};
-    for (const s of steps) {
-      allVisited[s.key] = true;
-    }
+    for (const s of steps) allVisited[s.key] = true;
     setVisitedTabs(allVisited);
   };
   // Navigation buttons
