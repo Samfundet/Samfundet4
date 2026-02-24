@@ -38,4 +38,5 @@ export const ROUTES_SAMF_THREE = {
     club: `${BASE_URL}/informasjon/klubb`,
   },
   volunteer: `${BASE_URL}/opptak`,
+  controllPanel: `${BASE_URL}/medlemmer/kontrollpanel`,
 } as const;
