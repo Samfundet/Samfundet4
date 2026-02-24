@@ -6,6 +6,7 @@ import { PagedPagination } from '~/Components/Pagination';
 import { getImagesPaginated } from '~/api';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { imageKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -40,7 +41,7 @@ export function ImageAdminPage() {
 
   // Fetch images using React Query
   const { data, isLoading } = useQuery({
-    queryKey: ['images', currentPage, debouncedSearch],
+    queryKey: imageKeys.list(currentPage, debouncedSearch || undefined),
     queryFn: () => getImagesPaginated(currentPage, PAGE_SIZE, debouncedSearch || undefined),
     placeholderData: keepPreviousData,
   });
