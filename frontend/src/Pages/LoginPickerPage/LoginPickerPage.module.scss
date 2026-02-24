@@ -1,81 +1,168 @@
+@use 'sass:color';
+
 @use 'src/constants' as *;
 
 @use 'src/mixins' as *;
 
 .container {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  max-width: 960px;
+  margin: 0 auto;
   padding: 2rem 1rem;
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 2rem;
+.formWrapper {
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+}
+
+.caption {
+  display: block;
+  font-size: 1.25rem;
+  color: $grey-1;
+  margin-bottom: 5px;
+  font-weight: 400;
+
+  @include theme-dark {
+    color: $grey-3;
+  }
 }
 
 .headerTitle {
-  font-size: 2rem;
-  margin: 0 0 .25rem 0;
-}
+  color: $black-1;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 30px;
+  line-height: 1.1;
 
-.headerSubtitle {
-  font-size: 1.25rem;
-  opacity: 0.9;
-  margin: 0;
+  @include theme-dark {
+    color: $white;
+  }
 }
 
 .picker {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 3rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  margin-bottom: 30px;
 }
 
 .choiceWrapper {
+  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  width: 280px;
-  text-align: center;
-  min-height: 200px;
   justify-content: space-between;
-}
-
-.description {
-  margin-bottom: 1rem;
-  line-height: 1.4;
-  min-height: 3.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.choice {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  padding: 22px 30px;
+  border: 2px solid $grey-35;
+  background-color: $white;
+  cursor: pointer;
+  margin-bottom: 15px;
+  text-align: left;
+  font-family: inherit;
   text-decoration: none;
-  font-weight: 700;
-  font-size: 1.5rem;
-  padding: 1rem;
-  border-radius: 6px;
-  background: $red-samf;
-  color: $white;
-  box-shadow: 0 1px 2px rgba(0,0,0,.08);
-  min-height: 100px;
-  transition: transform .05s ease, filter .15s ease, box-shadow .15s ease;
 
-  &:hover { filter: brightness(0.96); }
-  &:active { transform: translateY(1px); }
-  &:focus-visible {
-    outline: 3px solid rgba(0,0,0,.4);
-    outline-offset: 3px;
+  @include theme-dark {
+    background-color: $theme_dark_input_bg;
+    border-color: $grey-1;
+  }
+
+  &:link,
+  &:visited {
+    color: inherit;
+  }
+
+  @include theme-dark {
+    color: $white;
+  }
+
+  &:hover {
+    border-color: $red_samf_hover;
+    background-color: $grey-5;
+
+    @include theme-dark {
+      background-color: $black-2;
+      border-color: $red_samf;
+    }
   }
 }
 
-.choiceTitle {
+.textWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.radioLabel {
+  display: block;
+  color: $black-1;
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 4px;
+
+  @include theme-dark {
+    color: $white;
+  }
+}
+
+.description {
+  color: $grey-1;
+  font-size: 1.1rem;
+  font-weight: 300;
   margin: 0;
+  line-height: 1.5;
+
+  @include theme-dark {
+    color: $grey-3;
+  }
+}
+
+.arrowIcon {
+  font-size: 2.5rem;
+  color: $black-1;
+  margin-left: 20px;
+  flex-shrink: 0;
+
+  @include theme-dark {
+    color: $white;
+  }
+}
+
+.backLink {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  color: $black-1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  @include theme-dark {
+    color: $theme_dark_color;
+  }
+
+  &:hover {
+    color: $grey-1;
+    text-decoration-thickness: 2px;
+
+    @include theme-dark {
+      color: $white;
+    }
+  }
+
+  &:focus-visible {
+    outline: 3px solid $orange-light;
+    outline-offset: 2px;
+  }
+}
+
+.backIcon {
+  margin-right: 4px;
+  font-size: 1.2rem;
+  text-decoration: none;
 }
