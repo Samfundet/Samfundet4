@@ -182,7 +182,7 @@ export const router = createBrowserRouter(
       */}
       <Route
         handle={{ crumb: () => <Link url={ROUTES.frontend.admin}>{t(KEY.control_panel_title)}</Link> }}
-        element={<AdminLayout />}
+        element={<ProtectedRoute authState={true} element={<AdminLayout />} />}
       >
         <Route element={<Outlet />} errorElement={<RootErrorBoundary />}>
           <Route
