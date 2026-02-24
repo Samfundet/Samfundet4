@@ -97,7 +97,7 @@ def application_on_update_positionstat(sender: RecruitmentApplication, instance:
     # Check if priority is updated after interview
     # This could reflect the quality of the interview
 
-    recruitment_stats, stats_created = RecruitmentStatistics.objects.get_or_create(recruitment=obj.recruitment)  # Get or create the recruitment statistics
+    recruitment_stats, _ = RecruitmentStatistics.objects.get_or_create(recruitment=obj.recruitment)  # Get or create the recruitment statistics
 
     # Now we can safely use recruitment_stats because it definitely exists
     position_stats, _created = RecruitmentPositionStat.objects.get_or_create(recruitment_position=obj.recruitment_position, recruitment_stats=recruitment_stats)
