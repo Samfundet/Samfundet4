@@ -11,6 +11,7 @@ import { connect_to_mdb } from '~/api';
 import { KEY } from '~/i18n/constants';
 import { PASSWORD, USERNAME } from '~/schema/user';
 import { lowerCapitalize } from '~/utils';
+import styles from './MDBConnectFormAdminPage.module.scss';
 
 const schema = z.object({
   username: USERNAME, //Might want to create a new schema for email and/or MDB number
@@ -71,7 +72,7 @@ export function MDBConnectForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" theme="green" display="block" rounded={true}>
+        <Button className={styles.form_button} type="submit" theme="green" display="block" rounded={true}>
           {t(KEY.common_connect)}
         </Button>
       </form>
