@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
-import styles from './MDBConnectFormAdminPage.module.scss';
 import { AdminPage } from '../AdminPageLayout';
 import { MDBConnectForm } from './MDBConnectForm';
-
+import styles from './MDBConnectFormAdminPage.module.scss';
 
 export function MDBConnectFormAdminPage() {
   const { t } = useTranslation();

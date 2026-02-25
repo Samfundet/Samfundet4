@@ -1,2 +1,2 @@
 export { MDBConnectFormAdminPage } from './MDBConnectFormAdminPage';
-export { MDBConnectForm } from './MDBConnectForm'
+export { MDBConnectForm } from './MDBConnectForm';

@@ -1323,12 +1323,13 @@ export async function getPositionsByTag(
 
 export async function connect_to_mdb(
   member_login: string, //email or member_id
-  password: string
-) 
-{
-  const url = BACKEND_DOMAIN + reverse({
-    pattern: ROUTES.backend.samfundet__mdb_connect,
-  })
-  const response = await axios.post(url,{member_login,password}, {withCredentials: true})
-  return response.data
+  password: string,
+) {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__mdb_connect,
+    });
+  const response = await axios.post(url, { member_login, password }, { withCredentials: true });
+  return response.data;
 }
