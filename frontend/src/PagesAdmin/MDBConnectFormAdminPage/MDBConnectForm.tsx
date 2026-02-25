@@ -11,7 +11,6 @@ import { Input } from '~/Components';
 import { Button } from '~/Components/Button';
 import { lowerCapitalize } from '~/utils';
 import { FormControl, FormDescription } from '~/Components/Forms/Form';
-import styles from './MDBConnectFormAdminPage.module.scss';
 
 const schema = z.object({
     username: USERNAME, //Might want to create a new schema for email and/or MDB number
@@ -48,10 +47,10 @@ export function MDBConnectForm() {
                     control={form.control}
                     name='username'
                     render={({ field }) => (
-                        <FormItem className={styles.input_element}>
+                        <FormItem>
                             <FormLabel>{t(KEY.email_or_membership_number_message)}</FormLabel>
                             <FormControl>
-                                <Input placeholder='' {...field}/>
+                                <Input placeholder='' type='text' {...field}/>
                             </FormControl>
                         </FormItem>
                     )}
@@ -60,15 +59,15 @@ export function MDBConnectForm() {
                     control={form.control}
                     name='password'
                     render={({ field }) => (
-                        <FormItem className={styles.input_element}>
+                        <FormItem>
                             <FormLabel>{lowerCapitalize(t(KEY.common_password))}</FormLabel>
                             <FormControl>
-                                <Input placeholder='' {...field}/>
+                                <Input placeholder='' type='password' {...field}/>
                             </FormControl>
                         </FormItem>
                     )}
                 />
-                <Button type='submit' theme='green' display='block'>
+                <Button type='submit' theme='green' display='block' rounded={true}>
                     {t(KEY.common_connect)}
                 </Button>
             </form>
