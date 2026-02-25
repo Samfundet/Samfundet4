@@ -10,7 +10,7 @@ export function MDBConnectFormAdminPage() {
   return (
     <AdminPage title={t(KEY.adminpage_connect_mdb_extended)}>
       <div className={styles.wrapper}>
-        <MDBConnectForm></MDBConnectForm>
+        <MDBConnectForm />
       </div>
     </AdminPage>
   );
