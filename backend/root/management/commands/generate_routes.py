@@ -149,15 +149,23 @@ class Command(BaseCommand):
 
                 frontend_file.write('export const ROUTES_BACKEND = {')
 
+                # Track seen names to avoid duplicates
+                seen_names: set[str] = set()
+
                 # Parse all urls to frontend routes.
                 for url in urls:
-                    if '<format>' in url.url:
+                    if '<format>' in url.url or '<drf_format_suffix' in url.url:
                         # Generic and malformed urls we don't need to keep.
                         continue
 
                     # Parse url to frontend route.
                     parsed_url = parse_url(url.url)
                     parsed_name = parse_name(url.name or parsed_url)  # 'samfundet:new_tjeneste' -> 'samfundet__new_tjeneste'
+
+                    # Skip duplicates
+                    if parsed_name in seen_names:
+                        continue
+                    seen_names.add(parsed_name)
 
                     # Write to file.
                     frontend_file.write(NEWLINE + f"  {parsed_name}: '{parsed_url}',")

@@ -300,6 +300,7 @@ export const ROUTES_BACKEND = {
   samfundet__gangsorganized: '/gangtypes/:organization/',
   samfundet__check_reservation: '/check-reservation/',
   samfundet__reservation_create: '/reservations/',
+  samfundet__mdb_connect: '/mdb/connect',
   samfundet__active_recruitments: '/active-recruitments/',
   samfundet__recruitment_positions: '/recruitment-positions/',
   samfundet__recruitment_show_unprocessed_applicants: '/recruitment-show-unprocessed-applicants/',

@@ -1,9 +1,8 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputField } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import type { EventCategoryValue, SetState } from '~/types';
-import { lowerCapitalize } from '~/utils';
+import { getEventCategoryKey, lowerCapitalize } from '~/utils';
 import { Dropdown } from '../Dropdown';
 import type { DropdownOption } from '../Dropdown/Dropdown';
 import styles from './EventQuery.module.scss';
@@ -15,20 +14,26 @@ type EventQueryProps = {
   setSelectedVenue: SetState<string | null>;
   selectedCategory: EventCategoryValue | null;
   setSelectedCategory: SetState<EventCategoryValue | null>;
+  search: string;
+  setSearch: SetState<string>;
 };
 
-export function EventQuery({ venues, categories, setSelectedVenue, setSelectedCategory }: EventQueryProps) {
+export function EventQuery({
+  venues,
+  categories,
+  setSelectedVenue,
+  setSelectedCategory,
+  search,
+  setSearch,
+}: EventQueryProps) {
   const { t } = useTranslation();
-
-  // Search
-  const [search, setSearch] = useState<string>('');
 
   const venueOptions: DropdownOption<string | null>[] = (venues ?? []).map((venue) => {
     return { label: venue ?? '', value: venue } as DropdownOption<string | null>;
   });
 
   const categoryOptions: DropdownOption<string | null>[] = (categories ?? []).map((category) => {
-    return { label: category, value: category } as DropdownOption<string>;
+    return { label: t(getEventCategoryKey(category)), value: category } as DropdownOption<string>;
   });
 
   return (
