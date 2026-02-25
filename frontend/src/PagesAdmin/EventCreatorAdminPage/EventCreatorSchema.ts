@@ -26,13 +26,6 @@ const event_custom_ticket = z.object({
   price: z.number().min(0),
 });
 
-// const image_schema = z.object({
-//   id: z.number(),
-//   title: z.string().optional(),
-//   url: z.string().optional(),
-//   tags: z.any().optional(),
-// }).passthrough();
-
 export const eventSchema = z.object({
   // text and description
   title_nb: EVENT_TITLE,

@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
-import type { EventDto } from '~/dto';
+import type { EventDto, EventWriteDto } from '~/dto';
 import type { EventCategoryValue } from '~/types';
 import { utcTimestampToLocal } from '~/utils';
 import { eventSchema } from '../EventCreatorSchema';
@@ -85,15 +85,15 @@ export function useEventCreatorForm(params: {
 
   const watchedValues = form.watch();
 
-  function buildPayload(values: FormType) {
+  function buildPayload(values: FormType): EventWriteDto {
     const start = values.start_dt ? new Date(values.start_dt) : null;
     const computedEndDt = start ? new Date(start?.getTime() + (values.duration ?? 0) * 60_000) : null;
-    const { image, ...rest } = values;
+
     return {
-      ...rest,
+      ...values,
       visibility_to_dt: computedEndDt ? computedEndDt.toISOString() : '',
       end_dt: computedEndDt ? computedEndDt.toISOString() : '',
-      ...(image?.id ? { image_id: image.id } : {}),
+      image_id: values.image?.id,
     };
   }
 

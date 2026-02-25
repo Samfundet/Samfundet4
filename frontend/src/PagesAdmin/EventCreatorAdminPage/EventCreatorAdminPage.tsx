@@ -32,7 +32,6 @@ import { TextStep } from './steps/TextStep';
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
-  // const navigate = useCustomNavigate();
   const [event, setEvent] = useState<Partial<EventDto>>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
@@ -126,7 +125,7 @@ export function EventCreatorAdminPage() {
   function onSubmit(values: FormType) {
     let payload: Partial<EventDto> = buildPayload(values);
 
-    if ( id && values.image === undefined ) {
+    if (id && values.image === undefined) {
       const { image, ...rest } = payload as Partial<EventDto> & { image?: unknown };
       payload = rest;
     }

@@ -2,14 +2,14 @@ import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { postEvent, putEvent } from '~/api';
-import type { EventDto } from '~/dto';
+import type { EventWriteDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 
 type UpdateEventInput = {
   id: number | string;
-  payload: Partial<EventDto>;
+  payload: Partial<EventWriteDto>;
 };
 
 export function useEventMutations() {
