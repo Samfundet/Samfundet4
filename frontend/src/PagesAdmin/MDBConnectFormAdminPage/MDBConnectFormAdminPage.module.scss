@@ -1,3 +1,5 @@
+@use 'src/global.scss' as *;
+
 @use 'src/mixins' as *;
 
 @use 'src/constants' as *;
@@ -5,7 +7,53 @@
 .wrapper {
     margin: 0 20vw 0 20vw;
     text-align: center;
+    display: flex;
+    flex-flow: row nowrap;
 }
 .Form {
     text-align: left;
 }
+
+.input_element {
+    margin: 0 0 2.5vh 0;
+}
+
+input {
+    width: 30vw;
+    //The styling below is just ripped from SamfForm's Inputfield styling to keep everything consistent
+    @include rounded-lighter;
+    padding: 0.75rem 1rem;
+    border: 1px solid $grey-35;
+    margin-top: 0.5em; // Make sure this is the same for all inputs that should be used together
+    outline: none;
+    font-weight: initial;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    &:focus {
+        border-color: $grey-3;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+        outline: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    @include theme-dark {
+        border-color: $grey-0;
+        &:focus {
+        border-color: $grey-1;
+        outline: 1px solid rgba(255, 255, 255, 0.6);
+        }
+    }
+}
+
+.input label {
+    margin: 0 0 2vh 0;
+}
+
+button {
+    //This is a bit hardcoded
+    max-width: 15vw;
+    border-radius: 1.5em !important;
+    margin: 5vh auto 0 auto;
+}
+
+
+//A lot of styling in this stylesheet should probably be connected to standardised sources in the future 
+//when samfForm is deleted

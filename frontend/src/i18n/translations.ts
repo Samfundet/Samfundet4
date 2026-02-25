@@ -43,6 +43,7 @@ export const nb = prepareTranslations({
   [KEY.pick_a_date]: 'Velg en dato',
 
   // Other common
+  [KEY.common_connect]: 'Koble til',
   [KEY.common_content]: 'Innhold',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Håndter',
@@ -116,7 +117,7 @@ export const nb = prepareTranslations({
   [KEY.common_email_subject]: 'Emne',
   [KEY.common_phonenumber]: 'Telefonnummer',
   [KEY.common_register]: 'Registrer',
-  [KEY.common_password]: 'Passord',
+  [KEY.common_password]: 'passord',
   [KEY.common_current]: 'Nåværende',
   [KEY.common_about_us]: 'Om oss',
   [KEY.common_previous]: 'Forrige',
@@ -313,6 +314,8 @@ export const nb = prepareTranslations({
 
   //MDB Connect AdminPage
   [KEY.adminpage_connect_mdb]: 'Koble til MDB',
+  [KEY.adminpage_connect_mdb_extended]: 'Koble til medlemsdatabasen',
+  [KEY.adminpage_connect_mdb_succesful_toast]: 'Vellyket tilkobling til MDB',
 
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
@@ -708,6 +711,7 @@ export const en = prepareTranslations({
   [KEY.pick_a_date]: 'Pick a date',
 
   // No category:
+  [KEY.common_connect]: 'Connect',
   [KEY.common_content]: 'Content',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Manage',
@@ -780,7 +784,7 @@ export const en = prepareTranslations({
   [KEY.common_email_subject]: 'Subject',
   [KEY.common_phonenumber]: 'Phone number',
   [KEY.common_lastname]: 'Last name',
-  [KEY.common_password]: 'Password',
+  [KEY.common_password]: 'password',
   [KEY.common_current]: 'Current',
   [KEY.common_about_us]: 'About us',
   [KEY.common_select_all]: 'Select all',
@@ -1290,6 +1294,8 @@ export const en = prepareTranslations({
 
   //MDB Connect AdminPage
   [KEY.adminpage_connect_mdb]: 'Connect to MDB',
+  [KEY.adminpage_connect_mdb_extended]: 'Connect to member database',
+  [KEY.adminpage_connect_mdb_succesful_toast]: 'Succesfully connected to MDB',
 
   // No category:
   [KEY.owner]: 'Owner',
