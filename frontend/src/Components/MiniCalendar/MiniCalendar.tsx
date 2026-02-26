@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { addDays, addMonths, isMonday, isSunday, lastDayOfMonth, nextSunday, previousMonday } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, TimeDisplay } from '~/Components';
+import { TimeDisplay } from '~/Components';
 import type { CalendarMarker } from '~/types';
 import { SHORT_DAY_I18N_KEYS } from '~/utils';
 import styles from './MiniCalendar.module.scss';
@@ -19,10 +19,11 @@ type MiniCalendarProps = {
   onChange?: (date: Date | null) => void;
   /** If true, displays the current month and year */
   displayLabel?: boolean;
-  /** List of dates to mark with a dot */
+  /** List of dates to mark with a square dot */
   markers?: CalendarMarker[];
   /** Selected date can be defined on beforehand */
   initialSelectedDate?: Date | null;
+  includeTime?: boolean;
 };
 
 export function MiniCalendar({
@@ -33,22 +34,100 @@ export function MiniCalendar({
   displayLabel,
   markers,
   initialSelectedDate,
+  includeTime = false,
 }: MiniCalendarProps) {
   const [displayDate, setDisplayDate] = useState<Date>(baseDate);
   const [days, setDays] = useState<Date[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(initialSelectedDate || null);
   const { t } = useTranslation();
 
+  const formatTimeFromDate = (date: Date | null) => {
+    if (!date) return '';
+    const h = String(date.getHours()).padStart(2, '0');
+    const m = String(date.getMinutes()).padStart(2, '0');
+    return `${h}:${m}`;
+  };
+
+  const [timeString, setTimeString] = useState(formatTimeFromDate(initialSelectedDate || null));
+
   function getMarker(d: Date | null) {
-    if (!d || !markers) {
-      return null;
-    }
+    if (!d || !markers) return null;
     return markers.find((m) => m.date.toDateString() === d.toDateString());
   }
 
   function dateValid(d: Date) {
     return !((minDate && d.getTime() < minDate.getTime()) || (maxDate && d.getTime() > maxDate.getTime()));
   }
+
+  // --- Time Logic ---
+
+  const parseTime = (str: string): { h: number; m: number } | null => {
+    const parts = str.split(':');
+    if (parts.length !== 2) return null;
+    const h = Number.parseInt(parts[0], 10);
+    const m = Number.parseInt(parts[1], 10);
+    if (Number.isNaN(h) || Number.isNaN(m) || h > 23 || m > 59) return null;
+    return { h, m };
+  };
+
+  const updateDateWithTime = (date: Date, tStr: string) => {
+    const time = parseTime(tStr);
+    if (time) {
+      const newD = new Date(date);
+      newD.setHours(time.h, time.m, 0, 0);
+      return newD;
+    }
+    const resetD = new Date(date);
+    resetD.setHours(0, 0, 0, 0);
+    return resetD;
+  };
+
+  const handleTimeChange = (val: string) => {
+    if (!/^[\d:]*$/.test(val) || val.length > 5) return;
+
+    let newVal = val;
+
+    if (val.length === 2 && timeString.length < 2 && !val.includes(':')) {
+      if (Number.parseInt(val) < 24) {
+        newVal = `${val}:`;
+      }
+    }
+
+    setTimeString(newVal);
+
+    if (newVal.length === 5 && selectedDate) {
+      const parsed = parseTime(newVal);
+      if (parsed) {
+        const newD = updateDateWithTime(selectedDate, newVal);
+        setSelectedDate(newD);
+        onChange?.(newD);
+      }
+    }
+  };
+
+  const handleBlur = () => {
+    // Standardize format on blur ("9:30" -> "09:30")
+    if (timeString.includes(':')) {
+      const [h, m] = timeString.split(':');
+      if (h && m) {
+        const hh = h.padStart(2, '0');
+        const mm = m.padEnd(2, '0');
+
+        if (Number.parseInt(hh) < 24 && Number.parseInt(mm) < 60) {
+          const finalStr = `${hh}:${mm.substring(0, 2)}`;
+          setTimeString(finalStr);
+
+          if (selectedDate) {
+            const newD = updateDateWithTime(selectedDate, finalStr);
+            setSelectedDate(newD);
+            onChange?.(newD);
+          }
+        }
+      }
+    }
+  };
+
+  // --- End Time Logic ---
 
   useEffect(() => {
     const monthStart = new Date(displayDate);
@@ -83,34 +162,40 @@ export function MiniCalendar({
     <div className={styles.month_header}>
       <div className={styles.previous_month}>
         {showPrevMonthButton && (
-          <Button onClick={() => setDisplayDate(addMonths(displayDate, -1))} className={styles.change_month_button}>
+          <button
+            type="button"
+            onClick={() => setDisplayDate(addMonths(displayDate, -1))}
+            className={styles.change_month_button}
+          >
             <Icon icon="carbon:chevron-left" />
-          </Button>
+          </button>
         )}
       </div>
       <TimeDisplay className={styles.label} timestamp={displayDate} displayType={'nice-month-year'} />
       <div className={styles.next_month}>
         {showNextMonthButton && (
-          <Button onClick={() => setDisplayDate(addMonths(displayDate, 1))} className={styles.change_month_button}>
+          <button
+            type="button"
+            onClick={() => setDisplayDate(addMonths(displayDate, 1))}
+            className={styles.change_month_button}
+          >
             <Icon icon="carbon:chevron-right" />
-          </Button>
+          </button>
         )}
       </div>
-    </div>
-  );
-
-  const daysHeader = (
-    <div className={`${styles.grid} ${styles.days_header}`}>
-      {SHORT_DAY_I18N_KEYS.map((d) => (
-        <span key={d}>{t(d)}</span>
-      ))}
     </div>
   );
 
   return (
     <div className={styles.container}>
       {monthHeader}
-      {daysHeader}
+
+      <div className={`${styles.grid} ${styles.days_header}`}>
+        {SHORT_DAY_I18N_KEYS.map((d) => (
+          <span key={d}>{t(d)}</span>
+        ))}
+      </div>
+
       <div className={styles.grid}>
         {days.map((d) => {
           const valid = dateValid(d);
@@ -129,19 +214,48 @@ export function MiniCalendar({
                 [styles.selected_day]: isSelected,
               })}
               onClick={() => {
-                // If we click the currently selected date, deselect it
-                const newDate = isSelected ? null : d;
+                const newDate = isSelected ? null : new Date(d);
+                if (newDate) {
+                  if (includeTime) {
+                    const updated = updateDateWithTime(newDate, timeString);
+                    // If time string was empty/invalid, updateDateWithTime defaults to 00:00
+                    newDate.setTime(updated.getTime());
+                  } else {
+                    newDate.setHours(0, 0, 0, 0);
+                  }
+                }
                 onChange?.(newDate);
                 setSelectedDate(newDate);
               }}
               disabled={!valid}
             >
               {d.getDate()}
-              {marker && <div className={`${styles.marker} ${marker.className}`} />}
+              {marker && <div className={classNames(styles.marker, marker.className)} />}
             </button>
           );
         })}
       </div>
+
+      {includeTime && (
+        <div className={styles.time_picker}>
+          <label className={styles.time_label}>{t('Time') || 'Time'}</label>
+          <div className={styles.time_input_wrapper}>
+            <input
+              type="text"
+              inputMode="numeric"
+              className={styles.time_input}
+              value={timeString}
+              placeholder="00:00"
+              onChange={(e) => handleTimeChange(e.target.value)}
+              onBlur={handleBlur}
+              onFocus={(e) => e.target.select()}
+              maxLength={5}
+              aria-label={t('Time')}
+            />
+            <Icon icon="carbon:time" className={styles.time_icon} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

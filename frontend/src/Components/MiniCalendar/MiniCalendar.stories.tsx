@@ -19,3 +19,13 @@ export const Basic: Story = {
     displayLabel: true,
   },
 };
+
+export const WithTimePicker: Story = {
+  args: {
+    baseDate: new Date(2024, 3, 1),
+    minDate: new Date(2024, 3, 3),
+    maxDate: new Date(2024, 4, 10),
+    displayLabel: true,
+    includeTime: true,
+  },
+};
