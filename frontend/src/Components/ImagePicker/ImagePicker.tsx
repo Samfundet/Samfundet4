@@ -89,7 +89,7 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
           )}
         </div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div className={styles.search_wrapper}>
         <InputField
           icon="mdi:search"
           value={searchInput}
@@ -97,7 +97,7 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
           placeholder={t(KEY.common_search)}
         />
         <div className={styles.image_container}>{images.map((image) => renderImage(image))}</div>
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+        <div className={styles.pagination_wrapper}>
           <PagedPagination
             currentPage={currentPage}
             totalItems={totalCount}

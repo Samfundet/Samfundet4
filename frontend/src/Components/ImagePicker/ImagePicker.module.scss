@@ -67,3 +67,14 @@
     transform: scale(1);
   }
 }
+
+.search_wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.pagination_wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
