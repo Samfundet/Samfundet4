@@ -329,7 +329,6 @@ export function EventCreatorAdminPage() {
                       {...field}
                       onChange={(e) => {
                         const v = e.target.value;
-                        console.log(v);
                         field.onChange(v === '' ? '' : Number.parseInt(v));
                       }}
                     />
