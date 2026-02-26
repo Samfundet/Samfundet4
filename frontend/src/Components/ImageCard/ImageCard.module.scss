@@ -5,13 +5,11 @@
 $mobile-width: $primary-content-width-mobile;
 $card-border-radius: 0.5rem;
 $subtitle-max-height: 1rem;
-$card-gradient-overlay: linear-gradient(
-  180deg,
-  rgba(0, 0, 0, 0) 0%,
-  rgba(0, 0, 0, 0.05) 30%,
-  rgba(0, 0, 0, 0.54) 80%,
-  rgba(0, 0, 0, 0.6) 100%
-);
+$card-gradient-overlay: linear-gradient(180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.05) 30%,
+    rgba(0, 0, 0, 0.54) 80%,
+    rgba(0, 0, 0, 0.6) 100%);
 $card-text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.5);
 
 $card-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
@@ -19,6 +17,7 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
 // TODO color variables
 
 .container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -107,6 +106,7 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
 
 .compact {
   width: 14em;
+
   @include for-mobile-only {
     width: $mobile-width;
   }
@@ -150,28 +150,54 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
   float: right;
 }
 
+.edit_bar {
+  opacity: 0%;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: 10px;
+  padding-right: 13px;
+  align-items: end;
+  width: 100%;
+  height: 55%;
+  pointer-events: none;
+  margin-left: 20px;
+  transition: all 200ms ease-in-out;
+  z-index: 10;
+}
+
 // Styling to container and children when it is hovered.
 .container:hover {
   .edit_button {
     visibility: visible;
   }
+
   .card {
     transform: translateY(-3px);
     box-shadow: $card-box-shadow-hover;
     text-decoration: none;
   }
+
   @include for-tablet-up {
     .subtitle {
       max-height: 0;
       opacity: 0;
     }
   }
+
   .card_content {
     transform: none;
   }
+
   .bottom_description {
     opacity: 1;
     max-height: 3.5em;
+  }
+
+  .edit_bar {
+    opacity: 100%;
+    margin-left: 0;
   }
 }
 
@@ -181,8 +207,15 @@ $card-box-shadow-hover: 0 3px 8px 0 rgba(0, 0, 0, 0.4);
     opacity: 1;
     max-height: $subtitle-max-height;
   }
+
   .bottom_description {
     opacity: 0;
     max-height: 0;
   }
+}
+
+.badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
