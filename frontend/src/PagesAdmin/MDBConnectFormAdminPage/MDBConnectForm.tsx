@@ -12,6 +12,7 @@ import { KEY } from '~/i18n/constants';
 import { PASSWORD, USERNAME } from '~/schema/user';
 import { lowerCapitalize } from '~/utils';
 import styles from './MDBConnectFormAdminPage.module.scss';
+import { useTitle } from '~/hooks';
 
 const schema = z.object({
   username: USERNAME, //Might want to create a new schema for email and/or MDB number
@@ -20,6 +21,7 @@ const schema = z.object({
 
 export function MDBConnectForm() {
   const { t } = useTranslation();
+  useTitle(t(KEY.adminpage_connect_mdb));
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
