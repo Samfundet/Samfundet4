@@ -6,7 +6,7 @@
 
 
 .edit_button {
-  pointer-events:all;
+  pointer-events: all;
   z-index: 10;
   border-radius: 30%;
   width: fit-content;
@@ -14,7 +14,6 @@
   color: white;
   cursor: pointer;
   transition: all 200ms ease-in-out;
-  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
   text-decoration: none;
 }
 
@@ -22,6 +21,7 @@
   .edit_icon {
     rotate: 15deg;
   }
+
   scale: 1.1;
   filter: brightness(110%);
 }
@@ -34,13 +34,11 @@
 .detail_edit {
   @extend .edit_button;
   background: teal;
-}                      
+}
 
 .delete_edit {
   @extend .edit_button;
   background: crimson;
   appearance: none;
   border: none;
-}              
-
-
+}

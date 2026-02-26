@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { ExpandableHeader, ExternalHostBox, H1, Image, Page } from '~/Components';
-import { EventEditButtons } from '~/Components';
+import { EventCrudButtons } from '~/Components';
 import { BuyEventTicket } from '~/Components/BuyEventTicket/BuyEventTicket';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { getEvent } from '~/api';
@@ -39,7 +39,7 @@ export function EventPage() {
 
       {canChangeEvent && (
         <div className={styles.admin_panel}>
-          <EventEditButtons title={dbT(event, 'title')} id={id} icon_size={20} />
+          <EventCrudButtons title={dbT(event, 'title')} id={id} icon_size={20} />
         </div>
       )}
 

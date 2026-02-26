@@ -7,16 +7,16 @@ import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 import { hasPerm } from '~/utils';
 import { Link } from '../Link';
-import styles from './EventEditButtons.module.scss';
+import styles from './EventCrudButtons.module.scss';
 
-type EventEditButtons = {
+type EventCrudButtons = {
   title?: ReactNode;
   id?: string;
   icon_size?: number;
   is_staff?: boolean;
 };
 
-export function EventEditButtons({ title = 'event', id, icon_size = 17, is_staff = false }: EventEditButtons) {
+export function EventCrudButtons({ title = 'event', id, icon_size = 17, is_staff = false }: EventCrudButtons) {
   const { user } = useAuthContext();
   const isStaff = user?.is_staff || is_staff;
   const canChangeEvent = hasPerm({ user: user, permission: PERM.SAMFUNDET_CHANGE_EVENT, obj: id }) || is_staff;

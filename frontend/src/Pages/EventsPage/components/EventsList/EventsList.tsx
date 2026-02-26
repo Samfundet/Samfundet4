@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import { type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, EventEditButtons, IconButton, InputField, Link, TimeDisplay } from '~/Components';
+import { Button, EventCrudButtons, IconButton, InputField, Link, TimeDisplay } from '~/Components';
 import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
@@ -78,7 +78,7 @@ export function EventsList({ events }: EventsListProps) {
         {
           content: (
             <div style={{ display: 'flex', gap: 10 }}>
-              <EventEditButtons title={dbT(event, 'title')} id={event.id.toString()} icon_size={15} />
+              <EventCrudButtons title={dbT(event, 'title')} id={event.id.toString()} icon_size={15} />
             </div>
           ),
         },

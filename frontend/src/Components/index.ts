@@ -21,6 +21,7 @@ export { EventCardContainer } from './EventCardContainer';
 export { EventQuery } from './EventQuery';
 export { ExpandableHeader } from './ExpandableHeader';
 export { ExpandableList } from './ExpandableList';
+export { EventCrudButtons } from './EventCrudButtons';
 export { ExternalHostBox } from './ExternalHostBox';
 export { Footer } from './Footer';
 export { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, useFormField } from './Forms';
@@ -93,7 +94,6 @@ export { ToolTip } from './ToolTip';
 export { UkaOutlet } from './UkaOutlet';
 export { UserFeedback } from './UserFeedback';
 export { Video } from './Video';
-export { EventEditButtons } from './EventEditButtons';
 // Props
 export type { ButtonProps } from './Button';
 export type { CheckboxProps } from './Checkbox';
