@@ -4,6 +4,7 @@
 
 .container {
   @include flex-row-center;
+  justify-content: space-evenly;
   gap: 0.5em;
 }
 
@@ -65,4 +66,15 @@
     border: 3px solid $blue;
     transform: scale(1);
   }
+}
+
+.search_wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.pagination_wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
 }
