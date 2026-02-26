@@ -87,6 +87,7 @@ import { ROUTES } from '~/routes';
 import { t } from 'i18next';
 import { App } from '~/App';
 import { DynamicOrgOutlet } from '~/Components/DynamicOrgOutlet/DynamicOrgOutlet';
+import { AdminEditImage } from '~/PagesAdmin/ImageAdminPage/components/AdminImage/AdminEditImage';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -448,6 +449,17 @@ export const router = createBrowserRouter(
                 <PermissionRoute
                   requiredPermissions={[PERM.SAMFUNDET_ADD_IMAGE]}
                   element={<ImageFormAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_images_edit}
+              handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link> }}
+              element={
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_CHANGE_IMAGE]}
+                  element={<AdminEditImage />}
                   resolveWithRolePermissions={true}
                 />
               }

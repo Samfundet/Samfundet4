@@ -202,6 +202,8 @@ export const KEY = {
   common_available: 'common_available',
   common_comment: 'common_comment',
   common_capacity: 'common_capacity',
+  common_replace: 'common_replace',
+  common_upload: 'common_upload',
 
   common_membership_number: 'common_membership_number',
   common_to_payment: 'common_to_payment',

@@ -1,0 +1,75 @@
+@use 'src/constants' as *;
+
+@use 'src/mixins' as *;
+
+.editContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.imageSection {
+  @include rounded;
+  @include shadow-light;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.imageInfo {
+  padding: 1rem;
+  background-color: $black;
+  color: $white;
+
+  h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2em;
+  }
+}
+
+.uploadSection {
+  @include rounded;
+  @include shadow-light;
+  padding: 2rem;
+
+  h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1em;
+  }
+}
+
+.uploadForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fileInput {
+  padding: 0.5rem;
+  border: 1px solid gray;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.fileName {
+  font-size: 0.9em;
+  color: gray;
+  margin: 0;
+}
+
+.container {
+  padding: 2rem;
+  text-align: center;
+}

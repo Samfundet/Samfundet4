@@ -587,6 +587,17 @@ export async function putImage(id: string | number, data: Partial<ImageDto>): Pr
   return response;
 }
 
+export async function replaceImageFile(id: string | number, file: File, title?: string): Promise<ImageDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
+  const formData = new FormData();
+  formData.append('file', file);
+  if (title) {
+    formData.append('title', title);
+  }
+  const response = await axios.putForm<ImageDto>(url, formData, { withCredentials: true });
+  return response.data;
+}
+
 /** Fetch all KeyValues from backend. */
 export function getKeyValues(): Promise<AxiosResponse<KeyValueDto[]>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__key_value_list;

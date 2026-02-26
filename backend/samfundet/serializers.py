@@ -149,6 +149,53 @@ class ImageSerializer(CustomBaseSerializer):
         image.save()
         return image
 
+    def update(self, instance: Image, validated_data: dict) -> Image:
+        """
+        Updates an image with a new file.
+        Deletes the old image file from storage before saving the new one.
+        """
+        # Delete old image file if a new file is being uploaded
+        if 'file' in validated_data:
+            file = validated_data.pop('file')
+            
+            # Validate the image file
+            try:
+                img = PilImage.open(file)
+                img.verify()
+            except (UnidentifiedImageError, Exception) as e:
+                raise ValidationError(f'Invalid image file: {str(e)}')
+            
+            # Delete the old image file from storage
+            if instance.image:
+                instance.image.delete(save=False)
+            # Preserve original filename if available; fallback to title
+            original_name = getattr(file, 'name', None) or validated_data.get('title', instance.title)
+            instance.image = ImageFile(file, original_name)
+
+        # Handle tag updates if provided
+        raw_tag_string = validated_data.pop('tag_string', None)
+        if raw_tag_string is not None:
+            # Split on comma, strip whitespace and drop empties
+            tag_names = [name.strip() for name in raw_tag_string.split(',')]
+            tag_names = [name for name in tag_names if name]
+
+            # De-duplicate while preserving order
+            seen: set[str] = set()
+            unique_tag_names = []
+            for name in tag_names:
+                if name not in seen:
+                    seen.add(name)
+                    unique_tag_names.append(name)
+            tags = [Tag.objects.get_or_create(name=name)[0] for name in unique_tag_names]
+            instance.tags.set(tags)
+
+        # Update other fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
+
     def get_url(self, image: Image) -> str:
         return image.image.url
 

@@ -75,6 +75,7 @@ export const ROUTES_FRONTEND = {
   // Images:
   admin_images: '/control-panel/images/',
   admin_images_create: '/control-panel/images/create/',
+  admin_images_edit: '/control-panel/images/edit/:id/',
   // Documents:
   admin_saksdokumenter: '/control-panel/saksdokument/',
   admin_saksdokumenter_create: '/control-panel/saksdokument/create/',
