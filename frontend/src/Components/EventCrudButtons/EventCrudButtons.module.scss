@@ -4,7 +4,6 @@
   transition: all 200ms ease-in-out;
 }
 
-
 .edit_button {
   pointer-events: all;
   z-index: 10;
@@ -18,12 +17,12 @@
 }
 
 .edit_button:hover {
+  scale: 1.1;
+  filter: brightness(110%);
+
   .edit_icon {
     rotate: 15deg;
   }
-
-  scale: 1.1;
-  filter: brightness(110%);
 }
 
 .default_edit {
