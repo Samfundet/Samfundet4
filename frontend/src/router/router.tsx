@@ -53,6 +53,7 @@ import {
   ImageFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
+  MDBConnectFormAdminPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
   RecruitmentApplicantAdminPage,
@@ -997,6 +998,12 @@ export const router = createBrowserRouter(
                 resolveWithRolePermissions={true}
               />
             }
+          />
+          {/* MDB Connect Form */}
+          <Route
+            path={ROUTES.frontend.admin_mdb_connect_form}
+            handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.adminpage_connect_mdb)}</Link> }}
+            element={<MDBConnectFormAdminPage />}
           />
         </Route>
       </Route>

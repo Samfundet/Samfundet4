@@ -43,6 +43,7 @@ export const nb = prepareTranslations({
   [KEY.pick_a_date]: 'Velg en dato',
 
   // Other common
+  [KEY.common_connect]: 'Koble til',
   [KEY.common_content]: 'Innhold',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Håndter',
@@ -310,6 +311,11 @@ export const nb = prepareTranslations({
   // AdminPage:
   [KEY.adminpage_gangs_title]: 'Administrer gjenger',
   [KEY.adminpage_gangs_create]: 'Opprett gjeng',
+
+  //MDB Connect AdminPage
+  [KEY.adminpage_connect_mdb]: 'Koble til MDB',
+  [KEY.adminpage_connect_mdb_extended]: 'Koble til medlemsdatabasen',
+  [KEY.adminpage_connect_mdb_succesful_toast]: 'Vellyket tilkobling til MDB',
 
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
@@ -705,6 +711,7 @@ export const en = prepareTranslations({
   [KEY.pick_a_date]: 'Pick a date',
 
   // No category:
+  [KEY.common_connect]: 'Connect',
   [KEY.common_content]: 'Content',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Manage',
@@ -1284,6 +1291,11 @@ export const en = prepareTranslations({
   [KEY.feedback_type_heading]: 'We want to hear what you think of samfundet.no',
   [KEY.feedback_your_feedback]: 'Your feedback',
   [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
+
+  //MDB Connect AdminPage
+  [KEY.adminpage_connect_mdb]: 'Connect to MDB',
+  [KEY.adminpage_connect_mdb_extended]: 'Connect to member database',
+  [KEY.adminpage_connect_mdb_succesful_toast]: 'Succesfully connected to MDB',
 
   // No category:
   [KEY.owner]: 'Owner',

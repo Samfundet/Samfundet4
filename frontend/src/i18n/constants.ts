@@ -57,6 +57,7 @@ export const KEY = {
   pick_a_date: 'pick_a_date',
 
   // No category:
+  common_connect: 'common_connect',
   common_content: 'common_content',
   common_url: 'common_url',
   common_manage: 'common_manage',
@@ -573,6 +574,9 @@ export const KEY = {
   admin_role_page_orggangsection: 'admin_role_page_orggangsection',
   admin_role_page_role_since: 'admin_role_page_role_since',
   admin_role_page_given_by: 'admin_role_page_given_by',
+  adminpage_connect_mdb: 'adminpage_connect_mdb',
+  adminpage_connect_mdb_extended: 'adminpage_connect_mdb_extended',
+  adminpage_connect_mdb_succesful_toast: 'adminpage_connect_mdb_succesful_toast',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',

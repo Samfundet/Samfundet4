@@ -1,0 +1,17 @@
+@use 'src/global.scss' as *;
+
+@use 'src/mixins' as *;
+
+@use 'src/constants' as *;
+
+.wrapper {
+    margin: 0 20vw 0 20vw;
+    text-align: center;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.form_button {
+    max-width: 15vw;
+    margin: 5vh auto 0 auto;
+}
