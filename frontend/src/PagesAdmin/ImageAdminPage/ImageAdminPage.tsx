@@ -1,34 +1,53 @@
-import { useEffect, useState } from 'react';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, ImageQuery } from '~/Components';
-import { getImages } from '~/api';
-import type { ImageDto } from '~/dto';
+import { Button, InputField } from '~/Components';
+import { PagedPagination } from '~/Components/Pagination';
+import { getImagesPaginated } from '~/api';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { imageKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageAdminPage.module.scss';
 import { AdminImage } from './components';
 
+const PAGE_SIZE = 20;
+
 export function ImageAdminPage() {
-  const [images, setImages] = useState<ImageDto[]>([]);
-  const [allImages, setAllImages] = useState<ImageDto[]>([]);
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [debouncedSearch, setDebouncedSearch] = useState<string>('');
+  const debounceTimeout = useRef<NodeJS.Timeout>();
   const { t } = useTranslation();
   useTitle(t(KEY.admin_images_title));
 
-  // Stuff to do on first render.
-  // TODO add permissions on render
+  // Debounce search input
   useEffect(() => {
-    getImages()
-      .then((data) => {
-        setImages(data);
-        setAllImages(data);
-        setShowSpinner(false);
-      })
-      .catch(console.error);
-  }, []);
+    clearTimeout(debounceTimeout.current);
+    debounceTimeout.current = setTimeout(() => {
+      setDebouncedSearch(searchInput);
+    }, 300);
+
+    return () => clearTimeout(debounceTimeout.current);
+  }, [searchInput]);
+
+  // Reset to page 1 when search changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Need to trigger on debouncedSearch change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch]);
+
+  // Fetch images using React Query
+  const { data, isLoading } = useQuery({
+    queryKey: imageKeys.list(currentPage, debouncedSearch || undefined),
+    queryFn: () => getImagesPaginated(currentPage, PAGE_SIZE, debouncedSearch || undefined),
+    placeholderData: keepPreviousData,
+  });
+
+  const images = data?.results ?? [];
+  const totalCount = data?.count ?? 0;
 
   const title = t(KEY.admin_images_title);
   const backendUrl = ROUTES.backend.admin__samfundet_image_changelist;
@@ -38,21 +57,32 @@ export function ImageAdminPage() {
     </Button>
   );
 
-  // Limit maximum number of rendered images
-  // TODO pagination & lazy load
-  const displayImages = images.slice(0, Math.min(images.length, 64));
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchInput(value);
+  }, []);
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={isLoading}>
       <div className={styles.action_row}>
-        <ImageQuery allImages={allImages} setImages={setImages} />
+        <InputField
+          icon="mdi:search"
+          value={searchInput}
+          onChange={handleSearchChange}
+          placeholder={t(KEY.common_search)}
+        />
       </div>
       <div className={styles.imageContainer}>
-        {displayImages.map((element) => (
+        {images.map((element) => (
           <AdminImage key={element.id} image={element} className={styles.imageBox} />
         ))}
-        {/* TODO pagination or translation */}
-        {images.length > displayImages.length && <i>And {images.length - displayImages.length} more...</i>}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+        <PagedPagination
+          currentPage={currentPage}
+          totalItems={totalCount}
+          pageSize={PAGE_SIZE}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </AdminPageLayout>
   );

@@ -58,6 +58,7 @@ import { ROUTES } from '~/routes';
 import type { BilligEventDto } from './apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from './constants';
 import type { PageNumberPaginationType } from './types';
+import { buildPaginatedUrl } from './utils';
 
 export async function getCsrfToken(): Promise<string> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__csrf;
@@ -566,6 +567,21 @@ export async function deleteClosedPeriod(id: string | number): Promise<AxiosResp
 export async function getImages(): Promise<ImageDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__images_list;
   const response = await axios.get<ImageDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function getImagesPaginated(
+  page: number,
+  pageSize?: number,
+  search?: string,
+): Promise<PageNumberPaginationType<ImageDto>> {
+  const url = buildPaginatedUrl(
+    BACKEND_DOMAIN + ROUTES.backend.samfundet__images_list,
+    page,
+    pageSize,
+    search ? { search } : undefined,
+  );
+  const response = await axios.get<PageNumberPaginationType<ImageDto>>(url, { withCredentials: true });
   return response.data;
 }
 
