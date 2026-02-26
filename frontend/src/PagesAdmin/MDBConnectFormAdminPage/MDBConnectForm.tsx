@@ -8,11 +8,11 @@ import { Button } from '~/Components/Button';
 import { Form, FormField, FormItem, FormLabel } from '~/Components/Forms';
 import { FormControl } from '~/Components/Forms/Form';
 import { connect_to_mdb } from '~/api';
+import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { PASSWORD, USERNAME } from '~/schema/user';
 import { lowerCapitalize } from '~/utils';
 import styles from './MDBConnectFormAdminPage.module.scss';
-import { useTitle } from '~/hooks';
 
 const schema = z.object({
   username: USERNAME, //Might want to create a new schema for email and/or MDB number
