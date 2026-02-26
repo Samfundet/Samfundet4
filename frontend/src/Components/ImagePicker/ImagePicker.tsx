@@ -1,13 +1,15 @@
 import { Icon } from '@iconify/react';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
-import { type ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getImages } from '~/api';
+import { getImagesPaginated } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { imageKeys } from '~/queryKeys';
 import { backgroundImageFromUrl } from '~/utils';
-import { ImageQuery } from '../ImageQuery/ImageQuery';
+import { InputField } from '../InputField';
 import { PagedPagination } from '../Pagination';
 import styles from './ImagePicker.module.scss';
 
@@ -21,23 +23,36 @@ export type ImagePickerProps = {
 export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
   const { t } = useTranslation();
   const [selected, setSelected] = useState<ImageDto | undefined>(selectedImage);
-  const [images, setImages] = useState<ImageDto[]>([]);
-  const [allImages, setAllImages] = useState<ImageDto[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [debouncedSearch, setDebouncedSearch] = useState<string>('');
+  const debounceTimeout = useRef<NodeJS.Timeout>();
 
+  // Debounce search input
   useEffect(() => {
-    getImages()
-      .then((imgs) => {
-        setImages(imgs);
-        setAllImages(imgs);
-      })
-      .catch(() => console.error);
-  }, []);
+    clearTimeout(debounceTimeout.current);
+    debounceTimeout.current = setTimeout(() => {
+      setDebouncedSearch(searchInput);
+    }, 300);
 
-  // Reset to page 1 when filtered images change
+    return () => clearTimeout(debounceTimeout.current);
+  }, [searchInput]);
+
+  // Reset to page 1 when search changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Need to trigger on debouncedSearch change
   useEffect(() => {
     setCurrentPage(1);
-  }, [images]);
+  }, [debouncedSearch]);
+
+  // Fetch images using React Query
+  const { data } = useQuery({
+    queryKey: imageKeys.list(currentPage, debouncedSearch || undefined),
+    queryFn: () => getImagesPaginated(currentPage, PAGE_SIZE, debouncedSearch || undefined),
+    placeholderData: keepPreviousData,
+  });
+
+  const images = data?.results ?? [];
+  const totalCount = data?.count ?? 0;
 
   function select(image: ImageDto) {
     setSelected(image);
@@ -57,10 +72,9 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
     );
   }
 
-  // Calculate paginated images
-  const startIndex = (currentPage - 1) * PAGE_SIZE;
-  const endIndex = startIndex + PAGE_SIZE;
-  const displayImages = images.slice(startIndex, endIndex);
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchInput(value);
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -75,13 +89,18 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
           )}
         </div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column'}}>
-        <ImageQuery allImages={allImages} setImages={setImages} />
-        <div className={styles.image_container}>{displayImages.map((image) => renderImage(image))}</div>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <InputField
+          icon="mdi:search"
+          value={searchInput}
+          onChange={handleSearchChange}
+          placeholder={t(KEY.common_search)}
+        />
+        <div className={styles.image_container}>{images.map((image) => renderImage(image))}</div>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
           <PagedPagination
             currentPage={currentPage}
-            totalItems={images.length}
+            totalItems={totalCount}
             pageSize={PAGE_SIZE}
             onPageChange={setCurrentPage}
           />
