@@ -564,12 +564,6 @@ export async function deleteClosedPeriod(id: string | number): Promise<AxiosResp
   return response;
 }
 
-export async function getImages(): Promise<ImageDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__images_list;
-  const response = await axios.get<ImageDto[]>(url, { withCredentials: true });
-  return response.data;
-}
-
 export async function getImagesPaginated(
   page: number,
   pageSize?: number,
