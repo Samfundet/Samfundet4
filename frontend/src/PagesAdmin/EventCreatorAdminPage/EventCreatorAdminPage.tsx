@@ -88,7 +88,7 @@ export function EventCreatorAdminPage() {
       description_short_nb: '',
       description_short_en: '',
       start_dt: '',
-      duration: 0,
+      duration: undefined,
       end_dt: '',
       category: eventCategoryOptions[0].value,
       host: '',
@@ -124,7 +124,7 @@ export function EventCreatorAdminPage() {
             description_short_nb: eventData.description_short_nb || '',
             description_short_en: eventData.description_short_en || '',
             start_dt: eventData.start_dt ? utcTimestampToLocal(eventData.start_dt, false) : '',
-            duration: eventDuration || 0,
+            duration: eventDuration || undefined,
             end_dt: eventData.end_dt ? utcTimestampToLocal(eventData.end_dt, false) : '',
             category: eventData.category || '',
             host: eventData.host || '',
@@ -284,7 +284,16 @@ export function EventCreatorAdminPage() {
       title_nb: 'Dato og informasjon',
       title_en: 'Date & info',
       validate: (data) => {
-        return !!(data.start_dt && data.duration > 0 && data.category && data.host && data.location);
+        return !!(
+          data.start_dt &&
+          data.duration !== undefined &&
+          data.duration > 0 &&
+          data.category &&
+          data.host &&
+          data.location &&
+          data.capacity !== undefined &&
+          data.capacity > 0
+        );
       },
       template: (
         <>
@@ -318,7 +327,10 @@ export function EventCreatorAdminPage() {
                     <Input
                       type="number"
                       {...field}
-                      onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        field.onChange(v === '' ? '' : Number.parseInt(v));
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -390,7 +402,7 @@ export function EventCreatorAdminPage() {
                       {...field}
                       onChange={(e) => {
                         const v = e.target.value;
-                        field.onChange(v === '' ? undefined : Number.parseInt(v, 10));
+                        field.onChange(v === '' ? '' : Number.parseInt(v));
                       }}
                     />
                   </FormControl>
