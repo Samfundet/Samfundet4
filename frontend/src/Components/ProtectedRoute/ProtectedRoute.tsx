@@ -18,7 +18,7 @@ type ProtectedRouteProps = {
  * Router component, to be used inside element of a route, and page that is requested
  * Allows for setting up routes that requires authentication, permissions, and staff.
  *
- * This assumes auth is already loaded. If it's not, then auth will likely be null.
+ * Waits for auth to load before making redirect decisions.
  */
 export function ProtectedRoute({
   authState,
@@ -26,11 +26,16 @@ export function ProtectedRoute({
   obj,
   element,
   requiresStaff = false,
-  redirectPath = ROUTES.frontend.home,
+  redirectPath = ROUTES.frontend.login,
   resolveWithRolePermissions = false,
 }: ProtectedRouteProps) {
-  const { user } = useAuthContext();
+  const { user, loading } = useAuthContext();
   const location = useLocation();
+
+  // Wait for auth to load before making redirect decisions
+  if (loading) {
+    return null;
+  }
 
   if ((authState && !user) || (!authState && user)) {
     return <Navigate to={redirectPath} replace state={{ path: location.pathname }} />;
