@@ -1,64 +1,43 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import type { z } from 'zod';
-import {
-  Button,
-  Dropdown,
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  ImageCard,
-  Input,
-  Textarea,
-} from '~/Components';
+import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
-import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { getEvent, getVenues, postEvent } from '~/api';
-import { BACKEND_DOMAIN } from '~/constants';
-import type { EventDto, ImageDto } from '~/dto';
-import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
+import { getEvent, getVenues } from '~/api';
+import type { EventDto } from '~/dto';
+import { usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { venueKeys } from '~/queryKeys';
-import { ROUTES } from '~/routes';
 import { EventAgeRestriction, type EventAgeRestrictionValue, EventCategory, type EventCategoryValue } from '~/types';
-import { dbT, getAgeRestrictionKey, getEventCategoryKey, lowerCapitalize, utcTimestampToLocal } from '~/utils';
+import { dbT, getAgeRestrictionKey, getEventCategoryKey, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
-import { eventSchema } from './EventCreatorSchema';
-import { PaymentForm } from './components/PaymentForm';
+import { type FormType, useEventCreatorForm } from './hooks/useEventCreatorForm';
+import { useEventMutations } from './hooks/useEventMutations';
 
-// Define the Zod schema for event validation
+import { type EventCreatorStep, type StepKey, steps } from './steps/stepConfig';
 
-type FormType = z.infer<typeof eventSchema>;
-
-type EventCreatorStep = {
-  key: string; // Unique key.
-  title_nb: string; // Tab title norwegian.
-  title_en: string; // Tab title english.
-  customIcon?: string; // Custom icon in tab bar.
-  template: ReactElement;
-  validate: (data: FormType) => boolean;
-};
+import type { FieldErrors } from 'react-hook-form';
+import { EventPreviewCard } from './components/EventPreviewCard';
+import { GraphicsStep } from './steps/GraphicsStep';
+import { InfoStep } from './steps/InfoStep';
+import { PaymentStep } from './steps/PaymentStep';
+import { SummaryStep } from './steps/SummaryStep';
+import { TextStep } from './steps/TextStep';
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
-  const navigate = useCustomNavigate();
   const [event, setEvent] = useState<Partial<EventDto>>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
+  const { createEventMutation, editEventMutation } = useEventMutations();
 
-  const { data: venues = [], isLoading } = useQuery({
+  const { data: venues = [] } = useQuery({
     queryKey: venueKeys.all,
     queryFn: getVenues,
   });
@@ -77,68 +56,26 @@ export function EventCreatorAdminPage() {
     label: t(getAgeRestrictionKey(age)),
   }));
 
-  // Setup React Hook Form
-  const form = useForm<FormType>({
-    resolver: zodResolver(eventSchema),
-    defaultValues: {
-      title_nb: '',
-      title_en: '',
-      description_long_nb: '',
-      description_long_en: '',
-      description_short_nb: '',
-      description_short_en: '',
-      start_dt: '',
-      duration: 0,
-      end_dt: '',
-      category: eventCategoryOptions[0].value,
-      host: '',
-      location: locationOptions.length > 0 ? locationOptions[0].value : '',
-      capacity: undefined,
-      age_restriction: 'none',
-      ticket_type: 'free',
-      custom_tickets: [],
-      billig_id: undefined,
-      image: undefined,
-      visibility_from_dt: '',
-      visibility_to_dt: '',
-    },
+  const { form, watchedValues, buildPayload } = useEventCreatorForm({
+    event,
+    defaultCategory: eventCategoryOptions[0]?.value ?? EventCategory.ART,
+    defaultLocation: locationOptions[0]?.value ?? '',
   });
+
+  const stepComponentMap: Record<StepKey, ReactElement> = {
+    text: <TextStep form={form} />,
+    info: <InfoStep form={form} eventCategoryOptions={eventCategoryOptions} locationOptions={locationOptions} />,
+    payment: <PaymentStep form={form} ageLimitOptions={ageLimitOptions} />,
+    graphics: <GraphicsStep form={form} />,
+    summary: <SummaryStep form={form} />,
+  };
 
   // Fetch event data using the event ID
   useEffect(() => {
     if (id) {
       getEvent(id)
         .then((eventData) => {
-          const eventDuration = Math.round(
-            (new Date(eventData.end_dt).getTime() - new Date(eventData.start_dt).getTime()) / 60000,
-          );
-          const imageObject: ImageDto | undefined = eventData.image_url
-            ? { id: eventData.id, title: '', url: eventData.image_url, tags: [] }
-            : undefined;
           setEvent(eventData);
-          form.reset({
-            title_nb: eventData.title_nb || '',
-            title_en: eventData.title_en || '',
-            description_long_nb: eventData.description_long_nb || '',
-            description_long_en: eventData.description_long_en || '',
-            description_short_nb: eventData.description_short_nb || '',
-            description_short_en: eventData.description_short_en || '',
-            start_dt: eventData.start_dt ? utcTimestampToLocal(eventData.start_dt, false) : '',
-            duration: eventDuration || 0,
-            end_dt: eventData.end_dt ? utcTimestampToLocal(eventData.end_dt, false) : '',
-            category: eventData.category || '',
-            host: eventData.host || '',
-            location: eventData.location || '',
-            capacity: eventData.capacity || undefined,
-            age_restriction: eventData.age_restriction || 'none',
-            ticket_type: eventData.ticket_type || 'free',
-            custom_tickets: eventData.custom_tickets || [],
-            billig_id: eventData.billig?.id,
-            image: imageObject,
-            visibility_from_dt: eventData.visibility_from_dt
-              ? utcTimestampToLocal(eventData.visibility_from_dt, false)
-              : '',
-          });
           setShowSpinner(false);
         })
         .catch((error) => {
@@ -147,411 +84,26 @@ export function EventCreatorAdminPage() {
     } else {
       setShowSpinner(false);
     }
-  }, [id, t, form]);
+  }, [id, t]);
 
   // ================================== //
   //          Creation Steps            //
   // ================================== //
 
-  const [completedSteps, setCompletedSteps] = useState<Record<string, boolean>>({});
-
-  const createSteps: EventCreatorStep[] = [
-    // Name and text descriptions.
-    {
-      key: 'text',
-      title_nb: 'Tittel/beskrivelse',
-      title_en: 'Text & description',
-      validate: (data) => {
-        return !!(
-          data.title_nb &&
-          data.title_en &&
-          data.description_short_nb &&
-          data.description_short_en &&
-          data.description_long_nb &&
-          data.description_long_en
-        );
-      },
-      template: (
-        <>
-          <div className={styles.input_row}>
-            <FormField
-              key="title_nb"
-              control={form.control}
-              name="title_nb"
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>
-                    {t(KEY.common_title)} ({t(KEY.common_norwegian)})
-                  </FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="title_en"
-              key={'title_en'}
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>
-                    {t(KEY.common_title)} ({t(KEY.common_english)})
-                  </FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className={styles.input_row}>
-            <FormField
-              control={form.control}
-              name="description_short_nb"
-              key={'description_short_nb'}
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>
-                    {t(KEY.common_short_description)} ({t(KEY.common_norwegian)})
-                  </FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description_short_en"
-              key={'description_short_en'}
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>
-                    {t(KEY.common_short_description)} ({t(KEY.common_english)})
-                  </FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className={styles.input_row}>
-            <FormField
-              control={form.control}
-              name="description_long_nb"
-              key={'description_long_nb'}
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>
-                    {t(KEY.common_long_description)} ({t(KEY.common_norwegian)})
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea className="textarea" {...field} rows={8} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description_long_en"
-              key={'description_long_en'}
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>
-                    {t(KEY.common_long_description)} ({t(KEY.common_english)})
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea className="textarea" {...field} rows={8} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </>
-      ),
-    },
-    // General info (category, dates etc.)
-    {
-      key: 'info',
-      title_nb: 'Dato og informasjon',
-      title_en: 'Date & info',
-      validate: (data) => {
-        return !!(data.start_dt && data.duration > 0 && data.category && data.host && data.location);
-      },
-      template: (
-        <>
-          <div className={styles.input_row}>
-            <FormField
-              control={form.control}
-              name="start_dt"
-              key={'start_dt'}
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>
-                    {t(KEY.common_date)} & {t(KEY.common_time)}
-                  </FormLabel>
-                  <FormControl>
-                    <Input type="datetime-local" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="duration"
-              key={'duration'}
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>
-                    {t(KEY.recruitment_duration)} ({t(KEY.common_minutes)})
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      {...field}
-                      onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className={styles.input_row}>
-            <FormField
-              control={form.control}
-              name="category"
-              key={'category'}
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>{t(KEY.category)}</FormLabel>
-                  <FormControl>
-                    <Dropdown options={eventCategoryOptions} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="host"
-              key={'host'}
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>{t(KEY.admin_organizer)}</FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className={styles.input_row}>
-            <FormField
-              control={form.control}
-              name="location"
-              key={'location'}
-              render={({ field }) => {
-                const selected = locationOptions.find((o) => o.value === field.value) ?? null;
-                return (
-                  <FormItem className={styles.form_item}>
-                    <FormLabel>{t(KEY.common_venue)}</FormLabel>
-                    <FormControl>
-                      <Dropdown
-                        options={venues.map((venue) => ({ value: venue.name, label: venue.name }))}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-            <FormField
-              control={form.control}
-              name="capacity"
-              key={'capacity'}
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>{t(KEY.common_capacity)}</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      {...field}
-                      onChange={(e) => {
-                        const v = e.target.value;
-                        field.onChange(v === '' ? undefined : Number.parseInt(v, 10));
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </>
-      ),
-    },
-    // Payment options
-    {
-      key: 'payment',
-      title_nb: 'Betaling/påmelding',
-      title_en: 'Payment/registration',
-      validate: (data) => {
-        return !!data.age_restriction && !!data.ticket_type;
-      },
-      template: (
-        <>
-          <FormField
-            control={form.control}
-            name="age_restriction"
-            key={'age_restriction'}
-            render={({ field }) => (
-              <FormItem className={styles.form_item}>
-                <FormLabel>{t(KEY.common_age_limit)}</FormLabel>
-                <FormControl>
-                  <Dropdown options={ageLimitOptions} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <PaymentForm
-            event={form.getValues()}
-            onChange={(partial) => {
-              // Update form values with payment data
-              const updatedValues = { ...form.getValues(), ...partial };
-              form.reset(updatedValues);
-            }}
-          />
-        </>
-      ),
-    },
-    // Graphics.
-    {
-      key: 'graphics',
-      title_nb: 'Grafikk',
-      title_en: 'Graphics',
-      validate: (data) => {
-        return !!data.image;
-      },
-      template: (
-        <FormField
-          control={form.control}
-          name="image"
-          key={'image'}
-          render={({ field }) => (
-            <FormItem className={styles.form_item}>
-              <FormLabel>{t(KEY.common_image)}</FormLabel>
-              <FormControl>
-                <ImagePicker
-                  onSelected={(image) => {
-                    field.onChange(image);
-                  }}
-                  selectedImage={field.value}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      ),
-    },
-    // Summary.
-    {
-      key: 'summary',
-      title_nb: 'Oppsummering',
-      title_en: 'Summary',
-      customIcon: 'ic:outline-remove-red-eye',
-      validate: (data) => {
-        return !!data.visibility_from_dt;
-      },
-      template: (
-        <FormField
-          control={form.control}
-          name="visibility_from_dt"
-          key="visibility_from_dt"
-          render={({ field }) => (
-            <FormItem className={styles.form_item}>
-              <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
-              <FormControl>
-                <Input type="datetime-local" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      ),
-    },
-  ];
-
   // Editor state.
   const [visitedTabs, setVisitedTabs] = useState<Record<string, boolean>>({});
 
-  // ================================== //
-  //             Save Logic             //
-  // ================================== //
-
-  function onSubmit(values: FormType) {
-    const start = values.start_dt ? new Date(values.start_dt) : null;
-    const computedEndDt = start ? new Date(start?.getTime() + (values.duration ?? 0) * 60_000) : null;
-    const payload: Partial<EventDto> = {
-      ...values,
-      visibility_to_dt: computedEndDt ? computedEndDt.toISOString() : '',
-      end_dt: computedEndDt ? computedEndDt.toISOString() : '',
-    };
-
-    postEvent(payload)
-      .then(() => {
-        navigate({ url: ROUTES.frontend.admin_events });
-        toast.success(t(KEY.common_creation_successful));
-      })
-      .catch((error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(JSON.stringify(error.response.data));
-        console.error(`FAIL: ${JSON.stringify(error)}`);
-      });
-  }
-
-  // ================================== //
-  //             Tab Logic              //
-  // ================================== //
-
-  const formTabs: Tab[] = createSteps.map((step: EventCreatorStep) => {
-    // Check step status to get icon and colors
+  const formTabs: Tab[] = steps.map((step: EventCreatorStep) => {
     const custom = step.customIcon !== undefined;
-    let icon = step.customIcon || 'material-symbols:circle-outline';
-    const stepData = form.getValues();
-    const valid = step.validate(stepData) && !custom;
+    const valid = step.validate(watchedValues) && !custom;
+
     const visited = visitedTabs[step.key] === true && !custom;
     const error = !valid && visited && !custom;
 
-    // Update completed steps
-    if (completedSteps[step.key] !== valid) {
-      setCompletedSteps((prev) => ({
-        ...prev,
-        [step.key]: step.validate(stepData),
-      }));
-    }
+    let icon = step.customIcon || 'material-symbols:circle-outline';
+    if (valid) icon = 'material-symbols:check-circle';
+    else if (error) icon = 'gridicons:cross-circle';
 
-    if (valid) {
-      icon = 'material-symbols:check-circle';
-    } else if (error) {
-      icon = 'gridicons:cross-circle';
-    }
-
-    // Create label
     const label = (
       <div className={styles.tab_label} key={step.key}>
         <Icon
@@ -562,8 +114,32 @@ export function EventCreatorAdminPage() {
         <span>{dbT(step, 'title')}</span>
       </div>
     );
-    return { key: step.key, label: label };
+
+    return { key: step.key, label };
   });
+
+  // ================================== //
+  //             Save Logic             //
+  // ================================== //
+
+  function onSubmit(values: FormType) {
+    let payload: Partial<EventDto> = buildPayload(values);
+
+    if (id && values.image === undefined) {
+      const { image, ...rest } = payload as Partial<EventDto> & { image?: unknown };
+      payload = rest;
+    }
+
+    if (id) {
+      editEventMutation.mutate({ id, payload });
+    } else {
+      createEventMutation.mutate(payload);
+    }
+  }
+
+  // ================================== //
+  //             Tab Logic              //
+  // ================================== //
 
   const [currentFormTab, setFormTab] = useState<Tab>(formTabs[0]);
   const previousTab = usePrevious(currentFormTab);
@@ -578,45 +154,8 @@ export function EventCreatorAdminPage() {
     setFormTab(tab);
   }
 
-  // ================================== //
-  //            Event Preview           //
-  // ================================== //
-
   // Ready to save?
-  const allStepsComplete = createSteps.every((step) => step.validate(form.getValues()));
-
-  // Get current form values for preview
-  const formValues = form.getValues();
-
-  // Event preview on final step
-  const eventPreview: ReactNode = (
-    <div className={styles.preview}>
-      <ImageCard
-        title={dbT(formValues, 'title') ?? ''}
-        description={dbT(formValues, 'description_short') ?? ''}
-        imageUrl={formValues.image?.url ? BACKEND_DOMAIN + formValues.image.url : ''}
-        date={formValues.start_dt ?? ''}
-        ticket_type={formValues.ticket_type}
-        host={formValues.host}
-      />
-      {/* Preview Info */}
-      <div className={styles.previewText}>
-        <span>
-          <b>{t(KEY.category)}:</b> {formValues.category ?? t(KEY.common_missing)}
-        </span>
-        <span>
-          <strong>{t(KEY.recruitment_duration)}:</strong>{' '}
-          {formValues.duration ? `${formValues.duration} min` : t(KEY.common_missing)}
-        </span>
-        <span>
-          <b>{t(KEY.admin_organizer)}:</b> {formValues.host ?? t(KEY.common_missing)}
-        </span>
-        <span>
-          <b>{t(KEY.common_venue)}:</b> {formValues.location ?? t(KEY.common_missing)}
-        </span>
-      </div>
-    </div>
-  );
+  const allStepsComplete = steps.every((step) => step.validate(watchedValues));
 
   // ================================== //
   //          Navigation Logic          //
@@ -625,39 +164,47 @@ export function EventCreatorAdminPage() {
   // Move to next/previous tab
   function navigateTabs(delta: number): () => void {
     return () => {
-      const keys = createSteps.map((s) => s.key);
-      const idx = keys.indexOf(currentFormTab.key as string) + delta;
-      if (idx >= 0 && idx < createSteps.length) {
+      const keys = steps.map((s) => s.key);
+      const idx = keys.indexOf(currentFormTab.key as StepKey) + delta;
+      if (idx >= 0 && idx < steps.length) {
         setFormTab(formTabs[idx]);
       }
     };
   }
 
   // Render all forms (some are hidden but not removed to keep values)
-  const currentStep = createSteps.find((step) => step.key === currentFormTab.key);
+  const currentStepKey = currentFormTab.key as StepKey;
+  const currentStep = steps.find((step) => step.key === currentFormTab.key);
   const currentStepContent = currentStep ? (
     <>
-      {currentStep.key === 'summary' && eventPreview}
-      {currentStep.template}
+      {currentStep.key === 'summary' && <EventPreviewCard values={watchedValues} />}
+      {stepComponentMap[currentStep.key]}
     </>
   ) : null;
 
+  const onInvalid = (errors: FieldErrors<FormType>) => {
+    console.log('INVALID ERRORS', errors);
+    toast.error('Form contains validation errors. Please check highlighted fields.');
+    const allVisited: Record<string, boolean> = {};
+    for (const s of steps) allVisited[s.key] = true;
+    setVisitedTabs(allVisited);
+  };
   // Navigation buttons
   const navigationButtons: ReactNode = (
     <div className={styles.button_row}>
-      {currentFormTab.key !== createSteps[0].key ? (
+      {currentFormTab.key !== steps[0].key ? (
         <Button theme="blue" rounded={true} onClick={navigateTabs(-1)}>
           {t(KEY.common_previous)}
         </Button>
       ) : (
         <div />
       )}
-      {currentFormTab.key !== createSteps.slice(-1)[0].key ? (
+      {currentFormTab.key !== steps.slice(-1)[0].key ? (
         <Button theme="blue" rounded={true} onClick={navigateTabs(1)}>
           {t(KEY.common_next)}
         </Button>
       ) : (
-        <Button theme="green" rounded={true} onClick={form.handleSubmit(onSubmit)} disabled={!allStepsComplete}>
+        <Button theme="green" rounded={true} type="submit" disabled={!allStepsComplete}>
           {t(KEY.common_save)}
         </Button>
       )}
@@ -679,7 +226,7 @@ export function EventCreatorAdminPage() {
       <br />
       <div className={styles.form_container}>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form onSubmit={form.handleSubmit(onSubmit, onInvalid)}>
             {currentStepContent}
             {navigationButtons}
           </form>
