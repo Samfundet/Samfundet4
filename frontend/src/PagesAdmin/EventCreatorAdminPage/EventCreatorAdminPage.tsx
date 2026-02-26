@@ -37,7 +37,7 @@ export function EventCreatorAdminPage() {
   const { id } = useParams();
   const { createEventMutation, editEventMutation } = useEventMutations();
 
-  const { data: venues = [], isLoading } = useQuery({
+  const { data: venues = [] } = useQuery({
     queryKey: venueKeys.all,
     queryFn: getVenues,
   });
