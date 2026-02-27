@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { type ChangeEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { InputTime } from '~/Components';
-import { Badge, useDynamicBadge } from '~/Components/Badge';
 import { getVenues, patchVenue } from '~/api';
 import type { VenueDto } from '~/dto';
 import { useTitle } from '~/hooks';
@@ -17,9 +17,6 @@ export function OpeningHoursAdminPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [saveTimer, setSaveTimer] = useState<Record<string, NodeJS.Timeout>>({});
-  const { badgeState, showSuccess, showError } = useDynamicBadge({
-    defaultDuration: 3000,
-  });
   useTitle(lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_opening_hours)}`));
 
   // Use React Query to fetch venues
@@ -42,12 +39,12 @@ export function OpeningHoursAdminPage() {
         oldVenues.map((venue) => (venue.slug === vars.slug ? { ...venue, ...vars.data } : venue)),
       );
 
-      // Show success badge
-      showSuccess(t(KEY.common_save_successful));
+      // Show success toast
+      toast.success(t(KEY.common_save_successful));
     },
     onError: (error) => {
-      // Show error badge
-      showError(t(KEY.common_something_went_wrong));
+      // Show error toast
+      toast.error(t(KEY.common_something_went_wrong));
       console.error('Error updating venue:', error);
     },
   });
@@ -145,7 +142,6 @@ export function OpeningHoursAdminPage() {
   const header = (
     <div>
       <div className={styles.subtitle}>{t(KEY.admin_opening_hours_hint)}</div>
-      {badgeState.show && <Badge text={badgeState.text} type={badgeState.type} animated={true} />}
     </div>
   );
 
