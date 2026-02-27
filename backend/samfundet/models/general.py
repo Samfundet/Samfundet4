@@ -260,9 +260,6 @@ class ClosedPeriod(CustomBaseModel):
     message_nb = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
     message_en = models.TextField(blank=True, null=True, verbose_name='Melding (engelsk)')
 
-    description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
-    description_en = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
-
     start_dt = models.DateField(blank=True, null=False, verbose_name='Start dato')
     end_dt = models.DateField(blank=True, null=False, verbose_name='Slutt dato')
 

@@ -551,7 +551,7 @@ export async function putClosedPeriod(id: string | number, data: Partial<ClosedP
   return response;
 }
 
-export async function postClosedPeriod(data: ClosedPeriodDto): Promise<ClosedPeriodDto> {
+export async function postClosedPeriod(data: Partial<ClosedPeriodDto>): Promise<ClosedPeriodDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__closedperiods_list;
   const response = await axios.post<ClosedPeriodDto>(url, data, { withCredentials: true });
   return response.data;
