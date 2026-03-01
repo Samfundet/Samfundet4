@@ -57,7 +57,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import type { BilligEventDto } from './apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from './constants';
-import type { PageNumberPaginationType } from './types';
+import type { EventsPaginationType, PageNumberPaginationType } from './types';
 import { buildPaginatedUrl } from './utils';
 
 export async function getCsrfToken(): Promise<string> {
@@ -284,6 +284,26 @@ export async function getEventsUpcomming(params: {
     categories,
     locations: response.data.locations,
   };
+}
+
+export async function getEventsUpcommingPaginated(
+  page: number,
+  pageSize?: number,
+  params?: {
+    search?: string;
+    venue?: string;
+    category?: string;
+    ticket_type?: string;
+  },
+): Promise<EventsPaginationType<EventDto>> {
+  const url = buildPaginatedUrl(BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcomming, page, pageSize, {
+    ...(params?.search ? { search: params.search } : {}),
+    ...(params?.venue ? { venue: params.venue } : {}),
+    ...(params?.category ? { category: params.category } : {}),
+    ...(params?.ticket_type ? { ticket_type: params.ticket_type } : {}),
+  });
+  const response = await axios.get<EventsPaginationType<EventDto>>(url, { withCredentials: true });
+  return response.data;
 }
 
 export async function getEvents(): Promise<EventDto[]> {
