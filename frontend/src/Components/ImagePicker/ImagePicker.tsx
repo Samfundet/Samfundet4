@@ -1,16 +1,16 @@
 import { Icon } from '@iconify/react';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PagedPagination } from '~/Components/Pagination';
-import { getImages, getImagesPaginated } from '~/api';
+import { getImagesPaginated } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { imageKeys } from '~/queryKeys';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './ImagePicker.module.scss';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { imageKeys } from '~/queryKeys';
 
 export type ImagePickerProps = {
   onSelected?(image: ImageDto): void;
@@ -33,7 +33,7 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
     queryFn: () => getImagesPaginated(currentPage, PAGE_SIZE),
     placeholderData: keepPreviousData,
   });
-  
+
   const images = data?.results ?? [];
   const totalCount = data?.count ?? 0;
 
@@ -70,23 +70,19 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
             </>
           )}
         </div>
-        {isError && (
-          <p style={{ marginTop: '1rem' }}>{t(KEY.common_something_went_wrong)}</p>
-        )}
+        {isError && <p style={{ marginTop: '1rem' }}>{t(KEY.common_something_went_wrong)}</p>}
         {/* TODO tags and other metadata */}
       </div>
       <div>
-      <div className={styles.image_container}>
-        {images.map(renderImage)}
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
-        <PagedPagination
-          currentPage={currentPage}
-          totalItems={totalCount}
-          pageSize={PAGE_SIZE}
-          onPageChange={setCurrentPage}
-        />
-      </div>
+        <div className={styles.image_container}>{images.map(renderImage)}</div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+          <PagedPagination
+            currentPage={currentPage}
+            totalItems={totalCount}
+            pageSize={PAGE_SIZE}
+            onPageChange={setCurrentPage}
+          />
+        </div>
       </div>
     </div>
   );
