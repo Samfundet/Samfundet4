@@ -18,12 +18,14 @@ export function GraphicsStep({ form }: { form: UseFormReturn<FormType> }) {
         <FormItem className={styles.form_item}>
           <FormLabel>{t(KEY.common_image)}</FormLabel>
           <FormControl>
-            <ImagePicker
-              onSelected={(image) => {
-                field.onChange(image);
-              }}
-              selectedImage={field.value}
-            />
+            <div>
+              <ImagePicker
+                onSelected={(image) => {
+                  field.onChange(image);
+                }}
+                selectedImage={field.value}
+              />
+            </div>
           </FormControl>
           <FormMessage />
         </FormItem>

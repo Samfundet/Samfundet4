@@ -34,26 +34,26 @@
 
 .image_container {
   max-height: 25em;
-  overflow-y: scroll;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
   gap: 0.5em;
-  margin: 0 auto;
+  width: min(70vw, 60rem);
+  padding-right: 0.25rem;
 }
 
 .image {
   @include rounded;
   @include shadow-light;
-  width: 10em;
+  width: 100%;
+  aspect-ratio: 5 / 4; // ca samme som 10em x 8em
   height: 8em;
   background-color: $grey-1;
   background-size: cover;
   background-position: center;
   border: 3px solid transparent;
   transition: 0.2s;
-  transform: scale(0.9);
+  transform: scale(0.98);
   cursor: pointer;
 
   &:hover {

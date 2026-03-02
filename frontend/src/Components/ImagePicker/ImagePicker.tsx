@@ -23,28 +23,17 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
   const { t } = useTranslation();
   const [selected, setSelected] = useState<ImageDto | undefined>(selectedImage);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [allImages, setAllImages] = useState<ImageDto[]>([]);
 
   useEffect(() => {
     setSelected(selectedImage);
   }, [selectedImage]);
 
-  const { data, isLoading, isFetching, isError } = useQuery({
+  const { data, isError } = useQuery({
     queryKey: imageKeys.list(currentPage, undefined),
     queryFn: () => getImagesPaginated(currentPage, PAGE_SIZE),
     placeholderData: keepPreviousData,
   });
-
-  useEffect(() => {
-    if (!data?.results) return;
-    setAllImages((prev) => {
-      const existingIds = new Set(prev.map((x) => x.id));
-      const next = data.results.filter((x) => !existingIds.has(x.id));
-      return [...prev, ...next];
-    });
-  }, [data?.results]);
-
-  const hasMore = Boolean(data?.next);
+  
   const images = data?.results ?? [];
   const totalCount = data?.count ?? 0;
 
@@ -88,9 +77,9 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
       </div>
       <div>
       <div className={styles.image_container}>
-        {allImages.map((image) => renderImage(image))}
+        {images.map(renderImage)}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
         <PagedPagination
           currentPage={currentPage}
           totalItems={totalCount}
@@ -98,9 +87,7 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
           onPageChange={setCurrentPage}
         />
       </div>
-
       </div>
-
     </div>
   );
 }
