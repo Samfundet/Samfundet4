@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next';
 
 import { Dropdown, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
 
+import { useQuery } from '@tanstack/react-query';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
+import { getVenues } from '~/api';
 import { KEY } from '~/i18n/constants';
+import { venueKeys } from '~/queryKeys';
 import type { EventCategoryValue } from '~/types';
 import styles from '../EventCreatorAdminPage.module.scss';
 import type { FormType } from '../hooks/useEventCreatorForm';
-import { getVenues } from '~/api';
-import { venueKeys } from '~/queryKeys';
-import { useQuery } from '@tanstack/react-query';
 
 type Props = {
   form: UseFormReturn<FormType>;
@@ -24,9 +24,9 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
 
   const venueOptions = useMemo(() => locationOptions, [locationOptions]);
   const { data: venues = [] } = useQuery({
-      queryKey: venueKeys.all,
-      queryFn: getVenues,
-    });
+    queryKey: venueKeys.all,
+    queryFn: getVenues,
+  });
 
   return (
     <>
@@ -109,11 +109,11 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
               <FormItem className={styles.form_item}>
                 <FormLabel>{t(KEY.common_venue)}</FormLabel>
                 <FormControl>
-                  <Dropdown 
+                  <Dropdown
                     options={venues.map((venue) => ({ value: venue.name, label: venue.name }))}
-                        nullOption={{ label: t(KEY.common_choose) }}
-                        {...field}
-                         />
+                    nullOption={{ label: t(KEY.common_choose) }}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
