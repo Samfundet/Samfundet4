@@ -4,6 +4,7 @@
 
 .container {
   @include flex-row-center;
+  justify-content: space-evenly;
   gap: 0.5em;
 }
 
@@ -38,7 +39,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
   gap: 0.5em;
-  width: min(70vw, 60rem);
+  width: 100%;
+  align-content: start;
   padding-right: 0.25rem;
 }
 
@@ -46,14 +48,13 @@
   @include rounded;
   @include shadow-light;
   width: 100%;
-  aspect-ratio: 5 / 4; // ca samme som 10em x 8em
-  height: 8em;
+  aspect-ratio: 5 / 4;
   background-color: $grey-1;
   background-size: cover;
   background-position: center;
   border: 3px solid transparent;
   transition: 0.2s;
-  transform: scale(0.98);
+  transform: scale(0.9);
   cursor: pointer;
 
   &:hover {
@@ -65,4 +66,21 @@
     border: 3px solid $blue;
     transform: scale(1);
   }
+}
+
+.search_wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.pagination_wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.error {
+  margin-top: 1rem;
 }

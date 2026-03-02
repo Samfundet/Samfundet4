@@ -9,6 +9,9 @@ import { KEY } from '~/i18n/constants';
 import type { EventCategoryValue } from '~/types';
 import styles from '../EventCreatorAdminPage.module.scss';
 import type { FormType } from '../hooks/useEventCreatorForm';
+import { getVenues } from '~/api';
+import { venueKeys } from '~/queryKeys';
+import { useQuery } from '@tanstack/react-query';
 
 type Props = {
   form: UseFormReturn<FormType>;
@@ -20,6 +23,10 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
   const { t } = useTranslation();
 
   const venueOptions = useMemo(() => locationOptions, [locationOptions]);
+  const { data: venues = [] } = useQuery({
+      queryKey: venueKeys.all,
+      queryFn: getVenues,
+    });
 
   return (
     <>
@@ -70,7 +77,7 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
             <FormItem className={styles.form_item}>
               <FormLabel>{t(KEY.category)}</FormLabel>
               <FormControl>
-                <Dropdown options={eventCategoryOptions} {...field} />
+                <Dropdown options={eventCategoryOptions} nullOption={{ label: t(KEY.common_choose) }} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -97,11 +104,16 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
           name="location"
           key={'location'}
           render={({ field }) => {
+            const selected = locationOptions.find((o) => o.value === field.value) ?? null;
             return (
               <FormItem className={styles.form_item}>
                 <FormLabel>{t(KEY.common_venue)}</FormLabel>
                 <FormControl>
-                  <Dropdown options={venueOptions} {...field} />
+                  <Dropdown 
+                    options={venues.map((venue) => ({ value: venue.name, label: venue.name }))}
+                        nullOption={{ label: t(KEY.common_choose) }}
+                        {...field}
+                         />
                 </FormControl>
                 <FormMessage />
               </FormItem>

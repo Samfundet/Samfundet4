@@ -20,6 +20,7 @@ export function useEventCreatorForm(params: {
   defaultCategory: EventCategoryValue;
   defaultLocation: string;
 }) {
+  // TODO: remove defaults since we set them to undefined now
   const { event, defaultCategory, defaultLocation } = params;
 
   // Setup React Hook Form
@@ -35,9 +36,9 @@ export function useEventCreatorForm(params: {
       start_dt: '',
       duration: 0,
       end_dt: '',
-      category: defaultCategory,
+      category: undefined,
       host: '',
-      location: defaultLocation,
+      location: undefined,
       capacity: undefined,
       age_restriction: 'none',
       ticket_type: 'free',

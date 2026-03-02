@@ -1,36 +1,53 @@
 import { Icon } from '@iconify/react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
-import { type ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PagedPagination } from '~/Components/Pagination';
 import { getImagesPaginated } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { imageKeys } from '~/queryKeys';
 import { backgroundImageFromUrl } from '~/utils';
+import { InputField } from '../InputField';
+import { PagedPagination } from '../Pagination';
 import styles from './ImagePicker.module.scss';
+
+const PAGE_SIZE = 12;
 
 export type ImagePickerProps = {
   onSelected?(image: ImageDto): void;
   selectedImage?: ImageDto;
 };
 
-const PAGE_SIZE = 15;
-
 export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
   const { t } = useTranslation();
   const [selected, setSelected] = useState<ImageDto | undefined>(selectedImage);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [debouncedSearch, setDebouncedSearch] = useState<string>('');
+  const debounceTimeout = useRef<NodeJS.Timeout>();
 
+  // Debounce search input
   useEffect(() => {
-    setSelected(selectedImage);
-  }, [selectedImage]);
+    clearTimeout(debounceTimeout.current);
+    debounceTimeout.current = setTimeout(() => {
+      setDebouncedSearch(searchInput);
+    }, 300);
 
+    return () => clearTimeout(debounceTimeout.current);
+  }, [searchInput]);
+
+  // Reset to page 1 when search changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Need to trigger on debouncedSearch change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch]);
+
+  // Fetch images using React Query
   const { data, isError } = useQuery({
-    queryKey: imageKeys.list(currentPage, undefined),
-    queryFn: () => getImagesPaginated(currentPage, PAGE_SIZE),
+    queryKey: imageKeys.list(currentPage, debouncedSearch || undefined),
+    queryFn: () => getImagesPaginated(currentPage, PAGE_SIZE, debouncedSearch || undefined),
     placeholderData: keepPreviousData,
   });
 
@@ -55,6 +72,10 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
     );
   }
 
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchInput(value);
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.selected_container}>
@@ -70,12 +91,17 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
             </>
           )}
         </div>
-        {isError && <p style={{ marginTop: '1rem' }}>{t(KEY.common_something_went_wrong)}</p>}
-        {/* TODO tags and other metadata */}
+        {isError && <p className={styles.error}>{t(KEY.common_something_went_wrong)}</p>}
       </div>
-      <div>
-        <div className={styles.image_container}>{images.map(renderImage)}</div>
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+      <div className={styles.search_wrapper}>
+        <InputField
+          icon="mdi:search"
+          value={searchInput}
+          onChange={handleSearchChange}
+          placeholder={t(KEY.common_search)}
+        />
+        <div className={styles.image_container}>{images.map((image) => renderImage(image))}</div>
+        <div className={styles.pagination_wrapper}>
           <PagedPagination
             currentPage={currentPage}
             totalItems={totalCount}

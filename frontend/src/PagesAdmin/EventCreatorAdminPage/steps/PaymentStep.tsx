@@ -29,7 +29,7 @@ export function PaymentStep({ form, ageLimitOptions }: Props) {
           <FormItem className={styles.form_item}>
             <FormLabel>{t(KEY.common_age_limit)}</FormLabel>
             <FormControl>
-              <Dropdown options={ageLimitOptions} {...field} />
+              <Dropdown options={ageLimitOptions} nullOption={{ label: t(KEY.common_choose) }} {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
