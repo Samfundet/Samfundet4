@@ -35,7 +35,7 @@ export const LoginPickerPage: FC = () => {
               <Icon icon="mdi:arrow-right" className={styles.arrowIcon} />
             </Link>
 
-            <Link url={ROUTES.samfThree.controllPanel} target="samf3" className={styles.choiceWrapper}>
+            <Link url={ROUTES.samfThree.controlPanel} target="samf3" className={styles.choiceWrapper}>
               <div className={styles.textWrapper}>
                 <span className={styles.radioLabel}>Eldre plattform (samf3)</span>
                 <p className={styles.description}>Gruppeadministrasjon og andre administrative oppgaver</p>

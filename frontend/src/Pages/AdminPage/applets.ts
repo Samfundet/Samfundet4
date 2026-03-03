@@ -11,7 +11,7 @@ export const appletCategories: AdminAppletCategory[] = [
         title_nb: 'Gamle kontroll panel',
         title_en: 'Old control panel',
         icon: 'bx:link-external',
-        url: ROUTES.samfThree.controllPanel,
+        url: ROUTES.samfThree.controlPanel,
         target: 'samf3',
         feature: 'navigation',
       },
