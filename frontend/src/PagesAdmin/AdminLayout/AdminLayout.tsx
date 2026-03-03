@@ -101,8 +101,8 @@ export function AdminLayout() {
     {
       url: ROUTES.samfThree.controlPanel,
       icon: 'bx:link-external',
-      title_nb: 'Gamle kontroll panel',
-      title_en: 'Old control panel',
+      title_nb: 'Gå til gamle kontrollpanel',
+      title_en: 'Go to old control panel',
       target: 'samf3',
     },
   ];
