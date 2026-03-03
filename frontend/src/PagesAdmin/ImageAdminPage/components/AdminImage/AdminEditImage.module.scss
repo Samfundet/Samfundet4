@@ -73,3 +73,35 @@
   padding: 2rem;
   text-align: center;
 }
+
+.linkedEventsSection {
+  @include rounded;
+  @include shadow-light;
+  padding: 2rem;
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+
+  h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1em;
+    color: #333;
+  }
+}
+
+.eventsList {
+  margin: 0 0 1rem 0;
+  padding-left: 2rem;
+  list-style-type: disc;
+
+  li {
+    margin-bottom: 0.5rem;
+    color: #555;
+  }
+}
+
+.warningText {
+  margin: 1rem 0 0 0;
+  font-size: 0.95em;
+  color: #855a00;
+  font-style: italic;
+}

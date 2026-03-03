@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components/Button/Button';
-import { getImage, replaceImageFile } from '~/api';
+import type { LinkedEventDto } from '~/api';
+import { getImage, getImageLinkedEvents, replaceImageFile } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
@@ -34,6 +35,7 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [notFound, setNotFound] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<boolean>(false);
+  const [linkedEvents, setLinkedEvents] = useState<LinkedEventDto[]>([]);
 
   const title = lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_image)}`);
   useTitle(title);
@@ -53,6 +55,11 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
         const data = await getImage(imageID);
         if (isMounted) {
           setImage(data);
+          // Fetch linked events
+          const events = await getImageLinkedEvents(imageID);
+          if (isMounted) {
+            setLinkedEvents(events);
+          }
         }
       } catch (error: unknown) {
         if (!isMounted) return;
@@ -163,6 +170,23 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
             <p className={styles.tags}>{image.tags.map((tag) => tag.name).join(', ')}</p>
           </div>
         </div>
+
+        {/* Linked events warning */}
+        {linkedEvents.length > 0 && (
+          <div className={styles.linkedEventsSection}>
+            <h4>{t(KEY.common_image)} {t(KEY.common_linked_to_events)}:</h4>
+            <ul className={styles.eventsList}>
+              {linkedEvents.map((event) => (
+                <li key={event.id}>
+                  {event.title_nb || event.title_en} ({new Date(event.start_dt).toLocaleDateString()})
+                </li>
+              ))}
+            </ul>
+            <p className={styles.warningText}>
+              {t(KEY.common_cannot_delete_image)}
+            </p>
+          </div>
+        )}
 
         {/* Upload form */}
         <div className={styles.uploadSection}>

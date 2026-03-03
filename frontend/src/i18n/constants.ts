@@ -204,6 +204,8 @@ export const KEY = {
   common_capacity: 'common_capacity',
   common_replace: 'common_replace',
   common_upload: 'common_upload',
+  common_linked_to_events: 'common_linked_to_events',
+  common_cannot_delete_image: 'common_cannot_delete_image',
 
   common_membership_number: 'common_membership_number',
   common_to_payment: 'common_to_payment',

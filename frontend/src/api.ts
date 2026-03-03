@@ -598,6 +598,22 @@ export async function replaceImageFile(id: string | number, file: File, title?: 
   return response.data;
 }
 
+export type LinkedEventDto = {
+  id: number;
+  title_en: string;
+  title_nb: string;
+  start_dt: string;
+};
+
+export async function getImageLinkedEvents(id: string | number): Promise<LinkedEventDto[]> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } }) +
+    'linked_events/';
+  const response = await axios.get<LinkedEventDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
 /** Fetch all KeyValues from backend. */
 export function getKeyValues(): Promise<AxiosResponse<KeyValueDto[]>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__key_value_list;

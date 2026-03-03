@@ -188,6 +188,8 @@ export const nb = prepareTranslations({
   [KEY.common_capacity]: 'Kapasitet',
   [KEY.common_upload]: 'Last opp',
   [KEY.common_replace]: 'Erstatt',
+  [KEY.common_linked_to_events]: 'brukt i disse arrangementene',
+  [KEY.common_cannot_delete_image]: 'Bildet kan ikke slettes før alle disse arrangementene er slettet eller bildet erstattes.',
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
@@ -850,6 +852,8 @@ export const en = prepareTranslations({
   [KEY.common_capacity]: 'Capacity',
   [KEY.common_replace]: 'Replace',
   [KEY.common_upload]: 'Upload',
+  [KEY.common_linked_to_events]: 'used in these events',
+  [KEY.common_cannot_delete_image]: 'The image cannot be deleted until all these events are deleted or the image is replaced.',
   [KEY.common_membership_number]: 'Membership number',
   [KEY.common_to_payment]: 'To payment',
 
