@@ -45,9 +45,8 @@ export function MDBConnectForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit, (error) => {
-          toast.error(error.username?.message);
-          toast.error(error.password?.message);
-          //Should probably add more information to the user here, like: username/mdb_id + error.message instead of just error.message
+          toast.error(lowerCapitalize(t(KEY.email_or_membership_number)) + ' ' + error.username?.message?.toLowerCase());
+          toast.error(lowerCapitalize(t(KEY.common_password)) + ' ' + error.password?.message?.toLowerCase());
         })}
       >
         <FormField

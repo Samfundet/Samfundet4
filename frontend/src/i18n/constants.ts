@@ -278,6 +278,7 @@ export const KEY = {
   // Purchase Ticket Info:
   invalid_email_message: 'invalid_email_message',
   email_or_membership_number_message: 'email_or_membership_number_message',
+  email_or_membership_number: 'email_or_membership_number',
   no_tickets_selected_message: 'no_tickets_selected_message',
   kr_per_ticket: 'kr_per_ticket',
   enter_membership_number: 'enter_membership_number',
