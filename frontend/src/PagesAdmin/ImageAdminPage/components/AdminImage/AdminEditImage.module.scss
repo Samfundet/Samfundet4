@@ -99,6 +99,20 @@
   }
 }
 
+.eventItem {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.25rem 0.5rem;
+  margin-left: -0.5rem;
+  border-radius: 3px;
+
+  &:hover {
+    background-color: #e8f4f8;
+    color: #003d5c;
+    font-weight: 500;
+  }
+}
+
 .warningText {
   margin: 1rem 0 0 0;
   font-size: 0.95em;

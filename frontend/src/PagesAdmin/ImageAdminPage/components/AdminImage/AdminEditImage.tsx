@@ -11,6 +11,7 @@ import type { ImageDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../../../AdminPageLayout/AdminPageLayout';
@@ -177,7 +178,11 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
             <h4>{t(KEY.common_image)} {t(KEY.common_linked_to_events)}:</h4>
             <ul className={styles.eventsList}>
               {linkedEvents.map((event) => (
-                <li key={event.id}>
+                <li
+                  key={event.id}
+                  className={styles.eventItem}
+                  onClick={() => navigate({ url: reverse({ pattern: ROUTES.frontend.admin_events_edit, urlParams: { id: event.id } }) })}
+                >
                   {event.title_nb || event.title_en} ({new Date(event.start_dt).toLocaleDateString()})
                 </li>
               ))}
