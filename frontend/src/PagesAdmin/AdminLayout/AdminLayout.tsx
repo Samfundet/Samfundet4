@@ -97,6 +97,18 @@ export function AdminLayout() {
 
   const userApplets = userAppletsRaw.filter((a) => !a.feature || isSiteFeatureEnabled(a.feature));
 
+  const navigationAppletsRaw: AdminApplet[] = [
+    {
+      url: ROUTES.samfThree.controlPanel,
+      icon: 'bx:link-external',
+      title_nb: 'Gamle kontroll panel',
+      title_en: 'Old control panel',
+      target: 'samf3',
+    },
+  ];
+
+  const navigationApplets = navigationAppletsRaw.filter((a) => !a.feature);
+
   const panel = (
     <div className={classNames(styles.panel, !panelOpen && styles.mobile_panel_closed)}>
       <button type="button" className={styles.mobile_panel_close_btn} onClick={() => setPanelOpen(false)}>
@@ -108,6 +120,8 @@ export function AdminLayout() {
       {/* Index */}
       {userApplets.map((applet, index) => makeAppletShortcut(applet, index))}
       <br />
+      {/* Samf3 navigation */}
+      {navigationApplets.map((applet, index) => makeAppletShortcut(applet, index))}
       {/* Applets */}
       {appletCategories.map((category) => {
         // Keep only the applets with enabled features visible
