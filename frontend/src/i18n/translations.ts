@@ -72,7 +72,7 @@ export const nb = prepareTranslations({
   [KEY.common_gang]: 'Gjeng',
   [KEY.common_gangs]: 'Gjenger',
   [KEY.common_section]: 'Seksjon',
-  [KEY.common_table]: 'Bord',
+  [KEY.common_table]: 'Tabell',
   [KEY.common_gang_type]: 'Gjengtype',
   [KEY.common_edit]: 'Rediger',
   [KEY.common_sheet]: 'Tabell',
