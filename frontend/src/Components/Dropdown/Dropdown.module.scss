@@ -35,7 +35,6 @@
   }
 
   @include theme-dark {
-    color: white;
     border-color: $grey-0;
     &:focus {
       border-color: $grey-1;

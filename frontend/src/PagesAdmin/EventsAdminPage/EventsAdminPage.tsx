@@ -29,6 +29,7 @@ export function EventsAdminPage() {
   const [categories, setCategories] = useState<EventCategoryValue[]>([]);
   const [selectedVenue, setSelectedVenue] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<EventCategoryValue | null>(null);
+  const [search, setSearch] = useState<string>('');
 
   function getEvents(venue?: string | null, category?: EventCategoryValue | null) {
     getEventsUpcomming({ venue: venue ?? undefined, category: category ?? undefined })
@@ -43,6 +44,17 @@ export function EventsAdminPage() {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
+  }
+
+  function filterEvents(): EventDto[] {
+    const normalizedSearch = search.trim().toLowerCase();
+    if (search === '') return events;
+    const keywords = normalizedSearch.split(' ');
+
+    return events.filter((event: EventDto) => {
+      const title = (dbT(event, 'title', i18n.language) as string)?.toLowerCase() ?? '';
+      return keywords.every((kw) => title.includes(kw));
+    });
   }
 
   // Stuff to do on first render.
@@ -74,7 +86,9 @@ export function EventsAdminPage() {
     '', // Buttons
   ];
 
-  const data = events.map((event: EventDto) => ({
+  const filteredEvents = filterEvents();
+
+  const data = filteredEvents.map((event: EventDto) => ({
     cells: [
       dbT(event, 'title', i18n.language) as string,
       { content: <TimeDisplay timestamp={event.start_dt} />, value: event.start_dt },
@@ -150,6 +164,8 @@ export function EventsAdminPage() {
         setSelectedVenue={setSelectedVenue}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
+        search={search}
+        setSearch={setSearch}
       />
       <div className={styles.tableContainer}>
         <Table columns={tableColumns} data={data} />
