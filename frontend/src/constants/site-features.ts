@@ -1,7 +1,6 @@
 import type { SiteFeature } from '~/types';
 
 const SITE_FEATURES: Record<SiteFeature, boolean> = {
-  navigation: true,
   profile: true,
   changePassword: false,
   events: true,
