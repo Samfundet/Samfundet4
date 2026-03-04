@@ -235,6 +235,15 @@ class Venue(CustomBaseModel):
     closing_saturday = models.TimeField(default=time(hour=20), blank=True, null=True)
     closing_sunday = models.TimeField(default=time(hour=20), blank=True, null=True)
 
+    # Is the venue open on this day?
+    is_open_monday = models.BooleanField(default=True)
+    is_open_tuesday = models.BooleanField(default=True)
+    is_open_wednesday = models.BooleanField(default=True)
+    is_open_thursday = models.BooleanField(default=True)
+    is_open_friday = models.BooleanField(default=True)
+    is_open_saturday = models.BooleanField(default=True)
+    is_open_sunday = models.BooleanField(default=True)
+
     class Meta:
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
