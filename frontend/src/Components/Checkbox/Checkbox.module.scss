@@ -1,5 +1,6 @@
 /* stylelint-disable selector-max-compound-selectors */
 @use 'src/constants' as *;
+
 @use 'src/mixins' as *;
 $checkmark: '\2714'; /* ASCII "check"-symbol. */
 

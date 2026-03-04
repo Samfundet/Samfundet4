@@ -34,7 +34,6 @@ $row-border-dark: #353535;
 
 .venue_header {
   padding: 0.5em 0.75em;
-
   font-size: 1.25em;
   font-weight: 700;
   color: $black;
@@ -68,6 +67,18 @@ $row-border-dark: #353535;
   }
 }
 
+/* Common styles for row children */
+.day_label {
+  width: 4rem;
+  flex-shrink: 0;
+  color: $black-2;
+  font-weight: 500;
+
+  @include theme-dark {
+    color: $theme-dark-color;
+  }
+}
+
 /* Styling for the Header Row */
 .day_row_header {
   font-size: 0.75rem;
@@ -89,18 +100,6 @@ $row-border-dark: #353535;
     @include theme-dark {
       color: $grey-36;
     }
-  }
-}
-
-/* Common styles for row children */
-.day_label {
-  width: 4rem;
-  flex-shrink: 0;
-  color: $black-2;
-  font-weight: 500;
-
-  @include theme-dark {
-    color: $theme-dark-color;
   }
 }
 
