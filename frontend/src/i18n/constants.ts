@@ -85,7 +85,7 @@ export const KEY = {
   common_max: 'common_max',
   common_edit: 'common_edit',
   common_card: 'common_card',
-  common_tags: 'common_tags', 
+  common_tags: 'common_tags',
   common_gang: 'common_gang',
   common_section: 'common_section',
   common_next: 'common_next',
