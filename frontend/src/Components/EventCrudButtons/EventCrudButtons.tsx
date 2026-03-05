@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
+import { deleteEvent } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
+import { useCustomNavigate } from '~/hooks';
 import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 import { hasPerm } from '~/utils';
 import { CrudButtons } from '../CrudButtons';
-import { useCustomNavigate } from '~/hooks';
-import { deleteEvent } from '~/api';
 
 type EventCrudButtons = {
   title?: ReactNode;
@@ -43,17 +43,17 @@ export function EventCrudButtons({
       onDelete={
         canChangeEvent || isStaff
           ? () => {
-            const con = window.confirm(`Are you sure you want to delete ${title}`);
-            if (con && id) {
-              deleteEvent(id)
-                .then(() => {
-                  alert(`Deleted ${title}`);
-                })
-                .catch(() => {
-                  alert(`Failed to delete ${title}`);
-                });
+              const con = window.confirm(`Are you sure you want to delete ${title}`);
+              if (con && id) {
+                deleteEvent(id)
+                  .then(() => {
+                    alert(`Deleted ${title}`);
+                  })
+                  .catch(() => {
+                    alert(`Failed to delete ${title}`);
+                  });
+              }
             }
-          }
           : undefined
       }
       onManage={isStaff ? () => nav({ linkTarget: 'backend', url: djangoUrl }) : undefined}
