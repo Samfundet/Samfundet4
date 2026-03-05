@@ -43,17 +43,17 @@ export function EventCrudButtons({
       onDelete={
         canChangeEvent || isStaff
           ? () => {
-              const con = window.confirm(`Are you sure you want to delete ${title}`);
-              if (con && id) {
-                deleteEvent(id)
-                  .then(() => {
-                    alert(`Deleted ${title}`);
-                  })
-                  .catch(() => {
-                    alert(`Failed to delete ${title}`);
-                  });
-              }
+            const con = window.confirm(`Are you sure you want to delete ${title}`);
+            if (con && id) {
+              deleteEvent(id)
+                .then(() => {
+                  alert(`${title} Has been deleted`);
+                })
+                .catch(() => {
+                  alert(`Failed to delete ${title}`);
+                });
             }
+          }
           : undefined
       }
       onManage={isStaff ? () => nav({ linkTarget: 'backend', url: djangoUrl }) : undefined}
