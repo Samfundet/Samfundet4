@@ -2,15 +2,13 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
-import { Button, Carousel, EventQuery, ImageCard, TimeDisplay } from '~/Components';
-import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
+import { Button, Carousel, EventCrudButtons, EventQuery, ImageCard, TimeDisplay } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteEvent, getEventsUpcomming } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import type { EventCategoryValue } from '~/types';
 import { dbT, getTicketTypeKey, lowerCapitalize } from '~/utils';
@@ -83,7 +81,7 @@ export function EventsAdminPage() {
     { content: t(KEY.admin_organizer), sortable: true },
     { content: t(KEY.common_venue), sortable: true },
     { content: t(KEY.common_ticket_type), sortable: true },
-    '', // Buttons
+    'Edit', // Buttons
   ];
 
   const filteredEvents = filterEvents();
@@ -97,34 +95,7 @@ export function EventsAdminPage() {
       event.location,
       t(getTicketTypeKey(event.ticket_type)),
       {
-        content: (
-          <CrudButtons
-            onView={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.event,
-                  urlParams: { id: event.id },
-                }),
-              );
-            }}
-            onEdit={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.admin_events_edit,
-                  urlParams: { id: event.id },
-                }),
-              );
-            }}
-            onDelete={() => {
-              // TODO custom modal confirm
-              const msg = lowerCapitalize(`${t(KEY.form_confirm)} ${t(KEY.common_delete)}`);
-              if (window.confirm(`${msg} ${dbT(event, 'title')}`)) {
-                // TODO toast component? A bit too easy to delete events
-                deleteSelectedEvent(event.id);
-              }
-            }}
-          />
-        ),
+        content: <EventCrudButtons title={dbT(event, 'title')} id={event.id.toString()} />,
       },
     ],
   }));
@@ -134,6 +105,7 @@ export function EventsAdminPage() {
   const header = (
     <>
       <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_events_create)}>
+        {' '}
         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`)}
       </Button>
     </>

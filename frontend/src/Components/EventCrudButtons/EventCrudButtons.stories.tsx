@@ -8,7 +8,7 @@ const flexDecorator: Decorator = (Story) => (
 );
 
 const meta: Meta<typeof EventCrudButtons> = {
-  title: 'Components/EventEditButtons',
+  title: 'Components/EventCrudButtons',
   component: EventCrudButtons,
   decorators: [flexDecorator],
 };
@@ -19,8 +19,10 @@ type Story = StoryObj<typeof EventCrudButtons>;
 
 export const Default: Story = {
   args: {
-    is_staff: true,
+    is_staff_overwrite: true,
     id: '123',
     title: 'Test event',
+    height: undefined,
+    have_view: true,
   },
 };

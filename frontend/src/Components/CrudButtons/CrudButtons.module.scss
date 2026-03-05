@@ -1,35 +1,10 @@
 @use 'src/constants' as *;
-
 @use 'src/mixins' as *;
 
 .row {
   display: flex;
   justify-content: flex-end;
-  gap: 0.5em;
-}
-
-.crud_button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
-  background-color: $grey-3;
-  border-radius: 100%;
-  width: 1.75em;
-  height: 1.75em;
-  cursor: pointer;
-  color: white;
-
-  &:hover {
-    filter: brightness(105%);
-    transform: scale(1.1);
-  }
-}
-
-.red {
-  background-color: $red;
-}
-
-.blue {
-  background-color: $blue;
+  gap: 0.3em;
+  z-index: 10;
+  pointer-events: all;
 }
