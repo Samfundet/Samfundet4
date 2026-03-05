@@ -29,6 +29,7 @@ export const ROUTES_SAMF_THREE = {
     club: `${BASE_URL}/informasjon/klubb`,
   },
   volunteer: `${BASE_URL}/opptak`,
+  controlPanel: `${BASE_URL}/medlemmer/kontrollpanel`,
 } as const;
 
 // Samfundet3 innlogging
