@@ -4,13 +4,15 @@
 
 .icon_button {
   border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: $grey-3;
   border-radius: 100%;
   width: fit-content;
   padding: 4px;
   cursor: pointer;
   color: white;
-
   transition: all 200ms ease-in-out;
 
   &:hover {

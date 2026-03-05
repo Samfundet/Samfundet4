@@ -39,7 +39,7 @@ export function EventPage() {
 
       {canChangeEvent && (
         <div className={styles.admin_panel}>
-          <EventCrudButtons title={dbT(event, 'title')} id={id} height={20} />
+          <EventCrudButtons title={dbT(event, 'title')} id={id} height={25} />
         </div>
       )}
 
