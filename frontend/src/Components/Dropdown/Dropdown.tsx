@@ -20,6 +20,7 @@ type PrimitiveDropdownProps<T> = {
   options?: DropdownOption<T>[];
   label?: string | ReactNode;
   disabled?: boolean;
+  sortAlphabetic?: boolean;
   error?: boolean;
   disableIcon?: boolean;
   nullOption?: boolean | NullOption;
@@ -50,6 +51,7 @@ function DropdownInner<T>(
     disabled = false,
     disableIcon = false,
     nullOption = false,
+    sortAlphabetic = false,
     error,
   }: DropdownProps<T>,
   ref: React.Ref<HTMLSelectElement>,
@@ -59,8 +61,12 @@ function DropdownInner<T>(
   const finalOptions = useMemo<DropdownOption<T>[]>(() => {
     let opts = [...options];
 
+    if (sortAlphabetic) {
+      opts.sort((a, b) => a.label.localeCompare(b.label));
+    }
+
     if (!nullOption) {
-      return options;
+      return opts;
     }
 
     if (nullOption) {
@@ -72,7 +78,7 @@ function DropdownInner<T>(
     }
 
     return opts;
-  }, [options, nullOption]);
+  }, [options, nullOption, sortAlphabetic]);
 
   const selectedIndex = useMemo(() => {
     if (isControlled) {
@@ -108,7 +114,7 @@ function DropdownInner<T>(
         defaultValue={!isControlled ? selectedIndex : undefined}
         value={isControlled ? selectedIndex : undefined}
       >
-        {finalOptions.map(({ label, value, ...props }, index) => (
+        {finalOptions.sort().map(({ label, value, ...props }, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
           <option value={index} key={index} {...props}>
             {label}
