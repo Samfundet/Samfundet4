@@ -317,6 +317,8 @@ export const nb = prepareTranslations({
   [KEY.adminpage_connect_mdb]: 'Koble til MDB',
   [KEY.adminpage_connect_mdb_extended]: 'Koble til medlemsdatabasen',
   [KEY.adminpage_connect_mdb_succesful_toast]: 'Vellyket tilkobling til MDB',
+  [KEY.adminpage_connect_mdb_invalid_email]: 'ugyldig e-post',
+  [KEY.adminpage_connect_mdb_invalid_membership_number]: 'ugyldig medlemsdatabasenummer',
 
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
@@ -1298,6 +1300,8 @@ export const en = prepareTranslations({
   [KEY.adminpage_connect_mdb]: 'Connect to MDB',
   [KEY.adminpage_connect_mdb_extended]: 'Connect to member database',
   [KEY.adminpage_connect_mdb_succesful_toast]: 'Succesfully connected to MDB',
+  [KEY.adminpage_connect_mdb_invalid_email]: 'Invalid email',
+  [KEY.adminpage_connect_mdb_invalid_membership_number]: 'Invalid member database number',
 
   // No category:
   [KEY.owner]: 'Owner',

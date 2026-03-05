@@ -10,18 +10,18 @@ import { FormControl } from '~/Components/Forms/Form';
 import { connect_to_mdb } from '~/api';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { PASSWORD, USERNAME } from '~/schema/user';
+import { EMAIL_OR_MEMBERSHIP_NUMBER, PASSWORD } from '~/schema/user';
 import { lowerCapitalize } from '~/utils';
 import styles from './MDBConnectFormAdminPage.module.scss';
-
-const schema = z.object({
-  username: USERNAME, //Might want to create a new schema for email and/or MDB number
-  password: PASSWORD,
-});
 
 export function MDBConnectForm() {
   const { t } = useTranslation();
   useTitle(t(KEY.adminpage_connect_mdb));
+
+  const schema = z.object({
+    username: EMAIL_OR_MEMBERSHIP_NUMBER(t),
+    password: PASSWORD,
+  });
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -45,8 +45,12 @@ export function MDBConnectForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit, (error) => {
-          toast.error(lowerCapitalize(t(KEY.email_or_membership_number)) + ' ' + error.username?.message?.toLowerCase());
-          toast.error(lowerCapitalize(t(KEY.common_password)) + ' ' + error.password?.message?.toLowerCase());
+          if (error.username) {
+            toast.error(error.username?.message);
+          }
+          if (error.password) {
+            toast.error(error.password?.message);
+          }
         })}
       >
         <FormField
