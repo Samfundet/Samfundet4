@@ -53,7 +53,7 @@ export function PaymentForm({ event, onChange }: PaymentFormProps) {
           <FormItem>
             <FormLabel>{t(KEY.common_the_ticket_type)}</FormLabel>
             <FormControl>
-              <Dropdown options={ticketTypeOptions} {...field} />
+              <Dropdown options={ticketTypeOptions} nullOption={{ label: t(KEY.common_choose) }} {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
