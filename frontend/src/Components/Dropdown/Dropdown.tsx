@@ -114,7 +114,7 @@ function DropdownInner<T>(
         defaultValue={!isControlled ? selectedIndex : undefined}
         value={isControlled ? selectedIndex : undefined}
       >
-        {finalOptions.sort().map(({ label, value, ...props }, index) => (
+        {finalOptions.map(({ label, value, ...props }, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
           <option value={index} key={index} {...props}>
             {label}
