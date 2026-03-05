@@ -90,12 +90,12 @@ export function EventCreatorAdminPage() {
       start_dt: '',
       duration: 0,
       end_dt: '',
-      category: eventCategoryOptions[0].value,
+      category: undefined,
       host: '',
-      location: locationOptions.length > 0 ? locationOptions[0].value : '',
+      location: undefined,
       capacity: undefined,
-      age_restriction: 'none',
-      ticket_type: 'free',
+      age_restriction: undefined,
+      ticket_type: undefined,
       custom_tickets: [],
       billig_id: undefined,
       image: undefined,
@@ -335,7 +335,7 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.category)}</FormLabel>
                   <FormControl>
-                    <Dropdown options={eventCategoryOptions} {...field} />
+                    <Dropdown options={eventCategoryOptions} nullOption={{ label: t(KEY.common_choose) }} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -369,6 +369,7 @@ export function EventCreatorAdminPage() {
                     <FormControl>
                       <Dropdown
                         options={venues.map((venue) => ({ value: venue.name, label: venue.name }))}
+                        nullOption={{ label: t(KEY.common_choose) }}
                         {...field}
                       />
                     </FormControl>
@@ -420,7 +421,7 @@ export function EventCreatorAdminPage() {
               <FormItem className={styles.form_item}>
                 <FormLabel>{t(KEY.common_age_limit)}</FormLabel>
                 <FormControl>
-                  <Dropdown options={ageLimitOptions} {...field} />
+                  <Dropdown options={ageLimitOptions} nullOption={{ label: t(KEY.common_choose) }} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
