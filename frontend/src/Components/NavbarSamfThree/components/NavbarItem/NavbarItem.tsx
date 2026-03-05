@@ -5,9 +5,9 @@ import { Link } from 'react-router';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { useDesktop } from '~/hooks';
 import type { SetState } from '~/types';
-import styles from '../../NavbarSamfThree.module.scss';
+import styles from '../../Navbar.module.scss';
 
-type NavbarItemSamfThreeProps = {
+type NavbarItemProps = {
   route: string;
   label: string;
   icon?: string;
@@ -19,7 +19,7 @@ type NavbarItemSamfThreeProps = {
 
 const iconDown = 'carbon:chevron-down';
 
-export function NavbarItemSamfThree({
+export function NavbarItem({
   label,
   route,
   icon,
@@ -27,7 +27,7 @@ export function NavbarItemSamfThree({
   setExpandedDropdown,
   dropdownLinks,
   labelClassName,
-}: NavbarItemSamfThreeProps) {
+}: NavbarItemProps) {
   const { setIsMobileNavigation } = useGlobalContext();
   const isDesktop = useDesktop();
   const isSelected = expandedDropdown === label;

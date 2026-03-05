@@ -19,13 +19,13 @@ import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { SAMF3_MEMBER_URL } from '~/routes/samf-three';
-import styles from './NavbarSamfThree.module.scss';
+import styles from './Navbar.module.scss';
 import { HamburgerMenu, LanguageButton } from './components';
-import { NavbarItemSamfThree } from './components/NavbarItem';
+import { NavbarItem } from './components/NavbarItem';
 
 const scrollDistanceForOpaque = 30;
 
-export function NavbarSamfThree() {
+export function Navbar() {
   const { isMobileNavigation, setIsMobileNavigation } = useGlobalContext();
   const { t, i18n } = useTranslation();
   const { user, setUser } = useAuthContext();
@@ -144,20 +144,20 @@ export function NavbarSamfThree() {
 
   const navbarHeaders = (
     <div className={isDesktop ? styles.navbar_main_links : styles.navbar_main_links_mobile}>
-      <NavbarItemSamfThree
+      <NavbarItem
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
         route={ROUTES.frontend.events}
         label={t(KEY.common_event)}
       />
-      <NavbarItemSamfThree
+      <NavbarItem
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
         route={'#'}
         label={t(KEY.common_information)}
         dropdownLinks={infoLinks}
       />
-      <NavbarItemSamfThree
+      <NavbarItem
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
         route={'#'}
@@ -169,7 +169,7 @@ export function NavbarSamfThree() {
 
   const recruitmentButton = (
     <div className={isDesktop ? styles.navbar_main_links : styles.navbar_main_links_mobile}>
-      <NavbarItemSamfThree
+      <NavbarItem
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
         route={ROUTES.samfThree.volunteer}
@@ -228,7 +228,7 @@ export function NavbarSamfThree() {
 
   const profileButton = user && (
     <div className={classNames(styles.navbar_profile_button, styles.profile_text, styles.dropdown_container_left)}>
-      <NavbarItemSamfThree
+      <NavbarItem
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
         route={'#'}
