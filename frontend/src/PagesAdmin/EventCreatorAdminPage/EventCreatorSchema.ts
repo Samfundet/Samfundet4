@@ -55,16 +55,19 @@ export const eventSchema = z
     visibility_from_dt: EVENT_VISIBILITY_FROM_DT,
     visibility_to_dt: EVENT_VISIBILITY_TO_DT,
   })
-  .refine((data) => {
-    // If visibility_from_dt and start_dt are both provided, check that publication date is before event start
-    if (data.visibility_from_dt && data.start_dt) {
-      return new Date(data.visibility_from_dt) <= new Date(data.start_dt);
-    }
-    // If either is missing, allow it (will be caught by individual field validation)
-    return true;
-  }, {
-    message: 'Publication date must be before event start date!',
-    path: ['visibility_from_dt'], // Show error on the publication date field
-  });
+  .refine(
+    (data) => {
+      // If visibility_from_dt and start_dt are both provided, check that publication date is before event start
+      if (data.visibility_from_dt && data.start_dt) {
+        return new Date(data.visibility_from_dt) <= new Date(data.start_dt);
+      }
+      // If either is missing, allow it (will be caught by individual field validation)
+      return true;
+    },
+    {
+      message: 'Publication date must be before event start date!',
+      path: ['visibility_from_dt'], // Show error on the publication date field
+    },
+  );
 
 export type EventFormType = z.infer<typeof eventSchema>;
