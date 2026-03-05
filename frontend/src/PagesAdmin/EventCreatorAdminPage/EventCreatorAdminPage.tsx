@@ -149,6 +149,17 @@ export function EventCreatorAdminPage() {
     }
   }, [id, t, form]);
 
+  // Watch for changes to date fields and trigger validation
+  const startDt = form.watch('start_dt');
+  const visibilityFromDt = form.watch('visibility_from_dt');
+
+  useEffect(() => {
+    // Trigger validation on visibility_from_dt whenever either date changes
+    if (startDt && visibilityFromDt) {
+      form.trigger('visibility_from_dt');
+    }
+  }, [startDt, visibilityFromDt, form]);
+
   // ================================== //
   //          Creation Steps            //
   // ================================== //
@@ -475,7 +486,14 @@ export function EventCreatorAdminPage() {
       title_en: 'Summary',
       customIcon: 'ic:outline-remove-red-eye',
       validate: (data) => {
-        return !!data.visibility_from_dt;
+        // Check that publication date exists and is before event start
+        if (!data.visibility_from_dt) {
+          return false;
+        }
+        if (data.start_dt && new Date(data.visibility_from_dt) > new Date(data.start_dt)) {
+          return false;
+        }
+        return true;
       },
       template: (
         <FormField
