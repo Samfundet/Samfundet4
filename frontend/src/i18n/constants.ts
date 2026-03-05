@@ -580,6 +580,7 @@ export const KEY = {
   adminpage_connect_mdb_succesful_toast: 'adminpage_connect_mdb_succesful_toast',
   adminpage_connect_mdb_invalid_email: 'adminpage_connect_mdb_invalid_email',
   adminpage_connect_mdb_invalid_membership_number: 'adminpage_connect_mdb_invalid_membership_number',
+  adminpage_connect_mdb_common_error: 'adminpage_connect_mdb_common_error',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',

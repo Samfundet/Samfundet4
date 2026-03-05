@@ -37,7 +37,7 @@ export function MDBConnectForm() {
         toast.success(t(KEY.adminpage_connect_mdb_succesful_toast));
       })
       .catch((error) => {
-        toast.error(error.response.data.message);
+        toast.error(t(KEY.adminpage_connect_mdb_common_error));
       });
   }
 
@@ -77,7 +77,7 @@ export function MDBConnectForm() {
             </FormItem>
           )}
         />
-        <Button className={styles.form_button} type="submit" theme="green" display="block" rounded={true}>
+        <Button className={styles.form_button} type="submit" theme="green" display="block" rounded>
           {t(KEY.common_connect)}
         </Button>
       </form>
