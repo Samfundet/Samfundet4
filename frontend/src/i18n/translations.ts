@@ -322,6 +322,9 @@ export const nb = prepareTranslations({
   [KEY.navbar_map]: 'Kart og lokaler',
   [KEY.navbar_photos]: 'Foto',
   [KEY.navbar_nybygg]: 'Nybygg',
+  [KEY.navbar_bar]: 'Bar',
+  [KEY.navbar_stages]: 'Scener',
+  [KEY.navbar_club]: 'Klubb',
 
   // Common navigation - links for samf 3 (used in navbar and footer):
 
@@ -982,6 +985,9 @@ export const en = prepareTranslations({
   [KEY.navbar_photos]: 'Photos',
   [KEY.navbar_nybygg]: 'New building',
   [KEY.navbar_map]: 'Map and venues',
+  [KEY.navbar_bar]: 'Bar',
+  [KEY.navbar_stages]: 'Stages',
+  [KEY.navbar_club]: 'Club',
 
   // Common navigation (used in navbar and footer):
 
