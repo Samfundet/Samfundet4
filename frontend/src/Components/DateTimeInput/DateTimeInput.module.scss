@@ -1,6 +1,11 @@
 @use 'src/constants' as *;
 @use 'src/mixins' as *;
 
+.wrapper {
+  position: relative; // Keeps the popup attached to this component
+  width: 100%;
+}
+
 .container {
   display: flex;
   align-items: center;
@@ -10,7 +15,6 @@
   border: 1px solid $grey-3;
   border-radius: 4px;
   padding: 0 0.75rem;
-  cursor: text;
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
@@ -18,7 +22,6 @@
   &:focus-within {
     border-color: #0052cc;
     box-shadow: 0 0 0 2px rgba(0, 82, 204, 0.2);
-    outline: none;
   }
 
   @include theme-dark {
@@ -26,7 +29,6 @@
     border-color: $grey-2;
     &:focus-within {
       border-color: $white;
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
     }
   }
 }
@@ -40,7 +42,6 @@
   font-size: 1rem;
   outline: none;
   font-variant-numeric: tabular-nums;
-
   &::placeholder {
     color: $grey-3;
   }
@@ -49,23 +50,52 @@
 .input_date {
   flex: 1;
 }
-
 .input_time {
   width: 4rem;
   text-align: left;
-  padding-left: 0.25rem;
 }
 
-.separator {
-  padding: 0 0.75rem;
+.icon_button {
+  background: none;
+  border: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
   color: $grey-2;
-  font-size: 1.1rem;
-  border-left: 1px solid $grey-4;
-  margin-left: 0.5rem;
+  font-size: 1.2rem;
+  padding: 0 0.5rem;
+  &:hover {
+    color: $grey-0;
+  }
+  @include theme-dark {
+    &:hover {
+      color: $white;
+    }
+  }
+}
+
+.separator {
+  height: 1.25rem;
+  width: 1px;
+  background-color: $grey-4;
+  margin-right: 0.75rem;
+  @include theme-dark {
+    background-color: $grey-1;
+  }
+}
+
+.calendar_popup {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  z-index: 1000;
+  background: $white;
+  border: 1px solid $grey-3;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 
   @include theme-dark {
-    border-left-color: $grey-1;
+    background: $grey-0;
+    border-color: $grey-2;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   }
 }
