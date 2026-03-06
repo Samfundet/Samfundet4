@@ -13,15 +13,6 @@ export const CASE_DOCUMENTS = {
   saksdokumenter: `${BASE_URL}/saksdokumenter`,
 };
 
-// Samfundet3 innlogging
-export const SAMF3_LOGIN_URL = {
-  login: `${BASE_URL}/logg-inn`,
-};
-
-export const SAMF3_MEMBER_URL = {
-  medlem: 'https://medlem.samfundet.no/',
-};
-
 export const ROUTES_SAMF_THREE = {
   information: {
     general: `${BASE_URL}/informasjon`,
@@ -39,3 +30,12 @@ export const ROUTES_SAMF_THREE = {
   },
   volunteer: `${BASE_URL}/opptak`,
 } as const;
+
+// Samfundet3 innlogging
+export const SAMF3_LOGIN_URL = {
+  login: `${BASE_URL}/logg-inn`,
+};
+
+export const SAMF3_MEMBER_URL = {
+  medlem: 'https://medlem.samfundet.no/',
+};
