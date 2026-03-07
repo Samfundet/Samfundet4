@@ -19,20 +19,20 @@ export function MDBConnectForm() {
   useTitle(t(KEY.adminpage_connect_mdb));
 
   const schema = z.object({
-    username: EMAIL_OR_MEMBERSHIP_NUMBER(t),
+    member_login: EMAIL_OR_MEMBERSHIP_NUMBER(t),
     password: PASSWORD,
   });
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      username: '',
+      member_login: '',
       password: '',
     },
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
-    connect_to_mdb(values.username, values.password)
+    connect_to_mdb(values.member_login, values.password)
       .then((res) => {
         toast.success(t(KEY.adminpage_connect_mdb_succesful_toast));
       })
@@ -45,8 +45,8 @@ export function MDBConnectForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit, (error) => {
-          if (error.username) {
-            toast.error(error.username?.message);
+          if (error.member_login) {
+            toast.error(error.member_login?.message);
           }
           if (error.password) {
             toast.error(error.password?.message);
@@ -55,7 +55,7 @@ export function MDBConnectForm() {
       >
         <FormField
           control={form.control}
-          name="username"
+          name="member_login"
           render={({ field }) => (
             <FormItem>
               <FormLabel>{t(KEY.email_or_membership_number_message)}</FormLabel>

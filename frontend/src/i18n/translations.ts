@@ -319,7 +319,8 @@ export const nb = prepareTranslations({
   [KEY.adminpage_connect_mdb_succesful_toast]: 'Vellyket tilkobling til MDB',
   [KEY.adminpage_connect_mdb_invalid_email]: 'ugyldig e-post',
   [KEY.adminpage_connect_mdb_invalid_membership_number]: 'ugyldig medlemsdatabasenummer',
-  [KEY.adminpage_connect_mdb_common_error]: 'Kunne ikke koble til MDB. Vennligst sjekk at alle felter er skrevet riktig',
+  [KEY.adminpage_connect_mdb_common_error]:
+    'Kunne ikke koble til MDB. Vennligst sjekk at alle felter er skrevet riktig',
 
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
