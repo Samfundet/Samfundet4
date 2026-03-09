@@ -74,6 +74,39 @@
   margin-top: 1.5em;
 }
 
+.field_label_row {
+  @include flex-row;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+.mode_switch_row {
+  @include flex-row;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.25em;
+}
+
+.mode_label {
+  font-size: 0.82em;
+  color: $grey-3;
+  transition: color 0.15s;
+}
+
+.mode_label_active {
+  font-size: 0.82em;
+  font-weight: 600;
+  transition: color 0.15s;
+}
+
+.conversion_hint {
+  display: block;
+  font-size: 0.78em;
+  color: $grey-3;
+  margin-top: 0.2em;
+}
+
 .preview {
   @include flex-row-center;
   align-items: center;

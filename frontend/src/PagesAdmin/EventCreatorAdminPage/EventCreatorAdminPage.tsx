@@ -20,6 +20,7 @@ import {
   ImageCard,
   Input,
   Textarea,
+  ToggleSwitch,
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
@@ -148,6 +149,29 @@ export function EventCreatorAdminPage() {
       setShowSpinner(false);
     }
   }, [id, t, form]);
+
+  // ================================== //
+  //       Duration / End-time mode     //
+  // ================================== //
+
+  const [durationMode, setDurationMode] = useState(true);
+
+  const watchStartDt = form.watch('start_dt');
+  const watchDuration = form.watch('duration');
+  const watchEndDt = form.watch('end_dt');
+
+  useEffect(() => {
+    if (durationMode && watchStartDt && watchDuration > 0) {
+      const start = new Date(watchStartDt);
+      const end = new Date(start.getTime() + watchDuration * 60_000);
+      form.setValue('end_dt', utcTimestampToLocal(end.toISOString(), false));
+    } else if (!durationMode && watchStartDt && watchEndDt) {
+      const start = new Date(watchStartDt);
+      const end = new Date(watchEndDt);
+      const diffMin = Math.round((end.getTime() - start.getTime()) / 60_000);
+      form.setValue('duration', Math.max(0, diffMin));
+    }
+  }, [watchStartDt, watchDuration, watchEndDt, durationMode, form]);
 
   // ================================== //
   //          Creation Steps            //
@@ -284,7 +308,8 @@ export function EventCreatorAdminPage() {
       title_nb: 'Dato og informasjon',
       title_en: 'Date & info',
       validate: (data) => {
-        return !!(data.start_dt && data.duration > 0 && data.category && data.host && data.location);
+        const timeValid = durationMode ? !!(data.start_dt && data.duration > 0) : !!(data.start_dt && data.end_dt);
+        return timeValid && !!(data.category && data.host && data.location);
       },
       template: (
         <>
@@ -305,26 +330,57 @@ export function EventCreatorAdminPage() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="duration"
-              key={'duration'}
-              render={({ field }) => (
-                <FormItem className={styles.form_item}>
-                  <FormLabel>
-                    {t(KEY.recruitment_duration)} ({t(KEY.common_minutes)})
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      {...field}
-                      onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {durationMode ? (
+              <FormField
+                control={form.control}
+                name="duration"
+                key={'duration'}
+                render={({ field }) => (
+                  <FormItem className={styles.form_item}>
+                    <div className={styles.field_label_row}>
+                      <FormLabel>
+                        {t(KEY.recruitment_duration)} ({t(KEY.common_minutes)})
+                      </FormLabel>
+                      <div className={styles.mode_switch_row}>
+                        <span className={styles.mode_label_active}>{t(KEY.recruitment_duration)}</span>
+                        <ToggleSwitch checked={!durationMode} onChange={() => setDurationMode((prev) => !prev)} />
+                        <span className={styles.mode_label}>{t(KEY.end_time)}</span>
+                      </div>
+                    </div>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : (
+              <FormField
+                control={form.control}
+                name="end_dt"
+                key={'end_dt'}
+                render={({ field }) => (
+                  <FormItem className={styles.form_item}>
+                    <div className={styles.field_label_row}>
+                      <FormLabel>{t(KEY.end_time)}</FormLabel>
+                      <div className={styles.mode_switch_row}>
+                        <span className={styles.mode_label}>{t(KEY.recruitment_duration)}</span>
+                        <ToggleSwitch checked={!durationMode} onChange={() => setDurationMode((prev) => !prev)} />
+                        <span className={styles.mode_label_active}>{t(KEY.end_time)}</span>
+                      </div>
+                    </div>
+                    <FormControl>
+                      <Input type="datetime-local" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
           </div>
           <div className={styles.input_row}>
             <FormField
@@ -506,7 +562,7 @@ export function EventCreatorAdminPage() {
 
   function onSubmit(values: FormType) {
     const start = values.start_dt ? new Date(values.start_dt) : null;
-    const computedEndDt = start ? new Date(start?.getTime() + (values.duration ?? 0) * 60_000) : null;
+    const computedEndDt = values.end_dt ? new Date(values.end_dt) : null;
     const payload: Partial<EventDto> = {
       ...values,
       visibility_to_dt: computedEndDt ? computedEndDt.toISOString() : '',
