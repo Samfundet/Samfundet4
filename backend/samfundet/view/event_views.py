@@ -3,6 +3,8 @@
 # =============================== #
 from __future__ import annotations
 
+from typing import Any
+
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.filters import SearchFilter
@@ -80,7 +82,7 @@ class EventsUpcomingView(ListAPIView):
         queryset = queryset.filter(start_dt__gt=timezone.now()).order_by('start_dt')
         return queryset
 
-    def list(self, request: Request, *args, **kwargs) -> Response:
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         # Get the paginated response from parent
         response = super().list(request, *args, **kwargs)
 
