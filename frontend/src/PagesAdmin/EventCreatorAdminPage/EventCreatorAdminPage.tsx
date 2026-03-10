@@ -336,7 +336,12 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.category)}</FormLabel>
                   <FormControl>
-                    <Dropdown options={eventCategoryOptions} nullOption={{ label: t(KEY.common_choose) }} {...field} />
+                    <Dropdown
+                      options={eventCategoryOptions}
+                      sortAlphabetic={true}
+                      nullOption={{ label: t(KEY.common_choose) }}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -369,6 +374,7 @@ export function EventCreatorAdminPage() {
                     <FormLabel>{t(KEY.common_venue)}</FormLabel>
                     <FormControl>
                       <Dropdown
+                        sortAlphabetic={true}
                         options={venues.map((venue) => ({ value: venue.name, label: venue.name }))}
                         nullOption={{ label: t(KEY.common_choose) }}
                         {...field}
