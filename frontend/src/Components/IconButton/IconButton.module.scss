@@ -3,19 +3,21 @@
 @use 'src/mixins' as *;
 
 .icon_button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: $grey-3;
   border-radius: 100%;
-  width: 1.75em;
-  height: 1.75em;
+  width: fit-content;
+  padding: 4px;
   cursor: pointer;
   color: white;
+  transition: all 200ms ease-in-out;
 
   &:hover {
-    filter: brightness(105%);
+    filter: brightness(110%);
     transform: scale(1.1);
+    rotate: 10deg;
   }
 }
