@@ -44,8 +44,11 @@ export const LOCAL_DATETIME_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
  */
 export const largeDesktopBpLower = 1201;
 export const desktopBpUpper = 1200;
-export const desktopBpLower = 993;
-export const tabletBpUpper = 992;
+// TODO: old breakpióints commented below, dont remove, fix breakpoints later (temparery navbar fix)
+// export const desktopBpLower = 993;
+// export const tabletBpUpper = 992;
+export const desktopBpLower = 1200;
+export const tabletBpUpper = 1199;
 export const tabletBpLower = 769;
 export const mobileBpUpper = 768;
 

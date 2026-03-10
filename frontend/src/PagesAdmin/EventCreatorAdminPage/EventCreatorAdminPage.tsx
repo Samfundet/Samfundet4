@@ -80,6 +80,7 @@ export function EventCreatorAdminPage() {
   // Setup React Hook Form
   const form = useForm<FormType>({
     resolver: zodResolver(eventSchema),
+    mode: 'onChange',
     defaultValues: {
       title_nb: '',
       title_en: '',
