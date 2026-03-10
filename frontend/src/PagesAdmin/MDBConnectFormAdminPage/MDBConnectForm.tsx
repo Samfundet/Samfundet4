@@ -49,7 +49,7 @@ export function MDBConnectForm() {
             toast.error(error.member_login?.message);
           }
           if (error.password) {
-            toast.error(`${lowerCapitalize(t(KEY.common_password))}:·${error.password?.message}`);
+            toast.error(`${lowerCapitalize(t(KEY.common_password))}: ${error.password?.message}`);
           }
         })}
       >
