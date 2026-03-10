@@ -1,5 +1,4 @@
 import { Icon } from '@iconify/react';
-import { KEY } from '~/i18n/constants';
 import classNames from 'classnames';
 import { format, isValid, parse } from 'date-fns';
 import { enGB, nb } from 'date-fns/locale';
@@ -11,6 +10,7 @@ type DateTimeInputProps = {
   value: string | undefined;
   onChange: (isoString: string) => void;
   className?: string;
+  /** Pass MiniCalendar component */
   calendarPopup?: React.ReactNode;
 };
 
@@ -23,28 +23,22 @@ export function DateTimeInput({ value, onChange, className, calendarPopup }: Dat
   const containerRef = useRef<HTMLDivElement>(null);
   const dateInputRef = useRef<HTMLInputElement>(null);
   const timeInputRef = useRef<HTMLInputElement>(null);
-
+  const lastSyncedValue = useRef<string | undefined>(undefined);
   const currentLocale = i18n.language === 'en' ? enGB : nb;
 
   useEffect(() => {
-    if (value) {
-      const d = new Date(value);
-      if (isValid(d)) {
-        setDateStr(format(d, 'dd/MM/yyyy'));
-        setTimeStr(format(d, 'HH:mm'));
+    if (value !== lastSyncedValue.current) {
+      if (value) {
+        const d = new Date(value);
+        if (isValid(d)) {
+          setDateStr(format(d, 'dd/MM/yyyy'));
+          setTimeStr(format(d, 'HH:mm'));
+        }
+      } else {
+        setDateStr('');
+        setTimeStr('');
       }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (value) {
-      const d = new Date(value);
-      if (isValid(d)) {
-        const formattedDate = format(d, 'dd/MM/yyyy');
-        const formattedTime = format(d, 'HH:mm');
-        if (formattedDate !== dateStr) setDateStr(formattedDate);
-        if (formattedTime !== timeStr) setTimeStr(formattedTime);
-      }
+      lastSyncedValue.current = value;
     }
   }, [value]);
 
@@ -67,8 +61,8 @@ export function DateTimeInput({ value, onChange, className, calendarPopup }: Dat
     const timeParts = timeStr.split(':');
 
     if (isValid(parsedDate) && timeParts.length === 2) {
-      const h = parseInt(timeParts[0], 10);
-      const m = parseInt(timeParts[1], 10);
+      const h = Number.parseInt(timeParts[0], 10);
+      const m = Number.parseInt(timeParts[1], 10);
       if (h >= 0 && h < 24 && m >= 0 && m < 60) {
         parsedDate.setHours(h, m);
         return {
@@ -78,7 +72,7 @@ export function DateTimeInput({ value, onChange, className, calendarPopup }: Dat
         };
       }
     }
-    return { valid: false, message: t(KEY.common_invalid_date) || 'Invalid date' };
+    return { valid: false, message: t('common_invalid_date') || 'Invalid date' };
   }, [dateStr, timeStr, currentLocale, t]);
 
   const tryEmit = (d: string, t: string) => {
@@ -86,14 +80,17 @@ export function DateTimeInput({ value, onChange, className, calendarPopup }: Dat
     const tNums = t.replace(/\D/g, '');
     if (dNums.length === 8 && tNums.length === 4) {
       const dateObj = parse(dNums, 'ddMMyyyy', new Date());
-      const hh = parseInt(tNums.slice(0, 2), 10);
-      const min = parseInt(tNums.slice(2, 4), 10);
+      const hh = Number.parseInt(tNums.slice(0, 2), 10);
+      const min = Number.parseInt(tNums.slice(2, 4), 10);
 
       if (isValid(dateObj) && hh < 24 && min < 60) {
         dateObj.setHours(hh, min);
-        onChange(dateObj.toISOString());
+        const iso = dateObj.toISOString();
+        lastSyncedValue.current = iso;
+        onChange(iso);
       }
     } else if (d === '' && t === '') {
+      lastSyncedValue.current = '';
       onChange('');
     }
   };
@@ -181,7 +178,12 @@ export function DateTimeInput({ value, onChange, className, calendarPopup }: Dat
       </div>
 
       {showCalendar && calendarPopup && (
-        <div className={styles.calendar_popup} onClick={() => setShowCalendar(false)}>
+        <div
+          className={styles.calendar_popup}
+          onClick={() => setShowCalendar(false)}
+          onKeyDown={(e) => e.key === 'Escape' && setShowCalendar(false)}
+          role="presentation"
+        >
           {calendarPopup}
         </div>
       )}
