@@ -166,7 +166,7 @@ class UserPreference(FullCleanSaveMixin):
     theme = models.CharField(max_length=30, choices=UserPreferenceTheme.choices, default=UserPreferenceTheme.LIGHT, blank=True, null=True)
     mirror_dimension = models.BooleanField(default=False)
     cursor_trail = models.BooleanField(default=False)
-    closed_override = models.CharField(max_length=30, default="default")
+    closed_override = models.CharField(max_length=30, default='default')
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
