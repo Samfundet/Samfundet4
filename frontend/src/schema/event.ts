@@ -1,6 +1,26 @@
 import { z } from 'zod';
 import { EventAgeRestriction, EventCategory, EventTicketType } from '~/types';
 
+const optionalUrl = z
+  .string()
+  .trim()
+  .refine(
+    (val) => val === '' || z.string().url().safeParse(val).success,
+    { message: 'Må være en gyldig URL' }
+  )
+  .optional();
+
+const validSpotifyUri = z
+  .string()
+  .trim()
+  .refine(
+    (val) =>
+      val === '' ||
+      /^spotify:(track|artist|album|playlist):[a-zA-Z0-9]{22}$/.test(val),
+    { message: 'Må være gyldig Spotify URI' }
+  )
+  .optional();
+
 // text and description
 export const EVENT_TITLE = z.string().min(1, { message: 'Tittel er påkrevd' });
 export const EVENT_DESCRIPTION_LONG = z.string().min(1, { message: 'Lang beskrivelse er påkrevd' });
@@ -25,16 +45,16 @@ export const EVENT_CUSTOM_TICKET = z.object({
 export const EVENT_REGISTRATION_URL = z.string().url().optional();
 export const EVENT_BILLIG_ID = z.number().optional();
 // Social media links
-export const EVENT_SPOTIFY_URI = z.string().uri().optional();
-export const EVENT_YOUTUBE_LINK = z.string().url().optional();
-export const EVENT_YOUTUBE_EMBED = z.string().url().optional();
-export const EVENT_FACEBOOK_LINK = z.string().url().optional();
-export const EVENT_SOUNDCLOUD_LINK = z.string().url().optional();
-export const EVENT_INSTAGRAM_LINK = z.string().url().optional();
-export const EVENT_X_LINK = z.string().url().optional();
-export const EVENT_LASTFM_LINK = z.string().url().optional();
-export const EVENT_VIMEO_LINK = z.string().url().optional();
-export const EVENT_GENERAL_LINK = z.string().url().optional();
+export const EVENT_SPOTIFY_URI = validSpotifyUri;
+export const EVENT_YOUTUBE_LINK = optionalUrl;
+export const EVENT_YOUTUBE_EMBED = optionalUrl;
+export const EVENT_FACEBOOK_LINK = optionalUrl;
+export const EVENT_SOUNDCLOUD_LINK = optionalUrl;
+export const EVENT_INSTAGRAM_LINK = optionalUrl;
+export const EVENT_X_LINK = optionalUrl;
+export const EVENT_LASTFM_LINK = optionalUrl;
+export const EVENT_VIMEO_LINK = optionalUrl;
+export const EVENT_GENERAL_LINK = optionalUrl;
 // Summary/Publication date
 export const EVENT_VISIBILITY_FROM_DT = z.string().min(1, { message: 'Synlig fra dato er påkrevd' });
 export const EVENT_VISIBILITY_TO_DT = z.string().optional();
