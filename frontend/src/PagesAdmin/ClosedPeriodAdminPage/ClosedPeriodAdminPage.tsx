@@ -74,8 +74,8 @@ export function ClosedPeriodAdminPage() {
             value: 'closed',
           },
         ]}
-        value={globalContext.isClosed}
-        onChange={(value) => globalContext.setIsClosed(value)}
+        value={globalContext.closedOverride}
+        onChange={(value) => globalContext.switchClosedOverride(value)}
       />
     </>
   );

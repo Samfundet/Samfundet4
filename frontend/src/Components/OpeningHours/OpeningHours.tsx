@@ -23,8 +23,8 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
   const globalContext = useGlobalContext();
 
   useEffect(() => {
-    if (globalContext.isClosed !== 'default') {
-      if (globalContext.isClosed === 'closed') {
+    if (globalContext.closedOverride !== 'default') {
+      if (globalContext.closedOverride === 'closed') {
         setIsClosed(true);
         setClosedText(t(KEY.admin_closed_message));
       }
