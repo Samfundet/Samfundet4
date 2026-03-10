@@ -62,15 +62,15 @@ export function ClosedPeriodAdminPage() {
       <Dropdown
         options={[
           {
-            label: 'default',
+            label: t(KEY.common_default),
             value: 'default',
           },
           {
-            label: 'open',
+            label: t(KEY.common_open),
             value: 'open',
           },
           {
-            label: 'closed',
+            label: t(KEY.common_closed),
             value: 'closed',
           },
         ]}
