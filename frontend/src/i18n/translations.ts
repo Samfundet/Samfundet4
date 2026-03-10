@@ -261,6 +261,10 @@ export const nb = prepareTranslations({
 
   // EventPage:
   [KEY.event_registration_url]: 'Registreringslenke',
+  [KEY.event_general_link]: 'Generell lenke',
+  [KEY.event_spotify_uri_help]: 'Legg til spotify URI-en til en spilleliste, og en widget med denne listen vil dukke opp på arrangementsiden.',
+  [KEY.event_youtube_link_help]: 'Legg til Youtube-film som skal linkes til',
+  [KEY.event_youtube_embed_help]: 'Legg til Youtube-film som skal embeddes, så vil den vises på arrangementsiden.',
   [KEY.event_add_ticket]: 'Legg til billett',
 
   // Event categories
@@ -941,6 +945,10 @@ export const en = prepareTranslations({
 
   // EventPage:
   [KEY.event_registration_url]: 'Registration URL',
+  [KEY.event_general_link]: 'General Link',
+  [KEY.event_spotify_uri_help]: 'Add the Spotify URI of a playlist, and a widget will appear on the event page with the chosen playlist.',
+  [KEY.event_youtube_link_help]: 'Add a link to a Youtube movie',
+  [KEY.event_youtube_embed_help]: 'Add a link to a Youtube movie to be embedded, and it will appear on the event page.',
   [KEY.event_add_ticket]: 'Add ticket',
 
   //Purchase Ticket Info:

@@ -272,6 +272,10 @@ export const KEY = {
 
   // EventPage:
   event_registration_url: 'event_registration_url',
+  event_general_link: 'event_general_link',
+  event_spotify_uri_help: 'event_spotify_uri_help',
+  event_youtube_link_help: 'event_youtube_link_help',
+  event_youtube_embed_help: 'event_youtube_embed_help',
   event_add_ticket: 'event_add_ticket',
 
   // Purchase Ticket Info:
