@@ -245,6 +245,15 @@ export const nb = prepareTranslations({
   [KEY.loginpage_username]: 'Brukernavn',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
 
+  // LoginPickerPage:
+  [KEY.loginpicker_page_caption]: 'Innlogging for interne',
+  [KEY.loginpicker_page_title]: 'Hvordan vil du logge inn?',
+  [KEY.loginpicker_page_nav_aria_label]: 'Velg innlogging',
+  [KEY.loginpicker_page_new_platform_title]: 'Ny plattform (samf4)',
+  [KEY.loginpicker_page_new_platform_description]: 'Den nye plattformen for arrangementer og generell bruk',
+  [KEY.loginpicker_page_old_platform_title]: 'Eldre plattform (samf3)',
+  [KEY.loginpicker_page_old_platform_description]: 'Gruppeadministrasjon og andre administrative oppgaver',
+
   // ContributorsPage
   [KEY.contributors_page_title]: 'De frivillige som utvikler Samfundet.no',
   [KEY.contributors_page_text]: 'Samfundet.no utvikles av MG::Web, som er en seksjon i Markedsføringsgjengen.',
@@ -324,6 +333,9 @@ export const nb = prepareTranslations({
   [KEY.navbar_map]: 'Kart og lokaler',
   [KEY.navbar_photos]: 'Foto',
   [KEY.navbar_nybygg]: 'Nybygg',
+  [KEY.navbar_bar]: 'Bar',
+  [KEY.navbar_stages]: 'Scener',
+  [KEY.navbar_club]: 'Klubb',
 
   // Common navigation - links for samf 3 (used in navbar and footer):
 
@@ -910,6 +922,15 @@ export const en = prepareTranslations({
   [KEY.loginpage_passwords_must_match]: 'Passwords must match',
   [KEY.loginpage_login_failed]: 'Login failed',
 
+  // LoginPickerPage:
+  [KEY.loginpicker_page_caption]: 'Internal login',
+  [KEY.loginpicker_page_title]: 'How would you like to log in?',
+  [KEY.loginpicker_page_nav_aria_label]: 'Choose login',
+  [KEY.loginpicker_page_new_platform_title]: 'New platform (samf4)',
+  [KEY.loginpicker_page_new_platform_description]: 'The new platform for events and general use',
+  [KEY.loginpicker_page_old_platform_title]: 'Legacy platform (samf3)',
+  [KEY.loginpicker_page_old_platform_description]: 'Group administration and other administrative tasks',
+
   // GangsPage:
   [KEY.gangspage_title]: 'The groups at Samfundet',
 
@@ -988,6 +1009,9 @@ export const en = prepareTranslations({
   [KEY.navbar_photos]: 'Photos',
   [KEY.navbar_nybygg]: 'New building',
   [KEY.navbar_map]: 'Map and venues',
+  [KEY.navbar_bar]: 'Bar',
+  [KEY.navbar_stages]: 'Stages',
+  [KEY.navbar_club]: 'Club',
 
   // Common navigation (used in navbar and footer):
 

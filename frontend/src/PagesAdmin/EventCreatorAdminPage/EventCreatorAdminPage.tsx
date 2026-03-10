@@ -80,6 +80,7 @@ export function EventCreatorAdminPage() {
   // Setup React Hook Form
   const form = useForm<FormType>({
     resolver: zodResolver(eventSchema),
+    mode: 'onChange',
     defaultValues: {
       title_nb: '',
       title_en: '',
@@ -88,14 +89,14 @@ export function EventCreatorAdminPage() {
       description_short_nb: '',
       description_short_en: '',
       start_dt: '',
-      duration: 0,
+      duration: undefined,
       end_dt: '',
-      category: eventCategoryOptions[0].value,
+      category: undefined,
       host: '',
-      location: locationOptions.length > 0 ? locationOptions[0].value : '',
+      location: undefined,
       capacity: undefined,
-      age_restriction: 'none',
-      ticket_type: 'free',
+      age_restriction: undefined,
+      ticket_type: undefined,
       custom_tickets: [],
       billig_id: undefined,
       image: undefined,
@@ -124,7 +125,7 @@ export function EventCreatorAdminPage() {
             description_short_nb: eventData.description_short_nb || '',
             description_short_en: eventData.description_short_en || '',
             start_dt: eventData.start_dt ? utcTimestampToLocal(eventData.start_dt, false) : '',
-            duration: eventDuration || 0,
+            duration: eventDuration || undefined,
             end_dt: eventData.end_dt ? utcTimestampToLocal(eventData.end_dt, false) : '',
             category: eventData.category || '',
             host: eventData.host || '',
@@ -284,7 +285,16 @@ export function EventCreatorAdminPage() {
       title_nb: 'Dato og informasjon',
       title_en: 'Date & info',
       validate: (data) => {
-        return !!(data.start_dt && data.duration > 0 && data.category && data.host && data.location);
+        return !!(
+          data.start_dt &&
+          data.duration !== undefined &&
+          data.duration > 0 &&
+          data.category &&
+          data.host &&
+          data.location &&
+          data.capacity !== undefined &&
+          data.capacity > 0
+        );
       },
       template: (
         <>
@@ -318,7 +328,10 @@ export function EventCreatorAdminPage() {
                     <Input
                       type="number"
                       {...field}
-                      onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        field.onChange(v === '' ? '' : Number.parseInt(v));
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -335,7 +348,12 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.category)}</FormLabel>
                   <FormControl>
-                    <Dropdown options={eventCategoryOptions} {...field} />
+                    <Dropdown
+                      options={eventCategoryOptions}
+                      sortAlphabetic={true}
+                      nullOption={{ label: t(KEY.common_choose) }}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -368,7 +386,9 @@ export function EventCreatorAdminPage() {
                     <FormLabel>{t(KEY.common_venue)}</FormLabel>
                     <FormControl>
                       <Dropdown
+                        sortAlphabetic={true}
                         options={venues.map((venue) => ({ value: venue.name, label: venue.name }))}
+                        nullOption={{ label: t(KEY.common_choose) }}
                         {...field}
                       />
                     </FormControl>
@@ -390,7 +410,7 @@ export function EventCreatorAdminPage() {
                       {...field}
                       onChange={(e) => {
                         const v = e.target.value;
-                        field.onChange(v === '' ? undefined : Number.parseInt(v, 10));
+                        field.onChange(v === '' ? '' : Number.parseInt(v));
                       }}
                     />
                   </FormControl>
@@ -420,7 +440,7 @@ export function EventCreatorAdminPage() {
               <FormItem className={styles.form_item}>
                 <FormLabel>{t(KEY.common_age_limit)}</FormLabel>
                 <FormControl>
-                  <Dropdown options={ageLimitOptions} {...field} />
+                  <Dropdown options={ageLimitOptions} nullOption={{ label: t(KEY.common_choose) }} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
