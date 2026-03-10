@@ -255,6 +255,15 @@ export const KEY = {
   loginpage_passwords_must_match: 'loginpage_passwords_must_match',
   loginpage_login_failed: 'loginpage_login_failed',
 
+  // LoginPickerPage:
+  loginpicker_page_caption: 'loginpicker_page_caption',
+  loginpicker_page_title: 'loginpicker_page_title',
+  loginpicker_page_nav_aria_label: 'loginpicker_page_nav_aria_label',
+  loginpicker_page_new_platform_title: 'loginpicker_page_new_platform_title',
+  loginpicker_page_new_platform_description: 'loginpicker_page_new_platform_description',
+  loginpicker_page_old_platform_title: 'loginpicker_page_old_platform_title',
+  loginpicker_page_old_platform_description: 'loginpicker_page_old_platform_description',
+
   contributors_page_title: 'contributors_page_title',
   contributors_page_text: 'contributors_page_text',
   contributors_page_past_developers: 'contributors_page_past_developers',
@@ -338,6 +347,9 @@ export const KEY = {
   navbar_map: 'navbar_map',
   navbar_photos: 'navbar_photos',
   navbar_nybygg: 'navbar_nybygg',
+  navbar_bar: 'navbar_bar',
+  navbar_stages: 'navbar_stages',
+  navbar_club: 'navbar_club',
 
   footer_developed_by: 'footer_developed_by',
   footer_have_questions: 'footer_have_questions',

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { InputField } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import type { EventCategoryValue, SetState } from '~/types';
-import { lowerCapitalize } from '~/utils';
+import { getEventCategoryKey, lowerCapitalize } from '~/utils';
 import { Dropdown } from '../Dropdown';
 import type { DropdownOption } from '../Dropdown/Dropdown';
 import styles from './EventQuery.module.scss';
@@ -33,7 +33,7 @@ export function EventQuery({
   });
 
   const categoryOptions: DropdownOption<string | null>[] = (categories ?? []).map((category) => {
-    return { label: category, value: category } as DropdownOption<string>;
+    return { label: t(getEventCategoryKey(category)), value: category } as DropdownOption<string>;
   });
 
   return (
@@ -45,6 +45,7 @@ export function EventQuery({
         icon="ic:baseline-search"
       />
       <Dropdown
+        sortAlphabetic={true}
         options={venueOptions}
         onChange={(val) => setSelectedVenue(val as string)}
         className={styles.element}
@@ -52,6 +53,7 @@ export function EventQuery({
       />
 
       <Dropdown
+        sortAlphabetic={true}
         options={categoryOptions}
         onChange={(val) => setSelectedCategory(val as EventCategoryValue)}
         className={styles.element}
