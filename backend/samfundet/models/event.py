@@ -169,7 +169,7 @@ class Event(CustomBaseModel):
     email_contact = models.EmailField(max_length=200, blank=True, null=True)
 
     host_link = models.URLField(max_length=200, blank=True, null=True)
-    
+
     spotify_uri = models.CharField(max_length=200, blank=True, null=True)
     youtube_link = models.URLField(max_length=200, blank=True, null=True)
     youtube_embed = models.URLField(max_length=200, blank=True, null=True)
