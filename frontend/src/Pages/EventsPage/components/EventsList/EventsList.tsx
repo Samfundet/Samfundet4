@@ -78,7 +78,7 @@ export function EventsList({ events }: EventsListProps) {
         {
           content: (
             <div style={{ display: 'flex', gap: 10 }}>
-              <EventCrudButtons title={dbT(event, 'title')} id={event.id.toString()} icon_size={15} />
+              <EventCrudButtons title={dbT(event, 'title')} id={event.id.toString()} height={20} />
             </div>
           ),
         },
