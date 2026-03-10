@@ -207,6 +207,11 @@ class Event(CustomBaseModel):
     billig_id = models.IntegerField(blank=True, null=True, unique=True)
 
     # ======================== #
+    #        Visibility        #
+    # ======================== #
+    is_hidden = models.BooleanField(default=False)
+
+    # ======================== #
     #    Computed Properties   #
     # ======================== #
 

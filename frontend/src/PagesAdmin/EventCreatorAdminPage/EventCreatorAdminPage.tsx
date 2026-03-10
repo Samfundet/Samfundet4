@@ -20,6 +20,7 @@ import {
   ImageCard,
   Input,
   Textarea,
+  ToggleSwitch,
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
@@ -102,6 +103,7 @@ export function EventCreatorAdminPage() {
       image: undefined,
       visibility_from_dt: '',
       visibility_to_dt: '',
+      is_hidden: false,
     },
   });
 
@@ -498,20 +500,37 @@ export function EventCreatorAdminPage() {
         return !!data.visibility_from_dt;
       },
       template: (
-        <FormField
-          control={form.control}
-          name="visibility_from_dt"
-          key="visibility_from_dt"
-          render={({ field }) => (
-            <FormItem className={styles.form_item}>
-              <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
-              <FormControl>
-                <Input type="datetime-local" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <>
+          <FormField
+            control={form.control}
+            name="visibility_from_dt"
+            key="visibility_from_dt"
+            render={({ field }) => (
+              <FormItem className={styles.form_item}>
+                <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
+                <FormControl>
+                  <Input type="datetime-local" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="is_hidden"
+            key="is_hidden"
+            render={({ field }) => (
+              <FormItem className={styles.form_item}>
+                <FormLabel>{t(KEY.event_form_is_hidden)}</FormLabel>
+                <FormControl>
+                  <ToggleSwitch checked={field.value} onChange={() => field.onChange(!field.value)} />
+                </FormControl>
+                <p>{t(KEY.event_form_is_hidden_help)}</p>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </>
       ),
     },
   ];
