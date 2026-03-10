@@ -11,6 +11,7 @@ import type { z } from 'zod';
 import {
   Button,
   DateTimeInput,
+  MiniCalendar,
   Dropdown,
   Form,
   FormControl,
@@ -293,21 +294,36 @@ export function EventCreatorAdminPage() {
             <FormField
               control={form.control}
               name="start_dt"
-              key={'start_dt'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>
                     {t(KEY.common_date)} & {t(KEY.common_time)}
                   </FormLabel>
                   <FormControl>
-                    {/* HERE IS THE NEW COMPONENT */}
-                    <DateTimeInput value={field.value} onChange={field.onChange} />
+                    <DateTimeInput
+                      value={field.value}
+                      onChange={field.onChange}
+                      calendarPopup={
+                        <MiniCalendar
+                          displayLabel
+                          baseDate={field.value ? new Date(field.value) : new Date()}
+                          initialSelectedDate={field.value ? new Date(field.value) : null}
+                          onChange={(newDate) => {
+                            if (newDate) {
+                              const currentFullDate = field.value ? new Date(field.value) : new Date();
+                              newDate.setHours(currentFullDate.getHours());
+                              newDate.setMinutes(currentFullDate.getMinutes());
+                              field.onChange(newDate.toISOString());
+                            }
+                          }}
+                        />
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* The duration field remains the same */}
             <FormField
               control={form.control}
               name="duration"

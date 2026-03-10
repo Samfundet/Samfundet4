@@ -1,16 +1,21 @@
 import { Icon } from '@iconify/react';
+import { KEY } from '~/i18n/constants';
 import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
-import { MiniCalendar } from '~/Components';
+import { format, isValid, parse } from 'date-fns';
+import { enGB, nb } from 'date-fns/locale';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './DateTimeInput.module.scss';
 
 type DateTimeInputProps = {
   value: string | undefined;
   onChange: (isoString: string) => void;
   className?: string;
+  calendarPopup?: React.ReactNode;
 };
 
-export function DateTimeInput({ value, onChange, className }: DateTimeInputProps) {
+export function DateTimeInput({ value, onChange, className, calendarPopup }: DateTimeInputProps) {
+  const { t, i18n } = useTranslation();
   const [dateStr, setDateStr] = useState('');
   const [timeStr, setTimeStr] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
@@ -19,20 +24,29 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
   const dateInputRef = useRef<HTMLInputElement>(null);
   const timeInputRef = useRef<HTMLInputElement>(null);
 
+  const currentLocale = i18n.language === 'en' ? enGB : nb;
+
   useEffect(() => {
     if (value) {
       const d = new Date(value);
-      if (!Number.isNaN(d.getTime())) {
-        const dd = String(d.getDate()).padStart(2, '0');
-        const mm = String(d.getMonth() + 1).padStart(2, '0');
-        const yyyy = d.getFullYear();
-        const HH = String(d.getHours()).padStart(2, '0');
-        const min = String(d.getMinutes()).padStart(2, '0');
-        setDateStr(`${dd}/${mm}/${yyyy}`);
-        setTimeStr(`${HH}:${min}`);
+      if (isValid(d)) {
+        setDateStr(format(d, 'dd/MM/yyyy'));
+        setTimeStr(format(d, 'HH:mm'));
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (value) {
+      const d = new Date(value);
+      if (isValid(d)) {
+        const formattedDate = format(d, 'dd/MM/yyyy');
+        const formattedTime = format(d, 'HH:mm');
+        if (formattedDate !== dateStr) setDateStr(formattedDate);
+        if (formattedTime !== timeStr) setTimeStr(formattedTime);
+      }
+    }
+  }, [value]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -44,18 +58,41 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const parseResult = useMemo(() => {
+    if (dateStr.length < 10 || timeStr.length < 5) {
+      return { valid: true, message: '' };
+    }
+
+    const parsedDate = parse(dateStr, 'dd/MM/yyyy', new Date());
+    const timeParts = timeStr.split(':');
+
+    if (isValid(parsedDate) && timeParts.length === 2) {
+      const h = parseInt(timeParts[0], 10);
+      const m = parseInt(timeParts[1], 10);
+      if (h >= 0 && h < 24 && m >= 0 && m < 60) {
+        parsedDate.setHours(h, m);
+        return {
+          valid: true,
+          message: format(parsedDate, 'PPPP p', { locale: currentLocale }),
+          date: parsedDate,
+        };
+      }
+    }
+    return { valid: false, message: t(KEY.common_invalid_date) || 'Invalid date' };
+  }, [dateStr, timeStr, currentLocale, t]);
+
   const tryEmit = (d: string, t: string) => {
     const dNums = d.replace(/\D/g, '');
     const tNums = t.replace(/\D/g, '');
-    if (dNums.length === 8 && tNums.length >= 3) {
-      const dateObj = new Date(
-        Number.parseInt(dNums.slice(4, 8)),
-        Number.parseInt(dNums.slice(2, 4)) - 1,
-        Number.parseInt(dNums.slice(0, 2)),
-        Number.parseInt(tNums.slice(0, 2)),
-        Number.parseInt(tNums.slice(2, 4)),
-      );
-      if (!Number.isNaN(dateObj.getTime())) onChange(dateObj.toISOString());
+    if (dNums.length === 8 && tNums.length === 4) {
+      const dateObj = parse(dNums, 'ddMMyyyy', new Date());
+      const hh = parseInt(tNums.slice(0, 2), 10);
+      const min = parseInt(tNums.slice(2, 4), 10);
+
+      if (isValid(dateObj) && hh < 24 && min < 60) {
+        dateObj.setHours(hh, min);
+        onChange(dateObj.toISOString());
+      }
     } else if (d === '' && t === '') {
       onChange('');
     }
@@ -83,7 +120,6 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     const isDeleting = val.length < timeStr.length;
-
     if (isDeleting) {
       setTimeStr(val);
       tryEmit(dateStr, val);
@@ -92,28 +128,11 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
 
     const nums = val.replace(/\D/g, '');
     let formatted = nums;
-
-    if (nums.length > 2) {
-      formatted = `${nums.slice(0, 2)}:${nums.slice(2, 4)}`;
-    } else if (nums.length === 2) {
-      formatted = `${nums}:`;
-    }
+    if (nums.length > 2) formatted = `${nums.slice(0, 2)}:${nums.slice(2, 4)}`;
+    else if (nums.length === 2) formatted = `${nums}:`;
 
     setTimeStr(formatted);
     tryEmit(dateStr, formatted);
-  };
-
-  const onCalendarSelect = (date: Date | null) => {
-    if (date) {
-      const dd = String(date.getDate()).padStart(2, '0');
-      const mm = String(date.getMonth() + 1).padStart(2, '0');
-      const yyyy = date.getFullYear();
-      const newDateStr = `${dd}/${mm}/${yyyy}`;
-      setDateStr(newDateStr);
-      tryEmit(newDateStr, timeStr);
-      setShowCalendar(false);
-      timeInputRef.current?.focus();
-    }
   };
 
   return (
@@ -129,7 +148,12 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
           placeholder="DD/MM/YYYY"
           maxLength={10}
         />
-        <button type="button" className={styles.icon_button} onClick={() => setShowCalendar(!showCalendar)}>
+        <button
+          type="button"
+          className={styles.icon_button}
+          onClick={() => setShowCalendar(!showCalendar)}
+          tabIndex={-1}
+        >
           <Icon icon="carbon:calendar" />
         </button>
         <div className={styles.separator} />
@@ -145,14 +169,20 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
           maxLength={5}
         />
       </div>
-      {showCalendar && (
-        <div className={styles.calendar_popup}>
-          <MiniCalendar
-            baseDate={new Date()}
-            initialSelectedDate={value ? new Date(value) : null}
-            onChange={onCalendarSelect}
-            displayLabel
-          />
+
+      <div
+        className={classNames(
+          styles.hint,
+          !parseResult.valid && styles.hint_error,
+          parseResult.message === '' && styles.hint_hidden,
+        )}
+      >
+        {parseResult.message}
+      </div>
+
+      {showCalendar && calendarPopup && (
+        <div className={styles.calendar_popup} onClick={() => setShowCalendar(false)}>
+          {calendarPopup}
         </div>
       )}
     </div>

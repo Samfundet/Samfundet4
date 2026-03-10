@@ -99,6 +99,29 @@
   }
 }
 
+.hint {
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+  margin-left: 0.2rem;
+  color: $grey-2;
+  font-style: italic;
+  min-height: 1.2rem;
+  transition: color 0.2s;
+
+  @include theme-dark {
+    color: $grey-3;
+  }
+}
+
+.hint_error {
+  color: $red;
+  font-weight: 600;
+
+  @include theme-dark {
+    color: lighten($red, 10%);
+  }
+}
+
 .calendar_popup {
   position: absolute;
   top: calc(100% + 5px);

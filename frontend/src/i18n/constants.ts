@@ -57,6 +57,8 @@ export const KEY = {
   pick_a_date: 'pick_a_date',
 
   // No category:
+  common_waiting: 'common_waiting',
+  common_invalid_date: 'common_invalid_date',
   common_content: 'common_content',
   common_url: 'common_url',
   common_manage: 'common_manage',
