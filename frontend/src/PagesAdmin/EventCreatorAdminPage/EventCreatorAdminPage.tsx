@@ -22,6 +22,7 @@ import {
   Textarea,
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
+import { FormDescription } from '~/Components/Forms/Form';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getEvent, getVenues, postEvent } from '~/api';
@@ -35,9 +36,8 @@ import { EventAgeRestriction, type EventAgeRestrictionValue, EventCategory, type
 import { dbT, getAgeRestrictionKey, getEventCategoryKey, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
-import { EventFormType, eventSchema } from './EventCreatorSchema';
+import { type EventFormType, eventSchema } from './EventCreatorSchema';
 import { PaymentForm } from './components/PaymentForm';
-import { FormDescription } from '~/Components/Forms/Form';
 
 // Define the Zod schema for event validation
 
@@ -196,6 +196,16 @@ export function EventCreatorAdminPage() {
             visibility_from_dt: eventData.visibility_from_dt
               ? utcTimestampToLocal(eventData.visibility_from_dt, false)
               : '',
+            spotify_uri: eventData.spotify_uri || '',
+            youtube_link: eventData.youtube_link || '',
+            youtube_embed: eventData.youtube_embed || '',
+            facebook_link: eventData.facebook_link || '',
+            soundcloud_link: eventData.soundcloud_link || '',
+            instagram_link: eventData.instagram_link || '',
+            x_link: eventData.x_link || '',
+            lastfm_link: eventData.lastfm_link || '',
+            vimeo_link: eventData.vimeo_link || '',
+            general_link: eventData.general_link || '',
           });
           setShowSpinner(false);
         })
@@ -535,7 +545,12 @@ export function EventCreatorAdminPage() {
                 <FormItem className={styles.socialMediaItem}>
                   <FormLabel className={styles.socialMediaLabel}>{SOCIAL_LABELS[name]}</FormLabel>
                   <FormControl>
-                    <input className={styles.socialMediaInput} type="text" {...field} placeholder={name === 'spotify_uri' ? 'spotify:...' : 'http://...'} />
+                    <input
+                      className={styles.socialMediaInput}
+                      type="text"
+                      {...field}
+                      placeholder={name === 'spotify_uri' ? 'spotify:...' : 'http://...'}
+                    />
                   </FormControl>
                   {SOCIAL_MEDIA_HELP[name] ? <FormDescription>{SOCIAL_MEDIA_HELP[name]}</FormDescription> : null}
                   <FormMessage />

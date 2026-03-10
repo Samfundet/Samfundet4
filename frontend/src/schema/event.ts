@@ -4,21 +4,15 @@ import { EventAgeRestriction, EventCategory, EventTicketType } from '~/types';
 const optionalUrl = z
   .string()
   .trim()
-  .refine(
-    (val) => val === '' || z.string().url().safeParse(val).success,
-    { message: 'Må være en gyldig URL' }
-  )
+  .refine((val) => val === '' || z.string().url().safeParse(val).success, { message: 'Må være en gyldig URL' })
   .optional();
 
 const validSpotifyUri = z
   .string()
   .trim()
-  .refine(
-    (val) =>
-      val === '' ||
-      /^spotify:(track|artist|album|playlist):[a-zA-Z0-9]{22}$/.test(val),
-    { message: 'Må være gyldig Spotify URI' }
-  )
+  .refine((val) => val === '' || /^spotify:(track|artist|album|playlist):[a-zA-Z0-9]{22}$/.test(val), {
+    message: 'Må være gyldig Spotify URI',
+  })
   .optional();
 
 // text and description
