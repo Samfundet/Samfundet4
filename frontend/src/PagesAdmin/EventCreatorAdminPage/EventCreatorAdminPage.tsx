@@ -35,8 +35,9 @@ import { EventAgeRestriction, type EventAgeRestrictionValue, EventCategory, type
 import { dbT, getAgeRestrictionKey, getEventCategoryKey, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
-import { eventSchema } from './EventCreatorSchema';
+import { EventFormType, eventSchema } from './EventCreatorSchema';
 import { PaymentForm } from './components/PaymentForm';
+import { FormDescription } from '~/Components/Forms/Form';
 
 // Define the Zod schema for event validation
 
@@ -50,6 +51,20 @@ type EventCreatorStep = {
   template: ReactElement;
   validate: (data: FormType) => boolean;
 };
+
+type SocialLinkKey = Extract<
+  keyof EventFormType,
+  | 'spotify_uri'
+  | 'youtube_link'
+  | 'youtube_embed'
+  | 'facebook_link'
+  | 'soundcloud_link'
+  | 'instagram_link'
+  | 'x_link'
+  | 'lastfm_link'
+  | 'vimeo_link'
+  | 'general_link'
+>;
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
@@ -76,6 +91,38 @@ export function EventCreatorAdminPage() {
     value: age,
     label: t(getAgeRestrictionKey(age)),
   }));
+
+  const SOCIAL_KEYS: readonly SocialLinkKey[] = [
+    'spotify_uri',
+    'youtube_link',
+    'youtube_embed',
+    'facebook_link',
+    'soundcloud_link',
+    'instagram_link',
+    'x_link',
+    'lastfm_link',
+    'vimeo_link',
+    'general_link',
+  ] as const;
+
+  const SOCIAL_LABELS: Record<SocialLinkKey, string> = {
+    spotify_uri: 'Spotify URI',
+    youtube_link: 'YouTube link',
+    youtube_embed: 'YouTube embed',
+    facebook_link: 'Facebook link',
+    soundcloud_link: 'SoundCloud link',
+    instagram_link: 'Instagram link',
+    x_link: 'X link',
+    lastfm_link: 'Last.fm link',
+    vimeo_link: 'Vimeo link',
+    general_link: t(KEY.event_general_link),
+  };
+
+  const SOCIAL_MEDIA_HELP: Partial<Record<SocialLinkKey, string>> = {
+    spotify_uri: t(KEY.event_spotify_uri_help),
+    youtube_link: t(KEY.event_youtube_link_help),
+    youtube_embed: t(KEY.event_youtube_embed_help),
+  };
 
   // Setup React Hook Form
   const form = useForm<FormType>({
@@ -454,150 +501,30 @@ export function EventCreatorAdminPage() {
       key: 'socialmedia',
       title_nb: 'Sosiale medier',
       title_en: 'Social media',
-      validate: (data) => {
-        return !!data.age_restriction && !!data.ticket_type;
+      validate: () => {
+        const socialFields = SOCIAL_KEYS;
+        return !socialFields.some((name) => !!form.formState.errors[name]);
       },
       template: (
-        <>
-          <div className={styles.input_row}>
+        <div className={styles.socialMediaGrid}>
+          {SOCIAL_KEYS.map((name) => (
             <FormField
-              name="registration_url"
+              key={name}
+              name={name}
               control={form.control}
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
+                <FormItem className={styles.socialMediaItem}>
+                  <FormLabel className={styles.socialMediaLabel}>{SOCIAL_LABELS[name]}</FormLabel>
                   <FormControl>
-                    <input type="text" {...field} placeholder="http://..." />
+                    <input className={styles.socialMediaInput} type="text" {...field} placeholder={name === 'spotify_uri' ? 'spotify:...' : 'http://...'} />
                   </FormControl>
+                  {SOCIAL_MEDIA_HELP[name] ? <FormDescription>{SOCIAL_MEDIA_HELP[name]}</FormDescription> : null}
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
-              name="registration_url"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
-                  <FormControl>
-                    <input type="text" {...field} placeholder="http://..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="registration_url"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
-                  <FormControl>
-                    <input type="text" {...field} placeholder="http://..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className={styles.input_row}>
-            <FormField
-              name="registration_url"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
-                  <FormControl>
-                    <input type="text" {...field} placeholder="http://..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="registration_url"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
-                  <FormControl>
-                    <input type="text" {...field} placeholder="http://..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="registration_url"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
-                  <FormControl>
-                    <input type="text" {...field} placeholder="http://..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className={styles.input_row}>
-            <FormField
-              name="registration_url"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
-                  <FormControl>
-                    <input type="text" {...field} placeholder="http://..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="registration_url"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
-                  <FormControl>
-                    <input type="text" {...field} placeholder="http://..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="registration_url"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
-                  <FormControl>
-                    <input type="text" {...field} placeholder="http://..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className={styles.input_row}>
-            <FormField
-              name="registration_url"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
-                  <FormControl>
-                    <input type="text" {...field} placeholder="http://..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </>
+          ))}
+        </div>
       ),
     },
     // Graphics.
