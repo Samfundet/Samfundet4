@@ -658,6 +658,17 @@ export const KEY = {
   error_server_error_description: 'error_server_error_description',
   error_submitting_reservation: 'error_submitting_reservation',
   error_invalid_reservation_data: 'error_invalid_reservation_data',
+
+  // Event form validation
+  event_form_title_required: 'event_form_title_required',
+  event_form_description_long_required: 'event_form_description_long_required',
+  event_form_description_short_required: 'event_form_description_short_required',
+  event_form_start_dt_required: 'event_form_start_dt_required',
+  event_form_duration_min: 'event_form_duration_min',
+  event_form_host_required: 'event_form_host_required',
+  event_form_location_required: 'event_form_location_required',
+  event_form_capacity_min: 'event_form_capacity_min',
+  event_form_visibility_from_required: 'event_form_visibility_from_required',
 } as const;
 
 // This will ensure that each value matches the key exactly.

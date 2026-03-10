@@ -673,6 +673,17 @@ export const nb = prepareTranslations({
   [KEY.error_server_error_description]: 'En serverfeil har opptstått',
   [KEY.error_submitting_reservation]: 'Det skjedde en feil ved innsending av reservasjon',
   [KEY.error_invalid_reservation_data]: 'Ugyldig reservasjonsdata',
+
+  // Event form validation
+  [KEY.event_form_title_required]: 'Tittel er påkrevd',
+  [KEY.event_form_description_long_required]: 'Lang beskrivelse er påkrevd',
+  [KEY.event_form_description_short_required]: 'Kort beskrivelse er påkrevd',
+  [KEY.event_form_start_dt_required]: 'Dato og tid er påkrevd',
+  [KEY.event_form_duration_min]: 'Varighet må være større enn 0',
+  [KEY.event_form_host_required]: 'Arrangør er påkrevd',
+  [KEY.event_form_location_required]: 'Lokale er påkrevd',
+  [KEY.event_form_capacity_min]: 'Kapasitet må være større enn 0',
+  [KEY.event_form_visibility_from_required]: 'Synlig fra dato er påkrevd',
 });
 
 export const en = prepareTranslations({
@@ -1339,4 +1350,15 @@ export const en = prepareTranslations({
   [KEY.error_server_error_description]: 'A server error has occurred',
   [KEY.error_submitting_reservation]: 'An error occurred while submitting the reservation',
   [KEY.error_invalid_reservation_data]: 'Invalid reservation data',
+
+  // Event form validation
+  [KEY.event_form_title_required]: 'Title is required',
+  [KEY.event_form_description_long_required]: 'Long description is required',
+  [KEY.event_form_description_short_required]: 'Short description is required',
+  [KEY.event_form_start_dt_required]: 'Date and time is required',
+  [KEY.event_form_duration_min]: 'Duration must be greater than 0',
+  [KEY.event_form_host_required]: 'Host is required',
+  [KEY.event_form_location_required]: 'Venue is required',
+  [KEY.event_form_capacity_min]: 'Capacity must be greater than 0',
+  [KEY.event_form_visibility_from_required]: 'Visible from date is required',
 });
