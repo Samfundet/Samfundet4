@@ -82,6 +82,16 @@ export function ComponentPage() {
             ...billig,
           }
         : undefined,
+      spotify_uri: '',
+      youtube_link: '',
+      youtube_embed: '',
+      facebook_link: '',
+      soundcloud_link: '',
+      instagram_link: '',
+      x_link: '',
+      lastfm_link: '',
+      vimeo_link: '',
+      general_link: '',
       ...override,
     };
   }

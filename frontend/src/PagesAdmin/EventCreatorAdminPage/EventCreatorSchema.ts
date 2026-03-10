@@ -4,27 +4,31 @@ import {
   EVENT_BILLIG_ID,
   EVENT_CAPACITY,
   EVENT_CATEGORY,
+  EVENT_CUSTOM_TICKET,
   EVENT_DESCRIPTION_LONG,
   EVENT_DESCRIPTION_SHORT,
   EVENT_DURATION,
   EVENT_END_DT,
+  EVENT_FACEBOOK_LINK,
+  EVENT_GENERAL_LINK,
   EVENT_HOST,
+  EVENT_INSTAGRAM_LINK,
+  EVENT_LASTFM_LINK,
   EVENT_LOCATION,
   EVENT_REGISTRATION_URL,
+  EVENT_SOUNDCLOUD_LINK,
+  EVENT_SPOTIFY_URI,
   EVENT_START_DT,
   EVENT_TICKET_TYPE,
   EVENT_TITLE,
+  EVENT_VIMEO_LINK,
   EVENT_VISIBILITY_FROM_DT,
   EVENT_VISIBILITY_TO_DT,
+  EVENT_X_LINK,
+  EVENT_YOUTUBE_EMBED,
+  EVENT_YOUTUBE_LINK,
 } from '~/schema/event';
 import { OPTIONAL_IMAGE } from '~/schema/samfImage';
-
-const event_custom_ticket = z.object({
-  id: z.number(),
-  name_nb: z.string().min(1),
-  name_en: z.string().min(1),
-  price: z.number().min(0),
-});
 
 export const eventSchema = z.object({
   // text and description
@@ -45,9 +49,20 @@ export const eventSchema = z.object({
   // Payment/registration
   age_restriction: EVENT_AGE_RESTRICTION,
   ticket_type: EVENT_TICKET_TYPE,
-  custom_tickets: z.array(event_custom_ticket).optional(),
+  custom_tickets: z.array(EVENT_CUSTOM_TICKET).optional(),
   registration_url: EVENT_REGISTRATION_URL,
   billig_id: EVENT_BILLIG_ID,
+  // Social media links
+  spotify_uri: EVENT_SPOTIFY_URI,
+  youtube_link: EVENT_YOUTUBE_LINK,
+  youtube_embed: EVENT_YOUTUBE_EMBED,
+  facebook_link: EVENT_FACEBOOK_LINK,
+  soundcloud_link: EVENT_SOUNDCLOUD_LINK,
+  instagram_link: EVENT_INSTAGRAM_LINK,
+  x_link: EVENT_X_LINK,
+  lastfm_link: EVENT_LASTFM_LINK,
+  vimeo_link: EVENT_VIMEO_LINK,
+  general_link: EVENT_GENERAL_LINK,
   // Graphics
   image: OPTIONAL_IMAGE,
   // Summary/Publication date

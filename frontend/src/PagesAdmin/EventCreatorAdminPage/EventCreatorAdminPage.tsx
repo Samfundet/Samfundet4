@@ -22,6 +22,7 @@ import {
   Textarea,
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
+import { FormDescription } from '~/Components/Forms/Form';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getEvent, getVenues, postEvent } from '~/api';
@@ -35,7 +36,7 @@ import { EventAgeRestriction, type EventAgeRestrictionValue, EventCategory, type
 import { dbT, getAgeRestrictionKey, getEventCategoryKey, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
-import { eventSchema } from './EventCreatorSchema';
+import { type EventFormType, eventSchema } from './EventCreatorSchema';
 import { PaymentForm } from './components/PaymentForm';
 
 // Define the Zod schema for event validation
@@ -50,6 +51,20 @@ type EventCreatorStep = {
   template: ReactElement;
   validate: (data: FormType) => boolean;
 };
+
+type SocialLinkKey = Extract<
+  keyof EventFormType,
+  | 'spotify_uri'
+  | 'youtube_link'
+  | 'youtube_embed'
+  | 'facebook_link'
+  | 'soundcloud_link'
+  | 'instagram_link'
+  | 'x_link'
+  | 'lastfm_link'
+  | 'vimeo_link'
+  | 'general_link'
+>;
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
@@ -77,6 +92,38 @@ export function EventCreatorAdminPage() {
     label: t(getAgeRestrictionKey(age)),
   }));
 
+  const SOCIAL_KEYS: readonly SocialLinkKey[] = [
+    'spotify_uri',
+    'youtube_link',
+    'youtube_embed',
+    'facebook_link',
+    'soundcloud_link',
+    'instagram_link',
+    'x_link',
+    'lastfm_link',
+    'vimeo_link',
+    'general_link',
+  ] as const;
+
+  const SOCIAL_LABELS: Record<SocialLinkKey, string> = {
+    spotify_uri: 'Spotify URI',
+    youtube_link: 'YouTube link',
+    youtube_embed: 'YouTube embed',
+    facebook_link: 'Facebook link',
+    soundcloud_link: 'SoundCloud link',
+    instagram_link: 'Instagram link',
+    x_link: 'X link',
+    lastfm_link: 'Last.fm link',
+    vimeo_link: 'Vimeo link',
+    general_link: t(KEY.event_general_link),
+  };
+
+  const SOCIAL_MEDIA_HELP: Partial<Record<SocialLinkKey, string>> = {
+    spotify_uri: t(KEY.event_spotify_uri_help),
+    youtube_link: t(KEY.event_youtube_link_help),
+    youtube_embed: t(KEY.event_youtube_embed_help),
+  };
+
   // Setup React Hook Form
   const form = useForm<FormType>({
     resolver: zodResolver(eventSchema),
@@ -99,6 +146,16 @@ export function EventCreatorAdminPage() {
       ticket_type: undefined,
       custom_tickets: [],
       billig_id: undefined,
+      spotify_uri: '',
+      youtube_link: '',
+      youtube_embed: '',
+      soundcloud_link: '',
+      instagram_link: '',
+      facebook_link: '',
+      x_link: '',
+      lastfm_link: '',
+      vimeo_link: '',
+      general_link: '',
       image: undefined,
       visibility_from_dt: '',
       visibility_to_dt: '',
@@ -139,6 +196,16 @@ export function EventCreatorAdminPage() {
             visibility_from_dt: eventData.visibility_from_dt
               ? utcTimestampToLocal(eventData.visibility_from_dt, false)
               : '',
+            spotify_uri: eventData.spotify_uri || '',
+            youtube_link: eventData.youtube_link || '',
+            youtube_embed: eventData.youtube_embed || '',
+            facebook_link: eventData.facebook_link || '',
+            soundcloud_link: eventData.soundcloud_link || '',
+            instagram_link: eventData.instagram_link || '',
+            x_link: eventData.x_link || '',
+            lastfm_link: eventData.lastfm_link || '',
+            vimeo_link: eventData.vimeo_link || '',
+            general_link: eventData.general_link || '',
           });
           setShowSpinner(false);
         })
@@ -456,6 +523,42 @@ export function EventCreatorAdminPage() {
             }}
           />
         </>
+      ),
+    },
+    // Social media links
+    {
+      key: 'socialmedia',
+      title_nb: 'Sosiale medier',
+      title_en: 'Social media',
+      validate: () => {
+        const socialFields = SOCIAL_KEYS;
+        return !socialFields.some((name) => !!form.formState.errors[name]);
+      },
+      template: (
+        <div className={styles.socialMediaGrid}>
+          {SOCIAL_KEYS.map((name) => (
+            <FormField
+              key={name}
+              name={name}
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className={styles.socialMediaItem}>
+                  <FormLabel className={styles.socialMediaLabel}>{SOCIAL_LABELS[name]}</FormLabel>
+                  <FormControl>
+                    <input
+                      className={styles.socialMediaInput}
+                      type="text"
+                      {...field}
+                      placeholder={name === 'spotify_uri' ? 'spotify:...' : 'http://...'}
+                    />
+                  </FormControl>
+                  {SOCIAL_MEDIA_HELP[name] ? <FormDescription>{SOCIAL_MEDIA_HELP[name]}</FormDescription> : null}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+        </div>
       ),
     },
     // Graphics.
