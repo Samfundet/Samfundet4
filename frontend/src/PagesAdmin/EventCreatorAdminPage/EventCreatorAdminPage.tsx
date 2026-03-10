@@ -141,6 +141,7 @@ export function EventCreatorAdminPage() {
             visibility_from_dt: eventData.visibility_from_dt
               ? utcTimestampToLocal(eventData.visibility_from_dt, false)
               : '',
+            is_hidden: eventData.is_hidden || false,
           });
           setShowSpinner(false);
         })
