@@ -684,6 +684,10 @@ export const nb = prepareTranslations({
   [KEY.event_form_location_required]: 'Lokale er påkrevd',
   [KEY.event_form_capacity_min]: 'Kapasitet må være større enn 0',
   [KEY.event_form_visibility_from_required]: 'Synlig fra dato er påkrevd',
+
+  [KEY.event_form_category_required]: 'Kategori er påkrevd',
+  [KEY.event_form_age_restriction_required]: 'Aldersgrense er påkrevd',
+  [KEY.event_form_ticket_type_required]: 'Billetttype er påkrevd',
 });
 
 export const en = prepareTranslations({
@@ -1361,4 +1365,8 @@ export const en = prepareTranslations({
   [KEY.event_form_location_required]: 'Venue is required',
   [KEY.event_form_capacity_min]: 'Capacity must be greater than 0',
   [KEY.event_form_visibility_from_required]: 'Visible from date is required',
+
+  [KEY.event_form_category_required]: 'Category is required',
+  [KEY.event_form_age_restriction_required]: 'Age restriction is required',
+  [KEY.event_form_ticket_type_required]: 'Ticket type is required',
 });

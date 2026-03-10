@@ -669,6 +669,10 @@ export const KEY = {
   event_form_location_required: 'event_form_location_required',
   event_form_capacity_min: 'event_form_capacity_min',
   event_form_visibility_from_required: 'event_form_visibility_from_required',
+
+  event_form_category_required: 'event_form_category_required',
+  event_form_age_restriction_required: 'event_form_age_restriction_required',
+  event_form_ticket_type_required: 'event_form_ticket_type_required',
 } as const;
 
 // This will ensure that each value matches the key exactly.

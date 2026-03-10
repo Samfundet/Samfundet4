@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { KEY } from '~/i18n/constants';
 import { EventAgeRestriction, EventCategory, EventTicketType } from '~/types';
+import { zodEnum } from './utils';
 
 export const EVENT_TITLE = z.string().min(1, { message: KEY.event_form_title_required });
 export const EVENT_DESCRIPTION_LONG = z.string().min(1, { message: KEY.event_form_description_long_required });
@@ -22,6 +23,6 @@ export const EVENT_INSTAGRAM_LINK = z.string().url().optional();
 export const EVENT_FACEBOOK_LINK = z.string().url().optional();
 export const EVENT_X_LINK = z.string().url().optional();
 
-export const EVENT_CATEGORY = z.nativeEnum(EventCategory);
-export const EVENT_AGE_RESTRICTION = z.nativeEnum(EventAgeRestriction);
-export const EVENT_TICKET_TYPE = z.nativeEnum(EventTicketType);
+export const EVENT_CATEGORY = zodEnum(EventCategory, KEY.event_form_category_required);
+export const EVENT_AGE_RESTRICTION = zodEnum(EventAgeRestriction, KEY.event_form_age_restriction_required);
+export const EVENT_TICKET_TYPE = zodEnum(EventTicketType, KEY.event_form_ticket_type_required);
