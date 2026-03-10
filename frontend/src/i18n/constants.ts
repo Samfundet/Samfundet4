@@ -80,7 +80,7 @@ export const KEY = {
   common_date: 'common_date',
   common_show: 'common_show',
   common_menu: 'common_menu',
-  common_table: 'common_table', // denne gir bord, ikke tabell
+  common_table: 'common_table', // this one gives "bord" in Norwegian, not "tabell"
   common_sheet: 'common_sheet',
   common_max: 'common_max',
   common_edit: 'common_edit',
