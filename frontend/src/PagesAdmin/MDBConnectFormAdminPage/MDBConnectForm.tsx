@@ -49,7 +49,7 @@ export function MDBConnectForm() {
             toast.error(error.member_login?.message);
           }
           if (error.password) {
-            toast.error(error.password?.message);
+            toast.error(`${lowerCapitalize(t(KEY.common_password))}:·${error.password?.message}`);
           }
         })}
       >
@@ -72,7 +72,7 @@ export function MDBConnectForm() {
             <FormItem>
               <FormLabel>{lowerCapitalize(t(KEY.common_password))}</FormLabel>
               <FormControl>
-                <Input placeholder="" type="password" {...field} />
+                <Input placeholder="" type="password" autoComplete="off" {...field} />
               </FormControl>
             </FormItem>
           )}
