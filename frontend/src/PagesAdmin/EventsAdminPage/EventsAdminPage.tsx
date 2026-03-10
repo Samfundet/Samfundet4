@@ -1,74 +1,104 @@
-import { useEffect, useState } from 'react';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Carousel, EventQuery, ImageCard, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
+import { PagedPagination } from '~/Components/Pagination';
 import { Table } from '~/Components/Table';
-import { deleteEvent, getEventsUpcomming } from '~/api';
+import { deleteEvent, getEventsUpcommingPaginated } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import { eventKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import type { EventCategoryValue } from '~/types';
 import { dbT, getTicketTypeKey, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventsAdminPage.module.scss';
 
+const PAGE_SIZE = 20;
+
 export function EventsAdminPage() {
   const navigate = useNavigate();
-  const [events, setEvents] = useState<EventDto[]>([]);
-  const [allEvents, setAllEvents] = useState<EventDto[]>([]);
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [debouncedSearch, setDebouncedSearch] = useState<string>('');
+  const [selectedVenue, setSelectedVenue] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<EventCategoryValue | null>(null);
+  const [selectedTicketType, setSelectedTicketType] = useState<string | null>(null);
+  const debounceTimeout = useRef<NodeJS.Timeout>();
   const { t, i18n } = useTranslation();
   useTitle(t(KEY.admin_events_administrate));
 
   const [venues, setVenues] = useState<string[] | null>(null);
   const [categories, setCategories] = useState<EventCategoryValue[]>([]);
-  const [selectedVenue, setSelectedVenue] = useState<string | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<EventCategoryValue | null>(null);
-  const [search, setSearch] = useState<string>('');
+  const [ticketTypes, setTicketTypes] = useState<string[]>([]);
 
-  function getEvents(venue?: string | null, category?: EventCategoryValue | null) {
-    getEventsUpcomming({ venue: venue ?? undefined, category: category ?? undefined })
-      .then((data) => {
-        setCategories(data.categories as EventCategoryValue[]);
-        setVenues(data.locations);
-        setEvents(data.events);
-        setAllEvents(data.events);
-        setShowSpinner(false);
-      })
-      .catch((error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
-      });
-  }
-
-  function filterEvents(): EventDto[] {
-    const normalizedSearch = search.trim().toLowerCase();
-    if (search === '') return events;
-    const keywords = normalizedSearch.split(' ');
-
-    return events.filter((event: EventDto) => {
-      const title = (dbT(event, 'title', i18n.language) as string)?.toLowerCase() ?? '';
-      return keywords.every((kw) => title.includes(kw));
-    });
-  }
-
-  // Stuff to do on first render.
-  // TODO add permissions on render
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  // Debounce search input
   useEffect(() => {
-    getEvents(selectedVenue, selectedCategory);
-  }, [selectedVenue, selectedCategory]);
+    clearTimeout(debounceTimeout.current);
+    debounceTimeout.current = setTimeout(() => {
+      setDebouncedSearch(searchInput);
+    }, 300);
+
+    return () => clearTimeout(debounceTimeout.current);
+  }, [searchInput]);
+
+  // Reset to page 1 when filters change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally reset page when any filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch, selectedVenue, selectedCategory, selectedTicketType]);
+
+  // Fetch paginated events
+  const { data, isLoading } = useQuery({
+    queryKey: eventKeys.paginatedList(currentPage, PAGE_SIZE, {
+      search: debouncedSearch || undefined,
+      venue: selectedVenue || undefined,
+      category: selectedCategory || undefined,
+      ticket_type: selectedTicketType || undefined,
+    }),
+    queryFn: () =>
+      getEventsUpcommingPaginated(currentPage, PAGE_SIZE, {
+        search: debouncedSearch || undefined,
+        venue: selectedVenue || undefined,
+        category: selectedCategory || undefined,
+        ticket_type: selectedTicketType || undefined,
+      }),
+    placeholderData: keepPreviousData,
+  });
+
+  const events = data?.results ?? [];
+  const totalCount = data?.count ?? 0;
+
+  // Extract metadata from API response
+  useEffect(() => {
+    if (data) {
+      if (data.categories) {
+        const rawCats = data.categories as (string | [string, string])[];
+        setCategories(rawCats.map((cat) => (Array.isArray(cat) ? cat[0] : cat)) as EventCategoryValue[]);
+      }
+      if (data.locations) {
+        setVenues(data.locations as string[]);
+      }
+      if (data.ticket_types) {
+        const rawTts = data.ticket_types as (string | [string, string])[];
+        setTicketTypes(rawTts.map((tt) => (Array.isArray(tt) ? tt[0] : tt)));
+      }
+    }
+  }, [data]);
 
   function deleteSelectedEvent(id: number) {
     deleteEvent(id)
       .then(() => {
-        getEvents();
+        // Refetch the current page
         toast.success(t(KEY.eventsadminpage_successful_delete_toast));
+        // Force a refetch by triggering the query again
+        navigate(ROUTES.frontend.admin_events);
       })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
@@ -77,18 +107,16 @@ export function EventsAdminPage() {
   }
 
   const tableColumns = [
-    { content: t(KEY.common_title), sortable: true },
-    { content: t(KEY.start_time), sortable: true },
-    { content: t(KEY.category), sortable: true },
-    { content: t(KEY.admin_organizer), sortable: true },
-    { content: t(KEY.common_venue), sortable: true },
-    { content: t(KEY.common_ticket_type), sortable: true },
+    { content: t(KEY.common_title) },
+    { content: t(KEY.start_time) },
+    { content: t(KEY.category) },
+    { content: t(KEY.admin_organizer) },
+    { content: t(KEY.common_venue) },
+    { content: t(KEY.common_ticket_type) },
     '', // Buttons
   ];
 
-  const filteredEvents = filterEvents();
-
-  const data = filteredEvents.map((event: EventDto) => ({
+  const tableData = events.map((event: EventDto) => ({
     cells: [
       dbT(event, 'title', i18n.language) as string,
       { content: <TimeDisplay timestamp={event.start_dt} />, value: event.start_dt },
@@ -116,10 +144,8 @@ export function EventsAdminPage() {
               );
             }}
             onDelete={() => {
-              // TODO custom modal confirm
               const msg = lowerCapitalize(`${t(KEY.form_confirm)} ${t(KEY.common_delete)}`);
               if (window.confirm(`${msg} ${dbT(event, 'title')}`)) {
-                // TODO toast component? A bit too easy to delete events
                 deleteSelectedEvent(event.id);
               }
             }}
@@ -140,9 +166,9 @@ export function EventsAdminPage() {
   );
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={isLoading}>
       <Carousel spacing={2} header="" className={styles.carousel} itemContainerClass={styles.carousel_item}>
-        {allEvents.slice(0, Math.min(allEvents.length, 10)).map((event) => {
+        {events.slice(0, Math.min(events.length, 10)).map((event) => {
           return (
             <ImageCard
               key={event.id}
@@ -160,15 +186,26 @@ export function EventsAdminPage() {
       <EventQuery
         venues={venues}
         categories={categories}
+        ticketTypes={ticketTypes}
         selectedVenue={selectedVenue}
         setSelectedVenue={setSelectedVenue}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
-        search={search}
-        setSearch={setSearch}
+        selectedTicketType={selectedTicketType}
+        setSelectedTicketType={setSelectedTicketType}
+        search={searchInput}
+        setSearch={setSearchInput}
       />
       <div className={styles.tableContainer}>
-        <Table columns={tableColumns} data={data} />
+        <Table columns={tableColumns} data={tableData} />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+        <PagedPagination
+          currentPage={currentPage}
+          totalItems={totalCount}
+          pageSize={PAGE_SIZE}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </AdminPageLayout>
   );
