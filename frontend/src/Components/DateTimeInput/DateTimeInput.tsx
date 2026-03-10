@@ -19,7 +19,6 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
   const dateInputRef = useRef<HTMLInputElement>(null);
   const timeInputRef = useRef<HTMLInputElement>(null);
 
-  // Sync initial/external value to local strings
   useEffect(() => {
     if (value) {
       const d = new Date(value);
@@ -33,9 +32,8 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
         setTimeStr(`${HH}:${min}`);
       }
     }
-  }, [value]);
+  }, []);
 
-  // Click outside logic to close calendar
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -51,11 +49,11 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
     const tNums = t.replace(/\D/g, '');
     if (dNums.length === 8 && tNums.length >= 3) {
       const dateObj = new Date(
-        Number.parseInt(dNums.slice(4, 8)), // YYYY
-        Number.parseInt(dNums.slice(2, 4)) - 1, // MM
-        Number.parseInt(dNums.slice(0, 2)), // DD
-        Number.parseInt(tNums.slice(0, 2)), // HH
-        Number.parseInt(tNums.slice(2, 4)), // min
+        Number.parseInt(dNums.slice(4, 8)),
+        Number.parseInt(dNums.slice(2, 4)) - 1,
+        Number.parseInt(dNums.slice(0, 2)),
+        Number.parseInt(tNums.slice(0, 2)),
+        Number.parseInt(tNums.slice(2, 4)),
       );
       if (!Number.isNaN(dateObj.getTime())) onChange(dateObj.toISOString());
     } else if (d === '' && t === '') {
@@ -85,31 +83,36 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     const isDeleting = val.length < timeStr.length;
-    const nums = val.replace(/\D/g, '');
-    let formatted = val;
 
-    if (!isDeleting) {
-      if (nums.length === 2 && !val.includes(':')) formatted = `${nums}:`;
-      else if (nums.length > 2) formatted = `${nums.slice(0, 2)}:${nums.slice(2, 4)}`;
-    } else if (timeStr.endsWith(':') && !val.endsWith(':')) {
-      formatted = val.slice(0, -1);
+    if (isDeleting) {
+      setTimeStr(val);
+      tryEmit(dateStr, val);
+      return;
     }
+
+    const nums = val.replace(/\D/g, '');
+    let formatted = nums;
+
+    if (nums.length > 2) {
+      formatted = `${nums.slice(0, 2)}:${nums.slice(2, 4)}`;
+    } else if (nums.length === 2) {
+      formatted = `${nums}:`;
+    }
+
     setTimeStr(formatted);
     tryEmit(dateStr, formatted);
   };
 
-  // When a date is clicked in the MiniCalendar
   const onCalendarSelect = (date: Date | null) => {
     if (date) {
       const dd = String(date.getDate()).padStart(2, '0');
       const mm = String(date.getMonth() + 1).padStart(2, '0');
       const yyyy = date.getFullYear();
       const newDateStr = `${dd}/${mm}/${yyyy}`;
-
       setDateStr(newDateStr);
       tryEmit(newDateStr, timeStr);
-      setShowCalendar(false); // Close after picking
-      timeInputRef.current?.focus(); // Move to time
+      setShowCalendar(false);
+      timeInputRef.current?.focus();
     }
   };
 
@@ -126,13 +129,10 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
           placeholder="DD/MM/YYYY"
           maxLength={10}
         />
-
         <button type="button" className={styles.icon_button} onClick={() => setShowCalendar(!showCalendar)}>
           <Icon icon="carbon:calendar" />
         </button>
-
         <div className={styles.separator} />
-
         <input
           ref={timeInputRef}
           type="text"
@@ -145,7 +145,6 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
           maxLength={5}
         />
       </div>
-
       {showCalendar && (
         <div className={styles.calendar_popup}>
           <MiniCalendar
