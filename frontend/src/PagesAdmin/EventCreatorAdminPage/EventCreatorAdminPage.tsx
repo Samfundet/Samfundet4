@@ -507,7 +507,7 @@ export function EventCreatorAdminPage() {
             <FormItem className={styles.form_item}>
               <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
               <FormControl>
-                <Input type="datetime-local" {...field} />
+                <DateTimeInput value={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>
