@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { addDays, addMonths, isMonday, isSunday, lastDayOfMonth, nextSunday, previousMonday } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { TimeDisplay } from '~/Components';
+import { Button, TimeDisplay } from '~/Components';
 import type { CalendarMarker } from '~/types';
 import { SHORT_DAY_I18N_KEYS } from '~/utils';
 import styles from './MiniCalendar.module.scss';
@@ -19,7 +19,7 @@ type MiniCalendarProps = {
   onChange?: (date: Date | null) => void;
   /** If true, displays the current month and year */
   displayLabel?: boolean;
-  /** List of dates to mark with a square dot */
+  /** List of dates to mark with a dot */
   markers?: CalendarMarker[];
   /** Selected date can be defined on beforehand */
   initialSelectedDate?: Date | null;
@@ -40,7 +40,9 @@ export function MiniCalendar({
   const { t } = useTranslation();
 
   function getMarker(d: Date | null) {
-    if (!d || !markers) return null;
+    if (!d || !markers) {
+      return null;
+    }
     return markers.find((m) => m.date.toDateString() === d.toDateString());
   }
 
@@ -81,40 +83,34 @@ export function MiniCalendar({
     <div className={styles.month_header}>
       <div className={styles.previous_month}>
         {showPrevMonthButton && (
-          <button
-            type="button"
-            onClick={() => setDisplayDate(addMonths(displayDate, -1))}
-            className={styles.change_month_button}
-          >
+          <Button onClick={() => setDisplayDate(addMonths(displayDate, -1))} className={styles.change_month_button}>
             <Icon icon="carbon:chevron-left" />
-          </button>
+          </Button>
         )}
       </div>
       <TimeDisplay className={styles.label} timestamp={displayDate} displayType={'nice-month-year'} />
       <div className={styles.next_month}>
         {showNextMonthButton && (
-          <button
-            type="button"
-            onClick={() => setDisplayDate(addMonths(displayDate, 1))}
-            className={styles.change_month_button}
-          >
+          <Button onClick={() => setDisplayDate(addMonths(displayDate, 1))} className={styles.change_month_button}>
             <Icon icon="carbon:chevron-right" />
-          </button>
+          </Button>
         )}
       </div>
+    </div>
+  );
+
+  const daysHeader = (
+    <div className={`${styles.grid} ${styles.days_header}`}>
+      {SHORT_DAY_I18N_KEYS.map((d) => (
+        <span key={d}>{t(d)}</span>
+      ))}
     </div>
   );
 
   return (
     <div className={styles.container}>
       {monthHeader}
-
-      <div className={`${styles.grid} ${styles.days_header}`}>
-        {SHORT_DAY_I18N_KEYS.map((d) => (
-          <span key={d}>{t(d)}</span>
-        ))}
-      </div>
-
+      {daysHeader}
       <div className={styles.grid}>
         {days.map((d) => {
           const valid = dateValid(d);
@@ -133,18 +129,15 @@ export function MiniCalendar({
                 [styles.selected_day]: isSelected,
               })}
               onClick={() => {
-                const newDate = isSelected ? null : new Date(d);
-                if (newDate) {
-                  // Reset hours to midnight, leaving time handling to the parent component
-                  newDate.setHours(0, 0, 0, 0);
-                }
+                // If we click the currently selected date, deselect it
+                const newDate = isSelected ? null : d;
                 onChange?.(newDate);
                 setSelectedDate(newDate);
               }}
               disabled={!valid}
             >
               {d.getDate()}
-              {marker && <div className={classNames(styles.marker, marker.className)} />}
+              {marker && <div className={`${styles.marker} ${marker.className}`} />}
             </button>
           );
         })}
