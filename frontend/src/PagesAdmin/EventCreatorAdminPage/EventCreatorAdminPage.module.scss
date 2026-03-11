@@ -52,9 +52,12 @@
   @include flex-row;
   gap: 1.5em;
   padding-top: 1em;
+  align-items: flex-start;
+
   @include for-mobile-only {
     flex-direction: column;
   }
+
   // Ensure children elements stretch to fit entire row
   /* stylelint-disable-next-line selector-max-universal */
   & > * {

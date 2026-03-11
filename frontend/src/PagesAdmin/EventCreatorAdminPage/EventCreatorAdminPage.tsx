@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import type { z } from 'zod';
 import {
   Button,
+  DateTimeInput,
   Dropdown,
   Form,
   FormControl,
@@ -302,14 +303,13 @@ export function EventCreatorAdminPage() {
             <FormField
               control={form.control}
               name="start_dt"
-              key={'start_dt'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>
                     {t(KEY.common_date)} & {t(KEY.common_time)}
                   </FormLabel>
                   <FormControl>
-                    <Input type="datetime-local" {...field} />
+                    <DateTimeInput value={field.value} onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -506,7 +506,7 @@ export function EventCreatorAdminPage() {
             <FormItem className={styles.form_item}>
               <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
               <FormControl>
-                <Input type="datetime-local" {...field} />
+                <DateTimeInput value={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>

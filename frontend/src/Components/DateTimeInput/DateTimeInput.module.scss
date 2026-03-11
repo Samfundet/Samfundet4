@@ -1,0 +1,153 @@
+@use 'src/constants' as *;
+
+@use 'src/mixins' as *;
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  margin-top: 0.5em; /* Restored to match standard input labels */
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.55rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #cccccc;
+  background: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  color: inherit;
+  cursor: text;
+  transition: all 0.2s ease-in-out;
+
+  &:focus-within {
+    outline: none;
+    border-color: $blue;
+    box-shadow: 0 0 0 2px rgba($blue, 0.2);
+  }
+
+  @include theme-dark {
+    background: transparent;
+    border-color: $grey-2;
+    color: $white;
+
+    &:focus-within {
+      border-color: $blue;
+      box-shadow: 0 0 0 2px rgba($blue, 0.4);
+    }
+  }
+
+  /* REACT HOOK FORM ERROR STATE INTEGRATION */
+  &.has_error {
+    border-color: $red;
+
+    &:focus-within {
+      box-shadow: 0 0 0 2px rgba($red, 0.2);
+    }
+
+    @include theme-dark {
+      border-color: $salmon;
+      &:focus-within {
+        box-shadow: 0 0 0 2px rgba($salmon, 0.4);
+      }
+    }
+  }
+}
+
+.input_date,
+.input_time {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  font-variant-numeric: tabular-nums;
+  padding: 0;
+  margin: 0;
+  line-height: normal;
+
+  &::placeholder {
+    color: #999999;
+  }
+}
+
+.input_date {
+  flex: 1;
+  width: 50%;
+}
+
+.input_time {
+  text-align: left;
+  width: 5.5rem;
+}
+
+.icon_button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #666666;
+  font-size: 1.25rem;
+  padding: 0 0.5rem;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $black;
+  }
+
+  @include theme-dark {
+    color: $grey-3;
+    &:hover {
+      color: $white;
+    }
+  }
+}
+
+.separator {
+  height: 1.5rem;
+  width: 1px;
+  background-color: #cccccc;
+  margin-right: 0.5rem;
+
+  @include theme-dark {
+    background-color: $grey-2;
+  }
+}
+
+.hidden_native_picker {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.hint {
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+  margin-left: 0.2rem;
+  color: $grey-2;
+  font-style: italic;
+  transition: color 0.2s;
+
+  @include theme-dark {
+    color: $grey-3;
+  }
+}
+
+.hint_error {
+  color: $red;
+  font-weight: 600;
+  font-style: normal;
+
+  @include theme-dark {
+    color: $salmon;
+  }
+}
