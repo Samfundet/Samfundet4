@@ -6,18 +6,20 @@
   position: relative;
   width: 100%;
   margin-top: 0.5em;
+  padding-bottom: 1.25rem;
 }
 
 .container {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 0.55rem 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   border: 1px solid #cccccc;
   background: #ffffff;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   color: inherit;
+  transition: all 0.2s ease-in-out;
   cursor: text;
 
   &:focus-within {
@@ -30,7 +32,6 @@
     background: transparent;
     border-color: $grey-2;
     color: $white;
-
     &:focus-within {
       border-color: $blue;
       box-shadow: 0 0 0 2px rgba($blue, 0.4);
@@ -89,52 +90,53 @@
 }
 
 .separator {
-  height: 1.5rem;
+  height: 1.25rem;
   width: 1px;
   background-color: #cccccc;
-  margin-right: 0.5rem;
+  margin-right: 0.75rem;
 
   @include theme-dark {
     background-color: $grey-2;
   }
 }
 
+.hidden_native_picker {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .hint {
+  position: absolute;
+  bottom: 0;
+  left: 0.2rem;
   font-size: 0.8rem;
-  margin-top: 0.4rem;
-  margin-left: 0.2rem;
   color: $grey-2;
   font-style: italic;
-  min-height: 1.2rem;
-  transition: color 0.2s;
+  white-space: nowrap;
+  transition:
+    opacity 0.2s,
+    color 0.2s;
+  opacity: 1;
 
   @include theme-dark {
     color: $grey-3;
   }
 }
 
+.hint_hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .hint_error {
   color: $red;
   font-weight: 600;
-
-  @include theme-dark {
-    color: $salmon;
-  }
-}
-
-.calendar_popup {
-  position: absolute;
-  top: calc(100% + 5px);
-  left: 0;
-  z-index: 1000;
-  background: $white;
-  border: 1px solid #cccccc;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-
-  @include theme-dark {
-    background: $grey-0;
-    border-color: $grey-2;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  }
+  font-style: normal;
 }

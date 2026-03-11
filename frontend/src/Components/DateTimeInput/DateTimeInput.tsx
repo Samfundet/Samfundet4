@@ -4,25 +4,24 @@ import { format, isValid, parse } from 'date-fns';
 import { enGB, nb } from 'date-fns/locale';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { KEY } from '~/i18n/constants';
 import styles from './DateTimeInput.module.scss';
 
 type DateTimeInputProps = {
   value: string | undefined;
   onChange: (isoString: string) => void;
   className?: string;
-  /** Pass MiniCalendar component */
-  calendarPopup?: React.ReactNode;
 };
 
-export function DateTimeInput({ value, onChange, className, calendarPopup }: DateTimeInputProps) {
+export function DateTimeInput({ value, onChange, className }: DateTimeInputProps) {
   const { t, i18n } = useTranslation();
   const [dateStr, setDateStr] = useState('');
   const [timeStr, setTimeStr] = useState('');
-  const [showCalendar, setShowCalendar] = useState(false);
 
-  const containerRef = useRef<HTMLDivElement>(null);
   const dateInputRef = useRef<HTMLInputElement>(null);
   const timeInputRef = useRef<HTMLInputElement>(null);
+  const nativeDateInputRef = useRef<HTMLInputElement>(null);
+
   const lastSyncedValue = useRef<string | undefined>(undefined);
   const currentLocale = i18n.language === 'en' ? enGB : nb;
 
@@ -42,37 +41,36 @@ export function DateTimeInput({ value, onChange, className, calendarPopup }: Dat
     }
   }, [value]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setShowCalendar(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   const parseResult = useMemo(() => {
-    if (dateStr.length < 10 || timeStr.length < 5) {
+    if (dateStr.length < 10) {
       return { valid: true, message: '' };
     }
 
     const parsedDate = parse(dateStr, 'dd/MM/yyyy', new Date());
-    const timeParts = timeStr.split(':');
 
-    if (isValid(parsedDate) && timeParts.length === 2) {
+    if (!isValid(parsedDate)) {
+      return { valid: false, message: t(KEY.common_invalid_date) };
+    }
+
+    if (timeStr.length === 5) {
+      const timeParts = timeStr.split(':');
       const h = Number.parseInt(timeParts[0], 10);
       const m = Number.parseInt(timeParts[1], 10);
-      if (h >= 0 && h < 24 && m >= 0 && m < 60) {
+
+      if (!Number.isNaN(h) && !Number.isNaN(m) && h >= 0 && h < 24 && m >= 0 && m < 60) {
         parsedDate.setHours(h, m);
         return {
           valid: true,
           message: format(parsedDate, 'PPPP p', { locale: currentLocale }),
-          date: parsedDate,
         };
       }
+      return { valid: false, message: t(KEY.common_invalid_date) };
     }
-    return { valid: false, message: t('common_invalid_date') || 'Invalid date' };
+
+    return {
+      valid: true,
+      message: format(parsedDate, 'PPPP', { locale: currentLocale }),
+    };
   }, [dateStr, timeStr, currentLocale, t]);
 
   const tryEmit = (d: string, t: string) => {
@@ -132,8 +130,28 @@ export function DateTimeInput({ value, onChange, className, calendarPopup }: Dat
     tryEmit(dateStr, formatted);
   };
 
+  // Convert DD/MM/YYYY into YYYY-MM-DD so the native picker opens to the correct month
+  const nativeDateValue = useMemo(() => {
+    if (dateStr.length === 10) {
+      const [d, m, y] = dateStr.split('/');
+      if (d && m && y) return `${y}-${m}-${d}`;
+    }
+    return '';
+  }, [dateStr]);
+
+  const handleNativeDateSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    if (val) {
+      const [y, m, d] = val.split('-');
+      const newDateStr = `${d}/${m}/${y}`;
+      setDateStr(newDateStr);
+      tryEmit(newDateStr, timeStr);
+      timeInputRef.current?.focus();
+    }
+  };
+
   return (
-    <div className={classNames(styles.wrapper, className)} ref={containerRef}>
+    <div className={classNames(styles.wrapper, className)}>
       <div className={styles.container}>
         <input
           ref={dateInputRef}
@@ -145,15 +163,29 @@ export function DateTimeInput({ value, onChange, className, calendarPopup }: Dat
           placeholder="DD/MM/YYYY"
           maxLength={10}
         />
+
         <button
           type="button"
           className={styles.icon_button}
-          onClick={() => setShowCalendar(!showCalendar)}
+          onClick={() => nativeDateInputRef.current?.showPicker()}
           tabIndex={-1}
+          aria-label="Open Calendar"
         >
           <Icon icon="carbon:calendar" />
         </button>
+
+        {/* native date picker */}
+        <input
+          type="date"
+          ref={nativeDateInputRef}
+          value={nativeDateValue}
+          onChange={handleNativeDateSelect}
+          className={styles.hidden_native_picker}
+          tabIndex={-1}
+        />
+
         <div className={styles.separator} />
+
         <input
           ref={timeInputRef}
           type="text"
@@ -176,17 +208,6 @@ export function DateTimeInput({ value, onChange, className, calendarPopup }: Dat
       >
         {parseResult.message}
       </div>
-
-      {showCalendar && calendarPopup && (
-        <div
-          className={styles.calendar_popup}
-          onClick={() => setShowCalendar(false)}
-          onKeyDown={(e) => e.key === 'Escape' && setShowCalendar(false)}
-          role="presentation"
-        >
-          {calendarPopup}
-        </div>
-      )}
     </div>
   );
 }

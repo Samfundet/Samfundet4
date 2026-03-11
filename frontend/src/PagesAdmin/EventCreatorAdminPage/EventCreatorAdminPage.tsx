@@ -310,25 +310,7 @@ export function EventCreatorAdminPage() {
                     {t(KEY.common_date)} & {t(KEY.common_time)}
                   </FormLabel>
                   <FormControl>
-                    <DateTimeInput
-                      value={field.value}
-                      onChange={field.onChange}
-                      calendarPopup={
-                        <MiniCalendar
-                          displayLabel
-                          baseDate={field.value ? new Date(field.value) : new Date()}
-                          initialSelectedDate={field.value ? new Date(field.value) : null}
-                          onChange={(newDate) => {
-                            if (newDate) {
-                              const currentFullDate = field.value ? new Date(field.value) : new Date();
-                              newDate.setHours(currentFullDate.getHours());
-                              newDate.setMinutes(currentFullDate.getMinutes());
-                              field.onChange(newDate.toISOString());
-                            }
-                          }}
-                        />
-                      }
-                    />
+                    <DateTimeInput value={field.value} onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
