@@ -2,22 +2,32 @@ import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { format, isValid, parse } from 'date-fns';
 import { enGB, nb } from 'date-fns/locale';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { type InputHTMLAttributes, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KEY } from '~/i18n/constants';
 import styles from './DateTimeInput.module.scss';
 
-type DateTimeInputProps = {
+interface DateTimeInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
   value: string | undefined;
   onChange: (isoString: string) => void;
   className?: string;
-};
+  calendarPopup?: React.ReactNode;
+}
 
-export function DateTimeInput({ value, onChange, className }: DateTimeInputProps) {
+export function DateTimeInput({
+  value,
+  onChange,
+  className,
+  calendarPopup,
+  'aria-invalid': isInvalid,
+  ...props
+}: DateTimeInputProps) {
   const { t, i18n } = useTranslation();
   const [dateStr, setDateStr] = useState('');
   const [timeStr, setTimeStr] = useState('');
+  const [showCalendar, setShowCalendar] = useState(false);
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const dateInputRef = useRef<HTMLInputElement>(null);
   const timeInputRef = useRef<HTMLInputElement>(null);
   const nativeDateInputRef = useRef<HTMLInputElement>(null);
@@ -25,6 +35,7 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
   const lastSyncedValue = useRef<string | undefined>(undefined);
   const currentLocale = i18n.language === 'en' ? enGB : nb;
 
+  // Sync incoming value to local strings
   useEffect(() => {
     if (value !== lastSyncedValue.current) {
       if (value) {
@@ -42,55 +53,59 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
   }, [value]);
 
   const parseResult = useMemo(() => {
-    if (dateStr.length < 10) {
-      return { valid: true, message: '' };
+    if (dateStr.length < 10 || timeStr.length < 5) {
+      return null;
     }
 
     const parsedDate = parse(dateStr, 'dd/MM/yyyy', new Date());
+    const timeParts = timeStr.split(':');
+    const h = Number.parseInt(timeParts[0], 10);
+    const m = Number.parseInt(timeParts[1], 10);
 
-    if (!isValid(parsedDate)) {
-      return { valid: false, message: t(KEY.common_invalid_date) };
-    }
+    const isTimeValid = !Number.isNaN(h) && !Number.isNaN(m) && h >= 0 && h < 24 && m >= 0 && m < 60;
 
-    if (timeStr.length === 5) {
-      const timeParts = timeStr.split(':');
-      const h = Number.parseInt(timeParts[0], 10);
-      const m = Number.parseInt(timeParts[1], 10);
-
-      if (!Number.isNaN(h) && !Number.isNaN(m) && h >= 0 && h < 24 && m >= 0 && m < 60) {
-        parsedDate.setHours(h, m);
-        return {
-          valid: true,
-          message: format(parsedDate, 'PPPP p', { locale: currentLocale }),
-        };
-      }
-      return { valid: false, message: t(KEY.common_invalid_date) };
+    if (isValid(parsedDate) && isTimeValid) {
+      parsedDate.setHours(h, m);
+      return {
+        message: format(parsedDate, 'PPPP p', { locale: currentLocale }),
+        isError: false,
+      };
     }
 
     return {
-      valid: true,
-      message: format(parsedDate, 'PPPP', { locale: currentLocale }),
+      message: t(KEY.common_invalid_date),
+      isError: true,
     };
   }, [dateStr, timeStr, currentLocale, t]);
 
   const tryEmit = (d: string, t: string) => {
+    if (d === '' && t === '') {
+      lastSyncedValue.current = '';
+      onChange('');
+      return;
+    }
+
     const dNums = d.replace(/\D/g, '');
     const tNums = t.replace(/\D/g, '');
+
     if (dNums.length === 8 && tNums.length === 4) {
       const dateObj = parse(dNums, 'ddMMyyyy', new Date());
       const hh = Number.parseInt(tNums.slice(0, 2), 10);
       const min = Number.parseInt(tNums.slice(2, 4), 10);
 
+      // If fully valid, emit the perfect ISO string
       if (isValid(dateObj) && hh < 24 && min < 60) {
         dateObj.setHours(hh, min);
         const iso = dateObj.toISOString();
         lastSyncedValue.current = iso;
         onChange(iso);
+        return;
       }
-    } else if (d === '' && t === '') {
-      lastSyncedValue.current = '';
-      onChange('');
     }
+
+    const raw = `${d} ${t}`.trim();
+    lastSyncedValue.current = raw;
+    onChange(raw);
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,7 +145,6 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
     tryEmit(dateStr, formatted);
   };
 
-  // Convert DD/MM/YYYY into YYYY-MM-DD so the native picker opens to the correct month
   const nativeDateValue = useMemo(() => {
     if (dateStr.length === 10) {
       const [d, m, y] = dateStr.split('/');
@@ -151,8 +165,12 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
   };
 
   return (
-    <div className={classNames(styles.wrapper, className)}>
-      <div className={styles.container}>
+    <div className={classNames(styles.wrapper, className)} ref={containerRef}>
+      <div
+        className={classNames(styles.container, {
+          [styles.has_error]: isInvalid || parseResult?.isError, // Turn border red if local error
+        })}
+      >
         <input
           ref={dateInputRef}
           type="text"
@@ -162,6 +180,7 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
           onChange={handleDateChange}
           placeholder="DD/MM/YYYY"
           maxLength={10}
+          {...props}
         />
 
         <button
@@ -174,7 +193,6 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
           <Icon icon="carbon:calendar" />
         </button>
 
-        {/* native date picker */}
         <input
           type="date"
           ref={nativeDateInputRef}
@@ -196,18 +214,13 @@ export function DateTimeInput({ value, onChange, className }: DateTimeInputProps
           onKeyDown={(e) => e.key === 'Backspace' && timeStr === '' && dateInputRef.current?.focus()}
           placeholder="HH:MM"
           maxLength={5}
+          {...props}
         />
       </div>
 
-      <div
-        className={classNames(
-          styles.hint,
-          !parseResult.valid && styles.hint_error,
-          parseResult.message === '' && styles.hint_hidden,
-        )}
-      >
-        {parseResult.message}
-      </div>
+      {parseResult && (
+        <div className={classNames(styles.hint, parseResult.isError && styles.hint_error)}>{parseResult.message}</div>
+      )}
     </div>
   );
 }
