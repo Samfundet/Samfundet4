@@ -51,7 +51,7 @@ export function PaymentForm({ event, onChange }: PaymentFormProps) {
         control={form.control}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>{t(KEY.common_the_ticket_type)}</FormLabel>
+            <FormLabel required>{t(KEY.common_the_ticket_type)}</FormLabel>
             <FormControl>
               <Dropdown options={ticketTypeOptions} nullOption={{ label: t(KEY.common_choose) }} {...field} />
             </FormControl>
@@ -66,7 +66,7 @@ export function PaymentForm({ event, onChange }: PaymentFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t(KEY.event_registration_url)}</FormLabel>
+              <FormLabel required>{t(KEY.event_registration_url)}</FormLabel>
               <FormControl>
                 <input type="text" {...field} placeholder="http://..." />
               </FormControl>
@@ -91,7 +91,7 @@ export function PaymentForm({ event, onChange }: PaymentFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Billig Event</FormLabel>
+              <FormLabel required>Billig Event</FormLabel>
               <FormControl>
                 <Dropdown
                   options={billigEvents.map((e) => ({
