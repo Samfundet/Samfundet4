@@ -78,12 +78,13 @@ FormItem.displayName = 'FormItem';
 
 interface FormLabelProps extends React.HTMLAttributes<HTMLLabelElement> {
   className?: string;
+  required?: boolean
 }
 
 export const FormLabel = React.forwardRef<
   React.ElementRef<'label'>,
   React.ComponentPropsWithoutRef<'label'> & FormLabelProps
->(({ className, ...props }, ref) => {
+>(({ className, required = false, children, ...props }, ref) => {
   const { error, formItemId } = useFormField();
 
   return (
@@ -92,7 +93,10 @@ export const FormLabel = React.forwardRef<
       className={classNames(styles.label, error && styles.error, className)}
       htmlFor={formItemId}
       {...props}
-    />
+    >
+      {children}
+      {required ? '*' : ''}
+    </label>
   );
 });
 FormLabel.displayName = 'FormLabel';
