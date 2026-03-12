@@ -1,0 +1,62 @@
+@use 'src/constants' as *;
+
+.banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+  background: $red-samf;
+  color: $white;
+  display: flex;
+  justify-content: center;
+  padding: 10px 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  max-height: 200px;
+  transition:
+    max-height 180ms ease,
+    opacity 180ms ease,
+    padding-top 80ms ease
+}
+
+.hidden {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  pointer-events: none;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 1200px;
+  min-width: 0;
+}
+
+.text {
+  line-height: 1.4;
+}
+
+.links {
+  margin-left: 12px;
+}
+
+.link {
+  color: inherit;
+  text-decoration: underline;
+  margin-right: 12px;
+
+  &:hover {
+    color: $red-light;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}

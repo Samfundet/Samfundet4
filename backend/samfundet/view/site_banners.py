@@ -1,0 +1,25 @@
+from __future__ import annotations
+
+from backend.samfundet import models
+
+from rest_framework import decorators
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.permissions import AllowAny
+
+from samfundet.serializers import SiteBannerSerializer
+from samfundet.models.site_banner import SiteBanner
+
+
+class SiteBannerView(ReadOnlyModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = SiteBannerSerializer
+
+    def get_queryset(self) -> models.QuerySet:
+        return SiteBanner.active().order_by('-start_at', '-created_at')
+
+    @decorators.action(detail=False, methods=['get'], url_path='active')
+    def active(self, request: Request) -> Response:
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
