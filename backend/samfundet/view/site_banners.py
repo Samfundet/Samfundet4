@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from backend.samfundet import models
-
 from rest_framework import decorators
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.permissions import AllowAny
+
+from django.db import models
 
 from samfundet.serializers import SiteBannerSerializer
 from samfundet.models.site_banner import SiteBanner
