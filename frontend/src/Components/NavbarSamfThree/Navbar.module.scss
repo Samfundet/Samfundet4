@@ -44,7 +44,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 /* Main navbar */
 #navbar_container {
   position: fixed;
-  top: var(--site-banner-offset, 0px);
+  top: var(--site-banner-offset, 0);
   transition: top 150ms ease;
   width: 100%;
   height: $navbar-height;
