@@ -181,7 +181,7 @@ export function EventCreatorAdminPage() {
               name="title_nb"
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>
+                  <FormLabel required>
                     {t(KEY.common_title)} ({t(KEY.common_norwegian)})
                   </FormLabel>
                   <FormControl>
@@ -197,7 +197,7 @@ export function EventCreatorAdminPage() {
               key={'title_en'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>
+                  <FormLabel required>
                     {t(KEY.common_title)} ({t(KEY.common_english)})
                   </FormLabel>
                   <FormControl>
@@ -215,7 +215,7 @@ export function EventCreatorAdminPage() {
               key={'description_short_nb'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>
+                  <FormLabel required>
                     {t(KEY.common_short_description)} ({t(KEY.common_norwegian)})
                   </FormLabel>
                   <FormControl>
@@ -231,7 +231,7 @@ export function EventCreatorAdminPage() {
               key={'description_short_en'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>
+                  <FormLabel required>
                     {t(KEY.common_short_description)} ({t(KEY.common_english)})
                   </FormLabel>
                   <FormControl>
@@ -249,7 +249,7 @@ export function EventCreatorAdminPage() {
               key={'description_long_nb'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>
+                  <FormLabel required>
                     {t(KEY.common_long_description)} ({t(KEY.common_norwegian)})
                   </FormLabel>
                   <FormControl>
@@ -265,7 +265,7 @@ export function EventCreatorAdminPage() {
               key={'description_long_en'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>
+                  <FormLabel required>
                     {t(KEY.common_long_description)} ({t(KEY.common_english)})
                   </FormLabel>
                   <FormControl>
@@ -305,7 +305,7 @@ export function EventCreatorAdminPage() {
               key={'start_dt'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>
+                  <FormLabel required>
                     {t(KEY.common_date)} & {t(KEY.common_time)}
                   </FormLabel>
                   <FormControl>
@@ -321,7 +321,7 @@ export function EventCreatorAdminPage() {
               key={'duration'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>
+                  <FormLabel required>
                     {t(KEY.recruitment_duration)} ({t(KEY.common_minutes)})
                   </FormLabel>
                   <FormControl>
@@ -346,7 +346,7 @@ export function EventCreatorAdminPage() {
               key={'category'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>{t(KEY.category)}</FormLabel>
+                  <FormLabel required>{t(KEY.category)}</FormLabel>
                   <FormControl>
                     <Dropdown
                       options={eventCategoryOptions}
@@ -365,7 +365,7 @@ export function EventCreatorAdminPage() {
               key={'host'}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
-                  <FormLabel>{t(KEY.admin_organizer)}</FormLabel>
+                  <FormLabel required>{t(KEY.admin_organizer)}</FormLabel>
                   <FormControl>
                     <Input type="text" {...field} />
                   </FormControl>
@@ -383,7 +383,7 @@ export function EventCreatorAdminPage() {
                 const selected = locationOptions.find((o) => o.value === field.value) ?? null;
                 return (
                   <FormItem className={styles.form_item}>
-                    <FormLabel>{t(KEY.common_venue)}</FormLabel>
+                    <FormLabel required>{t(KEY.common_venue)}</FormLabel>
                     <FormControl>
                       <Dropdown
                         sortAlphabetic={true}
@@ -438,7 +438,7 @@ export function EventCreatorAdminPage() {
             key={'age_restriction'}
             render={({ field }) => (
               <FormItem className={styles.form_item}>
-                <FormLabel>{t(KEY.common_age_limit)}</FormLabel>
+                <FormLabel required>{t(KEY.common_age_limit)}</FormLabel>
                 <FormControl>
                   <Dropdown options={ageLimitOptions} nullOption={{ label: t(KEY.common_choose) }} {...field} />
                 </FormControl>
@@ -473,7 +473,7 @@ export function EventCreatorAdminPage() {
           key={'image'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
-              <FormLabel>{t(KEY.common_image)}</FormLabel>
+              <FormLabel required>{t(KEY.common_image)}</FormLabel>
               <FormControl>
                 <ImagePicker
                   onSelected={(image) => {
@@ -504,7 +504,7 @@ export function EventCreatorAdminPage() {
           key="visibility_from_dt"
           render={({ field }) => (
             <FormItem className={styles.form_item}>
-              <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
+              <FormLabel required>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
               <FormControl>
                 <Input type="datetime-local" {...field} />
               </FormControl>
