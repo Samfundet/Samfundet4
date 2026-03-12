@@ -78,7 +78,7 @@ FormItem.displayName = 'FormItem';
 
 interface FormLabelProps extends React.HTMLAttributes<HTMLLabelElement> {
   className?: string;
-  required?: boolean
+  required?: boolean;
 }
 
 export const FormLabel = React.forwardRef<
