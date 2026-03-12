@@ -10,6 +10,7 @@ from django.urls import path, include
 import samfundet.view.mdb_views
 import samfundet.view.user_views
 import samfundet.view.event_views
+import samfundet.view.site_banners
 import samfundet.view.sulten_views
 import samfundet.view.general_views
 from samfundet.view import billig_views
@@ -45,6 +46,7 @@ router.register('key-value', samfundet.view.general_views.KeyValueView, 'key_val
 router.register('organizations', samfundet.view.general_views.OrganizationView, 'organizations')
 router.register('merch', samfundet.view.general_views.MerchView, 'merch')
 router.register('role', samfundet.view.general_views.RoleView, 'role')
+router.register('site-banners', samfundet.view.site_banners.SiteBannerView, 'site_banners')
 
 ########## Recruitment ##########
 router.register('recruitment', recruitment_views.RecruitmentView, 'recruitment')
