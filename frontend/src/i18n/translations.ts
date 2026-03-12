@@ -673,6 +673,10 @@ export const nb = prepareTranslations({
   [KEY.error_server_error_description]: 'En serverfeil har opptstått',
   [KEY.error_submitting_reservation]: 'Det skjedde en feil ved innsending av reservasjon',
   [KEY.error_invalid_reservation_data]: 'Ugyldig reservasjonsdata',
+
+  [KEY.event_form_is_hidden]: 'Gjør kun synlig via direktelenke',
+  [KEY.event_form_is_hidden_help]:
+    'Arrangementet vil ikke vises i arrangementslisting for vanlige brukere, men kan nås via en direktelenke. Dette er nyttig for arrangementer som ikke skal være tilgjenlige for alle.',
 });
 
 export const en = prepareTranslations({
@@ -1339,4 +1343,8 @@ export const en = prepareTranslations({
   [KEY.error_server_error_description]: 'A server error has occurred',
   [KEY.error_submitting_reservation]: 'An error occurred while submitting the reservation',
   [KEY.error_invalid_reservation_data]: 'Invalid reservation data',
+
+  [KEY.event_form_is_hidden]: 'Make only visible via direct link',
+  [KEY.event_form_is_hidden_help]:
+    'The event will not appear in the events listings for regular users, but can be accessed via a direct link. This is useful for events that should not be accessible.',
 });

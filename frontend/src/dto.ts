@@ -196,6 +196,7 @@ export type EventDto = {
   // Used to create new event with using id of existing imagedto
   image?: ImageDto;
   capacity?: number;
+  is_hidden?: boolean;
 };
 
 export type EventGroupDto = {

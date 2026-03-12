@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import type { z } from 'zod';
 import {
   Button,
+  Checkbox,
   Dropdown,
   Form,
   FormControl,
@@ -19,6 +20,7 @@ import {
   FormMessage,
   ImageCard,
   Input,
+  Text,
   Textarea,
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
@@ -102,6 +104,7 @@ export function EventCreatorAdminPage() {
       image: undefined,
       visibility_from_dt: '',
       visibility_to_dt: '',
+      is_hidden: false,
     },
   });
 
@@ -139,6 +142,7 @@ export function EventCreatorAdminPage() {
             visibility_from_dt: eventData.visibility_from_dt
               ? utcTimestampToLocal(eventData.visibility_from_dt, false)
               : '',
+            is_hidden: eventData.is_hidden || false,
           });
           setShowSpinner(false);
         })
@@ -498,20 +502,39 @@ export function EventCreatorAdminPage() {
         return !!data.visibility_from_dt;
       },
       template: (
-        <FormField
-          control={form.control}
-          name="visibility_from_dt"
-          key="visibility_from_dt"
-          render={({ field }) => (
-            <FormItem className={styles.form_item}>
-              <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
-              <FormControl>
-                <Input type="datetime-local" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <>
+          <FormField
+            control={form.control}
+            name="visibility_from_dt"
+            key="visibility_from_dt"
+            render={({ field }) => (
+              <FormItem className={styles.form_item}>
+                <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
+                <FormControl>
+                  <Input type="datetime-local" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="is_hidden"
+            key="is_hidden"
+            render={({ field }) => (
+              <FormItem className={styles.form_item}>
+                <FormLabel>{t(KEY.event_form_is_hidden)}</FormLabel>
+                <FormControl>
+                  <div className={styles.checkbox}>
+                    <Checkbox checked={field.value} onChange={() => field.onChange(!field.value)} />
+                  </div>
+                </FormControl>
+                <Text size="s">{t(KEY.event_form_is_hidden_help)}</Text>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </>
       ),
     },
   ];

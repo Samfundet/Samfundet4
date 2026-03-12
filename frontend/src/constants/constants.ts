@@ -72,8 +72,8 @@ export const DAY_MILLIS = 24 * HOUR_MILLIS;
  */
 
 export const textSizes: Record<string, string> = {
-  xs: '0.1rem',
-  s: '0.5rem',
+  xs: '0.5rem',
+  s: '0.75rem',
   m: '1rem',
   l: '2rem',
   xl: '3rem',
