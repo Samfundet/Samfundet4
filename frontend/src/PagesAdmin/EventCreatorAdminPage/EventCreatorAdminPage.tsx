@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import type { z } from 'zod';
 import {
   Button,
+  Checkbox,
   Dropdown,
   Form,
   FormControl,
@@ -19,8 +20,8 @@ import {
   FormMessage,
   ImageCard,
   Input,
+  Text,
   Textarea,
-  ToggleSwitch,
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
@@ -524,9 +525,11 @@ export function EventCreatorAdminPage() {
               <FormItem className={styles.form_item}>
                 <FormLabel>{t(KEY.event_form_is_hidden)}</FormLabel>
                 <FormControl>
-                  <ToggleSwitch checked={field.value} onChange={() => field.onChange(!field.value)} />
+                  <div className={styles.checkbox}>
+                    <Checkbox checked={field.value} onChange={() => field.onChange(!field.value)} />
+                  </div>
                 </FormControl>
-                <p>{t(KEY.event_form_is_hidden_help)}</p>
+                <Text size="s">{t(KEY.event_form_is_hidden_help)}</Text>
                 <FormMessage />
               </FormItem>
             )}
