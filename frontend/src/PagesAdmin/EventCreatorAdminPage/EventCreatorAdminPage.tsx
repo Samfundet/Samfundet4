@@ -294,9 +294,7 @@ export function EventCreatorAdminPage() {
           data.duration > 0 &&
           data.category &&
           data.host &&
-          data.location &&
-          data.capacity !== undefined &&
-          data.capacity > 0
+          data.location
         );
       },
       template: (
@@ -413,7 +411,7 @@ export function EventCreatorAdminPage() {
                       {...field}
                       onChange={(e) => {
                         const v = e.target.value;
-                        field.onChange(v === '' ? '' : Number.parseInt(v));
+                        field.onChange(v === '' ? undefined : Number.parseInt(v));
                       }}
                     />
                   </FormControl>
