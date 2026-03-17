@@ -1,0 +1,53 @@
+@use 'src/constants' as *;
+
+@use 'src/mixins' as *;
+
+.imageContainer {
+  @include rounded;
+  @include shadow-light;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  transition: 0.2s;
+  border: none;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+.clickable {
+  cursor: pointer;
+  padding: 0;
+  text-align: inherit;
+}
+
+.selected {
+  box-shadow: 0 0 25px 5px rgba(143, 181, 238, 0.625);
+  border: 3px solid $blue;
+  transform: scale(1);
+}
+
+.imageTitle {
+  color: $white;
+  text-align: center;
+  min-height: 2em;
+}
+
+.text {
+  font-size: 1.2em;
+  padding: 0.2em;
+  background-color: $black;
+  text-decoration: none;
+}
+
+.tags {
+  font-size: 0.8em;
+  padding: 0.4em;
+  background-color: $black-t75;
+  text-decoration: none;
+}
