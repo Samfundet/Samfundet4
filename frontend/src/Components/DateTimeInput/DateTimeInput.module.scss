@@ -4,8 +4,8 @@
 
 .wrapper {
   position: relative;
-  width: 100%;
-  margin-top: 0.5em; /* Restored to match standard input labels */
+  width: 50%;
+  margin-top: 0.5em;
 }
 
 .container {
@@ -38,7 +38,6 @@
     }
   }
 
-  /* REACT HOOK FORM ERROR STATE INTEGRATION */
   &.has_error {
     border-color: $red;
 
