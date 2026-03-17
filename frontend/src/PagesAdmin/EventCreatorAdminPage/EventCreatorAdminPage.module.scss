@@ -91,7 +91,7 @@
 
 .socialMediaGrid {
   display: grid;
-  gap: 20px;
+  gap: 2em;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   align-items: start;
 }
@@ -99,7 +99,7 @@
 .socialMediaItem {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.3em;
 }
 
 
@@ -108,8 +108,8 @@
 }
 
 .socialMediaInput {
-  height: 36px;
-  padding: 0 10px;
+  height: 2.25em;
+  padding: 0 1em;
   border: 1px solid #b8b8b8;
   border-radius: 6px;
   background: #ffffff;
