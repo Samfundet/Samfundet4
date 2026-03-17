@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 import datetime
+from typing import TYPE_CHECKING
 from operator import or_
 from functools import reduce
 from collections.abc import Callable
+
+if TYPE_CHECKING:
+    from rest_framework.request import Request
 
 from django.conf import settings
 from django.http import QueryDict
@@ -19,6 +23,18 @@ from django.contrib.contenttypes.models import ContentType
 from .models import User
 from .models.event import Event
 from .models.recruitment import Recruitment, OccupiedTimeslot, RecruitmentInterviewAvailability
+
+
+def visible_events_for_user(request: Request) -> QuerySet[Event]:
+    """Returns the base Event queryset for a request, filtering out hidden events unless the user has edit permission."""
+    from root.custom_classes.permission_classes import has_required_permissions
+
+    user = request.user
+    can_edit = user.is_authenticated and (user.has_perm('samfundet.change_event') or has_required_permissions(request, ['samfundet.change_event']))
+    if can_edit:
+        return Event.objects.all()
+    return Event.objects.filter(is_hidden=False)
+
 
 SEARCH_FIELDS = (
     'title_nb__icontains',

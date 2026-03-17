@@ -9,6 +9,7 @@ import {
   EVENT_DURATION,
   EVENT_END_DT,
   EVENT_HOST,
+  EVENT_IS_HIDDEN,
   EVENT_LOCATION,
   EVENT_REGISTRATION_URL,
   EVENT_START_DT,
@@ -53,6 +54,7 @@ export const eventSchema = z.object({
   // Summary/Publication date
   visibility_from_dt: EVENT_VISIBILITY_FROM_DT,
   visibility_to_dt: EVENT_VISIBILITY_TO_DT,
+  is_hidden: EVENT_IS_HIDDEN,
 });
 
 export type EventFormType = z.infer<typeof eventSchema>;
