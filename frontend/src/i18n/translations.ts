@@ -316,11 +316,11 @@ export const nb = prepareTranslations({
   //MDB Connect AdminPage
   [KEY.adminpage_connect_mdb]: 'Koble til MDB',
   [KEY.adminpage_connect_mdb_extended]: 'Koble til medlemsdatabasen',
-  [KEY.adminpage_connect_mdb_succesful_toast]: 'Vellyket tilkobling til MDB',
+  [KEY.adminpage_connect_mdb_succesful_toast]: 'Vellyket tilkobling til medlemsdatabasen',
   [KEY.adminpage_connect_mdb_invalid_email]: 'ugyldig e-post',
-  [KEY.adminpage_connect_mdb_invalid_membership_number]: 'ugyldig medlemsdatabasenummer',
+  [KEY.adminpage_connect_mdb_invalid_membership_id]: 'ugyldig medlemsdatabasenummer',
   [KEY.adminpage_connect_mdb_common_error]:
-    'Kunne ikke koble til MDB. Vennligst sjekk at alle felter er skrevet riktig',
+    'Kunne ikke koble til medlemsdatabasen. Vennligst sjekk at alle felter er skrevet riktig',
 
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
@@ -1306,11 +1306,12 @@ export const en = prepareTranslations({
 
   //MDB Connect AdminPage
   [KEY.adminpage_connect_mdb]: 'Connect to MDB',
-  [KEY.adminpage_connect_mdb_extended]: 'Connect to member database',
-  [KEY.adminpage_connect_mdb_succesful_toast]: 'Succesfully connected to MDB',
+  [KEY.adminpage_connect_mdb_extended]: 'Connect to the membership database',
+  [KEY.adminpage_connect_mdb_succesful_toast]: 'Succesfully connected to the membership database',
   [KEY.adminpage_connect_mdb_invalid_email]: 'Invalid email',
-  [KEY.adminpage_connect_mdb_invalid_membership_number]: 'Invalid member database number',
-  [KEY.adminpage_connect_mdb_common_error]: "Couldn't connect to MDB. Please check that all fields are correct",
+  [KEY.adminpage_connect_mdb_invalid_membership_id]: 'Invalid membership ID',
+  [KEY.adminpage_connect_mdb_common_error]:
+    "Couldn't connect to the membership database. Please check that all fields are correct",
 
   // No category:
   [KEY.owner]: 'Owner',

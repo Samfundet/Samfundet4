@@ -1315,7 +1315,7 @@ export async function getPositionsByTag(
   return response.data;
 }
 
-export async function connect_to_mdb(
+export async function connectToMdb(
   member_login: string, //email or member_id
   password: string,
 ) {

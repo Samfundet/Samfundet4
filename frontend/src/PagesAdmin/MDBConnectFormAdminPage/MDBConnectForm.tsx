@@ -7,7 +7,7 @@ import { Input } from '~/Components';
 import { Button } from '~/Components/Button';
 import { Form, FormField, FormItem, FormLabel } from '~/Components/Forms';
 import { FormControl } from '~/Components/Forms/Form';
-import { connect_to_mdb } from '~/api';
+import { connectToMdb } from '~/api';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { EMAIL_OR_MEMBERSHIP_NUMBER, PASSWORD } from '~/schema/user';
@@ -32,7 +32,7 @@ export function MDBConnectForm() {
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
-    connect_to_mdb(values.member_login, values.password)
+    connectToMdb(values.member_login, values.password)
       .then((res) => {
         toast.success(t(KEY.adminpage_connect_mdb_succesful_toast));
       })

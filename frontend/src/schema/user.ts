@@ -1,8 +1,8 @@
 import type { TFunction } from 'i18next';
 import { z } from 'zod';
 import {
-  MEMBERSHIP_NUMBER_LENGTH_MAX,
-  MEMBERSHIP_NUMBER_LENGTH_MIN,
+  MEMBERSHIP_ID_LENGTH_MAX,
+  MEMBERSHIP_ID_LENGTH_MIN,
   PASSWORD_LENGTH_MAX,
   PASSWORD_LENGTH_MIN,
   USERNAME_LENGTH_MAX,
@@ -17,11 +17,7 @@ export const PASSWORD = z.string().min(PASSWORD_LENGTH_MIN).max(PASSWORD_LENGTH_
 
 export const EMAIL = z.string().email();
 
-export const MEMBERSHIPNUMBER = z
-  .string()
-  .min(MEMBERSHIP_NUMBER_LENGTH_MIN)
-  .max(MEMBERSHIP_NUMBER_LENGTH_MAX)
-  .regex(/^\d+$/);
+export const MEMBERSHIPNUMBER = z.string().min(MEMBERSHIP_ID_LENGTH_MIN).max(MEMBERSHIP_ID_LENGTH_MAX).regex(/^\d+$/);
 
 export const EMAIL_OR_MEMBERSHIP_NUMBER = (t: TFunction) =>
   z.string().superRefine((value, ctx) => {
@@ -33,7 +29,7 @@ export const EMAIL_OR_MEMBERSHIP_NUMBER = (t: TFunction) =>
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: onlyNumbers
-          ? lowerCapitalize(t(KEY.adminpage_connect_mdb_invalid_membership_number))
+          ? lowerCapitalize(t(KEY.adminpage_connect_mdb_invalid_membership_id))
           : lowerCapitalize(t(KEY.adminpage_connect_mdb_invalid_email)),
       });
     }
