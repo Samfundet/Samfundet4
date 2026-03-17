@@ -81,7 +81,7 @@ export const KEY = {
   common_date: 'common_date',
   common_show: 'common_show',
   common_menu: 'common_menu',
-  common_table: 'common_table',
+  common_table: 'common_table', // this one gives "bord" in Norwegian, not "tabell"
   common_sheet: 'common_sheet',
   common_max: 'common_max',
   common_edit: 'common_edit',
@@ -255,6 +255,15 @@ export const KEY = {
   loginpage_forgotten_password: 'loginpage_forgotten_password',
   loginpage_passwords_must_match: 'loginpage_passwords_must_match',
   loginpage_login_failed: 'loginpage_login_failed',
+
+  // LoginPickerPage:
+  loginpicker_page_caption: 'loginpicker_page_caption',
+  loginpicker_page_title: 'loginpicker_page_title',
+  loginpicker_page_nav_aria_label: 'loginpicker_page_nav_aria_label',
+  loginpicker_page_new_platform_title: 'loginpicker_page_new_platform_title',
+  loginpicker_page_new_platform_description: 'loginpicker_page_new_platform_description',
+  loginpicker_page_old_platform_title: 'loginpicker_page_old_platform_title',
+  loginpicker_page_old_platform_description: 'loginpicker_page_old_platform_description',
 
   contributors_page_title: 'contributors_page_title',
   contributors_page_text: 'contributors_page_text',
