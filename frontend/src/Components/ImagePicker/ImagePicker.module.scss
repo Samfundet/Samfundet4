@@ -44,28 +44,13 @@
   padding-right: 0.25rem;
 }
 
-.image {
-  @include rounded;
-  @include shadow-light;
+.image_box {
+  overflow: hidden;
   width: 100%;
   aspect-ratio: 5 / 4;
+  box-sizing: border-box;
   background-color: $grey-1;
-  background-size: cover;
-  background-position: center;
-  border: 3px solid transparent;
-  transition: 0.2s;
   transform: scale(0.9);
-  cursor: pointer;
-
-  &:hover {
-    filter: brightness(110%);
-  }
-
-  &.selected_image {
-    box-shadow: 0 0 25px 5px rgba(143, 181, 238, 0.625);
-    border: 3px solid $blue;
-    transform: scale(1);
-  }
 }
 
 .search_wrapper {
