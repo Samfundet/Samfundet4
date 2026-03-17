@@ -9,7 +9,6 @@ from root.utils.mixins import CustomBaseModel
 
 
 class SiteBanner(CustomBaseModel):
-
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     text_nb = models.CharField(max_length=80)
