@@ -43,6 +43,7 @@ export const nb = prepareTranslations({
   [KEY.pick_a_date]: 'Velg en dato',
 
   // Other common
+  [KEY.common_connect]: 'Koble til',
   [KEY.common_content]: 'Innhold',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Håndter',
@@ -303,6 +304,7 @@ export const nb = prepareTranslations({
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',
   [KEY.email_or_membership_number_message]: 'Du må oppgi enten en e-post eller et medlemsnummer',
+  [KEY.email_or_membership_number]: 'e-post eller medlemsnummer',
   [KEY.no_tickets_selected_message]: 'Du må velge minst én billett',
   [KEY.kr_per_ticket]: 'kr per billett',
   [KEY.enter_membership_number]: 'Skriv inn medlemsnummer',
@@ -323,6 +325,15 @@ export const nb = prepareTranslations({
   // AdminPage:
   [KEY.adminpage_gangs_title]: 'Administrer gjenger',
   [KEY.adminpage_gangs_create]: 'Opprett gjeng',
+
+  //MDB Connect AdminPage
+  [KEY.adminpage_connect_mdb]: 'Koble til MDB',
+  [KEY.adminpage_connect_mdb_extended]: 'Koble til medlemsdatabasen',
+  [KEY.adminpage_connect_mdb_succesful_toast]: 'Vellyket tilkobling til medlemsdatabasen',
+  [KEY.adminpage_connect_mdb_invalid_email]: 'ugyldig e-post',
+  [KEY.adminpage_connect_mdb_invalid_membership_id]: 'ugyldig medlemsdatabasenummer',
+  [KEY.adminpage_connect_mdb_common_error]:
+    'Kunne ikke koble til medlemsdatabasen. Vennligst sjekk at alle felter er skrevet riktig',
 
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
@@ -721,6 +732,7 @@ export const en = prepareTranslations({
   [KEY.pick_a_date]: 'Pick a date',
 
   // No category:
+  [KEY.common_connect]: 'Connect',
   [KEY.common_content]: 'Content',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Manage',
@@ -975,6 +987,7 @@ export const en = prepareTranslations({
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',
   [KEY.email_or_membership_number_message]: 'You must provide either an email or a membership number',
+  [KEY.email_or_membership_number]: 'email or membership number',
   [KEY.no_tickets_selected_message]: 'You must select at least one ticket',
   [KEY.kr_per_ticket]: 'kr per ticket',
   [KEY.enter_membership_number]: 'Enter your membership number',
@@ -1316,6 +1329,15 @@ export const en = prepareTranslations({
   [KEY.feedback_type_heading]: 'We want to hear what you think of samfundet.no',
   [KEY.feedback_your_feedback]: 'Your feedback',
   [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
+
+  //MDB Connect AdminPage
+  [KEY.adminpage_connect_mdb]: 'Connect to MDB',
+  [KEY.adminpage_connect_mdb_extended]: 'Connect to the membership database',
+  [KEY.adminpage_connect_mdb_succesful_toast]: 'Succesfully connected to the membership database',
+  [KEY.adminpage_connect_mdb_invalid_email]: 'Invalid email',
+  [KEY.adminpage_connect_mdb_invalid_membership_id]: 'Invalid membership ID',
+  [KEY.adminpage_connect_mdb_common_error]:
+    "Couldn't connect to the membership database. Please check that all fields are correct",
 
   // No category:
   [KEY.owner]: 'Owner',
