@@ -4,7 +4,7 @@ import { EventAgeRestriction, EventCategory, EventTicketType } from '~/types';
 const optionalUrl = z
   .string()
   .trim()
-  .refine((val) => val === '' || z.string().url().safeParse(val).success, { message: 'Må være en gyldig URL' })
+  .refine((val) => val === '' || /^https?:\/\//.test(val), { message: 'Må være en gyldig URL' })
   .optional();
 
 const validSpotifyUri = z
