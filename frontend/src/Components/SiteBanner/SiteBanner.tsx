@@ -5,20 +5,13 @@ import { BACKEND_DOMAIN } from '~/constants/constants';
 import { useScrollY } from '~/hooks';
 import styles from './SiteBanner.module.scss';
 
-type BannerLink = {
-  label_nb: string;
-  label_en: string;
-  url: string;
-  new_tab?: boolean;
-};
-
 export type SiteBannerDto = {
   id: string;
   version: number;
   text_nb: string;
   text_en: string;
-  severity: 'info' | 'warning' | 'error';
-  links: BannerLink[];
+  url: string | null;
+  new_tab?: boolean;
   is_active: boolean;
   start_at: string | null;
   end_at: string | null;
@@ -100,6 +93,8 @@ export function SiteBanner({ hideAfterPx = 1000 }: Props): JSX.Element | null {
 
   if (!visibleBanner) return null;
 
+  const content = <span className={styles.text}>{text}</span>;
+
   return (
     <div
       ref={ref}
@@ -108,22 +103,18 @@ export function SiteBanner({ hideAfterPx = 1000 }: Props): JSX.Element | null {
       aria-live="polite"
     >
       <div className={styles.content}>
-        <span className={styles.text}>{text}</span>
-        {visibleBanner.links?.length ? (
-          <span className={styles.links}>
-            {visibleBanner.links.map((l, idx) => (
-              <a
-                key={`${visibleBanner.id}_link_${idx}`}
-                className={styles.link}
-                href={l.url}
-                target={l.new_tab ? '_blank' : undefined}
-                rel={l.new_tab ? 'noreferrer' : undefined}
-              >
-                {isNorwegian ? l.label_nb : l.label_en}
-              </a>
-            ))}
-          </span>
-        ) : null}
+        {visibleBanner.url ? (
+          <a
+            className={styles.link}
+            href={visibleBanner.url}
+            target={visibleBanner.new_tab ? '_blank' : undefined}
+            rel={visibleBanner.new_tab ? 'noreferrer' : undefined}
+          >
+            {content}
+          </a>
+        ) : (
+          content
+        )}
       </div>
     </div>
   );

@@ -93,8 +93,8 @@ class OccupiedTimeAdmin(admin.ModelAdmin):
 
 @admin.register(SiteBanner)
 class SiteBannerAdmin(CustomBaseAdmin):
-    list_display = ['id', 'severity', 'is_active', 'start_at', 'end_at', 'updated_at']
-    list_filter = ['severity', 'is_active']
+    list_display = ['id', 'is_active', 'start_at', 'end_at', 'updated_at']
+    list_filter = ['is_active']
     search_fields = ['text_nb', 'text_en']
     ordering = ['-start_at', '-created_at']
     list_select_related = True

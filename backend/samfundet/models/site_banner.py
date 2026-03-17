@@ -9,18 +9,14 @@ from root.utils.mixins import CustomBaseModel
 
 
 class SiteBanner(CustomBaseModel):
-    class Severity(models.TextChoices):
-        INFO = 'info', 'Info'
-        WARNING = 'warning', 'Warning'
-        ERROR = 'error', 'Error'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
-    text_nb = models.TextField(blank=False, null=False)
-    text_en = models.TextField(blank=False, null=False)
+    text_nb = models.CharField(max_length=80)
+    text_en = models.CharField(max_length=80)
 
-    severity = models.CharField(max_length=16, choices=Severity.choices, default=Severity.INFO)
-    links = models.JSONField(blank=True, null=True, default=list)
+    url = models.CharField(max_length=500, blank=True, null=True)
+    new_tab = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
     start_at = models.DateTimeField(null=True, blank=True)

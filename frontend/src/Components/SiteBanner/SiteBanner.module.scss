@@ -10,10 +10,9 @@
   color: $white;
   display: flex;
   justify-content: center;
-  padding: 10px 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  align-items: center;
+  padding: 0.5rem 1rem;
   overflow: hidden;
-  max-height: 200px;
   transition:
     max-height 180ms ease,
     opacity 180ms ease,
@@ -29,34 +28,56 @@
 }
 
 .content {
+  width: 100%;
+  max-width: 1200px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  width: 100%;
-  max-width: 1200px;
-  min-width: 0;
+  gap: 0.75rem;
+  text-align: center;
+  overflow: hidden;
 }
 
 .text {
-  line-height: 1.4;
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .links {
-  margin-left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .link {
   color: inherit;
   text-decoration: underline;
-  margin-right: 12px;
-
-  &:hover {
-    color: $red-light;
-  }
 
   &:focus-visible {
     outline: 2px solid currentcolor;
     outline-offset: 2px;
+  }
+}
+
+@media (max-width: 900px) {
+  .content {
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .text {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .links {
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }
