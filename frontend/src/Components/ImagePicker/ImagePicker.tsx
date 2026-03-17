@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import classNames from 'classnames';
 import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ImageTile } from '~/Components/ImageTile';
 import { getImagesPaginated } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
@@ -62,12 +62,13 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
   function renderImage(image: ImageDto): ReactNode {
     const isSelected = selected?.id === image.id;
     return (
-      <button
-        type="button"
+      <ImageTile
         key={image.id}
-        className={classNames(styles.image, isSelected && styles.selected_image)}
+        image={image}
+        className={styles.image_box}
+        selected={isSelected}
+        selectedClassName={styles.image_box_selected}
         onClick={() => select(image)}
-        style={backgroundImageFromUrl(BACKEND_DOMAIN + image.url)}
       />
     );
   }
