@@ -57,6 +57,7 @@ export const KEY = {
   pick_a_date: 'pick_a_date',
 
   // No category:
+  common_connect: 'common_connect',
   common_content: 'common_content',
   common_url: 'common_url',
   common_manage: 'common_manage',
@@ -80,7 +81,7 @@ export const KEY = {
   common_date: 'common_date',
   common_show: 'common_show',
   common_menu: 'common_menu',
-  common_table: 'common_table',
+  common_table: 'common_table', // this one gives "bord" in Norwegian, not "tabell"
   common_sheet: 'common_sheet',
   common_max: 'common_max',
   common_edit: 'common_edit',
@@ -288,6 +289,7 @@ export const KEY = {
   // Purchase Ticket Info:
   invalid_email_message: 'invalid_email_message',
   email_or_membership_number_message: 'email_or_membership_number_message',
+  email_or_membership_number: 'email_or_membership_number',
   no_tickets_selected_message: 'no_tickets_selected_message',
   kr_per_ticket: 'kr_per_ticket',
   enter_membership_number: 'enter_membership_number',
@@ -589,6 +591,12 @@ export const KEY = {
   admin_role_page_orggangsection: 'admin_role_page_orggangsection',
   admin_role_page_role_since: 'admin_role_page_role_since',
   admin_role_page_given_by: 'admin_role_page_given_by',
+  adminpage_connect_mdb: 'adminpage_connect_mdb',
+  adminpage_connect_mdb_extended: 'adminpage_connect_mdb_extended',
+  adminpage_connect_mdb_succesful_toast: 'adminpage_connect_mdb_succesful_toast',
+  adminpage_connect_mdb_invalid_email: 'adminpage_connect_mdb_invalid_email',
+  adminpage_connect_mdb_invalid_membership_id: 'adminpage_connect_mdb_invalid_membership_id',
+  adminpage_connect_mdb_common_error: 'adminpage_connect_mdb_common_error',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
