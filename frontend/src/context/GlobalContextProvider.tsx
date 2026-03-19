@@ -30,6 +30,11 @@ type GlobalContextProps = {
   setIsMobileNavigation: SetState<boolean>;
 
   keyValues: KeyValueMap;
+
+  // AdminToggels
+  closedOverride: string;
+  setClosedOverride: SetState<string>;
+  switchClosedOverride: (override: string) => void;
 };
 
 /**
@@ -76,6 +81,8 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
   const [mirrorDimension, setMirrorDimension] = useState<boolean>(false);
   const { isMouseTrail, setIsMouseTrail, toggleMouseTrail } = useMouseTrail();
 
+  const [closedOverride, setClosedOverride] = useState<string>('default');
+
   // =================================== //
   //               Effects               //
   // =================================== //
@@ -84,6 +91,7 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
   useEffect(() => {
     if (!user || !enabled) return;
     setMirrorDimension(user.user_preference.mirror_dimension);
+    setClosedOverride(user.user_preference.closed_override);
   }, [user, enabled]);
 
   // Stuff to do on first render.
@@ -140,6 +148,14 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
     return toggledValue;
   }
 
+  /** changes closed override and saves it to user preference */
+  function switchClosedOverride(override: string): void {
+    setClosedOverride(override);
+    if (user) {
+      putUserPreference(user.user_preference.id, { closed_override: override });
+    }
+  }
+
   // =================================== //
   //    Finalize context with values     //
   // =================================== //
@@ -158,6 +174,9 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
     toggleMouseTrail,
     toggleMirrorDimension,
     keyValues,
+    closedOverride,
+    setClosedOverride,
+    switchClosedOverride,
   };
 
   return <GlobalContext.Provider value={globalContextValues}>{children}</GlobalContext.Provider>;
