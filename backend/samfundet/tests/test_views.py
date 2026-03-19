@@ -282,18 +282,20 @@ class TestVenueOpenViews:
             'slug': open_slug,
             f'opening_{day_of_week}': open_time,
             f'closing_{day_of_week}': close_time,
+            f'is_open_{day_of_week}': True,
         }
         self._create_venue(**open_venue_kwargs)
 
-        # 2. Venue that is explicitly closed (00:00 - 00:00)
+        # 2. Venue that is explicitly closed (is_open_* = False)
         closed_venue_kwargs = {
             'slug': closed_slug,
             f'opening_{day_of_week}': zero_time,
             f'closing_{day_of_week}': zero_time,
+            f'is_open_{day_of_week}': False,
         }
         self._create_venue(**closed_venue_kwargs)
 
-        # 3. Venue open on a different day (should be treated as closed on the test day if explicitly set to 0:00-0:00)
+        # 3. Venue open on a different day (should be treated as closed on the test day)
         other_slug = 'other_day'
         other_day_kwargs = {
             'slug': other_slug,
@@ -301,6 +303,7 @@ class TestVenueOpenViews:
             'closing_tuesday': close_time,
             f'opening_{day_of_week}': zero_time,
             f'closing_{day_of_week}': zero_time,
+            f'is_open_{day_of_week}': False,
         }
         self._create_venue(**other_day_kwargs)
 

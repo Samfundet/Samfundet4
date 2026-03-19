@@ -6,7 +6,7 @@ import type { UseFormReturn } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import type { z } from 'zod';
 import { CURSOR_TRAIL_CLASS, THEME_KEY, type ThemeValue } from '~/constants';
-import type { UserDto } from '~/dto';
+import type { UserDto, VenueDto } from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
 import {
@@ -180,6 +180,78 @@ export function getFullDisplayName(u: UserDto): string {
 export function isTruthy(value = ''): boolean {
   const falsy = ['', 'no', 'zero', '0'];
   return !falsy.includes(value.toLowerCase());
+}
+
+export type DaySchedule = {
+  opening: string;
+  closing: string;
+  isOpen: boolean;
+};
+
+// 4-hour offset for venues open past midnight
+export const VENUE_DAY_OFFSET_MS = 4 * 60 * 60 * 1000;
+
+/**
+ * Returns the current date shifted by the venue day offset.
+ * Venues can be open past midnight (e.g. Thursday 10:00–02:00), so we subtract
+ * 4 hours: 01:00 Friday still counts as Thursday in the venue schedule.
+ */
+export function getVenueDate(): Date {
+  return new Date(Date.now() - VENUE_DAY_OFFSET_MS);
+}
+
+/**
+ * Returns the current "venue day" — the day whose schedule should be shown.
+ * This matches the backend's open_venues logic (timezone.now() - timedelta(hours=4)).
+ */
+export function getVenueDay(): Day {
+  return getVenueDate().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase() as Day;
+}
+
+/**
+ * Returns the opening hours schedule for a specific day from a venue.
+ * Centralises the per-day field access so the unsafe cast lives in one place.
+ */
+export function getVenueDaySchedule(venue: VenueDto, day: Day): DaySchedule {
+  return {
+    opening: venue[`opening_${day}`] as string,
+    closing: venue[`closing_${day}`] as string,
+    isOpen: venue[`is_open_${day}`] as boolean,
+  };
+}
+
+type VenueScheduleISO = {
+  startISO: string;
+  endISO: string;
+  isOpen: boolean;
+};
+
+/**
+ * Returns ISO date strings for a venue's schedule on the current venue day.
+ * Handles overnight hours (e.g., 22:00-02:00) by adding a day to the end time.
+ */
+export function getVenueScheduleISO(venue: VenueDto): VenueScheduleISO {
+  const day = getVenueDay();
+  const { opening, closing, isOpen } = getVenueDaySchedule(venue, day);
+
+  if (!isOpen || !opening || !closing) {
+    return { startISO: '', endISO: '', isOpen: false };
+  }
+
+  const startDate = getVenueDate();
+
+  // Check if closing is earlier than opening (indicates overnight to next day)
+  const [openHour, openMin] = opening.split(':').map(Number);
+  const [closeHour, closeMin] = closing.split(':').map(Number);
+  const isOvernight = closeHour < openHour || (closeHour === openHour && closeMin <= openMin);
+
+  const endDate = isOvernight ? new Date(startDate.getTime() + 24 * 60 * 60 * 1000) : startDate;
+
+  const dateToISO = (date: Date) => date.toISOString().split('T')[0];
+  const startISO = `${dateToISO(startDate)}T${opening}`;
+  const endISO = `${dateToISO(endDate)}T${closing}`;
+
+  return { startISO, endISO, isOpen };
 }
 
 /**
