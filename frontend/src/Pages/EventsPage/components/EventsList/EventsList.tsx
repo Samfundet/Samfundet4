@@ -1,18 +1,16 @@
 import { Icon } from '@iconify/react';
-import { type ReactNode, useState } from 'react';
+import { type ReactNode, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Dropdown, IconButton, InputField, Link, TimeDisplay } from '~/Components';
+import { Button, Dropdown, InputField, Link, TimeDisplay } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
-import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import type { EventCategoryValue, SetState } from '~/types';
-import { COLORS } from '~/types';
 import { dbT, lowerCapitalize } from '~/utils';
 import styles from './EventsList.module.scss';
 
@@ -38,7 +36,6 @@ export function EventsList({
   const { t, i18n } = useTranslation();
   const [tableView, setTableView] = useState(false);
   const [query, setQuery] = useState('');
-  const isDesktop = useDesktop();
 
   const categoryOptions: DropdownOption<string | null>[] = (categories ?? []).map((category) => {
     return { label: category, value: category } as DropdownOption<string>;
@@ -59,8 +56,8 @@ export function EventsList({
   ];
 
   // TODO debounce and move header/filtering stuff to a separate component
-  function filteredEvents() {
-    const allEvents = Object.keys(events).flatMap((k: string) => events[k]);
+  const filteredEvents = useMemo(() => {
+    const allEvents = Object.values(events).flat();
     const normalizedSearch = query.trim().toLowerCase();
     const keywords = normalizedSearch.split(' ');
 
@@ -72,11 +69,11 @@ export function EventsList({
 
       return matchesSearch && matchesVenue && matchesCategory;
     });
-  }
+  }, [events, query, selectedVenue, selectedCategory, i18n.language]);
 
   // TODO improve table view for events
   function getEventRows(): TableRow[] {
-    return filteredEvents().map((event) => ({
+    return filteredEvents.map((event) => ({
       cells: [
         {
           content: (
@@ -104,7 +101,7 @@ export function EventsList({
   }
 
   function getEventCards(): ReactNode[] {
-    return filteredEvents().map((event: EventDto) => {
+    return filteredEvents.map((event: EventDto) => {
       const time_display = <TimeDisplay timestamp={event.start_dt} displayType="event-datetime" />;
       return (
         <div className={styles.event_container} key={event.id}>
@@ -147,16 +144,6 @@ export function EventsList({
             onChange={setQuery}
             value={query}
           />
-          {isDesktop && (
-            <span className={styles.filter_button}>
-              <IconButton
-                icon="fluent:options-24-filled"
-                title="Filter"
-                color={COLORS.black}
-                onClick={() => alert('TODO legg til tinius sitt filter')}
-              />
-            </span>
-          )}
           <Dropdown
             options={categoryOptions}
             onChange={(val) => setSelectedCategory(val as EventCategoryValue)}
