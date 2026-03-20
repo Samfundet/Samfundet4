@@ -22,7 +22,7 @@ $error-color: red;
   &.error {
     border: 1px solid $error-color;
   }
-
+  
   @include theme-dark {
     background-color: $theme-dark-input-bg;
     color: $theme-dark-color;
