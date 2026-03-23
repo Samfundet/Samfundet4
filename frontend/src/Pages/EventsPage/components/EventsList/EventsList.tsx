@@ -102,7 +102,15 @@ export function EventsList({ events }: EventsListProps) {
   }
 
   useEffect(() => {
-    setSearchParam({ search: query });
+    setSearchParam((prev) => {
+      const next = new URLSearchParams(prev);
+      if (query) {
+        next.set('search', query);
+      } else {
+        next.delete('search');
+      }
+      return next;
+    });
   }, [query, setSearchParam]);
 
   function getButton(title: string, icon: string, func: () => void, chosen: boolean) {
