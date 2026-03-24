@@ -3,12 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
-import { Button, Carousel, EventQuery, ImageCard, TimeDisplay } from '~/Components';
+import { Button, EventQuery, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { PagedPagination } from '~/Components/Pagination';
 import { Table } from '~/Components/Table';
 import { deleteEvent, getEventsUpcommingPaginated } from '~/api';
-import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -167,22 +166,6 @@ export function EventsAdminPage() {
 
   return (
     <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={isLoading}>
-      <Carousel spacing={2} header="" className={styles.carousel} itemContainerClass={styles.carousel_item}>
-        {events.slice(0, Math.min(events.length, 10)).map((event) => {
-          return (
-            <ImageCard
-              key={event.id}
-              title={dbT(event, 'title')}
-              date={event.start_dt}
-              subtitle=""
-              imageUrl={BACKEND_DOMAIN + event.image_url}
-              compact={true}
-              ticket_type={event.ticket_type}
-              host={event.host}
-            />
-          );
-        })}
-      </Carousel>
       <EventQuery
         venues={venues}
         categories={categories}
