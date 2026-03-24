@@ -12,6 +12,7 @@ export const EVENT_LOCATION = z.string().min(1, { message: 'Lokale er påkrevd' 
 export const EVENT_CAPACITY = z.number().min(1, { message: 'Kapasitet må være større enn 0' }).optional();
 export const EVENT_VISIBILITY_FROM_DT = z.string().min(1, { message: 'Synlig fra dato er påkrevd' });
 export const EVENT_VISIBILITY_TO_DT = z.string().optional();
+export const EVENT_IS_HIDDEN = z.boolean().default(false);
 export const EVENT_PAID_OPTION = z.string().url().optional();
 export const EVENT_BILLIG_ID = z.number().optional();
 
