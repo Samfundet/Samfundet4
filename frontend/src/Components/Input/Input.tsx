@@ -55,7 +55,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <input
         ref={ref}
         type={type}
-        className={classNames(styles.input, type && classMap[type], className)}
+        className={classNames(type && classMap[type], className)}
         // If controlled, pass `value`, else pass `defaultValue`.
         value={isControlled ? value : undefined}
         defaultValue={!isControlled ? defaultValue : undefined}
