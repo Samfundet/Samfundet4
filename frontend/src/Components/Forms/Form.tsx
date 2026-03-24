@@ -8,6 +8,7 @@ import {
   FormProvider,
   useFormContext,
 } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 import styles from './Forms.module.scss';
@@ -126,7 +127,9 @@ FormControl.displayName = 'FormControl';
 export const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, children, ...props }, ref) => {
     const { error, formMessageId } = useFormField();
-    const body = error ? String(error?.message) : children;
+    const { t, i18n } = useTranslation();
+    const message = error ? String(error?.message) : children;
+    const body = typeof message === 'string' && i18n.exists(message) ? t(message) : message;
 
     if (!body) {
       return null;
