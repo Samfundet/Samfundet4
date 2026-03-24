@@ -43,6 +43,7 @@ export const nb = prepareTranslations({
   [KEY.pick_a_date]: 'Velg en dato',
 
   // Other common
+  [KEY.common_connect]: 'Koble til',
   [KEY.common_content]: 'Innhold',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Håndter',
@@ -244,6 +245,15 @@ export const nb = prepareTranslations({
   [KEY.loginpage_username]: 'Brukernavn',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
 
+  // LoginPickerPage:
+  [KEY.loginpicker_page_caption]: 'Innlogging for interne',
+  [KEY.loginpicker_page_title]: 'Hvordan vil du logge inn?',
+  [KEY.loginpicker_page_nav_aria_label]: 'Velg innlogging',
+  [KEY.loginpicker_page_new_platform_title]: 'Ny plattform (samf4)',
+  [KEY.loginpicker_page_new_platform_description]: 'Den nye plattformen for arrangementer og generell bruk',
+  [KEY.loginpicker_page_old_platform_title]: 'Eldre plattform (samf3)',
+  [KEY.loginpicker_page_old_platform_description]: 'Gruppeadministrasjon og andre administrative oppgaver',
+
   // ContributorsPage
   [KEY.contributors_page_title]: 'De frivillige som utvikler Samfundet.no',
   [KEY.contributors_page_text]: 'Samfundet.no utvikles av MG::Web, som er en seksjon i Markedsføringsgjengen.',
@@ -291,6 +301,7 @@ export const nb = prepareTranslations({
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',
   [KEY.email_or_membership_number_message]: 'Du må oppgi enten en e-post eller et medlemsnummer',
+  [KEY.email_or_membership_number]: 'e-post eller medlemsnummer',
   [KEY.no_tickets_selected_message]: 'Du må velge minst én billett',
   [KEY.kr_per_ticket]: 'kr per billett',
   [KEY.enter_membership_number]: 'Skriv inn medlemsnummer',
@@ -312,6 +323,15 @@ export const nb = prepareTranslations({
   [KEY.adminpage_gangs_title]: 'Administrer gjenger',
   [KEY.adminpage_gangs_create]: 'Opprett gjeng',
 
+  //MDB Connect AdminPage
+  [KEY.adminpage_connect_mdb]: 'Koble til MDB',
+  [KEY.adminpage_connect_mdb_extended]: 'Koble til medlemsdatabasen',
+  [KEY.adminpage_connect_mdb_succesful_toast]: 'Vellyket tilkobling til medlemsdatabasen',
+  [KEY.adminpage_connect_mdb_invalid_email]: 'ugyldig e-post',
+  [KEY.adminpage_connect_mdb_invalid_membership_id]: 'ugyldig medlemsdatabasenummer',
+  [KEY.adminpage_connect_mdb_common_error]:
+    'Kunne ikke koble til medlemsdatabasen. Vennligst sjekk at alle felter er skrevet riktig',
+
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
 
@@ -323,6 +343,9 @@ export const nb = prepareTranslations({
   [KEY.navbar_map]: 'Kart og lokaler',
   [KEY.navbar_photos]: 'Foto',
   [KEY.navbar_nybygg]: 'Nybygg',
+  [KEY.navbar_bar]: 'Bar',
+  [KEY.navbar_stages]: 'Scener',
+  [KEY.navbar_club]: 'Klubb',
 
   // Common navigation - links for samf 3 (used in navbar and footer):
 
@@ -662,6 +685,21 @@ export const nb = prepareTranslations({
   [KEY.error_server_error_description]: 'En serverfeil har opptstått',
   [KEY.error_submitting_reservation]: 'Det skjedde en feil ved innsending av reservasjon',
   [KEY.error_invalid_reservation_data]: 'Ugyldig reservasjonsdata',
+
+  // Event form validation
+  [KEY.event_form_title_required]: 'Tittel er påkrevd',
+  [KEY.event_form_description_long_required]: 'Lang beskrivelse er påkrevd',
+  [KEY.event_form_description_short_required]: 'Kort beskrivelse er påkrevd',
+  [KEY.event_form_start_dt_required]: 'Dato og tid er påkrevd',
+  [KEY.event_form_duration_min]: 'Varighet må være større enn 0',
+  [KEY.event_form_host_required]: 'Arrangør er påkrevd',
+  [KEY.event_form_location_required]: 'Lokale er påkrevd',
+  [KEY.event_form_capacity_min]: 'Kapasitet må være større enn 0',
+  [KEY.event_form_visibility_from_required]: 'Synlig fra dato er påkrevd',
+
+  [KEY.event_form_category_required]: 'Kategori er påkrevd',
+  [KEY.event_form_age_restriction_required]: 'Aldersgrense er påkrevd',
+  [KEY.event_form_ticket_type_required]: 'Billetttype er påkrevd',
 });
 
 export const en = prepareTranslations({
@@ -706,6 +744,7 @@ export const en = prepareTranslations({
   [KEY.pick_a_date]: 'Pick a date',
 
   // No category:
+  [KEY.common_connect]: 'Connect',
   [KEY.common_content]: 'Content',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Manage',
@@ -906,6 +945,15 @@ export const en = prepareTranslations({
   [KEY.loginpage_passwords_must_match]: 'Passwords must match',
   [KEY.loginpage_login_failed]: 'Login failed',
 
+  // LoginPickerPage:
+  [KEY.loginpicker_page_caption]: 'Internal login',
+  [KEY.loginpicker_page_title]: 'How would you like to log in?',
+  [KEY.loginpicker_page_nav_aria_label]: 'Choose login',
+  [KEY.loginpicker_page_new_platform_title]: 'New platform (samf4)',
+  [KEY.loginpicker_page_new_platform_description]: 'The new platform for events and general use',
+  [KEY.loginpicker_page_old_platform_title]: 'Legacy platform (samf3)',
+  [KEY.loginpicker_page_old_platform_description]: 'Group administration and other administrative tasks',
+
   // GangsPage:
   [KEY.gangspage_title]: 'The groups at Samfundet',
 
@@ -948,6 +996,7 @@ export const en = prepareTranslations({
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',
   [KEY.email_or_membership_number_message]: 'You must provide either an email or a membership number',
+  [KEY.email_or_membership_number]: 'email or membership number',
   [KEY.no_tickets_selected_message]: 'You must select at least one ticket',
   [KEY.kr_per_ticket]: 'kr per ticket',
   [KEY.enter_membership_number]: 'Enter your membership number',
@@ -984,6 +1033,9 @@ export const en = prepareTranslations({
   [KEY.navbar_photos]: 'Photos',
   [KEY.navbar_nybygg]: 'New building',
   [KEY.navbar_map]: 'Map and venues',
+  [KEY.navbar_bar]: 'Bar',
+  [KEY.navbar_stages]: 'Stages',
+  [KEY.navbar_club]: 'Club',
 
   // Common navigation (used in navbar and footer):
 
@@ -1287,6 +1339,15 @@ export const en = prepareTranslations({
   [KEY.feedback_your_feedback]: 'Your feedback',
   [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
 
+  //MDB Connect AdminPage
+  [KEY.adminpage_connect_mdb]: 'Connect to MDB',
+  [KEY.adminpage_connect_mdb_extended]: 'Connect to the membership database',
+  [KEY.adminpage_connect_mdb_succesful_toast]: 'Succesfully connected to the membership database',
+  [KEY.adminpage_connect_mdb_invalid_email]: 'Invalid email',
+  [KEY.adminpage_connect_mdb_invalid_membership_id]: 'Invalid membership ID',
+  [KEY.adminpage_connect_mdb_common_error]:
+    "Couldn't connect to the membership database. Please check that all fields are correct",
+
   // No category:
   [KEY.owner]: 'Owner',
   [KEY.end_time]: 'End time',
@@ -1317,4 +1378,19 @@ export const en = prepareTranslations({
   [KEY.error_server_error_description]: 'A server error has occurred',
   [KEY.error_submitting_reservation]: 'An error occurred while submitting the reservation',
   [KEY.error_invalid_reservation_data]: 'Invalid reservation data',
+
+  // Event form validation
+  [KEY.event_form_title_required]: 'Title is required',
+  [KEY.event_form_description_long_required]: 'Long description is required',
+  [KEY.event_form_description_short_required]: 'Short description is required',
+  [KEY.event_form_start_dt_required]: 'Date and time is required',
+  [KEY.event_form_duration_min]: 'Duration must be greater than 0',
+  [KEY.event_form_host_required]: 'Host is required',
+  [KEY.event_form_location_required]: 'Venue is required',
+  [KEY.event_form_capacity_min]: 'Capacity must be greater than 0',
+  [KEY.event_form_visibility_from_required]: 'Visible from date is required',
+
+  [KEY.event_form_category_required]: 'Category is required',
+  [KEY.event_form_age_restriction_required]: 'Age restriction is required',
+  [KEY.event_form_ticket_type_required]: 'Ticket type is required',
 });

@@ -54,6 +54,7 @@ export function EventQuery({
         icon="ic:baseline-search"
       />
       <Dropdown
+        sortAlphabetic={true}
         options={venueOptions}
         onChange={(val) => setSelectedVenue(val as string)}
         className={styles.element}
@@ -61,6 +62,7 @@ export function EventQuery({
       />
 
       <Dropdown
+        sortAlphabetic={true}
         options={categoryOptions}
         onChange={(val) => setSelectedCategory(val as EventCategoryValue)}
         className={styles.element}
