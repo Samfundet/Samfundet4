@@ -4,10 +4,12 @@
 from __future__ import annotations
 
 from typing import Any
+from datetime import time, timedelta
 from itertools import chain
 
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.filters import SearchFilter
 from rest_framework.request import Request
 from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.response import Response
@@ -16,12 +18,14 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 
 from django.utils import timezone
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from django.shortcuts import get_object_or_404
 
-from root.custom_classes.permission_classes import RoleProtectedOrAnonReadOnlyObjectPermissions
+from root.constants import WebFeatures
+from root.custom_classes.permission_classes import FeatureEnabled, RoleProtectedOrAnonReadOnlyObjectPermissions
 
 from samfundet.homepage import homepage
+from samfundet.pagination import CustomPageNumberPagination
 from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from samfundet.serializers import (
     TagSerializer,
@@ -95,27 +99,61 @@ class KeyValueView(ReadOnlyModelViewSet):
 
 # Images
 class ImageView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.IMAGES
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = ImageSerializer
     queryset = Image.objects.all().order_by('-pk')
+    pagination_class = CustomPageNumberPagination
+    filter_backends = [SearchFilter]
+    search_fields = ['title']
 
 
 # Image tags
 class TagView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.IMAGES
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = TagSerializer
     queryset = Tag.objects.all()
 
 
 class VenueView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.VENUE
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
     lookup_field = 'slug'
 
+    @action(detail=False, methods=['get'])
+    def open_venues(self, request: Request) -> Response:
+        day_name = (timezone.now() - timedelta(hours=4)).strftime('%A').lower()
+
+        q = ~Q(
+            **{
+                f'opening_{day_name}': time(0, 0, 0),
+                f'closing_{day_name}': time(0, 0, 0),
+            }
+        )
+
+        open_venues = Venue.objects.filter(q)
+        serializer = self.get_serializer(open_venues, many=True)
+        return Response(serializer.data)
+
 
 class ClosedPeriodView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.CLOSED_HOURS
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = ClosedPeriodSerializer
     queryset = ClosedPeriod.objects.all()
 
@@ -132,13 +170,21 @@ class IsClosedView(ListAPIView):
 
 
 class SaksdokumentView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.DOCUMENTS
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = SaksdokumentSerializer
     queryset = Saksdokument.objects.all()
 
 
 class OrganizationView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.ORGANIZATION
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = OrganizationSerializer
     queryset = Organization.objects.all()
 
@@ -151,13 +197,21 @@ class OrganizationView(ModelViewSet):
 
 
 class GangView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.GANGS
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = GangSerializer
     queryset = Gang.objects.all()
 
 
 class GangTypeView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.GANGS
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = GangTypeSerializer
     queryset = GangType.objects.all()
 
@@ -172,7 +226,11 @@ class GangTypeOrganizationView(APIView):
 
 
 class InformationPageView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.INFORMATION
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = InformationPageSerializer
     queryset = InformationPage.objects.all()
 
@@ -184,13 +242,21 @@ class InfoboxView(ModelViewSet):
 
 
 class BlogPostView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.BLOG
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = BlogPostSerializer
     queryset = BlogPost.objects.all()
 
 
 class RoleView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.ROLES
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = RoleSerializer
     queryset = Role.objects.all()
 
@@ -215,7 +281,11 @@ class RoleView(ModelViewSet):
 #             Merch               #
 # =============================== #
 class MerchView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.MERCH
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = MerchSerializer
     queryset = Merch.objects.all()
 

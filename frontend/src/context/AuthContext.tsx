@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { type ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { getUser } from '~/api';
 import type { UserDto } from '~/dto';
-import type { Children, SetState } from '~/types';
+import type { SetState } from '~/types';
 
 type AuthContextProps = {
   user: UserDto | undefined;
@@ -23,7 +23,7 @@ export function useAuthContext() {
 
 type AuthContextProviderProps = {
   enabled?: boolean; // Enable/disable all side-effects, useful when used in Storybook.
-  children: Children;
+  children: ReactNode;
 };
 
 export function AuthContextProvider({ children, enabled = true }: AuthContextProviderProps) {

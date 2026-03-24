@@ -45,3 +45,46 @@ AUTH_BACKEND = 'django.contrib.auth.backends.ModelBackend'
 # Phone number regex
 
 PHONE_NUMBER_REGEX = r'^\+?\s*(\d\s*){8,15}$'
+
+
+class WebFeatures:
+    PROFILE = 'profile'
+    CHANGE_P = 'change_p'
+    EVENTS = 'events'
+    IMAGES = 'images'
+    OPENING_HOURS = 'opening_hours'
+    CLOSED_HOURS = 'closed_hours'
+    USERS = 'users'
+    ROLES = 'roles'
+    GANGS = 'gangs'
+    INFORMATION = 'information'
+    DOCUMENTS = 'documents'
+    RECRUITMENT = 'recruitment'
+    SULTEN = 'sulten'
+    FAQ = 'faq'
+    ORGANIZATION = 'organization'
+    VENUE = 'venue'
+    BLOG = 'blog'
+    MERCH = 'merch'
+
+
+CP_FEATURES_ALL = {
+    WebFeatures.PROFILE,
+    WebFeatures.CHANGE_P,
+    WebFeatures.EVENTS,
+    WebFeatures.IMAGES,
+    WebFeatures.OPENING_HOURS,
+    WebFeatures.CLOSED_HOURS,
+    WebFeatures.USERS,
+    WebFeatures.ROLES,
+    WebFeatures.GANGS,
+    WebFeatures.INFORMATION,
+    WebFeatures.DOCUMENTS,
+    WebFeatures.RECRUITMENT,
+    WebFeatures.SULTEN,
+    WebFeatures.FAQ,
+    WebFeatures.ORGANIZATION,
+    WebFeatures.VENUE,
+    WebFeatures.BLOG,
+    WebFeatures.MERCH,
+}

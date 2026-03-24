@@ -12,6 +12,7 @@ import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import type { EventCategoryValue } from '~/types';
 import { dbT, getTicketTypeKey, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventsAdminPage.module.scss';
@@ -24,11 +25,19 @@ export function EventsAdminPage() {
   const { t, i18n } = useTranslation();
   useTitle(t(KEY.admin_events_administrate));
 
-  function getEvents() {
-    getEventsUpcomming()
+  const [venues, setVenues] = useState<string[] | null>(null);
+  const [categories, setCategories] = useState<EventCategoryValue[]>([]);
+  const [selectedVenue, setSelectedVenue] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<EventCategoryValue | null>(null);
+  const [search, setSearch] = useState<string>('');
+
+  function getEvents(venue?: string | null, category?: EventCategoryValue | null) {
+    getEventsUpcomming({ venue: venue ?? undefined, category: category ?? undefined })
       .then((data) => {
-        setEvents(data);
-        setAllEvents(data);
+        setCategories(data.categories as EventCategoryValue[]);
+        setVenues(data.locations);
+        setEvents(data.events);
+        setAllEvents(data.events);
         setShowSpinner(false);
       })
       .catch((error) => {
@@ -37,12 +46,23 @@ export function EventsAdminPage() {
       });
   }
 
+  function filterEvents(): EventDto[] {
+    const normalizedSearch = search.trim().toLowerCase();
+    if (search === '') return events;
+    const keywords = normalizedSearch.split(' ');
+
+    return events.filter((event: EventDto) => {
+      const title = (dbT(event, 'title', i18n.language) as string)?.toLowerCase() ?? '';
+      return keywords.every((kw) => title.includes(kw));
+    });
+  }
+
   // Stuff to do on first render.
   // TODO add permissions on render
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    getEvents();
-  }, []);
+    getEvents(selectedVenue, selectedCategory);
+  }, [selectedVenue, selectedCategory]);
 
   function deleteSelectedEvent(id: number) {
     deleteEvent(id)
@@ -66,7 +86,9 @@ export function EventsAdminPage() {
     '', // Buttons
   ];
 
-  const data = events.map((event: EventDto) => ({
+  const filteredEvents = filterEvents();
+
+  const data = filteredEvents.map((event: EventDto) => ({
     cells: [
       dbT(event, 'title', i18n.language) as string,
       { content: <TimeDisplay timestamp={event.start_dt} />, value: event.start_dt },
@@ -135,7 +157,16 @@ export function EventsAdminPage() {
           );
         })}
       </Carousel>
-      <EventQuery allEvents={allEvents} setEvents={setEvents} />
+      <EventQuery
+        venues={venues}
+        categories={categories}
+        selectedVenue={selectedVenue}
+        setSelectedVenue={setSelectedVenue}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        search={search}
+        setSearch={setSearch}
+      />
       <div className={styles.tableContainer}>
         <Table columns={tableColumns} data={data} />
       </div>

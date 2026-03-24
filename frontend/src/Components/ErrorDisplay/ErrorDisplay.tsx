@@ -1,11 +1,11 @@
+import type { ReactNode } from 'react';
 import { H1 } from '~/Components';
-import type { Children } from '~/types';
 import styles from './ErrorDisplay.module.scss';
 
 interface ErrorDisplayProps {
   header: string;
   message: string;
-  children?: Children;
+  children?: ReactNode;
 }
 
 export function ErrorDisplay({ header, message, children }: ErrorDisplayProps) {

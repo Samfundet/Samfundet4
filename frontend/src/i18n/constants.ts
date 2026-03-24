@@ -57,6 +57,7 @@ export const KEY = {
   pick_a_date: 'pick_a_date',
 
   // No category:
+  common_connect: 'common_connect',
   common_content: 'common_content',
   common_url: 'common_url',
   common_manage: 'common_manage',
@@ -72,6 +73,7 @@ export const KEY = {
   common_not: 'common_not',
   common_now: 'common_now',
   common_time: 'common_time',
+  common_minutes: 'common_minutes',
   common_here: 'common_here',
   common_name: 'common_name',
   common_save: 'common_save',
@@ -79,7 +81,7 @@ export const KEY = {
   common_date: 'common_date',
   common_show: 'common_show',
   common_menu: 'common_menu',
-  common_table: 'common_table',
+  common_table: 'common_table', // this one gives "bord" in Norwegian, not "tabell"
   common_sheet: 'common_sheet',
   common_max: 'common_max',
   common_edit: 'common_edit',
@@ -101,6 +103,7 @@ export const KEY = {
   common_events: 'common_events',
   common_repeat: 'common_repeat',
   common_venues: 'common_venues',
+  common_shortcuts: 'common_shortcuts',
   common_sulten: 'common_sulten',
   common_logout: 'common_logout',
   common_go_back: 'common_go_back',
@@ -163,7 +166,6 @@ export const KEY = {
   common_contributors: 'common_contributors',
   common_unselect_all: 'common_unselect_all',
   common_opening_hours: 'common_opening_hours',
-  common_general: 'common_general',
   common_long_description: 'common_long_description',
   common_short_description: 'common_short_description',
   common_back_to_samfundet: 'common_back_to_samfundet',
@@ -200,6 +202,8 @@ export const KEY = {
   common_tab_view: 'common_tab_view',
   common_available: 'common_available',
   common_comment: 'common_comment',
+  common_capacity: 'common_capacity',
+
   common_membership_number: 'common_membership_number',
   common_to_payment: 'common_to_payment',
 
@@ -219,11 +223,13 @@ export const KEY = {
   common_about_the_organisation: 'common_about_the_organisation',
   common_the_society_meeting: 'common_the_society_meeting',
   common_tickets: 'common_tickets',
+  common_the_ticket_type: 'common_the_ticket_type',
   common_contact_information: 'common_contact_information',
   common_about_samfundet: 'common_about_samfundet',
   // Price groups:
   common_ticket_type: 'common_ticket_type',
   common_ticket_type_free: 'common_ticket_type_free',
+  common_ticket_type_free_with_registration: 'common_ticket_type_free_with_registration',
   common_ticket_type_custom: 'common_ticket_type_custom',
   common_ticket_type_billig: 'common_ticket_type_billig',
   common_ticket_type_included: 'common_ticket_type_included',
@@ -231,6 +237,7 @@ export const KEY = {
 
   // Billig
 
+  common_buy_ticket: 'common_buy_ticket',
   common_sold_out: 'common_sold_out',
   common_almost_sold_out: 'common_almost_sold_out',
   // ==================== //
@@ -249,6 +256,15 @@ export const KEY = {
   loginpage_passwords_must_match: 'loginpage_passwords_must_match',
   loginpage_login_failed: 'loginpage_login_failed',
 
+  // LoginPickerPage:
+  loginpicker_page_caption: 'loginpicker_page_caption',
+  loginpicker_page_title: 'loginpicker_page_title',
+  loginpicker_page_nav_aria_label: 'loginpicker_page_nav_aria_label',
+  loginpicker_page_new_platform_title: 'loginpicker_page_new_platform_title',
+  loginpicker_page_new_platform_description: 'loginpicker_page_new_platform_description',
+  loginpicker_page_old_platform_title: 'loginpicker_page_old_platform_title',
+  loginpicker_page_old_platform_description: 'loginpicker_page_old_platform_description',
+
   contributors_page_title: 'contributors_page_title',
   contributors_page_text: 'contributors_page_text',
   contributors_page_past_developers: 'contributors_page_past_developers',
@@ -264,9 +280,14 @@ export const KEY = {
   none: 'none',
   mix: 'mix',
 
+  // EventPage:
+  event_registration_url: 'event_registration_url',
+  event_add_ticket: 'event_add_ticket',
+
   // Purchase Ticket Info:
   invalid_email_message: 'invalid_email_message',
   email_or_membership_number_message: 'email_or_membership_number_message',
+  email_or_membership_number: 'email_or_membership_number',
   no_tickets_selected_message: 'no_tickets_selected_message',
   kr_per_ticket: 'kr_per_ticket',
   enter_membership_number: 'enter_membership_number',
@@ -280,6 +301,30 @@ export const KEY = {
 
   event_external_host_message: 'event_external_host_message',
 
+  // Event categories
+  event_category_art: 'event_category_art',
+  event_category_concert: 'event_category_concert',
+  event_category_course: 'event_category_course',
+  event_category_debate: 'event_category_debate',
+  event_category_dj: 'event_category_dj',
+  event_category_excenteraften: 'event_category_excenteraften',
+  event_category_football_match: 'event_category_football_match',
+  event_category_happening: 'event_category_happening',
+  event_category_lecture: 'event_category_lecture',
+  event_category_luka_event: 'event_category_luka_event',
+  event_category_meeting: 'event_category_meeting',
+  event_category_movie: 'event_category_movie',
+  event_category_music: 'event_category_music',
+  event_category_other: 'event_category_other',
+  event_category_party_meeting: 'event_category_party_meeting',
+  event_category_performance: 'event_category_performance',
+  event_category_quiz: 'event_category_quiz',
+  event_category_samfundet_meeting: 'event_category_samfundet_meeting',
+  event_category_show: 'event_category_show',
+  event_category_theater: 'event_category_theater',
+  event_category_theme_party: 'event_category_theme_party',
+  event_category_uka_event: 'event_category_uka_event',
+
   // Venue Page:
   venuepage_title: 'venuepage_title',
 
@@ -287,12 +332,29 @@ export const KEY = {
   information_page: 'information_page',
   information_page_short: 'information_page_short',
 
-  // Navbar:
+  // Navigation links (used in both navbar and footer):
+  // Links for samf 3
+
+  // Shortcuts
+  common_general: 'common_general',
+  common_renting: 'common_renting',
+  common_photos: 'common_photos',
+
+  //Venues
+  common_bar: 'common_bar',
+  common_stages: 'common_stages',
+  common_club: 'common_club',
+
+  // Navbar only:
   navbar_map: 'navbar_map',
   navbar_photos: 'navbar_photos',
   navbar_nybygg: 'navbar_nybygg',
+  navbar_bar: 'navbar_bar',
+  navbar_stages: 'navbar_stages',
+  navbar_club: 'navbar_club',
 
   footer_developed_by: 'footer_developed_by',
+  footer_have_questions: 'footer_have_questions',
 
   // Sulten / Lyche:
   sulten_dishes: 'sulten_dishes',
@@ -502,6 +564,7 @@ export const KEY = {
   admin_saksdokument: 'admin_saksdokument',
   admin_images_title: 'admin_images_title',
   admin_images_create: 'admin_images_create',
+  admin_no_image_selected: 'admin_no_image_selected',
   admin_steal_identity: 'admin_steal_identity',
   adminpage_gangs_title: 'adminpage_gangs_title',
   adminpage_gangs_create: 'adminpage_gangs_create',
@@ -524,6 +587,12 @@ export const KEY = {
   admin_role_page_orggangsection: 'admin_role_page_orggangsection',
   admin_role_page_role_since: 'admin_role_page_role_since',
   admin_role_page_given_by: 'admin_role_page_given_by',
+  adminpage_connect_mdb: 'adminpage_connect_mdb',
+  adminpage_connect_mdb_extended: 'adminpage_connect_mdb_extended',
+  adminpage_connect_mdb_succesful_toast: 'adminpage_connect_mdb_succesful_toast',
+  adminpage_connect_mdb_invalid_email: 'adminpage_connect_mdb_invalid_email',
+  adminpage_connect_mdb_invalid_membership_id: 'adminpage_connect_mdb_invalid_membership_id',
+  adminpage_connect_mdb_common_error: 'adminpage_connect_mdb_common_error',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',

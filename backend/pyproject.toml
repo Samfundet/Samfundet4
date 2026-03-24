@@ -144,15 +144,15 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "3.11.2"
-django = "5.1.*"
+django = "5.2.*"
 django-extensions = "4.*"
 django-environ = "0.*"
 djangorestframework = "3.*"
 django-cors-headers = "4.*"
 dataclasses-json = "0.*"
 django-guardian = "2.*"
-pillow = "11.*"
-gunicorn = "23.*"
+pillow = "12.*"
+gunicorn = "25.*"
 django-admin-autocomplete-filter = "0.*"
 psycopg = { extras = ["c"], version = "*" }
 whitenoise = "^6.11.0"
@@ -162,12 +162,13 @@ whitenoise = "^6.11.0"
 mypy = "1.*"
 ruff = "0.*"
 bandit = "1.*"
-pillow = "11.*"
+pillow = "12.*"
 debugpy = "1.*"
 requests = "2.*"
 pytest = "8.*"
 pytest-django = "4.*"
-drf-spectacular = "0.28.*"
+drf-spectacular = "0.29.*"
+freezegun = "^1.5.5"
 
 [build-system]
 requires = ["poetry-core"]

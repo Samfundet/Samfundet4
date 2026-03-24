@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { EventCarousel, LargeCard } from '~/Pages/HomePage/components';
@@ -6,7 +6,6 @@ import { getHomeData } from '~/api';
 import type { HomePageDto, HomePageElementDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import type { Children } from '~/types';
 import styles from './HomePage.module.scss';
 import { Splash } from './components/Splash/Splash';
 
@@ -29,7 +28,7 @@ export function HomePage() {
       });
   }, [t]);
 
-  function renderElement(key: number, element: HomePageElementDto): Children {
+  function renderElement(key: number, element: HomePageElementDto): ReactNode {
     switch (element.variation) {
       case 'carousel': {
         if (element.events.length > 0) return <EventCarousel key={key} element={element} />;

@@ -97,7 +97,8 @@ export function RecruitmentAdminPage() {
     };
   });
 
-  const backendUrl = ROUTES.backend.admin__samfundet_recruitment_changelist;
+  // const backendUrl = ROUTES.backend.admin__samfundet_recruitment_changelist;
+  const backendUrl = undefined;
   const header = (
     <>
       <Button theme="success" rounded={true} link={ROUTES.frontend.admin_recruitment_create}>

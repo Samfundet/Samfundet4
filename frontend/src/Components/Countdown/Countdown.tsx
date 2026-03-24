@@ -1,14 +1,13 @@
-import { useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 
 import classNames from 'classnames';
 import { SECOND_MILLIS } from '~/constants';
-import type { Children } from '~/types';
 import styles from './Countdown.module.scss';
 import { calculateTimeLeft, hasReachedTargetDate } from './utils';
 
 type CountdownProps = {
   targetDate: Date;
-  children?: Children;
+  children?: ReactNode;
 };
 
 export function Countdown({ targetDate, children }: CountdownProps) {

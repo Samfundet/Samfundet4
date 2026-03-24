@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import { textSizes } from '~/constants';
-import type { Children } from '~/types';
 
 type textProps = {
-  children?: Children;
+  children?: ReactNode;
   size?: 'xs' | 's' | 'm' | 'l' | 'xl' | '2xl';
   as?: 'p' | 'strong' | 'u' | 'i' | 'em' | 'mark' | 'del' | 'ins';
   className?: string;
@@ -23,7 +22,7 @@ export function Text({ children, className, size = 'm', as = 'p' }: textProps) {
 
   type TextAttrProps = {
     as: 'p' | 'strong' | 'u' | 'i' | 'em' | 'mark' | 'del' | 'ins';
-    children: Children;
+    children: ReactNode;
     className?: string;
     style?: React.CSSProperties;
   };
