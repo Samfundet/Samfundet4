@@ -26,6 +26,7 @@ export function useEventCreatorForm(params: {
   // Setup React Hook Form
   const form = useForm<FormType>({
     resolver: zodResolver(eventSchema),
+    mode: 'onChange',
     defaultValues: {
       title_nb: '',
       title_en: '',
@@ -34,7 +35,7 @@ export function useEventCreatorForm(params: {
       description_short_nb: '',
       description_short_en: '',
       start_dt: '',
-      duration: 0,
+      duration: undefined,
       end_dt: '',
       category: undefined,
       host: '',
@@ -53,7 +54,7 @@ export function useEventCreatorForm(params: {
   const resetValues = useMemo<FormType | undefined>(() => {
     if (!event?.id) return undefined;
 
-    const duration = computeDurationMinutes(event.start_dt, event.end_dt);
+    var duration = computeDurationMinutes(event.start_dt, event.end_dt);
 
     return {
       title_nb: event.title_nb || '',
@@ -63,7 +64,7 @@ export function useEventCreatorForm(params: {
       description_short_nb: event.description_short_nb || '',
       description_short_en: event.description_short_en || '',
       start_dt: event.start_dt ? utcTimestampToLocal(event.start_dt, false) : '',
-      duration: duration || 0,
+      duration: duration || undefined,
       end_dt: event.end_dt ? utcTimestampToLocal(event.end_dt, false) : '',
       category: event.category || defaultCategory,
       host: event.host || '',

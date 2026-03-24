@@ -60,7 +60,10 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                 <Input
                   type="number"
                   {...field}
-                  onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    field.onChange(v === '' ? '' : Number.parseInt(v));
+                  }}
                 />
               </FormControl>
               <FormMessage />
@@ -77,7 +80,12 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
             <FormItem className={styles.form_item}>
               <FormLabel>{t(KEY.category)}</FormLabel>
               <FormControl>
-                <Dropdown options={eventCategoryOptions} nullOption={{ label: t(KEY.common_choose) }} {...field} />
+                <Dropdown
+                  options={eventCategoryOptions}
+                  sortAlphabetic={true}
+                  nullOption={{ label: t(KEY.common_choose) }}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -110,6 +118,7 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                 <FormLabel>{t(KEY.common_venue)}</FormLabel>
                 <FormControl>
                   <Dropdown
+                    sortAlphabetic={true}
                     options={venues.map((venue) => ({ value: venue.name, label: venue.name }))}
                     nullOption={{ label: t(KEY.common_choose) }}
                     {...field}
@@ -133,7 +142,7 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                   {...field}
                   onChange={(e) => {
                     const v = e.target.value;
-                    field.onChange(v === '' ? undefined : Number.parseInt(v, 10));
+                    field.onChange(v === '' ? '' : Number.parseInt(v));
                   }}
                 />
               </FormControl>
