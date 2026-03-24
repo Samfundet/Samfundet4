@@ -321,7 +321,7 @@ LOGGING = {
 # https://docs.djangoproject.com/en/1.10/topics/db/transactions/#django.db.transaction.on_commit
 # https://medium.com/@hakibenita/how-to-manage-concurrency-in-django-models-b240fed4ee2
 ATOMIC_REQUESTS = True
-APPEND_SLASH = True
+APPEND_SLASH = False
 
 # ======================== #
 #         Email            #

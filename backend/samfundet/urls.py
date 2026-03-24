@@ -1,12 +1,15 @@
 # imports
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from django.conf.urls.static import static
+from django.http import HttpResponse
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from rest_framework import routers
 
-from django.urls import path, include
+from django.urls import path, include, URLPattern
 from django.conf import settings
 
 import samfundet.view.user_views
@@ -72,8 +75,13 @@ router.register('billig-ticket-group', billig_views.BilligTicketGroupReadOnlyMod
 
 app_name = 'samfundet'
 
-def frontend_path(route_path, view, name):
-    return path(route_path.lstrip('/'), view, name=name)
+
+def frontend_path(route_path: str, view: Callable[..., HttpResponse], name: str) -> list[URLPattern]:
+    clean = route_path.strip('/')
+    return [
+        path(clean, view, name=name),
+        path(clean + '/', view, name=f'{name}_trailing_slash'),
+    ]
 
 
 urlpatterns = ([
@@ -197,7 +205,7 @@ urlpatterns = ([
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ] + [
     # Serve React frontend
-    frontend_path(frontend_routes.EVENT, react_event_view, name='reactapp_event'),
+    *frontend_path(frontend_routes.EVENT, react_event_view, name='reactapp_event'),
 
     path("", react_view, name="reactapp"),
     path("<path:resource>", react_view),#
