@@ -3,13 +3,13 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Input } from '~/Components';
 import { getImagesPaginated } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { imageKeys } from '~/queryKeys';
 import { backgroundImageFromUrl } from '~/utils';
-import { InputField } from '../InputField';
 import { PagedPagination } from '../Pagination';
 import styles from './ImagePicker.module.scss';
 
@@ -90,10 +90,10 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
         </div>
       </div>
       <div className={styles.search_wrapper}>
-        <InputField
-          icon="mdi:search"
+        <Input
+          type="search"
           value={searchInput}
-          onChange={handleSearchChange}
+          onChange={(e) => handleSearchChange(e.target.value)}
           placeholder={t(KEY.common_search)}
         />
         <div className={styles.image_container}>{images.map((image) => renderImage(image))}</div>
