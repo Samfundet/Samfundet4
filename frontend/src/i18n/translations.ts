@@ -272,6 +272,8 @@ export const nb = prepareTranslations({
   // EventPage:
   [KEY.event_registration_url]: 'Registreringslenke',
   [KEY.event_add_ticket]: 'Legg til billett',
+  [KEY.event_invalid_form_error]: 'Skjemaet inneholder valideringsfeil. Vennligst sjekk de uthevede feltene.',
+
 
   // Event categories
   [KEY.event_category_art]: 'Kunst',
@@ -975,6 +977,7 @@ export const en = prepareTranslations({
   // EventPage:
   [KEY.event_registration_url]: 'Registration URL',
   [KEY.event_add_ticket]: 'Add ticket',
+  [KEY.event_invalid_form_error]: 'Form contains validation errors. Please check highlighted fields.',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',
