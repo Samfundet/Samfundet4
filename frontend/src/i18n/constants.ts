@@ -227,6 +227,7 @@ export const KEY = {
   common_contact_information: 'common_contact_information',
   common_about_samfundet: 'common_about_samfundet',
   // Price groups:
+  common_ticket: 'common_ticket',
   common_ticket_type: 'common_ticket_type',
   common_ticket_type_free: 'common_ticket_type_free',
   common_ticket_type_free_with_registration: 'common_ticket_type_free_with_registration',
