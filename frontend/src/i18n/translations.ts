@@ -274,7 +274,6 @@ export const nb = prepareTranslations({
   [KEY.event_add_ticket]: 'Legg til billett',
   [KEY.event_invalid_form_error]: 'Skjemaet inneholder valideringsfeil. Vennligst sjekk de uthevede feltene.',
 
-
   // Event categories
   [KEY.event_category_art]: 'Kunst',
   [KEY.event_category_concert]: 'Konsert',
