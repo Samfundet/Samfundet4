@@ -100,9 +100,11 @@ export function EventCreatorAdminPage() {
     const visited = visitedTabs[step.key] === true && !custom;
     const error = !valid && visited && !custom;
 
-    let icon = step.customIcon || 'material-symbols:circle-outline';
-    if (valid) icon = 'material-symbols:check-circle';
-    else if (error) icon = 'gridicons:cross-circle';
+    const icon =
+      step.customIcon ||
+      (valid && 'material-symbols:check-circle') ||
+      (error && 'gridicons:cross-circle') ||
+      'material-symbols:circle-outline';
 
     const label = (
       <div className={styles.tab_label} key={step.key}>
@@ -173,7 +175,6 @@ export function EventCreatorAdminPage() {
   }
 
   // Render all forms (some are hidden but not removed to keep values)
-  const currentStepKey = currentFormTab.key as StepKey;
   const currentStep = steps.find((step) => step.key === currentFormTab.key);
   const currentStepContent = currentStep ? (
     <>
@@ -183,8 +184,7 @@ export function EventCreatorAdminPage() {
   ) : null;
 
   const onInvalid = (errors: FieldErrors<FormType>) => {
-    console.log('INVALID ERRORS', errors);
-    toast.error('Form contains validation errors. Please check highlighted fields.');
+    toast.error(KEY.event_invalid_form_error);
     const allVisited: Record<string, boolean> = {};
     for (const s of steps) allVisited[s.key] = true;
     setVisitedTabs(allVisited);
