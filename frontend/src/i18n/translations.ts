@@ -210,7 +210,7 @@ export const nb = prepareTranslations({
   [KEY.common_about_samfundet]: 'Om Samfundet',
 
   // Price groups:
-  [KEY.common_ticket_type]: 'Billett type',
+  [KEY.common_ticket_type]: 'Billetttype',
   [KEY.common_ticket_type_free]: 'Gratis',
   [KEY.common_ticket_type_free_with_registration]: 'Gratis med registrering',
   [KEY.common_ticket_type_custom]: 'Tilpasset',
