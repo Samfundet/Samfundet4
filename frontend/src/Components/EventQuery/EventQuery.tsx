@@ -72,7 +72,7 @@ export function EventQuery({
           options={ticketTypeOptions}
           onChange={(val) => setSelectedTicketType(val as string)}
           className={styles.element}
-          nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_ticket_type)}`) }}
+          nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_ticket)}`) }}
         />
       )}
     </div>
