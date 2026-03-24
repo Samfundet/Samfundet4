@@ -3,14 +3,14 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from django.conf.urls.static import static
-from django.http import HttpResponse
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from rest_framework import routers
 
-from django.urls import path, include, URLPattern
 from django.conf import settings
+from django.http import HttpResponse
+from django.urls import URLPattern, path, include
+from django.conf.urls.static import static
 
 import samfundet.view.user_views
 import samfundet.view.event_views
@@ -19,9 +19,9 @@ import samfundet.view.general_views
 from samfundet.view import billig_views
 
 from . import views
-from .routing.views import react_view, react_event_view
 from .view import recruitment_views
 from .routing import frontend_routes
+from .routing.views import react_view, react_event_view
 
 # End: imports -----------------------------------------------------------------
 router = routers.DefaultRouter()
@@ -84,7 +84,7 @@ def frontend_path(route_path: str, view: Callable[..., HttpResponse], name: str)
     ]
 
 
-urlpatterns = ([
+urlpatterns = [
     path('api/', include(router.urls)),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='samfundet:schema'), name='swagger_ui'),
@@ -201,12 +201,10 @@ urlpatterns = ([
     path('recruitment/<int:recruitment_id>/gang/<int:gang_id>/stats/', views.GangApplicationCountView.as_view(), name='gang-application-stats'),
     path('recruitment/<int:id>/positions-by-tags/', views.PositionByTagsView.as_view(), name='recruitment_positions_by_tags'),
     path('recruitment/all-applications/', views.RecruitmentAllApplicationsPerRecruitmentView.as_view(), name='recruitment-all-applications'),
-
-    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ] + [
     # Serve React frontend
     *frontend_path(frontend_routes.EVENT, react_event_view, name='reactapp_event'),
-
-    path("", react_view, name="reactapp"),
-    path("<path:resource>", react_view),#
-])
+    path('', react_view, name='reactapp'),
+    path('<path:resource>', react_view),
+]

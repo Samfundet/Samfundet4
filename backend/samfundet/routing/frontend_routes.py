@@ -6,6 +6,7 @@ Frontend routes meant for consumption by the Django backend.
 
 Run 'yarn export-routes' in the frontend directory to regenerate
 """
+from __future__ import annotations
 
 HOME = "/"
 GANGS = "/gangs/"

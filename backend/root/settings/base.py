@@ -24,7 +24,7 @@ from root.constants import Environment
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # React frontend
-REACT_BUILD_DIR = "reactapp"
+REACT_BUILD_DIR = 'reactapp'
 
 IS_DOCKER = os.environ.get('IS_DOCKER') == 'yes'
 
