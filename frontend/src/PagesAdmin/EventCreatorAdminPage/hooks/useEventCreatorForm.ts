@@ -54,7 +54,7 @@ export function useEventCreatorForm(params: {
   const resetValues = useMemo<FormType | undefined>(() => {
     if (!event?.id) return undefined;
 
-    var duration = computeDurationMinutes(event.start_dt, event.end_dt);
+    const duration = computeDurationMinutes(event.start_dt, event.end_dt);
 
     return {
       title_nb: event.title_nb || '',

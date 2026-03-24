@@ -30,17 +30,17 @@ export const steps: EventCreatorStep[] = [
     title_nb: 'Dato og informasjon',
     title_en: 'Date & info',
     validate: (d) => {
-        return !!(
-          d.start_dt &&
-          d.duration !== undefined &&
-          d.duration > 0 &&
-          d.category &&
-          d.host &&
-          d.location &&
-          d.capacity !== undefined &&
-          d.capacity > 0
-        );
-      },
+      return !!(
+        d.start_dt &&
+        d.duration !== undefined &&
+        d.duration > 0 &&
+        d.category &&
+        d.host &&
+        d.location &&
+        d.capacity !== undefined &&
+        d.capacity > 0
+      );
+    },
   },
   {
     key: 'payment',
