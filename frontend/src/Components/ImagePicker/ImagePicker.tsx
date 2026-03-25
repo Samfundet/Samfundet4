@@ -45,7 +45,7 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
   }, [debouncedSearch]);
 
   // Fetch images using React Query
-  const { data } = useQuery({
+  const { data, isError } = useQuery({
     queryKey: imageKeys.list(currentPage, debouncedSearch || undefined),
     queryFn: () => getImagesPaginated(currentPage, PAGE_SIZE, debouncedSearch || undefined),
     placeholderData: keepPreviousData,
@@ -80,7 +80,10 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
     <div className={styles.container}>
       <div className={styles.selected_container}>
         {selected && <h1 className={styles.image_title}>{selected.title}</h1>}
-        <div className={styles.selected} style={backgroundImageFromUrl(BACKEND_DOMAIN + selected?.url)}>
+        <div
+          className={styles.selected}
+          style={backgroundImageFromUrl(selected?.url ? BACKEND_DOMAIN + selected.url : undefined)}
+        >
           {selected === undefined && (
             <>
               <Icon icon="ic:outline-image" width={24} />
@@ -88,6 +91,7 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
             </>
           )}
         </div>
+        {isError && <p className={styles.error}>{t(KEY.common_something_went_wrong)}</p>}
       </div>
       <div className={styles.search_wrapper}>
         <InputField

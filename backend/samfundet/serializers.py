@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 import datetime
 import itertools
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from collections import defaultdict
 
 from PIL import Image as PilImage
@@ -224,18 +224,37 @@ class EventSerializer(CustomBaseSerializer):
         model = Event
         list_serializer_class = EventListSerializer
         # Warning: registration object contains sensitive data, don't include it!
-        exclude = ['image', 'registration', 'event_group', 'billig_id']
+        exclude = ['registration', 'event_group', 'billig_id']
 
     # Read only properties (computed property, foreign model).
     total_registrations = serializers.IntegerField(read_only=True)
     image_url = serializers.CharField(read_only=True)
+    image = serializers.SerializerMethodField(read_only=True)
 
     # Custom tickets/billig
     custom_tickets = EventCustomTicketSerializer(many=True, read_only=True)
     billig = BilligEventSerializer(read_only=True)
 
     # For post/put (change image by id).
-    image_id = serializers.IntegerField(write_only=True)
+    image_id = serializers.IntegerField(write_only=True, required=True)
+
+    def get_image(self, obj: Event) -> dict:
+        img = obj.image
+        return {'id': img.id, 'url': img.image.url, 'title': img.title, 'tags': list(img.tags.values_list('id', flat=True))}
+
+    def update(self, instance: Event, validated_data: dict[str, Any]) -> Event:
+        image_id = validated_data.pop('image_id', None)
+        if image_id is not None:
+            try:
+                instance.image = Image.objects.get(pk=image_id)
+            except Image.DoesNotExist as err:
+                raise serializers.ValidationError({'image_id': 'Invalid image id'}) from err
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
 
     def validate(self, data: dict) -> dict:
         # Check if all required fields are present for validation
@@ -260,7 +279,8 @@ class EventSerializer(CustomBaseSerializer):
         and sets it in the new event. Read/write only fields enable
         us to use the same serializer for both reading and writing.
         """
-        validated_data['image'] = Image.objects.get(pk=validated_data['image_id'])
+        image_id = validated_data.pop('image_id')
+        validated_data['image'] = Image.objects.get(pk=image_id)
         event = Event(**validated_data)
         event.save()
         return event

@@ -154,48 +154,68 @@ export type EventCustomTicketDto = {
 };
 
 export type EventDto = {
-  // Status of event
+  id: number;
   status: EventStatus;
-
-  // Used to group recurring events together
   event_group: EventGroupDto;
 
-  // General info
-  id: number;
   title_nb: string;
   title_en: string;
   description_long_nb: string;
   description_long_en: string;
   description_short_nb: string;
   description_short_en: string;
+
   age_restriction: EventAgeRestrictionValue;
   location: string;
   category: EventCategoryValue;
   host: string;
+
   billig?: BilligEventDto;
   numberOfTickets?: number;
-
   registration_url?: string;
 
-  // Timestamps/duration
-  image_url: string;
   start_dt: string;
-  duration: number;
   end_dt: string;
   visibility_from_dt: string;
   visibility_to_dt: string;
   doors_time?: string;
+  duration: number;
 
-  // Ticket type for event (billig, free, custom, registration etc.)
   ticket_type: EventTicketTypeValue;
-
-  // Custom tickets (only relevant for custom price group events)
   custom_tickets: EventCustomTicketDto[];
 
-  // Write only:
-  // Used to create new event with using id of existing imagedto
   image?: ImageDto;
+  image_url: string;
+
   capacity?: number;
+};
+
+export type EventWriteDto = {
+  title_nb: string;
+  title_en: string;
+  description_long_nb: string;
+  description_long_en: string;
+  description_short_nb: string;
+  description_short_en: string;
+
+  age_restriction: EventAgeRestrictionValue;
+  location: string;
+  category: EventCategoryValue;
+  host: string;
+
+  registration_url?: string;
+
+  start_dt: string;
+  end_dt: string;
+  visibility_from_dt: string;
+  visibility_to_dt: string;
+
+  ticket_type: EventTicketTypeValue;
+  custom_tickets?: EventCustomTicketDto[];
+
+  image_id?: number;
+  capacity?: number;
+  billig_id?: number;
 };
 
 export type EventGroupDto = {
