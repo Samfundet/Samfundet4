@@ -288,6 +288,7 @@ export const KEY = {
   // EventPage:
   event_registration_url: 'event_registration_url',
   event_add_ticket: 'event_add_ticket',
+  event_invalid_form_error: 'event_invalid_form_error',
 
   // Purchase Ticket Info:
   invalid_email_message: 'invalid_email_message',
