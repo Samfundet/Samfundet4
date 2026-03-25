@@ -204,7 +204,7 @@ export function EventCreatorAdminPage() {
           {t(KEY.common_next)}
         </Button>
       ) : (
-        <Button theme="green" rounded={true} type="submit" disabled={!allStepsComplete}>
+        <Button theme="green" rounded={true} onClick={form.handleSubmit(onSubmit)} disabled={!allStepsComplete}>
           {t(KEY.common_save)}
         </Button>
       )}
