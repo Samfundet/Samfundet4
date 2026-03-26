@@ -274,9 +274,9 @@ export const nb = prepareTranslations({
   [KEY.event_registration_url]: 'Registreringslenke',
   [KEY.event_general_link]: 'Generell lenke',
   [KEY.event_spotify_uri_help]:
-    'Legg til spotify URI-en til en spilleliste, og en widget med denne listen vil dukke opp på arrangementsiden.',
-  [KEY.event_youtube_link_help]: 'Legg til Youtube-film som skal linkes til',
-  [KEY.event_youtube_embed_help]: 'Legg til Youtube-film som skal embeddes, så vil den vises på arrangementsiden.',
+    'Legg til Spotify URI-en til en spilleliste, og en widget med denne listen vil dukke opp på arrangementsiden.',
+  [KEY.event_youtube_link_help]: 'Legg til YouTube-video som skal linkes til',
+  [KEY.event_youtube_embed_help]: 'Legg til YouTube-video som skal embeddes, så vil den vises på arrangementsiden.',
   [KEY.event_add_ticket]: 'Legg til billett',
   [KEY.event_invalid_form_error]: 'Skjemaet inneholder valideringsfeil. Vennligst sjekk de uthevede feltene.',
 
@@ -997,11 +997,11 @@ export const en = prepareTranslations({
 
   // EventPage:
   [KEY.event_registration_url]: 'Registration URL',
-  [KEY.event_general_link]: 'General Link',
+  [KEY.event_general_link]: 'General link',
   [KEY.event_spotify_uri_help]:
     'Add the Spotify URI of a playlist, and a widget will appear on the event page with the chosen playlist.',
-  [KEY.event_youtube_link_help]: 'Add a link to a Youtube movie',
-  [KEY.event_youtube_embed_help]: 'Add a link to a Youtube movie to be embedded, and it will appear on the event page.',
+  [KEY.event_youtube_link_help]: 'Add a link to a YouTube video',
+  [KEY.event_youtube_embed_help]: 'Add a link to a YouTube video to be embedded, and it will appear on the event page.',
   [KEY.event_add_ticket]: 'Add ticket',
   [KEY.event_invalid_form_error]: 'Form contains validation errors. Please check highlighted fields.',
 
