@@ -36,9 +36,7 @@ export const steps: EventCreatorStep[] = [
         d.duration > 0 &&
         d.category &&
         d.host &&
-        d.location &&
-        d.capacity !== undefined &&
-        d.capacity > 0
+        d.location
       );
     },
   },
