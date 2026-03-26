@@ -227,6 +227,7 @@ export const KEY = {
   common_contact_information: 'common_contact_information',
   common_about_samfundet: 'common_about_samfundet',
   // Price groups:
+  common_ticket: 'common_ticket',
   common_ticket_type: 'common_ticket_type',
   common_ticket_type_free: 'common_ticket_type_free',
   common_ticket_type_free_with_registration: 'common_ticket_type_free_with_registration',
@@ -287,6 +288,7 @@ export const KEY = {
   event_youtube_link_help: 'event_youtube_link_help',
   event_youtube_embed_help: 'event_youtube_embed_help',
   event_add_ticket: 'event_add_ticket',
+  event_invalid_form_error: 'event_invalid_form_error',
 
   // Purchase Ticket Info:
   invalid_email_message: 'invalid_email_message',
@@ -670,6 +672,21 @@ export const KEY = {
   error_server_error_description: 'error_server_error_description',
   error_submitting_reservation: 'error_submitting_reservation',
   error_invalid_reservation_data: 'error_invalid_reservation_data',
+
+  // Event form validation
+  event_form_title_required: 'event_form_title_required',
+  event_form_description_long_required: 'event_form_description_long_required',
+  event_form_description_short_required: 'event_form_description_short_required',
+  event_form_start_dt_required: 'event_form_start_dt_required',
+  event_form_duration_min: 'event_form_duration_min',
+  event_form_host_required: 'event_form_host_required',
+  event_form_location_required: 'event_form_location_required',
+  event_form_capacity_min: 'event_form_capacity_min',
+  event_form_visibility_from_required: 'event_form_visibility_from_required',
+
+  event_form_category_required: 'event_form_category_required',
+  event_form_age_restriction_required: 'event_form_age_restriction_required',
+  event_form_ticket_type_required: 'event_form_ticket_type_required',
 } as const;
 
 // This will ensure that each value matches the key exactly.

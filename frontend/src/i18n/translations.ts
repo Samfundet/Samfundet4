@@ -211,7 +211,8 @@ export const nb = prepareTranslations({
   [KEY.common_about_samfundet]: 'Om Samfundet',
 
   // Price groups:
-  [KEY.common_ticket_type]: 'Billett',
+  [KEY.common_ticket]: 'Billett',
+  [KEY.common_ticket_type]: 'Billettype',
   [KEY.common_ticket_type_free]: 'Gratis',
   [KEY.common_ticket_type_free_with_registration]: 'Gratis med registrering',
   [KEY.common_ticket_type_custom]: 'Tilpasset',
@@ -277,6 +278,7 @@ export const nb = prepareTranslations({
   [KEY.event_youtube_link_help]: 'Legg til Youtube-film som skal linkes til',
   [KEY.event_youtube_embed_help]: 'Legg til Youtube-film som skal embeddes, så vil den vises på arrangementsiden.',
   [KEY.event_add_ticket]: 'Legg til billett',
+  [KEY.event_invalid_form_error]: 'Skjemaet inneholder valideringsfeil. Vennligst sjekk de uthevede feltene.',
 
   // Event categories
   [KEY.event_category_art]: 'Kunst',
@@ -689,6 +691,21 @@ export const nb = prepareTranslations({
   [KEY.error_server_error_description]: 'En serverfeil har opptstått',
   [KEY.error_submitting_reservation]: 'Det skjedde en feil ved innsending av reservasjon',
   [KEY.error_invalid_reservation_data]: 'Ugyldig reservasjonsdata',
+
+  // Event form validation
+  [KEY.event_form_title_required]: 'Tittel er påkrevd',
+  [KEY.event_form_description_long_required]: 'Lang beskrivelse er påkrevd',
+  [KEY.event_form_description_short_required]: 'Kort beskrivelse er påkrevd',
+  [KEY.event_form_start_dt_required]: 'Dato og tid er påkrevd',
+  [KEY.event_form_duration_min]: 'Varighet må være større enn 0',
+  [KEY.event_form_host_required]: 'Arrangør er påkrevd',
+  [KEY.event_form_location_required]: 'Lokale er påkrevd',
+  [KEY.event_form_capacity_min]: 'Kapasitet må være større enn 0',
+  [KEY.event_form_visibility_from_required]: 'Synlig fra dato er påkrevd',
+
+  [KEY.event_form_category_required]: 'Kategori er påkrevd',
+  [KEY.event_form_age_restriction_required]: 'Aldersgrense er påkrevd',
+  [KEY.event_form_ticket_type_required]: 'Billetttype er påkrevd',
 });
 
 export const en = prepareTranslations({
@@ -901,7 +918,8 @@ export const en = prepareTranslations({
   [KEY.common_administrate]: 'Administrate',
   [KEY.common_administration]: 'Administration',
   // Price groups:
-  [KEY.common_ticket_type]: 'Ticket',
+  [KEY.common_ticket]: 'Ticket',
+  [KEY.common_ticket_type]: 'Ticket type',
   [KEY.common_ticket_type_free]: 'Free',
   [KEY.common_ticket_type_free_with_registration]: 'Free with registration',
   [KEY.common_ticket_type_billig]: 'Paid (billig)',
@@ -985,6 +1003,7 @@ export const en = prepareTranslations({
   [KEY.event_youtube_link_help]: 'Add a link to a Youtube movie',
   [KEY.event_youtube_embed_help]: 'Add a link to a Youtube movie to be embedded, and it will appear on the event page.',
   [KEY.event_add_ticket]: 'Add ticket',
+  [KEY.event_invalid_form_error]: 'Form contains validation errors. Please check highlighted fields.',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',
@@ -1371,4 +1390,19 @@ export const en = prepareTranslations({
   [KEY.error_server_error_description]: 'A server error has occurred',
   [KEY.error_submitting_reservation]: 'An error occurred while submitting the reservation',
   [KEY.error_invalid_reservation_data]: 'Invalid reservation data',
+
+  // Event form validation
+  [KEY.event_form_title_required]: 'Title is required',
+  [KEY.event_form_description_long_required]: 'Long description is required',
+  [KEY.event_form_description_short_required]: 'Short description is required',
+  [KEY.event_form_start_dt_required]: 'Date and time is required',
+  [KEY.event_form_duration_min]: 'Duration must be greater than 0',
+  [KEY.event_form_host_required]: 'Host is required',
+  [KEY.event_form_location_required]: 'Venue is required',
+  [KEY.event_form_capacity_min]: 'Capacity must be greater than 0',
+  [KEY.event_form_visibility_from_required]: 'Visible from date is required',
+
+  [KEY.event_form_category_required]: 'Category is required',
+  [KEY.event_form_age_restriction_required]: 'Age restriction is required',
+  [KEY.event_form_ticket_type_required]: 'Ticket type is required',
 });
