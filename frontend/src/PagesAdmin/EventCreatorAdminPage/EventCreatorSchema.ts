@@ -4,7 +4,6 @@ import {
   EVENT_BILLIG_ID,
   EVENT_CAPACITY,
   EVENT_CATEGORY,
-  EVENT_CUSTOM_TICKET,
   EVENT_DESCRIPTION_LONG,
   EVENT_DESCRIPTION_SHORT,
   EVENT_DURATION,
@@ -30,6 +29,13 @@ import {
 } from '~/schema/event';
 import { OPTIONAL_IMAGE } from '~/schema/samfImage';
 
+const event_custom_ticket = z.object({
+  id: z.number(),
+  name_nb: z.string().min(1),
+  name_en: z.string().min(1),
+  price: z.number().min(0),
+});
+
 export const eventSchema = z.object({
   // text and description
   title_nb: EVENT_TITLE,
@@ -49,7 +55,7 @@ export const eventSchema = z.object({
   // Payment/registration
   age_restriction: EVENT_AGE_RESTRICTION,
   ticket_type: EVENT_TICKET_TYPE,
-  custom_tickets: z.array(EVENT_CUSTOM_TICKET).optional(),
+  custom_tickets: z.array(event_custom_ticket).optional(),
   registration_url: EVENT_REGISTRATION_URL,
   billig_id: EVENT_BILLIG_ID,
   // Social media links
