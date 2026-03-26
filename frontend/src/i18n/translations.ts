@@ -279,6 +279,9 @@ export const nb = prepareTranslations({
   [KEY.event_youtube_embed_help]: 'Legg til YouTube-video som skal embeddes, så vil den vises på arrangementsiden.',
   [KEY.event_add_ticket]: 'Legg til billett',
   [KEY.event_invalid_form_error]: 'Skjemaet inneholder valideringsfeil. Vennligst sjekk de uthevede feltene.',
+  [KEY.event_must_be_valid_url]: 'Må være en gyldig URL',
+  [KEY.event_must_be_valid_spotify_uri]: 'Må være en gyldig Spotify URI',
+  [KEY.event_publication_date_required]: 'Publiseringsdato er påkrevd',
 
   // Event categories
   [KEY.event_category_art]: 'Kunst',
@@ -1004,6 +1007,9 @@ export const en = prepareTranslations({
   [KEY.event_youtube_embed_help]: 'Add a link to a YouTube video to be embedded, and it will appear on the event page.',
   [KEY.event_add_ticket]: 'Add ticket',
   [KEY.event_invalid_form_error]: 'Form contains validation errors. Please check highlighted fields.',
+  [KEY.event_must_be_valid_url]: 'Must be a valid URL',
+  [KEY.event_must_be_valid_spotify_uri]: 'Must be a valid Spotify URI',
+  [KEY.event_publication_date_required]: 'Publication date is required',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',
