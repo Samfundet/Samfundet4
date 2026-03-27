@@ -66,6 +66,7 @@ from .models.recruitment import (
     RecruitmentInterviewAvailability,
     RecruitmentPositionSharedInterviewGroup,
 )
+from .models.site_banner import SiteBanner
 
 # Common fields:
 # ordering = []
@@ -87,6 +88,15 @@ admin.site.unregister(Group)
 @register_if_feature_enabled(WebFeatures.RECRUITMENT, OccupiedTimeslot)
 class OccupiedTimeAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'recruitment']
+    list_select_related = True
+
+
+@admin.register(SiteBanner)
+class SiteBannerAdmin(CustomBaseAdmin):
+    list_display = ['id', 'is_active', 'start_at', 'end_at', 'updated_at']
+    list_filter = ['is_active']
+    search_fields = ['text_nb', 'text_en']
+    ordering = ['-start_at', '-created_at']
     list_select_related = True
 
 
