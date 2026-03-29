@@ -87,6 +87,7 @@ export const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HT
 FormItem.displayName = 'FormItem';
 
 // Unwraps ZodEffects (.refine(), .transform(), .superRefine())
+// Documentation: https://zod.dev/packages/core?id=internals
 function unwrapEffects(schema: ZodTypeAny): ZodTypeAny {
   let current = schema;
   while (current instanceof z.ZodEffects) {
