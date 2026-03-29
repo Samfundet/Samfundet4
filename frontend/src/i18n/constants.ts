@@ -283,8 +283,15 @@ export const KEY = {
 
   // EventPage:
   event_registration_url: 'event_registration_url',
+  event_general_link: 'event_general_link',
+  event_spotify_uri_help: 'event_spotify_uri_help',
+  event_youtube_link_help: 'event_youtube_link_help',
+  event_youtube_embed_help: 'event_youtube_embed_help',
   event_add_ticket: 'event_add_ticket',
   event_invalid_form_error: 'event_invalid_form_error',
+  event_must_be_valid_url: 'event_must_be_valid_url',
+  event_must_be_valid_spotify_uri: 'event_must_be_valid_spotify_uri',
+  event_publication_date_required: 'event_publication_date_required',
 
   // Purchase Ticket Info:
   invalid_email_message: 'invalid_email_message',
