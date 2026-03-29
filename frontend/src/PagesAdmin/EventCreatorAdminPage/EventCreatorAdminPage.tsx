@@ -29,6 +29,7 @@ import { InfoStep } from './steps/InfoStep';
 import { PaymentStep } from './steps/PaymentStep';
 import { SummaryStep } from './steps/SummaryStep';
 import { TextStep } from './steps/TextStep';
+import { eventSchema } from "./EventCreatorSchema";
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
@@ -225,7 +226,7 @@ export function EventCreatorAdminPage() {
       />
       <br />
       <div className={styles.form_container}>
-        <Form {...form}>
+        <Form {...form} schema={eventSchema}>
           <form onSubmit={form.handleSubmit(onSubmit, onInvalid)}>
             {currentStepContent}
             {navigationButtons}

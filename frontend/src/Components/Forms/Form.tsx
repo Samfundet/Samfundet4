@@ -12,8 +12,19 @@ import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 import styles from './Forms.module.scss';
+import { z, type ZodTypeAny } from "zod";
 
-export const Form = FormProvider;
+const FormSchemaContext = React.createContext<ZodTypeAny | null>(null);
+
+type FormProps<T extends FieldValues> = React.ComponentProps<typeof FormProvider<T>> & { schema?: z.ZodTypeAny; };
+
+export const Form = <T extends FieldValues>(
+  { schema, ...props }: FormProps<T>
+) => (
+  <FormSchemaContext.Provider value={schema ?? null}>
+    <FormProvider {...props} />
+  </FormSchemaContext.Provider>
+);
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
@@ -77,6 +88,41 @@ export const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HT
 });
 FormItem.displayName = 'FormItem';
 
+// Unwraps ZodEffects (.refine(), .transform(), .superRefine())
+function unwrapEffects(schema: ZodTypeAny): ZodTypeAny {
+  let current = schema;
+  while (current instanceof z.ZodEffects) {
+    current = current._def.schema;
+  }
+  return current;
+}
+
+function resolveField(schema: ZodTypeAny, path: string): ZodTypeAny | null {
+  let current = unwrapEffects(schema);
+  for (const key of path.split(".")) {
+    current = unwrapEffects(current);
+
+    if (!(current instanceof z.ZodObject)) {
+      return null;
+    }
+
+    const next = current.shape[key];
+    if (!next) {
+      return null;
+    }
+    current = next;
+  }
+  return current;
+}
+
+function isFieldRequired(schema: ZodTypeAny | null, name: string): boolean {
+  if (!schema) {
+    return false;
+  }
+  const field = resolveField(schema, name);
+  return field !== null && !field.isOptional();
+}
+
 interface FormLabelProps extends React.HTMLAttributes<HTMLLabelElement> {
   className?: string;
 }
@@ -84,8 +130,10 @@ interface FormLabelProps extends React.HTMLAttributes<HTMLLabelElement> {
 export const FormLabel = React.forwardRef<
   React.ElementRef<'label'>,
   React.ComponentPropsWithoutRef<'label'> & FormLabelProps
->(({ className, ...props }, ref) => {
-  const { error, formItemId } = useFormField();
+>(({ className, children, ...props }, ref) => {
+  const { error, formItemId, name } = useFormField();
+  const schema = React.useContext(FormSchemaContext);
+  const required = isFieldRequired(schema, name);
 
   return (
     <label
@@ -93,7 +141,10 @@ export const FormLabel = React.forwardRef<
       className={classNames(styles.label, error && styles.error, className)}
       htmlFor={formItemId}
       {...props}
-    />
+    >
+      {children}
+      {required && <span className={styles.required}>*</span>}
+    </label>
   );
 });
 FormLabel.displayName = 'FormLabel';
