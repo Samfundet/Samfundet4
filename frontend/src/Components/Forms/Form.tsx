@@ -11,16 +11,14 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
+import { type ZodTypeAny, z } from 'zod';
 import styles from './Forms.module.scss';
-import { z, type ZodTypeAny } from "zod";
 
 const FormSchemaContext = React.createContext<ZodTypeAny | null>(null);
 
-type FormProps<T extends FieldValues> = React.ComponentProps<typeof FormProvider<T>> & { schema?: z.ZodTypeAny; };
+type FormProps<T extends FieldValues> = React.ComponentProps<typeof FormProvider<T>> & { schema?: z.ZodTypeAny };
 
-export const Form = <T extends FieldValues>(
-  { schema, ...props }: FormProps<T>
-) => (
+export const Form = <T extends FieldValues>({ schema, ...props }: FormProps<T>) => (
   <FormSchemaContext.Provider value={schema ?? null}>
     <FormProvider {...props} />
   </FormSchemaContext.Provider>
@@ -99,7 +97,7 @@ function unwrapEffects(schema: ZodTypeAny): ZodTypeAny {
 
 function resolveField(schema: ZodTypeAny, path: string): ZodTypeAny | null {
   let current = unwrapEffects(schema);
-  for (const key of path.split(".")) {
+  for (const key of path.split('.')) {
     current = unwrapEffects(current);
 
     if (!(current instanceof z.ZodObject)) {

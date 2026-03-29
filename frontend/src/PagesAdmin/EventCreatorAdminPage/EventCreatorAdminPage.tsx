@@ -23,13 +23,13 @@ import { useEventMutations } from './hooks/useEventMutations';
 import { type EventCreatorStep, type StepKey, steps } from './steps/stepConfig';
 
 import type { FieldErrors } from 'react-hook-form';
+import { eventSchema } from './EventCreatorSchema';
 import { EventPreviewCard } from './components/EventPreviewCard';
 import { GraphicsStep } from './steps/GraphicsStep';
 import { InfoStep } from './steps/InfoStep';
 import { PaymentStep } from './steps/PaymentStep';
 import { SummaryStep } from './steps/SummaryStep';
 import { TextStep } from './steps/TextStep';
-import { eventSchema } from "./EventCreatorSchema";
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
