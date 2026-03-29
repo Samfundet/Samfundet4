@@ -334,7 +334,7 @@ export const nb = prepareTranslations({
   [KEY.adminpage_connect_mdb_invalid_membership_id]: 'ugyldig medlemsdatabasenummer',
   [KEY.adminpage_connect_mdb_common_error]:
     'Kunne ikke koble til medlemsdatabasen. Vennligst sjekk at alle felter er skrevet riktig',
-  [KEY.adminpage_connect_mdb_password_notice_1]: 'Merk: passordet ditt til ',
+  [KEY.adminpage_connect_mdb_password_notice_1]: 'Passordet ditt til ',
   [KEY.adminpage_connect_mdb_password_notice_2]: 'medlemsdatabasen',
 
   // SaksdokumentPage:
@@ -1355,7 +1355,7 @@ export const en = prepareTranslations({
   [KEY.adminpage_connect_mdb_invalid_membership_id]: 'Invalid membership ID',
   [KEY.adminpage_connect_mdb_common_error]:
     "Couldn't connect to the membership database. Please check that all fields are correct",
-  [KEY.adminpage_connect_mdb_password_notice_1]: 'Note: your password to the',
+  [KEY.adminpage_connect_mdb_password_notice_1]: 'Your password to the',
   [KEY.adminpage_connect_mdb_password_notice_2]: 'membership database',
 
   // No category:
