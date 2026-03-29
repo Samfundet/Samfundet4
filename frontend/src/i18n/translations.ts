@@ -245,6 +245,9 @@ export const nb = prepareTranslations({
   [KEY.loginpage_username]: 'Brukernavn',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
 
+  [KEY.signuppage_register_failed]: 'Registrering feilet',
+  [KEY.signuppage_login_link]: 'Har du allerede en bruker?',
+
   // LoginPickerPage:
   [KEY.loginpicker_page_caption]: 'Innlogging for interne',
   [KEY.loginpicker_page_title]: 'Hvordan vil du logge inn?',
@@ -664,7 +667,7 @@ export const nb = prepareTranslations({
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
 
   [KEY.control_panel_title]: 'Kontrollpanel',
-  [KEY.invalid_phonenumber]: 'Ikke et gyldig telefonnummer',
+  [KEY.invalid_phonenumber]: 'Ugyldig telefonnummer',
   [KEY.inputfile_choose_a_file]: 'Velg en fil...',
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
   [KEY.notfoundpage_title]: 'Side ikke funnet',
@@ -945,6 +948,9 @@ export const en = prepareTranslations({
   [KEY.loginpage_forgotten_password]: 'Forgot password?',
   [KEY.loginpage_passwords_must_match]: 'Passwords must match',
   [KEY.loginpage_login_failed]: 'Login failed',
+
+  [KEY.signuppage_register_failed]: 'Registration failed',
+  [KEY.signuppage_login_link]: 'Already have a user?',
 
   // LoginPickerPage:
   [KEY.loginpicker_page_caption]: 'Internal login',
@@ -1364,7 +1370,7 @@ export const en = prepareTranslations({
   [KEY.we_use_cookies]: 'We use cookies to give you the best experience on Samfundet.no. Read more about cookies',
   [KEY.control_panel_faq]: 'Help/questions',
   [KEY.control_panel_title]: 'Control panel',
-  [KEY.invalid_phonenumber]: 'Not a valid phone number',
+  [KEY.invalid_phonenumber]: 'Invalid phone number',
   [KEY.inputfile_choose_a_file]: 'Upload file...',
   [KEY.inputfile_no_file_selected]: 'No file selected',
   [KEY.notfoundpage_title]: 'Page not found',
