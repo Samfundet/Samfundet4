@@ -37,7 +37,7 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
           key={'start_dt'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
-              <FormLabel>
+              <FormLabel required>
                 {t(KEY.common_date)} & {t(KEY.common_time)}
               </FormLabel>
               <FormControl>
@@ -53,7 +53,7 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
           key={'duration'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
-              <FormLabel>
+              <FormLabel required>
                 {t(KEY.recruitment_duration)} ({t(KEY.common_minutes)})
               </FormLabel>
               <FormControl>
@@ -78,7 +78,7 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
           key={'category'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
-              <FormLabel>{t(KEY.category)}</FormLabel>
+              <FormLabel required>{t(KEY.category)}</FormLabel>
               <FormControl>
                 <Dropdown
                   options={eventCategoryOptions}
@@ -97,7 +97,7 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
           key={'host'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
-              <FormLabel>{t(KEY.admin_organizer)}</FormLabel>
+              <FormLabel required>{t(KEY.admin_organizer)}</FormLabel>
               <FormControl>
                 <Input type="text" {...field} />
               </FormControl>
@@ -115,7 +115,7 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
             const selected = locationOptions.find((o) => o.value === field.value) ?? null;
             return (
               <FormItem className={styles.form_item}>
-                <FormLabel>{t(KEY.common_venue)}</FormLabel>
+                <FormLabel required>{t(KEY.common_venue)}</FormLabel>
                 <FormControl>
                   <Dropdown
                     sortAlphabetic={true}

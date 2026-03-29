@@ -16,7 +16,7 @@ export function GraphicsStep({ form }: { form: UseFormReturn<FormType> }) {
       key={'image'}
       render={({ field }) => (
         <FormItem className={styles.form_item}>
-          <FormLabel>{t(KEY.common_image)}</FormLabel>
+          <FormLabel required>{t(KEY.common_image)}</FormLabel>
           <FormControl>
             <div>
               <ImagePicker

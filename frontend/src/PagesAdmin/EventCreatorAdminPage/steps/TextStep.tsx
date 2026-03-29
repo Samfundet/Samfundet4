@@ -17,7 +17,7 @@ export function TextStep({ form }: { form: UseFormReturn<FormType> }) {
           name="title_nb"
           render={({ field }) => (
             <FormItem className={styles.form_item}>
-              <FormLabel>
+              <FormLabel required>
                 {t(KEY.common_title)} ({t(KEY.common_norwegian)})
               </FormLabel>
               <FormControl>
@@ -33,7 +33,7 @@ export function TextStep({ form }: { form: UseFormReturn<FormType> }) {
           key={'title_en'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
-              <FormLabel>
+              <FormLabel required>
                 {t(KEY.common_title)} ({t(KEY.common_english)})
               </FormLabel>
               <FormControl>
@@ -51,7 +51,7 @@ export function TextStep({ form }: { form: UseFormReturn<FormType> }) {
           key={'description_short_nb'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
-              <FormLabel>
+              <FormLabel required>
                 {t(KEY.common_short_description)} ({t(KEY.common_norwegian)})
               </FormLabel>
               <FormControl>
@@ -67,7 +67,7 @@ export function TextStep({ form }: { form: UseFormReturn<FormType> }) {
           key={'description_short_en'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
-              <FormLabel>
+              <FormLabel required>
                 {t(KEY.common_short_description)} ({t(KEY.common_english)})
               </FormLabel>
               <FormControl>
@@ -85,7 +85,7 @@ export function TextStep({ form }: { form: UseFormReturn<FormType> }) {
           key={'description_long_nb'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
-              <FormLabel>
+              <FormLabel required>
                 {t(KEY.common_long_description)} ({t(KEY.common_norwegian)})
               </FormLabel>
               <FormControl>
@@ -101,7 +101,7 @@ export function TextStep({ form }: { form: UseFormReturn<FormType> }) {
           key={'description_long_en'}
           render={({ field }) => (
             <FormItem className={styles.form_item}>
-              <FormLabel>
+              <FormLabel required>
                 {t(KEY.common_long_description)} ({t(KEY.common_english)})
               </FormLabel>
               <FormControl>

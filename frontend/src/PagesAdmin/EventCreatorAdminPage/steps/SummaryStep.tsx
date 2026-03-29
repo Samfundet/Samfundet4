@@ -15,7 +15,7 @@ export function SummaryStep({ form }: { form: UseFormReturn<FormType> }) {
       key="visibility_from_dt"
       render={({ field }) => (
         <FormItem className={styles.form_item}>
-          <FormLabel>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
+          <FormLabel required>{t(KEY.saksdokumentpage_publication_date) ?? ''}</FormLabel>
           <FormControl>
             <Input type="datetime-local" {...field} />
           </FormControl>
