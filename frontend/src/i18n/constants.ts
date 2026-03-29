@@ -241,6 +241,8 @@ export const KEY = {
   common_buy_ticket: 'common_buy_ticket',
   common_sold_out: 'common_sold_out',
   common_almost_sold_out: 'common_almost_sold_out',
+
+  common_member_database: 'common_member_database',
   // ==================== //
   //        Others        //
   // ==================== //
@@ -590,11 +592,12 @@ export const KEY = {
   admin_role_page_role_since: 'admin_role_page_role_since',
   admin_role_page_given_by: 'admin_role_page_given_by',
   adminpage_connect_mdb: 'adminpage_connect_mdb',
-  adminpage_connect_mdb_extended: 'adminpage_connect_mdb_extended',
   adminpage_connect_mdb_succesful_toast: 'adminpage_connect_mdb_succesful_toast',
   adminpage_connect_mdb_invalid_email: 'adminpage_connect_mdb_invalid_email',
   adminpage_connect_mdb_invalid_membership_id: 'adminpage_connect_mdb_invalid_membership_id',
   adminpage_connect_mdb_common_error: 'adminpage_connect_mdb_common_error',
+  adminpage_connect_mdb_password_notice_1: 'adminpage_connect_mdb_password_notice_1',
+  adminpage_connect_mdb_password_notice_2: 'adminpage_connect_mdb_password_notice_2',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
