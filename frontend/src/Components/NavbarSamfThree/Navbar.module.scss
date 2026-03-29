@@ -175,7 +175,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   z-index: 2;
   font-size: 16px;
   font-weight: 600;
-  letter-spacing: -0.4px;
+  letter-spacing: -0.3px;
 
   &:hover {
     text-decoration: none;
@@ -198,8 +198,8 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 .navbar_logo {
   display: flex;
   text-decoration: none;
-  margin: 0 1rem;
-  width: 250px;
+  margin: 0 2rem 0 0.75rem;
+  width: 240px;
   cursor: pointer;
 }
 
@@ -229,14 +229,11 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   align-items: center;
   white-space: nowrap;
   cursor: pointer;
-  padding-left: 6px;
-  padding-right: 6px;
   background-color: inherit;
   gap: 5px;
-
-  @include for-desktop-up {
-    height: 100%;
-  }
+  color: $grey-2;
+  border-radius: 4px;
+  padding: 1px 6px;
 
   .profile_icon {
     width: 16px;
@@ -249,7 +246,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   }
 
   &:hover {
-    color: $red-samf;
+    background: $black-2;
   }
 }
 
