@@ -1,0 +1,15 @@
+@use 'src/constants' as *;
+
+@use 'src/mixins' as *;
+
+.login_button {
+  margin: 1rem 0 0 auto;
+}
+
+.login_failed_comment {
+  color: $red;
+  text-align: center;
+  margin-top: 0.6em;
+  font-size: 0.9em;
+  font-weight: 700;
+}
