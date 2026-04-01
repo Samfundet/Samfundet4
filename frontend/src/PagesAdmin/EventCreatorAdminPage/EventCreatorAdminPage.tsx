@@ -23,6 +23,7 @@ import { useEventMutations } from './hooks/useEventMutations';
 import { type EventCreatorStep, type StepKey, steps } from './steps/stepConfig';
 
 import type { FieldErrors } from 'react-hook-form';
+import { eventSchema } from './EventCreatorSchema';
 import { EventPreviewCard } from './components/EventPreviewCard';
 import { GraphicsStep } from './steps/GraphicsStep';
 import { InfoStep } from './steps/InfoStep';
@@ -225,7 +226,7 @@ export function EventCreatorAdminPage() {
       />
       <br />
       <div className={styles.form_container}>
-        <Form {...form}>
+        <Form {...form} schema={eventSchema}>
           <form onSubmit={form.handleSubmit(onSubmit, onInvalid)}>
             {currentStepContent}
             {navigationButtons}
