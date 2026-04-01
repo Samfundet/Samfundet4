@@ -5,6 +5,7 @@ import {
   MEMBERSHIP_ID_LENGTH_MIN,
   PASSWORD_LENGTH_MAX,
   PASSWORD_LENGTH_MIN,
+  PHONENUMBER_REGEX,
   USERNAME_LENGTH_MAX,
   USERNAME_LENGTH_MIN,
 } from '~/constants';
@@ -16,6 +17,12 @@ export const USERNAME = z.string().min(USERNAME_LENGTH_MIN).max(USERNAME_LENGTH_
 export const PASSWORD = z.string().min(PASSWORD_LENGTH_MIN).max(PASSWORD_LENGTH_MAX);
 
 export const EMAIL = z.string().email();
+
+export const PHONE_NUMBER = (t: TFunction) => z.string().regex(PHONENUMBER_REGEX, t(KEY.invalid_phonenumber));
+
+export const FIRST_NAME = z.string();
+
+export const LAST_NAME = z.string();
 
 export const MEMBERSHIPNUMBER = z.string().min(MEMBERSHIP_ID_LENGTH_MIN).max(MEMBERSHIP_ID_LENGTH_MAX).regex(/^\d+$/);
 
