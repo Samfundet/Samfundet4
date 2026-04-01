@@ -229,6 +229,9 @@ export const nb = prepareTranslations({
   [KEY.common_sold_out]: 'Utsolgt',
   [KEY.common_almost_sold_out]: 'Få billetter igjen',
 
+  // MDB
+  [KEY.common_member_database]: 'Medlemsdatabase',
+
   // ==================== //
   //        Others        //
   // ==================== //
@@ -329,13 +332,14 @@ export const nb = prepareTranslations({
   [KEY.adminpage_gangs_create]: 'Opprett gjeng',
 
   //MDB Connect AdminPage
-  [KEY.adminpage_connect_mdb]: 'Koble til MDB',
-  [KEY.adminpage_connect_mdb_extended]: 'Koble til medlemsdatabasen',
+  [KEY.adminpage_connect_mdb]: 'Koble til medlemsdatabasen',
   [KEY.adminpage_connect_mdb_succesful_toast]: 'Vellyket tilkobling til medlemsdatabasen',
   [KEY.adminpage_connect_mdb_invalid_email]: 'ugyldig e-post',
   [KEY.adminpage_connect_mdb_invalid_membership_id]: 'ugyldig medlemsdatabasenummer',
   [KEY.adminpage_connect_mdb_common_error]:
     'Kunne ikke koble til medlemsdatabasen. Vennligst sjekk at alle felter er skrevet riktig',
+  [KEY.adminpage_connect_mdb_password_notice_1]: 'Passordet ditt til ',
+  [KEY.adminpage_connect_mdb_password_notice_2]: 'medlemsdatabasen',
 
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
@@ -934,6 +938,9 @@ export const en = prepareTranslations({
   [KEY.common_buy_ticket]: 'Buy ticket',
   [KEY.common_sold_out]: 'Sold out',
   [KEY.common_almost_sold_out]: 'Few tickets left',
+
+  // MDB
+  [KEY.common_member_database]: 'Membership database',
   // ==================== //
   //        Others        //
   // ==================== //
@@ -1350,13 +1357,14 @@ export const en = prepareTranslations({
   [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
 
   //MDB Connect AdminPage
-  [KEY.adminpage_connect_mdb]: 'Connect to MDB',
-  [KEY.adminpage_connect_mdb_extended]: 'Connect to the membership database',
+  [KEY.adminpage_connect_mdb]: 'Connect to the membership database',
   [KEY.adminpage_connect_mdb_succesful_toast]: 'Succesfully connected to the membership database',
   [KEY.adminpage_connect_mdb_invalid_email]: 'Invalid email',
   [KEY.adminpage_connect_mdb_invalid_membership_id]: 'Invalid membership ID',
   [KEY.adminpage_connect_mdb_common_error]:
     "Couldn't connect to the membership database. Please check that all fields are correct",
+  [KEY.adminpage_connect_mdb_password_notice_1]: 'Your password to the',
+  [KEY.adminpage_connect_mdb_password_notice_2]: 'membership database',
 
   // No category:
   [KEY.owner]: 'Owner',
