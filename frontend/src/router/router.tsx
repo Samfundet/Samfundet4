@@ -1001,7 +1001,7 @@ export const router = createBrowserRouter(
           />
           {/* MDB Connect Form */}
           <Route
-            path={ROUTES.frontend.admin_mdb_connect_form}
+            path={ROUTES.frontend.admin_mdb_connect}
             handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.adminpage_connect_mdb)}</Link> }}
             element={<MDBConnectFormAdminPage />}
           />
