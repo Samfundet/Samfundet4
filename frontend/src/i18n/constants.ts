@@ -259,6 +259,9 @@ export const KEY = {
   loginpage_passwords_must_match: 'loginpage_passwords_must_match',
   loginpage_login_failed: 'loginpage_login_failed',
 
+  signuppage_register_failed: 'signuppage_register_failed',
+  signuppage_login_link: 'signuppage_login_link',
+
   // LoginPickerPage:
   loginpicker_page_caption: 'loginpicker_page_caption',
   loginpicker_page_title: 'loginpicker_page_title',
