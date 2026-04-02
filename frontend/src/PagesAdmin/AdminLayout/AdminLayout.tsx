@@ -147,15 +147,17 @@ export function AdminLayout() {
           </button>
         )}
         {/** Connect to MDB button */}
-        <Link
-          url={ROUTES.frontend.admin_mdb_connect}
-          className={classNames(styles.panel_item, {
-            [styles.selected]: location.pathname === ROUTES.frontend.admin_mdb_connect,
-          })}
-        >
-          <Icon icon="mdi:connection" />
-          {t(KEY.common_member_database)}
-        </Link>
+        {!user?.mdb_medlem_id ? (
+          <Link
+            url={ROUTES.frontend.admin_mdb_connect}
+            className={classNames(styles.panel_item, {
+              [styles.selected]: location.pathname === ROUTES.frontend.admin_mdb_connect,
+            })}
+          >
+            <Icon icon="mdi:connection" />
+            {t(KEY.common_member_database)}
+          </Link>
+        ) : null}
         {/* Logout */}
         <button
           type="button"
