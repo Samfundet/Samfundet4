@@ -189,16 +189,16 @@ export type EventDto = {
 
   capacity?: number;
 
-  spotify_uri: string;
-  youtube_link: string;
-  youtube_embed: string;
-  facebook_link: string;
-  soundcloud_link: string;
-  instagram_link: string;
-  x_link: string;
-  lastfm_link: string;
-  vimeo_link: string;
-  general_link: string;
+  spotify_uri?: string;
+  youtube_link?: string;
+  youtube_embed?: string;
+  facebook_link?: string;
+  soundcloud_link?: string;
+  instagram_link?: string;
+  x_link?: string;
+  lastfm_link?: string;
+  vimeo_link?: string;
+  general_link?: string;
 };
 
 export type EventWriteDto = {
