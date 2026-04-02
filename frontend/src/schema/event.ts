@@ -3,19 +3,17 @@ import { KEY } from '~/i18n/constants';
 import { EventAgeRestriction, EventCategory, EventTicketType } from '~/types';
 import { zodEnum } from './utils';
 
-const optionalUrl = z
+const validUrl = z
   .string()
   .trim()
-  .refine((val) => val === '' || /^https?:\/\//.test(val), { message: KEY.event_must_be_valid_url })
-  .optional();
+  .refine((val) => val === '' || /^https?:\/\//.test(val), { message: KEY.event_must_be_valid_url });
 
 const validSpotifyUri = z
   .string()
   .trim()
   .refine((val) => val === '' || /^spotify:(track|artist|album|playlist):[a-zA-Z0-9]{22}$/.test(val), {
     message: KEY.event_must_be_valid_spotify_uri,
-  })
-  .optional();
+  });
 
 // text and description
 export const EVENT_TITLE = z.string().min(1, { message: KEY.event_form_title_required });
@@ -43,15 +41,15 @@ export const EVENT_HOST_LINK = z.string().url().optional();
 export const EVENT_BILLIG_ID = z.number().optional();
 // Social media links
 export const EVENT_SPOTIFY_URI = validSpotifyUri;
-export const EVENT_YOUTUBE_LINK = optionalUrl;
-export const EVENT_YOUTUBE_EMBED = optionalUrl;
-export const EVENT_FACEBOOK_LINK = optionalUrl;
-export const EVENT_SOUNDCLOUD_LINK = optionalUrl;
-export const EVENT_INSTAGRAM_LINK = optionalUrl;
-export const EVENT_X_LINK = optionalUrl;
-export const EVENT_LASTFM_LINK = optionalUrl;
-export const EVENT_VIMEO_LINK = optionalUrl;
-export const EVENT_GENERAL_LINK = optionalUrl;
+export const EVENT_YOUTUBE_LINK = validUrl;
+export const EVENT_YOUTUBE_EMBED = validUrl;
+export const EVENT_FACEBOOK_LINK = validUrl;
+export const EVENT_SOUNDCLOUD_LINK = validUrl;
+export const EVENT_INSTAGRAM_LINK = validUrl;
+export const EVENT_X_LINK = validUrl;
+export const EVENT_LASTFM_LINK = validUrl;
+export const EVENT_VIMEO_LINK = validUrl;
+export const EVENT_GENERAL_LINK = validUrl;
 // Summary/Publication date
 export const EVENT_VISIBILITY_FROM_DT = z.string().min(1, { message: KEY.event_publication_date_required });
 export const EVENT_VISIBILITY_TO_DT = z.string().optional();
