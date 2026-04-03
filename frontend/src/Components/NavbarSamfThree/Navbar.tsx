@@ -148,7 +148,7 @@ export function Navbar() {
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
         route={ROUTES.frontend.events}
-        label={t(KEY.common_event)}
+        label={t(KEY.common_events)}
       />
       <NavbarItem
         setExpandedDropdown={setExpandedDropdown}
