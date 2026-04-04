@@ -13,6 +13,8 @@
   width: 100%;
   resize: vertical;
   min-height: 2.75rem;
+  background: $white;
+  color: $black;
 
   &:focus {
     border-color: $grey-3;
@@ -24,6 +26,8 @@
   }
 
   @include theme-dark {
+    background: $theme-dark-input-bg;
+    color: $theme-dark-color;
     border-color: $grey-0;
     &:focus {
       border-color: $grey-1;
