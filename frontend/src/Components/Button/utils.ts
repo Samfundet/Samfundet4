@@ -19,7 +19,6 @@ export const themeToStyleMap = {
   selected: styles.button_selected,
   pure: styles.pure,
   text: styles.button_text,
-  samf: styles.button_samf,
   outlined: classNames(styles.button_outlined, 'button_outlined'), // Must be globally available for theme-dark.
   blue: styles.button_blue,
   green: styles.button_green,

@@ -94,7 +94,7 @@ export function ClosedPeriodAdminPage() {
                       {t(KEY.common_edit)}
                     </Button>
                     <Button
-                      theme="samf"
+                      theme="primary"
                       display="block"
                       className={styles.smallButtons}
                       onClick={() => {

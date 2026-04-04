@@ -326,7 +326,7 @@ export function RecruitmentApplicationFormPage() {
                     {submitText}
                   </Button>
                   {!recruitmentApplication?.withdrawn && recruitmentApplication && (
-                    <Button type="button" theme="samf" display="basic" onClick={() => withdrawApplication()}>
+                    <Button type="button" theme="primary" display="basic" onClick={() => withdrawApplication()}>
                       {t(KEY.recruitment_withdraw_application)}
                     </Button>
                   )}
@@ -337,7 +337,7 @@ export function RecruitmentApplicationFormPage() {
         ) : (
           <div>
             <Button
-              theme="samf"
+              theme="primary"
               onClick={() =>
                 navigate({
                   url: ROUTES.frontend.login,

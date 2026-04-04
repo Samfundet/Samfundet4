@@ -24,7 +24,7 @@ export function AboutPage() {
           <h2 className={styles.header}>{t(KEY.common_about_samfundet)}</h2>
           <p className={styles.text}>{useTextItem(TextItem.about_samfundet)}</p>
           <Link url={ROUTES.frontend.membership}>
-            <Button theme="samf" className={styles.button}>
+            <Button theme="primary" className={styles.button}>
               {t(KEY.common_membership).toUpperCase()}
             </Button>
           </Link>
@@ -42,7 +42,7 @@ export function AboutPage() {
       <div className={classNames(styles.box, styles.textBox)}>
         <h2 className={styles.header}>{t(KEY.common_the_society_meeting)}</h2>
         <p className={styles.text}>{useTextItem(TextItem.the_society_meeting)}</p>
-        <Button theme="samf" className={styles.button}>
+        <Button theme="primary" className={styles.button}>
           {t(KEY.common_about_the_organisation).toUpperCase()}
         </Button>
         <Button className={styles.button} theme="outlined" link={CASE_DOCUMENTS.saksdokumenter}>
@@ -105,7 +105,7 @@ export function AboutPage() {
             <h3 className={styles.header_col}>UKA & ISFiT</h3>
             <p className={styles.text}>{useTextItem(TextItem.festivals)}</p>
             <div className={styles.buttonTable}>
-              <Button className={styles.tableButton} theme="samf">
+              <Button className={styles.tableButton} theme="primary">
                 UKA
               </Button>
               <Button className={styles.tableButton} theme="blue">

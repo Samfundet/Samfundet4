@@ -173,7 +173,7 @@ export function AdminLayout() {
   const mobileOpen = (
     <>
       <div className={styles.mobile_header}>
-        <Button theme="samf" onClick={() => setPanelOpen(!panelOpen)}>
+        <Button theme="primary" onClick={() => setPanelOpen(!panelOpen)}>
           <Icon icon="ci:hamburger-md" /> {t(KEY.common_open)} {t(KEY.control_panel_title)}
         </Button>
       </div>
