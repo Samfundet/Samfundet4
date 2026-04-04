@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router';
 import { useNavigate } from 'react-router';
 import { Button, Link } from '~/Components';
+import { Navbar } from '~/Components/NavbarSamfThree';
 import { appletCategories } from '~/Pages/AdminPage/applets';
 import { logout, stopImpersonatingUser } from '~/api';
 import { isSiteFeatureEnabled } from '~/constants/site-features';
@@ -18,7 +19,6 @@ import { ROUTES_FRONTEND } from '~/routes/frontend';
 import type { AdminApplet } from '~/types';
 import { dbT } from '~/utils';
 import styles from './AdminLayout.module.scss';
-import { Navbar } from "~/Components/NavbarSamfThree";
 
 /**
  * Wraps admin routes with the standard navbar and a side panel with common links
