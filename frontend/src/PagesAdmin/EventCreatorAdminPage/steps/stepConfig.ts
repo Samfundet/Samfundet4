@@ -1,6 +1,6 @@
 import type { FormType } from '../hooks/useEventCreatorForm';
 
-export type StepKey = 'text' | 'info' | 'payment' | 'graphics' | 'summary';
+export type StepKey = 'text' | 'info' | 'payment' | 'socialmedia' | 'graphics' | 'summary';
 
 export type EventCreatorStep = {
   key: StepKey;
@@ -47,6 +47,13 @@ export const steps: EventCreatorStep[] = [
     title_nb: 'Betaling/påmelding',
     title_en: 'Payment/registration',
     validate: (d) => !!d.age_restriction && !!d.ticket_type,
+  },
+  // Social media links
+  {
+    key: 'socialmedia',
+    title_nb: 'Sosiale medier',
+    title_en: 'Social media',
+    validate: () => true,
   },
   {
     key: 'graphics',

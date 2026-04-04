@@ -62,6 +62,7 @@
   }
 }
 
+
 .half {
   flex-basis: 50%;
   display: flex;
@@ -86,4 +87,34 @@
   align-items: flex-start;
   padding-bottom: 3.75em;
   gap: 0.5em;
+}
+
+.socialMediaGrid {
+  display: grid;
+  gap: 2em;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  align-items: start;
+}
+
+.socialMediaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+
+.socialMediaLabel {
+  font-weight: 600;
+}
+
+.socialMediaInput {
+  height: 2.25em;
+}
+
+.gridItemFull {
+  grid-column: 1 / -1;
+}
+
+.gridItemFull .socialGrid {
+  max-width:max-content ;
 }
