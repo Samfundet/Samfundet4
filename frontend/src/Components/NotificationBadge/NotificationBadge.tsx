@@ -11,7 +11,7 @@ type NotificationBadgeProps = {
 
 export function NotificationBadge({ number, className, onClick }: NotificationBadgeProps) {
   return (
-    <Button className={classNames(className, styles.wrapper)} theme="pure" onClick={onClick}>
+    <Button className={classNames(className, styles.wrapper)} theme="ghost" onClick={onClick}>
       <Icon className={styles.icon} height={21} icon="clarity:notification-line" />
       {number !== undefined && <span className={styles.badge}>{number}</span>}
     </Button>

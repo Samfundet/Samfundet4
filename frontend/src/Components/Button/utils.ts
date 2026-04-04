@@ -17,7 +17,6 @@ export const themeToStyleMap = {
   // TODO: Old styles, to be removed.
   basic: styles.button_basic,
   selected: styles.button_selected,
-  pure: styles.pure,
   text: styles.button_text,
   outlined: classNames(styles.button_outlined, 'button_outlined'), // Must be globally available for theme-dark.
   blue: styles.button_blue,
