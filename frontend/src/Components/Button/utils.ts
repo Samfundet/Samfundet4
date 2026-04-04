@@ -16,7 +16,6 @@ export const themeToStyleMap = {
   // TODO: Old styles, to be removed.
   basic: styles.button_basic,
   selected: styles.button_selected,
-  text: styles.button_text,
   blue: styles.button_blue,
   green: styles.button_green,
 } as const;
