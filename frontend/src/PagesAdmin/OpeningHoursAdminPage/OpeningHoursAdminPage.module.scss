@@ -2,10 +2,8 @@
 
 @use 'src/constants' as *;
 
-$header-border: #f1f1f1;
-$header-border-dark: #000000;
-
 $bg-dark: #272727;
+$row-border-dark: #353535;
 
 .subtitle {
   display: inline-block;
@@ -14,18 +12,18 @@ $bg-dark: #272727;
 }
 
 .venue_container {
-  @include flex-row;
-  flex-wrap: wrap;
-  gap: 1em;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+  gap: 1.25rem;
+  align-items: start;
 }
 
 .venue_box {
-  border-radius: 0.4em;
+  container-type: inline-size;
+  @include rounded-light;
   background-color: $white;
   border: 1px solid $grey-4;
-  overflow: hidden;
-  min-width: 16em;
-  max-width: 20em;
+  padding: 20px;
 
   @include theme-dark {
     border-color: $black;
@@ -35,44 +33,160 @@ $bg-dark: #272727;
 }
 
 .venue_header {
-  padding: 0.5em 0.75em;
-  border-bottom: 1px solid $header-border;
+  padding: 0.5em;
   font-size: 1.25em;
   font-weight: 700;
   color: $black;
 
   @include theme-dark {
-    border-color: $header-border-dark;
     color: white;
   }
 }
 
 .venue_content {
-  padding: 1em;
+  overflow-x: auto;
 }
 
-.input_row {
-  @include flex-row;
+.row_container {
+  display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  gap: 0.5em;
+  min-width: 100%;
 }
 
+/* Base styles for both header and data rows */
+.day_row_header,
 .day_row {
   @include flex-row;
   justify-content: space-between;
   width: 100%;
+  border-bottom: 1px solid $grey-5;
+  padding: 0.75rem 1rem;
+
+  @include theme-dark {
+    border-bottom-color: $row-border-dark;
+  }
 }
 
+/* Common styles for row children */
 .day_label {
-  color: $grey-1;
+  width: 4rem;
+  flex-shrink: 0;
+  color: $black-2;
+  font-weight: 500;
+
   @include theme-dark {
-    color: $grey-4;
+    color: $theme-dark-color;
+  }
+}
+
+/* Styling for the Header Row */
+.day_row_header {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: $grey-1;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid $grey-4;
+
+  @include theme-dark {
+    color: $grey-36;
+    border-bottom-color: $grey-0;
+  }
+
+  .day_label {
+    font-weight: 600;
+    color: $grey-1;
+
+    @include theme-dark {
+      color: $grey-36;
+    }
   }
 }
 
 .day_edit {
-  @include flex-row;
-  gap: 0.5em;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 6rem 6rem 5rem;
+  column-gap: 1rem;
+}
+
+.time_label {
+  font-weight: 600;
+  color: $grey-1;
+
+  @include theme-dark {
+    color: $grey-36;
+  }
+}
+
+.open_label,
+.checkbox_wrapper {
+  width: 5rem;
+  text-align: center;
+}
+
+.checkbox_wrapper {
+  @include flex-row-center;
+}
+
+/* Styling for data rows */
+.day_row {
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $grey-5;
+
+    @include theme-dark {
+      background-color: $black-2;
+    }
+  }
+}
+
+/* Faded/disabled row when venue is closed that day */
+.day_row.row_disabled {
+  opacity: 0.45;
+  background-color: $grey-5;
+
+  @include theme-dark {
+    opacity: 0.35;
+    background-color: $black-2;
+    border-bottom-color: transparent;
+  }
+}
+
+/* Size overrides for the admin venue box context */
+.time_input {
+  width: 6rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  padding: 0.4rem 0.8rem;
+}
+
+/* Compact layout when the box itself is narrow (mobile or 3-col desktop) */
+@container (max-width: 29rem) {
+  .day_row_header,
+  .day_row {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .day_label {
+    width: 3rem;
+    font-size: 0.875rem;
+  }
+
+  .day_edit {
+    grid-template-columns: 4.5rem 4.5rem 2.5rem;
+    column-gap: 0.5rem;
+  }
+
+  .open_label,
+  .checkbox_wrapper {
+    width: 2.5rem;
+  }
+
+  .time_input {
+    width: 4.5rem;
+    font-size: 0.875rem;
+    padding: 0.3rem 0.4rem;
+  }
 }
