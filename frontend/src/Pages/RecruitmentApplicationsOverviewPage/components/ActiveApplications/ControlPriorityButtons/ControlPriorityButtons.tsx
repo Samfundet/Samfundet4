@@ -21,7 +21,7 @@ export function ControlPriorityButtons({
   return (
     <div className={styles.priorityControllBtnWrapper}>
       {!isFirstItem && (
-        <Button display="pill" theme="outlined" onClick={() => onPriorityChange(id, 'up')} disabled={isPending}>
+        <Button display="pill" theme="secondary" onClick={() => onPriorityChange(id, 'up')} disabled={isPending}>
           <Icon
             icon="material-symbols:keyboard-arrow-up-rounded"
             className={styles.priorityControllArrow}
@@ -30,7 +30,7 @@ export function ControlPriorityButtons({
         </Button>
       )}
       {!isLastItem && (
-        <Button display="pill" theme="outlined" onClick={() => onPriorityChange(id, 'down')} disabled={isPending}>
+        <Button display="pill" theme="secondary" onClick={() => onPriorityChange(id, 'down')} disabled={isPending}>
           <Icon
             icon="material-symbols:keyboard-arrow-down-rounded"
             className={styles.priorityControllArrow}

@@ -151,7 +151,7 @@ export function RecruitmentGangAdminPage() {
         {t(KEY.recruitment_show_applicants_without_interview)}
       </Button>
       <Button
-        theme="outlined"
+        theme="secondary"
         link={reverse({
           pattern: ROUTES.frontend.admin_recruitment_gang_all_applications,
           urlParams: {

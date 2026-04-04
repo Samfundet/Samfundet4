@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import styles from './Button.module.scss';
 
 export const themeToStyleMap = {
@@ -18,7 +17,6 @@ export const themeToStyleMap = {
   basic: styles.button_basic,
   selected: styles.button_selected,
   text: styles.button_text,
-  outlined: classNames(styles.button_outlined, 'button_outlined'), // Must be globally available for theme-dark.
   blue: styles.button_blue,
   green: styles.button_green,
 } as const;

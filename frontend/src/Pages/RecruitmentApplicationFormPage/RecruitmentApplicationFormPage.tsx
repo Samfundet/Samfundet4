@@ -202,7 +202,7 @@ export function RecruitmentApplicationFormPage() {
       </h2>
       <div className={styles.other_positions_buttons}>
         {recruitmentPositionsForGang?.map((pos) => (
-          <Button key={pos.id} display="pill" theme="outlined" onClick={() => handlePosNavigate(pos)}>
+          <Button key={pos.id} display="pill" theme="secondary" onClick={() => handlePosNavigate(pos)}>
             {dbT(pos, 'name')}
           </Button>
         ))}
@@ -220,7 +220,7 @@ export function RecruitmentApplicationFormPage() {
               <Button
                 key={similarPosition.id}
                 display="pill"
-                theme="outlined"
+                theme="secondary"
                 onClick={() => handlePosNavigate(similarPosition)}
               >
                 {dbT(similarPosition, 'name')}

@@ -34,7 +34,7 @@ export function AboutPage() {
           <Button theme="blue" className={styles.button}>
             {t(KEY.common_contact_information).toUpperCase()}
           </Button>
-          <Button theme="outlined" className={styles.button}>
+          <Button theme="secondary" className={styles.button}>
             {t(KEY.common_tickets).toUpperCase()}
           </Button>
         </div>
@@ -45,10 +45,10 @@ export function AboutPage() {
         <Button theme="primary" className={styles.button}>
           {t(KEY.common_about_the_organisation).toUpperCase()}
         </Button>
-        <Button className={styles.button} theme="outlined" link={CASE_DOCUMENTS.saksdokumenter}>
+        <Button className={styles.button} theme="secondary" link={CASE_DOCUMENTS.saksdokumenter}>
           {t(KEY.common_documents).toUpperCase()}
         </Button>
-        <Button className={styles.button} theme="outlined">
+        <Button className={styles.button} theme="secondary">
           {t(KEY.common_our_history).toUpperCase()}
         </Button>
       </div>
@@ -77,10 +77,10 @@ export function AboutPage() {
       </div>
 
       <div className={styles.row}>
-        <Button className={styles.button} theme="outlined">
+        <Button className={styles.button} theme="secondary">
           {t(KEY.common_overview_map).toUpperCase()}
         </Button>
-        <Button className={styles.button} theme="outlined">
+        <Button className={styles.button} theme="secondary">
           {t(KEY.common_new_building).toUpperCase()}
         </Button>
       </div>
