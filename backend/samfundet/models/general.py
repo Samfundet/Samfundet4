@@ -166,6 +166,7 @@ class UserPreference(FullCleanSaveMixin):
     theme = models.CharField(max_length=30, choices=UserPreferenceTheme.choices, default=UserPreferenceTheme.LIGHT, blank=True, null=True)
     mirror_dimension = models.BooleanField(default=False)
     cursor_trail = models.BooleanField(default=False)
+    closed_override = models.CharField(max_length=30, default='default')
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
@@ -259,9 +260,6 @@ class Venue(CustomBaseModel):
 class ClosedPeriod(CustomBaseModel):
     message_nb = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
     message_en = models.TextField(blank=True, null=True, verbose_name='Melding (engelsk)')
-
-    description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
-    description_en = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
 
     start_dt = models.DateField(blank=True, null=False, verbose_name='Start dato')
     end_dt = models.DateField(blank=True, null=False, verbose_name='Slutt dato')
