@@ -11,6 +11,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodAdminPage.module.scss';
+import { Icon } from "@iconify/react";
 
 export function ClosedPeriodAdminPage() {
   const [closedPeriods, setClosedPeriods] = useState<ClosedPeriodDto[]>([]);
@@ -51,7 +52,8 @@ export function ClosedPeriodAdminPage() {
   }
 
   const header = (
-    <Button theme="success" rounded={true} link={ROUTES.frontend.admin_closed_create}>
+    <Button theme="primary" link={ROUTES.frontend.admin_closed_create}>
+      <Icon icon="lucide:plus" />
       {t(KEY.admin_closed_period_new_period)}
     </Button>
   );

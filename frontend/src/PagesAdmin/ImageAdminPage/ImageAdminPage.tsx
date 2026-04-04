@@ -12,6 +12,7 @@ import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageAdminPage.module.scss';
 import { AdminImage } from './components';
+import { Icon } from "@iconify/react";
 
 const PAGE_SIZE = 20;
 
@@ -52,7 +53,8 @@ export function ImageAdminPage() {
   const title = t(KEY.admin_images_title);
   const backendUrl = ROUTES.backend.admin__samfundet_image_changelist;
   const header = (
-    <Button theme="success" rounded={true} link={ROUTES.frontend.admin_images_create}>
+    <Button theme="primary" link={ROUTES.frontend.admin_images_create}>
+      <Icon icon="lucide:plus" />
       {lowerCapitalize(t(KEY.admin_images_create))}
     </Button>
   );
