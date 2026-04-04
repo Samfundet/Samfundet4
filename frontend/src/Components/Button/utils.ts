@@ -15,9 +15,6 @@ export const themeToStyleMap = {
   // Special buttons
   uka: styles.button_uka,
   isfit: styles.button_isfit,
-
-  // TODO: Old styles, to be removed.
-  basic: styles.button_basic,
 } as const;
 
 /**

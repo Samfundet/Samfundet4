@@ -22,6 +22,8 @@ import {
   RadioButton,
   ToolTip,
 } from '~/Components';
+import type { ButtonTheme } from '~/Components/Button';
+import { themeToStyleMap } from '~/Components/Button/utils';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
@@ -88,6 +90,38 @@ export function ComponentPage() {
 
   return (
     <Page className={styles.wrapper}>
+      <div>
+        <div>Hello there this is a normal regular body of text? I think so.</div>
+
+        <H1>Buttons</H1>
+        <div className={styles.button_row}>
+          <Button disabled>Disabled button</Button>
+          <Button disabled>
+            <Icon icon="ph:ticket-bold" />
+            With icon
+          </Button>
+          <Button disabled rounded>
+            Pill button
+          </Button>
+        </div>
+        {Object.keys(themeToStyleMap).map((theme) => (
+          <div className={styles.button_row} key={theme}>
+            <Button theme={theme as ButtonTheme}>Theme: {theme}</Button>
+            <Button theme={theme as ButtonTheme}>
+              <Icon icon="ph:ticket-bold" />
+              With icon
+            </Button>
+            <Button theme={theme as ButtonTheme} rounded>
+              Pill button
+            </Button>
+          </div>
+        ))}
+      </div>
+
+      <br />
+      <hr />
+      <br />
+
       <div style={{ display: 'flex', gap: '1.5rem' }}>
         <EventCard
           event={createFakeEvent(
@@ -172,9 +206,9 @@ export function ComponentPage() {
       <h1>Components:</h1>
       <div>
         <h2>Buttons:</h2>
-        <Button theme="samf">Test</Button>
+        <Button theme="primary">Test</Button>
         <br />
-        <Button theme="samf" disabled>
+        <Button theme="primary" disabled>
           Disabled
         </Button>
         <br />

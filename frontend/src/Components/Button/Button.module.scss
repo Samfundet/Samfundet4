@@ -1,6 +1,4 @@
 /* stylelint-disable declaration-no-important */
-@use 'src/constants' as *;
-
 @use 'src/mixins' as *;
 
 @use 'src/styles/variables' as v;
@@ -34,8 +32,30 @@
   cursor: not-allowed;
 }
 
+//
+// Shape
+//
 
-// Redesigned buttons
+.display_basic {
+  padding: 8px 14px;
+}
+
+.display_pill {
+  padding: 0.3em 0.4em;
+}
+
+.display_block {
+  padding: 10px 25px;
+  width: 100%;
+}
+
+.rounded {
+  border-radius: 10000px;
+}
+
+//
+// Themes
+//
 
 .button_primary {
   background-color: c.$samf-red-700;
@@ -144,32 +164,4 @@
   &:hover {
     background-color: c.$blue-800;
   }
-}
-
-
-////// old
-
-
-
-.button_basic {
-  background-color: white;
-  color: black;
-}
-
-
-.display_basic {
-  padding: 8px 14px;
-}
-
-.display_pill {
-  padding: 0.3em 0.4em;
-}
-
-.display_block {
-  padding: 10px 25px;
-  width: 100%;
-}
-
-.rounded {
-  border-radius: 10000px;
 }

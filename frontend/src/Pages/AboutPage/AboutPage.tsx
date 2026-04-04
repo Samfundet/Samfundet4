@@ -91,10 +91,10 @@ export function AboutPage() {
             <h2 className={styles.header}>{t(KEY.common_volunteering)}</h2>
             <p className={styles.text}>{useTextItem(TextItem.volunteering)}</p>
             <div className={styles.buttonTable}>
-              <Button className={styles.tableButton} theme="basic" link={ROUTES.frontend.gangs}>
+              <Button className={styles.tableButton} theme="primary" link={ROUTES.frontend.gangs}>
                 {t(KEY.common_the_gangs_at_samfundet).toUpperCase()}
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="white">
                 {t(KEY.common_volunteer).toUpperCase()}
               </Button>
             </div>
@@ -116,28 +116,28 @@ export function AboutPage() {
           <div className={styles.other_info}>
             <h3 className={styles.header_col}>{t(KEY.common_more_info)}</h3>
             <div className={styles.buttonTable}>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 {t(KEY.common_age_limit).toUpperCase()}
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 BOOKING
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 QUIZ
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 {t(KEY.common_rent_services).toUpperCase()}
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 {t(KEY.common_press).toUpperCase()}
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 {t(KEY.common_film_club).toUpperCase()}
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 {t(KEY.common_privacy_policy).toUpperCase()}
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 {t(KEY.common_facilitation).toUpperCase()}
               </Button>
             </div>
