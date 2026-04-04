@@ -137,6 +137,15 @@
   }
 }
 
+.button_blue {
+  background-color: c.$blue-700;
+  color: c.$blue-50;
+
+  &:hover {
+    background-color: c.$blue-800;
+  }
+}
+
 
 ////// old
 
@@ -145,11 +154,6 @@
 .button_basic {
   background-color: white;
   color: black;
-}
-
-.button_blue {
-  background-color: $blue;
-  color: white;
 }
 
 

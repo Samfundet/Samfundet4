@@ -8,6 +8,7 @@ export const themeToStyleMap = {
   ghost: styles.button_ghost,
   black: styles.button_black,
   white: styles.button_white,
+  blue: styles.button_blue,
 
   // Special buttons
   uka: styles.button_uka,
@@ -15,7 +16,6 @@ export const themeToStyleMap = {
 
   // TODO: Old styles, to be removed.
   basic: styles.button_basic,
-  blue: styles.button_blue,
   green: styles.button_green,
 } as const;
 

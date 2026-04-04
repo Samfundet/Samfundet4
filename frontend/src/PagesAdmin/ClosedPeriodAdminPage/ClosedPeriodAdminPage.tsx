@@ -83,7 +83,7 @@ export function ClosedPeriodAdminPage() {
                 content: (
                   <div>
                     <Button
-                      theme="blue"
+                      theme="secondary"
                       display="block"
                       className={styles.smallButtons}
                       link={reverse({
