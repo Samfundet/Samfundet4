@@ -164,7 +164,7 @@ export function InformationFormAdminPage() {
               Toggle preview
             </Button>
           )}
-          <Button theme="green" rounded={true} onClick={handleOnSubmit} disabled={disableSubmit}>
+          <Button theme="success" rounded={true} onClick={handleOnSubmit} disabled={disableSubmit}>
             <div style={{ padding: '0 1em' }}>{t(KEY.common_save)}</div>
           </Button>
         </div>

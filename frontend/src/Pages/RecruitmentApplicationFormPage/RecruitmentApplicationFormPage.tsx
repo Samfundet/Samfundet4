@@ -322,7 +322,7 @@ export function RecruitmentApplicationFormPage() {
                   }}
                 />
                 <div className={styles.form_buttons}>
-                  <Button type="submit" theme="green" display="basic">
+                  <Button type="submit" theme="success" display="basic">
                     {submitText}
                   </Button>
                   {!recruitmentApplication?.withdrawn && recruitmentApplication && (

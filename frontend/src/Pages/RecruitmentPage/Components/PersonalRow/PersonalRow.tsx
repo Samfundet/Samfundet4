@@ -20,7 +20,7 @@ export function PersonalRow({ recruitmentId, organizationName, showRecruitmentBt
     <>
       {showRecruitmentBtn && (
         <Button
-          theme="green"
+          theme="success"
           onClick={() => {
             navigate({
               url: reverse({

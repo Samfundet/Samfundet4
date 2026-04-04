@@ -178,7 +178,7 @@ export function SignUpForm() {
           )}
         />
         {signUpFailed && <p className={styles.signup_failed_comment}>{t(KEY.signuppage_register_failed)}</p>}
-        <Button type="submit" className={styles.signup_button} theme="green" rounded disabled={isPending}>
+        <Button type="submit" className={styles.signup_button} theme="primary" rounded disabled={isPending}>
           {t(KEY.common_register)}
         </Button>
       </form>

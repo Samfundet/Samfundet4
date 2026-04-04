@@ -6,6 +6,8 @@ export const themeToStyleMap = {
   success: styles.button_success,
   danger: styles.button_danger,
   ghost: styles.button_ghost,
+
+  // Color-specific
   black: styles.button_black,
   white: styles.button_white,
   blue: styles.button_blue,
@@ -16,7 +18,6 @@ export const themeToStyleMap = {
 
   // TODO: Old styles, to be removed.
   basic: styles.button_basic,
-  green: styles.button_green,
 } as const;
 
 /**

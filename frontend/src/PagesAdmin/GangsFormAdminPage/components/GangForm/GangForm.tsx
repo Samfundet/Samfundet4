@@ -190,7 +190,7 @@ export function GangForm({ gang, onSuccess, onError }: Props) {
         </div>
 
         <div className={styles.action_row}>
-          <Button type="submit" rounded={true} theme="green" disabled={submitting}>
+          <Button type="submit" rounded={true} theme="success" disabled={submitting}>
             {lowerCapitalize(`${t(gang ? KEY.common_edit : KEY.common_create)} ${t(KEY.common_gang)}`)}
           </Button>
         </div>
