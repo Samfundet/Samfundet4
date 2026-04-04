@@ -2,8 +2,30 @@
 
 
 /// =~=~=~=~=~ ///
+/// General    ///
+/// =~=~=~=~=~ ///
+
+$border-radius-sm: 3px;
+$border-radius: 5px;
+$border-radius-md: 8px;
+$border-radius-lg: 10px;
+
+/// =~=~=~=~=~ ///
 /// Typography ///
 /// =~=~=~=~=~ ///
 
 $heading-color: c.$gray-950;
 $primary-text-color: c.$gray-700;
+
+$font-size-xs: 10px;
+$font-size-sm: 12px;
+$font-size: 14px;
+$font-size-lg: 16px;
+
+$font-family: "Inter", system-ui, 'Helvetica Neue', 'Avenir Next', avenir, 'Adwaita Sans', cantarell, sans-serif;
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$letter-spacing: -2.5%;

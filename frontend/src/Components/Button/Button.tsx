@@ -24,7 +24,7 @@ export type ButtonProps = {
 
 export function Button({
   name,
-  theme = 'basic',
+  theme = 'primary',
   display = 'basic',
   rounded = false,
   type = 'button',

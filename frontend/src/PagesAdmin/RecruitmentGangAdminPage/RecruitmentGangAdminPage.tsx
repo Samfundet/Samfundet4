@@ -140,7 +140,6 @@ export function RecruitmentGangAdminPage() {
         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
       </Button>
       <Button
-        theme="yellow"
         link={reverse({
           pattern: ROUTES.frontend.admin_recruitment_gang_users_without_interview,
           urlParams: {
