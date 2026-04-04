@@ -31,7 +31,7 @@ export function RecruitmentApplicantWithdraw({ application }: Props) {
         </Text>
       ) : (
         <Button
-          theme="samf"
+          theme="primary"
           onClick={() => {
             if (application?.id) {
               adminWithdraw.mutate(application.id);

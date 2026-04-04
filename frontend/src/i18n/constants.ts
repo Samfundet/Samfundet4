@@ -203,6 +203,7 @@ export const KEY = {
   common_available: 'common_available',
   common_comment: 'common_comment',
   common_capacity: 'common_capacity',
+  common_read_more: 'common_read_more',
 
   common_membership_number: 'common_membership_number',
   common_to_payment: 'common_to_payment',
@@ -331,6 +332,7 @@ export const KEY = {
   event_category_theater: 'event_category_theater',
   event_category_theme_party: 'event_category_theme_party',
   event_category_uka_event: 'event_category_uka_event',
+  event_call_to_action_register: 'event_call_to_action_register',
 
   // Venue Page:
   venuepage_title: 'venuepage_title',

@@ -16,7 +16,7 @@ export function BackButton({ url }: BackButtonProps) {
   };
 
   return (
-    <Button theme="outlined" rounded={true} onClick={goBack}>
+    <Button theme="secondary" rounded={true} onClick={goBack}>
       {t(KEY.common_go_back)}
     </Button>
   );

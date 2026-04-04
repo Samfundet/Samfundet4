@@ -328,7 +328,7 @@ export function RecruitmentPositionForm({
             )}
           />
 
-          <Button type="submit" rounded theme="green">
+          <Button type="submit" rounded theme="success">
             {positionId ? t(KEY.common_save) : t(KEY.common_create)}
           </Button>
         </div>

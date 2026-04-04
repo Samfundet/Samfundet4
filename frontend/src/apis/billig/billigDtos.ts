@@ -5,6 +5,9 @@ export type BilligPriceGroupDto = {
   membership_needed: boolean;
   netsale: boolean;
   price: number;
+
+  // Ticket fee (included in price)
+  ticket_fee?: number;
 };
 
 export type BilligTicketGroupDto = {

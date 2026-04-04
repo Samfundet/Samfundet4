@@ -93,7 +93,7 @@ export function LoginForm() {
           )}
         />
         {loginFailed && <p className={styles.login_failed_comment}>{t(KEY.loginpage_login_failed)}</p>}
-        <Button type="submit" theme="green" className={styles.login_button} rounded disabled={isPending}>
+        <Button type="submit" theme="primary" className={styles.login_button} rounded disabled={isPending}>
           {t(KEY.common_login)}
         </Button>
       </form>

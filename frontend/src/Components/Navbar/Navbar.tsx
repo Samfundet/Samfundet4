@@ -188,7 +188,7 @@ export function Navbar() {
 
   const memberButton = (
     <Button
-      theme="samf"
+      theme="primary"
       rounded={true}
       className={isDesktop ? styles.login_button : styles.popup_internal_button}
       onClick={() => {

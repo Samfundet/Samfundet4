@@ -1,0 +1,37 @@
+@use '../../../../mixins' as m;
+
+@use '../../../../styles/colors' as c;
+
+@use '../../../../styles/variables' as v;
+
+
+.banner {
+  position: absolute;
+  height: 100px;
+  width: 200px;
+
+  :first-child {
+    position: absolute;
+    left: -56px;
+    top: 27px;
+    background: c.$samf-red-700;
+    color: c.$white-50;
+    transform: rotate(-45deg);
+    text-align: center;
+    padding: 8px 0;
+    width: 100%;
+    font-size: v.$font-size;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+}
+
+.gray :first-child {
+  background: c.$gray-400;
+  color: c.$white-900;
+}
+
+.red :first-child {
+  background: c.$samf-red-700;
+  color: c.$white-50;
+}
+

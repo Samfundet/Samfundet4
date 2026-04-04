@@ -18,7 +18,7 @@ export function InterviewFormModal({ application }: InterviewFormModalProps) {
 
   return (
     <>
-      <Button theme="samf" onClick={() => setInterviewModal(true)}>
+      <Button theme="primary" onClick={() => setInterviewModal(true)}>
         {t(KEY.recruitment_interview_set)}
       </Button>
       <Modal isOpen={interviewModal}>

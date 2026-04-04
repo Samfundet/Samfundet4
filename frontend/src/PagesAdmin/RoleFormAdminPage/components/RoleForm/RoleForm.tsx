@@ -166,7 +166,7 @@ export function RoleForm({ role }: Props) {
         />
 
         <div className={styles.action_row}>
-          <Button type="submit" theme="green" disabled={isLoading || isPending}>
+          <Button type="submit" theme="success" disabled={isLoading || isPending}>
             {t(KEY.common_save)}
           </Button>
         </div>

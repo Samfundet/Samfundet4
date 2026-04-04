@@ -95,7 +95,7 @@ export function RoomAdminPage() {
             pattern: ROUTES.frontend.admin_recruitment_room_create,
             urlParams: { recruitmentId: data?.recruitment?.id },
           })}
-          theme="samf"
+          theme="primary"
         >
           {t(KEY.common_create)}
         </Button>
