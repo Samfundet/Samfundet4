@@ -116,7 +116,7 @@ export function RecruitmentProgression({ recruitment }: RecruitmentProgessionPro
                 </Text>
               ) : (
                 <Button
-                  theme={'green'}
+                  theme="success"
                   onClick={() => {
                     navigate({
                       url: reverse({

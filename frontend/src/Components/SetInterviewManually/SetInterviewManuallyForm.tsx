@@ -195,7 +195,7 @@ export function SetInterviewManuallyForm({
             <Button display="block" theme="secondary" onClick={() => onCancel?.()}>
               {t(KEY.common_cancel)}
             </Button>
-            <Button display="block" theme="samf" onClick={save}>
+            <Button display="block" theme="primary" onClick={save}>
               {t(KEY.common_save)}
             </Button>
           </div>

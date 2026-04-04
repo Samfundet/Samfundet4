@@ -202,7 +202,7 @@ export function RecruitmentApplicationFormPage() {
       </h2>
       <div className={styles.other_positions_buttons}>
         {recruitmentPositionsForGang?.map((pos) => (
-          <Button key={pos.id} display="pill" theme="outlined" onClick={() => handlePosNavigate(pos)}>
+          <Button key={pos.id} display="pill" theme="secondary" onClick={() => handlePosNavigate(pos)}>
             {dbT(pos, 'name')}
           </Button>
         ))}
@@ -220,7 +220,7 @@ export function RecruitmentApplicationFormPage() {
               <Button
                 key={similarPosition.id}
                 display="pill"
-                theme="outlined"
+                theme="secondary"
                 onClick={() => handlePosNavigate(similarPosition)}
               >
                 {dbT(similarPosition, 'name')}
@@ -322,11 +322,11 @@ export function RecruitmentApplicationFormPage() {
                   }}
                 />
                 <div className={styles.form_buttons}>
-                  <Button type="submit" theme="green" display="basic">
+                  <Button type="submit" theme="success" display="basic">
                     {submitText}
                   </Button>
                   {!recruitmentApplication?.withdrawn && recruitmentApplication && (
-                    <Button type="button" theme="samf" display="basic" onClick={() => withdrawApplication()}>
+                    <Button type="button" theme="primary" display="basic" onClick={() => withdrawApplication()}>
                       {t(KEY.recruitment_withdraw_application)}
                     </Button>
                   )}
@@ -337,7 +337,7 @@ export function RecruitmentApplicationFormPage() {
         ) : (
           <div>
             <Button
-              theme="samf"
+              theme="primary"
               onClick={() =>
                 navigate({
                   url: ROUTES.frontend.login,

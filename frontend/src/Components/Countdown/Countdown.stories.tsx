@@ -18,7 +18,7 @@ export const Basic: Story = {
   },
   render: (args) => (
     <Countdown {...args}>
-      <Button theme="green">he he he haw, Guilty</Button>
+      <Button theme="success">he he he haw, Guilty</Button>
     </Countdown>
   ),
 };
@@ -29,7 +29,7 @@ export const Short: Story = {
   },
   render: (args) => (
     <Countdown {...args}>
-      <Button theme="green">he he he haw, Guilty</Button>
+      <Button theme="success">he he he haw, Guilty</Button>
     </Countdown>
   ),
 };

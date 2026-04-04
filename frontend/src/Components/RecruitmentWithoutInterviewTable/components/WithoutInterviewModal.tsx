@@ -19,7 +19,7 @@ export function WithoutInterviewModal({
 
   return (
     <>
-      <Button theme="outlined" display="pill" onClick={() => setWithoutInterviewModal(true)}>
+      <Button theme="secondary" display="pill" onClick={() => setWithoutInterviewModal(true)}>
         {applications.length - applicationsWithoutInterview.length} / {applications.length}
       </Button>
       <Modal isOpen={withoutInterviewModal}>
