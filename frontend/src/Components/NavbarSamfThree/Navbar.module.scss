@@ -241,12 +241,12 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   }
 
   .profile_text {
-    text-decoration: none;
     color: inherit;
   }
 
   &:hover {
     background: $black-2;
+    text-decoration: none;
   }
 }
 

@@ -179,12 +179,10 @@ export function Navbar() {
   );
 
   const profileButton = user && (
-    <div className={classNames(styles.navbar_profile_button, styles.profile_text)}>
+    <Link url={ROUTES.frontend.admin} className={classNames(styles.profile_text, styles.navbar_profile_button)}>
       <Icon icon="material-symbols:person" />
-      <Link url={ROUTES.frontend.admin} className={styles.profile_text}>
-        {user?.username}
-      </Link>
-    </div>
+      {user?.username}
+    </Link>
   );
 
   const loginButton = !user && (
