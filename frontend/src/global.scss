@@ -6,6 +6,8 @@
 /* stylelint-disable-next-line no-invalid-position-at-import-rule */
 @use 'mixins' as *;
 
+@use 'src/styles/variables' as v;
+
 /* stylelint-disable selector-max-type */
 /* stylelint-disable selector-max-universal */
 
@@ -51,7 +53,11 @@ html {
 
 body {
   margin: 0;
-  font-family: $primary-font-family;
+  font-family: v.$font-family;
+  font-optical-sizing: auto;
+  font-weight: v.$font-weight-normal;
+  font-style: normal;
+  letter-spacing: v.$letter-spacing;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;

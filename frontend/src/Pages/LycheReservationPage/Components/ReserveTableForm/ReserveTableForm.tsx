@@ -154,7 +154,7 @@ export function ReservationDetailsForm({ findTableData, availableTimes, onSubmit
           )}
         />
 
-        <Button type="submit" theme="green">
+        <Button type="submit" theme="success">
           {t(KEY.sulten_reservation_form_find_times)}
         </Button>
       </form>

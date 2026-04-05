@@ -19,8 +19,8 @@ export function PaginationButton({
 }: PaginationButtonProps) {
   return (
     <Button
-      theme={isActive ? 'basic' : 'samf'}
-      display={'basic'}
+      theme={isActive ? 'secondary' : 'primary'}
+      display="basic"
       rounded={false}
       onClick={onClick}
       disabled={disabled}

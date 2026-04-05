@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -158,7 +159,8 @@ export function EventsAdminPage() {
   const backendUrl = ROUTES.backend.admin__samfundet_event_changelist;
   const header = (
     <>
-      <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_events_create)}>
+      <Button theme="primary" onClick={() => navigate(ROUTES.frontend.admin_events_create)}>
+        <Icon icon="lucide:plus" />
         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`)}
       </Button>
     </>

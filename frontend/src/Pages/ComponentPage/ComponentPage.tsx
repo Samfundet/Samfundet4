@@ -22,6 +22,8 @@ import {
   RadioButton,
   ToolTip,
 } from '~/Components';
+import type { ButtonTheme } from '~/Components/Button';
+import { buttonThemes } from '~/Components/Button/utils';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
@@ -66,7 +68,7 @@ export function ComponentPage() {
       visibility_to_dt: '',
       start_dt: new Date().toISOString(),
       status: 'active',
-      ticket_type: 'free',
+      ticket_type: EventTicketType.FREE,
       title_en: 'Von August with a very long title just like this // 23:59',
       title_nb: 'Von August // 23:59',
       billig: billig
@@ -78,7 +80,35 @@ export function ComponentPage() {
             name: '',
             sale_from: '',
             sale_to: '',
-            ticket_groups: [],
+            ticket_groups: [
+              {
+                id: 0,
+                is_almost_sold_out: false,
+                is_sold_out: false,
+                name: 'Billettgruppe 1',
+                price_groups: [
+                  {
+                    can_be_put_on_card: false,
+                    id: 0,
+                    membership_needed: true,
+                    name: 'Medlem',
+                    netsale: false,
+                    price: 50,
+                    ticket_fee: 20,
+                  },
+                  {
+                    can_be_put_on_card: false,
+                    id: 1,
+                    membership_needed: false,
+                    name: 'Ikke-medlem',
+                    netsale: false,
+                    price: 150,
+                    ticket_fee: 30,
+                  },
+                ],
+                ticket_limit: 0,
+              },
+            ],
             ...billig,
           }
         : undefined,
@@ -88,10 +118,51 @@ export function ComponentPage() {
 
   return (
     <Page className={styles.wrapper}>
-      <div style={{ display: 'flex', gap: '1.5rem' }}>
+      <div>
+        <H1 style={{ margin: '2rem 0 0.5rem' }}>Buttons</H1>
+
+        <div className={styles.button_row}>
+          <Button disabled>Disabled button</Button>
+          <Button disabled>
+            <Icon icon="ph:ticket-bold" />
+            With icon
+          </Button>
+          <Button disabled rounded>
+            Rounded button
+          </Button>
+          <Button disabled display="pill">
+            Pill button
+          </Button>
+        </div>
+        {Object.keys(buttonThemes).map((theme) => (
+          <div className={styles.button_row} key={theme}>
+            <Button theme={theme as ButtonTheme}>Theme: {theme}</Button>
+            <Button theme={theme as ButtonTheme}>
+              <Icon icon="ph:ticket-bold" />
+              With icon
+            </Button>
+            <Button theme={theme as ButtonTheme} rounded>
+              Rounded button
+            </Button>
+            <Button theme={theme as ButtonTheme} display="pill">
+              Pill button
+            </Button>
+          </div>
+        ))}
+      </div>
+
+      <H1 style={{ margin: '2rem 0 0.5rem' }}>Event Cards</H1>
+
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem' }}>
         <EventCard
           event={createFakeEvent(
-            { category: EventCategory.FOOTBALL_MATCH, ticket_type: EventTicketType.BILLIG },
+            {
+              title_nb: 'Richard Layout',
+              start_dt: addDays(new Date(), 1).toISOString(),
+              image_url: '/media/images/img_18_RNUZqSO',
+              location: 'Storsalen',
+              ticket_type: EventTicketType.BILLIG,
+            },
             { is_almost_sold_out: true },
           )}
         />
@@ -102,11 +173,13 @@ export function ComponentPage() {
               start_dt: addDays(new Date(), 1).toISOString(),
               image_url: '/media/images/img_7_Cj7HE9w',
               location: 'Storsalen',
+              ticket_type: EventTicketType.BILLIG,
             },
             { is_sold_out: true },
           )}
         />
         <EventCard
+          useDateBadge={false}
           event={createFakeEvent({
             title_nb: 'Villmarksforedrag med Lars Monsen',
             image_url: '/media/images/img_1_LFzT7HJ',
@@ -115,12 +188,21 @@ export function ComponentPage() {
             location: 'Hele huset',
           })}
         />
+        <EventCard
+          event={createFakeEvent({
+            category: 'debate',
+            title_nb: 'Onsdagsdebatt: Lorem ipsum',
+            start_dt: new Date(2026, 11, 23).toISOString(),
+            location: 'Skala',
+            ticket_type: EventTicketType.INCLUDED,
+          })}
+        />
       </div>
 
       <br />
 
       <div>
-        <H1>Example form</H1>
+        <H1 style={{ margin: '2rem 0 0.5rem' }}>Form</H1>
 
         <ExampleForm />
       </div>
@@ -172,9 +254,9 @@ export function ComponentPage() {
       <h1>Components:</h1>
       <div>
         <h2>Buttons:</h2>
-        <Button theme="samf">Test</Button>
+        <Button theme="primary">Test</Button>
         <br />
-        <Button theme="samf" disabled>
+        <Button theme="primary" disabled>
           Disabled
         </Button>
         <br />

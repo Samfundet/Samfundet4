@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react';
-import type { themeToStyleMap } from '~/Components/Button/utils';
+import type { buttonThemes } from '~/Components/Button/utils';
 import type { KV } from '~/constants';
 /** Module for global generic types. */
 
@@ -220,7 +220,7 @@ export type OrganizationTheme = {
   pagePrimaryColor: string;
   pageSecondaryColor: string;
   pageTertiaryColor?: string;
-  buttonTheme: keyof typeof themeToStyleMap;
+  buttonTheme: keyof typeof buttonThemes;
 };
 
 // Recruitment mappings

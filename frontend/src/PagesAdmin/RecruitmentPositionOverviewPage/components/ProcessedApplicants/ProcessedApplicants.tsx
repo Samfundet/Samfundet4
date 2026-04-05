@@ -64,7 +64,7 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
           content: (
             <Button
               display="pill"
-              theme="outlined"
+              theme="secondary"
               onClick={() => revertStateFunction(application.id, { recruiter_status: 0 })}
             >
               {t(KEY.recruitment_revert_status)}
