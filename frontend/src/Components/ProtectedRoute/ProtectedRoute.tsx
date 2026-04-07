@@ -26,7 +26,7 @@ export function ProtectedRoute({
   obj,
   element,
   requiresStaff = false,
-  redirectPath = ROUTES.frontend.login,
+  redirectPath = ROUTES.frontend.home,
   resolveWithRolePermissions = false,
 }: ProtectedRouteProps) {
   const { user, loading } = useAuthContext();
