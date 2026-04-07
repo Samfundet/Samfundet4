@@ -105,7 +105,15 @@ export const ALL_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'f
 export const WEEK_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
 
 /** Event types */
-export type EventStatus = 'active' | 'cancelled' | 'archived' | 'deleted';
+export const EventStatusChoice = {
+  PUBLIC: 'public',
+  PRIVATE: 'private',
+  ARCHIVED: 'archived',
+  CANCELLED: 'cancelled',
+  DELETED: 'deleted',
+} as const;
+
+export type EventStatus = (typeof EventStatusChoice)[keyof typeof EventStatusChoice];
 
 export const EventAgeRestriction = {
   NONE: 'none',

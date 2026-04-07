@@ -305,6 +305,14 @@ export const nb = prepareTranslations({
   [KEY.event_category_theme_party]: 'Temafest',
   [KEY.event_category_uka_event]: 'UKE-arrangement',
 
+  // Event statuses
+  [KEY.event_status]: 'Status',
+  [KEY.event_status_public]: 'Offentlig',
+  [KEY.event_status_private]: 'Privat',
+  [KEY.event_status_archived]: 'Arkivert',
+  [KEY.event_status_cancelled]: 'Avlyst',
+  [KEY.event_status_deleted]: 'Slettet',
+
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',
   [KEY.email_or_membership_number_message]: 'Du må oppgi enten en e-post eller et medlemsnummer',
@@ -708,6 +716,7 @@ export const nb = prepareTranslations({
   [KEY.event_form_category_required]: 'Kategori er påkrevd',
   [KEY.event_form_age_restriction_required]: 'Aldersgrense er påkrevd',
   [KEY.event_form_ticket_type_required]: 'Billetttype er påkrevd',
+  [KEY.event_form_status_required]: 'Status er påkrevd',
 });
 
 export const en = prepareTranslations({
@@ -1002,6 +1011,14 @@ export const en = prepareTranslations({
   [KEY.event_category_theater]: 'Theater',
   [KEY.event_category_theme_party]: 'Theme party',
   [KEY.event_category_uka_event]: 'UKA event',
+
+  // Event statuses
+  [KEY.event_status]: 'Status',
+  [KEY.event_status_public]: 'Public',
+  [KEY.event_status_private]: 'Private',
+  [KEY.event_status_archived]: 'Archived',
+  [KEY.event_status_cancelled]: 'Cancelled',
+  [KEY.event_status_deleted]: 'Deleted',
 
   // EventPage:
   [KEY.event_registration_url]: 'Registration URL',
@@ -1409,4 +1426,5 @@ export const en = prepareTranslations({
   [KEY.event_form_category_required]: 'Category is required',
   [KEY.event_form_age_restriction_required]: 'Age restriction is required',
   [KEY.event_form_ticket_type_required]: 'Ticket type is required',
+  [KEY.event_form_status_required]: 'Status is required',
 });
