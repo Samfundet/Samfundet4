@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components/Button/Button';
 import type { LinkedEventDto } from '~/api';
-import { getImage, getImageLinkedEvents, replaceImageFile } from '~/api';
+import { deleteImage, getImage, getImageLinkedEvents, replaceImageFile } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
@@ -144,6 +144,29 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
     }
   };
 
+  const handleDelete = async () => {
+    if (!image || linkedEvents.length > 0) {
+      toast.error(t(KEY.common_cannot_delete_image));
+      return;
+    }
+
+    if (!window.confirm(`${t(KEY.common_confirm_image_delete)} `)) {
+      return;
+    }
+
+    try {
+      setUploading(true);
+      await deleteImage(image.id);
+      toast.success(t(KEY.common_delete_successful));
+      navigate({ url: ROUTES.frontend.admin_images, replace: true });
+    } catch (error: unknown) {
+      toast.error(t(KEY.common_something_went_wrong));
+      console.error('Failed to delete image:', error);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   if (loading) {
     return (
       <AdminPageLayout title={title} loading={true} header={true}>
@@ -172,27 +195,6 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
           </div>
         </div>
 
-        {/* Linked events warning */}
-        {linkedEvents.length > 0 && (
-          <div className={styles.linkedEventsSection}>
-            <h4>{t(KEY.common_image)} {t(KEY.common_linked_to_events)}:</h4>
-            <ul className={styles.eventsList}>
-              {linkedEvents.map((event) => (
-                <li
-                  key={event.id}
-                  className={styles.eventItem}
-                  onClick={() => navigate({ url: reverse({ pattern: ROUTES.frontend.admin_events_edit, urlParams: { id: event.id } }) })}
-                >
-                  {event.title_nb || event.title_en} ({new Date(event.start_dt).toLocaleDateString()})
-                </li>
-              ))}
-            </ul>
-            <p className={styles.warningText}>
-              {t(KEY.common_cannot_delete_image)}
-            </p>
-          </div>
-        )}
-
         {/* Upload form */}
         <div className={styles.uploadSection}>
           <h4>{lowerCapitalize(`${t(KEY.common_replace)} ${t(KEY.common_image)}`)}</h4>
@@ -210,6 +212,40 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
               {uploading ? t(KEY.common_loading) : t(KEY.common_upload)}
             </Button>
           </div>
+        </div>
+
+        {/* Linked events warning */}
+        {linkedEvents.length > 0 && (
+          <div className={styles.linkedEventsSection}>
+            <h4>{t(KEY.common_image_linked_to_events)}:</h4>
+            <ul className={styles.eventsList}>
+              {linkedEvents.map((event) => (
+                <li
+                  key={event.id}
+                  className={styles.eventItem}
+                  onClick={() => navigate({ url: reverse({ pattern: ROUTES.frontend.admin_events_edit, urlParams: { id: event.id } }) })}
+                >
+                  {event.title_nb || event.title_en} ({new Date(event.start_dt).toLocaleDateString()})
+                </li>
+              ))}
+            </ul>
+            <p className={styles.warningText}>
+              {t(KEY.common_cannot_delete_image)}
+            </p>
+          </div>
+        )}
+
+        {/* Delete button */}
+        <div className={styles.deleteSection}>
+          <Button
+            onClick={handleDelete}
+            disabled={uploading || linkedEvents.length > 0}
+            theme="samf"
+            rounded={true}
+            title={linkedEvents.length > 0 ? t(KEY.common_cannot_delete_image) : undefined}
+          >
+            {t(KEY.common_delete)}
+          </Button>
         </div>
       </div>
     </AdminPageLayout>

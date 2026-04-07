@@ -628,6 +628,12 @@ export async function replaceImageFile(id: string | number, file: File, title?: 
   return response.data;
 }
 
+export async function deleteImage(id: string | number): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
+  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
+  return response;
+}
+
 export type LinkedEventDto = {
   id: number;
   title_en: string;
