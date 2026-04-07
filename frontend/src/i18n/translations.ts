@@ -227,6 +227,7 @@ export const nb = prepareTranslations({
 
   // MDB
   [KEY.common_member_database]: 'Medlemsdatabase',
+  [KEY.common_the_member_database]: 'medlemsdatabasen',
 
   // ==================== //
   //        Others        //
@@ -330,7 +331,7 @@ export const nb = prepareTranslations({
   [KEY.adminpage_gangs_title]: 'Administrer gjenger',
   [KEY.adminpage_gangs_create]: 'Opprett gjeng',
 
-  //MDB Connect AdminPage
+  //MDB
   [KEY.adminpage_connect_mdb]: 'Koble til medlemsdatabasen',
   [KEY.adminpage_connect_mdb_succesful_toast]: 'Vellyket tilkobling til medlemsdatabasen',
   [KEY.adminpage_connect_mdb_invalid_email]: 'ugyldig e-post',
@@ -339,6 +340,8 @@ export const nb = prepareTranslations({
     'Kunne ikke koble til medlemsdatabasen. Vennligst sjekk at alle felter er skrevet riktig',
   [KEY.adminpage_connect_mdb_password_notice_1]: 'Passordet ditt til ',
   [KEY.adminpage_connect_mdb_password_notice_2]: 'medlemsdatabasen',
+  [KEY.adminpage_profile_connected_to_mdb]: 'du er koblet til',
+  [KEY.adminpage_profile_not_connected_to_mdb]: 'du er ikke koblet til',
 
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
@@ -936,6 +939,7 @@ export const en = prepareTranslations({
 
   // MDB
   [KEY.common_member_database]: 'Membership database',
+  [KEY.common_the_member_database]: 'the membership database',
   // ==================== //
   //        Others        //
   // ==================== //
@@ -1354,7 +1358,7 @@ export const en = prepareTranslations({
   [KEY.feedback_your_feedback]: 'Your feedback',
   [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
 
-  //MDB Connect AdminPage
+  //MDB
   [KEY.adminpage_connect_mdb]: 'Connect to the membership database',
   [KEY.adminpage_connect_mdb_succesful_toast]: 'Succesfully connected to the membership database',
   [KEY.adminpage_connect_mdb_invalid_email]: 'Invalid email',
@@ -1363,6 +1367,8 @@ export const en = prepareTranslations({
     "Couldn't connect to the membership database. Please check that all fields are correct",
   [KEY.adminpage_connect_mdb_password_notice_1]: 'Your password to the',
   [KEY.adminpage_connect_mdb_password_notice_2]: 'membership database',
+  [KEY.adminpage_profile_connected_to_mdb]: "you're connected to",
+  [KEY.adminpage_profile_not_connected_to_mdb]: "you're not connected to",
 
   // No category:
   [KEY.owner]: 'Owner',
