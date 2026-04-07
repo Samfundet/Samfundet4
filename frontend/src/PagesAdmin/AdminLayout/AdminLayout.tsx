@@ -5,7 +5,8 @@ import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router';
 import { useNavigate } from 'react-router';
-import { Button, Link, Navbar } from '~/Components';
+import { Button, Link } from '~/Components';
+import { Navbar } from '~/Components/NavbarSamfThree';
 import { appletCategories } from '~/Pages/AdminPage/applets';
 import { logout, stopImpersonatingUser } from '~/api';
 import { isSiteFeatureEnabled } from '~/constants/site-features';
@@ -146,6 +147,16 @@ export function AdminLayout() {
             {t(KEY.admin_stop_impersonate)}
           </button>
         )}
+        {/** Connect to MDB button */}
+        <Link
+          url={ROUTES.frontend.admin_mdb_connect}
+          className={classNames(styles.panel_item, {
+            [styles.selected]: location.pathname === ROUTES.frontend.admin_mdb_connect,
+          })}
+        >
+          <Icon icon="mdi:connection" />
+          {t(KEY.common_member_database)}
+        </Link>
         {/* Logout */}
         <button
           type="button"

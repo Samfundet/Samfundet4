@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from samfundet.serializers import EventSerializer
 from samfundet.models.event import Event
-from samfundet.models.model_choices import EventCategory, EventTicketType
+from samfundet.models.model_choices import EventStatus, EventCategory, EventTicketType
 
 
 class ElementType:
@@ -58,7 +58,7 @@ def carousel(*, title_nb: str, title_en: str, events: list[Event]) -> HomePageEl
 
 def generate() -> dict[str, Any]:  # noqa: C901
     elements: list[HomePageElement] = []
-    upcoming_events = Event.objects.filter(start_dt__gt=timezone.now() - timezone.timedelta(hours=6)).order_by('start_dt')
+    upcoming_events = Event.objects.filter(start_dt__gt=timezone.now() - timezone.timedelta(hours=6), status=EventStatus.PUBLIC).order_by('start_dt')
     # Optimize DB queries by:
     # - select_related (FK and OTO) to perform an SQL JOIN, fetching related 'image' data in the same query.
     # - prefetch_related (MTM and reverse FK) to fetch related objects in separate queries and join in Python.
