@@ -354,6 +354,14 @@ export const KEY = {
   event_category_uka_event: 'event_category_uka_event',
   event_call_to_action_register: 'event_call_to_action_register',
 
+  // Event statuses
+  event_status: 'event_status',
+  event_status_public: 'event_status_public',
+  event_status_private: 'event_status_private',
+  event_status_archived: 'event_status_archived',
+  event_status_cancelled: 'event_status_cancelled',
+  event_status_deleted: 'event_status_deleted',
+
   // Venue Page:
   venuepage_title: 'venuepage_title',
 
@@ -734,6 +742,7 @@ export const KEY = {
   event_form_category_required: 'event_form_category_required',
   event_form_age_restriction_required: 'event_form_age_restriction_required',
   event_form_ticket_type_required: 'event_form_ticket_type_required',
+  event_form_status_required: 'event_form_status_required',
 } as const;
 
 // This will ensure that each value matches the key exactly.
