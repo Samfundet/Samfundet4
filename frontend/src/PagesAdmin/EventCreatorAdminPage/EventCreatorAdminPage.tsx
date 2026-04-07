@@ -64,7 +64,11 @@ export function EventCreatorAdminPage() {
     label: t(getAgeRestrictionKey(age)),
   }));
 
-  const eventStatusOptions: DropdownOption<EventStatus>[] = Object.values(EventStatusChoice).map((status) => ({
+  const availableEventStatuses: EventStatus[] = id
+    ? Object.values(EventStatusChoice)
+    : [EventStatusChoice.PUBLIC, EventStatusChoice.PRIVATE];
+
+  const eventStatusOptions: DropdownOption<EventStatus>[] = availableEventStatuses.map((status) => ({
     value: status,
     label: t(getEventStatusTranslationKey(status)),
   }));
