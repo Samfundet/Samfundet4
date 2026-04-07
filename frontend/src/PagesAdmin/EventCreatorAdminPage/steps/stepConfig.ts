@@ -59,6 +59,6 @@ export const steps: EventCreatorStep[] = [
     title_nb: 'Oppsummering',
     title_en: 'Summary',
     customIcon: 'ic:outline-remove-red-eye',
-    validate: (d) => !!d.visibility_from_dt,
+    validate: (d) => !!d.visibility_from_dt && !!d.status,
   },
 ];

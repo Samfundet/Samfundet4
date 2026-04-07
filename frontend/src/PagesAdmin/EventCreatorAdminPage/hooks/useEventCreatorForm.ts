@@ -46,6 +46,7 @@ export function useEventCreatorForm(params: {
       custom_tickets: [],
       billig_id: undefined,
       image: undefined,
+      status: 'public',
       visibility_from_dt: '',
       visibility_to_dt: '',
     },
@@ -75,6 +76,7 @@ export function useEventCreatorForm(params: {
       custom_tickets: event.custom_tickets || [],
       billig_id: event.billig?.id,
       image: event.image ?? undefined,
+      status: event.status || 'public',
       visibility_from_dt: event.visibility_from_dt ? utcTimestampToLocal(event.visibility_from_dt, false) : '',
       visibility_to_dt: event.visibility_to_dt ? utcTimestampToLocal(event.visibility_to_dt, false) : '',
     };
