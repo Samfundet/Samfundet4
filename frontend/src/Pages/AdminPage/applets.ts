@@ -1,8 +1,8 @@
-import type { AppletCategory } from '~/Components/AdminBox/types';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
+import type { AdminAppletCategory } from '~/types.ts';
 
-export const appletCategories: AppletCategory[] = [
+export const appletCategories: AdminAppletCategory[] = [
   {
     title_en: 'General',
     title_nb: 'Generelt',
@@ -13,6 +13,7 @@ export const appletCategories: AppletCategory[] = [
         perm: PERM.SAMFUNDET_ADD_EVENT,
         icon: 'material-symbols:calendar-month-outline-rounded',
         url: ROUTES.frontend.admin_events,
+        feature: 'events',
       },
       {
         title_nb: 'Informasjonssider',
@@ -20,13 +21,15 @@ export const appletCategories: AppletCategory[] = [
         perm: PERM.SAMFUNDET_ADD_INFORMATIONPAGE,
         icon: 'ph:note-pencil-light',
         url: ROUTES.frontend.admin_information,
+        feature: 'information',
       },
       {
         title_nb: 'Åpningstider',
-        title_en: 'Open hours',
+        title_en: 'Opening hours',
         perm: PERM.SAMFUNDET_CHANGE_VENUE,
         icon: 'mdi:clock-time-eight-outline',
         url: ROUTES.frontend.admin_opening_hours,
+        feature: 'openingHours',
       },
       {
         title_nb: 'Stengte perioder',
@@ -34,6 +37,7 @@ export const appletCategories: AppletCategory[] = [
         perm: PERM.SAMFUNDET_ADD_CLOSEDPERIOD,
         icon: 'solar:moon-sleep-bold',
         url: ROUTES.frontend.admin_closed,
+        feature: 'openingHours',
       },
       {
         title_nb: 'Bildearkiv',
@@ -41,6 +45,7 @@ export const appletCategories: AppletCategory[] = [
         perm: PERM.SAMFUNDET_ADD_IMAGE,
         icon: 'clarity:image-gallery-line',
         url: ROUTES.frontend.admin_images,
+        feature: 'images',
       },
       {
         title_nb: 'Saksdokumenter',
@@ -48,6 +53,7 @@ export const appletCategories: AppletCategory[] = [
         perm: PERM.SAMFUNDET_ADD_SAKSDOKUMENT,
         icon: 'mdi:file-document-outline',
         url: ROUTES.frontend.admin_saksdokumenter,
+        feature: 'documents',
       },
       {
         title_nb: 'Brukere',
@@ -55,6 +61,7 @@ export const appletCategories: AppletCategory[] = [
         perm: PERM.SAMFUNDET_VIEW_USER,
         icon: 'mdi:person-search',
         url: ROUTES.frontend.admin_users,
+        feature: 'users',
       },
       {
         title_nb: 'Roller',
@@ -62,6 +69,7 @@ export const appletCategories: AppletCategory[] = [
         perm: PERM.SAMFUNDET_VIEW_ROLE,
         icon: 'ph:user-circle-gear',
         url: ROUTES.frontend.admin_roles,
+        feature: 'roles',
       },
       {
         title_nb: 'Gjenger',
@@ -69,6 +77,7 @@ export const appletCategories: AppletCategory[] = [
         perm: PERM.SAMFUNDET_ADD_GANG,
         icon: 'mdi:people-group',
         url: ROUTES.frontend.admin_gangs,
+        feature: 'gangs',
       },
       {
         title_nb: 'Opptak',
@@ -76,6 +85,7 @@ export const appletCategories: AppletCategory[] = [
         perm: PERM.SAMFUNDET_ADD_RECRUITMENT,
         icon: 'mdi:briefcase-search',
         url: ROUTES.frontend.admin_recruitment,
+        feature: 'recruitment',
       },
       {
         title_nb: 'Lyche Reservasjon',
@@ -83,6 +93,7 @@ export const appletCategories: AppletCategory[] = [
         perm: PERM.SAMFUNDET_VIEW_RESERVATION,
         icon: 'mdi:food-outline',
         url: ROUTES.frontend.admin_sulten_reservations,
+        feature: 'sulten',
       },
       {
         title_nb: 'Lyche Meny',
@@ -90,6 +101,7 @@ export const appletCategories: AppletCategory[] = [
         perm: PERM.SAMFUNDET_VIEW_MENU,
         icon: 'bx:food-menu',
         url: ROUTES.frontend.admin_sulten_menu,
+        feature: 'sulten',
       },
     ],
   },

@@ -19,6 +19,46 @@ jobs:
     name: Verify backend
     if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
+    services:
+      sm4_dev_database:
+        image: postgres:15
+        env:
+          POSTGRES_DB: sm4DB
+          POSTGRES_USER: sm4DB
+          POSTGRES_PASSWORD: sm4DB
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      billig_dev_database:
+        image: postgres:15
+        env:
+          POSTGRES_DB: billigDB
+          POSTGRES_USER: billigDB
+          POSTGRES_PASSWORD: billigDB
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5433:5432
+      mdb_dev:
+        image: postgres:15
+        env:
+          POSTGRES_DB: mdb2
+          POSTGRES_USER: mdb2
+          POSTGRES_PASSWORD: mdb2
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5434:5432
     defaults:
       run:
         working-directory: ./backend
@@ -30,6 +70,15 @@ jobs:
       DJANGO_SUPERUSER_USERNAME: admin
       DJANGO_SUPERUSER_PASSWORD: Django123
       DJANGO_SUPERUSER_EMAIL: admin@example.com
+      SM4_DEV_CREDENTIAL: sm4DB
+      BILLIG_DEV_CREDENTIAL: billigDB
+      MDB_DEV_CREDENTIAL: mdb2
+      SM4_DEV_HOST: localhost
+      BILLIG_DEV_HOST: localhost
+      MDB_DEV_HOST: localhost
+      SM4_DEV_PORT: 5432
+      BILLIG_DEV_PORT: 5433
+      MDB_DEV_PORT: 5434
 
     steps:
       - name: Checkout code
@@ -100,17 +149,17 @@ jobs:
           echo VITE_CYPRESS_BASE_URL=http://frontend:3000 >> frontend/.env.docker
 
       - name: Build images
-        run: docker compose build backend frontend storybook
+        run: docker compose --env-file .env.example build backend frontend storybook
 
       - name: Start containers
-        run: docker compose up backend frontend storybook -d; sleep 20 # Give additional seconds to boot.
+        run: docker compose --env-file .env.example up backend frontend storybook -d; sleep 20 # Give additional seconds to boot.
 
       - name: Check running containers
         # Will fail if container isn't running.
         run: |
-          docker compose exec backend echo 
-          docker compose exec frontend echo
-          docker compose exec storybook echo
+          docker compose --env-file .env.example exec backend echo 
+          docker compose --env-file .env.example exec frontend echo
+          docker compose --env-file .env.example exec storybook echo
 
       # - name: Seed backend for Cypress tests
       #   run: docker compose exec backend poetry run python manage.py seed_cypress
@@ -119,7 +168,7 @@ jobs:
       #   run: docker compose up cypress
 
       - name: Stop containers
-        run: docker compose down
+        run: docker compose --env-file .env.example down
 
   job_verify_frontend_lint:
     name: Verify frontend

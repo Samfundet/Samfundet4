@@ -1,0 +1,41 @@
+@use 'src/constants' as v;
+
+@use 'src/mixins' as m;
+
+.wrapper {
+  margin: 2rem auto;
+  width: v.$primary-content-width-wide;
+  max-width: 100%;
+
+  @include m.for-tablet-down {
+    padding: 0 0.25rem;
+  }
+}
+
+.container {
+  display: grid;
+  justify-items: center;
+  gap: 2rem;
+
+  @include m.for-large-desktop-up {
+    grid-template-columns: repeat(4, minmax(auto, 1fr));
+  }
+
+  @include m.for-desktop-down {
+    grid-template-columns: repeat(3, minmax(auto, 1fr));
+  }
+
+  @include m.for-tablet-down {
+    grid-template-columns: repeat(2, minmax(auto, 1fr));
+    gap: 1rem;
+  }
+
+  @include m.for-mobile-down {
+    grid-template-columns: repeat(1, minmax(auto, 1fr));
+  }
+}
+
+.card_container {
+  width: 100%;
+  max-width: 420px;
+}

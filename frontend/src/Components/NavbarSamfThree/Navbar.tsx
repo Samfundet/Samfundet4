@@ -1,0 +1,258 @@
+// ******************************************************************************************************************************
+// Replication of Samf3 navbar. Use until Samf4 is fully ready.
+// ******************************************************************************************************************************
+
+import { Icon } from '@iconify/react';
+import { default as classNames } from 'classnames';
+import { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router';
+import { Button, Link, ThemeSwitch } from '~/Components';
+import { getActiveRecruitments } from '~/api';
+import { logoWhite } from '~/assets';
+import { useAuthContext } from '~/context/AuthContext';
+import { useGlobalContext } from '~/context/GlobalContextProvider';
+import type { RecruitmentDto } from '~/dto';
+import { useDesktop } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
+import { SAMF3_MEMBER_URL } from '~/routes/samf-three';
+import styles from './Navbar.module.scss';
+import { HamburgerMenu, LanguageButton } from './components';
+import { NavbarItem } from './components/NavbarItem';
+
+const scrollDistanceForOpaque = 30;
+
+export function Navbar() {
+  const { isMobileNavigation, setIsMobileNavigation } = useGlobalContext();
+  const { t, i18n } = useTranslation();
+  const { user, setUser } = useAuthContext();
+  const [activeRecruitments, setActiveRecruitments] = useState<RecruitmentDto[]>();
+  const navigate = useNavigate();
+  const isDesktop = useDesktop();
+  const [cookies, setCookie, removeCookie] = useCookies();
+
+  // Each NavbarItem can have a dropdown menu.
+  // We want only one of them to be extended at any time, therefore this parent component
+  // is given the responsibility of managing this.
+  // Store the label of the currently selected dropdown.
+  const [expandedDropdown, setExpandedDropdown] = useState('');
+
+  // Navbar style.
+  const isRootPath = useLocation().pathname === ROUTES.frontend.home;
+
+  useEffect(() => {
+    // Close expanded dropdown menu whenever mobile navbar is closed, or we switch from mobile to desktop, like when
+    // switching from portrait to landscape on iPad.
+    if (!isMobileNavigation || isDesktop) {
+      setExpandedDropdown('');
+    }
+  }, [isMobileNavigation, isDesktop]);
+
+  useEffect(() => {
+    getActiveRecruitments().then((response) => {
+      setActiveRecruitments(response.data);
+    });
+  }, []);
+
+  const showActiveRecruitments = activeRecruitments !== undefined && activeRecruitments?.length > 0;
+
+  // Return profile button for navbar if logged in.
+  const mobileProfileButton = (
+    <div className={styles.navbar_profile_button}>
+      <Icon icon="material-symbols:person" />
+      <Link url={ROUTES.frontend.admin} className={styles.profile_text}>
+        {user?.username}
+      </Link>
+    </div>
+  );
+
+  const infoLinks = (
+    <>
+      <a
+        href={ROUTES.samfThree.information.general}
+        className={styles.navbar_dropdown_link}
+        onClick={() => setExpandedDropdown('')}
+      >
+        {t(KEY.common_general)}
+      </a>
+      <a
+        href={ROUTES.samfThree.information.membership}
+        className={styles.navbar_dropdown_link}
+        onClick={() => setExpandedDropdown('')}
+      >
+        {t(KEY.common_membership)}
+      </a>
+      <a
+        href={ROUTES.samfThree.information.openingHours}
+        className={styles.navbar_dropdown_link}
+        onClick={() => setExpandedDropdown('')}
+      >
+        {t(KEY.common_opening_hours)}
+      </a>
+      <a
+        href={ROUTES.samfThree.information.photos}
+        className={styles.navbar_dropdown_link}
+        onClick={() => setExpandedDropdown('')}
+      >
+        {t(KEY.navbar_photos)}
+      </a>
+      <a
+        href={ROUTES.samfThree.information.renting}
+        className={styles.navbar_dropdown_link}
+        onClick={() => setExpandedDropdown('')}
+      >
+        {t(KEY.common_rent_services)}
+      </a>
+    </>
+  );
+
+  const venueLinks = (
+    <>
+      <a
+        href={ROUTES.samfThree.venues.restaurant}
+        className={styles.navbar_dropdown_link}
+        onClick={() => setExpandedDropdown('')}
+      >
+        {t(KEY.common_restaurant)}
+      </a>
+      <a
+        href={ROUTES.samfThree.venues.bar}
+        className={styles.navbar_dropdown_link}
+        onClick={() => setExpandedDropdown('')}
+      >
+        {t(KEY.navbar_bar)}
+      </a>
+      <a
+        href={ROUTES.samfThree.venues.scene}
+        className={styles.navbar_dropdown_link}
+        onClick={() => setExpandedDropdown('')}
+      >
+        {t(KEY.navbar_stages)}
+      </a>
+      <a
+        href={ROUTES.samfThree.venues.club}
+        className={styles.navbar_dropdown_link}
+        onClick={() => setExpandedDropdown('')}
+      >
+        {t(KEY.navbar_club)}
+      </a>
+    </>
+  );
+
+  const navbarHeaders = (
+    <div className={isDesktop ? styles.navbar_main_links : styles.navbar_main_links_mobile}>
+      <NavbarItem
+        setExpandedDropdown={setExpandedDropdown}
+        expandedDropdown={expandedDropdown}
+        route={ROUTES.frontend.events}
+        label={t(KEY.common_events)}
+      />
+      <NavbarItem
+        setExpandedDropdown={setExpandedDropdown}
+        expandedDropdown={expandedDropdown}
+        route={'#'}
+        label={t(KEY.common_information)}
+        dropdownLinks={infoLinks}
+      />
+      <NavbarItem
+        setExpandedDropdown={setExpandedDropdown}
+        expandedDropdown={expandedDropdown}
+        route={'#'}
+        label={t(KEY.common_venues)}
+        dropdownLinks={venueLinks}
+      />
+    </div>
+  );
+
+  const recruitmentButton = (
+    <div className={isDesktop ? styles.navbar_main_links : styles.navbar_main_links_mobile}>
+      <NavbarItem
+        setExpandedDropdown={setExpandedDropdown}
+        expandedDropdown={expandedDropdown}
+        route={ROUTES.samfThree.volunteer}
+        label={t(KEY.common_volunteer)}
+        labelClassName={showActiveRecruitments ? styles.active_recruitment : ''}
+      />
+    </div>
+  );
+
+  const profileButton = user && (
+    <Link url={ROUTES.frontend.admin} className={classNames(styles.profile_text, styles.navbar_profile_button)}>
+      <Icon icon="material-symbols:person" />
+      {user?.username}
+    </Link>
+  );
+
+  const loginButton = !user && (
+    <Button
+      theme={'white'}
+      rounded={true}
+      className={isDesktop ? styles.login_button : styles.popup_internal_button}
+      onClick={() => {
+        navigate(ROUTES.frontend.login);
+        setIsMobileNavigation(false);
+      }}
+    >
+      {t(KEY.common_login)}
+    </Button>
+  );
+
+  const memberButton = (
+    <Button
+      theme="samf"
+      rounded={true}
+      className={isDesktop ? styles.login_button : styles.popup_internal_button}
+      onClick={() => {
+        window.location.href = SAMF3_MEMBER_URL.medlem;
+        setIsMobileNavigation(false);
+      }}
+    >
+      {t(KEY.common_member)}
+    </Button>
+  );
+
+  // Show mobile popup for navigation.
+  const mobileNavigation = (
+    <>
+      <nav id={styles.mobile_popup_container}>
+        {navbarHeaders}
+        {recruitmentButton}
+        <div className={styles.mobile_widgets}>
+          <ThemeSwitch />
+          <div className={styles.mobile_user}>
+            {memberButton}
+            {loginButton}
+          </div>
+          <LanguageButton />
+        </div>
+        <br />
+        {user && mobileProfileButton}
+      </nav>
+    </>
+  );
+
+  return (
+    <>
+      <nav id={styles.navbar_container}>
+        <div className={styles.navbar_inner}>
+          <Link url={ROUTES.frontend.home} className={styles.navbar_logo}>
+            <img src={logoWhite} id={styles.navbar_logo_img} alt="Logo" />
+          </Link>
+          {isDesktop && navbarHeaders}
+          {isDesktop && recruitmentButton}
+          <div className={styles.navbar_widgets}>
+            <ThemeSwitch />
+            <LanguageButton />
+            {memberButton}
+            {loginButton}
+            {profileButton}
+          </div>
+          <HamburgerMenu />
+        </div>
+      </nav>
+      {isMobileNavigation && mobileNavigation}
+    </>
+  );
+}

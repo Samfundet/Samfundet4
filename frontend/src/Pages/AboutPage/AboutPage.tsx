@@ -7,6 +7,7 @@ import { TextItem } from '~/constants';
 import { useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { CASE_DOCUMENTS } from '~/routes/samf-three';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './AboutPage.module.scss';
 import { VENUES } from './data';
@@ -44,7 +45,7 @@ export function AboutPage() {
         <Button theme="samf" className={styles.button}>
           {t(KEY.common_about_the_organisation).toUpperCase()}
         </Button>
-        <Button className={styles.button} theme="outlined">
+        <Button className={styles.button} theme="outlined" link={CASE_DOCUMENTS.saksdokumenter}>
           {t(KEY.common_documents).toUpperCase()}
         </Button>
         <Button className={styles.button} theme="outlined">

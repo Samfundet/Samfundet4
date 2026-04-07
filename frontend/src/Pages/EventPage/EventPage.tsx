@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { ExpandableHeader, ExternalHostBox, H1, Image, Page } from '~/Components';
-import { BuyButton } from '~/Components/BuyButton/BuyButton';
+import { BuyEventTicket } from '~/Components/BuyEventTicket/BuyEventTicket';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { getEvent } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
@@ -43,7 +43,9 @@ export function EventPage() {
           />
         )}
         {event?.billig && (
-          <BuyButton ticketSaleState={event.billig.ticket_groups} eventId={event.id} billigId={event.billig.id} />
+          <>
+            <BuyEventTicket event={event} ticketSaleState={event.billig} />
+          </>
         )}
         {/* Text */}
         <div className={styles.text_container}>

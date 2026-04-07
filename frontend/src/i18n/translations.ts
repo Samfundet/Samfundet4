@@ -43,6 +43,7 @@ export const nb = prepareTranslations({
   [KEY.pick_a_date]: 'Velg en dato',
 
   // Other common
+  [KEY.common_connect]: 'Koble til',
   [KEY.common_content]: 'Innhold',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Håndter',
@@ -58,6 +59,7 @@ export const nb = prepareTranslations({
   [KEY.common_not]: 'Ikke',
   [KEY.common_now]: 'Nå',
   [KEY.common_time]: 'Tid',
+  [KEY.common_minutes]: 'minutter',
   [KEY.common_from]: 'Fra',
   [KEY.common_here]: 'her',
   [KEY.common_show]: 'Vis',
@@ -90,6 +92,7 @@ export const nb = prepareTranslations({
   [KEY.common_event]: 'Arrangement',
   [KEY.common_repeat]: 'Repeter',
   [KEY.common_venues]: 'Lokaler',
+  [KEY.common_shortcuts]: 'Snarveier',
   [KEY.common_events]: 'Arrangementer',
   [KEY.common_create]: 'Opprett',
   [KEY.common_delete]: 'Slett',
@@ -143,7 +146,6 @@ export const nb = prepareTranslations({
   [KEY.common_details]: 'Detaljer',
   [KEY.common_reservation]: 'Reservasjon',
   [KEY.common_opening_hours]: 'Åpningstider',
-  [KEY.common_general]: 'Generelt',
   [KEY.common_long_description]: 'Lang beskrivelse',
   [KEY.common_short_description]: 'Kort beskrivelse',
   [KEY.common_back_to_samfundet]: 'Tilbake til samfundet.no',
@@ -183,6 +185,11 @@ export const nb = prepareTranslations({
   [KEY.common_list_view]: 'Liste visning',
   [KEY.common_tab_view]: 'Fane visning',
   [KEY.common_available]: 'Tilgjengelig',
+  [KEY.common_comment]: 'Kommentar',
+  [KEY.common_capacity]: 'Kapasitet',
+
+  [KEY.common_membership_number]: 'Medlemsnummer',
+  [KEY.common_to_payment]: 'Til betaling',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -199,20 +206,27 @@ export const nb = prepareTranslations({
   [KEY.common_about_the_organisation]: 'Samfundet som organisasjon',
   [KEY.common_the_society_meeting]: 'Samfundsmøtet',
   [KEY.common_tickets]: 'billetter',
+  [KEY.common_the_ticket_type]: 'Billettype',
   [KEY.common_contact_information]: 'Kontaktinfo',
   [KEY.common_about_samfundet]: 'Om Samfundet',
 
   // Price groups:
-  [KEY.common_ticket_type]: 'Billett',
+  [KEY.common_ticket]: 'Billett',
+  [KEY.common_ticket_type]: 'Billettype',
   [KEY.common_ticket_type_free]: 'Gratis',
+  [KEY.common_ticket_type_free_with_registration]: 'Gratis med registrering',
   [KEY.common_ticket_type_custom]: 'Tilpasset',
-  [KEY.common_ticket_type_billig]: 'Betalt',
+  [KEY.common_ticket_type_billig]: 'Betalt (billig)',
   [KEY.common_ticket_type_included]: 'Inkludert i inngang',
   [KEY.common_ticket_type_registration]: 'Påmelding',
 
   // Billig
+  [KEY.common_buy_ticket]: 'Kjøp billett',
   [KEY.common_sold_out]: 'Utsolgt',
-  [KEY.common_almost_sold_out]: 'Nesten utsolgt',
+  [KEY.common_almost_sold_out]: 'Få billetter igjen',
+
+  // MDB
+  [KEY.common_member_database]: 'Medlemsdatabase',
 
   // ==================== //
   //        Others        //
@@ -234,6 +248,18 @@ export const nb = prepareTranslations({
   [KEY.loginpage_username]: 'Brukernavn',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
 
+  [KEY.signuppage_register_failed]: 'Registrering feilet',
+  [KEY.signuppage_login_link]: 'Har du allerede en bruker?',
+
+  // LoginPickerPage:
+  [KEY.loginpicker_page_caption]: 'Innlogging for interne',
+  [KEY.loginpicker_page_title]: 'Hvordan vil du logge inn?',
+  [KEY.loginpicker_page_nav_aria_label]: 'Velg innlogging',
+  [KEY.loginpicker_page_new_platform_title]: 'Ny plattform (samf4)',
+  [KEY.loginpicker_page_new_platform_description]: 'Den nye plattformen for arrangementer og generell bruk',
+  [KEY.loginpicker_page_old_platform_title]: 'Eldre plattform (samf3)',
+  [KEY.loginpicker_page_old_platform_description]: 'Gruppeadministrasjon og andre administrative oppgaver',
+
   // ContributorsPage
   [KEY.contributors_page_title]: 'De frivillige som utvikler Samfundet.no',
   [KEY.contributors_page_text]: 'Samfundet.no utvikles av MG::Web, som er en seksjon i Markedsføringsgjengen.',
@@ -250,12 +276,69 @@ export const nb = prepareTranslations({
   [KEY.event_external_host_message]:
     'Arrangeres i regi av ekstern arrangør, ikke gjengene på Samfundet. Henvendelser kan rettes mot',
 
+  // EventPage:
+  [KEY.event_registration_url]: 'Registreringslenke',
+  [KEY.event_add_ticket]: 'Legg til billett',
+  [KEY.event_invalid_form_error]: 'Skjemaet inneholder valideringsfeil. Vennligst sjekk de uthevede feltene.',
+
+  // Event categories
+  [KEY.event_category_art]: 'Kunst',
+  [KEY.event_category_concert]: 'Konsert',
+  [KEY.event_category_course]: 'Kurs',
+  [KEY.event_category_debate]: 'Debatt',
+  [KEY.event_category_dj]: 'DJ',
+  [KEY.event_category_excenteraften]: 'Excenteraften',
+  [KEY.event_category_football_match]: 'Fotballkamp',
+  [KEY.event_category_happening]: 'Happening',
+  [KEY.event_category_lecture]: 'Forelesning',
+  [KEY.event_category_luka_event]: 'LUKA-arrangement',
+  [KEY.event_category_meeting]: 'Møte',
+  [KEY.event_category_movie]: 'Film',
+  [KEY.event_category_music]: 'Musikk',
+  [KEY.event_category_other]: 'Annet',
+  [KEY.event_category_party_meeting]: 'Festmøte',
+  [KEY.event_category_performance]: 'Performance',
+  [KEY.event_category_quiz]: 'Quiz',
+  [KEY.event_category_samfundet_meeting]: 'Samfundsmøte',
+  [KEY.event_category_show]: 'Show',
+  [KEY.event_category_theater]: 'Teater',
+  [KEY.event_category_theme_party]: 'Temafest',
+  [KEY.event_category_uka_event]: 'UKE-arrangement',
+
+  //Purchase Ticket Info:
+  [KEY.invalid_email_message]: 'Ugyldig e-postformat',
+  [KEY.email_or_membership_number_message]: 'Du må oppgi enten en e-post eller et medlemsnummer',
+  [KEY.email_or_membership_number]: 'e-post eller medlemsnummer',
+  [KEY.no_tickets_selected_message]: 'Du må velge minst én billett',
+  [KEY.kr_per_ticket]: 'kr per billett',
+  [KEY.enter_membership_number]: 'Skriv inn medlemsnummer',
+  [KEY.enter_email]: 'Skriv inn e-postadresse',
+  [KEY.ticketless_description]:
+    'Medlemskortet blir billetten din, og det er bare å trekke kortet i døren når du kommer til Samfundet.',
+  [KEY.ticketless_description_note]:
+    ' <strong>Merk:</strong> Du kan kun ha én billett på kortet per arrangement. Alle billettene vil bli tilsendt på epost.',
+  [KEY.email_ticket_description]:
+    'Billetten(e) blir sendt på epost, og må vises fram i døren når du kommer til Samfundet. Billettene kan vises på mobil eller tas med som utskrift.',
+  [KEY.stripe_info]: 'Betalingen håndteres av Stripe.',
+  [KEY.pay_info]: 'Alle priser er i norske kroner og er inkludert alle avgifter.',
+  [KEY.sales_conditions]: 'Kjøp forutsetter at kunden godtar salgsbetingelsene.',
+
   // Venue Page:
   [KEY.venuepage_title]: 'Kart og lokaler',
 
   // AdminPage:
   [KEY.adminpage_gangs_title]: 'Administrer gjenger',
   [KEY.adminpage_gangs_create]: 'Opprett gjeng',
+
+  //MDB Connect AdminPage
+  [KEY.adminpage_connect_mdb]: 'Koble til medlemsdatabasen',
+  [KEY.adminpage_connect_mdb_succesful_toast]: 'Vellyket tilkobling til medlemsdatabasen',
+  [KEY.adminpage_connect_mdb_invalid_email]: 'ugyldig e-post',
+  [KEY.adminpage_connect_mdb_invalid_membership_id]: 'ugyldig medlemsdatabasenummer',
+  [KEY.adminpage_connect_mdb_common_error]:
+    'Kunne ikke koble til medlemsdatabasen. Vennligst sjekk at alle felter er skrevet riktig',
+  [KEY.adminpage_connect_mdb_password_notice_1]: 'Passordet ditt til ',
+  [KEY.adminpage_connect_mdb_password_notice_2]: 'medlemsdatabasen',
 
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
@@ -268,8 +351,24 @@ export const nb = prepareTranslations({
   [KEY.navbar_map]: 'Kart og lokaler',
   [KEY.navbar_photos]: 'Foto',
   [KEY.navbar_nybygg]: 'Nybygg',
+  [KEY.navbar_bar]: 'Bar',
+  [KEY.navbar_stages]: 'Scener',
+  [KEY.navbar_club]: 'Klubb',
+
+  // Common navigation - links for samf 3 (used in navbar and footer):
+
+  //Shortcuts
+  [KEY.common_general]: 'Generelt',
+  [KEY.common_photos]: 'Foto',
+  [KEY.common_renting]: 'Utleie',
+
+  //Venues
+  [KEY.common_bar]: 'Bar',
+  [KEY.common_stages]: 'Scener',
+  [KEY.common_club]: 'Klubb',
 
   [KEY.footer_developed_by]: 'Utviklet av MG::Web',
+  [KEY.footer_have_questions]: 'Lurer du på noe?',
 
   // Recruitment:
   [KEY.recruitment_look_at_recipients]: 'Gå videre og se gjennom mottakere',
@@ -411,6 +510,7 @@ export const nb = prepareTranslations({
   [KEY.admin_saksdokument]: 'Saksdokument',
   [KEY.admin_images_title]: 'Bildearkiv',
   [KEY.admin_images_create]: 'Nytt Bilde',
+  [KEY.admin_no_image_selected]: 'Ingen bilde valgt',
   [KEY.admin_steal_identity]: 'Stjel identitet',
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
@@ -571,7 +671,7 @@ export const nb = prepareTranslations({
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
 
   [KEY.control_panel_title]: 'Kontrollpanel',
-  [KEY.invalid_phonenumber]: 'Ikke et gyldig telefonnummer',
+  [KEY.invalid_phonenumber]: 'Ugyldig telefonnummer',
   [KEY.inputfile_choose_a_file]: 'Velg en fil...',
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
   [KEY.notfoundpage_title]: 'Side ikke funnet',
@@ -593,6 +693,21 @@ export const nb = prepareTranslations({
   [KEY.error_server_error_description]: 'En serverfeil har opptstått',
   [KEY.error_submitting_reservation]: 'Det skjedde en feil ved innsending av reservasjon',
   [KEY.error_invalid_reservation_data]: 'Ugyldig reservasjonsdata',
+
+  // Event form validation
+  [KEY.event_form_title_required]: 'Tittel er påkrevd',
+  [KEY.event_form_description_long_required]: 'Lang beskrivelse er påkrevd',
+  [KEY.event_form_description_short_required]: 'Kort beskrivelse er påkrevd',
+  [KEY.event_form_start_dt_required]: 'Dato og tid er påkrevd',
+  [KEY.event_form_duration_min]: 'Varighet må være større enn 0',
+  [KEY.event_form_host_required]: 'Arrangør er påkrevd',
+  [KEY.event_form_location_required]: 'Lokale er påkrevd',
+  [KEY.event_form_capacity_min]: 'Kapasitet må være større enn 0',
+  [KEY.event_form_visibility_from_required]: 'Synlig fra dato er påkrevd',
+
+  [KEY.event_form_category_required]: 'Kategori er påkrevd',
+  [KEY.event_form_age_restriction_required]: 'Aldersgrense er påkrevd',
+  [KEY.event_form_ticket_type_required]: 'Billetttype er påkrevd',
 });
 
 export const en = prepareTranslations({
@@ -637,6 +752,7 @@ export const en = prepareTranslations({
   [KEY.pick_a_date]: 'Pick a date',
 
   // No category:
+  [KEY.common_connect]: 'Connect',
   [KEY.common_content]: 'Content',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Manage',
@@ -652,6 +768,7 @@ export const en = prepareTranslations({
   [KEY.common_not]: 'Not',
   [KEY.common_now]: 'Now',
   [KEY.common_time]: 'Time',
+  [KEY.common_minutes]: 'minutes',
   [KEY.common_here]: 'here',
   [KEY.common_save]: 'Save',
   [KEY.common_from]: 'From',
@@ -683,6 +800,7 @@ export const en = prepareTranslations({
   [KEY.common_active]: 'Active',
   [KEY.common_cancel]: 'Cancel',
   [KEY.common_venues]: 'Venues',
+  [KEY.common_shortcuts]: 'Shortcuts',
   [KEY.common_events]: 'Events',
   [KEY.common_repeat]: 'Repeat',
   [KEY.common_create]: 'Create',
@@ -709,11 +827,12 @@ export const en = prepareTranslations({
   [KEY.common_lastname]: 'Last name',
   [KEY.common_password]: 'password',
   [KEY.common_current]: 'Current',
+  [KEY.common_about_us]: 'About us',
   [KEY.common_select_all]: 'Select all',
   [KEY.common_unselect_all]: 'Unselect all',
   [KEY.common_overview]: 'Overview',
   [KEY.common_recruitmentposition]: 'Position',
-  [KEY.common_about_us]: 'About us',
+  [KEY.common_general]: 'General',
   [KEY.common_previous]: 'Previous',
   [KEY.common_required]: 'Required',
   [KEY.common_age_limit]: 'Age Limit',
@@ -735,7 +854,6 @@ export const en = prepareTranslations({
   [KEY.common_reservation]: 'Reservation',
   [KEY.common_contributors]: 'Contributors',
   [KEY.common_opening_hours]: 'Opening hours',
-  [KEY.common_general]: 'General',
   [KEY.common_doors_date]: 'Doors',
   [KEY.common_permissions]: 'Permissions',
   [KEY.common_long_description]: 'Long description',
@@ -774,9 +892,14 @@ export const en = prepareTranslations({
   [KEY.common_list_view]: 'List view',
   [KEY.common_tab_view]: 'Tab view',
   [KEY.common_available]: 'Available',
+  [KEY.common_comment]: 'Comment',
+  [KEY.common_capacity]: 'Capacity',
+  [KEY.common_membership_number]: 'Membership number',
+  [KEY.common_to_payment]: 'To payment',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
+
   [KEY.common_press]: 'Press',
   [KEY.common_film_club]: 'Film club',
   [KEY.common_privacy_policy]: 'Privacy policy',
@@ -790,22 +913,29 @@ export const en = prepareTranslations({
   [KEY.common_about_the_organisation]: 'About the organisation',
   [KEY.common_the_society_meeting]: 'The Society Meeting',
   [KEY.common_tickets]: 'tickets',
+  [KEY.common_the_ticket_type]: 'Ticket type',
   [KEY.common_contact_information]: 'Contact information',
   [KEY.common_about_samfundet]: 'About Samfundet',
   [KEY.common_processed]: 'Processed',
   [KEY.common_administrate]: 'Administrate',
   [KEY.common_administration]: 'Administration',
   // Price groups:
-  [KEY.common_ticket_type]: 'Ticket',
+  [KEY.common_ticket]: 'Ticket',
+  [KEY.common_ticket_type]: 'Ticket type',
   [KEY.common_ticket_type_free]: 'Free',
-  [KEY.common_ticket_type_billig]: 'Paid',
+  [KEY.common_ticket_type_free_with_registration]: 'Free with registration',
+  [KEY.common_ticket_type_billig]: 'Paid (billig)',
   [KEY.common_ticket_type_custom]: 'Custom',
   [KEY.common_ticket_type_included]: 'Included with entrance',
   [KEY.common_ticket_type_registration]: 'Registration',
 
   // Billig
+  [KEY.common_buy_ticket]: 'Buy ticket',
   [KEY.common_sold_out]: 'Sold out',
-  [KEY.common_almost_sold_out]: 'Almost sold out',
+  [KEY.common_almost_sold_out]: 'Few tickets left',
+
+  // MDB
+  [KEY.common_member_database]: 'Membership database',
   // ==================== //
   //        Others        //
   // ==================== //
@@ -826,6 +956,18 @@ export const en = prepareTranslations({
   [KEY.loginpage_passwords_must_match]: 'Passwords must match',
   [KEY.loginpage_login_failed]: 'Login failed',
 
+  [KEY.signuppage_register_failed]: 'Registration failed',
+  [KEY.signuppage_login_link]: 'Already have a user?',
+
+  // LoginPickerPage:
+  [KEY.loginpicker_page_caption]: 'Internal login',
+  [KEY.loginpicker_page_title]: 'How would you like to log in?',
+  [KEY.loginpicker_page_nav_aria_label]: 'Choose login',
+  [KEY.loginpicker_page_new_platform_title]: 'New platform (samf4)',
+  [KEY.loginpicker_page_new_platform_description]: 'The new platform for events and general use',
+  [KEY.loginpicker_page_old_platform_title]: 'Legacy platform (samf3)',
+  [KEY.loginpicker_page_old_platform_description]: 'Group administration and other administrative tasks',
+
   // GangsPage:
   [KEY.gangspage_title]: 'The groups at Samfundet',
 
@@ -836,6 +978,53 @@ export const en = prepareTranslations({
   [KEY.mix]: 'Mixed',
   [KEY.event_external_host_message]:
     'Organized by an external organizer, not the groups at the Samfundet. Inquiries can be directed to',
+
+  // Event categories
+  [KEY.event_category_art]: 'Art',
+  [KEY.event_category_concert]: 'Concert',
+  [KEY.event_category_course]: 'Course',
+  [KEY.event_category_debate]: 'Debate',
+  [KEY.event_category_dj]: 'DJ',
+  [KEY.event_category_excenteraften]: 'Excenteraften',
+  [KEY.event_category_football_match]: 'Football match',
+  [KEY.event_category_happening]: 'Happening',
+  [KEY.event_category_lecture]: 'Lecture',
+  [KEY.event_category_luka_event]: 'LUKA event',
+  [KEY.event_category_meeting]: 'Meeting',
+  [KEY.event_category_movie]: 'Movie',
+  [KEY.event_category_music]: 'Music',
+  [KEY.event_category_other]: 'Other',
+  [KEY.event_category_party_meeting]: 'Party meeting',
+  [KEY.event_category_performance]: 'Performance',
+  [KEY.event_category_quiz]: 'Quiz',
+  [KEY.event_category_samfundet_meeting]: 'Samfundet meeting',
+  [KEY.event_category_show]: 'Show',
+  [KEY.event_category_theater]: 'Theater',
+  [KEY.event_category_theme_party]: 'Theme party',
+  [KEY.event_category_uka_event]: 'UKA event',
+
+  // EventPage:
+  [KEY.event_registration_url]: 'Registration URL',
+  [KEY.event_add_ticket]: 'Add ticket',
+  [KEY.event_invalid_form_error]: 'Form contains validation errors. Please check highlighted fields.',
+
+  //Purchase Ticket Info:
+  [KEY.invalid_email_message]: 'Invalid email format',
+  [KEY.email_or_membership_number_message]: 'You must provide either an email or a membership number',
+  [KEY.email_or_membership_number]: 'email or membership number',
+  [KEY.no_tickets_selected_message]: 'You must select at least one ticket',
+  [KEY.kr_per_ticket]: 'kr per ticket',
+  [KEY.enter_membership_number]: 'Enter your membership number',
+  [KEY.enter_email]: 'Enter your email address',
+  [KEY.ticketless_description]:
+    'If you choose ticketless, your membership card itself will be your ticket. You will then simply swipe your card when you enter Samfundet.',
+  [KEY.ticketless_description_note]:
+    '<strong>Please note:</strong> You may only have one ticket on your card per event. All the tickets will be sent to your email.',
+  [KEY.email_ticket_description]:
+    'If you choose digital ticket, your ticket(s) will be sent to your email. The tickets barcode will be scanned when you enter Samfundet, either from your phone or a printed out copy.',
+  [KEY.stripe_info]: 'The payment is processed by Stripe.',
+  [KEY.pay_info]: 'All prices are in norwegian krone and includes all fees.',
+  [KEY.sales_conditions]: 'Purchase requires acceptance of sales terms.',
 
   // VenuePage:
   [KEY.venuepage_title]: 'Map and Venues',
@@ -859,8 +1048,23 @@ export const en = prepareTranslations({
   [KEY.navbar_photos]: 'Photos',
   [KEY.navbar_nybygg]: 'New building',
   [KEY.navbar_map]: 'Map and venues',
+  [KEY.navbar_bar]: 'Bar',
+  [KEY.navbar_stages]: 'Stages',
+  [KEY.navbar_club]: 'Club',
+
+  // Common navigation (used in navbar and footer):
+
+  // Shortcuts
+  [KEY.common_photos]: 'Photos',
+  [KEY.common_renting]: 'Renting',
+
+  // venus
+  [KEY.common_bar]: 'Bar',
+  [KEY.common_stages]: 'Stages',
+  [KEY.common_club]: 'Club',
 
   [KEY.footer_developed_by]: 'Developed by MG::Web',
+  [KEY.footer_have_questions]: 'Have questions?',
 
   // Recruitment:
   [KEY.recruitment_look_at_recipients]: 'Go ahead and look through recipients',
@@ -1063,6 +1267,7 @@ export const en = prepareTranslations({
   [KEY.admin_saksdokument]: 'Case document',
   [KEY.admin_images_title]: 'Image Archive',
   [KEY.admin_images_create]: 'New Image',
+  [KEY.admin_no_image_selected]: 'No image selected',
   [KEY.admin_steal_identity]: 'Steal identity',
   [KEY.adminpage_gangs_title]: 'Groups administration',
   [KEY.adminpage_gangs_create]: 'Create group',
@@ -1149,6 +1354,16 @@ export const en = prepareTranslations({
   [KEY.feedback_your_feedback]: 'Your feedback',
   [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
 
+  //MDB Connect AdminPage
+  [KEY.adminpage_connect_mdb]: 'Connect to the membership database',
+  [KEY.adminpage_connect_mdb_succesful_toast]: 'Succesfully connected to the membership database',
+  [KEY.adminpage_connect_mdb_invalid_email]: 'Invalid email',
+  [KEY.adminpage_connect_mdb_invalid_membership_id]: 'Invalid membership ID',
+  [KEY.adminpage_connect_mdb_common_error]:
+    "Couldn't connect to the membership database. Please check that all fields are correct",
+  [KEY.adminpage_connect_mdb_password_notice_1]: 'Your password to the',
+  [KEY.adminpage_connect_mdb_password_notice_2]: 'membership database',
+
   // No category:
   [KEY.owner]: 'Owner',
   [KEY.end_time]: 'End time',
@@ -1163,7 +1378,7 @@ export const en = prepareTranslations({
   [KEY.we_use_cookies]: 'We use cookies to give you the best experience on Samfundet.no. Read more about cookies',
   [KEY.control_panel_faq]: 'Help/questions',
   [KEY.control_panel_title]: 'Control panel',
-  [KEY.invalid_phonenumber]: 'Not a valid phone number',
+  [KEY.invalid_phonenumber]: 'Invalid phone number',
   [KEY.inputfile_choose_a_file]: 'Upload file...',
   [KEY.inputfile_no_file_selected]: 'No file selected',
   [KEY.notfoundpage_title]: 'Page not found',
@@ -1179,4 +1394,19 @@ export const en = prepareTranslations({
   [KEY.error_server_error_description]: 'A server error has occurred',
   [KEY.error_submitting_reservation]: 'An error occurred while submitting the reservation',
   [KEY.error_invalid_reservation_data]: 'Invalid reservation data',
+
+  // Event form validation
+  [KEY.event_form_title_required]: 'Title is required',
+  [KEY.event_form_description_long_required]: 'Long description is required',
+  [KEY.event_form_description_short_required]: 'Short description is required',
+  [KEY.event_form_start_dt_required]: 'Date and time is required',
+  [KEY.event_form_duration_min]: 'Duration must be greater than 0',
+  [KEY.event_form_host_required]: 'Host is required',
+  [KEY.event_form_location_required]: 'Venue is required',
+  [KEY.event_form_capacity_min]: 'Capacity must be greater than 0',
+  [KEY.event_form_visibility_from_required]: 'Visible from date is required',
+
+  [KEY.event_form_category_required]: 'Category is required',
+  [KEY.event_form_age_restriction_required]: 'Age restriction is required',
+  [KEY.event_form_ticket_type_required]: 'Ticket type is required',
 });

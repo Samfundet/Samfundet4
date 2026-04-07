@@ -3,30 +3,45 @@
 # =============================== #
 from __future__ import annotations
 
+from typing import Any
+
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.filters import SearchFilter
 from rest_framework.request import Request
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from django.utils import timezone
 
-from root.custom_classes.permission_classes import RoleProtectedOrAnonReadOnlyObjectPermissions
+from root.constants import WebFeatures
+from root.custom_classes.permission_classes import FeatureEnabled, RoleProtectedOrAnonReadOnlyObjectPermissions
 
 from samfundet.utils import event_query
+from samfundet.pagination import CustomPageNumberPagination
 from samfundet.serializers import (
     EventSerializer,
     EventGroupSerializer,
     PurchaseFeedbackSerializer,
 )
-from samfundet.models.event import Event, EventGroup, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
+from samfundet.models.event import (
+    Event,
+    EventGroup,
+    PurchaseFeedbackQuestion,
+    PurchaseFeedbackAlternative,
+)
+from samfundet.models.general import Venue
 from samfundet.models.model_choices import EventStatus
 
 
 class EventView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.EVENTS
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = EventSerializer
     queryset = Event.objects.all()
 
@@ -55,17 +70,41 @@ class EventPerDayView(APIView):
         return Response(data=events_per_day)
 
 
-class EventsUpcomingView(APIView):
+class EventsUpcomingView(ListAPIView):
     permission_classes = [AllowAny]
+    serializer_class = EventSerializer
+    pagination_class = CustomPageNumberPagination
+    filter_backends = [SearchFilter]
+    search_fields = ['title_en', 'title_nb']
 
-    def get(self, request: Request) -> Response:
-        events = event_query(query=request.query_params)
-        events = events.filter(start_dt__gt=timezone.now()).order_by('start_dt')
-        return Response(data=EventSerializer(events, many=True).data)
+    def get_queryset(self) -> Response:
+        queryset = event_query(query=self.request.query_params)
+        queryset = queryset.filter(start_dt__gt=timezone.now()).order_by('start_dt')
+        return queryset
+
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        # Get the paginated response from parent
+        response = super().list(request, *args, **kwargs)
+
+        # Add categories, locations, organizers, and ticket types to the response
+        if isinstance(response.data, dict):
+            venue_names = list(Venue.objects.values_list('name', flat=True))
+            categories = Event._meta.get_field('category').choices if Event._meta.get_field('category').choices else []
+            ticket_types = Event._meta.get_field('ticket_type').choices if Event._meta.get_field('ticket_type').choices else []
+
+            response.data['categories'] = categories
+            response.data['locations'] = venue_names if venue_names else []
+            response.data['ticket_types'] = ticket_types
+
+        return response
 
 
 class EventGroupView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.EVENTS
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = EventGroupSerializer
     queryset = EventGroup.objects.all()
 

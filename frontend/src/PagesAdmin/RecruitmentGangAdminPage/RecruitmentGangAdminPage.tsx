@@ -123,7 +123,8 @@ export function RecruitmentGangAdminPage() {
     };
   });
 
-  const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
+  // const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
+  const backendUrl = undefined;
   const header = (
     <div className={styles.headerRow}>
       <Button

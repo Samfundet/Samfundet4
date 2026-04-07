@@ -10,11 +10,13 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissionsOrAnonRea
 
 from django.utils import timezone
 
-from samfundet.models.general import Menu, Table, Booking, MenuItem, Reservation, FoodCategory, FoodPreference
+from root.constants import WebFeatures
+from root.custom_classes.permission_classes import FeatureEnabled
+
+from samfundet.models.general import Menu, Table, MenuItem, Reservation, FoodCategory, FoodPreference
 from samfundet.serializer.sulten_serializers import (
     MenuSerializer,
     TableSerializer,
-    BookingSerializer,
     MenuItemSerializer,
     ReservationSerializer,
     FoodCategorySerializer,
@@ -24,31 +26,51 @@ from samfundet.serializer.sulten_serializers import (
 
 
 class MenuView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    feature_key = WebFeatures.SULTEN
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = MenuSerializer
     queryset = Menu.objects.all()
 
 
 class MenuItemView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    feature_key = WebFeatures.SULTEN
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = MenuItemSerializer
     queryset = MenuItem.objects.all()
 
 
 class FoodCategoryView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    feature_key = WebFeatures.SULTEN
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = FoodCategorySerializer
     queryset = FoodCategory.objects.all()
 
 
 class FoodPreferenceView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    feature_key = WebFeatures.SULTEN
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = FoodPreferenceSerializer
     queryset = FoodPreference.objects.all()
 
 
 class TableView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    feature_key = WebFeatures.SULTEN
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = TableSerializer
     queryset = Table.objects.all()
 
@@ -81,9 +103,3 @@ class ReservationCheckAvailabilityView(APIView):
             )
             return Response(available_tables, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class BookingView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = BookingSerializer
-    queryset = Booking.objects.all()

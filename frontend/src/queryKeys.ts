@@ -36,6 +36,12 @@ export const eventKeys = {
   all: ['events'] as const,
   lists: () => [...eventKeys.all, 'list'] as const,
   list: (filters: unknown[]) => [...eventKeys.lists(), { filters }] as const,
+  paginatedLists: () => [...eventKeys.all, 'paginated'] as const,
+  paginatedList: (
+    page: number,
+    pageSize: number,
+    filters?: { search?: string; venue?: string; category?: string; ticket_type?: string },
+  ) => [...eventKeys.paginatedLists(), { page, pageSize, ...filters }] as const,
   details: () => [...eventKeys.all, 'detail'] as const,
   detail: (id: number) => [...eventKeys.details(), id] as const,
 };
@@ -72,4 +78,21 @@ export const recruitmentGangKeys = {
   list: (filters: unknown[]) => [...recruitmentGangKeys.lists(), { filters }] as const,
   details: () => [...recruitmentGangKeys.all, 'detail'] as const,
   detail: (id: number) => [...recruitmentGangKeys.details(), id] as const,
+};
+
+export const venueKeys = {
+  all: ['venues'] as const,
+  lists: () => [...venueKeys.all, 'list'] as const,
+  list: (filters: unknown[]) => [...venueKeys.lists(), { filters }] as const,
+  details: () => [...venueKeys.all, 'detail'] as const,
+  detail: (slug: string) => [...venueKeys.details(), slug] as const,
+  open: () => [...venueKeys.list(['open'])] as const,
+};
+
+export const imageKeys = {
+  all: ['images'] as const,
+  lists: () => [...imageKeys.all, 'list'] as const,
+  list: (page: number, search?: string) => [...imageKeys.lists(), { page, search }] as const,
+  details: () => [...imageKeys.all, 'detail'] as const,
+  detail: (id: number) => [...imageKeys.details(), id] as const,
 };

@@ -3,9 +3,11 @@ from __future__ import annotations
 import re
 import datetime
 import itertools
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from collections import defaultdict
 
+from PIL import Image as PilImage
+from PIL import UnidentifiedImageError
 from guardian.models import UserObjectPermission, GroupObjectPermission
 
 from rest_framework import serializers
@@ -94,19 +96,53 @@ class ImageSerializer(CustomBaseSerializer):
         model = Image
         exclude = ['image']
 
-    def create(self, validated_data: dict) -> Event:
+    def validate(self, attributes: dict) -> dict:
+        title = attributes.get('title')
+        if not title:
+            raise serializers.ValidationError({'title': 'This field is required.'})
+
+        file = attributes.get('file')
+        if not file:
+            raise serializers.ValidationError({'file': 'An image file is required.'})
+
+        # Validate that the uploaded file is a valid image
+        try:
+            file.seek(0)
+            PilImage.open(file).verify()
+            file.seek(0)
+        except UnidentifiedImageError as error:
+            raise serializers.ValidationError('Invalid image') from error
+
+        return attributes
+
+    def create(self, validated_data: dict) -> Image:
         """
         Uses the write_only file field to create new image file.
         Automatically finds/creates new tags based on comma-separated string.
+        Strips whitespace and drops empty tag names
+        and preserves the original filename when saving the image
         """
         file = validated_data.pop('file')
-        if 'tag_string' in validated_data:
-            tag_names = validated_data.pop('tag_string').split(',')
-            tags = [Tag.objects.get_or_create(name=name)[0] for name in tag_names]
+        raw_tag_string = validated_data.pop('tag_string', None)
+        if raw_tag_string is not None:
+            # Split on comma, strip whitespace and drop empties
+            tag_names = [name.strip() for name in raw_tag_string.split(',')]
+            tag_names = [name for name in tag_names if name]
+
+            # De-duplicate while preserving order
+            seen: set[str] = set()
+            unique_tag_names = []
+            for name in tag_names:
+                if name not in seen:
+                    seen.add(name)
+                    unique_tag_names.append(name)
+            tags = [Tag.objects.get_or_create(name=name)[0] for name in unique_tag_names]
         else:
             tags = []
+        # Preserve original filename if available; fallback to title
+        original_name = getattr(file, 'name', None) or validated_data.get('title')
         image = Image.objects.create(
-            image=ImageFile(file, validated_data['title']),
+            image=ImageFile(file, original_name),
             **validated_data,
         )
         image.tags.set(tags)
@@ -188,18 +224,37 @@ class EventSerializer(CustomBaseSerializer):
         model = Event
         list_serializer_class = EventListSerializer
         # Warning: registration object contains sensitive data, don't include it!
-        exclude = ['image', 'registration', 'event_group', 'billig_id']
+        exclude = ['registration', 'event_group', 'billig_id']
 
     # Read only properties (computed property, foreign model).
     total_registrations = serializers.IntegerField(read_only=True)
     image_url = serializers.CharField(read_only=True)
+    image = serializers.SerializerMethodField(read_only=True)
 
     # Custom tickets/billig
     custom_tickets = EventCustomTicketSerializer(many=True, read_only=True)
     billig = BilligEventSerializer(read_only=True)
 
     # For post/put (change image by id).
-    image_id = serializers.IntegerField(write_only=True)
+    image_id = serializers.IntegerField(write_only=True, required=True)
+
+    def get_image(self, obj: Event) -> dict:
+        img = obj.image
+        return {'id': img.id, 'url': img.image.url, 'title': img.title, 'tags': list(img.tags.values_list('id', flat=True))}
+
+    def update(self, instance: Event, validated_data: dict[str, Any]) -> Event:
+        image_id = validated_data.pop('image_id', None)
+        if image_id is not None:
+            try:
+                instance.image = Image.objects.get(pk=image_id)
+            except Image.DoesNotExist as err:
+                raise serializers.ValidationError({'image_id': 'Invalid image id'}) from err
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
 
     def validate(self, data: dict) -> dict:
         # Check if all required fields are present for validation
@@ -224,7 +279,8 @@ class EventSerializer(CustomBaseSerializer):
         and sets it in the new event. Read/write only fields enable
         us to use the same serializer for both reading and writing.
         """
-        validated_data['image'] = Image.objects.get(pk=validated_data['image_id'])
+        image_id = validated_data.pop('image_id')
+        validated_data['image'] = Image.objects.get(pk=image_id)
         event = Event(**validated_data)
         event.save()
         return event
