@@ -13,8 +13,15 @@ import type { EventDto } from '~/dto';
 import { usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { venueKeys } from '~/queryKeys';
-import { EventAgeRestriction, type EventAgeRestrictionValue, EventCategory, type EventCategoryValue } from '~/types';
-import { dbT, getAgeRestrictionKey, getEventCategoryKey, lowerCapitalize } from '~/utils';
+import {
+  EventAgeRestriction,
+  type EventAgeRestrictionValue,
+  EventCategory,
+  type EventCategoryValue,
+  type EventStatus,
+  EventStatusChoice,
+} from '~/types';
+import { dbT, getAgeRestrictionKey, getEventCategoryKey, getEventStatusTranslationKey, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { type FormType, useEventCreatorForm } from './hooks/useEventCreatorForm';
@@ -58,6 +65,11 @@ export function EventCreatorAdminPage() {
     label: t(getAgeRestrictionKey(age)),
   }));
 
+  const eventStatusOptions: DropdownOption<EventStatus>[] = Object.values(EventStatusChoice).map((status) => ({
+    value: status,
+    label: t(getEventStatusTranslationKey(status)),
+  }));
+
   const { form, watchedValues, buildPayload } = useEventCreatorForm({
     event,
     defaultCategory: eventCategoryOptions[0]?.value ?? EventCategory.ART,
@@ -70,7 +82,7 @@ export function EventCreatorAdminPage() {
     payment: <PaymentStep form={form} ageLimitOptions={ageLimitOptions} />,
     socialmedia: <SocialMediaStep form={form} />,
     graphics: <GraphicsStep form={form} />,
-    summary: <SummaryStep form={form} />,
+    summary: <SummaryStep form={form} eventStatusOptions={eventStatusOptions} />,
   };
 
   const hasSocialMediaErrors = SOCIAL_KEYS.some((name) => !!form.formState.errors[name]);
