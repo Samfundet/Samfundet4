@@ -25,9 +25,7 @@ const event_custom_ticket = z.object({
   name_en: z.string().min(1),
   price: z.number().min(0),
 });
-
-export const eventSchema = z
-  .object({
+export const eventSchema = z.object({
     // text and description
     title_nb: EVENT_TITLE,
     title_en: EVENT_TITLE,
@@ -57,11 +55,9 @@ export const eventSchema = z
   })
   .refine(
     (data) => {
-      // If visibility_from_dt and start_dt are both provided, check that publication date is before event start
       if (data.visibility_from_dt && data.start_dt) {
         return new Date(data.visibility_from_dt) <= new Date(data.start_dt);
       }
-      // If either is missing, allow it (will be caught by individual field validation)
       return true;
     },
     {
