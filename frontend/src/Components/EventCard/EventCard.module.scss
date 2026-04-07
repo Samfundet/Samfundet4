@@ -1,35 +1,129 @@
+@use 'src/mixins' as m;
+
 @use 'src/styles/colors' as c;
 
-@use 'src/constants' as v;
+@use 'src/styles/variables' as v;
+
+$border-radius: v.$border-radius-lg;
+$width: 390px;
+$min-width: 330px;
+$image-height: 180px;
+$image-height-mobile: 160px;
+
+
+.event_card {
+  width: $width;
+  min-width: $min-width;
+  transition: box-shadow 0.1s ease-in-out;
+  border-radius: $border-radius;
+  box-shadow: 0 1px 12px 0 rgba(0, 0, 0, 0.04);
+}
+
+.image {
+  background-size: cover;
+  background-position: center center;
+  display: block;
+  height: $image-height;
+  width: 100%;
+  cursor: pointer;
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+
+  @include m.for-mobile-down {
+    height: $image-height-mobile;
+  }
+}
+
+.header {
+  position: relative;
+  overflow: hidden;
+}
+
+.few_tickets_banner {
+  position: absolute;
+  height: 100px;
+  width: 200px;
+
+  :first-child {
+    position: absolute;
+    left: -56px;
+    top: 27px;
+    background: c.$samf-red-700;
+    color: c.$white-50;
+    transform: rotate(-45deg);
+    text-align: center;
+    padding: 8px 0;
+    width: 100%;
+    font-size: v.$font-size-sm;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+}
+
+.date_badge {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  text-align: center;
+  font-size: v.$font-size-sm;
+  line-height: 0.9rem;
+  padding: 4px 6px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: v.$border-radius-md;
+  backdrop-filter: blur(6px);
+  color: c.$gray-800;
+  text-transform: uppercase;
+
+  :first-child {
+    font-weight: v.$font-weight-semibold;
+  }
+}
+
+.title {
+  display: block; // the purpose of this is to expand the clickable area of the title
+  font-size: v.$font-size-lg;
+  font-weight: v.$font-weight-semibold;
+  text-decoration: none;
+  color: c.$gray-950;
+
+  @include m.theme-dark {
+    color: c.$white-50;
+  }
+}
 
 .footer {
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  color: c.$white-50;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
+  padding: 16px;
+  border: 1px solid c.$gray-100;
+  border-top: none;
+  border-bottom-left-radius: $border-radius;
+  border-bottom-right-radius: $border-radius;
 
-.badge {
-  font-family: v.$special-font-family;
-  letter-spacing: v.$special-letter-spacing;
-}
-
-.call_to_action {
-  font-family: v.$special-font-family;
-  letter-spacing: v.$special-letter-spacing;
-  color: c.$white-50;
-  border-bottom: 1px solid c.$white-50;
-  padding-bottom: 3px;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  white-space: nowrap;
+  @include m.theme-dark {
+    border-color: c.$gray-800;
+  }
 }
 
 .details {
   display: flex;
-  justify-content: space-between;
+  gap: 0.75rem;
   align-items: center;
   color: c.$gray-400;
+  margin-top: 0.5rem;
+}
+
+.detail {
+  display: flex;
+  gap: 0.125rem;
+  align-items: center;
+  color: c.$gray-400;
+}
+
+.ticket_row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+}
+
+.ticket_price {
+  flex: 1;
 }

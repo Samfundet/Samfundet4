@@ -160,11 +160,11 @@ export function InformationFormAdminPage() {
           </span>
           {/* Save button */}
           {!isDesktop && (
-            <Button theme="samf" rounded={true} onClick={() => setShowMobilePreview(!showMobilePreview)}>
+            <Button theme="primary" rounded={true} onClick={() => setShowMobilePreview(!showMobilePreview)}>
               Toggle preview
             </Button>
           )}
-          <Button theme="green" rounded={true} onClick={handleOnSubmit} disabled={disableSubmit}>
+          <Button theme="success" rounded={true} onClick={handleOnSubmit} disabled={disableSubmit}>
             <div style={{ padding: '0 1em' }}>{t(KEY.common_save)}</div>
           </Button>
         </div>

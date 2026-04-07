@@ -1,32 +1,30 @@
-import classNames from 'classnames';
 import styles from './Button.module.scss';
 
-export const themeToStyleMap = {
-  basic: styles.button_basic,
-  selected: styles.button_selected,
-  pure: styles.pure,
-  text: styles.button_text,
-  samf: styles.button_samf,
-  lyche: styles.button_lyche,
+export const buttonThemes = {
+  primary: styles.button_primary,
   secondary: styles.button_secondary,
   success: styles.button_success,
-  outlined: classNames(styles.button_outlined, 'button_outlined'), // Must be globally available for theme-dark.
-  blue: styles.button_blue,
+  danger: styles.button_danger,
+  ghost: styles.button_ghost,
+
+  // Color-specific
   black: styles.button_black,
   white: styles.button_white,
-  green: styles.button_green,
+  blue: styles.button_blue,
+
+  // Special buttons
   uka: styles.button_uka,
   isfit: styles.button_isfit,
-  yellow: styles.button_yellow,
 } as const;
 
 /**
- * basic: Normal button wrapping text.
- * pill: Rounded button.
- * block: Utilises full width.
+ * pill: Small and rounded button.
+ * block: Utilizes full width.
+ * rounded: Rounded button.
  */
-export const displayToStyleMap = {
+export const buttonStyles = {
   basic: styles.display_basic,
   pill: styles.display_pill,
   block: styles.display_block,
+  rounded: styles.rounded,
 } as const;

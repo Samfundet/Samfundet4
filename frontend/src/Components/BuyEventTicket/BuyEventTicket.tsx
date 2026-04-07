@@ -27,7 +27,7 @@ export function BuyEventTicket({ event, ticketSaleState }: BuyButtonProps) {
 
   return (
     <>
-      <Button theme={'samf'} onClick={() => setShowModal(true)}>
+      <Button theme="primary" onClick={() => setShowModal(true)}>
         <Icon icon="ph:ticket-bold" />
         {buttonText}
       </Button>
