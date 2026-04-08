@@ -6,6 +6,7 @@ export const nb = prepareTranslations({
   //        Common        //
   // ==================== //
   // Days:
+  [KEY.common_day]: 'Dag',
   [KEY.common_day_monday]: 'Mandag',
   [KEY.common_day_tuesday]: 'Tirsdag',
   [KEY.common_day_wednesday]: 'Onsdag',
@@ -65,7 +66,7 @@ export const nb = prepareTranslations({
   [KEY.common_show]: 'Vis',
   [KEY.common_date]: 'Dato',
   [KEY.common_send]: 'Send',
-  [KEY.common_open]: 'Åpne',
+  [KEY.common_open]: 'Åpen?',
   [KEY.common_menu]: 'Meny',
   [KEY.common_name]: 'Navn',
   [KEY.common_next]: 'Neste',
@@ -715,6 +716,7 @@ export const en = prepareTranslations({
   //        Common        //
   // ==================== //
   // Days:
+  [KEY.common_day]: 'Day',
   [KEY.common_day_monday]: 'Monday',
   [KEY.common_day_tuesday]: 'Tuesday',
   [KEY.common_day_wednesday]: 'Wednesday',
@@ -774,7 +776,7 @@ export const en = prepareTranslations({
   [KEY.common_from]: 'From',
   [KEY.common_date]: 'Date',
   [KEY.common_send]: 'Send',
-  [KEY.common_open]: 'Open',
+  [KEY.common_open]: 'Open?',
   [KEY.common_edit]: 'Edit',
   [KEY.common_show]: 'Show',
   [KEY.common_table]: 'Table',

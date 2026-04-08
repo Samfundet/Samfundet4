@@ -4,6 +4,7 @@ import { Link } from '~/Components/Link/Link';
 import { Text } from '~/Components/Text/Text';
 import type { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { getVenueScheduleISO } from '~/utils';
 import styles from './OpeningHours.module.scss';
 
 type OpeningHoursProps = {
@@ -23,9 +24,6 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
     return <Text>{t(KEY.error_generic)}</Text>;
   }
 
-  const today = new Date().toISOString().split('T')[0];
-  const day = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-
   return (
     <div className={styles.container}>
       <Text size="l" as="strong">
@@ -33,8 +31,7 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
       </Text>
       <table className={styles.timeTable}>
         {venues.map((venue) => {
-          const openingTime = venue[`opening_${day}` as keyof VenueDto] as string;
-          const closingTime = venue[`closing_${day}` as keyof VenueDto] as string;
+          const { startISO, endISO } = getVenueScheduleISO(venue);
           return (
             <tr key={venue.name} className={styles.openingRow}>
               <td className={styles.tableCell}>
@@ -43,11 +40,7 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
                 </Link>
               </td>
               <td className={styles.tableCell}>
-                <TimeDuration
-                  className={styles.openingHoursText}
-                  start={`${today}T${openingTime}`}
-                  end={`${today}T${closingTime}`}
-                />
+                <TimeDuration className={styles.openingHoursText} start={startISO} end={endISO} />
               </td>
             </tr>
           );
