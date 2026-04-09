@@ -100,6 +100,7 @@ export const KEY = {
   common_venue: 'common_venue',
   common_active: 'common_active',
   common_cancel: 'common_cancel',
+  common_close: 'common_close',
   common_events: 'common_events',
   common_repeat: 'common_repeat',
   common_venues: 'common_venues',
