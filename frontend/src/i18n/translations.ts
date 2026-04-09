@@ -211,7 +211,8 @@ export const nb = prepareTranslations({
   [KEY.common_about_samfundet]: 'Om Samfundet',
 
   // Price groups:
-  [KEY.common_ticket_type]: 'Billett',
+  [KEY.common_ticket]: 'Billett',
+  [KEY.common_ticket_type]: 'Billettype',
   [KEY.common_ticket_type_free]: 'Gratis',
   [KEY.common_ticket_type_free_with_registration]: 'Gratis med registrering',
   [KEY.common_ticket_type_custom]: 'Tilpasset',
@@ -223,6 +224,9 @@ export const nb = prepareTranslations({
   [KEY.common_buy_ticket]: 'Kjøp billett',
   [KEY.common_sold_out]: 'Utsolgt',
   [KEY.common_almost_sold_out]: 'Få billetter igjen',
+
+  // MDB
+  [KEY.common_member_database]: 'Medlemsdatabase',
 
   // ==================== //
   //        Others        //
@@ -243,6 +247,9 @@ export const nb = prepareTranslations({
   [KEY.loginpage_passwords_must_match]: 'Passordene må være like',
   [KEY.loginpage_username]: 'Brukernavn',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
+
+  [KEY.signuppage_register_failed]: 'Registrering feilet',
+  [KEY.signuppage_login_link]: 'Har du allerede en bruker?',
 
   // LoginPickerPage:
   [KEY.loginpicker_page_caption]: 'Innlogging for interne',
@@ -272,6 +279,7 @@ export const nb = prepareTranslations({
   // EventPage:
   [KEY.event_registration_url]: 'Registreringslenke',
   [KEY.event_add_ticket]: 'Legg til billett',
+  [KEY.event_invalid_form_error]: 'Skjemaet inneholder valideringsfeil. Vennligst sjekk de uthevede feltene.',
 
   // Event categories
   [KEY.event_category_art]: 'Kunst',
@@ -323,13 +331,14 @@ export const nb = prepareTranslations({
   [KEY.adminpage_gangs_create]: 'Opprett gjeng',
 
   //MDB Connect AdminPage
-  [KEY.adminpage_connect_mdb]: 'Koble til MDB',
-  [KEY.adminpage_connect_mdb_extended]: 'Koble til medlemsdatabasen',
+  [KEY.adminpage_connect_mdb]: 'Koble til medlemsdatabasen',
   [KEY.adminpage_connect_mdb_succesful_toast]: 'Vellyket tilkobling til medlemsdatabasen',
   [KEY.adminpage_connect_mdb_invalid_email]: 'ugyldig e-post',
   [KEY.adminpage_connect_mdb_invalid_membership_id]: 'ugyldig medlemsdatabasenummer',
   [KEY.adminpage_connect_mdb_common_error]:
     'Kunne ikke koble til medlemsdatabasen. Vennligst sjekk at alle felter er skrevet riktig',
+  [KEY.adminpage_connect_mdb_password_notice_1]: 'Passordet ditt til ',
+  [KEY.adminpage_connect_mdb_password_notice_2]: 'medlemsdatabasen',
 
   // SaksdokumentPage:
   [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
@@ -662,7 +671,7 @@ export const nb = prepareTranslations({
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
 
   [KEY.control_panel_title]: 'Kontrollpanel',
-  [KEY.invalid_phonenumber]: 'Ikke et gyldig telefonnummer',
+  [KEY.invalid_phonenumber]: 'Ugyldig telefonnummer',
   [KEY.inputfile_choose_a_file]: 'Velg en fil...',
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
   [KEY.notfoundpage_title]: 'Side ikke funnet',
@@ -684,6 +693,21 @@ export const nb = prepareTranslations({
   [KEY.error_server_error_description]: 'En serverfeil har opptstått',
   [KEY.error_submitting_reservation]: 'Det skjedde en feil ved innsending av reservasjon',
   [KEY.error_invalid_reservation_data]: 'Ugyldig reservasjonsdata',
+
+  // Event form validation
+  [KEY.event_form_title_required]: 'Tittel er påkrevd',
+  [KEY.event_form_description_long_required]: 'Lang beskrivelse er påkrevd',
+  [KEY.event_form_description_short_required]: 'Kort beskrivelse er påkrevd',
+  [KEY.event_form_start_dt_required]: 'Dato og tid er påkrevd',
+  [KEY.event_form_duration_min]: 'Varighet må være større enn 0',
+  [KEY.event_form_host_required]: 'Arrangør er påkrevd',
+  [KEY.event_form_location_required]: 'Lokale er påkrevd',
+  [KEY.event_form_capacity_min]: 'Kapasitet må være større enn 0',
+  [KEY.event_form_visibility_from_required]: 'Synlig fra dato er påkrevd',
+
+  [KEY.event_form_category_required]: 'Kategori er påkrevd',
+  [KEY.event_form_age_restriction_required]: 'Aldersgrense er påkrevd',
+  [KEY.event_form_ticket_type_required]: 'Billetttype er påkrevd',
 });
 
 export const en = prepareTranslations({
@@ -896,7 +920,8 @@ export const en = prepareTranslations({
   [KEY.common_administrate]: 'Administrate',
   [KEY.common_administration]: 'Administration',
   // Price groups:
-  [KEY.common_ticket_type]: 'Ticket',
+  [KEY.common_ticket]: 'Ticket',
+  [KEY.common_ticket_type]: 'Ticket type',
   [KEY.common_ticket_type_free]: 'Free',
   [KEY.common_ticket_type_free_with_registration]: 'Free with registration',
   [KEY.common_ticket_type_billig]: 'Paid (billig)',
@@ -908,6 +933,9 @@ export const en = prepareTranslations({
   [KEY.common_buy_ticket]: 'Buy ticket',
   [KEY.common_sold_out]: 'Sold out',
   [KEY.common_almost_sold_out]: 'Few tickets left',
+
+  // MDB
+  [KEY.common_member_database]: 'Membership database',
   // ==================== //
   //        Others        //
   // ==================== //
@@ -927,6 +955,9 @@ export const en = prepareTranslations({
   [KEY.loginpage_forgotten_password]: 'Forgot password?',
   [KEY.loginpage_passwords_must_match]: 'Passwords must match',
   [KEY.loginpage_login_failed]: 'Login failed',
+
+  [KEY.signuppage_register_failed]: 'Registration failed',
+  [KEY.signuppage_login_link]: 'Already have a user?',
 
   // LoginPickerPage:
   [KEY.loginpicker_page_caption]: 'Internal login',
@@ -975,6 +1006,7 @@ export const en = prepareTranslations({
   // EventPage:
   [KEY.event_registration_url]: 'Registration URL',
   [KEY.event_add_ticket]: 'Add ticket',
+  [KEY.event_invalid_form_error]: 'Form contains validation errors. Please check highlighted fields.',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',
@@ -1323,13 +1355,14 @@ export const en = prepareTranslations({
   [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
 
   //MDB Connect AdminPage
-  [KEY.adminpage_connect_mdb]: 'Connect to MDB',
-  [KEY.adminpage_connect_mdb_extended]: 'Connect to the membership database',
+  [KEY.adminpage_connect_mdb]: 'Connect to the membership database',
   [KEY.adminpage_connect_mdb_succesful_toast]: 'Succesfully connected to the membership database',
   [KEY.adminpage_connect_mdb_invalid_email]: 'Invalid email',
   [KEY.adminpage_connect_mdb_invalid_membership_id]: 'Invalid membership ID',
   [KEY.adminpage_connect_mdb_common_error]:
     "Couldn't connect to the membership database. Please check that all fields are correct",
+  [KEY.adminpage_connect_mdb_password_notice_1]: 'Your password to the',
+  [KEY.adminpage_connect_mdb_password_notice_2]: 'membership database',
 
   // No category:
   [KEY.owner]: 'Owner',
@@ -1345,7 +1378,7 @@ export const en = prepareTranslations({
   [KEY.we_use_cookies]: 'We use cookies to give you the best experience on Samfundet.no. Read more about cookies',
   [KEY.control_panel_faq]: 'Help/questions',
   [KEY.control_panel_title]: 'Control panel',
-  [KEY.invalid_phonenumber]: 'Not a valid phone number',
+  [KEY.invalid_phonenumber]: 'Invalid phone number',
   [KEY.inputfile_choose_a_file]: 'Upload file...',
   [KEY.inputfile_no_file_selected]: 'No file selected',
   [KEY.notfoundpage_title]: 'Page not found',
@@ -1361,4 +1394,19 @@ export const en = prepareTranslations({
   [KEY.error_server_error_description]: 'A server error has occurred',
   [KEY.error_submitting_reservation]: 'An error occurred while submitting the reservation',
   [KEY.error_invalid_reservation_data]: 'Invalid reservation data',
+
+  // Event form validation
+  [KEY.event_form_title_required]: 'Title is required',
+  [KEY.event_form_description_long_required]: 'Long description is required',
+  [KEY.event_form_description_short_required]: 'Short description is required',
+  [KEY.event_form_start_dt_required]: 'Date and time is required',
+  [KEY.event_form_duration_min]: 'Duration must be greater than 0',
+  [KEY.event_form_host_required]: 'Host is required',
+  [KEY.event_form_location_required]: 'Venue is required',
+  [KEY.event_form_capacity_min]: 'Capacity must be greater than 0',
+  [KEY.event_form_visibility_from_required]: 'Visible from date is required',
+
+  [KEY.event_form_category_required]: 'Category is required',
+  [KEY.event_form_age_restriction_required]: 'Age restriction is required',
+  [KEY.event_form_ticket_type_required]: 'Ticket type is required',
 });
