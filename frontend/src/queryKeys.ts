@@ -15,6 +15,14 @@ export const infoPageKeys = {
   detail: (slug: string) => [...infoPageKeys.details(), slug] as const,
 };
 
+export const infoboxKeys = {
+  all: ['infoboxes'] as const,
+  lists: () => [...infoboxKeys.all, 'list'] as const,
+  list: (filters: unknown[]) => [...infoboxKeys.lists(), { filters }] as const,
+  details: () => [...infoboxKeys.all, 'detail'] as const,
+  detail: (id: number) => [...infoboxKeys.details(), id] as const,
+};
+
 export const permissionKeys = {
   all: ['permissions'] as const,
   lists: () => [...permissionKeys.all, 'list'] as const,

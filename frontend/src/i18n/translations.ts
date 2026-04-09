@@ -526,6 +526,8 @@ export const nb = prepareTranslations({
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
+  [KEY.admin_infobox]: 'Infoboks',
+  [KEY.admin_infoboxes_title]: 'Infobokser',
   [KEY.admin_images_title]: 'Bildearkiv',
   [KEY.admin_images_create]: 'Nytt Bilde',
   [KEY.admin_no_image_selected]: 'Ingen bilde valgt',
@@ -1302,6 +1304,8 @@ export const en = prepareTranslations({
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'Case document',
+  [KEY.admin_infobox]: 'Infobox',
+  [KEY.admin_infoboxes_title]: 'Infoboxes',
   [KEY.admin_images_title]: 'Image Archive',
   [KEY.admin_images_create]: 'New Image',
   [KEY.admin_no_image_selected]: 'No image selected',
