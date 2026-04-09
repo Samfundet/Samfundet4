@@ -9,6 +9,7 @@ import type { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from './OpeningHours.module.scss';
+import { toast } from 'react-toastify';
 
 type OpeningHoursProps = {
   venues: VenueDto[] | undefined;
@@ -19,7 +20,7 @@ type OpeningHoursProps = {
 export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) {
   const { t } = useTranslation();
   const [isClosed, setIsClosed] = useState<boolean>(false);
-  const [closedText, setClosedText] = useState<string | undefined>('Samf is closed');
+  const [closedText, setClosedText] = useState<string | undefined>(undefined);
   const globalContext = useGlobalContext();
 
   useEffect(() => {
@@ -30,17 +31,22 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
       }
       return;
     }
-    getClosedPeriods().then((periods) => {
-      const now = new Date();
-      for (const period of periods) {
-        if (new Date(period.start_dt) < now && now < new Date(period.end_dt)) {
-          setIsClosed(true);
-          setClosedText(dbT(period, 'message'));
-          return;
+    getClosedPeriods()
+      .then((periods) => {
+        const now = new Date();
+        for (const period of periods) {
+          if (new Date(period.start_dt) < now && now < new Date(period.end_dt)) {
+            setIsClosed(true);
+            setClosedText(dbT(period, 'message'));
+            return;
+          }
         }
-      }
-    });
-  });
+      })
+      .catch((error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      });
+  }, [globalContext.closedOverride, t]);
 
   if (isLoading) {
     return <Text>{t(KEY.common_loading)}</Text>;

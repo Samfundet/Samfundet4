@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { type FormType, SamfForm } from '~/Forms/SamfForm';
+import { SamfForm } from '~/Forms/SamfForm';
 import { SamfFormField } from '~/Forms/SamfFormField';
 import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
 import { useCustomNavigate, useTitle } from '~/hooks';
@@ -31,7 +31,6 @@ export function ClosedPeriodFormAdminPage() {
     data: initialData,
     isLoading,
     isError,
-    error,
   } = useQuery({
     queryKey: ['closed-period', id],
     queryFn: () => getClosedPeriod(id as string),
@@ -52,7 +51,7 @@ export function ClosedPeriodFormAdminPage() {
   }, [isError, t, navigate]);
 
   const updateMutation = useMutation({
-    mutationFn: (data: FormType) => putClosedPeriod(id as string, data),
+    mutationFn: (data: formType) => putClosedPeriod(id as string, data),
     onSuccess: () => {
       toast.success(t(KEY.common_update_successful));
       navigate({ url: reverse({ pattern: ROUTES.frontend.admin_closed }) });
