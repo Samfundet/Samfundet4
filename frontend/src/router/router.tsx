@@ -51,6 +51,8 @@ import {
   GangsFormAdminPage,
   ImageAdminPage,
   ImageFormAdminPage,
+  InfoboxAdminPage,
+  InfoboxFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
   MDBConnectFormAdminPage,
@@ -999,6 +1001,48 @@ export const router = createBrowserRouter(
               />
             }
           />
+          {/* Infoboxes */}
+          <Route
+            element={
+              <SiteFeatureGate feature="infobox">
+                <Outlet />
+              </SiteFeatureGate>
+            }
+            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_infobox}>Infobokser</Link> }}
+          >
+            <Route
+              path={ROUTES.frontend.admin_infobox}
+              element={
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_VIEW_INFOBOX]}
+                  element={<InfoboxAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_infobox_create}
+              handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
+              element={
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_ADD_INFOBOX]}
+                  element={<InfoboxFormAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_infobox_edit}
+              handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link> }}
+              element={
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_CHANGE_INFOBOX]}
+                  element={<InfoboxFormAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
+              }
+            />
+          </Route>
           {/* MDB Connect Form */}
           <Route
             path={ROUTES.frontend.admin_mdb_connect}

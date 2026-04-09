@@ -190,6 +190,7 @@ export type SiteFeature =
   | 'roles'
   | 'gangs'
   | 'information'
+  | 'infobox'
   | 'documents'
   | 'recruitment'
   | 'sulten'

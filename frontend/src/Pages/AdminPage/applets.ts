@@ -24,6 +24,14 @@ export const appletCategories: AdminAppletCategory[] = [
         feature: 'information',
       },
       {
+        title_nb: 'Infobokser',
+        title_en: 'Infoboxes',
+        perm: PERM.SAMFUNDET_ADD_INFOBOX,
+        icon: 'mdi:message-badge-outline',
+        url: ROUTES.frontend.admin_infobox,
+        feature: 'infobox',
+      },
+      {
         title_nb: 'Åpningstider',
         title_en: 'Opening hours',
         perm: PERM.SAMFUNDET_CHANGE_VENUE,
