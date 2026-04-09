@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components/Button/Button';
 import type { LinkedEventDto } from '~/api';
@@ -24,6 +24,8 @@ type AdminEditImageProps = {
 export function AdminEditImage({ id }: AdminEditImageProps) {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
+  const reactNavigate = useNavigate();
+  const location = useLocation();
   const { id: paramsId } = useParams<{ id: string }>();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -223,7 +225,10 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
                 <li
                   key={event.id}
                   className={styles.eventItem}
-                  onClick={() => navigate({ url: reverse({ pattern: ROUTES.frontend.admin_events_edit, urlParams: { id: event.id } }) })}
+                  onClick={() => {
+                    const eventUrl = reverse({ pattern: ROUTES.frontend.admin_events_edit, urlParams: { id: event.id } });
+                    reactNavigate(eventUrl, { state: { from: location.pathname } });
+                  }}
                 >
                   {event.title_nb || event.title_en} ({new Date(event.start_dt).toLocaleDateString()})
                 </li>
