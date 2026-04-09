@@ -52,6 +52,8 @@ import {
   GangsAdminPage,
   ImageAdminPage,
   ImageDetailAdminPage,
+  InfoboxAdminPage,
+  InfoboxFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
   InformationHistoryAdminPage,
@@ -1129,6 +1131,48 @@ export const router = createBrowserRouter(
                   required={[PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE]}
                   element={<InformationFormAdminPage />}
                   resolution="anywhere"
+                />
+              }
+            />
+          </Route>
+          {/* Infoboxes */}
+          <Route
+            element={
+              <SiteFeatureGate feature="infobox">
+                <Outlet />
+              </SiteFeatureGate>
+            }
+            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_infobox}>Infobokser</Link> }}
+          >
+            <Route
+              path={ROUTES.frontend.admin_infobox}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_VIEW_INFOBOX]}
+                  element={<InfoboxAdminPage />}
+                  resolution="roles"
+                />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_infobox_create}
+              handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_ADD_INFOBOX]}
+                  element={<InfoboxFormAdminPage />}
+                  resolution="roles"
+                />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_infobox_edit}
+              handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link> }}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_CHANGE_INFOBOX]}
+                  element={<InfoboxFormAdminPage />}
+                  resolution="roles"
                 />
               }
             />
