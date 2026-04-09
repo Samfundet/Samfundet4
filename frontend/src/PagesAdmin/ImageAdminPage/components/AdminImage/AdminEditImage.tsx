@@ -221,18 +221,22 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
           <div className={styles.linkedEventsSection}>
             <h4>{t(KEY.common_image_linked_to_events)}:</h4>
             <ul className={styles.eventsList}>
-              {linkedEvents.map((event) => (
-                <li
-                  key={event.id}
-                  className={styles.eventItem}
-                  onClick={() => {
-                    const eventUrl = reverse({ pattern: ROUTES.frontend.admin_events_edit, urlParams: { id: event.id } });
-                    reactNavigate(eventUrl, { state: { from: location.pathname } });
-                  }}
-                >
-                  {event.title_nb || event.title_en} ({new Date(event.start_dt).toLocaleDateString()})
-                </li>
-              ))}
+              {linkedEvents.map((event) => {
+                const eventUrl = reverse({ pattern: ROUTES.frontend.admin_events_edit, urlParams: { id: event.id } });
+                return (
+                  <li key={event.id} className={styles.eventItem}>
+                    <a
+                      href={eventUrl}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        reactNavigate(eventUrl, { state: { from: location.pathname } });
+                      }}
+                    >
+                      {event.title_nb || event.title_en} ({new Date(event.start_dt).toLocaleDateString()})
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
             <p className={styles.warningText}>
               {t(KEY.common_cannot_delete_image)}
