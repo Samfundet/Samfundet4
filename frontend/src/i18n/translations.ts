@@ -312,6 +312,15 @@ export const nb = prepareTranslations({
   [KEY.event_status_archived]: 'Arkivert',
   [KEY.event_status_cancelled]: 'Avlyst',
   [KEY.event_status_deleted]: 'Slettet',
+  [KEY.event_status_help_title]: 'Hva betyr statusene?',
+  [KEY.event_status_help_intro]: 'Status styrer hvordan arrangementet vises og håndteres.',
+  [KEY.event_status_help_button_aria_label]: 'Vis forklaring av arrangementsstatus',
+  [KEY.event_status_help_public]: 'Arrangementet er synlig for alle.',
+  [KEY.event_status_help_private]:
+    'Arrangementet er skjult i alle oversikter, men kan kun nås via direkte lenke. Dette er nyttig for interne arrangementer.',
+  [KEY.event_status_help_archived]: 'Arrangementet er avsluttet og flyttet til historikk.',
+  [KEY.event_status_help_cancelled]: 'Arrangementet er avlyst og vises således.',
+  [KEY.event_status_help_deleted]: 'Arrangementet er markert som slettet og vises ikke i det hele tatt.',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',
@@ -1019,6 +1028,15 @@ export const en = prepareTranslations({
   [KEY.event_status_archived]: 'Archived',
   [KEY.event_status_cancelled]: 'Cancelled',
   [KEY.event_status_deleted]: 'Deleted',
+  [KEY.event_status_help_title]: 'What do the statuses mean?',
+  [KEY.event_status_help_intro]: 'Status controls how the event is shown and handled.',
+  [KEY.event_status_help_button_aria_label]: 'Show event status explanation',
+  [KEY.event_status_help_public]: 'The event is visible to everyone.',
+  [KEY.event_status_help_private]:
+    'The event is hidden in all overviews, but can only be reached through a direct link. This is useful for internal events.',
+  [KEY.event_status_help_archived]: 'The event is finished and moved to history.',
+  [KEY.event_status_help_cancelled]: 'The event is cancelled and shown as such.',
+  [KEY.event_status_help_deleted]: 'The event is marked as deleted and is not shown at all.',
 
   // EventPage:
   [KEY.event_registration_url]: 'Registration URL',

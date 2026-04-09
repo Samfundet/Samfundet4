@@ -339,6 +339,14 @@ export const KEY = {
   event_status_archived: 'event_status_archived',
   event_status_cancelled: 'event_status_cancelled',
   event_status_deleted: 'event_status_deleted',
+  event_status_help_title: 'event_status_help_title',
+  event_status_help_intro: 'event_status_help_intro',
+  event_status_help_button_aria_label: 'event_status_help_button_aria_label',
+  event_status_help_public: 'event_status_help_public',
+  event_status_help_private: 'event_status_help_private',
+  event_status_help_archived: 'event_status_help_archived',
+  event_status_help_cancelled: 'event_status_help_cancelled',
+  event_status_help_deleted: 'event_status_help_deleted',
 
   // Venue Page:
   venuepage_title: 'venuepage_title',
