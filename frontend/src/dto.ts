@@ -247,6 +247,17 @@ export type InformationPageDto = {
   text_en?: string;
 };
 
+export type InfoboxDto = {
+  id: number;
+  title_nb?: string;
+  text_nb?: string;
+  title_en: string;
+  text_en: string;
+  color: string;
+  url?: string | null;
+  image?: number | null;
+};
+
 export type ReservationTableDto = {
   name: string;
   start_time: string;
