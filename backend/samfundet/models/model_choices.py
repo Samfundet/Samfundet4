@@ -101,6 +101,7 @@ class SaksdokumentCategory(models.TextChoices):
     RADET = 'RADET', _('Rådet')
     ARSBERETNINGER = 'ARSBERETNINGER', _('Årsberetninger, regnskap og budsjettkunngjøringer')
 
+
 class ClosedOverride(models.TextChoices):
     DEFAULT = 'default', 'Default'
     CLOSED = 'closed', 'Closed'
