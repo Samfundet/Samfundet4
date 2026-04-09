@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { TimeDuration } from '~/Components';
 import { Link } from '~/Components/Link/Link';
 import { Text } from '~/Components/Text/Text';
@@ -9,7 +10,6 @@ import type { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from './OpeningHours.module.scss';
-import { toast } from 'react-toastify';
 
 type OpeningHoursProps = {
   venues: VenueDto[] | undefined;
