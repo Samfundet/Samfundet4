@@ -22,7 +22,7 @@ from django.contrib.auth.models import AbstractUser
 from root.utils import permissions
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
-from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory, ClosedOverride
+from samfundet.models.model_choices import ClosedOverride, ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
 
 from .utils.fields import LowerCaseField, PhoneNumberField
 from .utils.string_utils import ellipsize
