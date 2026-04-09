@@ -613,6 +613,8 @@ export const KEY = {
   admin_users_last_active: 'admin_users_last_active',
   admin_organizer: 'admin_organizer',
   admin_casedocument: 'admin_casedocument',
+  admin_infobox: 'admin_infobox',
+  admin_infoboxes_title: 'admin_infoboxes_title',
   admin_images_title: 'admin_images_title',
   admin_images_create: 'admin_images_create',
   admin_images_confirm_delete: 'admin_images_confirm_delete',

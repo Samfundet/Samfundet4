@@ -1142,7 +1142,7 @@ export const router = createBrowserRouter(
                 <Outlet />
               </SiteFeatureGate>
             }
-            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_infobox}>Infobokser</Link> }}
+            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_infobox}>{t(KEY.admin_infoboxes_title)}</Link> }}
           >
             <Route
               path={ROUTES.frontend.admin_infobox}
