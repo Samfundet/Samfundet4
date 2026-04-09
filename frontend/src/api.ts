@@ -611,7 +611,10 @@ export async function postImage(data: ImagePostDto): Promise<ImageDto> {
   return response.data;
 }
 
-export async function putImage(id: string | number, data: { title?: string; tag_string?: string }): Promise<AxiosResponse> {
+export async function putImage(
+  id: string | number,
+  data: { title?: string; tag_string?: string },
+): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
   const formData = new FormData();
   if (data.title) {
@@ -624,13 +627,21 @@ export async function putImage(id: string | number, data: { title?: string; tag_
   return response;
 }
 
-export async function patchImage(id: string | number, data: { title?: string; tag_string?: string }): Promise<ImageDto> {
+export async function patchImage(
+  id: string | number,
+  data: { title?: string; tag_string?: string },
+): Promise<ImageDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
   const response = await axios.patch<ImageDto>(url, data, { withCredentials: true });
   return response.data;
 }
 
-export async function replaceImageFile(id: string | number, file: File, title?: string, tagString?: string): Promise<ImageDto> {
+export async function replaceImageFile(
+  id: string | number,
+  file: File,
+  title?: string,
+  tagString?: string,
+): Promise<ImageDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
   const formData = new FormData();
   formData.append('file', file);
@@ -658,10 +669,7 @@ export type LinkedEventDto = {
 };
 
 export async function getImageLinkedEvents(id: string | number): Promise<LinkedEventDto[]> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } }) +
-    'linked_events/';
+  const url = `${BACKEND_DOMAIN}${reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } })}linked_events/`;
   const response = await axios.get<LinkedEventDto[]>(url, { withCredentials: true });
   return response.data;
 }

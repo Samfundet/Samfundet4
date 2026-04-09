@@ -82,6 +82,43 @@ class TagSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+def _parse_tag_string(tag_string: str | None) -> list[str]:
+    """Parse comma-separated tag string into deduplicated list."""
+    if not tag_string:
+        return []
+    tag_names = [name.strip() for name in tag_string.split(',')]
+    tag_names = [name for name in tag_names if name]
+    seen = set()
+    result = []
+    for name in tag_names:
+        if name not in seen:
+            seen.add(name)
+            result.append(name)
+    return result
+
+
+def _get_or_create_tags(tag_names: list[str]) -> list:
+    """Get or create Tag objects from list of names."""
+    tags = []
+    for name in tag_names:
+        tag = Tag.objects.filter(name=name).first() or Tag.objects.create(name=name)
+        tags.append(tag)
+    return tags
+
+
+def _update_image_file(instance: Image, file: File, validated_data: dict) -> None:
+    """Update the image file on an instance."""
+    try:
+        img = PilImage.open(file)
+        img.verify()
+    except (UnidentifiedImageError, Exception) as e:
+        raise ValidationError(f'Invalid image file: {str(e)}') from e
+    if instance.image:
+        instance.image.delete(save=False)
+    original_name = getattr(file, 'name', None) or validated_data.get('title', instance.title)
+    instance.image = ImageFile(file, original_name)
+
+
 class ImageSerializer(CustomBaseSerializer):
     # Read only tags used in frontend.
     tags = TagSerializer(many=True, read_only=True)
@@ -119,96 +156,30 @@ class ImageSerializer(CustomBaseSerializer):
         return attributes
 
     def create(self, validated_data: dict) -> Image:
-        """
-        Uses the write_only file field to create new image file.
-        Automatically finds/creates new tags based on comma-separated string.
-        Strips whitespace and drops empty tag names
-        and preserves the original filename when saving the image
-        """
+        """Create new image with file and tags."""
         file = validated_data.pop('file')
         raw_tag_string = validated_data.pop('tag_string', None)
-        if raw_tag_string is not None:
-            # Split on comma, strip whitespace and drop empties
-            tag_names = [name.strip() for name in raw_tag_string.split(',')]
-            tag_names = [name for name in tag_names if name]
-
-            # De-duplicate while preserving order
-            seen: set[str] = set()
-            unique_tag_names = []
-            for name in tag_names:
-                if name not in seen:
-                    seen.add(name)
-                    unique_tag_names.append(name)
-            # Get or create tags, handling cases where multiple tags with the same name exist
-            tags = []
-            for name in unique_tag_names:
-                tag = Tag.objects.filter(name=name).first()
-                if not tag:
-                    tag = Tag.objects.create(name=name)
-                tags.append(tag)
-        else:
-            tags = []
-        # Preserve original filename if available; fallback to title
+        tag_names = _parse_tag_string(raw_tag_string)
+        tags = _get_or_create_tags(tag_names)
         original_name = getattr(file, 'name', None) or validated_data.get('title')
-        image = Image.objects.create(
-            image=ImageFile(file, original_name),
-            **validated_data,
-        )
+        image = Image.objects.create(image=ImageFile(file, original_name), **validated_data)
         image.tags.set(tags)
         image.save()
         return image
 
     def update(self, instance: Image, validated_data: dict) -> Image:
-        """
-        Updates an image with a new file.
-        Deletes the old image file from storage before saving the new one.
-        """
-        # Delete old image file if a new file is being uploaded
+        """Update image metadata and optionally the image file."""
         if 'file' in validated_data:
-            file = validated_data.pop('file')
-            
-            # Validate the image file
-            try:
-                img = PilImage.open(file)
-                img.verify()
-            except (UnidentifiedImageError, Exception) as e:
-                raise ValidationError(f'Invalid image file: {str(e)}')
-            
-            # Delete the old image file from storage
-            if instance.image:
-                instance.image.delete(save=False)
-            # Preserve original filename if available; fallback to title
-            original_name = getattr(file, 'name', None) or validated_data.get('title', instance.title)
-            instance.image = ImageFile(file, original_name)
+            _update_image_file(instance, validated_data.pop('file'), validated_data)
 
-        # Handle tag updates if provided
         raw_tag_string = validated_data.pop('tag_string', None)
         if raw_tag_string is not None:
-            # Split on comma, strip whitespace and drop empties
-            tag_names = [name.strip() for name in raw_tag_string.split(',')]
-            tag_names = [name for name in tag_names if name]
-
-            # De-duplicate while preserving order
-            seen: set[str] = set()
-            unique_tag_names = []
-            for name in tag_names:
-                if name not in seen:
-                    seen.add(name)
-                    unique_tag_names.append(name)
-            
-            # Get or create tags, handling cases where multiple tags with the same name exist
-            tags = []
-            for name in unique_tag_names:
-                tag = Tag.objects.filter(name=name).first()
-                if not tag:
-                    tag = Tag.objects.create(name=name)
-                tags.append(tag)
+            tag_names = _parse_tag_string(raw_tag_string)
+            tags = _get_or_create_tags(tag_names)
             instance.tags.set(tags)
 
-        # Update other fields
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-
         instance.save()
         return instance
 

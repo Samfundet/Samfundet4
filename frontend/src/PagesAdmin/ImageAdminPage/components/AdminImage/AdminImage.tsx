@@ -48,9 +48,7 @@ export function AdminImage({ image, className }: AdminImageProps) {
         <p className={styles.text}>{image.title}</p>
         <p className={styles.tags}>{TAGS}</p>
       </div>
-      <div className={styles.editButtonWrapper}>
-        {header}
-      </div>
+      <div className={styles.editButtonWrapper}>{header}</div>
     </div>
   );
 }

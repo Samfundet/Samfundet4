@@ -224,18 +224,8 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
               validateOn="submit"
               initialData={formValues}
             >
-              <SamfFormField
-                field="title"
-                type="text"
-                label={`${t(KEY.common_name)}`}
-                required={true}
-              />
-              <SamfFormField
-                field="tag_string"
-                type="text"
-                label={`${t(KEY.common_tags)}`}
-                required={false}
-              />
+              <SamfFormField field="title" type="text" label={`${t(KEY.common_name)}`} required={true} />
+              <SamfFormField field="tag_string" type="text" label={`${t(KEY.common_tags)}`} required={false} />
               <SamfFormField
                 field="file"
                 type="upload_image"
@@ -268,9 +258,7 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
                 );
               })}
             </ul>
-            <p className={styles.warningText}>
-              {t(KEY.common_cannot_delete_image)}
-            </p>
+            <p className={styles.warningText}>{t(KEY.common_cannot_delete_image)}</p>
           </div>
         )}
 
