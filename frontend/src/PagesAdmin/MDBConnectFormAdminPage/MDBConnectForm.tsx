@@ -1,14 +1,17 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { Input, Link } from '~/Components';
 import { Button } from '~/Components/Button';
 import { Form, FormField, FormItem, FormLabel } from '~/Components/Forms';
 import { FormControl, FormDescription } from '~/Components/Forms/Form';
-import { connectToMdb } from '~/api';
+import { connectToMdb, getUser } from '~/api';
+import { useAuthContext } from '~/context/AuthContext';
 import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
 import { SAMF3_MEMBER_URL } from '~/routes/samf-three';
 import { EMAIL_OR_MEMBERSHIP_NUMBER, PASSWORD } from '~/schema/user';
 import { lowerCapitalize } from '~/utils';
@@ -16,6 +19,8 @@ import styles from './MDBConnectFormAdminPage.module.scss';
 
 export function MDBConnectForm() {
   const { t } = useTranslation();
+  const { user, setUser, loading: authLoading } = useAuthContext();
+  const navigate = useNavigate();
 
   const schema = z.object({
     member_login: EMAIL_OR_MEMBERSHIP_NUMBER(t),
@@ -32,8 +37,11 @@ export function MDBConnectForm() {
 
   function onSubmit(values: z.infer<typeof schema>) {
     connectToMdb(values.member_login, values.password)
-      .then((res) => {
+      .then(() => getUser())
+      .then((updatedUser) => {
+        setUser(updatedUser);
         toast.success(t(KEY.adminpage_connect_mdb_succesful_toast));
+        navigate(ROUTES.frontend.admin);
       })
       .catch((error) => {
         toast.error(t(KEY.adminpage_connect_mdb_common_error));
