@@ -12,6 +12,7 @@ import type {
   HomePageDto,
   ImageDto,
   ImagePostDto,
+  InfoboxDto,
   InformationPageDto,
   InterviewDto,
   InterviewRoomDto,
@@ -238,6 +239,36 @@ export async function putInformationPage(
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: slug_field } });
   const response = await axios.put<InformationPageDto>(url, page, { withCredentials: true });
+  return response;
+}
+
+export async function getInfoboxes(): Promise<InfoboxDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__infobox_list;
+  const response = await axios.get<InfoboxDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function getInfobox(id: string | number): Promise<InfoboxDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__infobox_detail, urlParams: { pk: id } });
+  const response = await axios.get<InfoboxDto>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function postInfobox(data: Partial<InfoboxDto>): Promise<InfoboxDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__infobox_list;
+  const response = await axios.post<InfoboxDto>(url, data, { withCredentials: true });
+  return response.data;
+}
+
+export async function putInfobox(id: string | number, data: Partial<InfoboxDto>): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__infobox_detail, urlParams: { pk: id } });
+  const response = await axios.put<InfoboxDto>(url, data, { withCredentials: true });
+  return response;
+}
+
+export async function deleteInfobox(id: string | number): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__infobox_detail, urlParams: { pk: id } });
+  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
   return response;
 }
 
