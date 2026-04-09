@@ -88,7 +88,7 @@ class ImageSerializer(CustomBaseSerializer):
     url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
 
     # Write only fields for posting new images.
-    file = serializers.FileField(write_only=True, required=True)
+    file = serializers.FileField(write_only=True, required=False)
     # Comma separated tag string "tag_a,tag_b" is automatically parsed to list of tag models.
     tag_string = serializers.CharField(write_only=True, allow_blank=True, required=False)
 
@@ -102,16 +102,19 @@ class ImageSerializer(CustomBaseSerializer):
             raise serializers.ValidationError({'title': 'This field is required.'})
 
         file = attributes.get('file')
-        if not file:
+        # File is required only for create operations (POST), not for updates (PUT/PATCH)
+        # self.instance will be None for creation, and non-None for updates
+        if not file and not self.instance:
             raise serializers.ValidationError({'file': 'An image file is required.'})
 
-        # Validate that the uploaded file is a valid image
-        try:
-            file.seek(0)
-            PilImage.open(file).verify()
-            file.seek(0)
-        except UnidentifiedImageError as error:
-            raise serializers.ValidationError('Invalid image') from error
+        # Validate that the uploaded file is a valid image if one is provided
+        if file:
+            try:
+                file.seek(0)
+                PilImage.open(file).verify()
+                file.seek(0)
+            except UnidentifiedImageError as error:
+                raise serializers.ValidationError('Invalid image') from error
 
         return attributes
 
@@ -136,7 +139,13 @@ class ImageSerializer(CustomBaseSerializer):
                 if name not in seen:
                     seen.add(name)
                     unique_tag_names.append(name)
-            tags = [Tag.objects.get_or_create(name=name)[0] for name in unique_tag_names]
+            # Get or create tags, handling cases where multiple tags with the same name exist
+            tags = []
+            for name in unique_tag_names:
+                tag = Tag.objects.filter(name=name).first()
+                if not tag:
+                    tag = Tag.objects.create(name=name)
+                tags.append(tag)
         else:
             tags = []
         # Preserve original filename if available; fallback to title
@@ -186,7 +195,14 @@ class ImageSerializer(CustomBaseSerializer):
                 if name not in seen:
                     seen.add(name)
                     unique_tag_names.append(name)
-            tags = [Tag.objects.get_or_create(name=name)[0] for name in unique_tag_names]
+            
+            # Get or create tags, handling cases where multiple tags with the same name exist
+            tags = []
+            for name in unique_tag_names:
+                tag = Tag.objects.filter(name=name).first()
+                if not tag:
+                    tag = Tag.objects.create(name=name)
+                tags.append(tag)
             instance.tags.set(tags)
 
         # Update other fields

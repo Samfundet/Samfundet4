@@ -1,11 +1,13 @@
 import { AxiosError } from 'axios';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components/Button/Button';
+import { SamfForm } from '~/Forms/SamfForm';
+import { SamfFormField } from '~/Forms/SamfFormField';
 import type { LinkedEventDto } from '~/api';
-import { deleteImage, getImage, getImageLinkedEvents, replaceImageFile } from '~/api';
+import { deleteImage, getImage, getImageLinkedEvents, patchImage, replaceImageFile } from '~/api';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
@@ -21,24 +23,29 @@ type AdminEditImageProps = {
   id?: number;
 };
 
+type FormType = {
+  title: string;
+  tag_string: string;
+  file?: File;
+};
+
 export function AdminEditImage({ id }: AdminEditImageProps) {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
   const reactNavigate = useNavigate();
   const location = useLocation();
   const { id: paramsId } = useParams<{ id: string }>();
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Use prop if provided, otherwise fall back to URL params
   const imageID = id || paramsId;
 
   const [image, setImage] = useState<ImageDto | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [uploading, setUploading] = useState<boolean>(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [deleting, setDeleting] = useState<boolean>(false);
   const [notFound, setNotFound] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<boolean>(false);
   const [linkedEvents, setLinkedEvents] = useState<LinkedEventDto[]>([]);
+  const [formValues, setFormValues] = useState<FormType | null>(null);
 
   const title = lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_image)}`);
   useTitle(title);
@@ -91,6 +98,17 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
     };
   }, [imageID]);
 
+  // Initialize form values when image loads
+  useEffect(() => {
+    if (image) {
+      setFormValues({
+        title: image.title,
+        tag_string: image.tags.map((tag) => tag.name).join(', '),
+        file: undefined,
+      });
+    }
+  }, [image]);
+
   // Handle 404 redirect
   useEffect(() => {
     if (notFound) {
@@ -105,44 +123,39 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
     }
   }, [fetchError, t]);
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-    }
-  };
-
-  const handleUpload = async () => {
-    if (!selectedFile || !image) {
+  const handleFormSubmit = async (data: FormType) => {
+    if (!image) {
       toast.error(t(KEY.common_something_went_wrong));
       return;
     }
 
-    // Validate file size (5MB max)
-    const MAX_FILE_SIZE = 5 * 1024 * 1024;
-    if (selectedFile.size > MAX_FILE_SIZE) {
-      toast.error('File size must be less than 5MB');
-      return;
-    }
-
     try {
-      setUploading(true);
-      await replaceImageFile(image.id, selectedFile, image.title);
+      // If a file was provided, upload it first (replaceImageFile already handles title and tags)
+      if (data.file) {
+        const MAX_FILE_SIZE = 5 * 1024 * 1024;
+        if (data.file.size > MAX_FILE_SIZE) {
+          toast.error('File size must be less than 5MB');
+          return;
+        }
+        await replaceImageFile(image.id, data.file, data.title, data.tag_string);
+      } else {
+        // No file upload - update metadata (title and tags) only via PATCH
+        const payload = {
+          title: data.title,
+          tag_string: data.tag_string || '',
+        };
+        await patchImage(image.id, payload);
+      }
 
       // Refetch the image to get the latest version from the server
       const refreshedImage = await getImage(image.id);
       setImage(refreshedImage);
 
-      setSelectedFile(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-      toast.success(t(KEY.common_creation_successful));
+      toast.success(t(KEY.common_save_successful));
     } catch (error: unknown) {
+      const errorMessage = error instanceof AxiosError ? JSON.stringify(error.response?.data) : String(error);
       toast.error(t(KEY.common_something_went_wrong));
-      console.error('Failed to upload image:', error);
-    } finally {
-      setUploading(false);
+      console.error('Failed to update image:', errorMessage);
     }
   };
 
@@ -157,7 +170,7 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
     }
 
     try {
-      setUploading(true);
+      setDeleting(true);
       await deleteImage(image.id);
       toast.success(t(KEY.common_delete_successful));
       navigate({ url: ROUTES.frontend.admin_images, replace: true });
@@ -165,7 +178,7 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
       toast.error(t(KEY.common_something_went_wrong));
       console.error('Failed to delete image:', error);
     } finally {
-      setUploading(false);
+      setDeleting(false);
     }
   };
 
@@ -197,24 +210,38 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
           </div>
         </div>
 
-        {/* Upload form */}
-        <div className={styles.uploadSection}>
-          <h4>{lowerCapitalize(`${t(KEY.common_replace)} ${t(KEY.common_image)}`)}</h4>
-          <div className={styles.uploadForm}>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileSelect}
-              disabled={uploading}
-              className={styles.fileInput}
-            />
-            {selectedFile && <p className={styles.fileName}>{selectedFile.name}</p>}
-            <Button onClick={handleUpload} disabled={!selectedFile || uploading} theme="success" rounded={true}>
-              {uploading ? t(KEY.common_loading) : t(KEY.common_upload)}
-            </Button>
+        {/* Edit form */}
+        {formValues && (
+          <div className={styles.uploadSection}>
+            <h4>{lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_image)}`)}</h4>
+            <SamfForm<FormType>
+              key={`image-form-${image?.id}`}
+              onSubmit={handleFormSubmit}
+              submitText={t(KEY.common_save)}
+              validateOn="submit"
+              initialData={formValues}
+            >
+              <SamfFormField
+                field="title"
+                type="text"
+                label={`${t(KEY.common_name)}`}
+                required={true}
+              />
+              <SamfFormField
+                field="tag_string"
+                type="text"
+                label={`${t(KEY.common_tags)}`}
+                required={false}
+              />
+              <SamfFormField
+                field="file"
+                type="upload_image"
+                label={lowerCapitalize(`${t(KEY.common_replace)} ${t(KEY.common_image)}`)}
+                required={false}
+              />
+            </SamfForm>
           </div>
-        </div>
+        )}
 
         {/* Linked events warning */}
         {linkedEvents.length > 0 && (
@@ -248,7 +275,7 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
         <div className={styles.deleteSection}>
           <Button
             onClick={handleDelete}
-            disabled={uploading || linkedEvents.length > 0}
+            disabled={deleting || linkedEvents.length > 0}
             theme="samf"
             rounded={true}
             title={linkedEvents.length > 0 ? t(KEY.common_cannot_delete_image) : undefined}

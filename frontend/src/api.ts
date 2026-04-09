@@ -611,18 +611,34 @@ export async function postImage(data: ImagePostDto): Promise<ImageDto> {
   return response.data;
 }
 
-export async function putImage(id: string | number, data: Partial<ImageDto>): Promise<AxiosResponse> {
+export async function putImage(id: string | number, data: { title?: string; tag_string?: string }): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
-  const response = await axios.put<ImageDto>(url, data, { withCredentials: true });
+  const formData = new FormData();
+  if (data.title) {
+    formData.append('title', data.title);
+  }
+  if (data.tag_string) {
+    formData.append('tag_string', data.tag_string);
+  }
+  const response = await axios.putForm<ImageDto>(url, formData, { withCredentials: true });
   return response;
 }
 
-export async function replaceImageFile(id: string | number, file: File, title?: string): Promise<ImageDto> {
+export async function patchImage(id: string | number, data: { title?: string; tag_string?: string }): Promise<ImageDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
+  const response = await axios.patch<ImageDto>(url, data, { withCredentials: true });
+  return response.data;
+}
+
+export async function replaceImageFile(id: string | number, file: File, title?: string, tagString?: string): Promise<ImageDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
   const formData = new FormData();
   formData.append('file', file);
   if (title) {
     formData.append('title', title);
+  }
+  if (tagString) {
+    formData.append('tag_string', tagString);
   }
   const response = await axios.putForm<ImageDto>(url, formData, { withCredentials: true });
   return response.data;
