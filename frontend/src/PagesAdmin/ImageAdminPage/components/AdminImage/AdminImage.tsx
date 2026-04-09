@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { t } from 'i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { IconButton } from '~/Components';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
@@ -17,6 +17,7 @@ type AdminImageProps = {
 
 export function AdminImage({ image, className }: AdminImageProps) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const editImageUrl = reverse({
     pattern: ROUTES.frontend.admin_images_edit,
@@ -28,7 +29,7 @@ export function AdminImage({ image, className }: AdminImageProps) {
       icon="ph:pencil-bold"
       title={lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_image)}`)}
       color="#4ab74c"
-      onClick={() => navigate(editImageUrl)}
+      onClick={() => navigate(editImageUrl, { state: { from: location.pathname } })}
     />
   );
 

@@ -152,6 +152,13 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
       setImage(refreshedImage);
 
       toast.success(t(KEY.common_save_successful));
+
+      // Navigate back to previous page after successful save
+      if (location.state?.from) {
+        navigate({ url: location.state.from, replace: true });
+      } else {
+        navigate({ url: ROUTES.frontend.admin_images, replace: true });
+      }
     } catch (error: unknown) {
       const errorMessage = error instanceof AxiosError ? JSON.stringify(error.response?.data) : String(error);
       toast.error(t(KEY.common_something_went_wrong));
