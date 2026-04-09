@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '~/Components/Button/Button';
+import { IconButton } from '~/Components';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
@@ -24,11 +24,12 @@ export function AdminImage({ image, className }: AdminImageProps) {
   });
 
   const header = (
-    <>
-      <Button theme="success" rounded={true} onClick={() => navigate(editImageUrl)}>
-        {lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_image)}`)}
-      </Button>
-    </>
+    <IconButton
+      icon="ph:pencil-bold"
+      title={lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_image)}`)}
+      color="#4ab74c"
+      onClick={() => navigate(editImageUrl)}
+    />
   );
 
   const TAGS = image.tags
@@ -45,6 +46,8 @@ export function AdminImage({ image, className }: AdminImageProps) {
       <div className={styles.imageTitle}>
         <p className={styles.text}>{image.title}</p>
         <p className={styles.tags}>{TAGS}</p>
+      </div>
+      <div className={styles.editButtonWrapper}>
         {header}
       </div>
     </div>

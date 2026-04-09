@@ -23,17 +23,6 @@
   object-fit: cover;
 }
 
-.imageInfo {
-  padding: 1rem;
-  background-color: $black;
-  color: $white;
-
-  h3 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.2em;
-  }
-}
-
 .uploadSection {
   @include rounded;
   @include shadow-light;

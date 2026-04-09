@@ -204,10 +204,6 @@ export function AdminEditImage({ id }: AdminEditImageProps) {
         {/* Display current image */}
         <div className={styles.imageSection}>
           <img src={BACKEND_DOMAIN + image.url} alt={image.title} className={styles.image} />
-          <div className={styles.imageInfo}>
-            <h3>{image.title}</h3>
-            <p className={styles.tags}>{image.tags.map((tag) => tag.name).join(', ')}</p>
-          </div>
         </div>
 
         {/* Edit form */}
