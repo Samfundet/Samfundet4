@@ -59,6 +59,7 @@ export const KEY = {
   // No category:
   common_connect: 'common_connect',
   common_content: 'common_content',
+  common_color: 'common_color',
   common_url: 'common_url',
   common_manage: 'common_manage',
   common_yes: 'common_yes',
