@@ -47,8 +47,8 @@ export function InfoboxAdminPage() {
   const tableColumns = [
     { content: t(KEY.common_title), sortable: true },
     { content: t(KEY.common_description), sortable: true },
-    { content: 'Color', sortable: true },
-    { content: 'URL', sortable: true },
+    { content: t(KEY.common_color), sortable: true },
+    { content: t(KEY.common_url), sortable: true },
     '',
   ];
 
