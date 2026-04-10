@@ -55,8 +55,20 @@ export function InfoboxAdminPage() {
   const tableData = infoboxes.map((infobox) => ({
     cells: [
       dbT(infobox, 'title') as string,
-      dbT(infobox, 'text') as string,
-      infobox.color,
+      {
+        content: <span className={styles.truncated_text}>{dbT(infobox, 'text') as string}</span>,
+        value: dbT(infobox, 'text') as string,
+      },
+      {
+        content: (
+          <div
+            className={styles.color_preview}
+            style={{ backgroundColor: infobox.color || 'transparent' }}
+            title={infobox.color}
+          />
+        ),
+        value: infobox.color,
+      },
       {
         content: infobox.url ? (
           <Link url={infobox.url} target="external">
