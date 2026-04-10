@@ -45,6 +45,7 @@ export const nb = prepareTranslations({
   // Other common
   [KEY.common_connect]: 'Koble til',
   [KEY.common_content]: 'Innhold',
+  [KEY.common_color]: 'Farge',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Håndter',
   [KEY.common_yes]: 'Ja',
@@ -775,6 +776,7 @@ export const en = prepareTranslations({
   // No category:
   [KEY.common_connect]: 'Connect',
   [KEY.common_content]: 'Content',
+  [KEY.common_color]: 'Color',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Manage',
   [KEY.common_yes]: 'Yes',
