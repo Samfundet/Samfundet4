@@ -88,7 +88,6 @@ import { ROUTES } from '~/routes';
 import { t } from 'i18next';
 import { App } from '~/App';
 import { DynamicOrgOutlet } from '~/Components/DynamicOrgOutlet/DynamicOrgOutlet';
-import { WeeklyOpeningPage } from '~/Pages/WeeklyOpeningPage/WeeklyOpeningPage';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -122,7 +121,6 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.venues} element={<SiteFeatureGate feature="venues"><VenuePage /></SiteFeatureGate>}/>
           <Route path={ROUTES.frontend.health} element={<HealthPage />} />
           <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
-          <Route path={ROUTES.frontend.weekly_opening_hours} element={<WeeklyOpeningPage />} />
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
             <Route path={ROUTES.frontend.login} element={<LoginPickerPage newRoute="/new-login" />} />
             <Route path={SAMF3_LOGIN_URL.login} element={<LoginPage />} />

@@ -19,7 +19,6 @@ export const ROUTES_FRONTEND = {
   membership: '/membership',
   luka: '/luka',
   contributors: '/contributors',
-  weekly_opening_hours: '/opening-hours',
   // Recruitment:
   recruitment: '/recruitment/',
   recruitment_application: '/recruitment/:recruitmentId/position/:positionId/',
