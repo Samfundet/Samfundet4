@@ -100,6 +100,7 @@ export const KEY = {
   common_venue: 'common_venue',
   common_active: 'common_active',
   common_cancel: 'common_cancel',
+  common_close: 'common_close',
   common_events: 'common_events',
   common_repeat: 'common_repeat',
   common_venues: 'common_venues',
@@ -331,6 +332,22 @@ export const KEY = {
   event_category_theater: 'event_category_theater',
   event_category_theme_party: 'event_category_theme_party',
   event_category_uka_event: 'event_category_uka_event',
+
+  // Event statuses
+  event_status: 'event_status',
+  event_status_public: 'event_status_public',
+  event_status_private: 'event_status_private',
+  event_status_archived: 'event_status_archived',
+  event_status_cancelled: 'event_status_cancelled',
+  event_status_deleted: 'event_status_deleted',
+  event_status_help_title: 'event_status_help_title',
+  event_status_help_intro: 'event_status_help_intro',
+  event_status_help_button_aria_label: 'event_status_help_button_aria_label',
+  event_status_help_public: 'event_status_help_public',
+  event_status_help_private: 'event_status_help_private',
+  event_status_help_archived: 'event_status_help_archived',
+  event_status_help_cancelled: 'event_status_help_cancelled',
+  event_status_help_deleted: 'event_status_help_deleted',
 
   // Venue Page:
   venuepage_title: 'venuepage_title',
@@ -689,6 +706,7 @@ export const KEY = {
   event_form_category_required: 'event_form_category_required',
   event_form_age_restriction_required: 'event_form_age_restriction_required',
   event_form_ticket_type_required: 'event_form_ticket_type_required',
+  event_form_status_required: 'event_form_status_required',
 } as const;
 
 // This will ensure that each value matches the key exactly.

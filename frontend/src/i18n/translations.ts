@@ -98,6 +98,7 @@ export const nb = prepareTranslations({
   [KEY.common_delete]: 'Slett',
   [KEY.common_logout]: 'Logg ut',
   [KEY.common_cancel]: 'Avbryt',
+  [KEY.common_close]: 'Lukk',
   [KEY.common_go_back]: 'Tilbake',
   [KEY.common_interval]: 'Intervall',
   [KEY.common_preview]: 'Forhåndsvisning',
@@ -304,6 +305,23 @@ export const nb = prepareTranslations({
   [KEY.event_category_theater]: 'Teater',
   [KEY.event_category_theme_party]: 'Temafest',
   [KEY.event_category_uka_event]: 'UKE-arrangement',
+
+  // Event statuses
+  [KEY.event_status]: 'Status',
+  [KEY.event_status_public]: 'Offentlig',
+  [KEY.event_status_private]: 'Privat',
+  [KEY.event_status_archived]: 'Arkivert',
+  [KEY.event_status_cancelled]: 'Avlyst',
+  [KEY.event_status_deleted]: 'Slettet',
+  [KEY.event_status_help_title]: 'Hva betyr statusene?',
+  [KEY.event_status_help_intro]: 'Status styrer hvordan arrangementet vises og håndteres.',
+  [KEY.event_status_help_button_aria_label]: 'Vis forklaring av arrangementsstatus',
+  [KEY.event_status_help_public]: 'Arrangementet er synlig for alle.',
+  [KEY.event_status_help_private]:
+    'Arrangementet er skjult i alle oversikter, men kan kun nås via direkte lenke. Dette er nyttig for interne arrangementer.',
+  [KEY.event_status_help_archived]: 'Arrangementet er avsluttet og flyttet til historikk.',
+  [KEY.event_status_help_cancelled]: 'Arrangementet er avlyst og vises således.',
+  [KEY.event_status_help_deleted]: 'Arrangementet er markert som slettet og vises ikke i det hele tatt.',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',
@@ -708,6 +726,7 @@ export const nb = prepareTranslations({
   [KEY.event_form_category_required]: 'Kategori er påkrevd',
   [KEY.event_form_age_restriction_required]: 'Aldersgrense er påkrevd',
   [KEY.event_form_ticket_type_required]: 'Billetttype er påkrevd',
+  [KEY.event_form_status_required]: 'Status er påkrevd',
 });
 
 export const en = prepareTranslations({
@@ -799,6 +818,7 @@ export const en = prepareTranslations({
   [KEY.common_role]: 'Role',
   [KEY.common_active]: 'Active',
   [KEY.common_cancel]: 'Cancel',
+  [KEY.common_close]: 'Close',
   [KEY.common_venues]: 'Venues',
   [KEY.common_shortcuts]: 'Shortcuts',
   [KEY.common_events]: 'Events',
@@ -1002,6 +1022,23 @@ export const en = prepareTranslations({
   [KEY.event_category_theater]: 'Theater',
   [KEY.event_category_theme_party]: 'Theme party',
   [KEY.event_category_uka_event]: 'UKA event',
+
+  // Event statuses
+  [KEY.event_status]: 'Status',
+  [KEY.event_status_public]: 'Public',
+  [KEY.event_status_private]: 'Private',
+  [KEY.event_status_archived]: 'Archived',
+  [KEY.event_status_cancelled]: 'Cancelled',
+  [KEY.event_status_deleted]: 'Deleted',
+  [KEY.event_status_help_title]: 'What do the statuses mean?',
+  [KEY.event_status_help_intro]: 'Status controls how the event is shown and handled.',
+  [KEY.event_status_help_button_aria_label]: 'Show event status explanation',
+  [KEY.event_status_help_public]: 'The event is visible to everyone.',
+  [KEY.event_status_help_private]:
+    'The event is hidden in all overviews, but can only be reached through a direct link. This is useful for internal events.',
+  [KEY.event_status_help_archived]: 'The event is finished and moved to history.',
+  [KEY.event_status_help_cancelled]: 'The event is cancelled and shown as such.',
+  [KEY.event_status_help_deleted]: 'The event is marked as deleted and is not shown at all.',
 
   // EventPage:
   [KEY.event_registration_url]: 'Registration URL',
@@ -1409,4 +1446,5 @@ export const en = prepareTranslations({
   [KEY.event_form_category_required]: 'Category is required',
   [KEY.event_form_age_restriction_required]: 'Age restriction is required',
   [KEY.event_form_ticket_type_required]: 'Ticket type is required',
+  [KEY.event_form_status_required]: 'Status is required',
 });

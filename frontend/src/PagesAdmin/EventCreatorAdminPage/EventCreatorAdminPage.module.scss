@@ -87,3 +87,92 @@
   padding-bottom: 3.75em;
   gap: 0.5em;
 }
+
+.status_label_row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+.status_info_button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  padding: 0;
+  width: 1.35rem;
+  height: 1.35rem;
+  background: transparent;
+  color: $blue;
+
+  &:hover {
+    background: rgba($blue, 0.12);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $blue;
+    outline-offset: 2px;
+  }
+}
+
+.status_help_modal {
+  width: min(32rem, calc(100vw - 2rem));
+}
+
+.status_help_modal_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+
+  h3 {
+    margin: 0;
+  }
+}
+
+.status_help_close_button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  color: $grey-1;
+
+  &:hover {
+    background: rgba($grey-2, 0.2);
+  }
+
+  @include theme-dark {
+    color: $grey-4;
+
+    &:hover {
+      background: rgba($grey-4, 0.2);
+    }
+  }
+}
+
+.status_help_intro {
+  margin: 0.5rem 0 0;
+}
+
+.status_help_list {
+  margin: 0.75rem 0 0;
+  padding-left: 1.2rem;
+
+  li + li {
+    margin-top: 0.5rem;
+  }
+}
+
+.status_help_actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+}
