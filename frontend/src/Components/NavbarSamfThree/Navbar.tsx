@@ -17,7 +17,7 @@ import type { RecruitmentDto } from '~/dto';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { SAMF3_MEMBER_URL } from '~/routes/samf-three';
+import { ROUTES_SAMF_THREE, SAMF3_MEMBER_URL } from '~/routes/samf-three';
 import styles from './Navbar.module.scss';
 import { HamburgerMenu, LanguageButton } from './components';
 import { NavbarItem } from './components/NavbarItem';
@@ -85,7 +85,7 @@ export function Navbar() {
         {t(KEY.common_membership)}
       </a>
       <a
-        href={ROUTES.samfThree.information.openingHours}
+        href={ROUTES.frontend.weekly_opening_hours}
         className={styles.navbar_dropdown_link}
         onClick={() => setExpandedDropdown('')}
       >
