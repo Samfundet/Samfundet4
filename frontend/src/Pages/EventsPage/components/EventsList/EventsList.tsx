@@ -24,7 +24,7 @@ export function EventsList({ events }: EventsListProps) {
   const { t, i18n } = useTranslation();
   const [tableView, setTableView] = useState(false);
   const [searchParam, setSearchParam] = useSearchParams();
-  const [query, setQuery] = useState(searchParam.get('search') ?? '');
+  const [query, setQuery] = useState(searchParam.get('q') ?? '');
   const isDesktop = useDesktop();
 
   const eventColumns = [
@@ -105,9 +105,9 @@ export function EventsList({ events }: EventsListProps) {
     setSearchParam((prev) => {
       const next = new URLSearchParams(prev);
       if (query) {
-        next.set('search', query);
+        next.set('q', query);
       } else {
-        next.delete('search');
+        next.delete('q');
       }
       return next;
     });
