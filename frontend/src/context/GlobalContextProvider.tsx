@@ -31,7 +31,7 @@ type GlobalContextProps = {
 
   keyValues: KeyValueMap;
 
-  // AdminToggels
+  // AdminToggles
   closedOverride: string;
   setClosedOverride: SetState<string>;
   switchClosedOverride: (override: string) => void;
