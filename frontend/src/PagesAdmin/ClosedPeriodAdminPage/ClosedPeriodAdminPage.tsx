@@ -2,10 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Button, TimeDisplay } from '~/Components';
-import { Dropdown } from '~/Components';
 import { Table } from '~/Components/Table';
 import { deleteClosedPeriod, getClosedPeriods } from '~/api';
-import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { ClosedPeriodDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -18,7 +16,6 @@ export function ClosedPeriodAdminPage() {
   const [closedPeriods, setClosedPeriods] = useState<ClosedPeriodDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
-  const globalContext = useGlobalContext();
   useTitle(t(KEY.command_menu_shortcut_closed));
 
   const getAllClosedPeriods = useCallback(() => {
@@ -58,25 +55,6 @@ export function ClosedPeriodAdminPage() {
       <Button theme="success" rounded link={ROUTES.frontend.admin_closed_create}>
         {t(KEY.admin_closed_period_new_period)}
       </Button>
-      <span style={{ marginRight: 10 }}>{t(KEY.admin_closed_period_closing_status)}</span>
-      <Dropdown
-        options={[
-          {
-            label: t(KEY.common_default),
-            value: 'default',
-          },
-          {
-            label: t(KEY.common_open),
-            value: 'open',
-          },
-          {
-            label: t(KEY.common_closed),
-            value: 'closed',
-          },
-        ]}
-        value={globalContext.closedOverride}
-        onChange={(value) => globalContext.switchClosedOverride(value)}
-      />
     </>
   );
   const backendUrl = ROUTES.backend.admin__samfundet_closedperiod_changelist;

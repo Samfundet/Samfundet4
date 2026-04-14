@@ -22,7 +22,7 @@ from django.contrib.auth.models import AbstractUser
 from root.utils import permissions
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
-from samfundet.models.model_choices import ClosedOverride, ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
+from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
 
 from .utils.fields import LowerCaseField, PhoneNumberField
 from .utils.string_utils import ellipsize
@@ -166,7 +166,6 @@ class UserPreference(FullCleanSaveMixin):
     theme = models.CharField(max_length=30, choices=UserPreferenceTheme.choices, default=UserPreferenceTheme.LIGHT, blank=True, null=True)
     mirror_dimension = models.BooleanField(default=False)
     cursor_trail = models.BooleanField(default=False)
-    closed_override = models.CharField(max_length=30, default=ClosedOverride.DEFAULT, choices=ClosedOverride.choices)
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)

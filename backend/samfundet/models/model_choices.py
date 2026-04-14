@@ -101,13 +101,6 @@ class SaksdokumentCategory(models.TextChoices):
     RADET = 'RADET', _('Rådet')
     ARSBERETNINGER = 'ARSBERETNINGER', _('Årsberetninger, regnskap og budsjettkunngjøringer')
 
-
-class ClosedOverride(models.TextChoices):
-    DEFAULT = 'default', 'Default'
-    CLOSED = 'closed', 'Closed'
-    OPEN = 'open', 'Open'
-
-
 class RecruitmentApplicantStates(models.IntegerChoices):
     # Mainly a descriptor
     # The lower, except 0, the least more likely to get this applicant

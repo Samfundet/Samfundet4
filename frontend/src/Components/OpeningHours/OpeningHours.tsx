@@ -4,8 +4,7 @@ import { toast } from 'react-toastify';
 import { TimeDuration } from '~/Components';
 import { Link } from '~/Components/Link/Link';
 import { Text } from '~/Components/Text/Text';
-import { getClosedPeriods } from '~/api';
-import { useGlobalContext } from '~/context/GlobalContextProvider';
+import { getActiveClosedPeriods } from '~/api';
 import type { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
@@ -21,32 +20,21 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
   const { t } = useTranslation();
   const [isClosed, setIsClosed] = useState<boolean>(false);
   const [closedText, setClosedText] = useState<string | undefined>(undefined);
-  const globalContext = useGlobalContext();
 
   useEffect(() => {
-    if (globalContext.closedOverride !== 'default') {
-      if (globalContext.closedOverride === 'closed') {
-        setIsClosed(true);
-        setClosedText(t(KEY.admin_closed_message));
-      }
-      return;
-    }
-    getClosedPeriods()
+    getActiveClosedPeriods()
       .then((periods) => {
-        const now = new Date();
-        for (const period of periods) {
-          if (new Date(period.start_dt) < now && now < new Date(period.end_dt)) {
-            setIsClosed(true);
-            setClosedText(dbT(period, 'message'));
-            return;
-          }
+        if (periods.length !== 0) {
+          setIsClosed(true);
+          setClosedText(dbT(periods[0], 'message'));
+          return;
         }
       })
       .catch((error) => {
         toast.error(t(KEY.common_something_went_wrong));
         console.error(error);
       });
-  }, [globalContext.closedOverride, t]);
+  }, [t]);
 
   if (isLoading) {
     return <Text>{t(KEY.common_loading)}</Text>;
