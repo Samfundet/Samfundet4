@@ -4,12 +4,16 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Textar
 import { KEY } from '~/i18n/constants';
 import styles from '../EventCreatorAdminPage.module.scss';
 import type { FormType } from '../hooks/useEventCreatorForm';
+import { CreateFromExistingEvent } from '../components/CreateFromExistingEvent';
 
 export function TextStep({ form }: { form: UseFormReturn<FormType> }) {
   const { t } = useTranslation();
 
   return (
     <>
+      <div className={styles.input_row}>
+        <CreateFromExistingEvent />
+      </div>
       <div className={styles.input_row}>
         <FormField
           key="title_nb"
