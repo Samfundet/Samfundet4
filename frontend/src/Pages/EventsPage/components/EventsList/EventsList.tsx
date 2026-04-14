@@ -37,8 +37,9 @@ export function EventsList({
   const [tableView, setTableView] = useState(false);
   const [query, setQuery] = useState('');
 
-  const eventCategoryOptions: DropdownOption<EventCategoryValue>[] = Object.values(EventCategory).map((category)=>({
-    value: category, label: t(getEventCategoryKey(category)),
+  const eventCategoryOptions: DropdownOption<EventCategoryValue>[] = Object.values(EventCategory).map((category) => ({
+    value: category,
+    label: t(getEventCategoryKey(category)),
   }));
 
   const venueOptions: DropdownOption<string | null>[] = (venues ?? []).map((venue) => {
