@@ -62,7 +62,6 @@
   }
 }
 
-
 .half {
   flex-basis: 50%;
   display: flex;
@@ -102,19 +101,10 @@
   gap: 0.25em;
 }
 
-
 .socialMediaLabel {
   font-weight: 600;
 }
 
 .socialMediaInput {
   height: 2.25em;
-}
-
-.gridItemFull {
-  grid-column: 1 / -1;
-}
-
-.gridItemFull .socialGrid {
-  max-width:max-content ;
 }

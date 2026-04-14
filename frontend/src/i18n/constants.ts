@@ -203,6 +203,7 @@ export const KEY = {
   common_available: 'common_available',
   common_comment: 'common_comment',
   common_capacity: 'common_capacity',
+  common_link: 'common_link',
 
   common_membership_number: 'common_membership_number',
   common_to_payment: 'common_to_payment',

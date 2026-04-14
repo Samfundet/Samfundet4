@@ -25,7 +25,7 @@ type Props = {
   form: UseFormReturn<FormType>;
 };
 
-const SOCIAL_KEYS: readonly SocialLinkKey[] = [
+export const SOCIAL_KEYS: readonly SocialLinkKey[] = [
   'spotify_uri',
   'youtube_link',
   'youtube_embed',
@@ -43,14 +43,14 @@ export function SocialMediaStep({ form }: Props) {
 
   const SOCIAL_LABELS: Record<SocialLinkKey, string> = {
     spotify_uri: 'Spotify URI',
-    youtube_link: 'YouTube link',
+    youtube_link: `YouTube ${t(KEY.common_link)}`,
     youtube_embed: 'YouTube embed',
-    facebook_link: 'Facebook link',
-    soundcloud_link: 'SoundCloud link',
-    instagram_link: 'Instagram link',
-    x_link: 'X link',
-    lastfm_link: 'Last.fm link',
-    vimeo_link: 'Vimeo link',
+    facebook_link: `Facebook ${t(KEY.common_link)}`,
+    soundcloud_link: `SoundCloud ${t(KEY.common_link)}`,
+    instagram_link: `Instagram ${t(KEY.common_link)}`,
+    x_link: `X ${t(KEY.common_link)}`,
+    lastfm_link: `Last.fm ${t(KEY.common_link)}`,
+    vimeo_link: `Vimeo ${t(KEY.common_link)}`,
     general_link: t(KEY.event_general_link),
   };
 

@@ -187,6 +187,7 @@ export const nb = prepareTranslations({
   [KEY.common_available]: 'Tilgjengelig',
   [KEY.common_comment]: 'Kommentar',
   [KEY.common_capacity]: 'Kapasitet',
+  [KEY.common_link]: 'Lenke',
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
@@ -902,6 +903,7 @@ export const en = prepareTranslations({
   [KEY.common_available]: 'Available',
   [KEY.common_comment]: 'Comment',
   [KEY.common_capacity]: 'Capacity',
+  [KEY.common_link]: 'Link',
   [KEY.common_membership_number]: 'Membership number',
   [KEY.common_to_payment]: 'To payment',
 
