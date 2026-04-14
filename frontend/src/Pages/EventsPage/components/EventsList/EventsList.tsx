@@ -10,8 +10,8 @@ import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import type { EventCategoryValue, SetState } from '~/types';
-import { dbT, lowerCapitalize } from '~/utils';
+import { EventCategory, type EventCategoryValue, type SetState } from '~/types';
+import { dbT, getEventCategoryKey, lowerCapitalize } from '~/utils';
 import styles from './EventsList.module.scss';
 
 type EventsListProps = {
@@ -37,9 +37,10 @@ export function EventsList({
   const [tableView, setTableView] = useState(false);
   const [query, setQuery] = useState('');
 
-  const categoryOptions: DropdownOption<string | null>[] = (categories ?? []).map((category) => {
-    return { label: category, value: category } as DropdownOption<string>;
-  });
+  const eventCategoryOptions: DropdownOption<EventCategoryValue>[] = Object.values(EventCategory).map((category)=>({
+    value: category, label: t(getEventCategoryKey(category)),
+  }));
+
   const venueOptions: DropdownOption<string | null>[] = (venues ?? []).map((venue) => {
     return { label: venue, value: venue } as DropdownOption<string>;
   });
@@ -145,7 +146,7 @@ export function EventsList({
             value={query}
           />
           <Dropdown
-            options={categoryOptions}
+            options={eventCategoryOptions}
             onChange={(val) => setSelectedCategory(val as EventCategoryValue)}
             className={styles.element}
             nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.event_type)}`) }}
