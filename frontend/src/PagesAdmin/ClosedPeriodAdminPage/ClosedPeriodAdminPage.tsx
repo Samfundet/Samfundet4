@@ -51,9 +51,11 @@ export function ClosedPeriodAdminPage() {
   }
 
   const header = (
-    <Button theme="success" rounded={true} link={ROUTES.frontend.admin_closed_create}>
-      {t(KEY.admin_closed_period_new_period)}
-    </Button>
+    <>
+      <Button theme="success" rounded link={ROUTES.frontend.admin_closed_create}>
+        {t(KEY.admin_closed_period_new_period)}
+      </Button>
+    </>
   );
   const backendUrl = ROUTES.backend.admin__samfundet_closedperiod_changelist;
 
@@ -67,21 +69,21 @@ export function ClosedPeriodAdminPage() {
       <div className={styles.tableContainer}>
         <Table
           columns={[
-            t(KEY.common_message) ?? '',
-            `Event ${t(KEY.common_message)}`,
+            `${t(KEY.common_message)} ${t(KEY.common_norwegian)}`,
+            `${t(KEY.common_message)} ${t(KEY.common_english)}`,
             t(KEY.start_time) ?? '',
             t(KEY.end_time) ?? '',
-            '',
+            t(KEY.common_edit) ?? '',
           ]}
           data={closedPeriods.map((element) => ({
             cells: [
-              element.message_no,
-              element.description_no,
+              element.message_nb,
+              element.message_en,
               { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
               { content: <TimeDisplay displayType="date" timestamp={element.end_dt} /> },
               {
                 content: (
-                  <div>
+                  <div className={styles.edit_buttons}>
                     <Button
                       theme="blue"
                       display="block"
@@ -98,7 +100,8 @@ export function ClosedPeriodAdminPage() {
                       display="block"
                       className={styles.smallButtons}
                       onClick={() => {
-                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_no}`)) {
+                        // :TODO: window.confirm should be replaced with a non-browser implementation (not built-in popup)
+                        if (window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_nb}`)) {
                           deleteSelectedEvent(element.id);
                         }
                       }}
