@@ -1,1 +1,1 @@
-export { WeeklyOpeningPage } from './WeeklyOpeningPage'
+export { WeeklyOpeningPage } from './WeeklyOpeningPage';
