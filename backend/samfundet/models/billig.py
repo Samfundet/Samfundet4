@@ -54,6 +54,17 @@ class BilligEvent(models.Model):
 
     # General info
     name = models.CharField(max_length=140, null=False, blank=False, db_column='event_name')
+    event_location = models.CharField(max_length=255, blank=True, null=True)
+    event_note = models.TextField(blank=True, null=True)
+    event_time = models.DateTimeField(blank=True, null=True)
+    event_type = models.CharField(max_length=255, blank=True, null=True)
+    external_id = models.IntegerField(blank=True, null=True)
+    organisation = models.IntegerField(blank=True, null=True)
+    a4_ticket_layout = models.IntegerField(blank=True, null=True)
+    receipt_ticket_layout = models.IntegerField(blank=True, null=True)
+    tp_ticket_layout = models.IntegerField(blank=True, null=True)
+    dave_id = models.IntegerField(blank=True, null=True)
+    dave_time_id = models.IntegerField(blank=True, null=True)
     sale_from = models.DateTimeField(blank=False, null=False)
     sale_to = models.DateTimeField(blank=False, null=False)
     hidden = models.BooleanField(blank=False, null=False)
@@ -66,7 +77,7 @@ class BilligEvent(models.Model):
         managed = False
         verbose_name = 'BilligEvent'
         verbose_name_plural = 'BilligEvents'
-        db_table = 'billig.event'
+        db_table = 'billig.event_lim_web'
 
     def __str__(self) -> str:
         return self.name
@@ -88,6 +99,8 @@ class BilligEvent(models.Model):
     def is_almost_sold_out(self) -> bool:
         total_tickets = sum(ticket.num for ticket in self.ticket_groups.all())
         total_sold = sum(ticket.num_sold for ticket in self.ticket_groups.all())
+        if total_tickets == 0:
+            return False
         return total_sold / total_tickets >= LIMIT_FOR_ALMOST_SOLD_OUT
 
     @staticmethod
@@ -112,6 +125,8 @@ class BilligTicketGroup(models.Model):
     may have something like "Dinner and concert" or "Just the concert"
     """
 
+    DEFAULT_TICKET_LIMIT = 9
+
     # The primary billig ticket group id
     id = models.IntegerField(null=False, blank=False, primary_key=True, db_column='ticket_group')
     name = models.CharField(max_length=140, blank=False, null=False, db_column='ticket_group_name')
@@ -131,8 +146,10 @@ class BilligTicketGroup(models.Model):
     num = models.PositiveIntegerField(blank=False, null=False)
     num_sold = models.PositiveIntegerField(blank=False, null=False)
 
+    is_theater_ticket_group = models.BooleanField(blank=False, null=False, default=False)
+
     # Maximum amount allowed to buy
-    ticket_limit = models.PositiveIntegerField(blank=False, null=False)
+    ticket_limit = models.PositiveIntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -155,6 +172,15 @@ class BilligTicketGroup(models.Model):
     def is_almost_sold_out(self) -> bool:
         percent_sold = self.num_sold / self.num
         return percent_sold >= LIMIT_FOR_ALMOST_SOLD_OUT
+
+    @property
+    def price_group_ticket_limit(self) -> int:
+        return self.ticket_limit if self.ticket_limit is not None else self.DEFAULT_TICKET_LIMIT
+
+    def group_ticket_limit(self, *, price_group_count: int) -> int:
+        if self.ticket_limit is not None:
+            return self.ticket_limit
+        return self.DEFAULT_TICKET_LIMIT * max(price_group_count, 1)
 
 
 # ======================== #
@@ -202,3 +228,72 @@ class BilligPriceGroup(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+
+class BilligPaymentError(models.Model):
+    error = models.CharField(max_length=64, primary_key=True)
+    failed = models.DateTimeField(blank=True, null=True)
+    owner_cardno = models.CharField(max_length=140, blank=True, null=True)
+    owner_email = models.CharField(max_length=254, blank=True, null=True)
+    message = models.TextField(blank=False, null=False)
+
+    class Meta:
+        managed = False
+        verbose_name = 'BilligPaymentError'
+        verbose_name_plural = 'BilligPaymentErrors'
+        db_table = 'billig.payment_error'
+
+
+class BilligTicketCard(models.Model):
+    card = models.BigIntegerField(primary_key=True)
+    owner_member_id = models.IntegerField(blank=True, null=True)
+    membership_ends = models.DateField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        verbose_name = 'BilligTicketCard'
+        verbose_name_plural = 'BilligTicketCards'
+        db_table = 'billig.ticket_card'
+
+
+class BilligPurchase(models.Model):
+    id = models.IntegerField(null=False, blank=False, primary_key=True, db_column='purchase')
+    owner_member_id = models.IntegerField(blank=True, null=True)
+    owner_email = models.CharField(max_length=254, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        verbose_name = 'BilligPurchase'
+        verbose_name_plural = 'BilligPurchases'
+        db_table = 'billig.purchase'
+
+
+class BilligTicket(models.Model):
+    id = models.IntegerField(null=False, blank=False, primary_key=True, db_column='ticket')
+    price_group = models.ForeignKey(
+        BilligPriceGroup,
+        blank=False,
+        null=False,
+        on_delete=models.DO_NOTHING,
+        related_name='tickets',
+        db_column='price_group',
+    )
+    purchase = models.ForeignKey(
+        BilligPurchase,
+        blank=False,
+        null=False,
+        on_delete=models.DO_NOTHING,
+        related_name='tickets',
+        db_column='purchase',
+    )
+    used = models.DateTimeField(blank=True, null=True)
+    refunded = models.DateTimeField(blank=True, null=True)
+    on_card = models.BooleanField(blank=False, null=False)
+    refunder = models.TextField(blank=True, null=True)
+    point_of_refund = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        verbose_name = 'BilligTicket'
+        verbose_name_plural = 'BilligTickets'
+        db_table = 'billig.ticket'
