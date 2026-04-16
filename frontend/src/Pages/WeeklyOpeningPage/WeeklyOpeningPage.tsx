@@ -1,8 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { Page } from '~/Components';
-import { TimeDuration } from '~/Components';
-import { Link } from '~/Components/Link/Link';
+import { Link, Page, TimeDuration } from '~/Components';
 import { getOpenVenues } from '~/api';
 import type { VenueDto } from '~/dto';
 import { useTitle } from '~/hooks';
