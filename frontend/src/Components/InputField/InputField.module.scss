@@ -12,6 +12,8 @@ $error-color: red;
   outline: none;
   font-weight: initial;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  background: $white;
+  color: $black;
   &:focus {
     border-color: $grey-3;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
@@ -22,6 +24,8 @@ $error-color: red;
   }
 
   @include theme-dark {
+    background: $theme-dark-input-bg;
+    color: $theme-dark-color;
     border-color: $grey-0;
     &:focus {
       border-color: $grey-1;
