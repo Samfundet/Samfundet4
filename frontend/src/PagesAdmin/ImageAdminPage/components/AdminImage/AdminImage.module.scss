@@ -10,6 +10,7 @@
   background-position: center;
   background-size: cover;
   transition: 0.2s;
+  position: relative;
   &:hover {
     transform: scale(1.02);
   }
@@ -31,4 +32,10 @@
     background-color: $black-t75;
     text-decoration: none;
   }
+}
+
+.editButtonWrapper {
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
 }

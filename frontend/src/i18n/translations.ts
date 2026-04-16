@@ -187,6 +187,12 @@ export const nb = prepareTranslations({
   [KEY.common_available]: 'Tilgjengelig',
   [KEY.common_comment]: 'Kommentar',
   [KEY.common_capacity]: 'Kapasitet',
+  [KEY.common_upload]: 'Last opp',
+  [KEY.common_replace]: 'Erstatt',
+  [KEY.common_image_linked_to_events]: 'Bildet er brukt i disse arrangementene',
+  [KEY.common_cannot_delete_image]:
+    'Bildet kan ikke slettes før alle disse arrangementene er slettet eller bildet erstattes.',
+  [KEY.common_confirm_image_delete]: 'Er du sikker på at du vil slette bildet?',
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
@@ -894,6 +900,13 @@ export const en = prepareTranslations({
   [KEY.common_available]: 'Available',
   [KEY.common_comment]: 'Comment',
   [KEY.common_capacity]: 'Capacity',
+  [KEY.common_replace]: 'Replace',
+  [KEY.common_upload]: 'Upload',
+  [KEY.common_image_linked_to_events]: 'The image is used in these events',
+  [KEY.common_cannot_delete_image]:
+    'The image cannot be deleted until all these events are deleted or the image is replaced.',
+  [KEY.common_confirm_image_delete]: 'Are you sure you want to delete the image?',
+
   [KEY.common_membership_number]: 'Membership number',
   [KEY.common_to_payment]: 'To payment',
 
