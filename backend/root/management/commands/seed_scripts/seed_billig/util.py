@@ -33,6 +33,10 @@ NEXT_PRICE_GROUP_ID = 0
 def create_event(
     *,
     name: str | None = None,
+    event_location: str | None = None,
+    event_note: str | None = None,
+    event_time: timezone.datetime | None = None,
+    event_type: str | None = None,
     sale_from: timezone.datetime | None = None,
     sale_to: timezone.datetime | None = None,
     hidden: bool | None = None,
@@ -48,11 +52,26 @@ def create_event(
     name = name or f'Billig - Dummy Event {NEXT_EVENT_ID}'
     sale_from = sale_from or timezone.now() + timezone.timedelta(days=random.randint(-90, 90))
     sale_to = sale_to or sale_from + timezone.timedelta(days=30)
+    event_time = event_time or sale_from + timezone.timedelta(days=7)
+    event_location = event_location or 'Storsalen'
+    event_note = event_note or ''
+    event_type = event_type or 'concert'
     hidden = random.randint(0, 25) == 0 if hidden is None else hidden
 
     return BilligEvent(
         id=NEXT_EVENT_ID,
         name=name,
+        event_location=event_location,
+        event_note=event_note,
+        event_time=event_time,
+        event_type=event_type,
+        external_id=None,
+        organisation=1,
+        a4_ticket_layout=None,
+        receipt_ticket_layout=None,
+        tp_ticket_layout=None,
+        dave_id=None,
+        dave_time_id=None,
         sale_from=sale_from,
         sale_to=sale_to,
         hidden=hidden,
@@ -79,7 +98,7 @@ def create_prices(ticket: BilligTicketGroup) -> list[BilligPriceGroup]:
                 name=f'Billig - Price Group {NEXT_PRICE_GROUP_ID}',
                 membership_needed=random.randint(0, 1) == 0,
                 can_be_put_on_card=random.randint(0, 10) != 0,
-                netsale=random.randint(0, 10) != 0,
+                netsale=True if not price_groups else random.randint(0, 10) != 0,
                 price=random.randint(50, 300),
             )
         )
@@ -107,7 +126,8 @@ def create_tickets(event: BilligEvent) -> list[BilligTicketGroup]:
                 id=NEXT_TICKET_GROUP_ID,
                 event=event,
                 name=f'Billig - Ticket Group {NEXT_TICKET_GROUP_ID}',
-                ticket_limit=random.randint(1, 5),
+                is_theater_ticket_group=random.randint(0, 5) == 0,
+                ticket_limit=None if random.randint(0, 1) == 0 else random.randint(1, 5),
                 num_sold=num_sold,
                 num=num,
             )

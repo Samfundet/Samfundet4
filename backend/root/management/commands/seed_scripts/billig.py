@@ -17,7 +17,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from samfundet.models.event import Event, EventTicketType
-from samfundet.models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
+from samfundet.models.billig import BilligEvent, BilligPriceGroup, BilligTicketCard, BilligTicketGroup
 
 from .seed_billig import util
 
@@ -61,6 +61,10 @@ def create_db() -> tuple[bool, str]:
 
 def seed_tables() -> Iterable[tuple[int, str]]:
     events, tickets, prices = [], [], []
+    ticket_cards = [
+        BilligTicketCard(card=100000 + i, owner_member_id=i, membership_ends=timezone.now().date() + timezone.timedelta(days=365))
+        for i in range(1, 26)
+    ]
 
     # Create a few billig events that are not used
     events.extend([util.create_event() for _ in range(COUNT)])
@@ -76,6 +80,10 @@ def seed_tables() -> Iterable[tuple[int, str]]:
             # Create billig event
             billig_event = util.create_event(
                 name=f'Billig - {event.title_nb}',
+                event_location=event.location,
+                event_note=event.description_short_nb,
+                event_time=event.start_dt,
+                event_type='samfundet',
                 sale_from=event.start_dt - timezone.timedelta(days=90),
                 sale_to=event.start_dt + timezone.timedelta(minutes=30),
                 hidden=False,
@@ -98,11 +106,14 @@ def seed_tables() -> Iterable[tuple[int, str]]:
     BilligEvent.objects.bulk_create(events)
     yield 80, 'Saved events'
 
+    BilligTicketCard.objects.bulk_create(ticket_cards)
+    yield 85, 'Saved ticket cards'
+
     # Create and save ticket groups
     for event in events:
         tickets.extend(util.create_tickets(event))
     BilligTicketGroup.objects.bulk_create(tickets)
-    yield 90, 'Saved tickets'
+    yield 90, 'Saved ticket groups'
 
     # Create and save price groups
     for ticket in tickets:
