@@ -67,6 +67,9 @@ export const ROUTES_FRONTEND = {
   admin_information: '/control-panel/information/',
   admin_information_edit: '/control-panel/information/edit/:slugField/',
   admin_information_create: '/control-panel/information/create/',
+  admin_infobox: '/control-panel/infobox/',
+  admin_infobox_create: '/control-panel/infobox/create/',
+  admin_infobox_edit: '/control-panel/infobox/edit/:id/',
   // Opening hours:
   admin_opening_hours: '/control-panel/opening-hours/',
   // Closed periods:

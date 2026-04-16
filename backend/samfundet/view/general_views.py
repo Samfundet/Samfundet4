@@ -236,7 +236,11 @@ class InformationPageView(ModelViewSet):
 
 
 class InfoboxView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.INFOBOX
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = InfoboxSerializer
     queryset = Infobox.objects.all()
 

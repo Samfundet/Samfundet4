@@ -584,7 +584,7 @@ class ClosedPeriodAdmin(CustomBaseAdmin):
     # list_select_related = True
 
 
-@register_if_feature_enabled(WebFeatures.INFORMATION, Infobox)
+@register_if_feature_enabled(WebFeatures.INFOBOX, Infobox)
 class InfoboxAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id', 'title_nb']

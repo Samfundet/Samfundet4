@@ -191,6 +191,8 @@ export type EventDto = {
 };
 
 export type EventWriteDto = {
+  status?: EventStatus;
+
   title_nb: string;
   title_en: string;
   description_long_nb: string;
@@ -243,6 +245,17 @@ export type InformationPageDto = {
 
   title_en?: string;
   text_en?: string;
+};
+
+export type InfoboxDto = {
+  id: number;
+  title_nb?: string;
+  text_nb?: string;
+  title_en: string;
+  text_en: string;
+  color: string;
+  url?: string | null;
+  image?: number | null;
 };
 
 export type ReservationTableDto = {

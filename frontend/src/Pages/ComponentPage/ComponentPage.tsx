@@ -65,7 +65,7 @@ export function ComponentPage() {
       visibility_from_dt: new Date().toISOString(),
       visibility_to_dt: '',
       start_dt: new Date().toISOString(),
-      status: 'active',
+      status: 'public',
       ticket_type: 'free',
       title_en: 'Von August with a very long title just like this // 23:59',
       title_nb: 'Von August // 23:59',
