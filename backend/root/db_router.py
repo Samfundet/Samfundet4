@@ -12,7 +12,11 @@ from django.db import models
 from samfundet.models.mdb import MedlemsInfo
 from samfundet.models.billig import (
     BilligEvent,
+    BilligPaymentError,
     BilligPriceGroup,
+    BilligPurchase,
+    BilligTicket,
+    BilligTicketCard,
     BilligTicketGroup,
 )
 
@@ -21,6 +25,10 @@ BILLIG_MODELS: list[type[models.Model]] = [
     BilligEvent,
     BilligTicketGroup,
     BilligPriceGroup,
+    BilligPaymentError,
+    BilligTicketCard,
+    BilligPurchase,
+    BilligTicket,
 ]
 
 # List of models routed to mdb database.
