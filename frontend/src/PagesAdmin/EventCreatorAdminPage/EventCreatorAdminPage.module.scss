@@ -87,3 +87,17 @@
   padding-bottom: 3.75em;
   gap: 0.5em;
 }
+
+.search_bar {
+  width: 25em;
+  @include for-tablet-down {
+    width: 15em;
+  }
+  @include for-mobile-only {
+    width: 100%;
+  }
+}
+
+.search_bar_field {
+  border: 1px solid $grey-3;
+}
