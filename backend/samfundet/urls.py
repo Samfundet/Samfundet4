@@ -96,6 +96,7 @@ urlpatterns = [
     path('billig/event/<int:event_id>/tickets/', billig_views.BilligEventTicketsView.as_view(), name='event_tickets'),
     path('billig/callback/success/', billig_views.BilligPurchaseSuccessView.as_view(), name='purchase_success'),
     path('billig/callback/failure/', billig_views.BilligPurchaseFailureView.as_view(), name='purchase_failure'),
+    path('billig/dev/pay/', billig_views.BilligDevPayView.as_view(), name='purchase_dev_pay'),
     ########## Lyche ##########
     path('check-reservation/', samfundet.view.sulten_views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
     path('reservations/', samfundet.view.sulten_views.ReservationCreateView.as_view(), name='reservation-create'),
