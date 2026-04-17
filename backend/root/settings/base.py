@@ -38,6 +38,8 @@ ALLOWED_HOSTS: list[str] = []
 
 ENV = os.environ.get('ENV')
 
+BILLIG_PAYMENT_URL = os.environ.get('BILLIG_PAYMENT_URL', 'https://billettsalg.samfundet.no/pay')
+
 # Static
 STATIC_ROOT = BASE_DIR / 'staticroot'
 STATIC_URL = '/static/'
