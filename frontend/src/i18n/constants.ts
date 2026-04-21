@@ -305,6 +305,13 @@ export const KEY = {
   stripe_info: 'stripe_info',
   pay_info: 'pay_info',
   sales_conditions: 'sales_conditions',
+  ticket_card_unavailable_message: 'ticket_card_unavailable_message',
+  ticket_requires_membership_message: 'ticket_requires_membership_message',
+  ticket_invalid_seat_selection_message: 'ticket_invalid_seat_selection_message',
+  ticket_missing_seat_selection_message: 'ticket_missing_seat_selection_message',
+  ticket_seat_selection_title: 'ticket_seat_selection_title',
+  ticket_seat_selection_hint: 'ticket_seat_selection_hint',
+  ticket_seat_selection_placeholder: 'ticket_seat_selection_placeholder',
 
   event_external_host_message: 'event_external_host_message',
 

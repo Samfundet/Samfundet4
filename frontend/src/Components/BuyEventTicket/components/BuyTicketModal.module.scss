@@ -47,6 +47,14 @@
   flex-direction: column;
 }
 
+.ticket_group_section {
+  margin-bottom: 1rem;
+}
+
+.ticket_group_title {
+  margin-bottom: 0.5rem;
+}
+
 .ticket_select {
   display: flex;
   border-bottom: 1px solid $grey-4;
@@ -79,6 +87,14 @@
   flex-direction: column;
 }
 
+.seat_selection_block {
+  padding: 0.75rem 0 0.25rem;
+}
+
+.seat_selection_title {
+  margin-bottom: 0.25rem;
+}
+
 .ticket_type_field {
   display: flex;
   flex-direction: column;
@@ -103,6 +119,12 @@
 .link {
   color: $red-samf;
   text-decoration: none;
+}
+
+.terms_link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: $red-samf;
 }
 
 .total_price {
@@ -134,4 +156,10 @@
 
 .ticketless_description_p {
   font-size: 0.75rem;
+}
+
+.validation_notice {
+  margin: 0 1rem;
+  color: $red;
+  font-size: 0.85rem;
 }
