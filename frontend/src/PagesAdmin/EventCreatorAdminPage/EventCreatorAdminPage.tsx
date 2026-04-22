@@ -64,7 +64,7 @@ export function EventCreatorAdminPage() {
   });
 
   const stepComponentMap: Record<StepKey, ReactElement> = {
-    text: <TextStep form={form} />,
+    text: <TextStep form={form} defaultCategory={eventCategoryOptions[0]?.value ?? EventCategory.ART} defaultLocation={locationOptions[0]?.value ?? ''}/>,
     info: <InfoStep form={form} eventCategoryOptions={eventCategoryOptions} locationOptions={locationOptions} />,
     payment: <PaymentStep form={form} ageLimitOptions={ageLimitOptions} />,
     graphics: <GraphicsStep form={form} />,

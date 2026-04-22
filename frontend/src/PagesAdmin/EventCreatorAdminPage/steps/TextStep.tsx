@@ -4,15 +4,47 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Textar
 import { KEY } from '~/i18n/constants';
 import styles from '../EventCreatorAdminPage.module.scss';
 import type { FormType } from '../hooks/useEventCreatorForm';
-import { CreateFromExistingEvent } from '../components/CreateFromExistingEvent';
+import { EventTemplateSearch } from '../components/EventTemplateSearch';
+import { EventCategoryValue } from '~/types';
+import { useQuery } from '@tanstack/react-query';
+import { getEvents } from '~/api';
+import { mapEventToFormValues } from '../utils';
+import { EventDto } from '~/dto';
 
-export function TextStep({ form }: { form: UseFormReturn<FormType> }) {
+type Props = {
+  form: UseFormReturn<FormType>;
+  defaultCategory: EventCategoryValue;
+  defaultLocation: string;
+};
+
+export function TextStep({ form, defaultCategory, defaultLocation }: Props) {
   const { t } = useTranslation();
+  const { data: events = [] } = useQuery({
+    queryKey: ['events'],
+    queryFn: getEvents,
+  })
+
+  function handleSelectedEvent(selectedEvent: EventDto) {
+      form.reset(
+          mapEventToFormValues({
+              event: selectedEvent,
+              defaultCategory,
+              defaultLocation,
+              forTemplate: true,
+          }),
+      );
+  }
 
   return (
     <>
       <div className={styles.input_row}>
-        <CreateFromExistingEvent />
+        <div className={styles.form_item}>
+          <label className={styles.form_label}>Lag event fra eksisterende</label>
+          <EventTemplateSearch
+            events={events}
+            onSelectEvent={handleSelectedEvent}
+          />
+          </div>
       </div>
       <div className={styles.input_row}>
         <FormField
