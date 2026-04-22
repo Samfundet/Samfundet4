@@ -1,17 +1,16 @@
 import { useMemo, useState } from "react";
-import { eventQuery } from "~/Components/EventQuery/utils";
 import { InputField } from "~/Components/InputField/InputField";
 import { EventDto } from "~/dto";
 import styles from '../EventCreatorAdminPage.module.scss'
 import { dbT } from "~/utils";
 import { useTranslation } from "react-i18next";
 
-type CreateFromExistingEventListProp = {
+type EventTemplateSearchProp = {
   events: EventDto[];
   onSelectEvent: (event: EventDto) => void;
 };
 
-export function CreateFromExistingEvent({ events, onSelectEvent }: CreateFromExistingEventListProp) {
+export function EventTemplateSearch({ events, onSelectEvent }: EventTemplateSearchProp) {
     const { t, i18n } = useTranslation();
     const [query, setQuery] = useState('');
     const filteredEvents = useMemo(() =>{
@@ -22,7 +21,7 @@ export function CreateFromExistingEvent({ events, onSelectEvent }: CreateFromExi
               const title = (dbT(event, 'title', i18n.language) as string)?.toLowerCase() ?? '';
               return keywords.every((kw) => title.includes(kw));
         });
-    }, [events, query])
+    }, [events, query, i18n.language]);
     // TODO: add translations
     return (
         <div className={styles.create_from_existing_event}>
