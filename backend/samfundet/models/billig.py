@@ -63,8 +63,6 @@ class BilligEvent(models.Model):
     a4_ticket_layout = models.IntegerField(blank=True, null=True)
     receipt_ticket_layout = models.IntegerField(blank=True, null=True)
     tp_ticket_layout = models.IntegerField(blank=True, null=True)
-    dave_id = models.IntegerField(blank=True, null=True)
-    dave_time_id = models.IntegerField(blank=True, null=True)
     sale_from = models.DateTimeField(blank=False, null=False)
     sale_to = models.DateTimeField(blank=False, null=False)
     hidden = models.BooleanField(blank=False, null=False)
