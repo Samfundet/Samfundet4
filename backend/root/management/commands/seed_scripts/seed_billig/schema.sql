@@ -29,8 +29,6 @@ CREATE TABLE "billig.event" (
     a4_ticket_layout int,
     receipt_ticket_layout int,
     tp_ticket_layout int,
-    dave_id int,
-    dave_time_id int,
     sale_from timestamp NOT NULL,
     sale_to timestamp NOT NULL,
     hidden boolean NOT NULL,
@@ -50,8 +48,6 @@ SELECT
     a4_ticket_layout,
     receipt_ticket_layout,
     tp_ticket_layout,
-    dave_id,
-    dave_time_id,
     sale_from,
     sale_to,
     hidden

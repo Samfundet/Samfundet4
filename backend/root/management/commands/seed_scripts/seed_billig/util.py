@@ -70,8 +70,6 @@ def create_event(
         a4_ticket_layout=None,
         receipt_ticket_layout=None,
         tp_ticket_layout=None,
-        dave_id=None,
-        dave_time_id=None,
         sale_from=sale_from,
         sale_to=sale_to,
         hidden=hidden,
