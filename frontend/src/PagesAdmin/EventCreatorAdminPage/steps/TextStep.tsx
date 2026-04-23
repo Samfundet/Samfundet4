@@ -23,6 +23,7 @@ export function TextStep({ form, defaultCategory, defaultLocation, isEditMode }:
   const { data: events = [] } = useQuery({
     queryKey: ['events'],
     queryFn: getEvents,
+    enabled: !isEditMode,
   })
 
   function handleSelectedEvent(selectedEvent: EventDto) {
