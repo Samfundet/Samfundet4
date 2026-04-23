@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputField } from '~/Components/InputField/InputField';
@@ -46,10 +47,14 @@ export function EventTemplateSearch({ events, onSelectEvent }: EventTemplateSear
       />
       {selectedEvent && (
         <div className={styles.selected_event_info}>
+          <Icon icon="material-symbols:check-circle" className={styles.selected_event_icon} />
           <span className={styles.selected_event_text}>
-            {t(KEY.event_selected_existing_event)}: <strong>{dbT(selectedEvent, 'title', i18n.language)}</strong>
-            {' · '}
-            {new Date(selectedEvent.start_dt).toLocaleDateString(i18n.language)}
+            {t(KEY.event_selected_existing_event)}: <strong>{dbT(selectedEvent, 'title', i18n.language)}</strong>{' '}
+            {new Intl.DateTimeFormat('nb-NO', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+            }).format(new Date(selectedEvent.start_dt))}
           </span>
         </div>
       )}

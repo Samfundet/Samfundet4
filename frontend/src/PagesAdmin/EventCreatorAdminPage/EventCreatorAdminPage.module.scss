@@ -4,6 +4,8 @@
 
 @use 'src/constants' as *;
 
+@use 'src/styles/colors' as c;
+
 .header {
   font-size: 2em;
   font-weight: 700;
@@ -99,7 +101,6 @@
 }
 
 .create_from_existing_event {
-  width: 100%;
   position: relative;
 }
 
@@ -108,7 +109,7 @@
   top: calc(100% + 0.4rem);
   width: 100%;
   z-index: 20;
-  border: 1px solid #d9d9d9;
+  border: 1px solid c.$gray-200;
   border-radius: 6px;
   background: white;
   max-height: 220px;
@@ -129,11 +130,11 @@
 }
 
 .search_result_item:not(:last-child) {
-  border-bottom: 1px solid #ececec;
+  border-bottom: 1px solid c.$gray-100;
 }
 
 .search_result_item:hover {
-  background: #f5f5f5;
+  background: c.$white-950
 }
 
 .search_result_title {
@@ -142,32 +143,30 @@
 
 .search_result_meta {
   font-size: 0.9rem;
-  color: #666666;
+  color: c.$gray-600;
 }
 
 .selected_event_info {
-  width: 100%;
   margin-top: 0.4rem;
   padding: 0.55rem 0.75rem;
-  border: 1px solid #d9d9d9;
+  border: 1px solid c.$green-100;
   border-radius: 6px;
-  background: white;
+  background: c.$green-200;
   display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+  align-items: center;
+  gap: 0.5rem;
   box-sizing: border-box;
 }
 
-.selected_event_label {
-  font-size: 0.85rem;
-  color: #666666;
-}
-
-.selected_event_title {
-  font-weight: 600;
-}
-
-.selected_event_meta {
+.selected_event_text {
   font-size: 0.9rem;
-  color: #666666;
+  color: c.$gray-950;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.selected_event_icon {
+  color: $green;
+  flex-shrink: 0;
 }
