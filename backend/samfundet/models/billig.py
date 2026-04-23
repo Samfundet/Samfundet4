@@ -241,6 +241,9 @@ class BilligPaymentError(models.Model):
         verbose_name_plural = 'BilligPaymentErrors'
         db_table = 'billig.payment_error'
 
+    def __str__(self) -> str:
+        return self.error
+
 
 class BilligTicketCard(models.Model):
     card = models.BigIntegerField(primary_key=True)
@@ -253,6 +256,9 @@ class BilligTicketCard(models.Model):
         verbose_name_plural = 'BilligTicketCards'
         db_table = 'billig.ticket_card'
 
+    def __str__(self) -> str:
+        return str(self.card)
+
 
 class BilligPurchase(models.Model):
     id = models.IntegerField(null=False, blank=False, primary_key=True, db_column='purchase')
@@ -264,6 +270,9 @@ class BilligPurchase(models.Model):
         verbose_name = 'BilligPurchase'
         verbose_name_plural = 'BilligPurchases'
         db_table = 'billig.purchase'
+
+    def __str__(self) -> str:
+        return str(self.id)
 
 
 class BilligTicket(models.Model):
@@ -295,3 +304,6 @@ class BilligTicket(models.Model):
         verbose_name = 'BilligTicket'
         verbose_name_plural = 'BilligTickets'
         db_table = 'billig.ticket'
+
+    def __str__(self) -> str:
+        return str(self.id)
