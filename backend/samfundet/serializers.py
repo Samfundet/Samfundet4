@@ -65,6 +65,7 @@ from .models.recruitment import (
     RecruitmentInterviewAvailability,
     RecruitmentPositionSharedInterviewGroup,
 )
+from .models.site_banner import SiteBanner
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 if TYPE_CHECKING:
@@ -302,6 +303,21 @@ class ClosedPeriodSerializer(CustomBaseSerializer):
     class Meta:
         model = ClosedPeriod
         fields = '__all__'
+
+
+class SiteBannerSerializer(CustomBaseSerializer):
+    class Meta:
+        model = SiteBanner
+        fields = [
+            'id',
+            'version',
+            'text_nb',
+            'text_en',
+            'url',
+            'new_tab',
+            'start_at',
+            'end_at',
+        ]
 
 
 class ChangePasswordSerializer(serializers.Serializer):

@@ -48,6 +48,7 @@ import type {
   RoleDto,
   RoleUsersDto,
   SaksdokumentDto,
+  SiteBannerDto,
   TextItemDto,
   UserDto,
   UserPreferenceDto,
@@ -154,6 +155,12 @@ export async function getHomeData(): Promise<HomePageDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__home;
   const response = await axios.get<HomePageDto>(url, { withCredentials: true });
 
+  return response.data;
+}
+
+export async function getActiveSiteBanner(): Promise<SiteBannerDto | null> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__site_banners_active;
+  const response = await axios.get<SiteBannerDto | null>(url, { withCredentials: true });
   return response.data;
 }
 
