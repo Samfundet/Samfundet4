@@ -5,7 +5,6 @@ import type { z } from 'zod';
 
 import type { EventDto, EventWriteDto } from '~/dto';
 import type { EventCategoryValue } from '~/types';
-import { utcTimestampToLocal } from '~/utils';
 import { eventSchema } from '../EventCreatorSchema';
 import { mapEventToFormValues } from '../utils';
 

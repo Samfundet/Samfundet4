@@ -98,10 +98,6 @@
   }
 }
 
-.search_bar_field {
-  border: 1px solid $grey-3;
-}
-
 .create_from_existing_event {
   width: 100%;
   position: relative;
@@ -110,7 +106,6 @@
 .search_results {
   position: absolute;
   top: calc(100% + 0.4rem);
-  left: 0;
   width: 100%;
   z-index: 20;
   border: 1px solid #d9d9d9;
@@ -147,7 +142,7 @@
 
 .search_result_meta {
   font-size: 0.9rem;
-  color: #666;
+  color: #666666;
 }
 
 .selected_event_info {
@@ -165,7 +160,7 @@
 
 .selected_event_label {
   font-size: 0.85rem;
-  color: #666;
+  color: #666666;
 }
 
 .selected_event_title {
@@ -174,5 +169,5 @@
 
 .selected_event_meta {
   font-size: 0.9rem;
-  color: #666;
+  color: #666666;
 }
