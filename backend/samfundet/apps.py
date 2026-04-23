@@ -16,7 +16,7 @@ class SamfundetConfig(AppConfig):
     name = 'samfundet'
 
     def ready(self) -> None:
-        from . import signals  # noqa: F401, PLC0415 # Important, this enables signals.
+        from . import signals  # noqa: F401 # Important, this enables signals.
 
         if os.environ['ENV'] == Environment.DEV:
             try:
