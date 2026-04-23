@@ -14,7 +14,10 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from django.http import HttpResponse
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.feedgenerator import Rss201rev2Feed
 
 from root.constants import WebFeatures
 from root.custom_classes.permission_classes import FeatureEnabled, RoleProtectedOrAnonReadOnlyObjectPermissions
@@ -135,3 +138,56 @@ class PurchaseFeedbackView(CreateAPIView):
                 form=purchase_model,
             )
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+class SamfundetRssFeed(Rss201rev2Feed):
+    def __init__(self, *args, **kwargs):
+        self._feed_url = kwargs.get('feed_url')
+        super().__init__(*args, **kwargs)
+
+    def root_attributes(self):
+        attrs = super().root_attributes()
+        attrs['xmlns:atom'] = 'http://www.w3.org/2005/Atom'
+        return attrs
+
+    def writeString(self, encoding):
+        """Override to add atom:link with rel='self'"""
+        feed_str = super().writeString(encoding)
+        # Insert atom:link after <rss>
+        atom_link = f'<atom:link href="{self._feed_url}" rel="self" type="application/rss+xml" />'
+        rss_open = '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">'
+        feed_str = feed_str.replace(rss_open, rss_open + '\n' + atom_link, 1)
+        return feed_str
+
+
+class EventRSSView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request) -> HttpResponse:
+        now = timezone.now()
+        events = Event.objects.filter(
+            start_dt__gt=now,
+            visibility_from_dt__lte=now,
+            visibility_to_dt__gte=now,
+            status=EventStatus.PUBLIC,
+        ).order_by('start_dt')[:20]
+
+        feed = SamfundetRssFeed(
+            title='Samfundet Events',
+            link=request.build_absolute_uri('/'),
+            description='Upcoming public Samfundet events',
+            language='en',
+            feed_url=request.build_absolute_uri(),  # Add feed_url for atom:link
+        )
+
+        for event in events:
+            event_url = request.build_absolute_uri(reverse('samfundet:events-detail', args=[event.pk]))
+            feed.add_item(
+                title=event.title_nb,
+                link=event_url,
+                description=event.description_short_nb or event.description_short_en,
+                pubdate=event.start_dt,
+                unique_id=event_url,  # Use full URL as GUID
+            )
+
+        return HttpResponse(feed.writeString('utf-8'), content_type='application/rss+xml; charset=utf-8')

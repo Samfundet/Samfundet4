@@ -85,6 +85,7 @@ urlpatterns = [
     path('users-search-paginated/', samfundet.view.user_views.PaginatedSearchUsersView.as_view(), name='users_search_paginated'),
     path('impersonate/', samfundet.view.user_views.ImpersonateView.as_view(), name='impersonate'),
     path('events-per-day/', samfundet.view.event_views.EventPerDayView.as_view(), name='eventsperday'),
+    path('events/rss/', samfundet.view.event_views.EventRSSView.as_view(), name='events_rss'),
     path('events-upcomming/', samfundet.view.event_views.EventsUpcomingView.as_view(), name='eventsupcomming'),
     path('isclosed/', samfundet.view.general_views.IsClosedView().as_view(), name='isclosed'),
     path('home/', samfundet.view.general_views.HomePageView().as_view(), name='home'),

@@ -18,6 +18,7 @@ from django.contrib.auth.models import Group, Permission
 from root.utils import routes, permissions
 
 from samfundet.serializers import UserSerializer, RegisterSerializer
+from samfundet.models.event import Event
 from samfundet.models.general import (
     Gang,
     User,
@@ -38,7 +39,7 @@ from samfundet.models.recruitment import (
     RecruitmentPosition,
     RecruitmentApplication,
 )
-from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+from samfundet.models.model_choices import EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 if TYPE_CHECKING:
     from rest_framework.test import APIClient
@@ -53,6 +54,35 @@ def test_csrf(fixture_rest_client: APIClient):
     url = reverse(routes.samfundet__csrf)
     response: Response = fixture_rest_client.get(path=url)
     assert status.is_success(code=response.status_code)
+
+
+def test_events_rss_feed(fixture_rest_client: APIClient, fixture_image: Image):
+    now = timezone.now()
+    Event.objects.create(
+        title_nb='RSS Event',
+        title_en='RSS Event',
+        start_dt=now + timezone.timedelta(minutes=5),
+        end_dt=now + timezone.timedelta(hours=1),
+        visibility_from_dt=now - timezone.timedelta(hours=1),
+        visibility_to_dt=now + timezone.timedelta(days=1),
+        description_long_nb='RSS description',
+        description_long_en='RSS description',
+        description_short_nb='RSS short description',
+        description_short_en='RSS short description',
+        location='location',
+        host='host',
+        image=fixture_image,
+        age_restriction=EventAgeRestriction.AGE_18,
+        capacity=100,
+    )
+
+    response: Response = fixture_rest_client.get(path='/events/rss/')
+
+    assert status.is_success(code=response.status_code)
+    assert response['Content-Type'].startswith('application/rss+xml')
+    assert b'<rss' in response.content
+    assert b'RSS Event' in response.content
+    assert b'RSS short description' in response.content
 
 
 class TestUserViews:
