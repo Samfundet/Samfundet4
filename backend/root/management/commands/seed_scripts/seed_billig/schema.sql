@@ -6,7 +6,6 @@
 */
 
 /* Drop Tables */
-DROP VIEW IF EXISTS "billig.event_lim_web";
 DROP TABLE IF EXISTS "billig.ticket";
 DROP TABLE IF EXISTS "billig.payment_error_price_group";
 DROP TABLE IF EXISTS "billig.price_group";
@@ -14,10 +13,10 @@ DROP TABLE IF EXISTS "billig.purchase";
 DROP TABLE IF EXISTS "billig.ticket_card";
 DROP TABLE IF EXISTS "billig.ticket_group";
 DROP TABLE IF EXISTS "billig.payment_error";
-DROP TABLE IF EXISTS "billig.event";
+DROP TABLE IF EXISTS "billig.event_lim_web";
 
 /* Billig Event */
-CREATE TABLE "billig.event" (
+CREATE TABLE "billig.event_lim_web" (
     event int NOT NULL,
     event_name varchar(140) NOT NULL,
     event_location varchar(255),
@@ -29,29 +28,12 @@ CREATE TABLE "billig.event" (
     a4_ticket_layout int,
     receipt_ticket_layout int,
     tp_ticket_layout int,
+    ticket_fee int,
     sale_from timestamp NOT NULL,
     sale_to timestamp NOT NULL,
     hidden boolean NOT NULL,
     PRIMARY KEY (event)
 );
-
-CREATE VIEW "billig.event_lim_web" AS
-SELECT
-    event,
-    event_name,
-    event_location,
-    event_note,
-    event_time,
-    event_type,
-    external_id,
-    organisation,
-    a4_ticket_layout,
-    receipt_ticket_layout,
-    tp_ticket_layout,
-    sale_from,
-    sale_to,
-    hidden
-FROM "billig.event";
 
 /* Ticket Group */
 CREATE TABLE "billig.ticket_group" (
@@ -63,7 +45,7 @@ CREATE TABLE "billig.ticket_group" (
     num_sold int NOT NULL,
     num int NOT NULL,
     PRIMARY KEY (ticket_group),
-    FOREIGN KEY (event) REFERENCES "billig.event"(event)
+    FOREIGN KEY (event) REFERENCES "billig.event_lim_web"(event)
 );
 
 /* Price Group */

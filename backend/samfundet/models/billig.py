@@ -17,10 +17,9 @@ from django.utils import timezone
 # to the following tables in billig, although only some are used (*):
 #
 # public.kort
-# billig.event (*)
+# billig.event_lim_web (*)
 # billig.ticket
 # billig.price_group (*)
-# billig.event_lim_web
 # billig.ticket_card
 # billig.ticket_group (*)
 # billig.event_type
@@ -63,6 +62,7 @@ class BilligEvent(models.Model):
     a4_ticket_layout = models.IntegerField(blank=True, null=True)
     receipt_ticket_layout = models.IntegerField(blank=True, null=True)
     tp_ticket_layout = models.IntegerField(blank=True, null=True)
+    ticket_fee = models.IntegerField(blank=True, null=True)
     sale_from = models.DateTimeField(blank=False, null=False)
     sale_to = models.DateTimeField(blank=False, null=False)
     hidden = models.BooleanField(blank=False, null=False)
