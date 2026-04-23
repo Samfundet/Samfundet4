@@ -17,7 +17,7 @@ def initialize_debugpy() -> None:
     This may be called in wsgi.py if hosting with gunicorn or in manage.py::__main__.
     """
     if os.environ.get('ENABLE_DEBUGPY') == 'yes':
-        import debugpy # noqa: PLC0415, I001
+        import debugpy  # noqa: PLC0415, I001
 
         # This is okay as long as ENABLE_DEBUGPY only is enabled during development and NOT in production.
         HOST = '0.0.0.0'  # noqa: N806, S104
