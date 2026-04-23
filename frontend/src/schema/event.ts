@@ -11,7 +11,15 @@ export const EVENT_DURATION = z.number().min(1, { message: KEY.event_form_durati
 export const EVENT_END_DT = z.string().optional();
 export const EVENT_HOST = z.string().min(1, { message: KEY.event_form_host_required });
 export const EVENT_LOCATION = z.string().min(1, { message: KEY.event_form_location_required });
-export const EVENT_CAPACITY = z.number().min(1, { message: KEY.event_form_capacity_min }).optional();
+export const EVENT_CAPACITY = z.preprocess((value) => {
+  if (value === '' || value === undefined || value === null) {
+    return undefined;
+  }
+  if (typeof value === 'string') {
+    return Number.parseInt(value, 10);
+  }
+  return value;
+}, z.number().min(1, { message: KEY.event_form_capacity_min }).optional());
 export const EVENT_VISIBILITY_FROM_DT = z.string().min(1, { message: KEY.event_form_visibility_from_required });
 export const EVENT_VISIBILITY_TO_DT = z.string().optional();
 export const EVENT_PAID_OPTION = z.string().url().optional();
