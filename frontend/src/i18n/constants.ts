@@ -290,6 +290,9 @@ export const KEY = {
   event_registration_url: 'event_registration_url',
   event_add_ticket: 'event_add_ticket',
   event_invalid_form_error: 'event_invalid_form_error',
+  event_create_from_existing_event: 'event_create_from_existing_event',
+  event_search_for_an_existing_event: 'event_search_for_an_existing_event',
+  event_selected_existing_event: 'event_selected_existing_event',
 
   // Purchase Ticket Info:
   invalid_email_message: 'invalid_email_message',

@@ -41,8 +41,8 @@ export function TextStep({ form, defaultCategory, defaultLocation, isEditMode }:
     <>
       {!isEditMode && (
       <div className={styles.input_row}>
-        <div className={styles.form_item}>
-          <label className={styles.form_label}>Lag event fra eksisterende</label>
+        <div className={styles.template_search_wrapper}>
+          <label className={styles.form_label}>{t(KEY.event_create_from_existing_event)}</label>
           <EventTemplateSearch
             events={events}
             onSelectEvent={handleSelectedEvent}
