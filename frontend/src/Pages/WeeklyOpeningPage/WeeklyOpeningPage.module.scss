@@ -1,0 +1,31 @@
+@use 'src/mixins' as *;
+
+@use 'src/constants' as *;
+
+//TODO: Add styling
+//I won't do it rn because the issue says to focus on functionality and it'll probably be redesigned in the future anyways
+
+.timeTable {
+    margin : 0 auto 0 auto;
+    width: 60%;
+}
+
+.tableRow {
+    min-width: 10%; //Dummy value, will be changed for the redisign
+}
+
+.tableHeader {
+    min-width: 10%; //Dummy value, will be changed for the redisign
+}
+
+.tableData {
+    min-width: 10%; //Dummy value, will be changed for the redisign
+}
+
+.tableParagraph {
+    min-width: 10%; //Dummy value, will be changed for the redisign
+}
+
+.tableTime {
+    min-width: 10%; //Dummy value, will be changed for the redisign
+}
