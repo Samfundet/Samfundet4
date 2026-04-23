@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useLayoutEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getActiveSiteBanner } from '~/api';
 import { useScrollY } from '~/hooks';
 import { siteBannerKeys } from '~/queryKeys';
@@ -12,6 +13,7 @@ type Props = {
 
 export function SiteBanner({ hideAfterPx = 1000 }: Props): JSX.Element | null {
   const ref = useRef<HTMLDivElement | null>(null);
+  const { i18n } = useTranslation();
   const scrollY = useScrollY();
   const isCoveredByNavbar = scrollY > hideAfterPx;
 
@@ -57,7 +59,7 @@ export function SiteBanner({ hideAfterPx = 1000 }: Props): JSX.Element | null {
 
   if (!visibleBanner) return null;
 
-  const content = <span className={styles.text}>{dbT(visibleBanner, 'text')}</span>;
+  const content = <span className={styles.text}>{dbT(visibleBanner, 'text', i18n.language)}</span>;
 
   return (
     <div ref={ref} className={styles.banner} role="status" aria-live="polite">
