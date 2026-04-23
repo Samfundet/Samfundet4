@@ -21,5 +21,8 @@ class SiteBannerView(ReadOnlyModelViewSet):
 
     @decorators.action(detail=False, methods=['get'], url_path='active')
     def active(self, request: Request) -> Response:
-        serializer = self.get_serializer(self.get_queryset(), many=True)
+        banner = self.get_queryset().first()
+        if banner is None:
+            return Response(None)
+        serializer = self.get_serializer(banner)
         return Response(serializer.data)

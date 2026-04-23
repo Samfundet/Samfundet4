@@ -295,7 +295,6 @@ class SiteBannerSerializer(CustomBaseSerializer):
             'text_en',
             'url',
             'new_tab',
-            'is_active',
             'start_at',
             'end_at',
         ]

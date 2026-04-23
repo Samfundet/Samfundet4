@@ -5,7 +5,7 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1100;
+  z-index: 11;
   background: $red-samf;
   color: $white;
   display: flex;
@@ -13,18 +13,6 @@
   align-items: center;
   padding: 0.5rem 1rem;
   overflow: hidden;
-  transition:
-    max-height 180ms ease,
-    opacity 180ms ease,
-    padding-top 80ms ease
-}
-
-.hidden {
-  max-height: 0;
-  opacity: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  pointer-events: none;
 }
 
 .content {
@@ -47,13 +35,6 @@
   text-overflow: ellipsis;
 }
 
-.links {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
-}
-
 .link {
   color: inherit;
   text-decoration: underline;
@@ -74,10 +55,5 @@
     white-space: normal;
     overflow-wrap: anywhere;
     word-break: break-word;
-  }
-
-  .links {
-    flex-wrap: wrap;
-    justify-content: center;
   }
 }

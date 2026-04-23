@@ -45,7 +45,7 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
 #navbar_container {
   position: fixed;
   top: var(--site-banner-offset, 0);
-  transition: top 150ms ease;
+  transition: top 260ms ease-out;
   width: 100%;
   height: $navbar-height;
   background: $navbar-bg-dark;
@@ -56,6 +56,10 @@ $navbar-link-transparent-hover-gradient-bottom: transparent;
   z-index: 12;
   white-space: nowrap;
   box-shadow: 0 0 25px 5px rgba(0, 0, 0, 0);
+}
+
+:global(.site-banner-covered) #navbar_container {
+  top: 0;
 }
 
 .navbar_inner {
