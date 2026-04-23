@@ -12,12 +12,12 @@ from django.db import models
 from samfundet.models.mdb import MedlemsInfo
 from samfundet.models.billig import (
     BilligEvent,
-    BilligPaymentError,
-    BilligPriceGroup,
-    BilligPurchase,
     BilligTicket,
+    BilligPurchase,
+    BilligPriceGroup,
     BilligTicketCard,
     BilligTicketGroup,
+    BilligPaymentError,
 )
 
 # List of models routed to billig database.
