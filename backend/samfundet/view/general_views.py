@@ -48,6 +48,7 @@ from samfundet.serializers import (
     InformationPageSerializer,
     UserGangSectionRoleSerializer,
 )
+from samfundet.models.event import Event
 from samfundet.models.general import (
     Tag,
     Gang,
@@ -109,6 +110,13 @@ class ImageView(ModelViewSet):
     pagination_class = CustomPageNumberPagination
     filter_backends = [SearchFilter]
     search_fields = ['title']
+
+    @action(detail=True, methods=['get'])
+    def linked_events(self, request: Request, pk: int | None = None) -> Response:
+        """Get all events that use this image."""
+        image = self.get_object()
+        events = Event.objects.filter(image=image).values('id', 'title_en', 'title_nb', 'start_dt')
+        return Response(data=list(events))
 
 
 # Image tags

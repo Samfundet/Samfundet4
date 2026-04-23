@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
@@ -33,6 +33,8 @@ import { TextStep } from './steps/TextStep';
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
+  const location = useLocation();
+  const reactNavigate = useNavigate();
   const [event, setEvent] = useState<Partial<EventDto>>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
@@ -86,6 +88,16 @@ export function EventCreatorAdminPage() {
       setShowSpinner(false);
     }
   }, [id, t]);
+
+  // Handle navigation after successful edit
+  useEffect(() => {
+    if (editEventMutation.isSuccess && id) {
+      const from = location.state?.from;
+      if (from) {
+        reactNavigate(from);
+      }
+    }
+  }, [editEventMutation.isSuccess, id, location.state, reactNavigate]);
 
   // ================================== //
   //          Creation Steps            //

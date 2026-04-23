@@ -611,10 +611,67 @@ export async function postImage(data: ImagePostDto): Promise<ImageDto> {
   return response.data;
 }
 
-export async function putImage(id: string | number, data: Partial<ImageDto>): Promise<AxiosResponse> {
+export async function putImage(
+  id: string | number,
+  data: { title?: string; tag_string?: string },
+): Promise<AxiosResponse> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
-  const response = await axios.put<ImageDto>(url, data, { withCredentials: true });
+  const formData = new FormData();
+  if (data.title) {
+    formData.append('title', data.title);
+  }
+  if (data.tag_string) {
+    formData.append('tag_string', data.tag_string);
+  }
+  const response = await axios.putForm<ImageDto>(url, formData, { withCredentials: true });
   return response;
+}
+
+export async function patchImage(
+  id: string | number,
+  data: { title?: string; tag_string?: string },
+): Promise<ImageDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
+  const response = await axios.patch<ImageDto>(url, data, { withCredentials: true });
+  return response.data;
+}
+
+export async function replaceImageFile(
+  id: string | number,
+  file: File,
+  title?: string,
+  tagString?: string,
+): Promise<ImageDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
+  const formData = new FormData();
+  formData.append('file', file);
+  if (title) {
+    formData.append('title', title);
+  }
+  if (tagString) {
+    formData.append('tag_string', tagString);
+  }
+  const response = await axios.putForm<ImageDto>(url, formData, { withCredentials: true });
+  return response.data;
+}
+
+export async function deleteImage(id: string | number): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
+  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
+  return response;
+}
+
+export type LinkedEventDto = {
+  id: number;
+  title_en: string;
+  title_nb: string;
+  start_dt: string;
+};
+
+export async function getImageLinkedEvents(id: string | number): Promise<LinkedEventDto[]> {
+  const url = `${BACKEND_DOMAIN}${reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } })}linked_events/`;
+  const response = await axios.get<LinkedEventDto[]>(url, { withCredentials: true });
+  return response.data;
 }
 
 /** Fetch all KeyValues from backend. */
