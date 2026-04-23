@@ -5,8 +5,8 @@ import type { z } from 'zod';
 
 import type { EventDto, EventWriteDto } from '~/dto';
 import type { EventCategoryValue } from '~/types';
-import { utcTimestampToLocal } from '~/utils';
 import { eventSchema } from '../EventCreatorSchema';
+import { mapEventToFormValues } from '../utils';
 
 export type FormType = z.infer<typeof eventSchema>;
 
@@ -54,30 +54,11 @@ export function useEventCreatorForm(params: {
   const resetValues = useMemo<FormType | undefined>(() => {
     if (!event?.id) return undefined;
 
-    const duration = computeDurationMinutes(event.start_dt, event.end_dt);
-
-    return {
-      title_nb: event.title_nb || '',
-      title_en: event.title_en || '',
-      description_long_nb: event.description_long_nb || '',
-      description_long_en: event.description_long_en || '',
-      description_short_nb: event.description_short_nb || '',
-      description_short_en: event.description_short_en || '',
-      start_dt: event.start_dt ? utcTimestampToLocal(event.start_dt, false) : '',
-      duration: duration || undefined,
-      end_dt: event.end_dt ? utcTimestampToLocal(event.end_dt, false) : '',
-      category: event.category || defaultCategory,
-      host: event.host || '',
-      location: event.location || defaultLocation,
-      capacity: event.capacity || undefined,
-      age_restriction: event.age_restriction || 'none',
-      ticket_type: event.ticket_type || 'free',
-      custom_tickets: event.custom_tickets || [],
-      billig_id: event.billig?.id,
-      image: event.image ?? undefined,
-      visibility_from_dt: event.visibility_from_dt ? utcTimestampToLocal(event.visibility_from_dt, false) : '',
-      visibility_to_dt: event.visibility_to_dt ? utcTimestampToLocal(event.visibility_to_dt, false) : '',
-    };
+    return mapEventToFormValues({
+      event,
+      defaultCategory,
+      defaultLocation,
+    });
   }, [event, defaultCategory, defaultLocation]);
 
   useEffect(() => {
