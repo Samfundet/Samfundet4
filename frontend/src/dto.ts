@@ -233,7 +233,6 @@ export type UserPreferenceDto = {
   theme: ThemeValue;
   mirror_dimension: boolean;
   cursor_trail: boolean;
-  closed_override: string;
 };
 
 export type InformationPageDto = {
