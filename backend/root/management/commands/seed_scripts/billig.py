@@ -62,8 +62,7 @@ def create_db() -> tuple[bool, str]:
 def seed_tables() -> Iterable[tuple[int, str]]:
     events, tickets, prices = [], [], []
     ticket_cards = [
-        BilligTicketCard(card=100000 + i, owner_member_id=i, membership_ends=timezone.now().date() + timezone.timedelta(days=365))
-        for i in range(1, 26)
+        BilligTicketCard(card=100000 + i, owner_member_id=i, membership_ends=timezone.now().date() + timezone.timedelta(days=365)) for i in range(1, 26)
     ]
 
     # Create a few billig events that are not used
