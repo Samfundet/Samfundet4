@@ -15,9 +15,10 @@ type Props = {
   form: UseFormReturn<FormType>;
   defaultCategory: EventCategoryValue;
   defaultLocation: string;
+  isEditMode: boolean;
 };
 
-export function TextStep({ form, defaultCategory, defaultLocation }: Props) {
+export function TextStep({ form, defaultCategory, defaultLocation, isEditMode }: Props) {
   const { t } = useTranslation();
   const { data: events = [] } = useQuery({
     queryKey: ['events'],
@@ -37,6 +38,7 @@ export function TextStep({ form, defaultCategory, defaultLocation }: Props) {
 
   return (
     <>
+      {!isEditMode && (
       <div className={styles.input_row}>
         <div className={styles.form_item}>
           <label className={styles.form_label}>Lag event fra eksisterende</label>
@@ -44,8 +46,9 @@ export function TextStep({ form, defaultCategory, defaultLocation }: Props) {
             events={events}
             onSelectEvent={handleSelectedEvent}
           />
-          </div>
+        </div>
       </div>
+      )}
       <div className={styles.input_row}>
         <FormField
           key="title_nb"
