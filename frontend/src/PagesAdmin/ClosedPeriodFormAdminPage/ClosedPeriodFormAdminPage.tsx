@@ -1,31 +1,44 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { SamfForm } from '~/Forms/SamfForm';
-import { SamfFormField } from '~/Forms/SamfFormField';
+import { z } from 'zod';
+import { Button, Form, FormField, FormItem, FormLabel, Input, Textarea } from '~/Components';
+import { FormControl, FormMessage } from '~/Components/Forms/Form';
 import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { DATE, MESSAGE } from '~/schema/closedPeriod';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
-
-type formType = {
-  message_nb: string;
-  message_en: string;
-  start_dt: string;
-  end_dt: string;
-};
 
 export function ClosedPeriodFormAdminPage() {
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
   const { id } = useParams();
 
-  const min_length_message = 10;
+  const schema = z
+    .object({
+      message_nb: MESSAGE,
+      message_en: MESSAGE,
+      start_dt: DATE,
+      end_dt: DATE,
+    })
+    .refine((data) => data.end_dt > data.start_dt, {
+      message: t(KEY.admin_closed_period_end_before_start),
+      path: ['end_dt'],
+    });
+
+  type formType = z.infer<typeof schema>;
+
+  const form = useForm<formType>({
+    resolver: zodResolver(schema),
+  });
 
   const {
     data: initialData,
@@ -72,7 +85,7 @@ export function ClosedPeriodFormAdminPage() {
     },
   });
 
-  function handleOnSubmit(data: formType) {
+  function onSubmit(data: formType) {
     if (id) {
       updateMutation.mutate(data);
     } else {
@@ -80,46 +93,82 @@ export function ClosedPeriodFormAdminPage() {
     }
   }
 
-  const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
+  useEffect(() => {
+    if (initialData) {
+      form.reset(initialData);
+    }
+  }, [initialData, form]);
+
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
   useTitle(title);
 
   return (
     <AdminPageLayout title={title} loading={isLoading} header={true}>
-      <SamfForm<formType> onSubmit={handleOnSubmit} initialData={initialData}>
-        <div className={styles.row}>
-          <SamfFormField
-            validator={(state: formType) => state.message_nb.length > min_length_message}
-            field="message_nb"
-            required={true}
-            type="text_long"
-            label={`${labelMessage} (${t(KEY.common_norwegian)})`}
-          />
-          <SamfFormField
-            validator={(state: formType) => state.message_en.length > min_length_message}
-            field="message_en"
-            required={true}
-            type="text_long"
-            label={`${labelMessage} (${t(KEY.common_english)})`}
-          />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField
-            validator={(state: formType) => (state.end_dt ? new Date(state.start_dt) <= new Date(state.end_dt) : true)}
-            field="start_dt"
-            type="date"
-            label={`${t(KEY.start_time)}`}
-          />
-          <SamfFormField
-            validator={(state: formType) =>
-              state.start_dt ? new Date(state.start_dt) <= new Date(state.end_dt) : true
-            }
-            field="end_dt"
-            type="date"
-            label={`${t(KEY.end_time)}`}
-          />
-        </div>
-      </SamfForm>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
+          <div className={styles.container}>
+            <FormField
+              control={form.control}
+              name="message_nb"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t(KEY.common_message)} {t(KEY.common_norwegian)}
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea placeholder={`${t(KEY.common_message)} ${t(KEY.common_norwegian)}`} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="message_en"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t(KEY.common_message)} {t(KEY.common_english)}
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea placeholder={`${t(KEY.common_message)} ${t(KEY.common_english)}`} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className={styles.container}>
+            <FormField
+              control={form.control}
+              name="start_dt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.start_date)}</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="end_dt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.end_date)}</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <Button type="submit">{t(KEY.common_save)}</Button>
+        </form>
+      </Form>
     </AdminPageLayout>
   );
 }
