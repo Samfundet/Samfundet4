@@ -2,17 +2,6 @@
 
 @use 'src/constants' as *;
 
-.row {
-  display: flex;
-  flex-direction: column;
-  margin-top: 0.5em;
-  gap: 1.5em;
-
-  @include for-tablet-up {
-    flex-direction: row;
-  }
-}
-
 .container {
   display: flex;
   flex-direction: row;
