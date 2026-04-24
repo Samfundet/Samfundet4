@@ -551,12 +551,36 @@ export async function putGang(id: string | number, data: Partial<GangDto>): Prom
   return response;
 }
 
+/**
+ * returns an array of all closedPeriods
+ */
 export async function getClosedPeriods(): Promise<ClosedPeriodDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__closedperiods_list;
   const response = await axios.get<ClosedPeriodDto[]>(url, { withCredentials: true });
   return response.data;
 }
 
+/**
+ * Returns a list of all currently active/closed closedPeriods, Samfundet is open if the array is empty
+ */
+export async function getActiveClosedPeriods(): Promise<ClosedPeriodDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__isclosed;
+  const response = await axios.get<ClosedPeriodDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
+/**
+ * Returns only if Samfundet is currently closed but not the closedPeriod responsible
+ */
+export async function getIsClosed(): Promise<boolean> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__isclosed;
+  const response = await axios.get<ClosedPeriodDto[]>(url, { withCredentials: true });
+  return (response.data as Array<ClosedPeriodDto>).length !== 0;
+}
+
+/**
+ * get a closedPeriod by id
+ */
 export async function getClosedPeriod(id: string | number): Promise<ClosedPeriodDto> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
@@ -564,6 +588,9 @@ export async function getClosedPeriod(id: string | number): Promise<ClosedPeriod
   return response.data;
 }
 
+/**
+ * edit a already existing closedPeriod
+ */
 export async function putClosedPeriod(id: string | number, data: Partial<ClosedPeriodDto>): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
@@ -571,12 +598,18 @@ export async function putClosedPeriod(id: string | number, data: Partial<ClosedP
   return response;
 }
 
-export async function postClosedPeriod(data: ClosedPeriodDto): Promise<ClosedPeriodDto> {
+/**
+ * create a new closedPeriod
+ */
+export async function postClosedPeriod(data: Partial<ClosedPeriodDto>): Promise<ClosedPeriodDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__closedperiods_list;
   const response = await axios.post<ClosedPeriodDto>(url, data, { withCredentials: true });
   return response.data;
 }
 
+/**
+ * delete a closedPeriod by id
+ */
 export async function deleteClosedPeriod(id: string | number): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });

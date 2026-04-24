@@ -1,110 +1,174 @@
-import type { AxiosError } from 'axios';
-import { useEffect, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { SamfForm } from '~/Forms/SamfForm';
-import { SamfFormField } from '~/Forms/SamfFormField';
-import { getClosedPeriod } from '~/api';
+import { z } from 'zod';
+import { Button, Form, FormField, FormItem, FormLabel, Input, Textarea } from '~/Components';
+import { FormControl, FormMessage } from '~/Components/Forms/Form';
+import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
 import { useCustomNavigate, useTitle } from '~/hooks';
-import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import { DATE, MESSAGE } from '~/schema/closedPeriod';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
-
-type formType = {
-  message_no: string;
-  message_en: string;
-  description_no: string;
-  description_en: string;
-  start_dt: Date;
-  end_dt: Date;
-};
 
 export function ClosedPeriodFormAdminPage() {
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
-
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  // const [closedPeriod, setClosedPeriod] = useState<ClosedPeriodDto | undefined>(undefined); For posting
-  const [initialData, setInitialData] = useState<formType | undefined>(undefined);
-
-  // If form has a id, check if it exists, and then load that item.
   const { id } = useParams();
 
-  // Stuff to do on first render.
-  // TODO add permissions on render
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
+  const schema = z
+    .object({
+      message_nb: MESSAGE,
+      message_en: MESSAGE,
+      start_dt: DATE,
+      end_dt: DATE,
+    })
+    .refine((data) => data.end_dt > data.start_dt, {
+      message: t(KEY.admin_closed_period_end_before_start),
+      path: ['end_dt'],
+    });
+
+  type formType = z.infer<typeof schema>;
+
+  const form = useForm<formType>({
+    resolver: zodResolver(schema),
+  });
+
+  const {
+    data: initialData,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['closed-period', id],
+    queryFn: () => getClosedPeriod(id as string),
+    enabled: !!id,
+    select: (data) => ({
+      message_nb: data.message_nb,
+      message_en: data.message_en,
+      start_dt: data.start_dt,
+      end_dt: data.end_dt,
+    }),
+  });
+
   useEffect(() => {
-    // TODO add fix on no id on editpage
-    if (id === undefined) {
-      setShowSpinner(false);
-      return;
+    if (isError) {
+      navigate({ url: ROUTES.frontend.admin_closed, replace: true });
+      toast.error(t(KEY.common_something_went_wrong));
     }
+  }, [isError, t, navigate]);
 
-    getClosedPeriod(id)
-      .then((data) => {
-        // setClosedPeriod(data); For posting
-        setInitialData({
-          message_no: data.message_no,
-          message_en: data.message_en,
-          description_no: data.description_no,
-          description_en: data.description_en,
-          start_dt: new Date(data.start_dt),
-          end_dt: new Date(data.end_dt),
-        });
-        setShowSpinner(false);
-      })
-      .catch((data: AxiosError) => {
-        // TODO add error pop up message?
-        if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-          navigate({ url: ROUTES.frontend.admin_closed, replace: true });
-        }
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(data);
-      });
-  }, [id]);
+  const updateMutation = useMutation({
+    mutationFn: (data: formType) => putClosedPeriod(id as string, data),
+    onSuccess: () => {
+      toast.success(t(KEY.common_update_successful));
+      navigate({ url: reverse({ pattern: ROUTES.frontend.admin_closed }) });
+    },
+    onError: () => {
+      toast.error(t(KEY.common_something_went_wrong));
+    },
+  });
 
-  function handleOnSubmit(data: formType) {
-    if (id !== undefined) {
-      // TODO patch data
+  const createMutation = useMutation({
+    mutationFn: (data: formType) => postClosedPeriod(data),
+    onSuccess: () => {
+      toast.success(t(KEY.common_creation_successful));
+      navigate({ url: reverse({ pattern: ROUTES.frontend.admin_closed }) });
+    },
+    onError: () => {
+      toast.error(t(KEY.common_something_went_wrong));
+    },
+  });
+
+  function onSubmit(data: formType) {
+    if (id) {
+      updateMutation.mutate(data);
     } else {
-      // TODO post data
+      createMutation.mutate(data);
     }
-    alert('TODO Submit');
-    console.log(JSON.stringify(data));
   }
 
-  const labelMessage = `${t(KEY.common_message)} under '${t(KEY.common_opening_hours)}'`;
-  const labelDescription = `${t(KEY.common_description)} under '${t(KEY.common_whatsup)}'`;
+  useEffect(() => {
+    if (initialData) {
+      form.reset(initialData);
+    }
+  }, [initialData, form]);
+
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
   useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true}>
-      <SamfForm onSubmit={handleOnSubmit} initialData={initialData}>
-        <div className={styles.row}>
-          <SamfFormField field="message_no" type="text_long" label={`${labelMessage} (${t(KEY.common_norwegian)})`} />
-          <SamfFormField field="message_en" type="text_long" label={`${labelMessage} (${t(KEY.common_english)})`} />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField
-            field="description_no"
-            type="text_long"
-            label={`${labelDescription} (${t(KEY.common_norwegian)})`}
-          />
-          <SamfFormField
-            field="description_en"
-            type="text_long"
-            label={`${labelDescription} (${t(KEY.common_english)})`}
-          />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField field="start_dt" type="date" label={`${t(KEY.start_time)}`} />
-          <SamfFormField field="end_dt" type="date" label={`${t(KEY.end_time)}`} />
-        </div>
-      </SamfForm>
+    <AdminPageLayout title={title} loading={isLoading} header={true}>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
+          <div className={styles.container}>
+            <FormField
+              control={form.control}
+              name="message_nb"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t(KEY.common_message)} {t(KEY.common_norwegian)}
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea placeholder={`${t(KEY.common_message)} ${t(KEY.common_norwegian)}`} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="message_en"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t(KEY.common_message)} {t(KEY.common_english)}
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea placeholder={`${t(KEY.common_message)} ${t(KEY.common_english)}`} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className={styles.container}>
+            <FormField
+              control={form.control}
+              name="start_dt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.start_date)}</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="end_dt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.end_date)}</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <Button type="submit">{t(KEY.common_save)}</Button>
+        </form>
+      </Form>
     </AdminPageLayout>
   );
 }
