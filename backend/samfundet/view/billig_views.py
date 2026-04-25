@@ -20,6 +20,19 @@ from root.custom_classes.billig_service import BilligService
 from samfundet.models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from samfundet.serializers import BilligEventSerializer, BilligPriceGroupSerializer, BilligTicketGroupSerializer
 
+
+def build_frontend_callback_url(path: str) -> str:
+    frontend_base_url = getattr(settings, 'BILLIG_FRONTEND_BASE_URL', '')
+    if frontend_base_url:
+        return f'{frontend_base_url.rstrip("/")}{path}'
+
+    allowed_origins = getattr(settings, 'CORS_ALLOWED_ORIGINS', [])
+    if allowed_origins:
+        return f'{allowed_origins[0].rstrip("/")}{path}'
+
+    return path
+
+
 class BilligEventReadOnlyModelViewSet(ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = BilligEventSerializer
@@ -91,15 +104,9 @@ class BilligPurchaseSuccessView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, format=None):
-        callback_data = request.GET.dict()
-
-        return Response(
-            {
-                'success': True,
-                'message': 'Billig payment callback received.',
-                'callback_data': callback_data,
-            }
-        )
+        tickets = request.GET.get('tickets', '').strip()
+        status_url = build_frontend_callback_url(f'/arrangement/billetter/status/{tickets}/')
+        return HttpResponseRedirect(status_url)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -108,14 +115,29 @@ class BilligPurchaseFailureView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, format=None):
-        callback_data = request.GET.dict()
-        return Response(
-            {
-                'success': False,
-                'message': 'Billig payment failure callback received.',
-                'callback_data': callback_data,
-            }
-        )
+        query_string = urlencode(request.GET.dict())
+        failure_url = build_frontend_callback_url('/arrangement/billetter/handlekurv/')
+        if query_string:
+            failure_url = f'{failure_url}?{query_string}'
+        return HttpResponseRedirect(failure_url)
+
+
+class BilligPurchaseSuccessDataView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, format=None):
+        ticket_refs = [ticket.strip() for ticket in request.GET.get('tickets', '').split(',') if ticket.strip()]
+        return Response(BilligService.get_success_context(ticket_refs))
+
+
+class BilligPurchaseFailureDataView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, format=None):
+        bsession = str(request.GET.get('bsession', '')).strip()
+        if not bsession:
+            return Response({'error': 'Missing bsession'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(BilligService.get_payment_error_context(bsession))
 
 
 @method_decorator(csrf_exempt, name='dispatch')

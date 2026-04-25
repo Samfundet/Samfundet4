@@ -302,6 +302,8 @@ export const ROUTES_BACKEND = {
   samfundet__event_tickets: '/billig/event/:eventId/tickets/',
   samfundet__purchase_success: '/billig/callback/success/',
   samfundet__purchase_failure: '/billig/callback/failure/',
+  samfundet__purchase_success_data: '/billig/callback/success-data/',
+  samfundet__purchase_failure_data: '/billig/callback/failure-data/',
   samfundet__check_reservation: '/check-reservation/',
   samfundet__reservation_create: '/reservations/',
   samfundet__mdb_connect: '/mdb/connect',

@@ -163,3 +163,14 @@
   color: $red;
   font-size: 0.85rem;
 }
+
+.info_notice {
+  margin: 0 1rem;
+  color: $grey-1;
+  font-size: 0.85rem;
+  line-height: 1.45;
+
+  @include theme-dark {
+    color: $grey-4;
+  }
+}

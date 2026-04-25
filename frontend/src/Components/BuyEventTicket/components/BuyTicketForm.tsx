@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -18,7 +18,7 @@ import {
   RadioButton,
 } from '~/Components';
 import { validEmail } from '~/Forms/util';
-import { prepareBilligPurchase, submitBilligForm } from '~/apis/billig/billigApi';
+import { BILLIG_PURCHASE_CONTEXT_KEY, prepareBilligPurchase, submitBilligForm } from '~/apis/billig/billigApi';
 import type { BilligPriceGroupDto, BilligTicketGroupDto } from '~/apis/billig/billigDtos';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
@@ -84,6 +84,7 @@ type BuyTicketFormType = z.infer<ReturnType<typeof createBuyTicketFormSchema>>;
 
 interface BuyTicketFormProps {
   event: EventDto;
+  initialValues?: Partial<BuyTicketFormType>;
 }
 
 function toTicketGroups(event: EventDto): BilligTicketGroupOption[] {
@@ -143,7 +144,7 @@ function parseSeatSelection(rawSelection: string): number[] | null {
   return seatIds;
 }
 
-export function BuyTicketForm({ event }: BuyTicketFormProps) {
+export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const ticketGroups = useMemo(() => toTicketGroups(event), [event]);
   const ticketOptions = useMemo(
@@ -177,16 +178,31 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
     [ticketGroups],
   );
 
+  const defaultValues = useMemo(
+    () => ({
+      ticketQuantities: {
+        ...ticketQuantityDefaults,
+        ...(initialValues?.ticketQuantities ?? {}),
+      },
+      seatSelections: {
+        ...seatSelectionDefaults,
+        ...(initialValues?.seatSelections ?? {}),
+      },
+      ticketType: initialValues?.ticketType ?? TICKET_TYPE_MEMBERSHIP,
+      email: initialValues?.email ?? '',
+      membershipNumber: initialValues?.membershipNumber ?? '',
+    }),
+    [initialValues, seatSelectionDefaults, ticketQuantityDefaults],
+  );
+
   const form = useForm<BuyTicketFormType>({
     resolver: zodResolver(createBuyTicketFormSchema(t)),
-    defaultValues: {
-      ticketQuantities: ticketQuantityDefaults,
-      seatSelections: seatSelectionDefaults,
-      ticketType: TICKET_TYPE_MEMBERSHIP,
-      email: '',
-      membershipNumber: '',
-    },
+    defaultValues,
   });
+
+  useEffect(() => {
+    form.reset(defaultValues);
+  }, [defaultValues, form]);
 
   const ticketQuantities = useWatch({ control: form.control, name: 'ticketQuantities' });
   const ticketType = useWatch({ control: form.control, name: 'ticketType' }) ?? TICKET_TYPE_MEMBERSHIP;
@@ -254,6 +270,15 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
       email: data.ticketType === TICKET_TYPE_EMAIL ? data.email : undefined,
       membercard: data.ticketType === TICKET_TYPE_MEMBERSHIP ? data.membershipNumber : undefined,
     });
+
+    sessionStorage.setItem(
+      BILLIG_PURCHASE_CONTEXT_KEY,
+      JSON.stringify({
+        event,
+        paymentUrl: preparedPurchase.payment_url,
+        selectedSeats,
+      }),
+    );
 
     submitBilligForm({
       paymentUrl: preparedPurchase.payment_url,
@@ -382,7 +407,7 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
                 <p className={styles.validation_notice}>{t(KEY.ticket_card_unavailable_message)}</p>
               )}
               {ticketType === TICKET_TYPE_EMAIL && selectedTicketsRequireMembership && (
-                <p className={styles.validation_notice}>{t(KEY.ticket_requires_membership_message)}</p>
+                <p className={styles.info_notice}>{t(KEY.ticket_requires_membership_message)}</p>
               )}
 
               {ticketType === TICKET_TYPE_MEMBERSHIP && (
