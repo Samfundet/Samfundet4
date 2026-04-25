@@ -18,6 +18,7 @@ DEBUG = True
 
 # Ensure correct ENV
 ENV = Environment.DEV
+BILLIG_PAYMENT_URL = os.environ.get('BILLIG_PAYMENT_URL', 'http://localhost:8000/billig/dev/pay/')
 
 ### CORS ###
 CORS_ALLOWED_ORIGINS = [

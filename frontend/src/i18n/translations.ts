@@ -322,6 +322,15 @@ export const nb = prepareTranslations({
   [KEY.stripe_info]: 'Betalingen håndteres av Stripe.',
   [KEY.pay_info]: 'Alle priser er i norske kroner og er inkludert alle avgifter.',
   [KEY.sales_conditions]: 'Kjøp forutsetter at kunden godtar salgsbetingelsene.',
+  [KEY.ticket_card_unavailable_message]:
+    'Valgte billetter kan ikke legges på medlemskort. Bruk e-postlevering i stedet.',
+  [KEY.ticket_requires_membership_message]:
+    'Valgte billetter krever medlemskap. Ved e-postlevering må du vise gyldig medlemskap i døra.',
+  [KEY.ticket_invalid_seat_selection_message]: 'Oppgi gyldige setenummer separert med komma.',
+  [KEY.ticket_missing_seat_selection_message]: 'Oppgi ett setenummer per teaterbillett.',
+  [KEY.ticket_seat_selection_title]: 'Setevalg',
+  [KEY.ticket_seat_selection_hint]: 'Oppgi {{count}} setenummer separert med komma.',
+  [KEY.ticket_seat_selection_placeholder]: 'For eksempel 12, 13',
 
   // Venue Page:
   [KEY.venuepage_title]: 'Kart og lokaler',
@@ -656,6 +665,32 @@ export const nb = prepareTranslations({
   [KEY.feedback_type_heading]: 'Vi ønsker din tilbakemelding på samfundet.no',
   [KEY.feedback_your_feedback]: 'Din tilbakemelding',
   [KEY.feedback_thank_you_for_feedback]: 'Takk for din tilbakemelding',
+  [KEY.billig_callback_status_title]: 'Kjøp fullført',
+  [KEY.billig_callback_status_lead]: 'Billettene er registrert. Du kan laste dem ned her eller vente på e-post.',
+  [KEY.billig_callback_tickets_heading]: 'Billetter',
+  [KEY.billig_callback_summary_heading]: 'Oversikt',
+  [KEY.billig_callback_ticket_count]: 'Antall billetter',
+  [KEY.billig_callback_total_price]: 'Totalpris',
+  [KEY.billig_callback_download_pdf]: 'Last ned PDF',
+  [KEY.billig_callback_missing_ticket_details]: 'Fant ingen billettdetaljer for denne returen.',
+  [KEY.billig_callback_on_card]: 'På kort',
+  [KEY.billig_callback_email_delivery]: 'På e-post',
+  [KEY.billig_callback_failure_title]: 'Betalingen ble ikke fullført',
+  [KEY.billig_callback_failure_lead]: 'Se feilen og prøv på nytt dersom ordren fortsatt kan gjenopprettes.',
+  [KEY.billig_callback_error_heading]: 'Feilmelding',
+  [KEY.billig_callback_retry_heading]: 'Prøv på nytt',
+  [KEY.billig_callback_retry_lead]: 'Handlekurven er fylt inn på nytt med det Billig lagret fra forrige forsøk.',
+  [KEY.billig_callback_signed_retry_lead]:
+    'Denne formen er Billig-kompatibel og brukes for signert JavaScript-feilhåndtering.',
+  [KEY.billig_callback_editable_retry_heading]: 'Redigerbar versjon',
+  [KEY.billig_callback_editable_retry_lead]:
+    'Denne formen speiler Billig-dataene og lar brukeren rette opp kjøpet uten å miste appens vanlige UI.',
+  [KEY.billig_callback_non_retryable_heading]: 'Kan ikke sendes på nytt',
+  [KEY.billig_callback_non_retryable_description]: 'Denne feilen kan ikke rettes ved å sende inn på nytt fra denne siden.',
+  [KEY.billig_callback_missing_error_session]: 'Fant ingen lagret feilinformasjon for denne sesjonen.',
+  [KEY.billig_callback_back_heading]: 'Tilbake',
+  [KEY.billig_callback_back_to_event]: 'Gå tilbake til arrangementet',
+  [KEY.billig_callback_back_to_events]: 'Se arrangementer',
 
   // No category:
   [KEY.owner]: 'Eier',
@@ -1025,6 +1060,15 @@ export const en = prepareTranslations({
   [KEY.stripe_info]: 'The payment is processed by Stripe.',
   [KEY.pay_info]: 'All prices are in norwegian krone and includes all fees.',
   [KEY.sales_conditions]: 'Purchase requires acceptance of sales terms.',
+  [KEY.ticket_card_unavailable_message]:
+    'The selected tickets cannot be put on a membership card. Use email delivery instead.',
+  [KEY.ticket_requires_membership_message]:
+    'The selected tickets require membership. If you choose email delivery, you must show valid membership at the door.',
+  [KEY.ticket_invalid_seat_selection_message]: 'Enter valid seat numbers separated by commas.',
+  [KEY.ticket_missing_seat_selection_message]: 'Enter one seat number per theater ticket.',
+  [KEY.ticket_seat_selection_title]: 'Seat selection',
+  [KEY.ticket_seat_selection_hint]: 'Enter {{count}} seat number(s), separated by commas.',
+  [KEY.ticket_seat_selection_placeholder]: 'For example 12, 13',
 
   // VenuePage:
   [KEY.venuepage_title]: 'Map and Venues',
@@ -1353,6 +1397,32 @@ export const en = prepareTranslations({
   [KEY.feedback_type_heading]: 'We want to hear what you think of samfundet.no',
   [KEY.feedback_your_feedback]: 'Your feedback',
   [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
+  [KEY.billig_callback_status_title]: 'Purchase completed',
+  [KEY.billig_callback_status_lead]: 'The tickets are registered. You can download them here or wait for email delivery.',
+  [KEY.billig_callback_tickets_heading]: 'Tickets',
+  [KEY.billig_callback_summary_heading]: 'Summary',
+  [KEY.billig_callback_ticket_count]: 'Number of tickets',
+  [KEY.billig_callback_total_price]: 'Total price',
+  [KEY.billig_callback_download_pdf]: 'Download PDF',
+  [KEY.billig_callback_missing_ticket_details]: 'No ticket details were found for this callback.',
+  [KEY.billig_callback_on_card]: 'On card',
+  [KEY.billig_callback_email_delivery]: 'By email',
+  [KEY.billig_callback_failure_title]: 'Payment was not completed',
+  [KEY.billig_callback_failure_lead]: 'See the error and try again if the order can still be restored.',
+  [KEY.billig_callback_error_heading]: 'Error message',
+  [KEY.billig_callback_retry_heading]: 'Try again',
+  [KEY.billig_callback_retry_lead]: 'The cart has been restored using the values Billig stored from the previous attempt.',
+  [KEY.billig_callback_signed_retry_lead]:
+    'This form is Billig-compatible and is used for signed JavaScript error handling.',
+  [KEY.billig_callback_editable_retry_heading]: 'Editable version',
+  [KEY.billig_callback_editable_retry_lead]:
+    'This form mirrors the Billig data and lets the user correct the purchase without losing the app UI.',
+  [KEY.billig_callback_non_retryable_heading]: 'Cannot be resubmitted',
+  [KEY.billig_callback_non_retryable_description]: 'This error cannot be fixed by submitting the page again.',
+  [KEY.billig_callback_missing_error_session]: 'No stored error information was found for this session.',
+  [KEY.billig_callback_back_heading]: 'Back',
+  [KEY.billig_callback_back_to_event]: 'Back to event',
+  [KEY.billig_callback_back_to_events]: 'View events',
 
   //MDB Connect AdminPage
   [KEY.adminpage_connect_mdb]: 'Connect to the membership database',
