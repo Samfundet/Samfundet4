@@ -1,5 +1,7 @@
 /* stylelint-disable selector-max-compound-selectors */
 @use 'src/constants' as *;
+
+@use 'src/mixins' as *;
 $checkmark: '\2714'; /* ASCII "check"-symbol. */
 
 /* Label wraper i checkbox.tsx. */
@@ -31,7 +33,10 @@ $checkmark: '\2714'; /* ASCII "check"-symbol. */
   margin-right: 10px;
   margin-left: 10px;
   flex-shrink: 0;
-  transition: background 0.15s, border-color 0.15s; /* Bakgrunn kommer gradvis inn. */
+
+  @include theme-dark {
+    border-color: $grey-0;
+  }
 }
 
 /* Her velges (og styles) det elementet med klassen .checkbox__box som ligger rett etter(ved bruk av +) elementet med klassen .checkbox__input, når det sistnevnte elementet er "checked". */
