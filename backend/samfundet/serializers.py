@@ -182,6 +182,7 @@ class BilligTicketGroupSerializer(CustomBaseSerializer):
             'name',
             'is_sold_out',
             'is_almost_sold_out',
+            'is_theater_ticket_group',
             'ticket_limit',
             'price_groups',
         ]
