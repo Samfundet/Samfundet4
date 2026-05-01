@@ -4694,7 +4694,7 @@ __metadata:
     vite: "npm:^6.4.2"
     vite-plugin-svgr: "npm:^4.5.0"
     web-vitals: "npm:^4.2.4"
-    zod: "npm:^3.23.8"
+    zod: "npm:^4.4.1"
     zod-i18n-map: "npm:^2.27.0"
   languageName: unknown
   linkType: soft
@@ -9140,10 +9140,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.23.8":
-  version: 3.24.2
-  resolution: "zod@npm:3.24.2"
-  checksum: 10c0/c638c7220150847f13ad90635b3e7d0321b36cce36f3fc6050ed960689594c949c326dfe2c6fa87c14b126ee5d370ccdebd6efb304f41ef5557a4aaca2824565
+"zod@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "zod@npm:4.4.1"
+  checksum: 10c0/55714c4bea81f7851ac46bf9edfde7c63ed6677a6cc8971ed3a526a079de3ffbe2bd56160327d22e070f72854fc4485b98ab7373255b6b69d64d9067caec864e
   languageName: node
   linkType: hard
 
