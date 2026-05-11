@@ -1,0 +1,14 @@
+@use 'src/global.scss' as *;
+
+@use 'src/mixins' as *;
+
+@use 'src/constants' as *;
+
+.wrapper {
+  width: 24rem;
+  max-width: 100%;
+}
+
+.form_button {
+  margin: 1rem 0 0 auto;
+}

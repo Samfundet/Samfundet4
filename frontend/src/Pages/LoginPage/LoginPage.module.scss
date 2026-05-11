@@ -15,46 +15,21 @@
   justify-content: center;
   flex-direction: column;
   box-sizing: border-box;
-  max-width: 31em;
-  width: 100%;
-  margin: 2em 1em;
+  width: 30em;
+  max-width: 100%;
+  margin-top: 2em;
 }
 
-.header_text {
+.center {
   text-align: center;
-  font-size: 1.8em;
-  margin-bottom: 1em;
-  font-weight: 600;
-  letter-spacing: -0.05rem;
-}
-
-.input_field {
-  display: block;
-  width: calc(100%);
-  margin-bottom: 0.8em;
-}
-
-.login_button {
-  width: 100%;
-  font-size: 1em;
 }
 
 .link {
-  color: $red-samf;
   text-align: center;
   margin-top: 0.6em;
   font-size: 0.9em;
-  text-decoration: none;
   font-weight: 700;
   &:hover {
     text-decoration: underline;
   }
-}
-
-.login_failed_comment {
-  color: $red;
-  text-align: center;
-  margin-top: 0.6em;
-  font-size: 0.9em;
-  font-weight: 700;
 }

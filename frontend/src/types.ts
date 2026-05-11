@@ -270,6 +270,12 @@ export interface PageNumberPaginationType<T> {
   results: T[];
 }
 
+export interface EventsPaginationType<T> extends PageNumberPaginationType<T> {
+  categories?: Array<[string, string]> | string[];
+  locations?: string[];
+  ticket_types?: Array<[string, string]> | string[];
+}
+
 /* For DRF pagination, see pagination.py */
 export interface CursorPaginatedResponse<T> {
   next: string | null; // URL or cursor for next page

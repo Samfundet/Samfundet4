@@ -47,6 +47,7 @@ export const ROUTES_FRONTEND = {
   //      Admin pages     //
   // ==================== //
   admin: '/control-panel/',
+  admin_mdb_connect: '/control-panel/mdb',
   // Users
   admin_users: '/control-panel/users/',
   // Roles
