@@ -12,6 +12,7 @@ import {
   EVENT_LOCATION,
   EVENT_REGISTRATION_URL,
   EVENT_START_DT,
+  EVENT_STATUS,
   EVENT_TICKET_TYPE,
   EVENT_TITLE,
   EVENT_VISIBILITY_FROM_DT,
@@ -51,6 +52,7 @@ export const eventSchema = z.object({
   // Graphics
   image: OPTIONAL_IMAGE,
   // Summary/Publication date
+  status: EVENT_STATUS,
   visibility_from_dt: EVENT_VISIBILITY_FROM_DT,
   visibility_to_dt: EVENT_VISIBILITY_TO_DT,
 });
