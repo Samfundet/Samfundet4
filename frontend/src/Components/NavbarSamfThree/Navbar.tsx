@@ -85,7 +85,7 @@ export function Navbar() {
         {t(KEY.common_membership)}
       </a>
       <a
-        href={ROUTES.samfThree.information.openingHours}
+        href={ROUTES.frontend.weekly_opening_hours}
         className={styles.navbar_dropdown_link}
         onClick={() => setExpandedDropdown('')}
       >
