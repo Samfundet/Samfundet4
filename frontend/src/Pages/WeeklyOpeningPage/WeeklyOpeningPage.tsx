@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Page, TimeDuration } from '~/Components';
 import { getOpenVenues } from '~/api';
@@ -13,6 +14,8 @@ import styles from './WeeklyOpeningPage.module.scss';
 
 export function WeeklyOpeningPage() {
   const { t } = useTranslation();
+  const today: Day = ALL_DAYS[new Date().getDay() - 1];
+  const [selectedDay, setSelectedDay] = useState<Day>(today);
   useTitle(t(KEY.common_opening_hours));
 
   const { data: venues = [], isLoading } = useQuery({
@@ -21,42 +24,42 @@ export function WeeklyOpeningPage() {
     select: (data) => [...data].sort((venueA, venueB) => venueA.name.localeCompare(venueB.name)),
   });
 
-  function buildVenueTable(venues: VenueDto[], day: Day) {
-    const dummy_date = '1970-01-01';
+  function buildDayCard(day: Day) {
     return (
-      <table className={styles.timeTable}>
-        <tr>
-          <th className={styles.tableHeader}>{t(getDayKey(day))}</th>
-          <th className={styles.tableHeader}>{t(KEY.common_opening_hours)}</th>
-        </tr>
-
-        {venues.map((venue) => {
-          const openingTime = venue[`opening_${day}` as keyof VenueDto] as string;
-          const closingTime = venue[`closing_${day}` as keyof VenueDto] as string;
-          return (
-            <tr key={venue.name} className={styles.tableRow}>
-              <td className={styles.tableData}>
-                <Link target="samf3" url={`${ROUTES_SAMF_THREE.information.general}/${venue.name}`}>
-                  <p className={styles.tableParagraph}>{venue.name}</p>
-                </Link>
-              </td>
-              <td className={styles.tableData}>
-                <TimeDuration
-                  className={styles.tableTime}
-                  start={`${dummy_date}T${openingTime}`}
-                  end={`${dummy_date}T${closingTime}`}
-                />
-              </td>
-            </tr>
-          );
-        })}
-      </table>
+      <button
+        type="button"
+        onClick={() => {
+          setSelectedDay(day);
+        }}
+        className={selectedDay === day ? styles.selectedDayCard : styles.dayCard}
+      >
+        {t(getDayKey(day))}
+      </button>
     );
   }
 
-  function buildAllDayTables(venues: VenueDto[]) {
-    return ALL_DAYS.map((day) => buildVenueTable(venues, day));
+  function buildVenueCard(venue: VenueDto) {
+    const dummy_date = '1970-01-01';
+    const openingTime = venue[`opening_${selectedDay}` as keyof VenueDto] as string;
+    const closingTime = venue[`closing_${selectedDay}` as keyof VenueDto] as string;
+    return (
+      <div className={styles.venueCard}>
+        <Link target="samf3" url={`${ROUTES_SAMF_THREE.information.general}/${venue.name}`}>
+          <p className={styles.tableParagraph}>{venue.name}</p>
+        </Link>
+        <TimeDuration
+          className={styles.tableTime}
+          start={`${dummy_date}T${openingTime}`}
+          end={`${dummy_date}T${closingTime}`}
+        />
+      </div>
+    );
   }
 
-  return <Page loading={isLoading}>{buildAllDayTables(venues)}</Page>;
+  return (
+    <Page className={styles.page} loading={isLoading}>
+      <div className={styles.dayCardContainer}>{ALL_DAYS.map((day) => buildDayCard(day))}</div>
+      <div className={styles.venueCardContainer}>{venues.map((venue) => buildVenueCard(venue))}</div>
+    </Page>
+  );
 }
