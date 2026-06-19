@@ -20,7 +20,7 @@ export function ImageAdminPage() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchInput, setSearchInput] = useState<string>('');
   const [debouncedSearch, setDebouncedSearch] = useState<string>('');
-  const debounceTimeout = useRef<NodeJS.Timeout>();
+  const debounceTimeout = useRef<ReturnType<typeof setTimeout>>();
   const { t } = useTranslation();
   useTitle(t(KEY.admin_images_title));
 
