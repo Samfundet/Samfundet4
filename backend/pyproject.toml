@@ -157,7 +157,7 @@ dependencies = [
 [dependency-groups]
 # Dev-only dependencies (PEP 735). Installed by default with `uv sync`; excluded by `uv sync --no-dev`.
 dev = [
-    "mypy==1.*",
+    "mypy==2.*",
     "ruff==0.*",
     "bandit==1.*",
     "pillow==12.*",
