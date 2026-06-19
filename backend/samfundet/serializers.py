@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 import datetime
 import itertools
-from typing import TYPE_CHECKING, Any
+from typing import Any
 from collections import defaultdict
 
 from PIL import Image as PilImage
@@ -11,6 +11,7 @@ from PIL import UnidentifiedImageError
 from guardian.models import UserObjectPermission, GroupObjectPermission
 
 from rest_framework import serializers
+from rest_framework.utils.serializer_helpers import ReturnList
 
 from django.db.models import Q, QuerySet
 from django.core.files import File
@@ -66,14 +67,6 @@ from .models.recruitment import (
     RecruitmentPositionSharedInterviewGroup,
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
-
-if TYPE_CHECKING:
-    from typing import Any
-
-if TYPE_CHECKING:
-    from typing import Any
-
-from rest_framework.utils.serializer_helpers import ReturnList
 
 
 class TagSerializer(CustomBaseSerializer):

@@ -4,7 +4,7 @@
 #         README:        #
 ##########################
 # This is a list of all commands commonly used in the project.
-# It was made because poetry doesn't support builtin alias like Pipfile and package.json. Seemed better than installing 3rd party alias tool.
+# It was made because uv doesn't support builtin alias like Pipfile and package.json. Seemed better than installing 3rd party alias tool.
 # Preferably this list should be used in all scenarios, but not all environments are alias fiendly (e.g. Dockerfile and non-interactive-shell).
 # If you find yourself running a command repeatedly, consider adding it here to share with other developers.
 
@@ -36,45 +36,42 @@
 ##########################
 alias git-has-change='git diff --quiet' # <filepath>
 alias la='ls -la'
-alias pip-upgrade='python -m pip install --upgrade pip'
-alias pip-install-poetry='python -m pip install poetry'
 
 
 ##########################
-#         poetry:        #
+#           uv:          #
 ##########################
-alias poetry-info='poetry env info'
-alias poetry-where='poetry-info' # Find location of environment.
-alias poetry-sync='poetry sync' # Install the exact dependencies from lockfile.
-alias poetry-i='poetry-sync' # Shorter alias for 'poetry-sync'.
-alias poetry-s='poetry-sync' # Shorter alias for 'poetry-sync'.
-alias poetry-lock='poetry lock --no-update' # Locks current dependencies according to the rules in pyproject.toml. Use to make sure current state is valid. This will not update to latest minors etc. IMPORTANT: it doesn't install anything in venv, use 'poetry-sync' for that.
-alias poetry-update='poetry lock' # Updates lock on dependencies according to the rules in pyproject.toml. The file 'poetry.lock' will likely change. IMPORTANT: it doesn't install anything in venv, use 'poetry-sync' for that.
-alias poetry-u='poetry-update' # Alias for 'poetry-update'.
-alias poetry-sync-prod='poetry install --sync --only main' # Sync of dependencies in production.
-alias poetry-sync-pipeline='poetry-lock-check && poetry-sync' # Sync of dependencies in pipeline. Fails if outdated lockfile.
-alias poetry-lock-check='(poetry check --lock > /dev/null && poetry-lock > /dev/null; git-has-change poetry.lock) || (echo "Outdated poetry.lock"; exit 1) ' # Utilises builtin (insufficient) check, then performs an actual lock to check diff. This should not result in a changed file.
-alias poetry-graph="poetry show --tree" # Show dependency graph.
-alias poetry-rm="poetry env remove --all" # Completely remove virtual environment.
-alias poetry-shell="poetry shell" # Opens a shell within the virtual environment.
-alias poetry-outdated="poetry show --outdated" # Show outdated dependencies.
+alias uv-info='uv python find' # Find location of the active Python interpreter / environment.
+alias uv-where='uv-info' # Find location of environment.
+alias uv-sync='uv sync' # Install the exact dependencies from the lockfile (incl. dev group).
+alias uv-i='uv-sync' # Shorter alias for 'uv-sync'.
+alias uv-s='uv-sync' # Shorter alias for 'uv-sync'.
+alias uv-lock='uv lock' # Update the lockfile according to the rules in pyproject.toml. The file 'uv.lock' may change. IMPORTANT: it doesn't install anything in venv, use 'uv-sync' for that.
+alias uv-update='uv lock --upgrade' # Upgrade locked dependencies to the latest allowed versions. IMPORTANT: it doesn't install anything in venv, use 'uv-sync' for that.
+alias uv-u='uv-update' # Alias for 'uv-update'.
+alias uv-sync-prod='uv sync --frozen --no-dev' # Sync of dependencies in production (no dev group, fails on outdated lockfile).
+alias uv-sync-pipeline='uv sync --frozen' # Sync of dependencies in pipeline. Fails if lockfile is out of sync with pyproject.toml.
+alias uv-lock-check='uv lock --check' # Verify the lockfile is up-to-date with pyproject.toml without modifying it. Fails if outdated.
+alias uv-graph='uv tree' # Show dependency graph.
+alias uv-rm='rm -rf .venv' # Completely remove virtual environment.
+alias uv-outdated='uv tree --outdated' # Show outdated dependencies.
 
 
 ##########################
-#       poetry run:      #
+#         uv run:        #
 ##########################
-# Scripts piped through poetry environment.
-alias poetry-run-ruff-check='poetry run ruff check .' # Run ruff check linter on project.
-alias poetry-run-ruff-apply='poetry run ruff check --fix .' # Apply ruff linter on project.
-alias poetry-run-ruff-format-check='poetry run ruff format --check .' # Dry ruff format on all files in the project.
-alias poetry-run-ruff-format-apply='poetry run ruff format .' # Apply ruff format on all files in the project.
-alias poetry-run-mypy-run='poetry run mypy --config-file mypy.ini .' # Run mypy on project.
+# Scripts piped through the uv-managed environment.
+alias uv-run-ruff-check='uv run ruff check .' # Run ruff check linter on project.
+alias uv-run-ruff-apply='uv run ruff check --fix .' # Apply ruff linter on project.
+alias uv-run-ruff-format-check='uv run ruff format --check .' # Dry ruff format on all files in the project.
+alias uv-run-ruff-format-apply='uv run ruff format .' # Apply ruff format on all files in the project.
+alias uv-run-mypy-run='uv run mypy --config-file mypy.ini .' # Run mypy on project.
 
-alias poetry-run-migrations-make='poetry run python manage.py makemigrations --noinput' # makemigrations
-alias poetry-run-migrations-verify='poetry run python manage.py makemigrations --check --dry-run --noinput --verbosity 2' # Verify that migrations are up-to-date and valid.
-alias poetry-run-migrations-apply='poetry run python manage.py migrate' # Apply migrations.
-alias poetry-run-collectstatic='poetry run python manage.py collectstatic --noinput' # Collect static files from apps to root of project.
+alias uv-run-migrations-make='uv run python manage.py makemigrations --noinput' # makemigrations
+alias uv-run-migrations-verify='uv run python manage.py makemigrations --check --dry-run --noinput --verbosity 2' # Verify that migrations are up-to-date and valid.
+alias uv-run-migrations-apply='uv run python manage.py migrate' # Apply migrations.
+alias uv-run-collectstatic='uv run python manage.py collectstatic --noinput' # Collect static files from apps to root of project.
 
-alias poetry-run-pytest-run='poetry run pytest' # Run pytest on project.
-alias poetry-run-pipeline='poetry-run-mypy-run && poetry-run-ruff-check && poetry-run-ruff-format-check && poetry-run-migrations-verify && poetry-run-pytest-run' # Run all checks in pipeline.
-alias poetry-run-seed='poetry run python manage.py seed' # Apply seed of database.
+alias uv-run-pytest-run='uv run pytest' # Run pytest on project.
+alias uv-run-pipeline='uv-run-mypy-run && uv-run-ruff-check && uv-run-ruff-format-check && uv-run-migrations-verify && uv-run-pytest-run' # Run all checks in pipeline.
+alias uv-run-seed='uv run python manage.py seed' # Apply seed of database.
