@@ -6,7 +6,7 @@ import type { UseFormReturn } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import type { z } from 'zod';
 import { CURSOR_TRAIL_CLASS, THEME_KEY, type ThemeValue } from '~/constants';
-import type { UserDto } from '~/dto';
+import type { EventDto, UserDto } from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
 import {
@@ -247,6 +247,39 @@ export function getEventCategoryKey(category: EventCategoryValue): TranslationKe
 }
 
 /**
+ * Gets the cheapest ticket price available for an event. Returns null if it has no price
+ */
+export function getCheapestPrice(event: EventDto): number | null {
+  switch (event.ticket_type) {
+    case EventTicketType.BILLIG: {
+      if (!event.billig) {
+        return null;
+      }
+      let cheapest: number | null = null;
+      for (const ticketGroup of event.billig.ticket_groups) {
+        for (const priceGroup of ticketGroup.price_groups) {
+          if (cheapest === null || priceGroup.price < cheapest) {
+            cheapest = priceGroup.price;
+          }
+        }
+      }
+      return cheapest;
+    }
+    case EventTicketType.CUSTOM: {
+      let cheapest: number | null = null;
+      for (const priceGroup of event.custom_tickets) {
+        if (cheapest === null || priceGroup.price < cheapest) {
+          cheapest = priceGroup.price;
+        }
+      }
+      return cheapest;
+    }
+    default:
+      return null;
+  }
+}
+
+/**
  * Gets the translation key for a given price group
  */
 export function getTicketTypeKey(ticketType: EventTicketTypeValue): TranslationKeys {
@@ -324,6 +357,16 @@ export function formatDateYMD(d: Date): string {
 
 export function formatDateYMDWithTime(d: Date): string {
   return format(d, 'yyyy.LL.dd HH:mm');
+}
+
+export function formatCurrency(n: number): string {
+  const s = new Intl.NumberFormat('no-NO', {
+    style: 'currency',
+    currency: 'NOK',
+    currencyDisplay: 'narrowSymbol',
+    maximumFractionDigits: 0,
+  }).format(n);
+  return i18next.language === 'nb' ? s : s.replace(/kr/, 'NOK');
 }
 
 /**

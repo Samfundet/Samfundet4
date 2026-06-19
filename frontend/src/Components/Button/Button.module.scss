@@ -1,149 +1,43 @@
 /* stylelint-disable declaration-no-important */
-@use 'src/constants' as *;
-
 @use 'src/mixins' as *;
 
+@use 'src/styles/variables' as v;
+
+@use 'src/styles/colors' as c;
+
+@use 'sass:color';
+
 .button {
+  @extend .display_basic; // Make basic display default
   @include flex-row;
-  gap: 0.5rem;
-  border: none;
+  gap: 0.25rem;
   cursor: pointer;
-  border-radius: 0.25em;
-  transition: 0.15s;
-  box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.05);
+  border-radius: v.$border-radius-md;
   justify-content: center;
+  font-size: v.$font-size;
+  transition: background-color 0.04s ease-in-out;
+  font-weight: v.$font-weight-medium;
+  border: 1px solid transparent;
 
   // Remove underline when button is a link
   &,
   &:hover {
-    text-decoration: none;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    background-color: $grey-3;
-    color: $grey-1;
-    cursor: not-allowed;
-  }
-
-  &:hover:not([disabled]) {
-    filter: brightness(120%);
-    transition: 0.15s;
-    box-shadow: 1px 2px 15px 3px rgba(0, 0, 0, 0.05);
+    text-decoration: none !important;
   }
 }
 
-.button_basic {
-  background-color: white;
-  color: black;
-}
-
-.button_selected {
-  background-color: white;
-  color: black;
-  box-shadow: inset 0 0 1.5px 2px rgba(0, 0, 0, 0.15);
-  cursor: default;
-
-  // Override hover effects for selected buttons
-  &:hover:not([disabled]) {
-    filter: none;
-    box-shadow: inset 0 0 1.5px 2px rgba(0, 0, 0, 0.15);
-  }
-}
-
-.button_samf {
-  background-color: $red-samf;
-  color: white;
-}
-
-.button_uka {
-  background-color: $blue-uka;
-  color: white;
-}
-
-.button_isfit {
-  background-color: $blue-isfit;
-  color: white;
-}
-
-.button_lyche {
-  background-color: $sulten-orange;
-  color: white;
-}
-
-.button_success {
-  background-color: $green;
-  color: white;
-}
-
-.button_blue {
-  background-color: $blue;
-  color: white;
-}
-
-.button_secondary {
-  border: none;
-  padding: 10px 25px;
-  background-color: $grey-3;
-  color: white;
-}
-
-.button_outlined {
-  background-color: inherit;
-  border: 1px solid $grey-1;
-  transition: 0.15s;
-
-  &:hover:not([disabled]) {
-    border-color: $red-samf;
-    color: $red-samf;
-    transition: 0.15s;
-  }
-}
-
-.button_black {
-  background-color: $black;
-  color: white;
-  transition: 0.15s;
-
-  &:hover:not([disabled]) {
-    background-color: $grey-1;
-    transition: 0.15s;
-  }
-}
-
-.button_white {
-  background-color: $white;
-  color: black;
-  transition: 0.15s;
-
-  &:hover:not([disabled]) {
-    filter: brightness(85%);
-    transition: 0.15s;
-  }
-}
-
-.button_yellow {
-  background-color: $yellow;
-  color: white;
-}
-
-.button_green {
-  background-color: $green;
-  color: white;
-  transition: 0.15s;
-
-  &:hover:not([disabled]) {
-    filter: brightness(110%);
-    transition: 0.15s;
-  }
-}
+//
+// Shape
+//
 
 .display_basic {
-  padding: 10px 25px;
+  padding: 8px 14px;
 }
 
 .display_pill {
-  padding: 0.3em 0.4em;
+  padding: 4px 6px;
+  border-radius: 9999px;
+  font-size: v.$font-size-sm;
 }
 
 .display_block {
@@ -152,34 +46,145 @@
 }
 
 .rounded {
-  border-radius: 10000px;
+  border-radius: 9999px;
 }
 
-.pure {
-  background-color: transparent;
-  color: inherit;
-  border-width: 0;
-  font-family: inherit;
-  font-size: inherit;
-  font-style: inherit;
-  font-weight: inherit;
-  line-height: inherit;
+//
+// Themes
+//
+
+.button_primary {
+  @extend .button;
+  background-color: c.$samf-red-700;
+  color: c.$red-50;
+
+  &:hover {
+    background-color: color.adjust(c.$samf-red-700, $lightness: -5%);
+  }
 }
 
-.button_text {
-  background-color: transparent;
-  border-width: 0;
-  font-family: inherit;
-  font-size: inherit;
-  font-style: inherit;
-  font-weight: inherit;
-  line-height: inherit;
-  color: $red-samf;
+.button_secondary {
+  @extend .button;
+  background-color: c.$white-50;
+  color: c.$gray-700;
+  border-color: c.$gray-200;
 
-  &:hover:not([disabled]) {
-    filter: brightness(120%);
-    transition: 0.15s;
-    cursor: pointer;
-    text-decoration: underline;
+  &:hover {
+    background-color: c.$gray-100;
+  }
+
+  @include theme-dark {
+    background-color: c.$gray-900;
+    color: c.$gray-100;
+    border-color: c.$gray-800;
+
+    &:hover {
+      background-color: color.adjust(c.$gray-900, $lightness: 4%);
+    }
+  }
+}
+
+.button_success {
+  @extend .button;
+  background-color: c.$green-700;
+  color: c.$green-50;
+
+  &:hover {
+    background-color: color.adjust(c.$green-700, $lightness: -8%);
+  }
+}
+
+.button_danger {
+  @extend .button;
+  background-color: c.$gold-600;
+  color: c.$white-50;
+
+  &:hover {
+    background-color: color.adjust(c.$gold-600, $lightness: -8%);
+  }
+}
+
+.button_ghost {
+  @extend .button;
+  background-color: transparent;
+  color: c.$gray-700;
+
+  &:hover {
+    background-color: c.$gray-100;
+  }
+
+  @include theme-dark {
+    color: c.$white-50;
+
+    &:hover {
+      background-color: c.$gray-800;
+    }
+  }
+}
+
+.button_uka {
+  @extend .button;
+  background-color: c.$uka-blue;
+  color: c.$white-50;
+
+  &:hover {
+    background-color: color.adjust(c.$uka-blue, $lightness: -6%);
+  }
+}
+
+.button_isfit {
+  @extend .button;
+  background-color: c.$isfit-primary;
+  color: c.$white-50;
+
+  &:hover {
+    background-color: color.adjust(c.$isfit-primary, $lightness: -5%);
+  }
+}
+
+.button_black {
+  @extend .button;
+  background-color: c.$gray-950;
+  color: c.$white-50;
+
+  &:hover {
+    background-color: c.$gray-800;
+  }
+}
+
+.button_white {
+  @extend .button;
+  background-color: c.$white-50;
+  color: c.$gray-800;
+
+  &:hover {
+    background-color: c.$gray-100;
+  }
+}
+
+.button_blue {
+  @extend .button;
+  background-color: c.$blue-700;
+  color: c.$blue-50;
+
+  &:hover {
+    background-color: c.$blue-800;
+  }
+}
+
+//
+// Disabled state
+// Important that this comes after other button style definitions
+//
+
+.button:disabled,
+.button:disabled:hover {
+  background-color: c.$gray-300;
+  color: c.$gray-50;
+  cursor: not-allowed;
+
+  @include theme-dark {
+    background-color: c.$gray-700;
+    color: c.$gray-300;
   }
 }

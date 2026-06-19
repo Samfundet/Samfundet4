@@ -27,7 +27,7 @@ export function SetInterviewManuallyModal({
   return (
     <>
       <Button
-        theme="samf"
+        theme="primary"
         rounded={isButtonRounded}
         onClick={() => setOpen(true)}
         className={styles.set_interview_button}

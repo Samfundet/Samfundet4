@@ -103,7 +103,7 @@ export function ChangePasswordForm() {
         />
 
         <div className={styles.action_row}>
-          <Button type="submit" theme="green" disabled={isPending}>
+          <Button type="submit" theme="success" disabled={isPending}>
             {t(KEY.common_save)}
           </Button>
         </div>

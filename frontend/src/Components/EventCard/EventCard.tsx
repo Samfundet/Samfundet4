@@ -1,32 +1,29 @@
 import { Icon } from '@iconify/react';
-import { useMemo } from 'react';
+import classNames from 'classnames';
+import { type HTMLAttributes, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Block,
-  BlockContainer,
-  BlockFooter,
-  BlockHeader,
-  BlockImage,
-  BlockTitle,
-  NewBadge,
-  TimeDisplay,
-} from '~/Components';
-import eventPlaceholder from '~/assets/event_placeholder.jpg';
-import { BACKEND_DOMAIN } from '~/constants';
+import { Button, Link, TimeDisplay } from '~/Components';
+import { buttonThemes } from '~/Components/Button/utils';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { EventTicketType } from '~/types';
-import { dbT, getEventCategoryKey } from '~/utils';
+import { dbT, formatCurrency, getCheapestPrice, getEventCategoryKey } from '~/utils';
 import styles from './EventCard.module.scss';
+import {
+  EventCardBanner,
+  EventCardDetail,
+  EventCardDetailContainer,
+  EventCardDetailGroup,
+  EventCardImage,
+} from './components';
 
-type Props = {
+type Props = HTMLAttributes<HTMLDivElement> & {
   event: EventDto;
-  containerClassName?: string;
 };
 
-export function EventCard({ event, containerClassName }: Props) {
+export function EventCard({ event, className, ...props }: Props) {
   const { t } = useTranslation(); // Necessary in order for dbT to work in this component
 
   const eventUrl = reverse({
@@ -34,84 +31,112 @@ export function EventCard({ event, containerClassName }: Props) {
     urlParams: { id: event.id },
   });
 
-  const imageUrl = useMemo(() => {
-    if (event.image_url) {
-      if (event.image_url.startsWith('http')) {
-        return event.image_url;
-      }
-      return BACKEND_DOMAIN + event.image_url;
-    }
-    return eventPlaceholder;
-  }, [event]);
-
-  const badges = useMemo(() => {
+  const banners = useMemo(() => {
     if (event.billig?.is_sold_out) {
-      return (
-        <NewBadge theme="gray" className={styles.badge}>
-          {t(KEY.common_sold_out)}
-        </NewBadge>
-      );
+      return <EventCardBanner theme="gray">{t(KEY.common_sold_out)}</EventCardBanner>;
     }
     if (event.billig?.is_almost_sold_out) {
-      return (
-        <NewBadge theme="red" className={styles.badge}>
-          <Icon icon="humbleicons:exclamation" />
-          {t(KEY.common_almost_sold_out)}
-        </NewBadge>
-      );
-    }
-    if (event.ticket_type === EventTicketType.FREE || event.ticket_type === EventTicketType.REGISTRATION) {
-      return (
-        <NewBadge theme="green" className={styles.badge}>
-          {t(KEY.common_ticket_type_free)}
-        </NewBadge>
-      );
+      return <EventCardBanner theme="red">{t(KEY.common_almost_sold_out)}</EventCardBanner>;
     }
 
     return null;
   }, [event, t]);
 
-  const callToAction = useMemo(() => {
-    if (
-      event.ticket_type === EventTicketType.FREE ||
-      event.ticket_type === EventTicketType.INCLUDED ||
-      event.ticket_type === EventTicketType.REGISTRATION // TODO: make own CTA for registrations, something like "Sign up now!"
-    ) {
-      return null;
+  const callToActionButton = useMemo(() => {
+    if (event.ticket_type === EventTicketType.FREE) {
+      return (
+        <Link url={eventUrl} plain className={buttonThemes.success}>
+          {t(KEY.common_ticket_type_free)}!
+        </Link>
+      );
     }
-    if (!event.billig) return null;
-    if (event.billig.is_sold_out) return null;
+    if (event.ticket_type === EventTicketType.INCLUDED) {
+      return (
+        <Link url={eventUrl} plain className={buttonThemes.ghost}>
+          {t(KEY.common_ticket_type_included)}
+        </Link>
+      );
+    }
+    if (event.ticket_type === EventTicketType.REGISTRATION) {
+      return (
+        <Link url={eventUrl} plain className={buttonThemes.primary}>
+          {t(KEY.event_call_to_action_register)}
+        </Link>
+      );
+    }
 
-    // TODO: implement more comprehensive CTA logic here
+    if (!event.billig) {
+      return (
+        <Link url={eventUrl} plain className={buttonThemes.ghost}>
+          {t(KEY.common_read_more)}
+        </Link>
+      );
+    }
 
+    if (event.billig.is_sold_out) {
+      return (
+        <Button theme="success" disabled>
+          {t(KEY.common_sold_out)}
+        </Button>
+      );
+    }
+
+    // TODO: open buy modal instead
     return (
-      <a href={eventUrl} className={styles.call_to_action}>
+      <Link url={eventUrl} plain className={buttonThemes.primary}>
         {t(KEY.common_buy_ticket)}
-        <Icon icon="mingcute:arrow-up-line" width={16} rotate={1} />
-      </a>
+      </Link>
     );
   }, [event, eventUrl, t]);
 
+  const cheapestPrice = getCheapestPrice(event);
+
   return (
-    <BlockContainer className={containerClassName}>
-      <Block square={false}>
-        <a href={eventUrl} tabIndex={-1}>
-          <BlockHeader gradient={badges !== null}>{badges}</BlockHeader>
-          <BlockFooter className={styles.footer} gradient={callToAction !== null}>
-            {callToAction}
-          </BlockFooter>
-          <BlockImage src={imageUrl} />
-        </a>
-      </Block>
-      <BlockTitle>
-        <a href={eventUrl}>{dbT(event, 'title')}</a>
-      </BlockTitle>
-      <div className={styles.details}>
-        <div>
-          {t(getEventCategoryKey(event.category))} // {event.location}
+    <div className={classNames(styles.event_card, className)} {...props}>
+      <Link url={eventUrl} plain>
+        <div className={styles.header}>
+          {banners}
+          <EventCardImage imageUrl={event.image_url} />
         </div>
-        <TimeDisplay timestamp={event.start_dt} displayType="event-datetime" />
+      </Link>
+
+      <div className={styles.footer}>
+        <Link url={eventUrl} plain className={styles.title}>
+          {dbT(event, 'title')}
+        </Link>
+
+        <EventCardDetailContainer>
+          <EventCardDetailGroup>
+            <EventCardDetail>
+              <Icon icon="mingcute:location-line" />
+              {event.location}
+            </EventCardDetail>
+            <EventCardDetail>
+              <Icon icon="material-symbols:category-outline-rounded" />
+              {t(getEventCategoryKey(event.category))}
+            </EventCardDetail>
+          </EventCardDetailGroup>
+          <EventCardDetailGroup>
+            <EventCardDetail className={styles.time_detail}>
+              <Icon icon="mingcute:time-line" />
+              <TimeDisplay timestamp={event.start_dt} displayType="event-datetime" />
+            </EventCardDetail>
+          </EventCardDetailGroup>
+        </EventCardDetailContainer>
+
+        <div className={styles.ticket_row}>
+          {cheapestPrice !== null && (
+            <EventCardDetail className={styles.ticket_price}>
+              <Icon icon="tabler:tag" />
+              <span>
+                {t(KEY.common_from)} {formatCurrency(cheapestPrice)}
+              </span>
+            </EventCardDetail>
+          )}
+
+          {callToActionButton}
+        </div>
       </div>
-    </BlockContainer>
+    </div>
   );
 }

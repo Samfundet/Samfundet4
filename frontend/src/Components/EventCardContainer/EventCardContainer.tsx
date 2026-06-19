@@ -13,7 +13,7 @@ export function EventCardContainer({ events, title }: Props) {
       {title && <H4>{title}</H4>}
       <div className={styles.container}>
         {events.map((event) => (
-          <EventCard event={event} key={event.id} containerClassName={styles.card_container} />
+          <EventCard event={event} key={event.id} className={styles.card_container} />
         ))}
       </div>
     </div>
