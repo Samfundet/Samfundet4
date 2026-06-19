@@ -12,6 +12,8 @@ import {
   AboutPage,
   AdminPage,
   ApiTestingPage,
+  BilligPurchaseFailurePage,
+  BilligPurchaseStatusPage,
   ComponentPage,
   ContributorsPage,
   EventPage,
@@ -145,9 +147,11 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.gangs} element={<SiteFeatureGate feature="gangs"><GangsPage /></SiteFeatureGate>} />
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route element={<SiteFeatureGate feature="events"><Outlet /></SiteFeatureGate>}>
-            <Route path={ROUTES.frontend.events} element={<EventsPage />} />
-            <Route path={ROUTES.frontend.event} element={<EventPage />} />
-          </Route>
+          <Route path={ROUTES.frontend.events} element={<EventsPage />} />
+          <Route path={ROUTES.frontend.event} element={<EventPage />} />
+          <Route path={ROUTES.frontend.billig_status} element={<BilligPurchaseStatusPage />} />
+          <Route path={ROUTES.frontend.billig_handlekurv} element={<BilligPurchaseFailurePage />} />
+        </Route>
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.saksdokumenter} element={<SiteFeatureGate feature="documents"><SaksdokumenterPage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />

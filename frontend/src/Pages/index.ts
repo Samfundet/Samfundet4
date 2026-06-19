@@ -1,6 +1,8 @@
 export { AboutPage } from './AboutPage';
 export { AdminPage } from './AdminPage';
 export { ApiTestingPage } from './ApiTestingPage';
+export { BilligPurchaseFailurePage } from './BilligPurchaseFailurePage';
+export { BilligPurchaseStatusPage } from './BilligPurchaseStatusPage';
 export { ComponentPage } from './ComponentPage';
 export { ContributorsPage } from './ContributorsPage';
 export { EventPage } from './EventPage';

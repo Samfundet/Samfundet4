@@ -27,6 +27,8 @@ export const ROUTES_FRONTEND = {
   contact: '/contact',
   // Purchase callback:
   purchase_callback: '/purchase-callback/:eventId',
+  billig_status: '/arrangement/billetter/status/:tickets/',
+  billig_handlekurv: '/arrangement/billetter/handlekurv/',
 
   // ==================== //
   //        Sulten        //
