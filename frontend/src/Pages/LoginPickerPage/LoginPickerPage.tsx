@@ -40,7 +40,7 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
               <Icon icon="mdi:arrow-right" className={styles.arrowIcon} />
             </a>
 
-            <a href={SAMF3_LOGIN_URL.login} target="samf3" className={styles.choiceWrapper}>
+            <a href={SAMF3_LOGIN_URL.login} className={styles.choiceWrapper}>
               <div className={styles.textWrapper}>
                 <span className={styles.radioLabel}>{t(KEY.loginpicker_page_old_platform_title)}</span>
                 <p className={styles.description}>{t(KEY.loginpicker_page_old_platform_description)}</p>

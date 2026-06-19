@@ -4,6 +4,10 @@
 
 @use 'src/mixins' as *;
 
+@use 'src/styles/variables' as v;
+
+@use 'src/styles/colors' as c;
+
 .container {
   max-width: 960px;
   margin: 0 auto;
@@ -19,25 +23,25 @@
 .caption {
   display: block;
   font-size: 1.25rem;
-  color: $grey-1;
+  color: c.$gray-600;
   margin-bottom: 5px;
   font-weight: 400;
 
   @include theme-dark {
-    color: $grey-3;
+    color: c.$gray-400;
   }
 }
 
 .headerTitle {
-  color: $black-1;
-  font-size: 3rem;
-  font-weight: 700;
+  color: c.$gray-950;
+  font-size: v.$font-size-4xl;
+  font-weight: 600;
   margin-top: 0;
   margin-bottom: 30px;
   line-height: 1.1;
 
   @include theme-dark {
-    color: $white;
+    color: c.$white-50;
   }
 }
 
@@ -54,8 +58,8 @@
   justify-content: space-between;
   width: 100%;
   padding: 22px 30px;
-  border: 2px solid $grey-35;
-  background-color: $white;
+  border: 2px solid c.$gray-200;
+  background-color: c.$white-50;
   cursor: pointer;
   margin-bottom: 15px;
   text-align: left;
@@ -64,7 +68,7 @@
 
   @include theme-dark {
     background-color: $theme_dark_input_bg;
-    border-color: $grey-1;
+    border-color: c.$gray-700;
   }
 
   &:link,
@@ -77,6 +81,7 @@
   }
 
   &:hover {
+    text-decoration: none;
     border-color: $red_samf_hover;
     background-color: $grey-5;
 
@@ -93,39 +98,27 @@
 }
 
 .radioLabel {
-  display: block;
-  color: $black-1;
-  font-size: 1.5rem;
+  font-size: v.$font-size-xl;
   font-weight: 600;
-  cursor: pointer;
   margin-bottom: 4px;
-
-  @include theme-dark {
-    color: $white;
-  }
 }
 
 .description {
-  color: $grey-1;
+  color: c.$gray-600;
   font-size: 1.1rem;
   font-weight: 300;
   margin: 0;
   line-height: 1.5;
 
   @include theme-dark {
-    color: $grey-3;
+    color: c.$gray-400;
   }
 }
 
 .arrowIcon {
   font-size: 2.5rem;
-  color: $black-1;
   margin-left: 20px;
   flex-shrink: 0;
-
-  @include theme-dark {
-    color: $white;
-  }
 }
 
 .backLink {
