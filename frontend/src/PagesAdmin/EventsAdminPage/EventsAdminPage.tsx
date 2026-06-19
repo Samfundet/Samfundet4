@@ -30,7 +30,7 @@ export function EventsAdminPage() {
   const [selectedVenue, setSelectedVenue] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<EventCategoryValue | null>(null);
   const [selectedTicketType, setSelectedTicketType] = useState<string | null>(null);
-  const debounceTimeout = useRef<NodeJS.Timeout>();
+  const debounceTimeout = useRef<ReturnType<typeof setTimeout>>();
   const { t, i18n } = useTranslation();
   useTitle(t(KEY.admin_events_administrate));
 
