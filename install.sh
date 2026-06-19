@@ -49,7 +49,6 @@ do_action "\"I understand\"" "echo '$BOT: Here we go!'; sleep 1;" "y" || eval "e
 [[ "$OSTYPE" == "linux-gnu"* ]] ; IS_UBUNTU=$?
 
 # Attempt to install requirements first.
-# https://github.com/pyenv/pyenv/wiki#suggested-build-environment
 echo ; echo ; echo ; echo "================================================================================================================"
 if [ $IS_UBUNTU == 0 ]; then
     do_action "$BOT: Attempt to install requirements (build-essential, procps, curl, file, git, ssh)" "sudo apt update -y ; sudo apt upgrade -y ; sudo apt install -y build-essential procps curl file git ssh" "$X_INTERACTIVE"
@@ -156,29 +155,17 @@ if [ ! "$(which psql)" ]; then
 fi
 
 
-### pyenv ###
-if [ ! "$(which pyenv)" ]; then
+### uv ###
+# uv is the Python package and project manager. It replaces pip, poetry, pyenv
+# and virtualenv: it manages the Python version (defined in backend/.python-version),
+# the virtual environment and the dependencies.
+# https://docs.astral.sh/uv/
+if [ ! "$(which uv)" ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
-    # do_action "$BOT: Install pyenv (required)?" "brew install pyenv ; echo 'export PYENV_ROOT=~/.pyenv' >> ~/.bash_profile && echo 'export PATH=~/.pyenv/bin:$PATH' >> ~/.bash_profile ; echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n eval '$(pyenv init -)'\nfi' >> ~/.bash_profile ; . ~/.bash_profile" $X_INTERACTIVE
-    # https://github.com/pyenv/pyenv/wiki#suggested-build-environment
-    do_action "$BOT: Install pyenv (required)?" "" "$X_INTERACTIVE"
-    if [ "$?" == 0 ] ; then # If 'yes'.
-        # Install pyenv dependencies to OS.
-        if [ $IS_UBUNTU ] ; then
-            sudo apt install -y make build-essential libssl-dev zlib1g-dev \
-                libbz2-dev libreadline-dev wget curl llvm \
-                libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
-        elif [ $IS_MAC ] ; then
-            brew install openssl readline xz zlib tcl-tk
-        fi
-
-        # Install pyenv.
-        brew install pyenv
-        # Must be wrapped by single quotes.
-        echo 'export PYENV_ROOT=~/.pyenv' >> ~/.bash_profile
-        echo 'export PATH=~/.pyenv/bin:$PATH' >> ~/.bash_profile
-        echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n eval "$(pyenv init -)"\nfi' >> ~/.bash_profile
-        . ~/.bash_profile
+    if [ $IS_UBUNTU == 0 ]; then
+        do_action "$BOT: Install uv (required)?" "curl -LsSf https://astral.sh/uv/install.sh | sh ; . ~/.bash_profile" "$X_INTERACTIVE"
+    elif [ $IS_MAC == 0 ]; then
+        do_action "$BOT: Install uv (required)?" "brew install uv" "$X_INTERACTIVE"
     fi
 fi
 
@@ -314,8 +301,10 @@ if [ "$(ls Samfundet4/README.md)" ] ; then # Simple check if an arbitrary file e
     fi
 
     # Install python virtual environment with dependencies.
+    # uv reads backend/.python-version, downloads the pinned Python if needed,
+    # creates backend/.venv and installs the locked dependencies.
     echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Install virtual python environment (pyenv, poetry)?" "pyenv install ; python -m pip install poetry ; POETRY_VIRTUALENVS_IN_PROJECT=1 python -m poetry install --python $(cat backend/.python-version)" "$X_INTERACTIVE"
+    do_action "$BOT: Install virtual python environment (uv)?" "(cd backend && uv sync)" "$X_INTERACTIVE"
 
     # Build project.
     echo ; echo ; echo ; echo "================================================================================================================"
@@ -368,6 +357,6 @@ if [ "$?" == 0 ]; then
 fi
 
 # echo "You can now run these commands to start the project:"
-# echo "    python -m poetry run python manage.py collectstatic"
-# echo "    python -m poetry run python manage.py migrate"
-# echo "    python -m poetry run python manage.py runserver"
+# echo "    uv run python manage.py collectstatic"
+# echo "    uv run python manage.py migrate"
+# echo "    uv run python manage.py runserver"
