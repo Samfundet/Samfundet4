@@ -40,7 +40,7 @@
     "verify": "yarn biome:check && yarn tsc:check && yarn stylelint:check"
   },
   "dependencies": {
-    "@babel/core": "^7.23.2",
+    "@babel/core": "^7.29.6",
     "@babel/plugin-syntax-flow": "^7.22.5",
     "@babel/plugin-transform-react-jsx": "^7.22.15",
     "@hookform/resolvers": "^4.1.3",
