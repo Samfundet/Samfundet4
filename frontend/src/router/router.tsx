@@ -120,7 +120,7 @@ export const router = createBrowserRouter(
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.venues} element={<SiteFeatureGate feature="venues"><VenuePage /></SiteFeatureGate>}/>
           <Route path={ROUTES.frontend.health} element={<HealthPage />} />
-          <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
+          {import.meta.env.DEV && <Route path={ROUTES.frontend.components} element={<ComponentPage />} />}
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
             <Route path={ROUTES.frontend.login} element={<LoginPickerPage newRoute="/new-login" />} />
             <Route path={SAMF3_LOGIN_URL.login} element={<LoginPage />} />
