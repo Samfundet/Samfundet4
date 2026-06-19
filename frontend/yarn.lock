@@ -297,18 +297,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@chromatic-com/storybook@npm:^3":
-  version: 3.2.6
-  resolution: "@chromatic-com/storybook@npm:3.2.6"
+"@chromatic-com/storybook@npm:^5":
+  version: 5.2.1
+  resolution: "@chromatic-com/storybook@npm:5.2.1"
   dependencies:
-    chromatic: "npm:^11.15.0"
-    filesize: "npm:^10.0.12"
+    "@neoconfetti/react": "npm:^1.0.0"
+    chromatic: "npm:16.10.0"
     jsonfile: "npm:^6.1.0"
-    react-confetti: "npm:^6.1.0"
     strip-ansi: "npm:^7.1.0"
   peerDependencies:
-    storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
-  checksum: 10c0/3388de20d12b1003990520726b0b4a20570c81d017292afa72f9ce88ab5146935663db7e5e8e7d58b5e94893c83bc1447d77c3cbc3ddc8c807325f9613d346d8
+    storybook: ^0.0.0-0 || ^10.1.0 || ^10.1.0-0 || ^10.2.0-0 || ^10.3.0-0 || ^10.4.0-0 || ^10.5.0-0 || ^10.6.0-0
+  checksum: 10c0/066b0a75906936916cbafbcb26375509240025bbacda02d9ae4929aaec07ae3ec7792dddf0b03095b8792d7891a55c1d70af6496eda1d3932fa2e2b9caa2407e
   languageName: node
   linkType: hard
 
@@ -935,6 +934,13 @@ __metadata:
     "@emnapi/core": ^1.7.1
     "@emnapi/runtime": ^1.7.1
   checksum: 10c0/727f2b6ae0e68bbe5d39aeb68aa6f183314e9f03dc50bb55a962849535b2db53ecc3fbf1554d8656a54488a608df5a2634670595cf5874dc4af2ee59f817c65d
+  languageName: node
+  linkType: hard
+
+"@neoconfetti/react@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@neoconfetti/react@npm:1.0.0"
+  checksum: 10c0/dfa487965b69f88b39562ccd910114cd68b00a90c7eb79cfb1a483c7ac717b720f9f095e5aea13cef8a9b9bea05533d380ddff5e44d3bc3f7dc4d5c66716765c
   languageName: node
   linkType: hard
 
@@ -3736,22 +3742,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chromatic@npm:^11.15.0":
-  version: 11.27.0
-  resolution: "chromatic@npm:11.27.0"
+"chromatic@npm:16.10.0":
+  version: 16.10.0
+  resolution: "chromatic@npm:16.10.0"
+  dependencies:
+    semver: "npm:^7.3.5"
   peerDependencies:
     "@chromatic-com/cypress": ^0.*.* || ^1.0.0
     "@chromatic-com/playwright": ^0.*.* || ^1.0.0
+    "@chromatic-com/vitest": ^0.*.* || ^1.0.0
   peerDependenciesMeta:
     "@chromatic-com/cypress":
       optional: true
     "@chromatic-com/playwright":
       optional: true
+    "@chromatic-com/vitest":
+      optional: true
   bin:
-    chroma: dist/bin.js
-    chromatic: dist/bin.js
-    chromatic-cli: dist/bin.js
-  checksum: 10c0/500c1a522a48b3ef9188d63693b2602128b4cd7b2b96e5cb5412cdc0e3b7ac2a33c30d8f55f7662de4111e1c7c70bcb970e86782700e02580881400bdd10419b
+    chroma: dist/bin.cjs
+    chromatic: dist/bin.cjs
+    chromatic-cli: dist/bin.cjs
+  checksum: 10c0/4867da7b0512c6c86b00b7e633908e90594b893801202577d76849d9b0ba61c716dfa7479dcb5c0786665b7fe6560ede262ad6a16696fc74c2240cc6d5bf485c
   languageName: node
   linkType: hard
 
@@ -4829,13 +4840,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"filesize@npm:^10.0.12":
-  version: 10.1.6
-  resolution: "filesize@npm:10.1.6"
-  checksum: 10c0/9a196d64da4e947b8c0d294be09a3dfa7a634434a1fc5fb3465f1c9acc1237ea0363f245ba6e24477ea612754d942bc964d86e0e500905a72e9e0e17ae1bbdbc
-  languageName: node
-  linkType: hard
-
 "fill-range@npm:^7.1.1":
   version: 7.1.1
   resolution: "fill-range@npm:7.1.1"
@@ -4945,7 +4949,7 @@ __metadata:
   resolution: "frontend@workspace:."
   dependencies:
     "@biomejs/biome": "npm:1.8.2"
-    "@chromatic-com/storybook": "npm:^3"
+    "@chromatic-com/storybook": "npm:^5"
     "@hookform/resolvers": "npm:^4.1.3"
     "@iconify/react": "npm:^4.1.1"
     "@radix-ui/react-slot": "npm:^1.2.2"
@@ -7522,17 +7526,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-confetti@npm:^6.1.0":
-  version: 6.4.0
-  resolution: "react-confetti@npm:6.4.0"
-  dependencies:
-    tween-functions: "npm:^1.2.0"
-  peerDependencies:
-    react: ^16.3.0 || ^17.0.1 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/a0e1bfc826cc086e13c18f2f8997e1825025be8ea80f5b1ffdd4871babe89a6876eac99f43525d4d4cbf141fab2a9372f5d51d19fa5995b64e77e6717ac4b286
-  languageName: node
-  linkType: hard
-
 "react-cookie@npm:^8.1.2":
   version: 8.1.2
   resolution: "react-cookie@npm:8.1.2"
@@ -8945,13 +8938,6 @@ __metadata:
   version: 2.4.0
   resolution: "turbo-stream@npm:2.4.0"
   checksum: 10c0/e68b2569f1f16e6e9633d090c6024b2ae9f0e97bfeacb572451ca3732e120ebbb546f3bc4afc717c46cb57b5aea6104e04ef497f9912eef6a7641e809518e98a
-  languageName: node
-  linkType: hard
-
-"tween-functions@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "tween-functions@npm:1.2.0"
-  checksum: 10c0/7e59295b8b0ee4132ed2fe335f56a9db5c87056dad6b6fd3011be72239fd20398003ddb4403bc98ad9f5c94468890830f64016edbbde35581faf95b32cda8305
   languageName: node
   linkType: hard
 
