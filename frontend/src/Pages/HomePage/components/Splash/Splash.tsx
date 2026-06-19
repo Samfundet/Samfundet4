@@ -58,7 +58,7 @@ export function Splash({ events, showInfo }: SplashProps) {
     </Button>
   );
 
-  const slideTimeout = useRef<NodeJS.Timeout>();
+  const slideTimeout = useRef<ReturnType<typeof setTimeout>>();
 
   const startSlideTimer = useCallback(() => {
     // Cancel previous if any
