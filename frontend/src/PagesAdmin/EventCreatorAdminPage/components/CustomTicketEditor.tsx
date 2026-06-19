@@ -115,7 +115,7 @@ export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: P
       <div className={styles.custom_ticket_container}>
         <Table columns={tableColumns} data={customTickets.map((ticket) => ticketRow(ticket))} />
         <div className={styles.add_custom_ticket}>
-          <Button rounded={true} theme="green" preventDefault={true} onClick={newTicket}>
+          <Button rounded={true} theme="success" preventDefault={true} onClick={newTicket}>
             {t(KEY.event_add_ticket)}
             <Icon icon="mdi:plus" />
           </Button>

@@ -38,7 +38,7 @@ export function Splash({ events, showInfo }: SplashProps) {
   const isPaid = events && PAID_TICKET_TYPES.includes(events[index].ticket_type);
 
   const ticketButton = isPaid ? (
-    <Button theme={'samf'} className={styles.ticket_button}>
+    <Button theme="primary" className={styles.ticket_button}>
       <Icon icon="ph:ticket-bold" />
       {lowerCapitalize(`${t(KEY.common_buy)} ${t(KEY.common_ticket)}`)}
     </Button>

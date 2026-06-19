@@ -82,7 +82,7 @@ export function MDBConnectForm() {
             </FormItem>
           )}
         />
-        <Button className={styles.form_button} type="submit" theme="green" rounded>
+        <Button className={styles.form_button} type="submit" theme="primary">
           {t(KEY.common_connect)}
         </Button>
       </form>
