@@ -149,7 +149,7 @@ dependencies = [
     "dataclasses-json==0.*",
     "django-guardian==3.*",
     "pillow==12.*",
-    "gunicorn==25.*",
+    "gunicorn==26.*",
     "django-admin-autocomplete-filter==0.*",
     "psycopg[c]",
 ]
