@@ -1,12 +1,14 @@
 import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
 import { ToggleSwitch } from '~/Components';
+import { Link } from '~/Components';
 import { Page } from '~/Components/Page';
 import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { getRandomEntryFromList } from '~/utils';
+import { SAMF3_MEMBER_URL } from '~/routes/samf-three';
+import { getRandomEntryFromList, lowerCapitalize } from '~/utils';
 import styles from './AdminPage.module.scss';
 import { WISEWORDS } from './data';
 
@@ -28,6 +30,21 @@ export function AdminPage() {
           {user?.last_name}
         </div>
         <p className={styles.wisewords}>{WISEWORD}</p>
+        {user?.mdb_medlem_id ? (
+          <div className={styles.mdb_user}>
+            {`${lowerCapitalize(t(KEY.adminpage_profile_connected_to_mdb))} `}
+            <Link url={SAMF3_MEMBER_URL.medlem} target="external">
+              {t(KEY.common_the_member_database)}
+            </Link>
+          </div>
+        ) : (
+          <div className={styles.mdb_user}>
+            {`${lowerCapitalize(t(KEY.adminpage_profile_not_connected_to_mdb))} `}
+            <Link url={SAMF3_MEMBER_URL.medlem} target="external">
+              {t(KEY.common_the_member_database)}
+            </Link>
+          </div>
+        )}
         {/* TODO make proper personal landing page with preferences etc */}
         <div className={styles.preferences_header}>Preferences</div>
         <div className={styles.preference_row}>

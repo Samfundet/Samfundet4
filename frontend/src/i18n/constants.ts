@@ -244,6 +244,7 @@ export const KEY = {
   common_almost_sold_out: 'common_almost_sold_out',
 
   common_member_database: 'common_member_database',
+  common_the_member_database: 'common_the_member_database',
   // ==================== //
   //        Others        //
   // ==================== //
@@ -603,6 +604,8 @@ export const KEY = {
   adminpage_connect_mdb_common_error: 'adminpage_connect_mdb_common_error',
   adminpage_connect_mdb_password_notice_1: 'adminpage_connect_mdb_password_notice_1',
   adminpage_connect_mdb_password_notice_2: 'adminpage_connect_mdb_password_notice_2',
+  adminpage_profile_connected_to_mdb: 'adminpage_profile_connected_to_mdb',
+  adminpage_profile_not_connected_to_mdb: 'adminpage_profile_not_connected_to_mdb',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
