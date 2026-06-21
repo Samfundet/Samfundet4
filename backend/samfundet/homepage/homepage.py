@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from samfundet.serializers import EventSerializer
 from samfundet.models.event import Event
-from samfundet.models.model_choices import EventStatus, EventCategory, EventTicketType
+from samfundet.models.model_choices import EventStatus, EventCategory
 
 
 class ElementType:
@@ -56,9 +56,12 @@ def carousel(*, title_nb: str, title_en: str, events: list[Event]) -> HomePageEl
     )
 
 
-def generate() -> dict[str, Any]:  # noqa: C901
+def generate() -> dict[str, Any]:
     elements: list[HomePageElement] = []
+
+    # TODO: apply custom weighting
     upcoming_events = Event.objects.filter(start_dt__gt=timezone.now() - timezone.timedelta(hours=6), status=EventStatus.PUBLIC).order_by('start_dt')
+
     # Optimize DB queries by:
     # - select_related (FK and OTO) to perform an SQL JOIN, fetching related 'image' data in the same query.
     # - prefetch_related (MTM and reverse FK) to fetch related objects in separate queries and join in Python.
@@ -80,11 +83,13 @@ def generate() -> dict[str, Any]:  # noqa: C901
     with contextlib.suppress(IndexError):
         elements.append(
             carousel(
-                title_nb='Hva skjer?',
-                title_en="What's happening?",
-                events=list(upcoming_events[:10]),
+                title_nb='Kommende arrangementer',
+                title_en='Upcoming events',
+                events=list(upcoming_events[:9]),
             )
         )
+
+    # TODO: fetch info boxes
 
     # Another highlight
     # TODO we should make a datamodel for this
@@ -95,25 +100,6 @@ def generate() -> dict[str, Any]:  # noqa: C901
     except IndexError:
         pass
 
-    # Concerts
-    with contextlib.suppress(IndexError):
-        elements.append(
-            carousel(
-                title_nb='Konserter',
-                title_en='Concerts',
-                events=list(upcoming_events.filter(category=EventCategory.CONCERT)[:10]),
-            )
-        )
-
-    # Another highlight
-    # TODO we should make a datamodel for this
-    try:
-        splash_event3: Event = upcoming_events[2]
-        if splash_event3:
-            elements.append(large_card(splash_event3))
-    except IndexError:
-        pass
-
     # Debates
     with contextlib.suppress(IndexError):
         elements.append(
@@ -121,36 +107,6 @@ def generate() -> dict[str, Any]:  # noqa: C901
                 title_nb='Debatter',
                 title_en='Debates',
                 events=list(upcoming_events.filter(category=EventCategory.DEBATE)[:10]),
-            )
-        )
-
-    # Courses
-    with contextlib.suppress(IndexError):
-        elements.append(
-            carousel(
-                title_nb='Kurs og Forelesninger',
-                title_en='Courses & Lectures',
-                events=list(upcoming_events.filter(category=EventCategory.LECTURE)[:10]),
-            )
-        )
-
-    # Free!
-    with contextlib.suppress(IndexError):
-        elements.append(
-            carousel(
-                title_nb='Gratisarrangementer',
-                title_en='Free events',
-                events=list(upcoming_events.filter(ticket_type__in=[EventTicketType.FREE, EventTicketType.INCLUDED])[:10]),
-            )
-        )
-
-    # Other
-    with contextlib.suppress(IndexError):
-        elements.append(
-            carousel(
-                title_nb='Andre arrangementer',
-                title_en='Other events',
-                events=list(upcoming_events.filter(category=EventCategory.OTHER)[:10]),
             )
         )
 
