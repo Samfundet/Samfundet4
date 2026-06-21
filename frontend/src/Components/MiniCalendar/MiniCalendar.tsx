@@ -83,7 +83,11 @@ export function MiniCalendar({
     <div className={styles.month_header}>
       <div className={styles.previous_month}>
         {showPrevMonthButton && (
-          <Button onClick={() => setDisplayDate(addMonths(displayDate, -1))} className={styles.change_month_button}>
+          <Button
+            theme="ghost"
+            onClick={() => setDisplayDate(addMonths(displayDate, -1))}
+            className={styles.change_month_button}
+          >
             <Icon icon="carbon:chevron-left" />
           </Button>
         )}
@@ -91,7 +95,11 @@ export function MiniCalendar({
       <TimeDisplay className={styles.label} timestamp={displayDate} displayType={'nice-month-year'} />
       <div className={styles.next_month}>
         {showNextMonthButton && (
-          <Button onClick={() => setDisplayDate(addMonths(displayDate, 1))} className={styles.change_month_button}>
+          <Button
+            theme="ghost"
+            onClick={() => setDisplayDate(addMonths(displayDate, 1))}
+            className={styles.change_month_button}
+          >
             <Icon icon="carbon:chevron-right" />
           </Button>
         )}

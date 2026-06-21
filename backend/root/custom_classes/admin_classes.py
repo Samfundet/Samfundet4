@@ -86,7 +86,7 @@ class CustomGuardedModelAdmin(GuardedModelAdmin):
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         if request.user.is_superuser:
             # print(18, super().get_queryset(request))
-            return super().get_queryset(request)
+            return super().get_queryset(request)  # type: ignore[no-untyped-call]
 
         data = self.get_model_objects(request=request)
         # print(22, self.opts.model_name, data)

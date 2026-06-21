@@ -28,7 +28,7 @@ export function Navbar() {
   const [activeRecruitments, setActiveRecruitments] = useState<RecruitmentDto[]>();
   const navigate = useNavigate();
   const isDesktop = useDesktop();
-  const [cookies, setCookie, removeCookie] = useCookies();
+  const [cookies, setCookie, removeCookie] = useCookies(['impersonated_user_id']);
 
   // Each NavbarItem can have a dropdown menu.
   // We want only one of them to be extended at any time, therefore this parent component
@@ -188,7 +188,7 @@ export function Navbar() {
 
   const memberButton = (
     <Button
-      theme="samf"
+      theme="primary"
       rounded={true}
       className={isDesktop ? styles.login_button : styles.popup_internal_button}
       onClick={() => {

@@ -3,14 +3,12 @@
 # Useful commands
 
 - [🐍 Python](#-python)
-  - [🐍 Pyenv: Install python](#-pyenv-install-python)
-  - [🐍 Python: Call submodule of Python](#-python-call-submodule-of-python)
-  - [🐍 Python: Install poetry](#-python-install-poetry)
-  - [🐍 poetry: Install virtual environment with dependencies](#-poetry-install-virtual-environment-with-dependencies)
-  - [🐍 poetry: Install package](#-poetry-install-package)
-  - [🐍 poetry: Uninstall package](#-poetry-uninstall-package)
-  - [🐍 poetry: Activate virtual environment](#-poetry-activate-virtual-environment)
-  - [🐍 poetry: Run command inside virtual environment](#-poetry-run-command-inside-virtual-environment)
+  - [🐍 uv: Install uv](#-uv-install-uv)
+  - [🐍 uv: Install Python](#-uv-install-python)
+  - [🐍 uv: Install virtual environment with dependencies](#-uv-install-virtual-environment-with-dependencies)
+  - [🐍 uv: Install package](#-uv-install-package)
+  - [🐍 uv: Uninstall package](#-uv-uninstall-package)
+  - [🐍 uv: Run command inside virtual environment](#-uv-run-command-inside-virtual-environment)
   - [🐍 Django: Show all commands](#-django-show-all-commands)
   - [🐍 Django: Run command](#-django-run-command)
   - [🐍 Django: Makemigrations](#-django-makemigrations)
@@ -47,76 +45,63 @@
 
 <br>
 
-### 🐍 Pyenv: Install python
-> `pyenv` must be installed.  
-> Must run inside same directory as [.python-version](/backend/.python-version).
+### 🐍 uv: Install uv
+> macOS (Homebrew):
 ```bash
-pyenv install
+brew install uv
+```
+> Linux/macOS (standalone installer):
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 <br>
 <br>
 
-### 🐍 Python: Call submodule of Python
+### 🐍 uv: Install Python
+> uv reads the pinned version from [.python-version](/backend/.python-version).
+> Must run inside the `backend` directory.
 ```bash
-python -m <module>
-```
-```bash
-# Example:
-python -m poetry
+uv python install
 ```
 
 <br>
 <br>
 
-### 🐍 Python: Install poetry
+### 🐍 uv: Install virtual environment with dependencies
+> Must run inside same directory as [pyproject.toml](/backend/pyproject.toml).
+> Creates `.venv` (downloading the pinned Python if needed) and installs the locked dependencies.
 ```bash
-python -m pip install poetry
+uv sync
 ```
 
 <br>
 <br>
 
-### 🐍 Poetry: Install virtual environment with dependencies
-> Must run inside same directory as [Pipfile](/backend/Pipfile).
+### 🐍 uv: Install package
+> Adds the package to `pyproject.toml` and updates `uv.lock`.
 ```bash
-POETRY_VIRTUALENVS_IN_PROJECT=1 python -m poetry install
+uv add <package>
 ```
 
 <br>
 <br>
 
-### 🐍 Poetry: Install package
+### 🐍 uv: Uninstall package
 ```bash
-python -m poetry install <package>
+uv remove <package>
 ```
 
 <br>
 <br>
 
-### 🐍 Poetry: Uninstall package
+### 🐍 uv: Run command inside virtual environment
 ```bash
-python -m poetry uninstall <package>
-```
-
-<br>
-<br>
-
-### 🐍 Poetry: Activate virtual environment
-```bash
-python -m poetry shell
-```
-
-<br>
-<br>
-
-### 🐍 Poetry: Run command inside virtual environment
-```bash
-python -m poetry run <command>
+uv run <command>
 ```
 ```bash
 # Example:
-python -m poetry run python -V
+uv run python -V
 ```
 
 <br>
@@ -124,7 +109,7 @@ python -m poetry run python -V
 
 ### 🐍 Django: Show all commands
 ```bash
-python -m poetry run python manage.py
+uv run python manage.py
 ```
 
 <br>
@@ -133,11 +118,11 @@ python -m poetry run python manage.py
 ### 🐍 Django: Run command
 ```bash
 # Locally:
-python -m poetry run python manage.py <command>
+uv run python manage.py <command>
 ```
 ```bash
 # Inside container:
-docker compose exec backend python -m poetry run python manage.py <command>
+docker compose exec backend uv run python manage.py <command>
 ```
 
 <br>
@@ -146,7 +131,7 @@ docker compose exec backend python -m poetry run python manage.py <command>
 ### 🐍 Django: Makemigrations
 ```bash
 # Locally: 
-python -m poetry run python manage.py makemigrations
+uv run python manage.py makemigrations
 ```
 
 <br>
@@ -155,7 +140,7 @@ python -m poetry run python manage.py makemigrations
 ### 🐍 Django: Migrate
 ```bash
 # Locally: 
-python -m poetry run python manage.py makemigrations
+uv run python manage.py migrate
 ```
 
 <br>
@@ -163,7 +148,7 @@ python -m poetry run python manage.py makemigrations
 
 ### 🐍 Django: Start server
 ```bash
-python -m poetry run python manage.py runserver
+uv run python manage.py runserver
 ```
 
 <br>
@@ -171,7 +156,7 @@ python -m poetry run python manage.py runserver
 
 ### 🐍 Django: Show all urls
 ```bash
-python -m poetry run python manage.py show_urls -f table
+uv run python manage.py show_urls -f table
 ```
 
 <br>
@@ -179,7 +164,7 @@ python -m poetry run python manage.py show_urls -f table
 
 ### 🐍 Django: Collect all staticfiles
 ```bash
-python -m poetry run python manage.py collectstatic
+uv run python manage.py collectstatic
 ```
 
 <br>
@@ -187,7 +172,7 @@ python -m poetry run python manage.py collectstatic
 
 ### 🐍 Django: Open shell
 ```bash
-python -m poetry run python manage.py shell_plus
+uv run python manage.py shell_plus
 ```
 
 <br>
@@ -195,7 +180,7 @@ python -m poetry run python manage.py shell_plus
 
 ### 🐍 Django: Collect all staticfiles
 ```bash
-python -m poetry run python manage.py collectstatic
+uv run python manage.py collectstatic
 ```
 
 <br>

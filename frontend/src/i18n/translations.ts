@@ -190,6 +190,7 @@ export const nb = prepareTranslations({
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
+  [KEY.common_read_more]: 'Les mer',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -304,6 +305,7 @@ export const nb = prepareTranslations({
   [KEY.event_category_theater]: 'Teater',
   [KEY.event_category_theme_party]: 'Temafest',
   [KEY.event_category_uka_event]: 'UKE-arrangement',
+  [KEY.event_call_to_action_register]: 'Meld på',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',
@@ -896,6 +898,7 @@ export const en = prepareTranslations({
   [KEY.common_capacity]: 'Capacity',
   [KEY.common_membership_number]: 'Membership number',
   [KEY.common_to_payment]: 'To payment',
+  [KEY.common_read_more]: 'Read more',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -1002,6 +1005,7 @@ export const en = prepareTranslations({
   [KEY.event_category_theater]: 'Theater',
   [KEY.event_category_theme_party]: 'Theme party',
   [KEY.event_category_uka_event]: 'UKA event',
+  [KEY.event_call_to_action_register]: 'Register here',
 
   // EventPage:
   [KEY.event_registration_url]: 'Registration URL',

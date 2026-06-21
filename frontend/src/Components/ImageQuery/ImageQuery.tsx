@@ -18,7 +18,7 @@ export function ImageQuery({ allImages, setImages }: ImageQueryProps) {
 
   // Debounce
   const searchRef = useRef<string>(search);
-  const timeout = useRef<NodeJS.Timeout>();
+  const timeout = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     setImages(queryDtoCustom(search, allImages, stringRepresentation));

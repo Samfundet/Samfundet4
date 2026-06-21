@@ -55,7 +55,7 @@ Dependabot makes changes in one or multiple of these files:
 frontend/package.json
 frontend/yarn.lock
 
-backend/poetry.lock
+backend/uv.lock
 backend/pyproject.toml
 ```
 
@@ -123,7 +123,7 @@ Direct dependency (depends on constraint):
 "react": "~18.2.0" and 18.2.1 → 18.3.0 → both files change (doesn't satisfy ~18.2.0)
 
 
-**A diff file in `backend/poetry.lock` of a pull request created by dependabot might look something like this:**
+**A diff file in `backend/uv.lock` of a pull request created by dependabot might look something like this:**
 
 The package being upgraded in
 [this PR](https://github.com/Samfundet/Samfundet4/pull/1898/files)

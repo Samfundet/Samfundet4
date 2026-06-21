@@ -268,7 +268,7 @@ export function RecruitmentInterviewAvailabilityForm({ recruitmentId, data }: Pr
           </div>
         </div>
         <div className={styles.action_row}>
-          <Button type="submit" theme="green" disabled={isPending} rounded>
+          <Button type="submit" theme="success" disabled={isPending} rounded>
             {t(KEY.common_save)}
           </Button>
         </div>

@@ -41,8 +41,8 @@ cd ..
 
 cd backend || exit
 source aliases.sh
-poetry-sync-prod
-poetry-migrate-apply
-poetry-run-collectstatic
+uv-sync-prod
+uv-run-migrations-apply
+uv-run-collectstatic
 touch reload # Trigger restart of uwsgi server.
 cd ..

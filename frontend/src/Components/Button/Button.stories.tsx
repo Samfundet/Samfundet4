@@ -17,8 +17,8 @@ export const Basic: Story = {
   render: (args) => <Button {...args}>Submit</Button>,
 };
 
-export const Samf: Story = {
-  args: { theme: 'samf' },
+export const Primary: Story = {
+  args: { theme: 'primary' },
   render: (args) => <Button {...args}>Submit</Button>,
 };
 

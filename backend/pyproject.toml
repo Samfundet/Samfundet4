@@ -135,39 +135,41 @@ max-positional-args = 1
 [tool.ruff.lint.mccabe]
 max-complexity = 5
 
-[tool.poetry]
-# Backend is not a package to publish.
-# https://python-poetry.org/docs/pyproject/
-# https://python-poetry.org/docs/basic-usage/#operating-modes
-package-mode = false
+[project]
+name = "samfundet4-backend"
+version = "0.0.0"
+# Exact interpreter is pinned by '.python-version' (3.11.2); this allows any 3.11.x for resolution.
+requires-python = "==3.11.*"
+dependencies = [
+    "django==5.2.*",
+    "django-extensions==4.*",
+    "django-environ==0.*",
+    "djangorestframework==3.*",
+    "django-cors-headers==4.*",
+    "dataclasses-json==0.*",
+    "django-guardian==3.*",
+    "pillow==12.*",
+    "gunicorn==26.*",
+    "django-admin-autocomplete-filter==0.*",
+    "psycopg[c]",
+]
 
-[tool.poetry.dependencies]
-python = "3.11.2"
-django = "5.2.*"
-django-extensions = "4.*"
-django-environ = "0.*"
-djangorestframework = "3.*"
-django-cors-headers = "4.*"
-dataclasses-json = "0.*"
-django-guardian = "2.*"
-pillow = "12.*"
-gunicorn = "25.*"
-django-admin-autocomplete-filter = "0.*"
-psycopg = { extras = ["c"], version = "*" }
+[dependency-groups]
+# Dev-only dependencies (PEP 735). Installed by default with `uv sync`; excluded by `uv sync --no-dev`.
+dev = [
+    "mypy==2.*",
+    "ruff==0.*",
+    "bandit==1.*",
+    "pillow==12.*",
+    "debugpy==1.*",
+    "requests==2.*",
+    "pytest==9.*",
+    "pytest-django==4.*",
+    "drf-spectacular==0.29.*",
+    "freezegun>=1.5.5,<2",
+]
 
-
-[tool.poetry.group.dev.dependencies]
-mypy = "1.*"
-ruff = "0.*"
-bandit = "1.*"
-pillow = "12.*"
-debugpy = "1.*"
-requests = "2.*"
-pytest = "8.*"
-pytest-django = "4.*"
-drf-spectacular = "0.29.*"
-freezegun = "^1.5.5"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.uv]
+# Backend is an application, not a publishable package (mirrors the old poetry `package-mode = false`).
+# https://docs.astral.sh/uv/concepts/projects/config/#build-systems
+package = false

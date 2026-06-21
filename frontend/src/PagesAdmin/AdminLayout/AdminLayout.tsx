@@ -31,7 +31,7 @@ export function AdminLayout() {
   const isMobile = useMobile();
   const location = useLocation();
   const navigate = useNavigate();
-  const [cookies] = useCookies();
+  const [cookies] = useCookies(['impersonated_user_id']);
   const { user, setUser, loading: authLoading } = useAuthContext();
 
   const isImpersonating = Object.hasOwn(cookies, 'impersonated_user_id');
@@ -173,7 +173,7 @@ export function AdminLayout() {
   const mobileOpen = (
     <>
       <div className={styles.mobile_header}>
-        <Button theme="samf" onClick={() => setPanelOpen(!panelOpen)}>
+        <Button theme="primary" onClick={() => setPanelOpen(!panelOpen)}>
           <Icon icon="ci:hamburger-md" /> {t(KEY.common_open)} {t(KEY.control_panel_title)}
         </Button>
       </div>

@@ -6,12 +6,11 @@
 
 * [Homebrew](https://docs.brew.sh/Installation)
     * MacOS package manager
-* [Poetry](https://python-poetry.org/docs/)
-    * Backend dependency manager
+* [uv](https://docs.astral.sh/uv/)
+    * Backend Python package, project and version manager (replaces pip, poetry, pyenv and virtualenv).
+      It also installs the Python version that Samfundet4 expects (defined in `backend/.python-version`).
 * [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)
     * Frontend dependency manager
-* [pyenv](https://github.com/pyenv/pyenv)
-    * Python version manager. Lets you easily install the same Python version that Samfundet4 expects.
 
 ## Installing
 
@@ -32,21 +31,21 @@ Install the backend dependencies
 
 ```bash
 cd ../backend
-poetry install
+uv sync
 ```
 
 Then apply migrations and run seed script (the seed script adds test data to our database)
 
 ```bash
-poetry run python3 manage.py migrate
-poetry run python3 manage.py seed
+uv run python3 manage.py migrate
+uv run python3 manage.py seed
 ```
 
 ## Environment files
 
 Both the `backend` and `frontend` directories have an `.env.example` file. In each directory, copy this file to `.env`
 and adjust any values as needed. You may for example want to change the default Django superuser username and
-password (`DJANGO_SUPERUSER_USERNAME` and `DJANGO_SUPERUSER_USERNAME`).
+password (`DJANGO_SUPERUSER_USERNAME` and `DJANGO_SUPERUSER_PASSWORD`).
 
 ## Running
 
@@ -54,7 +53,7 @@ Start backend:
 
 ```bash
 cd backend
-poetry run python3 manage.py runserver
+uv run python3 manage.py runserver
 ```
 
 Start frontend:
