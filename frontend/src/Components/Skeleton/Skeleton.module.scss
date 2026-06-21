@@ -1,0 +1,40 @@
+@use '../../mixins' as m;
+
+@use '../../styles/colors' as c;
+
+@keyframes skeleton-loading {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 1em;
+  border-radius: 0.25rem;
+  background-color: c.$gray-100;
+  border: 1px solid c.$gray-200;
+  line-height: 1;
+  overflow: hidden;
+  user-select: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(90deg, transparent 0%, c.$gray-50 50%, transparent 100%);
+    transform: translateX(-100%);
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+  }
+
+  @include m.theme-dark {
+    background-color: c.$gray-850;
+    border: 1px solid c.$gray-950;
+
+    &::after {
+      background-image: linear-gradient(90deg, transparent 0%, c.$gray-800 50%, transparent 100%);
+    }
+  }
+}
