@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { type ReactNode, createContext, useContext, useEffect, useState } from 'react';
-import { getCsrfToken, getKeyValues, putUserPreference } from '~/api';
+import { getCsrfToken, getKeyValues } from '~/api';
 import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, type ThemeValue, XCSRFTOKEN } from '~/constants';
 import { useTheme } from '~/hooks';
 import type { KeyValueMap, SetState } from '~/types';
@@ -15,7 +15,7 @@ type GlobalContextProps = {
   setTheme: SetState<ThemeValue>;
   switchTheme: () => ThemeValue;
 
-  // Mirror dimention
+  // Mirror dimension
   mirrorDimension: boolean;
   setMirrorDimension: SetState<boolean>;
   toggleMirrorDimension: () => boolean;
@@ -77,7 +77,7 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
   // Update preferences when user is loaded.
   useEffect(() => {
     if (!user || !enabled) return;
-    setMirrorDimension(user.user_preference.mirror_dimension);
+    // load any saved preferences here...
   }, [user, enabled]);
 
   // Stuff to do on first render.
@@ -128,9 +128,6 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
   function toggleMirrorDimension(): boolean {
     const toggledValue = !mirrorDimension;
     setMirrorDimension(toggledValue);
-    if (user) {
-      putUserPreference(user.user_preference.id, { mirror_dimension: toggledValue });
-    }
     return toggledValue;
   }
 
