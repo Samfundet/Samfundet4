@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 import { getTextItem, putUserPreference } from '~/api';
 import type { Key, PageNumberPaginationType, SetState } from '~/types';
-import { createDot, hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
+import { hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
 import type { LinkTarget } from './Components/Link/Link';
 import {
   BACKEND_DOMAIN,
@@ -245,68 +245,6 @@ export function useMousePosition(): { x: number; y: number } {
   }, []);
 
   return position;
-}
-
-/** Return type for hook useMouseTrail. */
-type UseMouseTrail = {
-  isMouseTrail: boolean;
-  setIsMouseTrail: SetState<boolean>;
-  toggleMouseTrail: () => boolean;
-};
-
-/**
- * When used will spawn a trail behind the cursor.
- * Currently only meant to be used in GlobalContextProvider.
- */
-export function useMouseTrail(): UseMouseTrail {
-  const { user } = useAuthContext();
-
-  const [isMouseTrail, setIsMouseTrail] = useState<boolean>(false);
-
-  const container = document.createElement('div');
-  document.body.appendChild(container);
-
-  useEffect(() => {
-    if (!user) return;
-    setIsMouseTrail(user.user_preference.cursor_trail);
-  }, [user]);
-
-  // Spawn trail behind cursor whenever it moves.
-  useEffect(() => {
-    if (!isMouseTrail) return;
-
-    function handleMouseMove(e: MouseEvent) {
-      const dot = createDot(e);
-      container.appendChild(dot);
-
-      // We need to clean all the elements the trail produces.
-      // If we don't do this, the <body> will be cluttered with thousands of elements.
-      // That would likely cause performance issues.
-      // This delay must be equal to or longer than the trail animation.
-      setTimeout(() => {
-        dot.remove();
-      }, 2000); // Remove the element after 1 second
-    }
-
-    document.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [container, isMouseTrail]);
-
-  /** Simplified theme switching. Returns theme it switched to. */
-  function toggleMouseTrail(): boolean {
-    const newIsCursorTrail = !isMouseTrail;
-
-    setIsMouseTrail(newIsCursorTrail);
-    if (user) {
-      putUserPreference(user.user_preference.id, { cursor_trail: newIsCursorTrail });
-    }
-    return newIsCursorTrail;
-  }
-
-  return { isMouseTrail, setIsMouseTrail, toggleMouseTrail };
 }
 
 /** Return type for hook useTheme. */

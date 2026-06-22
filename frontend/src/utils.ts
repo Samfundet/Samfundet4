@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import type { z } from 'zod';
-import { CURSOR_TRAIL_CLASS, THEME_KEY, type ThemeValue } from '~/constants';
+import { THEME_KEY, type ThemeValue } from '~/constants';
 import type { EventDto, UserDto } from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
@@ -426,18 +426,6 @@ export function updateBodyThemeClass(theme: ThemeValue): void {
   document.body.setAttribute(THEME_KEY, theme);
   // Remember theme in localStorage between refreshes.
   localStorage.setItem(THEME_KEY, theme);
-}
-
-/**
- * Helper to create element, add class, position the element and add to body.
- */
-export function createDot(e: MouseEvent): HTMLDivElement {
-  //
-  const dot = document.createElement('div');
-  dot.classList.add(CURSOR_TRAIL_CLASS); // global.scss
-  dot.style.left = `${e.clientX + window.pageXOffset}px`;
-  dot.style.top = `${e.clientY + window.pageYOffset}px`;
-  return dot;
 }
 
 /**

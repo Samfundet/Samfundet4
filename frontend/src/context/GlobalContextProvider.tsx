@@ -2,7 +2,7 @@ import axios from 'axios';
 import { type ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { getCsrfToken, getKeyValues, putUserPreference } from '~/api';
 import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, type ThemeValue, XCSRFTOKEN } from '~/constants';
-import { useMouseTrail, useTheme } from '~/hooks';
+import { useTheme } from '~/hooks';
 import type { KeyValueMap, SetState } from '~/types';
 import { useAuthContext } from './AuthContext';
 
@@ -19,11 +19,6 @@ type GlobalContextProps = {
   mirrorDimension: boolean;
   setMirrorDimension: SetState<boolean>;
   toggleMirrorDimension: () => boolean;
-
-  // Mouse trail
-  isMouseTrail: boolean;
-  setIsMouseTrail: SetState<boolean>;
-  toggleMouseTrail: () => boolean;
 
   // Navbar
   isMobileNavigation: boolean;
@@ -74,7 +69,6 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
   const { user } = useAuthContext();
 
   const [mirrorDimension, setMirrorDimension] = useState<boolean>(false);
-  const { isMouseTrail, setIsMouseTrail, toggleMouseTrail } = useMouseTrail();
 
   // =================================== //
   //               Effects               //
@@ -153,9 +147,6 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
     setIsMobileNavigation,
     mirrorDimension,
     setMirrorDimension,
-    isMouseTrail: isMouseTrail,
-    setIsMouseTrail: setIsMouseTrail,
-    toggleMouseTrail,
     toggleMirrorDimension,
     keyValues,
   };
