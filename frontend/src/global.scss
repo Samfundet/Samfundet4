@@ -8,7 +8,9 @@
 /* stylelint-disable-next-line no-invalid-position-at-import-rule */
 @use 'mixins' as *;
 
-@use 'src/styles/variables' as v;
+@use './styles/variables' as v;
+
+@use './styles/colors' as col;
 
 /* stylelint-disable selector-max-type */
 /* stylelint-disable selector-max-universal */
@@ -97,9 +99,9 @@ a {
 label {
   display: flex;
   flex-direction: column;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 0.5em;
-  color: $black;
+  color: col.$gray-950;
 }
 
 // Themes:
