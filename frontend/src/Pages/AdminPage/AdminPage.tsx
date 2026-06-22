@@ -17,7 +17,7 @@ export function AdminPage() {
 
   const WISEWORD = getRandomEntryFromList(WISEWORDS) as string;
 
-  const { mirrorDimension, toggleMirrorDimension, isMouseTrail, toggleMouseTrail } = useGlobalContext();
+  const { mirrorDimension, toggleMirrorDimension } = useGlobalContext();
 
   return (
     <Page>
@@ -33,10 +33,6 @@ export function AdminPage() {
         <div className={styles.preference_row}>
           <div className={styles.label}>Mirror Dimension</div>
           <ToggleSwitch checked={mirrorDimension} onChange={toggleMirrorDimension} />
-        </div>
-        <div className={styles.preference_row}>
-          <div className={styles.label}>Mouse Trail</div>
-          <ToggleSwitch checked={isMouseTrail} onChange={toggleMouseTrail} />
         </div>
       </div>
     </Page>
