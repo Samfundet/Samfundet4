@@ -30,7 +30,7 @@
   }
 
   @include m.theme-dark {
-    background-color: c.$gray-850;
+    background-color: c.$black-600;
     border: 1px solid c.$gray-950;
 
     &::after {

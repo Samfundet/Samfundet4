@@ -8,6 +8,7 @@ import { hasPerm, isTruthy, updateBodyThemeClass } from '~/utils';
 import type { LinkTarget } from './Components/Link/Link';
 import {
   BACKEND_DOMAIN,
+  CONTROL_PANEL_SIDEPANEL_KEY,
   PAGE_SIZE,
   THEME,
   THEME_KEY,
@@ -559,4 +560,22 @@ export function useSearchPaginatedQuery<T>({
     isLoading,
     error,
   };
+}
+
+/**
+ * Handles control panel sidepanel open/minimize state.
+ * Persisted in localStorage
+ */
+export function useSidePanelState(): [boolean, (open: boolean) => void] {
+  const isMobile = useMobile();
+  const [isOpen, setOpenState] = useState(
+    (localStorage.getItem(CONTROL_PANEL_SIDEPANEL_KEY) || 'open') === 'open' && !isMobile,
+  );
+
+  function setPanelOpen(open: boolean) {
+    localStorage.setItem(CONTROL_PANEL_SIDEPANEL_KEY, open ? 'open' : 'minimized');
+    setOpenState(open);
+  }
+
+  return [isOpen, setPanelOpen];
 }
