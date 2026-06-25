@@ -498,11 +498,17 @@ export function IsNumber(value: unknown): value is number {
 export function handleServerFormErrors<T extends z.ZodType>(
   error: unknown,
   form: UseFormReturn<z.infer<T>>,
-  nbTranslationMap?: Record<string, string>,
+  nbTranslations?: Record<string, string>,
 ) {
   if (!(error instanceof AxiosError)) {
     return;
   }
+
+  const defaultNbTranslations: Record<string, string> = {
+    'This field may not be blank': 'Dette feltet kan ikke være tomt.',
+  };
+
+  const nbTranslationMap = { ...defaultNbTranslations, ...nbTranslations };
 
   let setFormErrors = false;
   const serverErrors = (error.response?.data as Record<string, string[]>) || null;
