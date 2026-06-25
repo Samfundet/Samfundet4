@@ -27,6 +27,11 @@ export const XCSRFTOKEN = 'X-CSRFToken';
  */
 export const THEME_KEY = 'data-theme'; // Valid html tag attribute.
 
+/**
+ * Whether the control panel side panel is open or minimized.
+ */
+export const CONTROL_PANEL_SIDEPANEL_KEY = 'control-panel-sidepanel';
+
 export const SUPPORT_EMAIL = 'mg-web@samfundet.no';
 
 export const PHONENUMBER_REGEX = /^\+?\s*(\d\s*){8,15}$/;

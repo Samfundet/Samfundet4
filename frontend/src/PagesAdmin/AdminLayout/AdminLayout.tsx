@@ -1,17 +1,16 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation } from 'react-router';
-import { useNavigate } from 'react-router';
-import { Button, Link } from '~/Components';
+import { Outlet, useLocation, useNavigate } from 'react-router';
+import { Link } from '~/Components';
 import { Navbar } from '~/Components/NavbarSamfThree';
 import { appletCategories } from '~/Pages/AdminPage/applets';
 import { logout, stopImpersonatingUser } from '~/api';
 import { isSiteFeatureEnabled } from '~/constants/site-features';
 import { useAuthContext } from '~/context/AuthContext';
-import { useMobile } from '~/hooks';
+import { useMobile, useSidePanelState } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -27,12 +26,12 @@ import styles from './AdminLayout.module.scss';
  */
 export function AdminLayout() {
   const { t } = useTranslation();
-  const [panelOpen, setPanelOpen] = useState(false);
   const isMobile = useMobile();
+  const [isPanelOpen, setPanelOpen] = useSidePanelState();
   const location = useLocation();
   const navigate = useNavigate();
   const [cookies] = useCookies(['impersonated_user_id']);
-  const { user, setUser, loading: authLoading } = useAuthContext();
+  const { setUser, loading: authLoading } = useAuthContext();
 
   const isImpersonating = Object.hasOwn(cookies, 'impersonated_user_id');
 
@@ -57,32 +56,29 @@ export function AdminLayout() {
 
   const makeAppletShortcut = useCallback(
     (applet: AdminApplet, index: number) => {
-      // No default url, dont show in navmenu
+      // No default url, don't show in navmenu
       if (applet.url === undefined) return <></>;
 
-      // Create panel item
-      const selected = location.pathname === applet.url;
+      // TODO: replace hacky solution of excluding /control-panel/. Maybe we can check breadcrumbs for a match?
+      const selected =
+        location.pathname === applet.url ||
+        (location.pathname.startsWith(applet.url) && !applet.url.endsWith('/control-panel/'));
+
       return (
         <Link
           key={index}
           className={classNames(styles.panel_item, selected && styles.selected)}
           url={applet.url}
-          onAfterClick={() => isMobile && panelOpen && setPanelOpen(false)}
+          onAfterClick={() => isMobile && isPanelOpen && setPanelOpen(false)}
           plain={true}
         >
           <Icon icon={applet.icon} />
-          {dbT(applet, 'title')}
+          {isPanelOpen && dbT(applet, 'title')}
         </Link>
       );
     },
-    [location, isMobile, panelOpen],
+    [location, isMobile, isPanelOpen, setPanelOpen],
   );
-
-  useEffect(() => {
-    if (!isMobile) {
-      setPanelOpen(true);
-    }
-  }, [isMobile]);
 
   const userAppletsRaw: AdminApplet[] = [
     { url: ROUTES_FRONTEND.admin, icon: 'mdi:person', title_nb: 'Profil', title_en: 'Profile', feature: 'profile' },
@@ -98,91 +94,95 @@ export function AdminLayout() {
   const userApplets = userAppletsRaw.filter((a) => !a.feature || isSiteFeatureEnabled(a.feature));
 
   const panel = (
-    <div className={classNames(styles.panel, !panelOpen && styles.mobile_panel_closed)}>
-      <button type="button" className={styles.mobile_panel_close_btn} onClick={() => setPanelOpen(false)}>
-        <Icon icon="mdi:close" width={24} />
-      </button>
+    <>
+      <div className={classNames(styles.panel, !isPanelOpen && styles.panel_closed)}>
+        <div className={styles.panel_header}>
+          {isPanelOpen && <span>{t(KEY.control_panel_title)}</span>}
+          <button type="button" className={styles.panel_close_btn} onClick={() => setPanelOpen(!isPanelOpen)}>
+            <Icon icon="lucide:arrow-left-from-line" rotate={isPanelOpen ? 0 : 2} />
+          </button>
+        </div>
+        {userApplets.map((applet, index) => makeAppletShortcut(applet, index))}
 
-      {/* Header */}
-      <div className={styles.panel_header}>{t(KEY.control_panel_title)}</div>
-      {/* Index */}
-      {userApplets.map((applet, index) => makeAppletShortcut(applet, index))}
-      <br />
-      {/* Applets */}
-      {appletCategories.map((category) => {
-        // Keep only the applets with enabled features visible
-        const visibleApplets = category.applets.filter(
-          (applet) => !applet.feature || isSiteFeatureEnabled(applet.feature),
-        );
+        <br />
 
-        if (visibleApplets.length === 0) return null;
+        {appletCategories.map((category) => {
+          // Keep only the applets with enabled features visible
+          const visibleApplets = category.applets.filter(
+            (applet) => !applet.feature || isSiteFeatureEnabled(applet.feature),
+          );
 
-        return (
-          <React.Fragment key={category.title_en}>
-            <div className={styles.category_header}>{dbT(category, 'title')}</div>
-            {visibleApplets.map((applet, index) => makeAppletShortcut(applet, index))}
-          </React.Fragment>
-        );
-      })}
-      <br />
+          if (visibleApplets.length === 0) return null;
 
-      {/* TODO help/faq (Hidden until ready)*/}
-      {isSiteFeatureEnabled('faq') && (
-        <Link className={classNames(styles.panel_item)} url={ROUTES_FRONTEND.admin}>
-          <Icon icon="material-symbols:question-mark-rounded" />
-          {t(KEY.control_panel_faq)}
-        </Link>
-      )}
+          return (
+            <React.Fragment key={category.title_en}>
+              {isPanelOpen ? (
+                <div className={styles.category_header}>{dbT(category, 'title')}</div>
+              ) : (
+                <hr className={styles.separator} />
+              )}
 
-      <div className={styles.bottom_items}>
-        <div className={styles.separator} />
-        {/* Stop Impersonating */}
-        {isImpersonating && (
+              {visibleApplets.map((applet, index) => makeAppletShortcut(applet, index))}
+            </React.Fragment>
+          );
+        })}
+        <br />
+
+        {/* TODO help/faq (Hidden until ready)*/}
+        {isSiteFeatureEnabled('faq') && (
+          <Link className={classNames(styles.panel_item)} url={ROUTES_FRONTEND.admin}>
+            <Icon icon="material-symbols:question-mark-rounded" />
+            {t(KEY.control_panel_faq)}
+          </Link>
+        )}
+
+        <div className={styles.bottom_items}>
+          <hr className={styles.separator} />
+
+          {isImpersonating && (
+            <button
+              type="button"
+              className={classNames(styles.panel_item, styles.panel_item_button)}
+              onClick={handleStopImpersonating}
+            >
+              <Icon icon="ri:spy-fill" />
+              {t(KEY.admin_stop_impersonate)}
+            </button>
+          )}
+
+          <Link
+            url={ROUTES.frontend.admin_mdb_connect}
+            className={classNames(styles.panel_item, {
+              [styles.selected]: location.pathname === ROUTES.frontend.admin_mdb_connect,
+            })}
+          >
+            <Icon icon="mdi:connection" />
+            {isPanelOpen && t(KEY.common_member_database)}
+          </Link>
+
           <button
             type="button"
             className={classNames(styles.panel_item, styles.panel_item_button)}
-            onClick={handleStopImpersonating}
+            onClick={handleLogout}
           >
-            <Icon icon="ri:spy-fill" />
-            {t(KEY.admin_stop_impersonate)}
+            <Icon icon="material-symbols:logout" />
+            {isPanelOpen && t(KEY.common_logout)}
           </button>
-        )}
-        {/** Connect to MDB button */}
-        <Link
-          url={ROUTES.frontend.admin_mdb_connect}
-          className={classNames(styles.panel_item, {
-            [styles.selected]: location.pathname === ROUTES.frontend.admin_mdb_connect,
-          })}
-        >
-          <Icon icon="mdi:connection" />
-          {t(KEY.common_member_database)}
-        </Link>
-        {/* Logout */}
+        </div>
+      </div>
+      {isPanelOpen && isMobile && (
         <button
           type="button"
-          className={classNames(styles.panel_item, styles.panel_item_button)}
-          onClick={handleLogout}
-        >
-          <Icon icon="material-symbols:logout" />
-          {t(KEY.common_logout)}
-        </button>
-      </div>
-    </div>
-  );
-
-  const mobileOpen = (
-    <>
-      <div className={styles.mobile_header}>
-        <Button theme="primary" onClick={() => setPanelOpen(!panelOpen)}>
-          <Icon icon="ci:hamburger-md" /> {t(KEY.common_open)} {t(KEY.control_panel_title)}
-        </Button>
-      </div>
+          className={classNames(styles.mobile_panel_backdrop)}
+          onClick={() => setPanelOpen(false)}
+        />
+      )}
     </>
   );
 
-  const desktopOpen = (
-    <button type="button" className={styles.open_panel_desktop} onClick={() => setPanelOpen(true)}>
-      <Icon icon="mdi:arrow-right-bold" width={16} className={styles.arrow} />
+  const mobileOpen = (
+    <button type="button" className={styles.mobile_open_button} onClick={() => setPanelOpen(true)}>
+      <Icon icon="carbon:chevron-right" />
     </button>
   );
 
@@ -192,9 +192,9 @@ export function AdminLayout() {
       {!authLoading && (
         <div className={styles.wrapper}>
           {panel}
-          {!panelOpen && (isMobile ? mobileOpen : desktopOpen)}
-          {/* Content */}
-          <div className={classNames(styles.content_wrapper, !panelOpen && styles.closed_panel_content_wrapper)}>
+          {!isPanelOpen && isMobile && mobileOpen}
+
+          <div className={classNames(styles.content_wrapper, !isPanelOpen && styles.closed_panel_content_wrapper)}>
             <Outlet />
           </div>
         </div>
