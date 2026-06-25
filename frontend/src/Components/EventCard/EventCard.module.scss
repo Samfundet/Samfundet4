@@ -1,8 +1,8 @@
-@use 'src/mixins' as m;
+@use '../../mixins' as m;
 
-@use 'src/styles/colors' as c;
+@use '../../styles/colors' as c;
 
-@use 'src/styles/variables' as v;
+@use '../../styles/variables' as v;
 
 $border-radius: v.$border-radius-lg;
 $width: 400px;
@@ -13,9 +13,14 @@ $min-width: 330px;
   min-width: $min-width;
   transition: box-shadow 0.1s ease-in-out;
   border-radius: $border-radius;
+  background-color: v.$primary-light-bg;
 
   &:hover {
     box-shadow: 0 1px 12px 0 rgba(0, 0, 0, 0.04);
+  }
+
+  @include m.theme-dark {
+    background-color: v.$primary-dark-bg;
   }
 }
 
