@@ -1,32 +1,24 @@
-@use 'src/constants' as *;
+@use '../../constants' as c;
 
-@use 'src/mixins' as *;
+@use '../../mixins' as m;
 
-$panel-width: 18em;
-$panel-light-bg: #f6f6f6;
-$panel-light-bg-hover: #e8e8e8;
-$panel-light-border: #d7d7d7;
-$panel-dark-bg: #333333;
+@use '../../styles/colors' as col;
 
 .wrapper {
   display: flex;
   flex-direction: row;
-  max-height: calc(100vh - $navbar-height);
-  height: calc(100vh - $navbar-height);
-  margin-top: $navbar-height;
+  max-height: calc(100vh - #{c.$navbar-height});
+  height: calc(100vh - #{c.$navbar-height});
+  margin-top: c.$navbar-height;
 
-  @include for-mobile-down {
+  @include m.for-mobile-down {
     flex-direction: column;
   }
 }
 
 .panel {
-  position: fixed;
-  height: calc(100% - $navbar-height);
-  min-width: $panel-width;
-  max-width: $panel-width;
-  background-color: $panel-light-bg;
-  border-right: 1px solid $panel-light-border;
+  background-color: col.$white-50;
+  border-right: 1px solid col.$gray-100;
   display: flex;
   flex-direction: column;
   gap: 0.2em;
@@ -36,117 +28,142 @@ $panel-dark-bg: #333333;
   opacity: 1;
   transition: transform 0.2s ease-in-out;
   padding-bottom: 2.5em;
+  position: relative;
 
-  @include for-mobile-only {
+  @include m.for-mobile-only {
+    position: fixed;
+    height: calc(100% - #{c.$navbar-height});
     box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.1);
     width: 80%;
     max-width: initial;
   }
 
-  @include theme-dark {
-    background-color: $panel-dark-bg;
-    border-color: $black;
+  @include m.theme-dark {
+    background-color: col.$gray-950;
+    border-color: col.$gray-800;
   }
 }
 
-.mobile_panel_closed {
-  transform: translateX(-100%);
+.panel_closed {
+  @include m.for-mobile-down {
+    transform: translateX(-100%);
+  }
 }
 
-.mobile_header {
-  padding: 1rem;
+.panel:not(.panel_closed) {
+  min-width: 250px;
 }
 
-.mobile_panel_close_btn {
-  position: absolute;
-  right: 0.5rem;
-  top: 0.5rem;
+.mobile_open_button {
+  padding: 1.5rem 0.25rem;
+  position: fixed;
+  background-color: col.$black-900;
+  color: col.$white-50;
+  border: none;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  opacity: 0.8;
+  backdrop-filter: blur(16px);
+  transition: opacity 0.1s ease-in-out;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  @include m.theme-dark {
+    background-color: col.$white-50;
+    color: col.$black-900;
+  }
+}
+
+.mobile_panel_backdrop {
+  display: none;
+  @include m.for-mobile-only {
+    display: initial;
+    border: none;
+    border-radius: 0;
+    position: fixed;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(2px);
+  }
+}
+
+.panel_close_btn {
   padding: 0.5rem;
   margin: 0;
   background: none;
   border: none;
-  border-radius: 0;
   cursor: pointer;
-  color: $grey-1;
+  color: col.$gray-500;
+  border-radius: 0.5em;
 
   &:hover {
-    color: $black;
+    color: c.$black;
+    background: col.$gray-50;
   }
 
-  @include theme-dark {
-    color: $grey-3;
+  @include m.theme-dark {
+    color: col.$gray-100;
 
     &:hover {
-      color: $grey-4;
+      background-color: col.$gray-800;
     }
   }
 }
 
-.mobile_backdrop {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  z-index: 5;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  pointer-events: none;
-  backdrop-filter: blur(2px);
-}
-
-.mobile_backdrop_open {
-  opacity: 1;
-  pointer-events: initial;
-}
-
 .panel_header {
-  @include flex-row;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-weight: 700;
   font-size: 1.25em;
-  padding: 0.75em;
-  padding-top: 0.5em;
+  padding: 0.5em 0.75em 0.75em;
   margin-top: 0.25em;
-  gap: 0.5em;
 
-  @include theme-dark {
-    border-color: $grey-1;
+  @include m.theme-dark {
+    border-color: c.$grey-1;
   }
 }
 
 .category_header {
-  font-weight: 700;
+  font-weight: 600;
   padding-left: 1.25em;
   padding-bottom: 0.5em;
 }
 
 .panel_item {
-  @include flex-row;
+  @include m.flex-row;
   text-align: right;
   gap: 1em;
-  padding: 0.5em 0.5em;
-  padding-left: 1em;
+  padding: 0.5em 0.5em 0.5em 1em;
   margin-left: 0.5em;
   margin-right: 0.5em;
   cursor: pointer;
   transition: 0.2s;
-  color: $grey-1;
+  color: c.$grey-1;
   text-decoration: none;
   border-radius: 0.5em;
   white-space: nowrap;
 
-  @include theme-dark {
-    color: $grey-4;
+  @include m.theme-dark {
+    color: col.$gray-100;
   }
 
   &:hover {
     text-decoration: none;
-    background-color: $panel-light-bg-hover;
+    background-color: col.$gray-50;
 
-    @include theme-dark {
-      background-color: $grey-1;
+    @include m.theme-dark {
+      background-color: col.$gray-800;
     }
   }
 }
-
 
 .panel_item_button {
   background: none;
@@ -158,29 +175,31 @@ $panel-dark-bg: #333333;
 }
 
 .selected {
-  background-color: $red-samf;
-  color: white;
-  @include theme-dark {
-    background-color: $red-samf;
+  background-color: col.$red-50;
+  color: col.$samf-red-700;
+  font-weight: 500;
+
+  @include m.theme-dark {
+    background-color: col.$red-900;
+    color: col.$samf-red-500;
+
+    &:hover {
+      background-color: col.$red-800;
+    }
   }
 
   &:hover {
-    background-color: $red-samf;
-    color: white;
+    background-color: col.$red-100;
   }
 }
 
 .content_wrapper {
   flex: 1;
-  height: calc(100vh - $navbar-height);
-  margin-left: calc($panel-width);
-  max-width: calc(100vw - $panel-width);
-  width: calc(100vw - $panel-width);
+  overflow: auto;
+  background-color: col.$white-300;
 
-  @include for-mobile-only {
-    width: auto;
-    max-width: 100%;
-    margin-left: 0;
+  @include m.theme-dark {
+    background-color: col.$black-800;
   }
 }
 
@@ -190,34 +209,6 @@ $panel-dark-bg: #333333;
   width: 100%;
 }
 
-.open_panel_desktop {
-  position: fixed;
-  height: 100%;
-  padding: 0.2em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-
-  &:hover {
-    background-color: $black-t10;
-    transition: background-color 200ms linear;
-  }
-  &:active {
-    background-color: $black-t25;
-    transition: background-color 1ms linear;
-  }
-}
-
-.arrow {
-  color: $grey-2;
-  background-color: transparent;
-  @include theme-dark {
-    background-color: $grey-4;
-  }
-}
-
 .bottom_items {
   margin-top: auto;
 }
@@ -225,9 +216,10 @@ $panel-dark-bg: #333333;
 .separator {
   width: 80%;
   margin: 0.5em auto;
-  border-top: 1px solid $panel-light-border;
+  border: none;
+  border-top: 1px solid col.$gray-100;
 
-  @include theme-dark {
-    border-color: $grey-1;
+  @include m.theme-dark {
+    border-color: c.$grey-1;
   }
 }

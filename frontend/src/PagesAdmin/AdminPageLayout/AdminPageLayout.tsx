@@ -21,32 +21,36 @@ export function AdminPageLayout({ title, backendUrl, header, loading, children }
   }, []);
 
   return (
-    <>
-      <div className={styles.header}>
+    <div className={styles.wrapper}>
+      <div className={styles.breadcrumb_bar}>
         <Breadcrumb />
-        <div className={styles.title_row}>
-          <div className={styles.title}>{title}</div>
-          {backendUrl && (
-            <IconButton
-              icon="vscode-icons:file-type-django"
-              title="Backend details"
-              target="backend"
-              color={COLORS.white}
-              border="solid #444 1px"
-              url={backendUrl}
-            />
-          )}
-        </div>
-        {header && <div className={styles.header_container}>{header}</div>}
       </div>
-      <div className={styles.content_container}>
-        {loading && (
-          <div className={styles.spinner_container}>
-            <SamfundetLogoSpinner />
+      <div className={styles.content}>
+        <div className={styles.header}>
+          <div className={styles.title_row}>
+            <div className={styles.title}>{title}</div>
+            {backendUrl && (
+              <IconButton
+                icon="vscode-icons:file-type-django"
+                title="Backend details"
+                target="backend"
+                color={COLORS.white}
+                border="solid #444 1px"
+                url={backendUrl}
+              />
+            )}
           </div>
-        )}
-        {!loading && children}
+          {header && <div className={styles.header_container}>{header}</div>}
+        </div>
+        <div className={styles.content_container}>
+          {loading && (
+            <div className={styles.spinner_container}>
+              <SamfundetLogoSpinner />
+            </div>
+          )}
+          {!loading && children}
+        </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -1,4 +1,5 @@
-import type { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type { UIMatch } from 'react-router';
 import type { buttonThemes } from '~/Components/Button/utils';
 import type { KV } from '~/constants';
 /** Module for global generic types. */
@@ -281,4 +282,12 @@ export interface CursorPaginatedResponse<T> {
   next: string | null; // URL or cursor for next page
   previous: string | null; // URL or cursor for previous page
   results: T[]; // Current page results
+}
+
+export type HandleWithCrumb = {
+  crumb: (match: UIMatch, data?: unknown) => ReactNode;
+};
+
+export interface MatchWithCrumb extends UIMatch {
+  handle: HandleWithCrumb;
 }
