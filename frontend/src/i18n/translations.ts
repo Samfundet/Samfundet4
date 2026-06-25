@@ -655,9 +655,12 @@ export const nb = prepareTranslations({
 
   // Feedback
   [KEY.feedback_type]: 'Type tilbakemelding',
-  [KEY.feedback_type_heading]: 'Vi ønsker din tilbakemelding på samfundet.no',
+  [KEY.feedback_type_heading]: 'Vi vil gjerne høre din tilbakemelding om Samfundet.no',
   [KEY.feedback_your_feedback]: 'Din tilbakemelding',
   [KEY.feedback_thank_you_for_feedback]: 'Takk for din tilbakemelding',
+  [KEY.feedback_helper_text]: 'Vi ønsker å vite hva du tenker om denne siden, og hva vi kan gjøre bedre.',
+  [KEY.feedback_want_contact_text]:
+    'Om du ønsker at vi kan kontakte deg om tilbakemeldingen, kan du skrive e-posten din her.',
 
   // No category:
   [KEY.owner]: 'Eier',
@@ -1354,9 +1357,11 @@ export const en = prepareTranslations({
 
   // Feedback
   [KEY.feedback_type]: 'Feedback type',
-  [KEY.feedback_type_heading]: 'We want to hear what you think of samfundet.no',
+  [KEY.feedback_type_heading]: "We'd like to hear your feedback about Samfundet.no",
   [KEY.feedback_your_feedback]: 'Your feedback',
   [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
+  [KEY.feedback_helper_text]: 'We want to know what we can do better and what you think is good about this page.',
+  [KEY.feedback_want_contact_text]: 'If you want us to contact you, you can write your email here.',
 
   //MDB Connect AdminPage
   [KEY.adminpage_connect_mdb]: 'Connect to the membership database',

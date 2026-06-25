@@ -642,6 +642,8 @@ export const KEY = {
   feedback_type_heading: 'feedback_type_heading',
   feedback_your_feedback: 'feedback_your_feedback',
   feedback_thank_you_for_feedback: 'feedback_thank_you_for_feedback',
+  feedback_helper_text: 'feedback_helper_text',
+  feedback_want_contact_text: 'feedback_want_contact_text',
 
   // No category:
   owner: 'owner',
