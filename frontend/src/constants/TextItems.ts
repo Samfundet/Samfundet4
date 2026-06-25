@@ -89,9 +89,6 @@ export const TextItem = {
   laws_and_statutes_header: 'laws_and_statutes_header',
   laws_and_statutes_text: 'laws_and_statutes_text',
 
-  // Feedback
-  feedback_helper_text: 'feedback_helper_text',
-  feedback_want_contact_text: 'feedback_want_contact_text',
   // Purchase Feedback
   purchase_feedback_title: 'purchase_feedback_title',
   purchase_feedback_alternative_1: 'purchase_feedback_alternative_1',
