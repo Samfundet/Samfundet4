@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import { default as classNames, default as classnames } from 'classnames';
-import React, { type ChangeEvent, type ReactNode, useMemo } from 'react';
+import React, { type ChangeEvent, type ReactNode, useMemo, useState } from 'react';
 import styles from './Dropdown.module.scss';
 
 export type DropdownOption<T> = {
@@ -58,6 +58,8 @@ function DropdownInner<T>(
 ) {
   const isControlled = value !== undefined;
 
+  const [internalIndex, setInternalIndex] = useState(0);
+
   const finalOptions = useMemo<DropdownOption<T>[]>(() => {
     let opts = [...options];
 
@@ -87,12 +89,18 @@ function DropdownInner<T>(
     if (defaultValue !== undefined) {
       return finalOptions.findIndex((opt) => opt.value === defaultValue);
     }
+    if (!isControlled) {
+      return internalIndex;
+    }
     return 0; // fall back to selecting first element
-  }, [isControlled, value, defaultValue, finalOptions]);
+  }, [isControlled, value, defaultValue, finalOptions, internalIndex]);
 
   function handleChange(event: ChangeEvent<HTMLSelectElement>) {
     const index = Number.parseInt(event.currentTarget.value, 10);
     if (index >= 0 && index < finalOptions.length) {
+      if (!isControlled) {
+        setInternalIndex(index);
+      }
       onChange?.(finalOptions[index].value);
     }
   }
@@ -102,13 +110,10 @@ function DropdownInner<T>(
       {label}
       <select
         ref={ref}
-        className={classNames(
-          classNameSelect,
-          styles.samf_select,
-          !disableIcon && styles.icon_disabled,
-          error && styles.error,
-          nullOption && finalOptions[selectedIndex].value === finalOptions[0].value && styles.italic,
-        )}
+        className={classNames(classNameSelect, styles.samf_select, {
+          [styles.error]: error, // is defined by base-input mixin
+          [styles.italic]: nullOption && finalOptions[selectedIndex].value === finalOptions[0].value,
+        })}
         onChange={handleChange}
         disabled={disabled}
         defaultValue={!isControlled ? selectedIndex : undefined}
