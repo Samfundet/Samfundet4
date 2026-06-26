@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import React from 'react';
 import styles from './Input.module.scss';
@@ -8,6 +9,7 @@ import styles from './Input.module.scss';
 interface PrimitiveInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'defaultValue'> {
   className?: string;
   type?: React.HTMLInputTypeAttribute;
+  icon?: string;
 }
 
 /**
@@ -32,7 +34,7 @@ interface UncontrolledInputProps extends PrimitiveInputProps {
 export type InputProps = ControlledInputProps | UncontrolledInputProps;
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, value, defaultValue, ...props }, ref) => {
+  ({ className, type, value, defaultValue, icon, ...props }, ref) => {
     const isControlled = value !== undefined;
 
     // Optional: Map to specialized classNames based on `type`
@@ -52,15 +54,18 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <input
-        ref={ref}
-        type={type}
-        className={classNames(styles.input, type && classMap[type], className)}
-        // If controlled, pass `value`, else pass `defaultValue`.
-        value={isControlled ? value : undefined}
-        defaultValue={!isControlled ? defaultValue : undefined}
-        {...props}
-      />
+      <label className={styles.label}>
+        <input
+          ref={ref}
+          type={type}
+          className={classNames(styles.input, type && classMap[type], className)}
+          // If controlled, pass `value`, else pass `defaultValue`.
+          value={isControlled ? value : undefined}
+          defaultValue={!isControlled ? defaultValue : undefined}
+          {...props}
+        />
+        {icon && <Icon icon={icon} className={styles.icon} />}
+      </label>
     );
   },
 );

@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import React from 'react';
 import styles from './Checkbox.module.scss';
@@ -47,6 +48,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           {...props}
         />
         <div className={styles.checkbox__box} />
+        <Icon icon="fluent:checkmark-12-filled" className={styles.check} />
       </label>
     );
   },
