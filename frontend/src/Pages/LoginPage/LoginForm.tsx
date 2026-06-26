@@ -69,7 +69,7 @@ export function LoginForm() {
           name="username"
           disabled={isPending}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className={styles.form_item}>
               <FormLabel>{t(KEY.common_username)}</FormLabel>
               <FormControl>
                 <Input type="text" {...field} />
@@ -83,7 +83,7 @@ export function LoginForm() {
           name="password"
           disabled={isPending}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className={styles.form_item}>
               <FormLabel>{lowerCapitalize(t(KEY.common_password))}</FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
