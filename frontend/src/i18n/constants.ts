@@ -264,13 +264,14 @@ export const KEY = {
   signuppage_login_link: 'signuppage_login_link',
 
   // LoginPickerPage:
-  loginpicker_page_caption: 'loginpicker_page_caption',
   loginpicker_page_title: 'loginpicker_page_title',
+  loginpicker_page_description: 'loginpicker_page_description',
   loginpicker_page_nav_aria_label: 'loginpicker_page_nav_aria_label',
   loginpicker_page_new_platform_title: 'loginpicker_page_new_platform_title',
   loginpicker_page_new_platform_description: 'loginpicker_page_new_platform_description',
   loginpicker_page_old_platform_title: 'loginpicker_page_old_platform_title',
   loginpicker_page_old_platform_description: 'loginpicker_page_old_platform_description',
+  loginpicker_page_old_platform_note: 'loginpicker_page_old_platform_note',
 
   contributors_page_title: 'contributors_page_title',
   contributors_page_text: 'contributors_page_text',
