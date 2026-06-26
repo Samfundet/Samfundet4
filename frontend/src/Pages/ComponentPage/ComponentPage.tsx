@@ -29,7 +29,6 @@ import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
 import { MultiSelect } from '~/Components/MultiSelect';
 import { ShrimpFishing } from '~/Components/ShrimpFishing/ShrimpFishing';
-import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOverlay';
 import { ExampleForm } from '~/Pages/ComponentPage/ExampleForm';
 import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { norwegianFlag } from '~/assets';
@@ -316,7 +315,6 @@ export function ComponentPage() {
         <ProgressBar value={75} max={100} />
       </div>
       <div>
-        <SnowflakesOverlay />
         <h2>
           <Countdown targetDate={new Date(new Date().getTime() + HOUR_MILLIS)}>
             <img src={norwegianFlag} alt="Flag" />
