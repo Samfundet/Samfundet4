@@ -1,6 +1,4 @@
-@use 'src/constants' as *;
-
-@use 'src/mixins' as *;
+@use '../../styles/variables' as v;
 
 .login_container {
   display: flex;
@@ -26,9 +24,9 @@
 
 .link {
   text-align: center;
-  margin-top: 0.6em;
-  font-size: 0.9em;
-  font-weight: 700;
+  margin-top: 0.5rem;
+  font-size: v.$font-size;
+  font-weight: 500;
   &:hover {
     text-decoration: underline;
   }

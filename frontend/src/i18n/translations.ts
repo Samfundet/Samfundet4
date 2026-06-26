@@ -244,7 +244,7 @@ export const nb = prepareTranslations({
   // LoginPage:
   [KEY.loginpage_register]: 'Lag bruker',
   [KEY.loginpage_login_failed]: 'Innlogging feilet',
-  [KEY.loginpage_internal_login]: 'Logg inn som intern',
+  [KEY.loginpage_internal_login]: 'Logg inn',
   [KEY.loginpage_passwords_must_match]: 'Passordene må være like',
   [KEY.loginpage_username]: 'Brukernavn',
   [KEY.loginpage_forgotten_password]: 'Glemt passordet ditt?',
@@ -253,13 +253,15 @@ export const nb = prepareTranslations({
   [KEY.signuppage_login_link]: 'Har du allerede en bruker?',
 
   // LoginPickerPage:
-  [KEY.loginpicker_page_caption]: 'Innlogging for interne',
-  [KEY.loginpicker_page_title]: 'Hvordan vil du logge inn?',
+  [KEY.loginpicker_page_title]: 'Hvor vil du logge inn?',
+  [KEY.loginpicker_page_description]:
+    'Vi jobber for tiden med å bygge en helt ny nettside for Samfundet.no. Funksjoner fra den gamle nettsiden vil gradvis bli tilgjengelige på den nye nettsiden, så foreløpig må du velge hvor du vil logge inn basert på hvilken funksjon du trenger.',
   [KEY.loginpicker_page_nav_aria_label]: 'Velg innlogging',
-  [KEY.loginpicker_page_new_platform_title]: 'Ny plattform (samf4)',
-  [KEY.loginpicker_page_new_platform_description]: 'Den nye plattformen for arrangementer og generell bruk',
-  [KEY.loginpicker_page_old_platform_title]: 'Eldre plattform (samf3)',
-  [KEY.loginpicker_page_old_platform_description]: 'Gruppeadministrasjon og andre administrative oppgaver',
+  [KEY.loginpicker_page_new_platform_title]: 'Ny nettside (samf4)',
+  [KEY.loginpicker_page_new_platform_description]: 'Arrangementer og generell bruk',
+  [KEY.loginpicker_page_old_platform_title]: 'Eldre nettside (samf3)',
+  [KEY.loginpicker_page_old_platform_description]: 'Gruppeadministrasjon, opptak, og andre administrative oppgaver.',
+  [KEY.loginpicker_page_old_platform_note]: 'NB: Kun tilgjengelig for frivillige',
 
   // ContributorsPage
   [KEY.contributors_page_title]: 'De frivillige som utvikler Samfundet.no',
@@ -956,7 +958,7 @@ export const en = prepareTranslations({
 
   // LoginPage:
   [KEY.loginpage_register]: 'Create user',
-  [KEY.loginpage_internal_login]: 'Log in as internal',
+  [KEY.loginpage_internal_login]: 'Log in',
   [KEY.loginpage_username]: 'Username',
   [KEY.loginpage_forgotten_password]: 'Forgot password?',
   [KEY.loginpage_passwords_must_match]: 'Passwords must match',
@@ -966,13 +968,15 @@ export const en = prepareTranslations({
   [KEY.signuppage_login_link]: 'Already have a user?',
 
   // LoginPickerPage:
-  [KEY.loginpicker_page_caption]: 'Internal login',
-  [KEY.loginpicker_page_title]: 'How would you like to log in?',
+  [KEY.loginpicker_page_title]: 'Where would you like to log in?',
+  [KEY.loginpicker_page_description]:
+    'We are currently building a brand new website for Samfundet.no. Features from the old website will gradually become available on the new one, so for now you need to choose where to log in based on which features you need.',
   [KEY.loginpicker_page_nav_aria_label]: 'Choose login',
-  [KEY.loginpicker_page_new_platform_title]: 'New platform (samf4)',
-  [KEY.loginpicker_page_new_platform_description]: 'The new platform for events and general use',
-  [KEY.loginpicker_page_old_platform_title]: 'Legacy platform (samf3)',
-  [KEY.loginpicker_page_old_platform_description]: 'Group administration and other administrative tasks',
+  [KEY.loginpicker_page_new_platform_title]: 'New site (samf4)',
+  [KEY.loginpicker_page_new_platform_description]: 'Events and general use',
+  [KEY.loginpicker_page_old_platform_title]: 'Legacy site (samf3)',
+  [KEY.loginpicker_page_old_platform_description]: 'Group administration, recruitment, and other administrative tasks.',
+  [KEY.loginpicker_page_old_platform_note]: 'NB: only available for volunteers',
 
   // GangsPage:
   [KEY.gangspage_title]: 'The groups at Samfundet',
