@@ -1,12 +1,8 @@
-@use 'sass:color';
+@use '../../mixins' as m;
 
-@use 'src/constants' as *;
+@use '../../styles/variables' as v;
 
-@use 'src/mixins' as *;
-
-@use 'src/styles/variables' as v;
-
-@use 'src/styles/colors' as c;
+@use '../../styles/colors' as c;
 
 .container {
   max-width: 960px;
@@ -27,7 +23,7 @@
   margin-bottom: 5px;
   font-weight: 400;
 
-  @include theme-dark {
+  @include m.theme-dark {
     color: c.$gray-400;
   }
 }
@@ -37,12 +33,17 @@
   font-size: v.$font-size-4xl;
   font-weight: 600;
   margin-top: 0;
-  margin-bottom: 30px;
+  margin-bottom: 1rem;
   line-height: 1.1;
 
-  @include theme-dark {
+  @include m.theme-dark {
     color: c.$white-50;
   }
+}
+
+.page_description {
+  margin-bottom: 1.5rem;
+  line-height: 1.5rem;
 }
 
 .picker {
@@ -66,8 +67,8 @@
   font-family: inherit;
   text-decoration: none;
 
-  @include theme-dark {
-    background-color: $theme_dark_input_bg;
+  @include m.theme-dark {
+    background-color: c.$black-700;
     border-color: c.$gray-700;
   }
 
@@ -76,18 +77,17 @@
     color: inherit;
   }
 
-  @include theme-dark {
-    color: $white;
+  @include m.theme-dark {
+    color: c.$white-50;
   }
 
   &:hover {
     text-decoration: none;
-    border-color: $red_samf_hover;
-    background-color: $grey-5;
+    border-color: c.$samf-red-primary;
+    background-color: c.$white-950;
 
-    @include theme-dark {
-      background-color: $black-2;
-      border-color: $red_samf;
+    @include m.theme-dark {
+      background-color: c.$black-600;
     }
   }
 }
@@ -105,12 +105,20 @@
 
 .description {
   color: c.$gray-600;
-  font-size: 1.1rem;
-  font-weight: 300;
   margin: 0;
   line-height: 1.5;
 
-  @include theme-dark {
+  @include m.theme-dark {
+    color: c.$gray-400;
+  }
+}
+
+.description_note {
+  font-size: v.$font-size;
+  color: c.$gray-600;
+  margin-top: 0.25rem;
+
+  @include m.theme-dark {
     color: c.$gray-400;
   }
 }
@@ -131,25 +139,24 @@
   align-items: center;
   margin-top: 15px;
   margin-bottom: 25px;
-  color: $black-1;
+  color: c.$black-700;
   text-decoration: underline;
   text-underline-offset: 3px;
 
-  @include theme-dark {
-    color: $theme_dark_color;
+  @include m.theme-dark {
+    color: c.$gray-200;
   }
 
   &:hover {
-    color: $grey-1;
-    text-decoration-thickness: 2px;
+    color: c.$gray-400;
 
-    @include theme-dark {
-      color: $white;
+    @include m.theme-dark {
+      color: c.$white-50;
     }
   }
 
   &:focus-visible {
-    outline: 3px solid $orange-light;
+    outline: 3px solid c.$samf-red-primary;
     outline-offset: 2px;
   }
 }

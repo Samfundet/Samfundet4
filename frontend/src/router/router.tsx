@@ -122,14 +122,16 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.health} element={<HealthPage />} />
           {import.meta.env.DEV && <Route path={ROUTES.frontend.components} element={<ComponentPage />} />}
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
-            <Route path={ROUTES.frontend.login} element={<LoginPickerPage newRoute="/new-login" />} />
+            <Route path={ROUTES.frontend.login} element={<LoginPickerPage />} />
             <Route path={SAMF3_LOGIN_URL.login} element={<LoginPage />} />
             <Route handle={{ crumb: () => <Link url={ROUTES.frontend.login}>{t(KEY.common_login)}</Link> }}>
               <Route
                 path={ROUTES.frontend.new_login}
                 element={<LoginPage />}
                 handle={{
-                  crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.loginpage_internal_login)}</Link>,
+                  crumb: ({ pathname }: UIMatch) => (
+                    <Link url={pathname}>{t(KEY.loginpicker_page_new_platform_title)}</Link>
+                  ),
                 }}
               />
             </Route>

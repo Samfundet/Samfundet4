@@ -1,21 +1,13 @@
 import { Icon } from '@iconify/react';
-import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Page } from '~/Components';
+import { Link, Page } from '~/Components';
 import { KEY } from '~/i18n/constants';
+import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { SAMF3_LOGIN_URL } from '~/routes/samf-three';
 import styles from './LoginPickerPage.module.scss';
 
-type Props = { newRoute: string };
-
-/**
- * A page that allows users to choose between the old and new samf login.
- *
- * @param newRoute for the new samf login (samf4)
- * @constructor
- */
-export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
+export function LoginPickerPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -28,22 +20,23 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
         </button>
 
         <div className={styles.formWrapper}>
-          <span className={styles.caption}>{t(KEY.loginpicker_page_caption)}</span>
           <h1 className={styles.headerTitle}>{t(KEY.loginpicker_page_title)}</h1>
+          <p className={styles.page_description}>{t(KEY.loginpicker_page_description)}</p>
 
           <nav aria-label={t(KEY.loginpicker_page_nav_aria_label)} className={styles.picker}>
-            <a href={newRoute} className={styles.choiceWrapper}>
+            <Link url={ROUTES_FRONTEND.new_login} className={styles.choiceWrapper}>
               <div className={styles.textWrapper}>
                 <span className={styles.radioLabel}>{t(KEY.loginpicker_page_new_platform_title)}</span>
                 <p className={styles.description}>{t(KEY.loginpicker_page_new_platform_description)}</p>
               </div>
               <Icon icon="mdi:arrow-right" className={styles.arrowIcon} />
-            </a>
+            </Link>
 
             <a href={SAMF3_LOGIN_URL.login} className={styles.choiceWrapper}>
               <div className={styles.textWrapper}>
                 <span className={styles.radioLabel}>{t(KEY.loginpicker_page_old_platform_title)}</span>
                 <p className={styles.description}>{t(KEY.loginpicker_page_old_platform_description)}</p>
+                <p className={styles.description_note}>{t(KEY.loginpicker_page_old_platform_note)}</p>
               </div>
               <Icon icon="mdi:arrow-right" className={styles.arrowIcon} />
             </a>
@@ -52,4 +45,4 @@ export const LoginPickerPage: FC<Props> = ({ newRoute }) => {
       </div>
     </Page>
   );
-};
+}
