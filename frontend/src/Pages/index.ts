@@ -1,5 +1,5 @@
 export { AboutPage } from './AboutPage';
-export { AdminPage } from './AdminPage';
+export { AccountPage } from './AccountPage';
 export { ApiTestingPage } from './ApiTestingPage';
 export { ComponentPage } from './ComponentPage';
 export { ContributorsPage } from './ContributorsPage';
@@ -24,7 +24,6 @@ export { RecruitmentPage } from './RecruitmentPage';
 export { RouteOverviewPage } from './RouteOverviewPage';
 export { SaksdokumenterPage } from './SaksdokumenterPage';
 export { SignUpPage } from './SignUpPage';
-export { UserChangePasswordPage } from './UserChangePasswordPage';
 export { VenuePage } from './VenuePage';
 export { OrganizationRecruitmentPage } from './OrganizationRecruitmentPage';
 export { LoginPickerPage } from './LoginPickerPage/LoginPickerPage';

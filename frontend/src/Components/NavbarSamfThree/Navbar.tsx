@@ -18,7 +18,7 @@ import type { RecruitmentDto } from '~/dto';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { SAMF3_MEMBER_URL } from '~/routes/samf-three';
+import { ROUTES_OTHER } from '~/routes/other';
 import styles from './Navbar.module.scss';
 import { HamburgerMenu, LanguageButton } from './components';
 import { NavbarItem } from './components/NavbarItem';
@@ -209,7 +209,7 @@ export function Navbar() {
       rounded={true}
       className={isDesktop ? styles.login_button : styles.popup_internal_button}
       onClick={() => {
-        window.location.href = SAMF3_MEMBER_URL.medlem;
+        window.location.href = ROUTES_OTHER.samf_medlem;
         setIsMobileNavigation(false);
       }}
     >

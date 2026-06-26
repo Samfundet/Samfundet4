@@ -64,10 +64,10 @@ export function ChangePasswordForm() {
           control={form.control}
           disabled={isPending}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className={styles.form_item}>
               <FormLabel>{lowerCapitalize(`${t(KEY.common_current)} ${t(KEY.common_password)}`)}</FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <Input autoComplete="current-password" type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -78,10 +78,10 @@ export function ChangePasswordForm() {
           control={form.control}
           disabled={isPending}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className={styles.form_item}>
               <FormLabel>{lowerCapitalize(t(KEY.new_password))}</FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <Input autoComplete="new-password" type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -92,10 +92,10 @@ export function ChangePasswordForm() {
           control={form.control}
           disabled={isPending}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className={styles.form_item}>
               <FormLabel>{lowerCapitalize(`${t(KEY.common_repeat)} ${t(KEY.new_password)}`)}</FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <Input autoComplete="new-password" type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -103,7 +103,7 @@ export function ChangePasswordForm() {
         />
 
         <div className={styles.action_row}>
-          <Button type="submit" theme="success" disabled={isPending}>
+          <Button type="submit" theme="primary" disabled={isPending}>
             {t(KEY.common_save)}
           </Button>
         </div>
