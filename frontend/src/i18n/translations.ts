@@ -108,6 +108,7 @@ export const nb = prepareTranslations({
   [KEY.common_contact]: 'Kontakt',
   [KEY.common_english]: 'Engelsk',
   [KEY.common_profile]: 'Profil',
+  [KEY.common_account]: 'Konto',
   [KEY.common_message]: 'Melding',
   [KEY.common_whatsup]: 'Hva skjer?',
   [KEY.common_sponsor]: 'Sponsorer',
@@ -621,6 +622,9 @@ export const nb = prepareTranslations({
 
   [KEY.role_edit_could_not_load_permissions]: 'Klarte ikke laste inn tilganger',
 
+  [KEY.preferences_page_account_connected_mdb]:
+    'Din konto er koblet til medlemsdatabasen, dine detaljer synkroniseres automatisk derifra. Ønsker du å gjøre endringer, kan du gjøre det på',
+
   // Sulten / Lyche
   [KEY.sulten_what_is_lyche]: 'Hva er Lyche?',
   [KEY.sulten_page_see_menu]: 'Se meny',
@@ -825,6 +829,7 @@ export const en = prepareTranslations({
   [KEY.common_whatsup]: "what's up?",
   [KEY.common_english]: 'English',
   [KEY.common_profile]: 'Profile',
+  [KEY.common_account]: 'Account',
   [KEY.common_contact]: 'Contact',
   [KEY.common_unknown]: 'Unknown',
   [KEY.common_register]: 'Register',
@@ -1323,6 +1328,9 @@ export const en = prepareTranslations({
   [KEY.command_menu_shortcut_about_samfundet]: 'About Samfundet',
 
   [KEY.role_edit_could_not_load_permissions]: 'Could not load permissions',
+
+  [KEY.preferences_page_account_connected_mdb]:
+    "Your account is linked to the member database, your details are automatically synced from it. If you'd like to make any changes, you can do so at",
 
   // Sulten / Lyche:
   [KEY.sulten_dishes]: 'Dishes',

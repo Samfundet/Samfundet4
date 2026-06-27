@@ -168,6 +168,11 @@ export function getFullName(u: UserDto): string {
   return `${u.first_name} ${u.last_name}`.trim();
 }
 
+export function getDisplayName(u: UserDto): string {
+  const fullName = getFullName(u);
+  return fullName ? fullName : u.username;
+}
+
 export function getFullDisplayName(u: UserDto): string {
   const fullName = getFullName(u);
   if (!fullName) {
