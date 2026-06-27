@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router';
 import { Link } from '~/Components';
 import { Navbar } from '~/Components/NavbarSamfThree';
-import { appletCategories } from '~/Pages/AdminPage/applets';
+import { appletCategories } from '~/PagesAdmin/AdminLayout/applets';
 import { logout, stopImpersonatingUser } from '~/api';
 import { isSiteFeatureEnabled } from '~/constants/site-features';
 import { useAuthContext } from '~/context/AuthContext';
@@ -81,14 +81,8 @@ export function AdminLayout() {
   );
 
   const userAppletsRaw: AdminApplet[] = [
-    { url: ROUTES_FRONTEND.admin, icon: 'mdi:person', title_nb: 'Profil', title_en: 'Profile', feature: 'profile' },
-    {
-      url: ROUTES_FRONTEND.user_change_password,
-      icon: 'mdi:password',
-      title_nb: 'Bytt passord',
-      title_en: 'Change password',
-      feature: 'changePassword',
-    },
+    { url: ROUTES_FRONTEND.admin, icon: 'mdi:house', title_nb: 'Hjem', title_en: 'Home' },
+    { url: ROUTES_FRONTEND.account, icon: 'mdi:person', title_nb: 'Konto', title_en: 'Account', feature: 'profile' },
   ];
 
   const userApplets = userAppletsRaw.filter((a) => !a.feature || isSiteFeatureEnabled(a.feature));

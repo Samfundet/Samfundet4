@@ -10,7 +10,7 @@ import {
 } from '~/Components';
 import {
   AboutPage,
-  AdminPage,
+  AccountPage,
   ApiTestingPage,
   ComponentPage,
   ContributorsPage,
@@ -37,7 +37,6 @@ import {
   RouteOverviewPage,
   SaksdokumenterPage,
   SignUpPage,
-  UserChangePasswordPage,
   VenuePage,
 } from '~/Pages';
 import {
@@ -88,6 +87,7 @@ import { ROUTES } from '~/routes';
 import { t } from 'i18next';
 import { App } from '~/App';
 import { DynamicOrgOutlet } from '~/Components/DynamicOrgOutlet/DynamicOrgOutlet';
+import { AdminHomePage } from '~/Pages/AdminHomePage';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -190,21 +190,16 @@ export const router = createBrowserRouter(
         <Route element={<Outlet />} errorElement={<RootErrorBoundary />}>
           <Route
             path={ROUTES.frontend.admin}
+            element={<PermissionRoute requiredPermissions={[]} element={<AdminHomePage />} />}
+          />
+          <Route
+            path={ROUTES.frontend.account}
             element={
               <SiteFeatureGate feature="profile">
-                <PermissionRoute requiredPermissions={[]} element={<AdminPage />} />
+                <PermissionRoute requiredPermissions={[]} element={<AccountPage />} />
               </SiteFeatureGate>
             }
-          />
-          {/* User pages */}
-          <Route
-            path={ROUTES.frontend.user_change_password}
-            element={
-              <SiteFeatureGate feature="changePassword">
-                <PermissionRoute element={<UserChangePasswordPage />} />
-              </SiteFeatureGate>
-            }
-            handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.change_password)}</Link> }}
+            handle={{ crumb: () => <Link url={ROUTES.frontend.account}>{t(KEY.common_account)}</Link> }}
           />
           {/* Gangs */}
           <Route

@@ -174,7 +174,6 @@ export type CalendarMarker = {
 
 export type SiteFeature =
   | 'profile'
-  | 'changePassword'
   | 'events'
   | 'images'
   | 'openingHours'

@@ -420,6 +420,23 @@ class RegisterSerializer(serializers.Serializer):
         return attrs
 
 
+class UpdateUserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for letting the logged-in user update their own profile details.
+
+    Blank values are allowed and stored as empty strings.
+    """
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'phone_number']
+        extra_kwargs = {
+            'first_name': {'required': False, 'allow_blank': False},
+            'last_name': {'required': False, 'allow_blank': False},
+            'phone_number': {'required': False, 'allow_blank': False},
+        }
+
+
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group

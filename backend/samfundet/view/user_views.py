@@ -30,6 +30,7 @@ from samfundet.serializers import (
     ProfileSerializer,
     RegisterSerializer,
     PermissionSerializer,
+    UpdateUserSerializer,
     ChangePasswordSerializer,
     UserPreferenceSerializer,
 )
@@ -115,6 +116,18 @@ class UserView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
+        return Response(data=UserSerializer(request.user, many=False).data)
+
+    def patch(self, request: Request) -> Response:
+        # Disallow for users linked to MDB, since their changes are automatically synced from there
+        if request.user.mdb_medlem_id is not None:
+            return Response(
+                {'detail': 'Profile details are automatically synced from MDB and cannot be edited here.'},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        serializer = UpdateUserSerializer(request.user, data=request.data, partial=True, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(data=UserSerializer(request.user, many=False).data)
 
 

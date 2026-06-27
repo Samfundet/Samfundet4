@@ -114,6 +114,7 @@ export const KEY = {
   common_missing: 'common_missing',
   common_delete: 'common_delete',
   common_profile: 'common_profile',
+  common_account: 'common_account',
   common_message: 'common_message',
   common_english: 'common_english',
   common_whatsup: 'common_whatsup',
@@ -278,6 +279,8 @@ export const KEY = {
   contributors_page_past_developers: 'contributors_page_past_developers',
 
   role_edit_could_not_load_permissions: 'role_edit_could_not_load_permissions',
+
+  preferences_page_account_connected_mdb: 'preferences_page_account_connected_mdb',
 
   // GangsPage:
   gangspage_title: 'gangspage_title',

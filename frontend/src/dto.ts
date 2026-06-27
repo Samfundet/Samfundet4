@@ -26,6 +26,7 @@ export type UserDto = {
   permissions?: string[];
   object_permissions?: ObjectPermissionDto[];
   role_permissions?: string[];
+  mdb_medlem_id?: number;
 };
 
 export type CampusDto = {

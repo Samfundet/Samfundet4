@@ -41,7 +41,7 @@ export const ROUTES_FRONTEND = {
   // ==================== //
   //  User control panel  //
   // ==================== //
-  user_change_password: '/control-panel/password/',
+  account: '/control-panel/account',
 
   // ==================== //
   //      Admin pages     //

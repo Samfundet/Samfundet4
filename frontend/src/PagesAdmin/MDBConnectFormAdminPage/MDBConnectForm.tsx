@@ -9,7 +9,7 @@ import { Form, FormField, FormItem, FormLabel } from '~/Components/Forms';
 import { FormControl, FormDescription } from '~/Components/Forms/Form';
 import { connectToMdb } from '~/api';
 import { KEY } from '~/i18n/constants';
-import { SAMF3_MEMBER_URL } from '~/routes/samf-three';
+import { ROUTES_OTHER } from '~/routes/other';
 import { EMAIL_OR_MEMBERSHIP_NUMBER, PASSWORD } from '~/schema/user';
 import { lowerCapitalize } from '~/utils';
 import styles from './MDBConnectFormAdminPage.module.scss';
@@ -72,7 +72,7 @@ export function MDBConnectForm() {
               <FormLabel>{lowerCapitalize(t(KEY.common_password))}</FormLabel>
               <FormDescription>
                 {t(KEY.adminpage_connect_mdb_password_notice_1)}{' '}
-                <Link url={SAMF3_MEMBER_URL.medlem} target="external">
+                <Link url={ROUTES_OTHER.samf_medlem} target="external">
                   {t(KEY.adminpage_connect_mdb_password_notice_2)}
                 </Link>
               </FormDescription>

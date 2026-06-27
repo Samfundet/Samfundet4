@@ -109,6 +109,18 @@ export async function getUser(): Promise<UserDto> {
   return response.data;
 }
 
+export type UpdateUserDto = {
+  first_name: string;
+  last_name: string;
+  phone_number?: string;
+};
+
+export async function updateUser(data: UpdateUserDto): Promise<UserDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__user;
+  const response = await axios.patch<UserDto>(url, data, { withCredentials: true });
+  return response.data;
+}
+
 export async function stopImpersonatingUser(): Promise<boolean> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__impersonate;
   const response = await axios.post(url, {}, { withCredentials: true });
