@@ -96,6 +96,8 @@ class Campus(FullCleanSaveMixin):
 
 
 class User(AbstractUser):
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'phone_number']
+
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     username = LowerCaseField(
