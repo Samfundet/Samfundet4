@@ -10,7 +10,7 @@ import { updateUser } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
 import type { UserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { EMAIL, FIRST_NAME, LAST_NAME, PHONE_NUMBER } from '~/schema/user';
+import { DATE_OF_BIRTH, EMAIL, FIRST_NAME, LAST_NAME, PHONE_NUMBER } from '~/schema/user';
 import { handleServerFormErrors } from '~/utils';
 import styles from './UserDetailsForm.module.scss';
 
@@ -28,6 +28,7 @@ export function UserDetailsForm({ user, disabled, ...props }: UserDetailsFormPro
     last_name: LAST_NAME,
     email: EMAIL,
     phone_number: PHONE_NUMBER(t),
+    date_of_birth: DATE_OF_BIRTH(t),
     // TODO: support changing campus
   });
 
@@ -40,6 +41,7 @@ export function UserDetailsForm({ user, disabled, ...props }: UserDetailsFormPro
       last_name: user.last_name,
       email: user.email,
       phone_number: user.phone_number ?? '',
+      date_of_birth: user.date_of_birth ?? '',
     },
   });
 
@@ -49,6 +51,7 @@ export function UserDetailsForm({ user, disabled, ...props }: UserDetailsFormPro
         first_name: values.first_name,
         last_name: values.last_name,
         phone_number: values.phone_number,
+        date_of_birth: values.date_of_birth,
       }),
     onSuccess: (updatedUser) => {
       setUser(updatedUser);
@@ -119,6 +122,20 @@ export function UserDetailsForm({ user, disabled, ...props }: UserDetailsFormPro
               <FormLabel>{t(KEY.common_phonenumber)}</FormLabel>
               <FormControl>
                 <Input type="text" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="date_of_birth"
+          disabled={isDisabled}
+          render={({ field }) => (
+            <FormItem className={styles.form_item}>
+              <FormLabel>{t(KEY.common_date_of_birth)}</FormLabel>
+              <FormControl>
+                <Input type="date" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

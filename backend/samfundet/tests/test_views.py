@@ -62,6 +62,7 @@ class TestUserViews:
         'firstname': 'kebab',
         'lastname': 'mannen',
         'phone_number': '48278994',
+        'date_of_birth': '2000-01-01',
         'password': 'jeglikerkebab',
     }
 
@@ -267,6 +268,7 @@ class TestUserViews:
             'phone_number': '48278995',
             'firstname': 'kebab',
             'lastname': 'mannen',
+            'date_of_birth': '2000-01-01',
             'password': 'jeglikerkebab',
         }
 

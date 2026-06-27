@@ -1,12 +1,23 @@
 from __future__ import annotations
 
+import random
 import itertools
+from datetime import date, timedelta
 from collections.abc import Generator
 
 from django.db import transaction  # type: ignore
 from django.contrib.auth.hashers import make_password
 
 from samfundet.models.general import User, Campus
+
+
+def random_date_of_birth() -> date:
+    """Return a random date of birth for a user roughly 18-30 years old."""
+    today = date.today()
+    start = today - timedelta(days=30 * 365)
+    end = today - timedelta(days=18 * 365)
+    return start + timedelta(days=random.randint(0, (end - start).days))
+
 
 # Number of applicant users to create
 APPLICANT_COUNT = 900
@@ -176,6 +187,7 @@ def create_user_object(username: str, first_name: str, last_name: str, hashed_pa
         is_superuser=False,
         is_staff=False,
         campus=campus,
+        date_of_birth=random_date_of_birth(),
     )
 
 

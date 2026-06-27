@@ -89,5 +89,9 @@ export const PASSWORD_LENGTH_MAX = 2048;
 export const MEMBERSHIP_ID_LENGTH_MIN = 1;
 export const MEMBERSHIP_ID_LENGTH_MAX = 30;
 
+// Allowed age range for a user's date of birth. Mirrors the backend validator (backend/samfundet/validators.py)
+export const MIN_AGE = 18;
+export const MAX_AGE = 110;
+
 // see pagination.py CustomPageNumberPagination
 export const PAGE_SIZE = 25;

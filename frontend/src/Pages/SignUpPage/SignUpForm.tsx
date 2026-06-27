@@ -11,7 +11,7 @@ import { useCustomNavigate } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { EMAIL, FIRST_NAME, LAST_NAME, PASSWORD, PHONE_NUMBER, USERNAME } from '~/schema/user';
+import { DATE_OF_BIRTH, EMAIL, FIRST_NAME, LAST_NAME, PASSWORD, PHONE_NUMBER, USERNAME } from '~/schema/user';
 import { lowerCapitalize } from '~/utils';
 import styles from './SignUpForm.module.scss';
 
@@ -28,6 +28,7 @@ export function SignUpForm() {
       phone_number: PHONE_NUMBER(t),
       firstname: FIRST_NAME,
       lastname: LAST_NAME,
+      date_of_birth: DATE_OF_BIRTH(t),
       password: PASSWORD,
       repeat_password: PASSWORD,
     })
@@ -51,6 +52,7 @@ export function SignUpForm() {
       phone_number: '',
       firstname: '',
       lastname: '',
+      date_of_birth: '',
       password: '',
       repeat_password: '',
     },
@@ -144,6 +146,20 @@ export function SignUpForm() {
               <FormLabel>{t(KEY.common_lastname)}</FormLabel>
               <FormControl>
                 <Input type="text" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="date_of_birth"
+          disabled={isPending}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t(KEY.common_date_of_birth)}</FormLabel>
+              <FormControl>
+                <Input type="date" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
