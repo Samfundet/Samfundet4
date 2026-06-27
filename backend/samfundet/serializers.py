@@ -24,6 +24,7 @@ from django.contrib.auth.password_validation import validate_password
 from root.constants import PHONE_NUMBER_REGEX
 from root.utils.mixins import CustomBaseSerializer
 
+from .validators import validate_date_of_birth
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
 from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
@@ -361,6 +362,7 @@ class RegisterSerializer(serializers.Serializer):
       * phone_number
       * firstname
       * lastname
+      * date_of_birth
       * password
     """
 
@@ -373,6 +375,7 @@ class RegisterSerializer(serializers.Serializer):
     )
     firstname = serializers.CharField(label='First name', write_only=True)
     lastname = serializers.CharField(label='Last name', write_only=True)
+    date_of_birth = serializers.DateField(label='Date of birth', write_only=True, validators=[validate_date_of_birth])
     password = serializers.CharField(
         label='Password',
         # This will be used when the DRF browsable API is enabled.
@@ -391,6 +394,7 @@ class RegisterSerializer(serializers.Serializer):
         phone_number = attrs.get('phone_number')
         firstname = attrs.get('firstname')
         lastname = attrs.get('lastname')
+        date_of_birth = attrs.get('date_of_birth')
         password = attrs.get('password')
         # Check for unique
         existing_users = User.objects.filter(Q(username=username) | Q(email=email) | Q(phone_number=phone_number))
@@ -408,7 +412,13 @@ class RegisterSerializer(serializers.Serializer):
         if username and password:
             # Try to authenticate the user using Django auth framework.
             user = User.objects.create_user(
-                first_name=firstname, last_name=lastname, username=username, email=email, phone_number=phone_number, password=password
+                first_name=firstname,
+                last_name=lastname,
+                username=username,
+                email=email,
+                phone_number=phone_number,
+                date_of_birth=date_of_birth,
+                password=password,
             )
             user = authenticate(request=self.context.get('request'), username=username, password=password)
         else:
@@ -429,11 +439,12 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'phone_number']
+        fields = ['first_name', 'last_name', 'phone_number', 'date_of_birth']
         extra_kwargs = {
             'first_name': {'required': False, 'allow_blank': False},
             'last_name': {'required': False, 'allow_blank': False},
             'phone_number': {'required': False, 'allow_blank': False},
+            'date_of_birth': {'required': False, 'allow_null': True, 'validators': [validate_date_of_birth]},
         }
 
 

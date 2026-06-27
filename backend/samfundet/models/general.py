@@ -96,7 +96,8 @@ class Campus(FullCleanSaveMixin):
 
 
 class User(AbstractUser):
-    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'phone_number']
+    # REQUIRED_FIELDS is only used by the createsuperuser tool, setting which fields need to have a value, nothing else
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'phone_number', 'date_of_birth']
 
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
@@ -131,6 +132,12 @@ class User(AbstractUser):
     )
 
     mdb_medlem_id = models.PositiveIntegerField(null=True, blank=False, unique=True, verbose_name='medlem_id in mdb2')
+
+    date_of_birth = models.DateField(
+        _('date of birth'),
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         permissions = [

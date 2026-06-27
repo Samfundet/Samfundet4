@@ -27,6 +27,7 @@ export type UserDto = {
   object_permissions?: ObjectPermissionDto[];
   role_permissions?: string[];
   mdb_medlem_id?: number;
+  date_of_birth?: string;
 };
 
 export type CampusDto = {
@@ -733,5 +734,6 @@ export type RegistrationDto = {
   phone_number: string;
   firstname: string;
   lastname: string;
+  date_of_birth: string;
   password: string;
 };
