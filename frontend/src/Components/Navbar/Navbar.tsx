@@ -16,6 +16,7 @@ import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { ROUTES_OTHER } from '~/routes/other';
+import { getDisplayName } from '~/utils';
 import styles from './Navbar.module.scss';
 import { HamburgerMenu, LanguageButton, NavbarItem } from './components';
 
@@ -46,6 +47,20 @@ export function Navbar() {
 
   const isDecember = useMemo(() => new Date().getMonth() === 11, []);
 
+  const userDisplayName = useMemo(() => {
+    if (!user) {
+      return '';
+    }
+    const display = getDisplayName(user);
+    if (display.length > 28) {
+      if (user.first_name.length <= 16) {
+        return user.first_name;
+      }
+      return user.username;
+    }
+    return display;
+  }, [user]);
+
   useEffect(() => {
     // Close expanded dropdown menu whenever mobile navbar is closed, or we switch from mobile to desktop, like when
     // switching from portrait to landscape on iPad.
@@ -70,7 +85,7 @@ export function Navbar() {
     <div className={styles.navbar_profile_button}>
       <Icon icon="material-symbols:person" />
       <Link url={firstEnabledAdminPath()} className={styles.profile_text}>
-        {user?.username}
+        {userDisplayName}
       </Link>
     </div>
   );
@@ -152,7 +167,7 @@ export function Navbar() {
   const profileButton = user && (
     <Link url={firstEnabledAdminPath()} className={classNames(styles.navbar_profile_button, styles.profile_text)}>
       <Icon icon={isImpersonate ? 'ri:spy-fill' : 'material-symbols:person'} />
-      {user.username}
+      {userDisplayName}
     </Link>
   );
 
