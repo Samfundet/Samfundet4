@@ -113,6 +113,7 @@ export type UpdateUserDto = {
   first_name: string;
   last_name: string;
   phone_number?: string;
+  date_of_birth?: string;
 };
 
 export async function updateUser(data: UpdateUserDto): Promise<UserDto> {
