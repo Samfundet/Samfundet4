@@ -31,7 +31,6 @@ router.register('information', samfundet.view.general_views.InformationPageView,
 router.register('blog', samfundet.view.general_views.BlogPostView, 'blog')
 router.register('user-preference', samfundet.view.user_views.UserPreferenceView, 'user_preference')
 router.register('saksdokument', samfundet.view.general_views.SaksdokumentView, 'saksdokument')
-router.register('profile', samfundet.view.user_views.ProfileView, 'profile')
 router.register('permissions', samfundet.view.user_views.PermissionView, 'permissions')
 router.register('menu', samfundet.view.sulten_views.MenuView, 'menu')
 router.register('menu-items', samfundet.view.sulten_views.MenuItemView, 'menu_items')

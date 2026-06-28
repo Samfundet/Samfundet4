@@ -36,7 +36,6 @@ from .models.general import (
     Venue,
     Campus,
     Infobox,
-    Profile,
     BlogPost,
     GangType,
     KeyValue,
@@ -290,20 +289,6 @@ class UserPreferenceAdmin(CustomGuardedModelAdmin):
     list_display = ['id', '__str__', 'user', 'theme', 'created_at', 'updated_at']
     _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
     search_fields = ['id', 'theme', *_user_search_fields]
-    # filter_horizontal = []
-    list_display_links = ['id', '__str__']
-    autocomplete_fields = ['user']
-    list_select_related = True
-
-
-@register_if_feature_enabled(WebFeatures.PROFILE, Profile)
-class ProfileAdmin(CustomGuardedModelAdmin):
-    # ordering = []
-    sortable_by = ['id', 'user', 'nickname', 'created_at', 'updated_at']
-    # list_filter = []
-    list_display = ['id', '__str__', 'user', 'nickname', 'created_at', 'updated_at']
-    _user_search_fields = UserAdmin.custom_search_fields(prefix='user')
-    search_fields = ['id', 'nickname', *_user_search_fields]
     # filter_horizontal = []
     list_display_links = ['id', '__str__']
     autocomplete_fields = ['user']

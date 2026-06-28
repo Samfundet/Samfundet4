@@ -173,7 +173,6 @@ export type CalendarMarker = {
 };
 
 export type SiteFeature =
-  | 'profile'
   | 'events'
   | 'images'
   | 'openingHours'
