@@ -32,41 +32,40 @@ def react_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
 
 
 def is_bot(request: HttpRequest) -> bool:
-    return True
-    # TODO:
-    # bot_patterns = [
-    #     'googlebot',
-    #     'bingbot',
-    #     'slurp',
-    #     'duckduckbot',
-    #     'baiduspider',
-    #     'yandexbot',
-    #     'facebookexternalhit',
-    #     'twitterbot',
-    #     'linkedinbot',
-    #     'whatsapp',
-    #     'telegrambot',
-    #     'claudebot',
-    #     'perplexitybot',
-    #     'chatgpt',
-    #     'pinterestbot',
-    #     'curl'
-    # ]
-    # user_agent = request.META['HTTP_USER_AGENT'].lower()
-    # return any(pattern in user_agent for pattern in bot_patterns)
+    bot_patterns = [
+        'googlebot',
+        'bingbot',
+        'slurp',
+        'duckduckbot',
+        'baiduspider',
+        'yandexbot',
+        'facebookexternalhit',
+        'twitterbot',
+        'linkedinbot',
+        'whatsapp',
+        'telegrambot',
+        'claudebot',
+        'perplexitybot',
+        'chatgpt',
+        'pinterestbot',
+        'curl'
+    ]
+    user_agent = request.META['HTTP_USER_AGENT'].lower()
+    return any(pattern in user_agent for pattern in bot_patterns)
 
 
 def react_event_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
-    if is_bot(request):
-        event = get_object_or_404(Event, id=kwargs['id'])
+    try:
+        event = Event.objects.get(id=kwargs['id'])
+    except Event.DoesNotExist:
+        # Let React handle displaying that the event wasn't found
+        return HttpResponse(get_frontend_html(), status=404)
 
-        title = f'{event.title_nb} - Samfundet'
-        description = event.description_short_nb
+    title = f'{event.title_nb} - Samfundet'
+    description = event.description_short_nb
 
-        metadata = Metadata(title=title, description=description)
-        metadata.items.append(MetadataItem('name', 'og:custom', 'Lorem ipsum'))
+    metadata = Metadata(title=title, description=description)
+    metadata.items.append(MetadataItem('name', 'og:custom', 'Lorem ipsum')) # TODO:
 
-        html = get_frontend_html()
-        return HttpResponse(inject_metadata(html, metadata))
-
-    return react_view(request, **kwargs)
+    html = get_frontend_html()
+    return HttpResponse(inject_metadata(html, metadata))

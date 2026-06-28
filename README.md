@@ -27,6 +27,7 @@ Samfundet4 is the latest and greatest iteration of samfundet.no. It's built usin
 - [Seed scripts](./docs/technical/backend/seed.md)
   - [Role seed scripts](./docs/technical/backend/seed_roles.md)
 - [Role system](./docs/technical/backend/rolesystem.md)
+- [Serving React through Django](./docs/technical/django_serving_react.md)
 
 ### Other
 

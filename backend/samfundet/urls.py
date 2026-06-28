@@ -206,7 +206,7 @@ urlpatterns = [
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ] + [
     # Serve React frontend
-    *frontend_path(frontend_routes.EVENT, react_event_view, name='reactapp_event'),
-    path('', react_view, name='reactapp'),
+    *frontend_path(frontend_routes.EVENT, react_event_view, name=f'{settings.REACT_ROUTE_PREFIX}_event'),
+    path('', react_view, name=settings.REACT_ROUTE_PREFIX),
     path('<path:resource>', react_view),
 ]
