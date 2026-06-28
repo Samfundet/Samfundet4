@@ -193,11 +193,6 @@ export const SAMFUNDET_CHANGE_ORGANIZATION = 'samfundet.change_organization';
 export const SAMFUNDET_DELETE_ORGANIZATION = 'samfundet.delete_organization';
 export const SAMFUNDET_VIEW_ORGANIZATION = 'samfundet.view_organization';
 
-export const SAMFUNDET_ADD_PROFILE = 'samfundet.add_profile';
-export const SAMFUNDET_CHANGE_PROFILE = 'samfundet.change_profile';
-export const SAMFUNDET_DELETE_PROFILE = 'samfundet.delete_profile';
-export const SAMFUNDET_VIEW_PROFILE = 'samfundet.view_profile';
-
 export const SAMFUNDET_ADD_PURCHASEFEEDBACKALTERNATIVE = 'samfundet.add_purchasefeedbackalternative';
 export const SAMFUNDET_CHANGE_PURCHASEFEEDBACKALTERNATIVE = 'samfundet.change_purchasefeedbackalternative';
 export const SAMFUNDET_DELETE_PURCHASEFEEDBACKALTERNATIVE = 'samfundet.delete_purchasefeedbackalternative';

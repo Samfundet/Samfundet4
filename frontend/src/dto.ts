@@ -21,7 +21,6 @@ export type UserDto = {
   date_joined: Date;
   last_login: Date | null;
   user_preference: UserPreferenceDto;
-  profile: ProfileDto;
   groups: GroupDto[];
   permissions?: string[];
   object_permissions?: ObjectPermissionDto[];
@@ -223,11 +222,6 @@ export type EventWriteDto = {
 export type EventGroupDto = {
   id: number;
   name: string;
-};
-
-export type ProfileDto = {
-  id: number;
-  nickname: string;
 };
 
 export type UserPreferenceDto = {
