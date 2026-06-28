@@ -11,7 +11,6 @@ from .general import (
     Gang,
     User,
     Image,
-    Profile,
     GangSection,
     Organization,
     UserPreference,
@@ -24,6 +23,5 @@ __all__ = [
     'Organization',
     'Event',
     'Image',
-    'Profile',
     'UserPreference',
 ]

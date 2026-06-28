@@ -37,7 +37,6 @@ from .models.general import (
     Venue,
     Campus,
     Infobox,
-    Profile,
     BlogPost,
     GangType,
     KeyValue,
@@ -460,12 +459,6 @@ class PermissionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ['id', 'nickname']
-
-
 class UserPreferenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserPreference
@@ -480,7 +473,6 @@ class CampusSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True, read_only=True)
-    profile = ProfileSerializer(many=False, read_only=True)
     campus = CampusSerializer(read_only=True)
     permissions = serializers.SerializerMethodField(method_name='get_permissions', read_only=True)
     object_permissions = serializers.SerializerMethodField(method_name='get_object_permissions', read_only=True)

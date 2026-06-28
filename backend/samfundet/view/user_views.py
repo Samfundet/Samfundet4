@@ -27,14 +27,13 @@ from samfundet.serializers import (
     UserSerializer,
     GroupSerializer,
     LoginSerializer,
-    ProfileSerializer,
     RegisterSerializer,
     PermissionSerializer,
     UpdateUserSerializer,
     ChangePasswordSerializer,
     UserPreferenceSerializer,
 )
-from samfundet.models.general import User, Profile, UserPreference
+from samfundet.models.general import User, UserPreference
 
 
 @method_decorator(csrf_protect, 'dispatch')
@@ -196,16 +195,6 @@ class CsrfView(APIView):
 class UserPreferenceView(ModelViewSet):
     serializer_class = UserPreferenceSerializer
     queryset = UserPreference.objects.all()
-
-
-class ProfileView(ModelViewSet):
-    feature_key = WebFeatures.PROFILE
-    permission_classes = (
-        DjangoModelPermissionsOrAnonReadOnly,
-        FeatureEnabled,
-    )
-    serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()
 
 
 class PermissionView(ModelViewSet):

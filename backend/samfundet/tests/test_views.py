@@ -108,8 +108,6 @@ class TestUserViews:
         assert data['username'] == fixture_user.username
         # All users should have a UserPreference.
         assert data['user_preference']['id'] == fixture_user.userpreference.id
-        # All users should have a Profile.
-        assert data['profile']['id'] == fixture_user.profile.id
         # Check permission in list.
         assert some_perm_str in data['permissions']
 

@@ -194,11 +194,7 @@ export const router = createBrowserRouter(
           />
           <Route
             path={ROUTES.frontend.account}
-            element={
-              <SiteFeatureGate feature="profile">
-                <PermissionRoute requiredPermissions={[]} element={<AccountPage />} />
-              </SiteFeatureGate>
-            }
+            element={<PermissionRoute requiredPermissions={[]} element={<AccountPage />} />}
             handle={{ crumb: () => <Link url={ROUTES.frontend.account}>{t(KEY.common_account)}</Link> }}
           />
           {/* Gangs */}

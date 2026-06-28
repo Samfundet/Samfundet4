@@ -82,7 +82,7 @@ export function AdminLayout() {
 
   const userAppletsRaw: AdminApplet[] = [
     { url: ROUTES_FRONTEND.admin, icon: 'mdi:house', title_nb: 'Hjem', title_en: 'Home' },
-    { url: ROUTES_FRONTEND.account, icon: 'mdi:person', title_nb: 'Konto', title_en: 'Account', feature: 'profile' },
+    { url: ROUTES_FRONTEND.account, icon: 'mdi:person', title_nb: 'Konto', title_en: 'Account' },
   ];
 
   const userApplets = userAppletsRaw.filter((a) => !a.feature || isSiteFeatureEnabled(a.feature));

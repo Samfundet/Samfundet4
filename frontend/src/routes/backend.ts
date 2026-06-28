@@ -236,8 +236,6 @@ export const ROUTES_BACKEND = {
   samfundet__user_preference_detail: '/api/user-preference/:pk/',
   samfundet__saksdokument_list: '/api/saksdokument/',
   samfundet__saksdokument_detail: '/api/saksdokument/:pk/',
-  samfundet__profile_list: '/api/profile/',
-  samfundet__profile_detail: '/api/profile/:pk/',
   samfundet__permissions_list: '/api/permissions/',
   samfundet__permissions_detail: '/api/permissions/:pk/',
   samfundet__menu_list: '/api/menu/',
