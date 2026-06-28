@@ -27,13 +27,13 @@ from samfundet.serializers import (
     UserSerializer,
     GroupSerializer,
     LoginSerializer,
-    ProfileSerializer,
     RegisterSerializer,
     PermissionSerializer,
+    UpdateUserSerializer,
     ChangePasswordSerializer,
     UserPreferenceSerializer,
 )
-from samfundet.models.general import User, Profile, UserPreference
+from samfundet.models.general import User, UserPreference
 
 
 @method_decorator(csrf_protect, 'dispatch')
@@ -117,6 +117,18 @@ class UserView(APIView):
     def get(self, request: Request) -> Response:
         return Response(data=UserSerializer(request.user, many=False).data)
 
+    def patch(self, request: Request) -> Response:
+        # Disallow for users linked to MDB, since their changes are automatically synced from there
+        if request.user.mdb_medlem_id is not None:
+            return Response(
+                {'detail': 'Profile details are automatically synced from MDB and cannot be edited here.'},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        serializer = UpdateUserSerializer(request.user, data=request.data, partial=True, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(data=UserSerializer(request.user, many=False).data)
+
 
 class AllUsersView(ListAPIView):
     feature_key = WebFeatures.USERS
@@ -183,16 +195,6 @@ class CsrfView(APIView):
 class UserPreferenceView(ModelViewSet):
     serializer_class = UserPreferenceSerializer
     queryset = UserPreference.objects.all()
-
-
-class ProfileView(ModelViewSet):
-    feature_key = WebFeatures.PROFILE
-    permission_classes = (
-        DjangoModelPermissionsOrAnonReadOnly,
-        FeatureEnabled,
-    )
-    serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()
 
 
 class PermissionView(ModelViewSet):

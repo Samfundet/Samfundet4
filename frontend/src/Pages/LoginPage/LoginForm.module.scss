@@ -1,0 +1,16 @@
+@use '../../styles/colors' as c;
+
+.login_button {
+  margin: 1rem 0 0 auto;
+}
+
+.login_failed_comment {
+  color: c.$red-600;
+  text-align: center;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.form_item {
+  margin-bottom: 0.5rem;
+}

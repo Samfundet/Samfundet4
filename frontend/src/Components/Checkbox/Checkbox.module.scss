@@ -1,8 +1,5 @@
-/* stylelint-disable selector-max-compound-selectors */
-@use 'src/constants' as *;
-$checkmark: '\2714'; /* ASCII "check"-symbol. */
+@use '../../styles/colors' as c;
 
-/* Label wraper i checkbox.tsx. */
 .checkbox {
   position: relative;
   display: inline-flex;
@@ -10,7 +7,6 @@ $checkmark: '\2714'; /* ASCII "check"-symbol. */
   cursor: pointer;
 }
 
-/* Selve input checkbox typen. */
 .checkbox__input {
   position: absolute;
   opacity: 0;
@@ -19,34 +15,39 @@ $checkmark: '\2714'; /* ASCII "check"-symbol. */
   width: 0;
 }
 
-/* Div som styles for å representere en checkbox. */
 .checkbox__box {
   width: 1.2em;
   height: 1.2em;
-  border: 2px solid $grey-3;
+  border: 2px solid c.$gray-400;
   border-radius: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin-right: 10px;
   margin-left: 10px;
   flex-shrink: 0;
-  transition: background 0.15s, border-color 0.15s; /* Bakgrunn kommer gradvis inn. */
 }
 
-/* Her velges (og styles) det elementet med klassen .checkbox__box som ligger rett etter(ved bruk av +) elementet med klassen .checkbox__input, når det sistnevnte elementet er "checked". */
 .checkbox__input:checked + .checkbox__box {
-  background-color: $red-samf;
-  border-color: $red-samf;
+  background-color: c.$samf-red-primary;
+  border-color: c.$samf-red-primary;
 }
 
-.checkbox__input:checked + .checkbox__box::after {
+.check {
+  visibility: hidden;
+  font-size: 18px;
   color: white;
-  content: $checkmark;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  pointer-events: none;
+}
+
+.checkbox__input:checked ~ .check {
+  visibility: visible;
 }
 
 .checkbox__input:disabled + .checkbox__box {
-  border-color: $grey-3;
-  background-color: $grey-3;
+  border-color: c.$gray-400;
+  background-color: c.$gray-400;
   cursor: not-allowed;
 }

@@ -1,12 +1,14 @@
-@use 'src/constants' as *;
+@use '../../mixins' as m;
 
-@use 'src/mixins' as *;
+@use '../../styles/colors' as col;
+
+@use '../../styles/variables' as v;
 
 .italic {
   font-style: italic;
+  font-family: v.$font-family-italic;
 }
 
-// label som wrapper
 .select_wrapper {
   display: flex;
   flex-direction: column;
@@ -15,43 +17,11 @@
 }
 
 .samf_select {
-  @include rounded-lighter;
+  @include m.base-input;
   display: flex;
-  font-size: 1em;
   padding: 0.75rem 2.5rem 0.75rem 1rem;
-  color: $black;
   cursor: pointer;
-  margin-top: 0.5em; // Make sure this is the same for all inputs that should be used together
-  border: 1px solid $grey-35;
-  background: $white;
-  font-weight: initial;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  appearance: none; // Hide default brower dropdown arrow
-
-  &:focus {
-    border-color: $grey-3;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-    outline: 1px solid rgba(0, 0, 0, 0.1);
-  }
-
-  @include theme-dark {
-    border-color: $grey-0;
-    &:focus {
-      border-color: $grey-1;
-      outline: 1px solid rgba(255, 255, 255, 0.6);
-    }
-  }
-}
-
-.icon_disabled {
-  appearance: none; //appearance "none" i flere browsere
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-}
-
-.error {
-  border: 1px solid $red;
+  appearance: none; // Hide default browser dropdown arrow
 }
 
 .arrow_container {

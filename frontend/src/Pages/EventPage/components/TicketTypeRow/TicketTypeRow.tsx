@@ -15,7 +15,7 @@ export function TicketTypeRow({ event }: TicketTypeRowProps) {
   if (event.ticket_type !== EventTicketType.CUSTOM) {
     return (
       <tr>
-        <td className={styles.table_element_left}> {t(KEY.common_ticket_type).toUpperCase()} </td>
+        <td className={styles.table_element_left}> {t(KEY.common_ticket).toUpperCase()} </td>
         <td className={styles.table_element_right}> {t(getTicketTypeKey(event.ticket_type))} </td>
       </tr>
     );

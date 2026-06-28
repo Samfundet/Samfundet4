@@ -5,64 +5,39 @@ I no understand Windows, so this guide is for Linux and MacOS users. It might wo
 # Backend setup
 
 ## Step 1
-First make sure you have the correct python version installed. Check the `.python-version` file in the root of the project. At the time of writing the correct version is '3.11.2'.
 
-<!-- expandable section  -->
-<details>
-<summary>How to install correct python version with pyenv </summary>
+Install [uv](https://docs.astral.sh/uv/), the Python package and project manager. It manages the
+Python version, the virtual environment and the dependencies (replacing pyenv, pip, poetry and
+virtualenv).
 
-Note: Pyenv does not exist on windows, so you will have to install the correct python version manually.
-
-Install pyenv
 ```bash
-brew install pyenv
+# macOS (Homebrew):
+brew install uv
+
+# Linux/macOS (standalone installer):
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
-
-Install the correct python version
-```bash
-pyenv install 3.11.2
-```
-
-Set the correct python version
-```bash
-pyenv global 3.11.2
-```
-
-
-</details>
-
 
 ## Step 2
 
-From inside the backend directory, run the following commands:
+uv reads the correct Python version from the `backend/.python-version` file and downloads it automatically. From inside
+the `backend` directory, install the locked dependencies:
 
 ```bash
-pip install poetry
-export POETRY_VIRTUALENVS_IN_PROJECT=1
+uv sync
 ```
+
+To verify that the installation was successful, check that a non-empty `.venv` directory was created
+in the backend directory. You can also run `uv run python -V` and confirm it prints the expected
+Python version.
+
+> Note: `.env` files are loaded by the project's settings (django-environ); no extra plugin is
+> needed.
 
 ## Step 3
 
-Install the dependencies with poetry:
+Run the development server:
 
 ```bash
-poetry install
-```
-
-To verify that the installation was successful, run the following command, check if there is a non empty .venv file in the backend directory.
-
-## Step 4
-
-Install dotenv for poetry
-    
-```bash
-❯ poetry self add poetry-plugin-dotenv
-```
-
-## Step 5
-
-Install 
-
-```bash
-poetry run python manage.py runserver
+uv run python manage.py runserver
 ```

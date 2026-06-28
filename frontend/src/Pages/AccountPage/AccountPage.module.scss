@@ -1,0 +1,27 @@
+@use '../../mixins' as m;
+
+.form_header {
+  margin-bottom: 1rem;
+}
+
+.preference_row {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.label {
+  width: 15em;
+}
+
+.form_container {
+  width: 400px;
+  max-width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.mdb_notice {
+  width: 800px;
+  max-width: 100%;
+  margin: 0.5rem 0;
+}

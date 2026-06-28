@@ -5,8 +5,8 @@ import type { CSSProperties } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import type { z } from 'zod';
-import { CURSOR_TRAIL_CLASS, THEME_KEY, type ThemeValue } from '~/constants';
-import type { UserDto } from '~/dto';
+import { THEME_KEY, type ThemeValue } from '~/constants';
+import type { EventDto, UserDto } from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
 import {
@@ -168,6 +168,11 @@ export function getFullName(u: UserDto): string {
   return `${u.first_name} ${u.last_name}`.trim();
 }
 
+export function getDisplayName(u: UserDto): string {
+  const fullName = getFullName(u);
+  return fullName ? fullName : u.username;
+}
+
 export function getFullDisplayName(u: UserDto): string {
   const fullName = getFullName(u);
   if (!fullName) {
@@ -244,6 +249,39 @@ export function getEventCategoryKey(category: EventCategoryValue): TranslationKe
     uka_event: KEY.event_category_uka_event,
   };
   return map[category];
+}
+
+/**
+ * Gets the cheapest ticket price available for an event. Returns null if it has no price
+ */
+export function getCheapestPrice(event: EventDto): number | null {
+  switch (event.ticket_type) {
+    case EventTicketType.BILLIG: {
+      if (!event.billig) {
+        return null;
+      }
+      let cheapest: number | null = null;
+      for (const ticketGroup of event.billig.ticket_groups) {
+        for (const priceGroup of ticketGroup.price_groups) {
+          if (cheapest === null || priceGroup.price < cheapest) {
+            cheapest = priceGroup.price;
+          }
+        }
+      }
+      return cheapest;
+    }
+    case EventTicketType.CUSTOM: {
+      let cheapest: number | null = null;
+      for (const priceGroup of event.custom_tickets) {
+        if (cheapest === null || priceGroup.price < cheapest) {
+          cheapest = priceGroup.price;
+        }
+      }
+      return cheapest;
+    }
+    default:
+      return null;
+  }
 }
 
 /**
@@ -326,6 +364,16 @@ export function formatDateYMDWithTime(d: Date): string {
   return format(d, 'yyyy.LL.dd HH:mm');
 }
 
+export function formatCurrency(n: number): string {
+  const s = new Intl.NumberFormat('no-NO', {
+    style: 'currency',
+    currency: 'NOK',
+    currencyDisplay: 'narrowSymbol',
+    maximumFractionDigits: 0,
+  }).format(n);
+  return i18next.language === 'nb' ? s : s.replace(/kr/, 'NOK');
+}
+
 /**
  * Generic query function for DTOs. Returns elements from array matching query.
  * @param query String query to search with
@@ -383,18 +431,6 @@ export function updateBodyThemeClass(theme: ThemeValue): void {
   document.body.setAttribute(THEME_KEY, theme);
   // Remember theme in localStorage between refreshes.
   localStorage.setItem(THEME_KEY, theme);
-}
-
-/**
- * Helper to create element, add class, position the element and add to body.
- */
-export function createDot(e: MouseEvent): HTMLDivElement {
-  //
-  const dot = document.createElement('div');
-  dot.classList.add(CURSOR_TRAIL_CLASS); // global.scss
-  dot.style.left = `${e.clientX + window.pageXOffset}px`;
-  dot.style.top = `${e.clientY + window.pageYOffset}px`;
-  return dot;
 }
 
 /**
@@ -467,11 +503,17 @@ export function IsNumber(value: unknown): value is number {
 export function handleServerFormErrors<T extends z.ZodType>(
   error: unknown,
   form: UseFormReturn<z.infer<T>>,
-  nbTranslationMap?: Record<string, string>,
+  nbTranslations?: Record<string, string>,
 ) {
   if (!(error instanceof AxiosError)) {
     return;
   }
+
+  const defaultNbTranslations: Record<string, string> = {
+    'This field may not be blank': 'Dette feltet kan ikke være tomt.',
+  };
+
+  const nbTranslationMap = { ...defaultNbTranslations, ...nbTranslations };
 
   let setFormErrors = false;
   const serverErrors = (error.response?.data as Record<string, string[]>) || null;

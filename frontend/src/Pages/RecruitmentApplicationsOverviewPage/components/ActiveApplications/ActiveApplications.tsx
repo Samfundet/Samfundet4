@@ -104,7 +104,7 @@ export function ActiveApplications({ recruitmentId }: ActiveApplicationsProps) {
   const withdrawButton = (application: RecruitmentApplicationDto) => {
     return (
       <Button
-        theme="samf"
+        theme="primary"
         onClick={() => {
           if (window.confirm(t(KEY.recruitment_withdraw_application))) {
             withdrawMutation.mutate(application.recruitment_position.id.toString());

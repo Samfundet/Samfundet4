@@ -2,6 +2,10 @@
 /* Necessary for theme mixin */
 @use './constants' as *;
 
+@use './styles/colors' as col;
+
+@use './styles/variables' as v;
+
 /* Screen size media queries */
 // https://www.freecodecamp.org/news/the-100-correct-way-to-do-css-breakpoints-88d6a5ba1862/
 
@@ -187,4 +191,42 @@ Usage:
 @mixin flex-column-center {
   @include flex-column;
   justify-content: center;
+}
+
+@mixin base-input {
+  background: col.$white-50;
+  color: col.$gray-700;
+  border: 1px solid col.$gray-200;
+  padding: 0.75rem 1rem;
+  outline: none;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  font-weight: initial;
+  border-radius: 0.5rem;
+  width: 100%;
+
+  &:focus {
+    border-color: col.$gray-300;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+    outline: 1px solid rgba(0, 0, 0, 0.1);
+
+    @include theme-dark {
+      border-color: col.$gray-600;
+      outline: 1px solid rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &.error {
+    border: 1px solid col.$red-600;
+  }
+
+  @include theme-dark {
+    background: col.$gray-950;
+    color: col.$white-50;
+    border-color: col.$gray-800;
+  }
 }

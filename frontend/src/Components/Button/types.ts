@@ -1,5 +1,5 @@
-import type { displayToStyleMap, themeToStyleMap } from './utils';
+import type { buttonStyles, buttonThemes } from './utils';
 
-export type ButtonTheme = keyof typeof themeToStyleMap;
+export type ButtonTheme = keyof typeof buttonThemes;
 
-export type ButtonDisplay = keyof typeof displayToStyleMap;
+export type ButtonDisplay = keyof typeof buttonStyles;

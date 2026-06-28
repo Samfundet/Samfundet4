@@ -43,49 +43,49 @@ Didnt find what you were looking for? See all frontend commands [here](../../fro
 ## Backend
 
 ```
-poetry install
+uv sync
 ```
 
 _Run Ruff_
 
 ```
-poetry run ruff check
+uv run ruff check
 ```
 
 _Run Ruff fix_
 
 ```
-poetry run ruff check --fix .
+uv run ruff check --fix .
 ```
 
 _Verify migrations_
 
 ```
-poetry run python manage.py makemigrations --check --dry-run --noinput --verbosity 2
+uv run python manage.py makemigrations --check --dry-run --noinput --verbosity 2
 ```
 
 _Apply migrations_
 
 ```
-poetry run python manage.py migrate
+uv run python manage.py migrate
 ```
 
 _Run (Py)tests_
 
 ```
-poetry run pytest
+uv run pytest
 ```
 
 _Run mypy_
 
 ```
-poetry run mypy --config-file mypy.ini .
+uv run mypy --config-file mypy.ini .
 ```
 
 _Run seed_
 
 ```
-poetry run python manage.py seed
+uv run python manage.py seed
 ```
 
 Didnt find what you were looking for? See all backend commands [here](../../backend/aliases.sh)

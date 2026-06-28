@@ -42,30 +42,30 @@ docker compose exec backend bash
 🐳The ```migrate``` alias will apply any pending database migrations to update the database schema according to the changes defined in Django. 
 ```bash
 migrate
-#equal to "poetry run python /app/manage.py migrate"
+#equal to "uv run python /app/manage.py migrate"
 ```
 
 🐳When you run the ```makemigrations``` alias Django will create database migration files based on any changes to your project's models.
 ```bash
 makemigrations
-#equal to "poetry run python /app/manage.py makemigrations"
+#equal to "uv run python /app/manage.py makemigrations"
 ```
 
 🐳The ```seed``` alias will seed the local database with dummy data. Further docs here: [Seeding](./technical/backend/seed.md). 
 ```bash
 seed
-#equal to "poetry run python /app/manage.py seed"
+#equal to "uv run python /app/manage.py seed"
 ```
 
 🐳The ```collectstatic``` alias will collect and copy the static files from Django apps into the appropriate location as configured in the Django project's settings.
 ```bash
 collectstatic
-#equal to "poetry run python /app/manage.py collectstatic --noinput"
+#equal to "uv run python /app/manage.py collectstatic --noinput"
 ```
 
 🐳The ```pipeline``` alias will run the backend GitHub Actions pipeline in Docker.
 ```bash
 pipeline
-#equal to "poetry run /app/run-pipeline.sh"
+#equal to "uv run /app/run-pipeline.sh"
 ```
 

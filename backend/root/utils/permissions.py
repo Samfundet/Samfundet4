@@ -193,10 +193,6 @@ SAMFUNDET_CHANGE_ORGANIZATION = 'samfundet.change_organization'
 SAMFUNDET_DELETE_ORGANIZATION = 'samfundet.delete_organization'
 SAMFUNDET_VIEW_ORGANIZATION = 'samfundet.view_organization'
 
-SAMFUNDET_ADD_PROFILE = 'samfundet.add_profile'
-SAMFUNDET_CHANGE_PROFILE = 'samfundet.change_profile'
-SAMFUNDET_DELETE_PROFILE = 'samfundet.delete_profile'
-SAMFUNDET_VIEW_PROFILE = 'samfundet.view_profile'
 
 SAMFUNDET_ADD_PURCHASEFEEDBACKALTERNATIVE = 'samfundet.add_purchasefeedbackalternative'
 SAMFUNDET_CHANGE_PURCHASEFEEDBACKALTERNATIVE = 'samfundet.change_purchasefeedbackalternative'

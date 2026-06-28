@@ -114,6 +114,7 @@ export const KEY = {
   common_missing: 'common_missing',
   common_delete: 'common_delete',
   common_profile: 'common_profile',
+  common_account: 'common_account',
   common_message: 'common_message',
   common_english: 'common_english',
   common_whatsup: 'common_whatsup',
@@ -136,6 +137,7 @@ export const KEY = {
   common_guests: 'common_guests',
   common_occasion: 'common_occasion',
   common_phonenumber: 'common_phonenumber',
+  common_date_of_birth: 'common_date_of_birth',
   common_password: 'common_password',
   common_current: 'common_current',
   common_about_us: 'common_about_us',
@@ -203,6 +205,7 @@ export const KEY = {
   common_available: 'common_available',
   common_comment: 'common_comment',
   common_capacity: 'common_capacity',
+  common_read_more: 'common_read_more',
 
   common_membership_number: 'common_membership_number',
   common_to_payment: 'common_to_payment',
@@ -227,6 +230,7 @@ export const KEY = {
   common_contact_information: 'common_contact_information',
   common_about_samfundet: 'common_about_samfundet',
   // Price groups:
+  common_ticket: 'common_ticket',
   common_ticket_type: 'common_ticket_type',
   common_ticket_type_free: 'common_ticket_type_free',
   common_ticket_type_free_with_registration: 'common_ticket_type_free_with_registration',
@@ -240,6 +244,8 @@ export const KEY = {
   common_buy_ticket: 'common_buy_ticket',
   common_sold_out: 'common_sold_out',
   common_almost_sold_out: 'common_almost_sold_out',
+
+  common_member_database: 'common_member_database',
   // ==================== //
   //        Others        //
   // ==================== //
@@ -256,20 +262,26 @@ export const KEY = {
   loginpage_passwords_must_match: 'loginpage_passwords_must_match',
   loginpage_login_failed: 'loginpage_login_failed',
 
+  signuppage_register_failed: 'signuppage_register_failed',
+  signuppage_login_link: 'signuppage_login_link',
+
   // LoginPickerPage:
-  loginpicker_page_caption: 'loginpicker_page_caption',
   loginpicker_page_title: 'loginpicker_page_title',
+  loginpicker_page_description: 'loginpicker_page_description',
   loginpicker_page_nav_aria_label: 'loginpicker_page_nav_aria_label',
   loginpicker_page_new_platform_title: 'loginpicker_page_new_platform_title',
   loginpicker_page_new_platform_description: 'loginpicker_page_new_platform_description',
   loginpicker_page_old_platform_title: 'loginpicker_page_old_platform_title',
   loginpicker_page_old_platform_description: 'loginpicker_page_old_platform_description',
+  loginpicker_page_old_platform_note: 'loginpicker_page_old_platform_note',
 
   contributors_page_title: 'contributors_page_title',
   contributors_page_text: 'contributors_page_text',
   contributors_page_past_developers: 'contributors_page_past_developers',
 
   role_edit_could_not_load_permissions: 'role_edit_could_not_load_permissions',
+
+  preferences_page_account_connected_mdb: 'preferences_page_account_connected_mdb',
 
   // GangsPage:
   gangspage_title: 'gangspage_title',
@@ -283,6 +295,7 @@ export const KEY = {
   // EventPage:
   event_registration_url: 'event_registration_url',
   event_add_ticket: 'event_add_ticket',
+  event_invalid_form_error: 'event_invalid_form_error',
 
   // Purchase Ticket Info:
   invalid_email_message: 'invalid_email_message',
@@ -324,6 +337,7 @@ export const KEY = {
   event_category_theater: 'event_category_theater',
   event_category_theme_party: 'event_category_theme_party',
   event_category_uka_event: 'event_category_uka_event',
+  event_call_to_action_register: 'event_call_to_action_register',
 
   // Venue Page:
   venuepage_title: 'venuepage_title',
@@ -588,11 +602,12 @@ export const KEY = {
   admin_role_page_role_since: 'admin_role_page_role_since',
   admin_role_page_given_by: 'admin_role_page_given_by',
   adminpage_connect_mdb: 'adminpage_connect_mdb',
-  adminpage_connect_mdb_extended: 'adminpage_connect_mdb_extended',
   adminpage_connect_mdb_succesful_toast: 'adminpage_connect_mdb_succesful_toast',
   adminpage_connect_mdb_invalid_email: 'adminpage_connect_mdb_invalid_email',
   adminpage_connect_mdb_invalid_membership_id: 'adminpage_connect_mdb_invalid_membership_id',
   adminpage_connect_mdb_common_error: 'adminpage_connect_mdb_common_error',
+  adminpage_connect_mdb_password_notice_1: 'adminpage_connect_mdb_password_notice_1',
+  adminpage_connect_mdb_password_notice_2: 'adminpage_connect_mdb_password_notice_2',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
@@ -632,6 +647,8 @@ export const KEY = {
   feedback_type_heading: 'feedback_type_heading',
   feedback_your_feedback: 'feedback_your_feedback',
   feedback_thank_you_for_feedback: 'feedback_thank_you_for_feedback',
+  feedback_helper_text: 'feedback_helper_text',
+  feedback_want_contact_text: 'feedback_want_contact_text',
 
   // No category:
   owner: 'owner',
@@ -646,6 +663,7 @@ export const KEY = {
   we_use_cookies: 'we_use_cookies',
   control_panel_faq: 'control_panel_faq',
   invalid_phonenumber: 'invalid_phonenumber',
+  invalid_date_of_birth: 'invalid_date_of_birth',
   control_panel_title: 'control_panel_title',
   inputfile_choose_a_file: 'inputfile_choose_a_file',
   inputfile_no_file_selected: 'inputfile_no_file_selected',
@@ -666,6 +684,21 @@ export const KEY = {
   error_server_error_description: 'error_server_error_description',
   error_submitting_reservation: 'error_submitting_reservation',
   error_invalid_reservation_data: 'error_invalid_reservation_data',
+
+  // Event form validation
+  event_form_title_required: 'event_form_title_required',
+  event_form_description_long_required: 'event_form_description_long_required',
+  event_form_description_short_required: 'event_form_description_short_required',
+  event_form_start_dt_required: 'event_form_start_dt_required',
+  event_form_duration_min: 'event_form_duration_min',
+  event_form_host_required: 'event_form_host_required',
+  event_form_location_required: 'event_form_location_required',
+  event_form_capacity_min: 'event_form_capacity_min',
+  event_form_visibility_from_required: 'event_form_visibility_from_required',
+
+  event_form_category_required: 'event_form_category_required',
+  event_form_age_restriction_required: 'event_form_age_restriction_required',
+  event_form_ticket_type_required: 'event_form_ticket_type_required',
 } as const;
 
 // This will ensure that each value matches the key exactly.

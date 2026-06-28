@@ -3,6 +3,7 @@ import type {
   ClosedPeriodDto,
   EventDto,
   EventGroupDto,
+  EventWriteDto,
   FeedbackDto,
   FoodCategoryDto,
   FoodPreferenceDto,
@@ -57,7 +58,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import type { BilligEventDto } from './apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from './constants';
-import type { PageNumberPaginationType } from './types';
+import type { EventsPaginationType, PageNumberPaginationType } from './types';
 import { buildPaginatedUrl } from './utils';
 
 export async function getCsrfToken(): Promise<string> {
@@ -105,6 +106,19 @@ export async function getUser(): Promise<UserDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__user;
   const response = await axios.get<UserDto>(url, { withCredentials: true });
 
+  return response.data;
+}
+
+export type UpdateUserDto = {
+  first_name: string;
+  last_name: string;
+  phone_number?: string;
+  date_of_birth?: string;
+};
+
+export async function updateUser(data: UpdateUserDto): Promise<UserDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__user;
+  const response = await axios.patch<UserDto>(url, data, { withCredentials: true });
   return response.data;
 }
 
@@ -286,6 +300,26 @@ export async function getEventsUpcomming(params: {
   };
 }
 
+export async function getEventsUpcommingPaginated(
+  page: number,
+  pageSize?: number,
+  params?: {
+    search?: string;
+    venue?: string;
+    category?: string;
+    ticket_type?: string;
+  },
+): Promise<EventsPaginationType<EventDto>> {
+  const url = buildPaginatedUrl(BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcomming, page, pageSize, {
+    ...(params?.search ? { search: params.search } : {}),
+    ...(params?.venue ? { venue: params.venue } : {}),
+    ...(params?.category ? { category: params.category } : {}),
+    ...(params?.ticket_type ? { ticket_type: params.ticket_type } : {}),
+  });
+  const response = await axios.get<EventsPaginationType<EventDto>>(url, { withCredentials: true });
+  return response.data;
+}
+
 export async function getEvents(): Promise<EventDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_list;
   const response = await axios.get<EventDto[]>(url, { withCredentials: true });
@@ -293,14 +327,13 @@ export async function getEvents(): Promise<EventDto[]> {
   return response.data;
 }
 
-export async function postEvent(data: Partial<EventDto>): Promise<AxiosResponse<EventDto>> {
-  const transformed = { ...data, image_id: data.image?.id };
+export async function postEvent(data: Partial<EventWriteDto>): Promise<AxiosResponse<EventDto>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_list;
-  const response = await axios.post<EventDto>(url, transformed, { withCredentials: true });
+  const response = await axios.post<EventDto>(url, data, { withCredentials: true });
   return response;
 }
 
-export async function putEvent(id: string | number, data: Partial<EventDto>): Promise<AxiosResponse<EventDto>> {
+export async function putEvent(id: string | number, data: Partial<EventWriteDto>): Promise<AxiosResponse<EventDto>> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
   const response = await axios.put<EventDto>(url, data, { withCredentials: true });
   return response;

@@ -41,13 +41,13 @@ export const ROUTES_FRONTEND = {
   // ==================== //
   //  User control panel  //
   // ==================== //
-  user_change_password: '/control-panel/password/',
+  account: '/control-panel/account',
 
   // ==================== //
   //      Admin pages     //
   // ==================== //
   admin: '/control-panel/',
-  admin_mdb_connect_form: '/control-panel/mdb-connect-form',
+  admin_mdb_connect: '/control-panel/mdb',
   // Users
   admin_users: '/control-panel/users/',
   // Roles

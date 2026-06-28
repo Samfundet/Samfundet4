@@ -1,5 +1,6 @@
-import type { Dispatch, SetStateAction } from 'react';
-import type { themeToStyleMap } from '~/Components/Button/utils';
+import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type { UIMatch } from 'react-router';
+import type { buttonThemes } from '~/Components/Button/utils';
 import type { KV } from '~/constants';
 /** Module for global generic types. */
 
@@ -172,8 +173,6 @@ export type CalendarMarker = {
 };
 
 export type SiteFeature =
-  | 'profile'
-  | 'changePassword'
   | 'events'
   | 'images'
   | 'openingHours'
@@ -220,7 +219,7 @@ export type OrganizationTheme = {
   pagePrimaryColor: string;
   pageSecondaryColor: string;
   pageTertiaryColor?: string;
-  buttonTheme: keyof typeof themeToStyleMap;
+  buttonTheme: keyof typeof buttonThemes;
 };
 
 // Recruitment mappings
@@ -270,9 +269,23 @@ export interface PageNumberPaginationType<T> {
   results: T[];
 }
 
+export interface EventsPaginationType<T> extends PageNumberPaginationType<T> {
+  categories?: Array<[string, string]> | string[];
+  locations?: string[];
+  ticket_types?: Array<[string, string]> | string[];
+}
+
 /* For DRF pagination, see pagination.py */
 export interface CursorPaginatedResponse<T> {
   next: string | null; // URL or cursor for next page
   previous: string | null; // URL or cursor for previous page
   results: T[]; // Current page results
+}
+
+export type HandleWithCrumb = {
+  crumb: (match: UIMatch, data?: unknown) => ReactNode;
+};
+
+export interface MatchWithCrumb extends UIMatch {
+  handle: HandleWithCrumb;
 }

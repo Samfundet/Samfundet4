@@ -10,8 +10,6 @@ from typing import TYPE_CHECKING
 from datetime import date, time, datetime, timedelta
 from collections import defaultdict
 
-from guardian.shortcuts import assign_perm
-
 from django.db import models
 from django.utils import timezone
 from django.db.models import Q
@@ -19,7 +17,6 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
 
-from root.utils import permissions
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
 from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
@@ -96,6 +93,9 @@ class Campus(FullCleanSaveMixin):
 
 
 class User(AbstractUser):
+    # REQUIRED_FIELDS is only used by the createsuperuser tool, setting which fields need to have a value, nothing else
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'phone_number', 'date_of_birth']
+
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     username = LowerCaseField(
@@ -129,6 +129,12 @@ class User(AbstractUser):
     )
 
     mdb_medlem_id = models.PositiveIntegerField(null=True, blank=False, unique=True, verbose_name='medlem_id in mdb2')
+
+    date_of_birth = models.DateField(
+        _('date of birth'),
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         permissions = [
@@ -164,8 +170,6 @@ class UserPreference(FullCleanSaveMixin):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     theme = models.CharField(max_length=30, choices=UserPreferenceTheme.choices, default=UserPreferenceTheme.LIGHT, blank=True, null=True)
-    mirror_dimension = models.BooleanField(default=False)
-    cursor_trail = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
@@ -176,29 +180,6 @@ class UserPreference(FullCleanSaveMixin):
 
     def __str__(self) -> str:
         return f'UserPreference ({self.user})'
-
-
-class Profile(FullCleanSaveMixin):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-    nickname = models.CharField(max_length=30, blank=True, null=True)
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-
-    class Meta:
-        verbose_name = 'Profile'
-        verbose_name_plural = 'Profiles'
-
-    def __str__(self) -> str:
-        return f'Profile ({self.user})'
-
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        """Additional operations on save."""
-        super().save(*args, **kwargs)
-
-        # Extend Profile to assign permission to whichever user is related to it.
-        assign_perm(perm=permissions.SAMFUNDET_VIEW_PROFILE, user_or_group=self.user, obj=self)
-        assign_perm(perm=permissions.SAMFUNDET_CHANGE_PROFILE, user_or_group=self.user, obj=self)
 
 
 class Venue(CustomBaseModel):

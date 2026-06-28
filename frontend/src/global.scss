@@ -1,10 +1,16 @@
 @use 'sass:color';
 
+@use 'src/styles/general-sans' as *;
+
 /* stylelint-disable-next-line no-invalid-position-at-import-rule */
 @use 'constants' as *;
 
 /* stylelint-disable-next-line no-invalid-position-at-import-rule */
 @use 'mixins' as *;
+
+@use './styles/variables' as v;
+
+@use './styles/colors' as col;
 
 /* stylelint-disable selector-max-type */
 /* stylelint-disable selector-max-universal */
@@ -51,12 +57,16 @@ html {
 
 body {
   margin: 0;
-  font-family: $primary-font-family;
+  font-family: v.$font-family;
+  font-optical-sizing: auto;
+  font-weight: v.$font-weight-normal;
+  font-style: normal;
+  letter-spacing: v.$letter-spacing;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
   height: 100%;
-  background-color: $theme-light-bg;
+  background: v.$primary-light-bg;
 
   // Disable scrolling when mobile navbar is open.
   &.mobile-navigation-open {
@@ -89,9 +99,8 @@ a {
 label {
   display: flex;
   flex-direction: column;
-  font-weight: 700;
-  margin-bottom: 0.5em;
-  color: $black;
+  font-weight: 600;
+  color: col.$gray-950;
 }
 
 // Themes:
@@ -100,7 +109,7 @@ label {
 // THEME.DARK
 [#{$theme-key}='#{$theme-dark}'] {
   color: $theme-dark-color;
-  background: $theme-dark-bg;
+  background: v.$primary-dark-bg;
 
   label {
     color: $white;
@@ -127,61 +136,3 @@ label {
 }
 
 // End: Themes --------------------------------------------------------------------------------------------------------
-
-/*
-fieldset {
-  padding: 1em;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  border: none;
-}
-
-legend {
-  margin-left: 1em;
-}
-
-label {
-  font-weight: bold;
-  color: $grey-1;
-}
-
-input[type=text], textarea {
-  @include rounded;
-  padding: 1em 1em;
-  border: 1px solid transparent;
-  outline: none;
-  
-
-  &:focus {
-    outline: none;
-    border: 1px solid $blue;
-    background-color: $blue-lighter;
-  }
-}
-*/
-
-.trail {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: white;
-  animation: dot 1s linear forwards;
-  z-index: 2;
-
-  // Trail causes laggy experience with horizontal scrolling etc because it blocks the cursor from elements behind it.
-  // No pointer events fixes that issue.
-  pointer-events: none;
-}
-
-@keyframes dot {
-  50% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(2);
-    opacity: 0;
-  }
-}

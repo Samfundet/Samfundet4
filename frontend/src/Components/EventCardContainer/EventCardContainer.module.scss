@@ -2,9 +2,11 @@
 
 @use 'src/mixins' as m;
 
+@use '../EventCard/EventCard.module' as ec;
+
 .wrapper {
   margin: 2rem auto;
-  width: v.$primary-content-width-wide;
+  width: 1200px;
   max-width: 100%;
 
   @include m.for-tablet-down {
@@ -13,29 +15,40 @@
 }
 
 .container {
-  display: grid;
-  justify-items: center;
-  gap: 2rem;
-
-  @include m.for-large-desktop-up {
-    grid-template-columns: repeat(4, minmax(auto, 1fr));
-  }
-
-  @include m.for-desktop-down {
-    grid-template-columns: repeat(3, minmax(auto, 1fr));
-  }
-
-  @include m.for-tablet-down {
-    grid-template-columns: repeat(2, minmax(auto, 1fr));
-    gap: 1rem;
-  }
-
-  @include m.for-mobile-down {
-    grid-template-columns: repeat(1, minmax(auto, 1fr));
-  }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.5rem 0.5rem;
 }
 
 .card_container {
-  width: 100%;
-  max-width: 420px;
+  // 3 columns
+  flex-basis: calc((100% / 3) - 1rem);
+
+  // Last row has one card. Set its width to 50% and center it
+  &:last-child:nth-child(3n + 1) {
+    flex-basis: calc(50% - 0.75rem);
+    margin: 0 auto;
+  }
+  // Last row has two cards. Set each of their widths to 50%
+  &:last-child:nth-child(3n + 2),
+  &:nth-last-child(2):nth-child(3n + 1) {
+    flex-basis: calc(50% - 0.75rem);
+  }
+
+  // 2 columns
+  @media (max-width: calc((ec.$min-width * 3) + 3rem)) {
+    flex-basis: calc(50% - 0.5rem);
+
+    // Last row has one card. Set its width to 75% and center it
+    &:last-child:nth-child(2n + 1) {
+      flex-basis: calc(75% - 1rem);
+      margin: 0 auto;
+    }
+  }
+
+  // 1 column
+  @media (max-width: calc((ec.$min-width * 2) + 2rem)) {
+    flex-basis: 100%;
+  }
 }

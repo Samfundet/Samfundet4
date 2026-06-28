@@ -15,6 +15,7 @@ import {
   FormMessage,
   Input,
   NumberInput,
+  Textarea,
 } from '~/Components';
 import { PASSWORD, USERNAME } from '~/schema/user';
 
@@ -24,6 +25,7 @@ const schema = z.object({
   organization: z.string().nullish().optional(),
   duration: z.number().min(15).max(60),
   date: z.date(),
+  body: z.string(),
   confirm: z.boolean().refine((v) => v, 'Påkrevd'),
   image_file: z
     .instanceof(File)
@@ -44,6 +46,7 @@ export function ExampleForm() {
       password: '',
       organization: 'uka',
       duration: 15,
+      body: '',
       confirm: false,
       image_file: null,
     },
@@ -125,6 +128,19 @@ export function ExampleForm() {
               <FormLabel>Dato</FormLabel>
               <FormControl>
                 <DatePicker disabled={submitting} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="body"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Melding</FormLabel>
+              <FormControl>
+                <Textarea disabled={submitting} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

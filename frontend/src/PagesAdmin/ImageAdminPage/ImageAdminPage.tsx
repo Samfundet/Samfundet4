@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +20,7 @@ export function ImageAdminPage() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchInput, setSearchInput] = useState<string>('');
   const [debouncedSearch, setDebouncedSearch] = useState<string>('');
-  const debounceTimeout = useRef<NodeJS.Timeout>();
+  const debounceTimeout = useRef<ReturnType<typeof setTimeout>>();
   const { t } = useTranslation();
   useTitle(t(KEY.admin_images_title));
 
@@ -52,7 +53,8 @@ export function ImageAdminPage() {
   const title = t(KEY.admin_images_title);
   const backendUrl = ROUTES.backend.admin__samfundet_image_changelist;
   const header = (
-    <Button theme="success" rounded={true} link={ROUTES.frontend.admin_images_create}>
+    <Button theme="primary" link={ROUTES.frontend.admin_images_create}>
+      <Icon icon="lucide:plus" />
       {lowerCapitalize(t(KEY.admin_images_create))}
     </Button>
   );

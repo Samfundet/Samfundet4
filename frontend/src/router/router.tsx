@@ -10,7 +10,7 @@ import {
 } from '~/Components';
 import {
   AboutPage,
-  AdminPage,
+  AccountPage,
   ApiTestingPage,
   ComponentPage,
   ContributorsPage,
@@ -37,7 +37,6 @@ import {
   RouteOverviewPage,
   SaksdokumenterPage,
   SignUpPage,
-  UserChangePasswordPage,
   VenuePage,
 } from '~/Pages';
 import {
@@ -88,6 +87,7 @@ import { ROUTES } from '~/routes';
 import { t } from 'i18next';
 import { App } from '~/App';
 import { DynamicOrgOutlet } from '~/Components/DynamicOrgOutlet/DynamicOrgOutlet';
+import { AdminHomePage } from '~/Pages/AdminHomePage';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -120,16 +120,18 @@ export const router = createBrowserRouter(
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.venues} element={<SiteFeatureGate feature="venues"><VenuePage /></SiteFeatureGate>}/>
           <Route path={ROUTES.frontend.health} element={<HealthPage />} />
-          <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
+          {import.meta.env.DEV && <Route path={ROUTES.frontend.components} element={<ComponentPage />} />}
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
-            <Route path={ROUTES.frontend.login} element={<LoginPickerPage newRoute="/new-login" />} />
+            <Route path={ROUTES.frontend.login} element={<LoginPickerPage />} />
             <Route path={SAMF3_LOGIN_URL.login} element={<LoginPage />} />
             <Route handle={{ crumb: () => <Link url={ROUTES.frontend.login}>{t(KEY.common_login)}</Link> }}>
               <Route
                 path={ROUTES.frontend.new_login}
                 element={<LoginPage />}
                 handle={{
-                  crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.loginpage_internal_login)}</Link>,
+                  crumb: ({ pathname }: UIMatch) => (
+                    <Link url={pathname}>{t(KEY.loginpicker_page_new_platform_title)}</Link>
+                  ),
                 }}
               />
             </Route>
@@ -188,21 +190,12 @@ export const router = createBrowserRouter(
         <Route element={<Outlet />} errorElement={<RootErrorBoundary />}>
           <Route
             path={ROUTES.frontend.admin}
-            element={
-              <SiteFeatureGate feature="profile">
-                <PermissionRoute requiredPermissions={[]} element={<AdminPage />} />
-              </SiteFeatureGate>
-            }
+            element={<PermissionRoute requiredPermissions={[]} element={<AdminHomePage />} />}
           />
-          {/* User pages */}
           <Route
-            path={ROUTES.frontend.user_change_password}
-            element={
-              <SiteFeatureGate feature="changePassword">
-                <PermissionRoute element={<UserChangePasswordPage />} />
-              </SiteFeatureGate>
-            }
-            handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.change_password)}</Link> }}
+            path={ROUTES.frontend.account}
+            element={<PermissionRoute requiredPermissions={[]} element={<AccountPage />} />}
+            handle={{ crumb: () => <Link url={ROUTES.frontend.account}>{t(KEY.common_account)}</Link> }}
           />
           {/* Gangs */}
           <Route
@@ -1001,7 +994,7 @@ export const router = createBrowserRouter(
           />
           {/* MDB Connect Form */}
           <Route
-            path={ROUTES.frontend.admin_mdb_connect_form}
+            path={ROUTES.frontend.admin_mdb_connect}
             handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.adminpage_connect_mdb)}</Link> }}
             element={<MDBConnectFormAdminPage />}
           />
