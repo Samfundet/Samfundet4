@@ -15,6 +15,7 @@ from .general import (
     Organization,
     UserPreference,
 )
+from .site_banner import SiteBanner
 
 __all__ = [
     'User',
@@ -24,4 +25,5 @@ __all__ = [
     'Event',
     'Image',
     'UserPreference',
+    'SiteBanner',
 ]

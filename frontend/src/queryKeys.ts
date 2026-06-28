@@ -96,3 +96,8 @@ export const imageKeys = {
   details: () => [...imageKeys.all, 'detail'] as const,
   detail: (id: number) => [...imageKeys.details(), id] as const,
 };
+
+export const siteBannerKeys = {
+  all: ['siteBanners'] as const,
+  active: () => [...siteBannerKeys.all, 'active'] as const,
+};
