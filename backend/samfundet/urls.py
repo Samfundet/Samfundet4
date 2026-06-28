@@ -1,11 +1,16 @@
 # imports
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from rest_framework import routers
 
-from django.urls import path, include
+from django.conf import settings
+from django.http import HttpResponse
+from django.urls import URLPattern, path, include
+from django.conf.urls.static import static
 
 import samfundet.view.mdb_views
 import samfundet.view.user_views
@@ -16,6 +21,8 @@ from samfundet.view import billig_views
 
 from . import views
 from .view import recruitment_views
+from .routing import frontend_routes
+from .routing.views import react_view, react_event_view
 
 # End: imports -----------------------------------------------------------------
 router = routers.DefaultRouter()
@@ -67,6 +74,15 @@ router.register('billig-ticket-group', billig_views.BilligTicketGroupReadOnlyMod
 # Lyche routes go here
 
 app_name = 'samfundet'
+
+
+def frontend_path(route_path: str, view: Callable[..., HttpResponse], name: str) -> list[URLPattern]:
+    clean = route_path.strip('/')
+    return [
+        path(clean, view, name=name),
+        path(clean + '/', view, name=f'{name}_trailing_slash'),
+    ]
+
 
 urlpatterns = [
     path('api/', include(router.urls)),
@@ -187,4 +203,10 @@ urlpatterns = [
     path('recruitment/<int:recruitment_id>/gang/<int:gang_id>/stats/', views.GangApplicationCountView.as_view(), name='gang-application-stats'),
     path('recruitment/<int:id>/positions-by-tags/', views.PositionByTagsView.as_view(), name='recruitment_positions_by_tags'),
     path('recruitment/all-applications/', views.RecruitmentAllApplicationsPerRecruitmentView.as_view(), name='recruitment-all-applications'),
+    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
+] + [
+    # Serve React frontend
+    *frontend_path(frontend_routes.EVENT, react_event_view, name=f'{settings.REACT_ROUTE_PREFIX}_event'),
+    path('', react_view, name=settings.REACT_ROUTE_PREFIX),
+    path('<path:resource>', react_view),
 ]
