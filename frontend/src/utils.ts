@@ -204,6 +204,28 @@ export function getDayKey(day: Day): TranslationKeys {
   }
 }
 
+/**
+ * Gets the shorthand translation key for a given day
+ */
+export function getShortDayKey(day: Day): TranslationKeys {
+  switch (day) {
+    case 'monday':
+      return KEY.common_day_monday_short;
+    case 'tuesday':
+      return KEY.common_day_tuesday_short;
+    case 'wednesday':
+      return KEY.common_day_wednesday_short;
+    case 'thursday':
+      return KEY.common_day_thursday_short;
+    case 'friday':
+      return KEY.common_day_friday_short;
+    case 'saturday':
+      return KEY.common_day_saturday_short;
+    case 'sunday':
+      return KEY.common_day_sunday_short;
+  }
+}
+
 export const SHORT_DAY_I18N_KEYS = [
   KEY.common_day_monday_short,
   KEY.common_day_tuesday_short,

@@ -8,95 +8,46 @@
   padding-bottom: 5em;
 }
 
-.dayCardContainer {
+
+
+.venueBlockContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9.375em, 1fr));
-  gap: 1em;
-  margin: 2em 0;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em 2em;
+  margin: 1em 1em 1em 1em;
+  align-items: stretch;
 
   @include for-mobile-only {
-    grid-template-columns: repeat(auto-fit, minmax(7.5em, 1fr));
+    grid-template-columns: 1fr; 
   }
 }
 
-.dayCard {
-  background-color: $background-primary;
-  color: $black;
-  padding: 1rem 1.5rem;
-  border-radius: 0.5em;
-  box-shadow: 0 2px 8px 0 $black-t10;
-  border: 1px solid $grey-4;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    box-shadow: 0 4px 12px 0 $black-t25;
-  }
-
-  @include theme-dark {
-    background-color: $theme-dark-input-bg;
-    color: $theme-dark-color;
-    border: 1px solid $grey-0;
-  }
-}
-
-.selectedDayCard {
-  background-color: $red-samf;
-  color: $white;
-  padding: 1rem 1.5rem;
-  border-radius: 0.5em;
-  box-shadow: 0 2px 8px 0 $black-t10;
-  border: 1px solid $grey-4;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    box-shadow: 0 4px 12px 0 $black-t25;
-  }
-
-  @include theme-dark {
-    background-color: $red-samf-dark;
-    border: 1px solid $red-samf;
-  }
-}
-
-.venueCardContainer {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 1em;
-  margin: 2em 0;
-
-  @include for-tablet-down {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-
-  @include for-mobile-only {
-    grid-template-columns: 1fr;
-    gap: 2em;
-  }
-}
-
-.venueCard {
-  background-color: $background-primary;
-  color: $black;
-  padding: 1rem 1.5rem;
-  border-radius: 0.5em;
-  box-shadow: 0 2px 8px 0 $black-t10;
-  border: 1px solid $grey-4;
+.venueBlock {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 12em;
-  line-height: 6vh;
+  min-height: 100%;
+  padding-bottom: 2em;
+  border-bottom: 1px solid $grey-36;
 
-  background-image: url();
-
-  @include theme-dark {
-    background-color: $theme-dark-input-bg;
-    color: $theme-dark-color;
-    border: 1px solid $grey-0;
+  &:nth-last-child(-n + 2) {
+    border-bottom: none;
   }
+}
+
+.venueName {
+  margin: 0 0 2vh 0;
+}
+
+.timeDuration {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  margin: 0.5em 0 0 0; 
+}
+
+.today {
+  font-weight: bold;
+}
+
+.notToday {
+  color: $grey-2;
 }
