@@ -52,7 +52,7 @@
     "date-fns": "^2.30.0",
     "i18next": "^25.8.5",
     "path-to-regexp": "^8.4.0",
-    "postcss": "^8.5.10",
+    "postcss": "^8.5.16",
     "react": "^18.2.0",
     "react-cookie": "^8.1.2",
     "react-dom": "^18.2.0",
