@@ -4950,7 +4950,7 @@ __metadata:
     typescript: "npm:^6.0.3"
     vite: "npm:^6.4.3"
     vite-plugin-svgr: "npm:^4.5.0"
-    web-vitals: "npm:^4.2.4"
+    web-vitals: "npm:^5.3.0"
     zod: "npm:^3.23.8"
     zod-i18n-map: "npm:^2.27.0"
   languageName: unknown
@@ -9290,10 +9290,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-vitals@npm:^4.2.4":
-  version: 4.2.4
-  resolution: "web-vitals@npm:4.2.4"
-  checksum: 10c0/383c9281d5b556bcd190fde3c823aeb005bb8cf82e62c75b47beb411014a4ed13fa5c5e0489ed0f1b8d501cd66b0bebcb8624c1a75750bd5df13e2a3b1b2d194
+"web-vitals@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "web-vitals@npm:5.3.0"
+  checksum: 10c0/a073c024d791bfac7a92f82607999b45be978ef3070f642f3cdd94c50d3e1651cf62b2475039248256b2d84651e16fa9bdcaa4b03f31af8bfeefb05832298b97
   languageName: node
   linkType: hard
 
