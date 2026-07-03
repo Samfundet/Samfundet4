@@ -1,6 +1,5 @@
 export { AboutPage } from './AboutPage';
 export { AccountPage } from './AccountPage';
-export { ApiTestingPage } from './ApiTestingPage';
 export { ComponentPage } from './ComponentPage';
 export { ContributorsPage } from './ContributorsPage';
 export { EventPage } from './EventPage';
@@ -21,7 +20,6 @@ export { NotFoundPage } from './NotFoundPage';
 export { RecruitmentApplicationFormPage } from './RecruitmentApplicationFormPage';
 export { RecruitmentApplicationsOverviewPage } from './RecruitmentApplicationsOverviewPage';
 export { RecruitmentPage } from './RecruitmentPage';
-export { RouteOverviewPage } from './RouteOverviewPage';
 export { SaksdokumenterPage } from './SaksdokumenterPage';
 export { SignUpPage } from './SignUpPage';
 export { VenuePage } from './VenuePage';
