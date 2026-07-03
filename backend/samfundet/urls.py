@@ -18,6 +18,10 @@ from . import views
 from .view import recruitment_views
 
 # End: imports -----------------------------------------------------------------
+#
+# NOTE: This module contains ONLY backend API routes. It is mounted under the
+# 'api/' prefix in root/urls.py, so every route here is reachable at '/api/...'.
+# React frontend routes live in samfundet/routing/urls.py.
 router = routers.DefaultRouter()
 router.register('images', samfundet.view.general_views.ImageView, 'images')
 router.register('tags', samfundet.view.general_views.TagView, 'tags')
@@ -68,8 +72,9 @@ router.register('billig-ticket-group', billig_views.BilligTicketGroupReadOnlyMod
 
 app_name = 'samfundet'
 
+
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='samfundet:schema'), name='swagger_ui'),
     path('schema/redoc/', SpectacularRedocView.as_view(url_name='samfundet:schema'), name='redoc'),
