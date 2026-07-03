@@ -50,6 +50,10 @@ STATICFILES_DIRS = [
     BASE_DIR / REACT_BUILD_DIR / 'assets',
 ]
 
+# Tells WhiteNoise to additionally serve the build files in backend/reactapp/ at the site root,
+# so /robots.txt, /favicon.ico, /manifest.json, etc. resolve at / directly from the build directory
+WHITENOISE_ROOT = BASE_DIR / REACT_BUILD_DIR
+
 # Media
 MEDIA_ROOT = BASE_DIR / 'mediaroot'
 MEDIA_URL = '/media/'
@@ -321,7 +325,7 @@ LOGGING = {
 # https://docs.djangoproject.com/en/1.10/topics/db/transactions/#django.db.transaction.on_commit
 # https://medium.com/@hakibenita/how-to-manage-concurrency-in-django-models-b240fed4ee2
 ATOMIC_REQUESTS = True
-APPEND_SLASH = False
+APPEND_SLASH = True
 
 # ======================== #
 #         Email            #
@@ -338,5 +342,4 @@ DEFAULT_FROM_EMAIL = 'mg-web@samfundet.no'
 # For enabled features in the control panel
 CP_ENABLED = {s.strip() for s in os.getenv('CP_ENABLED', 'users,events,images,opening_hours,closed_hours,venue').split(',') if s.strip()} & CP_FEATURES_ALL
 
-REACT_ROUTE_PREFIX = "reactapp"
-
+REACT_ROUTE_PREFIX = 'reactapp'

@@ -3,8 +3,6 @@ from __future__ import annotations
 import os
 from typing import Any
 
-from rest_framework.generics import get_object_or_404
-
 from django.conf import settings
 from django.http import HttpRequest, HttpResponse
 
@@ -31,6 +29,17 @@ def react_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
         return HttpResponse('React build not found.', status=500)
 
 
+def react_404_view(request: HttpRequest, exception: Exception | None = None, **kwargs: Any) -> HttpResponse:
+    """
+    Serve the React frontend with HTTP 404. Used as both the URL catch-all for
+    unknown paths and as Django's handler404.
+    """
+    try:
+        return HttpResponse(get_frontend_html(), status=404)
+    except FileNotFoundError:
+        return HttpResponse('React build not found.', status=500)
+
+
 def is_bot(request: HttpRequest) -> bool:
     bot_patterns = [
         'googlebot',
@@ -48,7 +57,7 @@ def is_bot(request: HttpRequest) -> bool:
         'perplexitybot',
         'chatgpt',
         'pinterestbot',
-        'curl'
+        'curl',
     ]
     user_agent = request.META['HTTP_USER_AGENT'].lower()
     return any(pattern in user_agent for pattern in bot_patterns)
@@ -65,7 +74,7 @@ def react_event_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
     description = event.description_short_nb
 
     metadata = Metadata(title=title, description=description)
-    metadata.items.append(MetadataItem('name', 'og:custom', 'Lorem ipsum')) # TODO:
+    metadata.items.append(MetadataItem('name', 'og:custom', 'Lorem ipsum'))  # TODO:
 
     html = get_frontend_html()
     return HttpResponse(inject_metadata(html, metadata))

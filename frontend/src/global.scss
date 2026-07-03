@@ -1,6 +1,6 @@
 @use 'sass:color';
 
-@use 'src/styles/general-sans' as *;
+@use './styles/general-sans' as *;
 
 /* stylelint-disable-next-line no-invalid-position-at-import-rule */
 @use 'constants' as *;

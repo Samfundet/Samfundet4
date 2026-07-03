@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { ROUTES_FRONTEND } from '../src/routes/frontend';
-import { fileURLToPath } from "node:url";
 
 // @ts-ignore
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
