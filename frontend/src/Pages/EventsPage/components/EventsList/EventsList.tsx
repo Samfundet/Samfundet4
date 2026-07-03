@@ -1,29 +1,50 @@
 import { Icon } from '@iconify/react';
-import { type ReactNode, useState } from 'react';
+import { type ReactNode, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, IconButton, InputField, Link, TimeDisplay } from '~/Components';
-import { eventQuery } from '~/Components/EventQuery/utils';
+import { Button, Dropdown, InputField, Link, TimeDisplay } from '~/Components';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
 import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
-import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { COLORS } from '~/types';
-import { dbT } from '~/utils';
+import { EventCategory, type EventCategoryValue, type SetState } from '~/types';
+import { dbT, getEventCategoryKey, lowerCapitalize } from '~/utils';
 import styles from './EventsList.module.scss';
 
 type EventsListProps = {
   events: Record<string, EventDto[]>;
+  categories: EventCategoryValue[] | null;
+  venues: string[] | null;
+  selectedVenue: string | null;
+  setSelectedVenue: SetState<string | null>;
+  selectedCategory: EventCategoryValue | null;
+  setSelectedCategory: SetState<EventCategoryValue | null>;
 };
 
-export function EventsList({ events }: EventsListProps) {
+export function EventsList({
+  events,
+  categories,
+  venues,
+  selectedVenue,
+  setSelectedVenue,
+  selectedCategory,
+  setSelectedCategory,
+}: EventsListProps) {
   const { t, i18n } = useTranslation();
   const [tableView, setTableView] = useState(false);
   const [query, setQuery] = useState('');
-  const isDesktop = useDesktop();
+
+  const eventCategoryOptions: DropdownOption<EventCategoryValue>[] = Object.values(EventCategory).map((category) => ({
+    value: category,
+    label: t(getEventCategoryKey(category)),
+  }));
+
+  const venueOptions: DropdownOption<string | null>[] = (venues ?? []).map((venue) => {
+    return { label: venue, value: venue } as DropdownOption<string>;
+  });
 
   const eventColumns = [
     { content: t(KEY.common_title), sortable: true },
@@ -37,21 +58,24 @@ export function EventsList({ events }: EventsListProps) {
   ];
 
   // TODO debounce and move header/filtering stuff to a separate component
-  function filteredEvents() {
-    const allEvents = Object.keys(events).flatMap((k: string) => events[k]);
+  const filteredEvents = useMemo(() => {
+    const allEvents = Object.values(events).flat();
     const normalizedSearch = query.trim().toLowerCase();
     const keywords = normalizedSearch.split(' ');
 
-    if (query === '') return eventQuery(allEvents, query);
     return allEvents.filter((event) => {
       const title = (dbT(event, 'title', i18n.language) as string)?.toLowerCase() ?? '';
-      return keywords.every((kw) => title.includes(kw));
+      const matchesSearch = query === '' || keywords.every((kw) => title.includes(kw));
+      const matchesVenue = !selectedVenue || event.location === selectedVenue;
+      const matchesCategory = !selectedCategory || event.category === selectedCategory;
+
+      return matchesSearch && matchesVenue && matchesCategory;
     });
-  }
+  }, [events, query, selectedVenue, selectedCategory, i18n.language]);
 
   // TODO improve table view for events
   function getEventRows(): TableRow[] {
-    return filteredEvents().map((event) => ({
+    return filteredEvents.map((event) => ({
       cells: [
         {
           content: (
@@ -79,7 +103,7 @@ export function EventsList({ events }: EventsListProps) {
   }
 
   function getEventCards(): ReactNode[] {
-    return filteredEvents().map((event: EventDto) => {
+    return filteredEvents.map((event: EventDto) => {
       const time_display = <TimeDisplay timestamp={event.start_dt} displayType="event-datetime" />;
       return (
         <div className={styles.event_container} key={event.id}>
@@ -122,16 +146,18 @@ export function EventsList({ events }: EventsListProps) {
             onChange={setQuery}
             value={query}
           />
-          {isDesktop && (
-            <span className={styles.filter_button}>
-              <IconButton
-                icon="fluent:options-24-filled"
-                title="Filter"
-                color={COLORS.black}
-                onClick={() => alert('TODO legg til tinius sitt filter')}
-              />
-            </span>
-          )}
+          <Dropdown
+            options={eventCategoryOptions}
+            onChange={(val) => setSelectedCategory(val as EventCategoryValue)}
+            className={styles.element}
+            nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.event_type)}`) }}
+          />
+          <Dropdown
+            options={venueOptions}
+            onChange={(val) => setSelectedVenue(val as string)}
+            className={styles.element}
+            nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_venue)}`) }}
+          />
         </div>
 
         {/* TODO translate */}
