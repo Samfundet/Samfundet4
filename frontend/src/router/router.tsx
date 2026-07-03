@@ -11,7 +11,6 @@ import {
 import {
   AboutPage,
   AccountPage,
-  ApiTestingPage,
   ComponentPage,
   ContributorsPage,
   EventPage,
@@ -34,7 +33,6 @@ import {
   RecruitmentApplicationFormPage,
   RecruitmentApplicationsOverviewPage,
   RecruitmentPage,
-  RouteOverviewPage,
   SaksdokumenterPage,
   SignUpPage,
   VenuePage,
@@ -137,7 +135,6 @@ export const router = createBrowserRouter(
             </Route>
             <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
           </Route>
-          <Route path={ROUTES.frontend.api_testing} element={<ApiTestingPage />} />
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route element={ <SiteFeatureGate feature="information"><Outlet /></SiteFeatureGate>}>
             <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
@@ -152,7 +149,6 @@ export const router = createBrowserRouter(
           </Route>
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.saksdokumenter} element={<SiteFeatureGate feature="documents"><SaksdokumenterPage /></SiteFeatureGate>} />
-          <Route path={ROUTES.frontend.route_overview} element={<RouteOverviewPage />} />
           <Route path={ROUTES.frontend.contributors} element={<ContributorsPage />} />
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.membership} element={<SiteFeatureGate feature="membership"><MembershipPage /></SiteFeatureGate>} />

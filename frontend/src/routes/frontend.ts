@@ -114,8 +114,6 @@ export const ROUTES_FRONTEND = {
   // ==================== //
   //      Development     //
   // ==================== //
-  api_testing: '/api-testing/',
   components: '/components/',
-  route_overview: '/route/overview/',
   not_found: '/not-found',
 } as const;
