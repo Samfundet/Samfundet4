@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { ImageCard } from '~/Components';
-import { BACKEND_DOMAIN } from '~/constants';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/utils';
+import { dbT, imageUrl } from '~/utils';
 import styles from '../EventCreatorAdminPage.module.scss';
 import type { FormType } from '../hooks/useEventCreatorForm';
 
@@ -13,7 +12,7 @@ export function EventPreviewCard({ values }: { values: FormType }) {
       <ImageCard
         title={dbT(values, 'title') ?? ''}
         description={dbT(values, 'description_short') ?? ''}
-        imageUrl={values.image?.url ? BACKEND_DOMAIN + values.image.url : ''}
+        imageUrl={imageUrl(values.image, 'small') ?? ''}
         date={values.start_dt ?? ''}
         ticket_type={values.ticket_type}
         host={values.host}

@@ -4,9 +4,10 @@ from typing import Any
 
 from django.utils import timezone
 from django.dispatch import receiver
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save, post_save, post_delete
 
 from .models import User, UserPreference
+from .models.general import Image
 from .models.recruitment import Recruitment, RecruitmentStatistics, RecruitmentApplication, RecruitmentPositionStat
 from .models.model_choices import RecruitmentStatusChoices
 
@@ -16,6 +17,12 @@ def create_user_preference(sender: User, instance: User, *, created: bool, **kwa
     """Ensures user_preference is created whenever a user is created."""
     if created:
         UserPreference.objects.get_or_create(user=instance)
+
+
+@receiver(post_delete, sender=Image)
+def delete_image_files(sender: Image, instance: Image, **kwargs: Any) -> None:
+    """Removes stored files (original + variants) when an image is deleted. Also fires on queryset deletes."""
+    instance.schedule_file_cleanup(tuple(getattr(instance, field).name or '' for field in Image.FILE_FIELDS))
 
 
 @receiver(post_save, sender=Recruitment)

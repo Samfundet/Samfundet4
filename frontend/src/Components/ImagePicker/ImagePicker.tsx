@@ -5,11 +5,10 @@ import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { Input } from '~/Components';
 import { getImagesPaginated } from '~/api';
-import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { imageKeys } from '~/queryKeys';
-import { backgroundImageFromUrl } from '~/utils';
+import { backgroundImageFromUrl, imageUrl } from '~/utils';
 import { PagedPagination } from '../Pagination';
 import styles from './ImagePicker.module.scss';
 
@@ -67,7 +66,7 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
         key={image.id}
         className={classNames(styles.image, isSelected && styles.selected_image)}
         onClick={() => select(image)}
-        style={backgroundImageFromUrl(BACKEND_DOMAIN + image.url)}
+        style={backgroundImageFromUrl(imageUrl(image, 'small'))}
       />
     );
   }
@@ -80,10 +79,7 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
     <div className={styles.container}>
       <div className={styles.selected_container}>
         {selected && <h1 className={styles.image_title}>{selected.title}</h1>}
-        <div
-          className={styles.selected}
-          style={backgroundImageFromUrl(selected?.url ? BACKEND_DOMAIN + selected.url : undefined)}
-        >
+        <div className={styles.selected} style={backgroundImageFromUrl(imageUrl(selected, 'small'))}>
           {selected === undefined && (
             <>
               <Icon icon="ic:outline-image" width={24} />

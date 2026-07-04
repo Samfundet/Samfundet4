@@ -6,14 +6,22 @@ from __future__ import annotations
 
 import re
 import secrets
+from io import BytesIO
 from typing import TYPE_CHECKING
+from pathlib import Path
 from datetime import date, time, datetime, timedelta
+from contextlib import contextmanager
 from collections import defaultdict
+from dataclasses import dataclass
 
-from django.db import models
+from PIL import Image as PilImage
+from PIL import ImageOps, JpegImagePlugin
+
+from django.db import models, transaction
 from django.utils import timezone
 from django.db.models import Q
 from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
 
@@ -26,6 +34,7 @@ from .utils.string_utils import ellipsize
 
 if TYPE_CHECKING:
     from typing import Any
+    from collections.abc import Iterator
 
     from django.db.models import Model
 
@@ -67,10 +76,57 @@ class Tag(CustomBaseModel):
         super().save(*args, **kwargs)
 
 
+def image_upload_path(instance: Image, filename: str) -> str:
+    """Partition images two levels deep by filename.
+
+    Example: images/9f/86/9f86d081.jpg.
+    """
+    return f'images/{filename[:2]}/{filename[2:4]}/{filename}'
+
+
+@dataclass(frozen=True, kw_only=True)
+class ImageVariant:
+    # longest side (px), never upscaled
+    max_size: int
+    # If lossy: WebP quality.
+    # If lossless: compression effort.
+    quality: int
+    # Images more elongated than this ratio (long side / short side) are
+    # center-cropped down to it before downscaling
+    max_aspect: float
+    lossless: bool
+
+
 class Image(CustomBaseModel):
+    # Accepted upload formats (PIL format names)
+    ALLOWED_FORMATS = ('JPEG', 'PNG', 'GIF', 'WEBP', 'TIFF')
+
+    # Originals at or below this size are served as-is, without generated variants
+    VARIANT_SIZE_THRESHOLD = 128 * 1024
+
+    # Smaller variants tolerate less extreme aspect ratios since they show in
+    # small containers, where extreme proportions leave too few usable pixels.
+    #
+    # If adding a variant, make sure to also add an ImageField field with a
+    # matching name (and update frontend).
+    VARIANTS = {
+        'large': ImageVariant(max_size=2560, quality=85, max_aspect=4.5, lossless=False),
+        'medium': ImageVariant(max_size=1536, quality=85, max_aspect=4.2, lossless=False),
+        'small': ImageVariant(max_size=768, quality=80, max_aspect=4.0, lossless=False),
+    }
+
     title = models.CharField(max_length=140)
     tags = models.ManyToManyField(Tag, blank=True, related_name='images')
-    image = models.ImageField(upload_to='images/', blank=False, null=False)
+    image = models.ImageField(upload_to=image_upload_path, blank=False, null=False)
+
+    # Downscaled copies generated automatically on upload.
+    # Empty for animated images, in which case urls falls back to the original.
+    image_large = models.ImageField(upload_to=image_upload_path, blank=True, editable=False)
+    image_medium = models.ImageField(upload_to=image_upload_path, blank=True, editable=False)
+    image_small = models.ImageField(upload_to=image_upload_path, blank=True, editable=False)
+
+    # All fields holding a stored file: the original plus one field per variant
+    FILE_FIELDS = ('image', *(f'image_{name}' for name in VARIANTS))
 
     class Meta:
         verbose_name = 'Image'
@@ -78,6 +134,158 @@ class Image(CustomBaseModel):
 
     def __str__(self) -> str:
         return f'{self.title}'
+
+    @property
+    def urls(self) -> dict[str, str]:
+        """URL for each size variant, falling back to the original when a variant is missing."""
+        original = self.image.url
+        urls = {'original': original}
+        for variant in self.VARIANTS:
+            file = getattr(self, f'image_{variant}')
+            urls[variant] = file.url if file else original
+        return urls
+
+    ORIENTATION_EXIF_TAG = 0x0112
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        stored_files = self._stored_file_names()
+        # New uploads carry a name not yet stored in db
+        image_changed = bool(self.image) and (stored_files is None or stored_files[0] != self.image.name)
+        if image_changed:
+            self._assign_random_name()
+            self._strip_metadata()
+            self.generate_variants()
+        super().save(*args, **kwargs)
+        if image_changed and stored_files:
+            # The save replaced the row's files, so the previous ones are orphans now
+            self.schedule_file_cleanup(stored_files)
+
+    def _stored_file_names(self) -> tuple[str, ...] | None:
+        """File names (original + variants) currently in the database, or None if the row is new."""
+        if not self.pk:
+            return None
+        return Image.objects.filter(pk=self.pk).values_list(*self.FILE_FIELDS).first()
+
+    @classmethod
+    def schedule_file_cleanup(cls, names: tuple[str, ...]) -> None:
+        """Delete stored files once the current transaction commits (or immediately if none)"""
+        storage = cls._meta.get_field('image').storage
+
+        def delete_files() -> None:
+            for name in names:
+                if name:
+                    storage.delete(name)
+
+        transaction.on_commit(delete_files)
+
+    @contextmanager
+    def _open_image(self) -> Iterator[PilImage.Image]:
+        file = self.image.file
+        file.seek(0)
+        with PilImage.open(file) as pil:
+            yield pil
+        file.seek(0)
+
+    def _assign_random_name(self) -> None:
+        """Name the file a random string. The extension is sniffed from the actual format"""
+        with self._open_image() as pil:
+            image_format = pil.format or ''
+        if image_format not in self.ALLOWED_FORMATS:
+            raise ValidationError(f'Unsupported image format: {image_format or "<unknown>"}')
+        # normalize both JPG/JPEG to use .jpg
+        extension = {'JPEG': '.jpg'}.get(image_format, f'.{image_format.lower()}')
+        name = f'{secrets.token_hex(8)}{extension}'
+        # Collisions are essentially impossible, but a silent Django rename would
+        # break the shared original/variant stem, so reroll rather than risk it.
+        while self.image.storage.exists(image_upload_path(self, name)):
+            name = f'{secrets.token_hex(8)}{extension}'
+        self.image.name = name
+
+    def _strip_metadata(self) -> None:
+        """Re-encode the original without metadata, so e.g. GPS EXIF from phone photos is never leaked.
+
+        - Only strips JPEG/PNG
+        - Orientation is baked into the pixels, the ICC color profile is kept
+        """
+        with self._open_image() as pil:
+            exif = pil.getexif()
+            has_metadata = exif or pil.info.get('exif') or pil.info.get('xmp')
+            strippable = pil.format in ('JPEG', 'PNG') and not getattr(pil, 'is_animated', False)
+            if not (strippable and has_metadata):
+                return
+
+            options: dict[str, Any] = {'exif': b'', 'xmp': b'', 'icc_profile': pil.info.get('icc_profile')}
+
+            # 1 means "no rotation needed"
+            needs_rotation = exif.get(self.ORIENTATION_EXIF_TAG, 1) != 1
+            stripped = (ImageOps.exif_transpose(pil) or pil) if needs_rotation else pil
+
+            if isinstance(pil, JpegImagePlugin.JpegImageFile):
+                # Inherit the source's compression instead of picking a new quality
+                if needs_rotation:
+                    options |= {'qtables': pil.quantization, 'subsampling': JpegImagePlugin.get_sampling(pil)}
+                else:
+                    options |= {'quality': 'keep', 'subsampling': 'keep'}
+
+            buffer = BytesIO()
+            stripped.save(buffer, format=pil.format, **options)
+        self.image.save(self.image.name, ContentFile(buffer.getvalue()), save=False)
+
+    def generate_variants(self) -> None:
+        """Generate a downscaled WebP copy of the image for each size in VARIANTS.
+
+        Small and animated originals get no variants, and urls falls back to the original.
+        """
+        if self.image.size <= self.VARIANT_SIZE_THRESHOLD:
+            self._clear_variants()
+            return
+        with self._open_image() as source:
+            if getattr(source, 'is_animated', False):
+                # Resizing would drop animation frames, serve the original instead.
+                self._clear_variants()
+                return
+            pil = self._normalize_for_webp(source)
+            stem = Path(self.image.name).stem
+            for name, variant in self.VARIANTS.items():
+                content = self._encode_variant(pil, variant)
+                getattr(self, f'image_{name}').save(f'{stem}_{name}.webp', content, save=False)
+
+    def _clear_variants(self) -> None:
+        for name in self.VARIANTS:
+            setattr(self, f'image_{name}', '')
+
+    @staticmethod
+    def _normalize_for_webp(source: PilImage.Image) -> PilImage.Image:
+        """Bake EXIF orientation into the pixels and convert to a mode WebP can encode."""
+        pil = ImageOps.exif_transpose(source) or source
+        if pil.mode not in ('RGB', 'RGBA'):
+            # Palette images may carry transparency, so they keep an alpha channel
+            pil = pil.convert('RGBA' if pil.mode == 'P' or 'A' in pil.getbands() else 'RGB')
+        return pil
+
+    @classmethod
+    def _encode_variant(cls, pil: PilImage.Image, variant: ImageVariant) -> ContentFile:
+        """Crop, downscale and encode one WebP variant of the (normalized) source image."""
+        resized = cls._center_crop(pil, variant.max_aspect)
+        resized.thumbnail((variant.max_size, variant.max_size), PilImage.Resampling.LANCZOS)
+        buffer = BytesIO()
+        resized.save(buffer, format='WEBP', lossless=variant.lossless, quality=variant.quality)
+        return ContentFile(buffer.getvalue())
+
+    @staticmethod
+    def _center_crop(pil: PilImage.Image, max_aspect: float) -> PilImage.Image:
+        """Center-crop the image so that no side exceeds max_aspect times the other."""
+        width, height = pil.size
+        if width > height * max_aspect:
+            crop_width = round(height * max_aspect)
+            left = (width - crop_width) // 2
+            return pil.crop((left, 0, left + crop_width, height))
+        if height > width * max_aspect:
+            crop_height = round(width * max_aspect)
+            top = (height - crop_height) // 2
+            return pil.crop((0, top, width, top + crop_height))
+        # Copy since thumbnail() mutates and the source is reused for other variants
+        return pil.copy()
 
 
 class Campus(FullCleanSaveMixin):
@@ -653,7 +861,7 @@ class Saksdokument(CustomBaseModel):
     publication_date = models.DateTimeField(blank=True, null=True)
 
     category = models.CharField(max_length=25, choices=SaksdokumentCategory.choices, default=SaksdokumentCategory.FS_REFERAT)
-    file = models.FileField(upload_to='uploads/saksdokument/', blank=True, null=True)
+    file = models.FileField(upload_to='saksdokument/', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Saksdokument'

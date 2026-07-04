@@ -350,6 +350,5 @@ export const ROUTES_BACKEND = {
   samfundet__gang_application_stats: '/api/recruitment/:recruitmentId/gang/:gangId/stats/',
   samfundet__recruitment_positions_by_tags: '/api/recruitment/:id/positions-by-tags/',
   samfundet__recruitment_all_applications: '/api/recruitment/all-applications/',
-  assets__path: '/assets/:path',
-  media__path: '/media/:path',
+  uploads__path: '/uploads/:path',
 } as const;

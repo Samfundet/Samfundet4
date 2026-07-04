@@ -1,7 +1,6 @@
 import classNames from 'classnames';
-import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
-import { backgroundImageFromUrl } from '~/utils';
+import { backgroundImageFromUrl, imageUrl } from '~/utils';
 import styles from './AdminImage.module.scss';
 
 type AdminImageProps = {
@@ -18,7 +17,7 @@ export function AdminImage({ image, className }: AdminImageProps) {
   return (
     <div
       className={classNames(styles.imageContainer, className)}
-      style={backgroundImageFromUrl(BACKEND_DOMAIN + image.url)}
+      style={backgroundImageFromUrl(imageUrl(image, 'small'))}
     >
       <div className={styles.imageTitle}>
         <p className={styles.text}>{image.title}</p>

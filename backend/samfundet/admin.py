@@ -354,6 +354,7 @@ class ImageAdmin(CustomBaseAdmin):
     list_display_links = ['id']
     # autocomplete_fields = []
     list_select_related = True
+    readonly_fields = [*CustomBaseAdmin.readonly_fields, *(f'image_{name}' for name in Image.VARIANTS)]
 
 
 @register_if_feature_enabled(WebFeatures.EVENTS, EventGroup)

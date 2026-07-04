@@ -186,7 +186,6 @@ export type EventDto = {
   custom_tickets: EventCustomTicketDto[];
 
   image?: ImageDto;
-  image_url: string;
 
   capacity?: number;
 };
@@ -385,10 +384,12 @@ export type TagDto = {
   color: string;
 };
 
+export type ImageSize = 'original' | 'large' | 'medium' | 'small';
+
 export type ImageDto = {
   id: number;
   title: string;
-  url: string;
+  urls: Record<ImageSize, string>;
   tags: TagDto[];
 };
 
