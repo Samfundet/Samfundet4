@@ -61,7 +61,6 @@ export function ComponentPage() {
       },
       host: 'KLST',
       id: 1,
-      image_url: '',
       location: 'Vuelie',
       visibility_from_dt: new Date().toISOString(),
       visibility_to_dt: '',
@@ -158,7 +157,6 @@ export function ComponentPage() {
             {
               title_nb: 'Richard Layout',
               start_dt: addDays(new Date(), 1).toISOString(),
-              image_url: '/media/images/img_18_RNUZqSO',
               location: 'Storsalen',
               ticket_type: EventTicketType.BILLIG,
             },
@@ -170,7 +168,6 @@ export function ComponentPage() {
             {
               title_nb: 'Richard Layout',
               start_dt: addDays(new Date(), 1).toISOString(),
-              image_url: '/media/images/img_7_Cj7HE9w',
               location: 'Storsalen',
               ticket_type: EventTicketType.BILLIG,
             },
@@ -180,7 +177,6 @@ export function ComponentPage() {
         <EventCard
           event={createFakeEvent({
             title_nb: 'Villmarksforedrag med Lars Monsen',
-            image_url: '/media/images/img_1_LFzT7HJ',
             category: EventCategory.QUIZ,
             start_dt: addDays(addMinutes(new Date(), 87), 5).toISOString(),
             location: 'Hele huset',

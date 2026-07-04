@@ -31,6 +31,7 @@ Samfundet4 is the latest and greatest iteration of samfundet.no. It's built usin
 
 ### Other
 
+- [Image resolution guidelines](./docs/images.md)
 - [Automatic Interview Scheduling](./docs/intervew-scheduling.md)
 
 ### Workflow

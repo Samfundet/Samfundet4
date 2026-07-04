@@ -218,10 +218,6 @@ class Event(CustomBaseModel):
         return 0
 
     @property
-    def image_url(self) -> str:
-        return self.image.image.url
-
-    @property
     def is_visible(self) -> bool:
         return (self.visibility_from_dt <= timezone.now() <= self.visibility_to_dt) and self.status == EventStatus.PUBLIC
 

@@ -37,7 +37,8 @@ def do_seed():  # noqa: C901
 
     for i in range(COUNT):
         image_file = random.choice(image_files)
-        random_image = ImageFile(image_file, name=f'img_{i}')
+        extension = os.path.splitext(image_file.name)[1]
+        random_image = ImageFile(image_file, name=f'img_{i}{extension}')
         title = words(random.randint(1, 2))
         image = Image.objects.create(title=title, image=random_image)
         image.tags.set(
