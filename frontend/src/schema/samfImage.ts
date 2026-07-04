@@ -6,7 +6,7 @@ export const OPTIONAL_TAG = TAG.optional();
 
 export const IMAGE = z
   .object({
-    url: z.string(),
+    urls: z.object({ original: z.string(), large: z.string(), medium: z.string(), small: z.string() }),
     id: z.number(),
     title: z.string(),
     tags: z.array(z.any()).default([]),

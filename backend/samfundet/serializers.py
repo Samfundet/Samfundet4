@@ -78,7 +78,7 @@ class TagSerializer(CustomBaseSerializer):
 class ImageSerializer(CustomBaseSerializer):
     # Read only tags used in frontend.
     tags = TagSerializer(many=True, read_only=True)
-    url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
+    urls = serializers.SerializerMethodField(method_name='get_urls', read_only=True)
 
     # Write only fields for posting new images.
     file = serializers.FileField(write_only=True, required=True)
@@ -87,7 +87,7 @@ class ImageSerializer(CustomBaseSerializer):
 
     class Meta:
         model = Image
-        exclude = ['image']
+        exclude = ['image', 'image_large', 'image_medium', 'image_small']
 
     def validate(self, attributes: dict) -> dict:
         title = attributes.get('title')
@@ -98,13 +98,18 @@ class ImageSerializer(CustomBaseSerializer):
         if not file:
             raise serializers.ValidationError({'file': 'An image file is required.'})
 
-        # Validate that the uploaded file is a valid image
+        # Validate that the uploaded file is a valid image of an accepted format
         try:
             file.seek(0)
-            PilImage.open(file).verify()
+            pil_image = PilImage.open(file)
+            pil_image.verify()
             file.seek(0)
         except UnidentifiedImageError as error:
             raise serializers.ValidationError('Invalid image') from error
+
+        if pil_image.format not in Image.ALLOWED_FORMATS:
+            allowed = ', '.join(Image.ALLOWED_FORMATS)
+            raise serializers.ValidationError({'file': f'Unsupported image format {pil_image.format}. Allowed formats: {allowed}.'})
 
         return attributes
 
@@ -142,8 +147,8 @@ class ImageSerializer(CustomBaseSerializer):
         image.save()
         return image
 
-    def get_url(self, image: Image) -> str:
-        return image.image.url
+    def get_urls(self, image: Image) -> dict[str, str]:
+        return image.urls
 
 
 class EventCustomTicketSerializer(CustomBaseSerializer):
@@ -221,7 +226,6 @@ class EventSerializer(CustomBaseSerializer):
 
     # Read only properties (computed property, foreign model).
     total_registrations = serializers.IntegerField(read_only=True)
-    image_url = serializers.CharField(read_only=True)
     image = serializers.SerializerMethodField(read_only=True)
 
     # Custom tickets/billig
@@ -233,7 +237,7 @@ class EventSerializer(CustomBaseSerializer):
 
     def get_image(self, obj: Event) -> dict:
         img = obj.image
-        return {'id': img.id, 'url': img.image.url, 'title': img.title, 'tags': list(img.tags.values_list('id', flat=True))}
+        return {'id': img.id, 'urls': img.urls, 'title': img.title, 'tags': list(img.tags.values_list('id', flat=True))}
 
     def update(self, instance: Event, validated_data: dict[str, Any]) -> Event:
         image_id = validated_data.pop('image_id', None)

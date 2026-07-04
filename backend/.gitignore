@@ -5,6 +5,7 @@
 ### Django ###
 staticroot/
 mediaroot/
+uploads/
 __pycache__
 .pytest_cache
 *.pyc

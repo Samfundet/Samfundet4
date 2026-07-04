@@ -5,8 +5,8 @@ import type { CSSProperties } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import type { z } from 'zod';
-import { THEME_KEY, type ThemeValue } from '~/constants';
-import type { EventDto, UserDto } from '~/dto';
+import { BACKEND_DOMAIN, THEME_KEY, type ThemeValue } from '~/constants';
+import type { EventDto, ImageDto, ImageSize, UserDto } from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
 import {
@@ -88,8 +88,19 @@ export function getGlobalBackgroundColor(): string {
 }
 
 /**
+ * Resolves the URL for an image in the given size
+ */
+export function imageUrl(image: ImageDto | undefined, size: ImageSize): string | undefined {
+  const url = image?.urls[size];
+  if (!url) {
+    return undefined;
+  }
+  return url.startsWith('http') ? url : BACKEND_DOMAIN + url;
+}
+
+/**
  * Function for creating a style with image url from domain
- * @param {string} url - Server relative URL (eg. /media/image.png)
+ * @param {string} url - Server relative URL (eg. /uploads/images/ab/cd/image.png)
  */
 export function backgroundImageFromUrl(url?: string): CSSProperties {
   if (!url) {
