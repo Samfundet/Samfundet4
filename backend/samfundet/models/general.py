@@ -24,6 +24,7 @@ from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
+from django.db.models.functions import Lower
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
@@ -40,14 +41,13 @@ if TYPE_CHECKING:
 
 
 class Tag(CustomBaseModel):
-    # TODO make name case-insensitive
-    # Kan tvinge alt til lowercase, er enklere.
     name = models.CharField(max_length=140)
     color = models.CharField(max_length=6, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Tag'
         verbose_name_plural = 'Tags'
+        constraints = [models.UniqueConstraint(Lower('name'), name='tag_name_case_insensitive_unique')]
 
     def __str__(self) -> str:
         return f'{self.name}'
@@ -62,12 +62,10 @@ class Tag(CustomBaseModel):
 
     @classmethod
     def find_or_create(cls, name: str) -> Tag:
-        # TODO make name case-insensitive
-        obj = Tag.objects.get(name=name)
-        if obj is not None:
-            return obj
-        # Create new tag if none exists
-        return Tag.objects.create(name=name, color=Tag.random_color())
+        """Find a tag by name (case-insensitive) or create it."""
+        name = name.strip()
+        existing = cls.objects.filter(name__iexact=name).first()
+        return existing or cls.objects.create(name=name)
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         # Saves with random color

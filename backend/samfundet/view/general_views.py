@@ -18,7 +18,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 
 from django.utils import timezone
-from django.db.models import Q, QuerySet
+from django.db.models import Q, Count, QuerySet, ProtectedError
 from django.shortcuts import get_object_or_404
 
 from root.constants import WebFeatures
@@ -108,11 +108,30 @@ class ImageView(ModelViewSet):
     queryset = Image.objects.all().order_by('-pk')
     pagination_class = CustomPageNumberPagination
     filter_backends = [SearchFilter]
-    search_fields = ['title']
+    search_fields = ['title', 'tags__name']
+
+    def get_queryset(self) -> QuerySet[Image]:
+        """With ?tag=<name>, returns only images carrying that exact tag."""
+        queryset = super().get_queryset()
+        tag_name = self.request.query_params.get('tag')
+        if tag_name:
+            queryset = queryset.filter(tags__name__iexact=tag_name)
+        return queryset
+
+    def destroy(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        try:
+            return super().destroy(request, *args, **kwargs)
+        except ProtectedError:
+            return Response(
+                status=status.HTTP_409_CONFLICT,
+                data={'detail': 'Cannot delete image, it is in use by other objects.'},
+            )
 
 
 # Image tags
 class TagView(ModelViewSet):
+    POPULAR_TAG_COUNT = 20
+
     feature_key = WebFeatures.IMAGES
     permission_classes = (
         RoleProtectedOrAnonReadOnlyObjectPermissions,
@@ -120,6 +139,13 @@ class TagView(ModelViewSet):
     )
     serializer_class = TagSerializer
     queryset = Tag.objects.all()
+
+    def get_queryset(self) -> QuerySet[Tag]:
+        """With ?popular=true on list, annotreturns the most used tags annotated with image_count."""
+        queryset = super().get_queryset()
+        if self.action == 'list' and self.request.query_params.get('popular'):
+            queryset = queryset.annotate(image_count=Count('images')).filter(image_count__gt=0).order_by('-image_count', 'name')[: self.POPULAR_TAG_COUNT]
+        return queryset
 
 
 class VenueView(ModelViewSet):

@@ -2,18 +2,26 @@ from __future__ import annotations
 
 import re
 from io import BytesIO
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
 from PIL import Image as PilImage
 
+from rest_framework import status
+
 from django.conf import settings
+from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
 from django.core.files.uploadedfile import SimpleUploadedFile
 
+from root.utils import routes
+
 from samfundet.serializers import ImageSerializer
-from samfundet.models.general import Image
+from samfundet.models.general import Tag, User, Image, Merch
+
+if TYPE_CHECKING:
+    from rest_framework.test import APIClient
 
 
 @pytest.fixture(autouse=True)
@@ -199,3 +207,176 @@ class TestImageSerializer:
 
         assert set(serializer.data['urls']) == {'original', *Image.VARIANTS}
         assert image.image_small
+
+
+class TestImageSerializerUpdate:
+    def test_update_title_and_tags(self):
+        image = make_image()
+        image.tags.set([Tag.objects.create(name='old')])
+
+        serializer = ImageSerializer(image, data={'title': 'renamed', 'tag_string': 'concert, stage'}, partial=True)
+        assert serializer.is_valid(), serializer.errors
+        serializer.save()
+
+        image.refresh_from_db()
+        assert image.title == 'renamed'
+        assert sorted(tag.name for tag in image.tags.all()) == ['concert', 'stage']
+
+    def test_update_with_empty_tag_string_clears_tags(self):
+        image = make_image()
+        image.tags.set([Tag.objects.create(name='old')])
+
+        serializer = ImageSerializer(image, data={'tag_string': ''}, partial=True)
+        assert serializer.is_valid(), serializer.errors
+        serializer.save()
+
+        assert image.tags.count() == 0
+
+    def test_update_without_tag_string_keeps_tags(self):
+        image = make_image()
+        image.tags.set([Tag.objects.create(name='old')])
+
+        serializer = ImageSerializer(image, data={'title': 'renamed'}, partial=True)
+        assert serializer.is_valid(), serializer.errors
+        serializer.save()
+
+        assert [tag.name for tag in image.tags.all()] == ['old']
+
+    def test_update_without_file_keeps_files(self):
+        image = make_image()
+        names = [getattr(image, field).name for field in Image.FILE_FIELDS]
+
+        serializer = ImageSerializer(image, data={'title': 'renamed'}, partial=True)
+        assert serializer.is_valid(), serializer.errors
+        serializer.save()
+
+        image.refresh_from_db()
+        assert [getattr(image, field).name for field in Image.FILE_FIELDS] == names
+
+    def test_replace_file_regenerates_and_deletes_old_files(self, django_capture_on_commit_callbacks):
+        image = make_image()
+        old_names = [getattr(image, field).name for field in Image.FILE_FIELDS]
+        file = SimpleUploadedFile('replacement.jpg', make_image_bytes().read())
+
+        with django_capture_on_commit_callbacks(execute=True):
+            serializer = ImageSerializer(image, data={'file': file}, partial=True)
+            assert serializer.is_valid(), serializer.errors
+            serializer.save()
+
+        new_names = [getattr(image, field).name for field in Image.FILE_FIELDS]
+        assert set(new_names).isdisjoint(old_names)
+        assert all(file_exists(name) for name in new_names)
+        assert not any(file_exists(name) for name in old_names)
+
+    def test_update_rejects_unsupported_format(self):
+        image = make_image()
+        file = SimpleUploadedFile('x.bmp', make_image_bytes('BMP').read())
+
+        serializer = ImageSerializer(image, data={'file': file}, partial=True)
+
+        assert not serializer.is_valid()
+        assert 'Unsupported image format' in str(serializer.errors['file'])
+
+    def test_update_rejects_blank_title(self):
+        image = make_image()
+
+        serializer = ImageSerializer(image, data={'title': ''}, partial=True)
+
+        assert not serializer.is_valid()
+        assert 'title' in serializer.errors
+
+    def test_tag_string_reuses_existing_tag_with_different_casing(self):
+        existing = Tag.objects.create(name='Redda')
+        image = make_image()
+
+        serializer = ImageSerializer(image, data={'tag_string': 'REDDA, redda, new tag'}, partial=True)
+        assert serializer.is_valid(), serializer.errors
+        serializer.save()
+
+        assert set(image.tags.all().values_list('id', flat=True)) == {existing.id, Tag.objects.get(name='new tag').id}
+        assert Tag.objects.count() == 2
+
+
+class TestImageApi:
+    @pytest.fixture(autouse=True)
+    def authenticate(self, fixture_rest_client: APIClient, fixture_superuser: User) -> None:
+        fixture_rest_client.force_authenticate(user=fixture_superuser)
+
+    def test_search_matches_tag_name(self, fixture_rest_client: APIClient):
+        tagged = make_image()
+        tagged.tags.set([Tag.objects.create(name='concert')])
+        make_image()  # untagged, should not match
+
+        response = fixture_rest_client.get(reverse(routes.samfundet__images_list), {'search': 'concert'})
+
+        assert status.is_success(response.status_code)
+        assert [result['id'] for result in response.json()['results']] == [tagged.id]
+
+    def test_search_with_multiple_matching_tags_returns_no_duplicates(self, fixture_rest_client: APIClient):
+        image = make_image()
+        image.tags.set([Tag.objects.create(name='rock concert'), Tag.objects.create(name='concerto')])
+
+        response = fixture_rest_client.get(reverse(routes.samfundet__images_list), {'search': 'concert'})
+
+        assert [result['id'] for result in response.json()['results']] == [image.id]
+
+    def test_tag_query_param_filters_by_exact_tag(self, fixture_rest_client: APIClient):
+        tag = Tag.objects.create(name='concert')
+        tagged = make_image()
+        tagged.tags.add(tag)
+        by_title = make_image()
+        by_title.title = 'concert night'  # matches search, but must not match the tag filter
+        by_title.save()
+
+        response = fixture_rest_client.get(reverse(routes.samfundet__images_list), {'tag': 'Concert'})  # case-insensitive
+
+        assert status.is_success(response.status_code)
+        assert [result['id'] for result in response.json()['results']] == [tagged.id]
+
+    def test_popular_tags_are_ordered_by_usage_and_exclude_unused(self, fixture_rest_client: APIClient):
+        popular = Tag.objects.create(name='popular')
+        rare = Tag.objects.create(name='rare')
+        Tag.objects.create(name='unused')
+        for _ in range(2):
+            make_image().tags.add(popular)
+        make_image().tags.add(rare)
+
+        response = fixture_rest_client.get(reverse(routes.samfundet__tags_list), {'popular': 'true'})
+
+        assert status.is_success(response.status_code)
+        data = response.json()
+        assert [tag['name'] for tag in data] == ['popular', 'rare']
+        assert [tag['image_count'] for tag in data] == [2, 1]
+
+    def test_delete_unreferenced_image(self, fixture_rest_client: APIClient, django_capture_on_commit_callbacks):
+        image = make_image()
+
+        with django_capture_on_commit_callbacks(execute=True):
+            response = fixture_rest_client.delete(reverse(routes.samfundet__images_detail, kwargs={'pk': image.id}))
+
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert not Image.objects.filter(pk=image.id).exists()
+
+    def test_delete_protected_image_returns_409(self, fixture_rest_client: APIClient):
+        image = make_image()
+        Merch.objects.create(name_nb='basic merch', name_en='merch', description_nb='merch', description_en='merch', base_price=100, image=image)
+
+        response = fixture_rest_client.delete(reverse(routes.samfundet__images_detail, kwargs={'pk': image.id}))
+
+        assert response.status_code == status.HTTP_409_CONFLICT
+        assert 'in use' in response.json()['detail']
+        assert Image.objects.filter(pk=image.id).exists()
+
+    def test_detail_exposes_audit_fields_with_user_object(self, fixture_rest_client: APIClient, fixture_superuser: User):
+        fixture_superuser.first_name = 'Super'
+        fixture_superuser.last_name = 'User'
+        fixture_superuser.save()
+        file = SimpleUploadedFile('x.jpg', make_image_bytes().read())
+
+        response = fixture_rest_client.post(reverse(routes.samfundet__images_list), {'title': 'test', 'file': file}, format='multipart')
+
+        assert status.is_success(response.status_code)
+        data = response.json()
+        assert data['created_by'] == {'username': fixture_superuser.username, 'first_name': 'Super', 'last_name': 'User'}
+        assert data['created_at']
+        assert data['updated_at']

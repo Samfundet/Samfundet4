@@ -193,6 +193,8 @@ export const nb = prepareTranslations({
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
   [KEY.common_read_more]: 'Les mer',
+  [KEY.common_uploaded_by]: 'Lastet opp av',
+  [KEY.common_last_edited_by]: 'Sist endret av',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -515,7 +517,11 @@ export const nb = prepareTranslations({
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_saksdokument]: 'Saksdokument',
   [KEY.admin_images_title]: 'Bildearkiv',
-  [KEY.admin_images_create]: 'Nytt Bilde',
+  [KEY.admin_images_create]: 'Nytt bilde',
+  [KEY.admin_images_confirm_delete]: 'Er du sikker på at du vil slette dette bildet? Dette kan ikke angres.',
+  [KEY.admin_images_add_tag]: 'Legg til merkelapp',
+  [KEY.admin_images_delete_in_use]: 'Bildet er i bruk og kan dermed ikke slettes.',
+  [KEY.admin_image_form_tag_description]: 'Skriv inn merkelapp og tast Enter eller Komma for å legge den til i listen',
   [KEY.admin_no_image_selected]: 'Ingen bilde valgt',
   [KEY.admin_steal_identity]: 'Stjel identitet',
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
@@ -912,6 +918,8 @@ export const en = prepareTranslations({
   [KEY.common_membership_number]: 'Membership number',
   [KEY.common_to_payment]: 'To payment',
   [KEY.common_read_more]: 'Read more',
+  [KEY.common_uploaded_by]: 'Uploaded by',
+  [KEY.common_last_edited_by]: 'Last edited by',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -1285,7 +1293,11 @@ export const en = prepareTranslations({
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_saksdokument]: 'Case document',
   [KEY.admin_images_title]: 'Image Archive',
-  [KEY.admin_images_create]: 'New Image',
+  [KEY.admin_images_create]: 'New image',
+  [KEY.admin_images_confirm_delete]: 'Are you sure you want to delete this image? This cannot be undone.',
+  [KEY.admin_images_add_tag]: 'Add tag',
+  [KEY.admin_images_delete_in_use]: 'The image cannot be deleted because it is in use.',
+  [KEY.admin_image_form_tag_description]: 'Write a tag and hit Enter or Comma to add it to the list',
   [KEY.admin_no_image_selected]: 'No image selected',
   [KEY.admin_steal_identity]: 'Steal identity',
   [KEY.adminpage_gangs_title]: 'Groups administration',

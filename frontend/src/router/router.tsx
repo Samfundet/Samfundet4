@@ -47,6 +47,7 @@ import {
   GangsAdminPage,
   GangsFormAdminPage,
   ImageAdminPage,
+  ImageDetailAdminPage,
   ImageFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
@@ -446,6 +447,17 @@ export const router = createBrowserRouter(
                 <PermissionRoute
                   requiredPermissions={[PERM.SAMFUNDET_ADD_IMAGE]}
                   element={<ImageFormAdminPage />}
+                  resolveWithRolePermissions={true}
+                />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_images_detail}
+              handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_details)}</Link> }}
+              element={
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_VIEW_IMAGE]}
+                  element={<ImageDetailAdminPage />}
                   resolveWithRolePermissions={true}
                 />
               }

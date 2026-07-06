@@ -29,6 +29,8 @@ export type UserDto = {
   date_of_birth?: string;
 };
 
+export type BasicUserDto = Pick<UserDto, 'username' | 'first_name' | 'last_name'>;
+
 export type CampusDto = {
   id: number;
   name_nb: string;
@@ -382,6 +384,11 @@ export type TagDto = {
   id: number;
   name: string;
   color: string;
+
+  // Only set by endpoints that annotate usage
+  // TODO: maybe make this generic...? but maybe it's too much of a hassle,
+  //  since we'll likely only ever add event_count
+  image_count?: number | null;
 };
 
 export type ImageSize = 'original' | 'large' | 'medium' | 'small';
@@ -391,11 +398,23 @@ export type ImageDto = {
   title: string;
   urls: Record<ImageSize, string>;
   tags: TagDto[];
+
+  created_at?: string;
+  updated_at?: string;
+  created_by?: BasicUserDto | null;
+  updated_by?: BasicUserDto | null;
 };
 
-export type ImagePostDto = ImageDto & {
+export type ImagePostDto = {
+  title: string;
   tag_string: string;
   file: File;
+};
+
+export type ImagePatchDto = {
+  title?: string;
+  tag_string?: string;
+  file?: File;
 };
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
