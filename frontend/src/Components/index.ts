@@ -81,6 +81,8 @@ export { SultenOutlet } from './SultenOutlet';
 export { TabBar } from './TabBar';
 export { Table } from './Table';
 export { TabView } from './TabView';
+export { TagChip } from './TagChip';
+export { TagChipInput } from './TagChipInput';
 export { Text } from './Text';
 export { Textarea, type TextareaProps } from './Textarea';
 export { TextAreaField } from './TextAreaField';
@@ -94,6 +96,7 @@ export { ToolTip } from './ToolTip';
 export { UkaOutlet } from './UkaOutlet';
 export { UserFeedback } from './UserFeedback';
 export { Video } from './Video';
+export { ImageForm } from './ImageForm';
 // Props
 export type { ButtonProps } from './Button';
 export type { CheckboxProps } from './Checkbox';

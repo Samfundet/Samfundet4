@@ -273,8 +273,9 @@ class CustomBaseSerializer(FullCleanSerializer):
             'updated_by',
         )
 
-    def get_created_by(self, obj: CustomBaseModel) -> str | None:
+    # Subclasses may override these with richer representations (e.g. a nested user object)
+    def get_created_by(self, obj: CustomBaseModel) -> str | dict | None:
         return obj.created_by.__str__() if obj.created_by else None
 
-    def get_updated_by(self, obj: CustomBaseModel) -> str | None:
+    def get_updated_by(self, obj: CustomBaseModel) -> str | dict | None:
         return obj.updated_by.__str__() if obj.updated_by else None

@@ -1,0 +1,12 @@
+.tagChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.25rem 0 0.5rem 0;
+}
+
+.tag_input_row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
