@@ -70,9 +70,38 @@ from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityC
 
 
 class TagSerializer(CustomBaseSerializer):
+    # Number of images using the tag, only set when the view annotates it (e.g. ?popular=true)
+    image_count = serializers.SerializerMethodField(method_name='get_image_count', read_only=True)
+
     class Meta:
         model = Tag
         fields = '__all__'
+
+    def validate(self, attributes: dict) -> dict:
+        # Uniqueness is checked manually since the base validate full_cleans a fresh
+        # instance, which cannot exclude the row being updated from the constraint check
+        name = attributes.get('name')
+        if name:
+            duplicates = Tag.objects.filter(name__iexact=name.strip())
+            if self.instance is not None:
+                duplicates = duplicates.exclude(pk=self.instance.pk)
+            if duplicates.exists():
+                raise serializers.ValidationError({'name': 'A tag with this name already exists.'})
+        instance = Tag(**attributes)
+        instance.full_clean(validate_constraints=False)
+        return attributes
+
+    def get_image_count(self, tag: Tag) -> int | None:
+        return getattr(tag, 'image_count', None)
+
+
+class BasicUserSerializer(serializers.ModelSerializer):
+    """Minimal user representation for display purposes, e.g. created_by/updated_by."""
+
+    class Meta:
+        model = User
+        # TODO: maybe include email here if logged-in user has permission to see
+        fields = ['username', 'first_name', 'last_name']
 
 
 class ImageSerializer(CustomBaseSerializer):
@@ -80,25 +109,33 @@ class ImageSerializer(CustomBaseSerializer):
     tags = TagSerializer(many=True, read_only=True)
     urls = serializers.SerializerMethodField(method_name='get_urls', read_only=True)
 
-    # Write only fields for posting new images.
-    file = serializers.FileField(write_only=True, required=True)
+    # Write only fields for posting new images. File is required on create, optional on update (replace).
+    file = serializers.FileField(write_only=True, required=False)
     # Comma separated tag string "tag_a,tag_b" is automatically parsed to list of tag models.
     tag_string = serializers.CharField(write_only=True, allow_blank=True, required=False)
 
     class Meta:
         model = Image
-        exclude = ['image', 'image_large', 'image_medium', 'image_small']
+        exclude = ['image', *(f'image_{name}' for name in Image.VARIANTS)]
 
     def validate(self, attributes: dict) -> dict:
+        is_create = self.instance is None
+
         title = attributes.get('title')
-        if not title:
+        if not title and (is_create or 'title' in attributes):
             raise serializers.ValidationError({'title': 'This field is required.'})
 
         file = attributes.get('file')
-        if not file:
+        if file:
+            self._validate_file(file)
+        elif is_create:
             raise serializers.ValidationError({'file': 'An image file is required.'})
 
-        # Validate that the uploaded file is a valid image of an accepted format
+        return attributes
+
+    @staticmethod
+    def _validate_file(file: File) -> None:
+        """Validate that the uploaded file is a valid image of an accepted format."""
         try:
             file.seek(0)
             pil_image = PilImage.open(file)
@@ -111,33 +148,31 @@ class ImageSerializer(CustomBaseSerializer):
             allowed = ', '.join(Image.ALLOWED_FORMATS)
             raise serializers.ValidationError({'file': f'Unsupported image format {pil_image.format}. Allowed formats: {allowed}.'})
 
-        return attributes
+    @staticmethod
+    def _parse_tag_string(raw_tag_string: str) -> list[Tag]:
+        """Find/create tags from a comma-separated string"""
+        tag_names = [name.strip() for name in raw_tag_string.split(',')]
+        tag_names = [name for name in tag_names if name]
+
+        # De-duplicate (case-insensitive) while preserving order
+        seen: set[str] = set()
+        unique_tag_names = []
+        for name in tag_names:
+            if name.lower() not in seen:
+                seen.add(name.lower())
+                unique_tag_names.append(name)
+        return [Tag.find_or_create(name) for name in unique_tag_names]
 
     def create(self, validated_data: dict) -> Image:
         """
         Uses the write_only file field to create new image file.
-        Automatically finds/creates new tags based on comma-separated string.
-        Strips whitespace and drops empty tag names
+        Automatically finds/creates new tags based on comma-separated string
         and preserves the original filename when saving the image
         """
         file = validated_data.pop('file')
         raw_tag_string = validated_data.pop('tag_string', None)
-        if raw_tag_string is not None:
-            # Split on comma, strip whitespace and drop empties
-            tag_names = [name.strip() for name in raw_tag_string.split(',')]
-            tag_names = [name for name in tag_names if name]
+        tags = self._parse_tag_string(raw_tag_string) if raw_tag_string is not None else []
 
-            # De-duplicate while preserving order
-            seen: set[str] = set()
-            unique_tag_names = []
-            for name in tag_names:
-                if name not in seen:
-                    seen.add(name)
-                    unique_tag_names.append(name)
-            tags = [Tag.objects.get_or_create(name=name)[0] for name in unique_tag_names]
-        else:
-            tags = []
-        # Preserve original filename if available; fallback to title
         original_name = getattr(file, 'name', None) or validated_data.get('title')
         image = Image.objects.create(
             image=ImageFile(file, original_name),
@@ -147,8 +182,35 @@ class ImageSerializer(CustomBaseSerializer):
         image.save()
         return image
 
+    def update(self, instance: Image, validated_data: dict) -> Image:
+        """
+        Supports replacing the image file (variants are regenerated and old files
+        cleaned up by the model) and replacing the tag set from tag_string.
+        """
+        file = validated_data.pop('file', None)
+        raw_tag_string = validated_data.pop('tag_string', None)
+
+        for attribute, value in validated_data.items():
+            setattr(instance, attribute, value)
+
+        if file is not None:
+            original_name = getattr(file, 'name', None) or instance.title
+            instance.image = ImageFile(file, original_name)
+
+        if raw_tag_string is not None:
+            instance.tags.set(self._parse_tag_string(raw_tag_string))
+
+        instance.save()
+        return instance
+
     def get_urls(self, image: Image) -> dict[str, str]:
         return image.urls
+
+    def get_created_by(self, obj: Image) -> dict | None:
+        return BasicUserSerializer(obj.created_by).data if obj.created_by else None
+
+    def get_updated_by(self, obj: Image) -> dict | None:
+        return BasicUserSerializer(obj.updated_by).data if obj.updated_by else None
 
 
 class EventCustomTicketSerializer(CustomBaseSerializer):

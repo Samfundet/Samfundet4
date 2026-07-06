@@ -1,0 +1,14 @@
+.action_row {
+  display: flex;
+  margin: 1rem 0 0.5rem;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.delete_btn:only-child {
+  margin-right: auto;
+}
+
+.form_item:not(:last-child) {
+  margin-bottom: 0.5rem;
+}

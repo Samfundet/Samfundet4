@@ -1,0 +1,1 @@
+export { TagChipInput } from './TagChipInput';

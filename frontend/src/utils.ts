@@ -6,7 +6,7 @@ import type { UseFormReturn } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import type { z } from 'zod';
 import { BACKEND_DOMAIN, THEME_KEY, type ThemeValue } from '~/constants';
-import type { EventDto, ImageDto, ImageSize, UserDto } from '~/dto';
+import type { BasicUserDto, EventDto, ImageDto, ImageSize, UserDto } from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
 import {
@@ -175,16 +175,16 @@ export function getObjectFieldOrNumber<T>(
   return undefined;
 }
 
-export function getFullName(u: UserDto): string {
+export function getFullName(u: BasicUserDto): string {
   return `${u.first_name} ${u.last_name}`.trim();
 }
 
-export function getDisplayName(u: UserDto): string {
+export function getDisplayName(u: BasicUserDto): string {
   const fullName = getFullName(u);
   return fullName ? fullName : u.username;
 }
 
-export function getFullDisplayName(u: UserDto): string {
+export function getFullDisplayName(u: BasicUserDto): string {
   const fullName = getFullName(u);
   if (!fullName) {
     return u.username;

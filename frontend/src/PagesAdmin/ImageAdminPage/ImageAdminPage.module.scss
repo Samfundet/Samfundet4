@@ -1,6 +1,6 @@
-@use 'src/mixins' as *;
+@use '../../mixins' as m;
 
-@use 'src/constants' as *;
+@use '../../constants' as c;
 
 .imageContainer {
   display: flex;
@@ -9,9 +9,16 @@
   flex-wrap: wrap;
   gap: 1em;
   margin-top: 1em;
-  @include for-tablet-up {
+  @include m.for-tablet-up {
     flex-direction: row;
   }
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
 .imageBox {
@@ -20,7 +27,7 @@
   min-height: 12em;
   height: 12em;
   box-sizing: inherit;
-  @include for-tablet-down {
+  @include m.for-tablet-down {
     flex-basis: calc(33.33% - 1em);
   }
 }

@@ -17,7 +17,7 @@ import {
   EVENT_VISIBILITY_FROM_DT,
   EVENT_VISIBILITY_TO_DT,
 } from '~/schema/event';
-import { OPTIONAL_IMAGE } from '~/schema/samfImage';
+import { OPTIONAL_IMAGE } from '~/schema/image';
 
 const event_custom_ticket = z.object({
   id: z.number(),

@@ -1,15 +1,14 @@
-/* stylelint-disable declaration-no-important */
-@use 'src/mixins' as *;
+@use '../../mixins' as m;
 
-@use 'src/styles/variables' as v;
+@use '../../styles/variables' as v;
 
-@use 'src/styles/colors' as c;
+@use '../../styles/colors' as c;
 
 @use 'sass:color';
 
 .button {
   @extend .display_basic; // Make basic display default
-  @include flex-row;
+  @include m.flex-row;
   gap: 0.25rem;
   cursor: pointer;
   border-radius: v.$border-radius-md;
@@ -18,11 +17,11 @@
   transition: background-color 0.04s ease-in-out;
   font-weight: v.$font-weight-medium;
   border: 1px solid transparent;
+}
 
-  // Remove underline when button is a link
-  &,
-  &:hover {
-    text-decoration: none !important;
+a.button {
+  &, &:hover {
+    text-decoration: none;
   }
 }
 
@@ -73,7 +72,7 @@
     background-color: c.$gray-100;
   }
 
-  @include theme-dark {
+  @include m.theme-dark {
     background-color: c.$gray-900;
     color: c.$gray-100;
     border-color: c.$gray-800;
@@ -113,7 +112,7 @@
     background-color: c.$gray-100;
   }
 
-  @include theme-dark {
+  @include m.theme-dark {
     color: c.$white-50;
 
     &:hover {
@@ -183,8 +182,18 @@
   color: c.$gray-50;
   cursor: not-allowed;
 
-  @include theme-dark {
+  @include m.theme-dark {
     background-color: c.$gray-700;
     color: c.$gray-300;
+  }
+}
+
+.button_ghost:disabled {
+  background-color: transparent;
+  color: c.$gray-500;
+
+  @include m.theme-dark {
+    background-color: transparent;
+    color: c.$gray-500;
   }
 }
