@@ -2249,19 +2249,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-links@npm:^8.6.4":
-  version: 8.6.7
-  resolution: "@storybook/addon-links@npm:8.6.7"
+"@storybook/addon-links@npm:^10.4.6":
+  version: 10.4.6
+  resolution: "@storybook/addon-links@npm:10.4.6"
   dependencies:
     "@storybook/global": "npm:^5.0.0"
-    ts-dedent: "npm:^2.0.0"
   peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
-    storybook: ^8.6.7
+    "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    storybook: ^10.4.6
   peerDependenciesMeta:
+    "@types/react":
+      optional: true
     react:
       optional: true
-  checksum: 10c0/49a511925db04cfa16d29e99155f6ab702afcf2dfbc7362c8dcee5a17e7d5fbca4411d3e4ef1724da1c2bbdc6b654f3e54a59e9b66752ad9b31efcbd7c387c64
+  checksum: 10c0/bd03384e5cc82fc88ac0741bd79888fd9dbda842df5c433fa0ecfdb381321ccc74429bbbc79a00b316184af5b4cdfc0eb4b5f8547dc6682d0b4bfa809de4ca4c
   languageName: node
   linkType: hard
 
@@ -5181,7 +5183,7 @@ __metadata:
     "@storybook/addon-actions": "npm:^8.6.4"
     "@storybook/addon-essentials": "npm:^8.6.4"
     "@storybook/addon-interactions": "npm:^8.6.4"
-    "@storybook/addon-links": "npm:^8.6.4"
+    "@storybook/addon-links": "npm:^10.4.6"
     "@storybook/react": "npm:^8.6.4"
     "@storybook/react-vite": "npm:^8.6.4"
     "@storybook/test": "npm:^8.6.4"
