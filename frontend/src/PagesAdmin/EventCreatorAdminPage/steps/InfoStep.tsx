@@ -138,11 +138,15 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
               <FormLabel>{t(KEY.common_capacity)}</FormLabel>
               <FormControl>
                 <Input
-                  type="number"
-                  {...field}
+                  type="text"
+                  inputMode="numeric"
+                  name={field.name}
+                  ref={field.ref}
+                  onBlur={field.onBlur}
+                  value={field.value ?? ''}
                   onChange={(e) => {
-                    const v = e.target.value;
-                    field.onChange(v === '' ? '' : Number.parseInt(v));
+                    const v = e.target.value.replace(/\D/g, '');
+                    field.onChange(v);
                   }}
                 />
               </FormControl>
