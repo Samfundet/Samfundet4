@@ -8,6 +8,14 @@ import type {
   HomePageElementVariation,
 } from './types';
 
+export type BaseModelDto = {
+  version?: number;
+  created_at?: string;
+  updated_at?: string;
+  created_by?: BasicUserDto | UserDto | null;
+  updated_by?: BasicUserDto | UserDto | null;
+};
+
 export type UserDto = {
   id: number;
   username: string;
@@ -393,16 +401,11 @@ export type TagDto = {
 
 export type ImageSize = 'original' | 'large' | 'medium' | 'small';
 
-export type ImageDto = {
+export type ImageDto = BaseModelDto & {
   id: number;
   title: string;
   urls: Record<ImageSize, string>;
   tags: TagDto[];
-
-  created_at?: string;
-  updated_at?: string;
-  created_by?: BasicUserDto | null;
-  updated_by?: BasicUserDto | null;
 };
 
 export type ImagePostDto = {
@@ -437,12 +440,11 @@ export type RoleDto = {
   content_type?: string | null;
 };
 
-export type UserRole = {
+export type UserRole = BaseModelDto & {
   id: number;
   user: UserDto;
   created_at: Date;
   obj: OrganizationDto | GangDto | GangSectionDto;
-  created_by?: UserDto;
 };
 
 export type UserGangRoleDto = Omit<UserRole, 'obj'> & {
@@ -612,7 +614,7 @@ export type RecruitmentPositionOrganizedApplicationsDto = {
   hardtoget: RecruitmentApplicationDto[];
 };
 
-export type RecruitmentApplicationDto = {
+export type RecruitmentApplicationDto = BaseModelDto & {
   id: string;
   interview?: InterviewDto;
   interview_time?: Date;
@@ -624,7 +626,6 @@ export type RecruitmentApplicationDto = {
   recruiter_priority?: number;
   recruiter_status?: number;
   applicant_state?: number;
-  created_at: string;
   withdrawn: boolean;
   application_count?: number;
   comment?: string;
