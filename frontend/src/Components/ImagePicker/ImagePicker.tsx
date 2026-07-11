@@ -5,9 +5,9 @@ import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { Input } from '~/Components';
 import { getImagesPaginated } from '~/api';
+import { imageKeys } from '~/domain';
 import type { ImageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { imageKeys } from '~/queryKeys';
 import { backgroundImageFromUrl, imageUrl } from '~/utils';
 import { PagedPagination } from '../Pagination';
 import styles from './ImagePicker.module.scss';

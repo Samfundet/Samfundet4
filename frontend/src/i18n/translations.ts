@@ -82,6 +82,7 @@ export const nb = prepareTranslations({
   [KEY.common_tags]: 'Merkelapper',
   [KEY.common_contributors]: 'Bidragsytere',
   [KEY.common_image]: 'Bilde',
+  [KEY.common_file]: 'Fil',
   [KEY.common_venue]: 'Lokale',
   [KEY.common_title]: 'Tittel',
   [KEY.common_login]: 'Logg inn',
@@ -193,8 +194,11 @@ export const nb = prepareTranslations({
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
   [KEY.common_read_more]: 'Les mer',
+  [KEY.common_created_by]: 'Opprettet av',
   [KEY.common_uploaded_by]: 'Lastet opp av',
   [KEY.common_last_edited_by]: 'Sist endret av',
+  [KEY.common_publication_date]: 'Publiseringsdato',
+  [KEY.common_casedocuments]: 'Saksdokumenter',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -347,9 +351,6 @@ export const nb = prepareTranslations({
     'Kunne ikke koble til medlemsdatabasen. Vennligst sjekk at alle felter er skrevet riktig',
   [KEY.adminpage_connect_mdb_password_notice_1]: 'Passordet ditt til ',
   [KEY.adminpage_connect_mdb_password_notice_2]: 'medlemsdatabasen',
-
-  // SaksdokumentPage:
-  [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
 
   // InformationPage
   [KEY.information_page]: 'Informasjonsside',
@@ -515,7 +516,7 @@ export const nb = prepareTranslations({
     'Her har man oversikt over dine kommende intervjuer, stillinger du har noe å gjøre med, og kan sette tider du er tilgjengelig til å avholde intervjuer',
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
-  [KEY.admin_saksdokument]: 'Saksdokument',
+  [KEY.admin_casedocument]: 'Saksdokument',
   [KEY.admin_images_title]: 'Bildearkiv',
   [KEY.admin_images_create]: 'Nytt bilde',
   [KEY.admin_images_confirm_delete]: 'Er du sikker på at du vil slette dette bildet? Dette kan ikke angres.',
@@ -526,7 +527,7 @@ export const nb = prepareTranslations({
   [KEY.admin_steal_identity]: 'Stjel identitet',
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
-  [KEY.admin_saksdokumenter_title]: 'Administrer saksdokumenter',
+  [KEY.admin_casedocuments_title]: 'Administrer saksdokumenter',
   [KEY.admin_sultenmenu_title]: 'Administrer Lyche meny',
   [KEY.admin_users_last_active]: 'Sist aktiv',
   [KEY.admin_events_recently_edited]: 'Nylig redigert',
@@ -695,7 +696,12 @@ export const nb = prepareTranslations({
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
   [KEY.notfoundpage_title]: 'Side ikke funnet',
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
-  [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
+  [KEY.admin_casedocuments_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
+  [KEY.admin_casedocuments_publication_date_note]:
+    'Dato og tid for offentliggjøring. Merk at filen vil være tilgjengelig via direktelenke før dette.',
+  [KEY.admin_casedocuments_title_used_as_filename]: 'Dette vil bli brukt som det synlige filnavnet.',
+  [KEY.admin_casedocuments_confirm_delete]:
+    'Er du sikker på at du vil slette dette saksdokumentet? Dette kan ikke angres.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
 
   [KEY.promo_media_description]: 'Lenke eller ID til en YouTube-video',
@@ -809,6 +815,7 @@ export const en = prepareTranslations({
   [KEY.common_section]: 'Section',
   [KEY.common_max]: 'Max',
   [KEY.common_image]: 'Image',
+  [KEY.common_file]: 'File',
   [KEY.common_venue]: 'Venue',
   [KEY.common_event]: 'Event',
   [KEY.common_title]: 'Title',
@@ -918,8 +925,11 @@ export const en = prepareTranslations({
   [KEY.common_membership_number]: 'Membership number',
   [KEY.common_to_payment]: 'To payment',
   [KEY.common_read_more]: 'Read more',
+  [KEY.common_created_by]: 'Created by',
   [KEY.common_uploaded_by]: 'Uploaded by',
   [KEY.common_last_edited_by]: 'Last edited by',
+  [KEY.common_publication_date]: 'Publication date',
+  [KEY.common_casedocuments]: 'Case documents',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -1063,9 +1073,6 @@ export const en = prepareTranslations({
   // GangsAdminPage:
   [KEY.admin_gangsadminpage_webpage]: 'Webpage',
   [KEY.admin_gangsadminpage_abbreviation]: 'Abbreviation',
-
-  // SaksdokumentPage:
-  [KEY.saksdokumentpage_publication_date]: 'Publication date',
 
   // InformationPage
   [KEY.information_page]: 'Information page',
@@ -1291,7 +1298,7 @@ export const en = prepareTranslations({
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
-  [KEY.admin_saksdokument]: 'Case document',
+  [KEY.admin_casedocument]: 'Case document',
   [KEY.admin_images_title]: 'Image Archive',
   [KEY.admin_images_create]: 'New image',
   [KEY.admin_images_confirm_delete]: 'Are you sure you want to delete this image? This cannot be undone.',
@@ -1305,7 +1312,7 @@ export const en = prepareTranslations({
   [KEY.admin_users_last_active]: 'Last active',
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
-  [KEY.admin_saksdokumenter_title]: 'Manage Documents',
+  [KEY.admin_casedocuments_title]: 'Manage Documents',
   [KEY.admin_sultenmenu_title]: 'Manage Lyche menu',
   [KEY.admin_events_recently_edited]: 'Recently edited',
   [KEY.admin_events_administrate]: 'Administrate events',
@@ -1314,7 +1321,12 @@ export const en = prepareTranslations({
   [KEY.admin_closed_period_edit_period]: 'Edit closed period',
   [KEY.admin_information_confirm_delete]: 'Are you sure to delete this informationpage?',
   [KEY.admin_information_confirm_cancel]: 'Are you sure you want to exit without saving?',
-  [KEY.admin_saksdokumenter_cannot_reupload]: 'It is not possible to change the uploaded file.',
+  [KEY.admin_casedocuments_cannot_reupload]: 'It is not possible to change the uploaded file.',
+  [KEY.admin_casedocuments_publication_date_note]:
+    'Publication date on the the saksdokumenter page. Note that the file will be accessible through direct URL before this time.',
+  [KEY.admin_casedocuments_title_used_as_filename]: 'This will be used as the visible file name.',
+  [KEY.admin_casedocuments_confirm_delete]:
+    'Are you sure you want to delete this case document? This cannot be undone.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
 
   [KEY.promo_media_description]: 'Link or ID of a YouTube video',

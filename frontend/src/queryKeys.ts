@@ -88,18 +88,3 @@ export const venueKeys = {
   detail: (slug: string) => [...venueKeys.details(), slug] as const,
   open: () => [...venueKeys.list(['open'])] as const,
 };
-
-export const imageKeys = {
-  all: ['images'] as const,
-  lists: () => [...imageKeys.all, 'list'] as const,
-  list: (page: number, search?: string, tag?: string) => [...imageKeys.lists(), { page, search, tag }] as const,
-  details: () => [...imageKeys.all, 'detail'] as const,
-  detail: (id: number) => [...imageKeys.details(), id] as const,
-};
-
-export const tagKeys = {
-  all: ['tags'] as const,
-  lists: () => [...tagKeys.all, 'list'] as const,
-  list: () => [...tagKeys.lists(), {}] as const,
-  popular: () => [...tagKeys.lists(), 'popular'] as const,
-};

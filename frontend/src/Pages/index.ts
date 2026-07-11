@@ -20,7 +20,7 @@ export { NotFoundPage } from './NotFoundPage';
 export { RecruitmentApplicationFormPage } from './RecruitmentApplicationFormPage';
 export { RecruitmentApplicationsOverviewPage } from './RecruitmentApplicationsOverviewPage';
 export { RecruitmentPage } from './RecruitmentPage';
-export { SaksdokumenterPage } from './SaksdokumenterPage';
+export { CaseDocumentsPage } from './CaseDocumentsPage';
 export { SignUpPage } from './SignUpPage';
 export { VenuePage } from './VenuePage';
 export { OrganizationRecruitmentPage } from './OrganizationRecruitmentPage';

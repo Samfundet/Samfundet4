@@ -11,6 +11,7 @@ import {
 import {
   AboutPage,
   AccountPage,
+  CaseDocumentsPage,
   ComponentPage,
   ContributorsPage,
   EventPage,
@@ -33,12 +34,13 @@ import {
   RecruitmentApplicationFormPage,
   RecruitmentApplicationsOverviewPage,
   RecruitmentPage,
-  SaksdokumenterPage,
   SignUpPage,
   VenuePage,
 } from '~/Pages';
 import {
   AdminLayout,
+  CaseDocumentFormAdminPage,
+  CaseDocumentsAdminPage,
   ClosedPeriodAdminPage,
   ClosedPeriodFormAdminPage,
   CreateInterviewRoomPage,
@@ -73,8 +75,6 @@ import {
   RoleFormAdminPage,
   RolesAdminPage,
   RoomAdminPage,
-  SaksdokumentAdminPage,
-  SaksdokumentFormAdminPage,
   SultenMenuAdminPage,
   SultenMenuItemFormAdminPage,
   SultenReservationAdminPage,
@@ -149,7 +149,7 @@ export const router = createBrowserRouter(
             <Route path={ROUTES.frontend.event} element={<EventPage />} />
           </Route>
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
-          <Route path={ROUTES.frontend.saksdokumenter} element={<SiteFeatureGate feature="documents"><SaksdokumenterPage /></SiteFeatureGate>} />
+          <Route path={ROUTES.frontend.casedocuments} element={<SiteFeatureGate feature="documents"><CaseDocumentsPage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.contributors} element={<ContributorsPage />} />
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.membership} element={<SiteFeatureGate feature="membership"><MembershipPage /></SiteFeatureGate>} />
@@ -463,46 +463,50 @@ export const router = createBrowserRouter(
               }
             />
           </Route>
-          {/* Saksdokumenter */}
+          {/* Case documents */}
           <Route
             element={
               <SiteFeatureGate feature="documents">
-                <Outlet />
+                <PermissionRoute
+                  requiredPermissions={[PERM.SAMFUNDET_VIEW_SAKSDOKUMENT]}
+                  element={<Outlet />}
+                  resolveWithRolePermissions
+                />
               </SiteFeatureGate>
             }
             handle={{
-              crumb: () => <Link url={ROUTES.frontend.admin_saksdokumenter}>{t(KEY.admin_saksdokument)}</Link>,
+              crumb: () => <Link url={ROUTES.frontend.admin_casedocuments}>{t(KEY.admin_casedocument)}</Link>,
             }}
           >
             <Route
-              path={ROUTES.frontend.admin_saksdokumenter}
+              path={ROUTES.frontend.admin_casedocuments}
               element={
                 <PermissionRoute
                   requiredPermissions={[PERM.SAMFUNDET_CHANGE_SAKSDOKUMENT]}
-                  element={<SaksdokumentAdminPage />}
-                  resolveWithRolePermissions={true}
+                  element={<CaseDocumentsAdminPage />}
+                  resolveWithRolePermissions
                 />
               }
             />
             <Route
-              path={ROUTES.frontend.admin_saksdokumenter_create}
+              path={ROUTES.frontend.admin_casedocuments_create}
               handle={{
                 crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link>,
               }}
               element={
                 <PermissionRoute
                   requiredPermissions={[PERM.SAMFUNDET_ADD_SAKSDOKUMENT]}
-                  element={<SaksdokumentFormAdminPage />}
+                  element={<CaseDocumentFormAdminPage />}
                 />
               }
             />
             <Route
-              path={ROUTES.frontend.admin_saksdokumenter_edit}
+              path={ROUTES.frontend.admin_casedocuments_edit}
               handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link> }}
               element={
                 <PermissionRoute
                   requiredPermissions={[PERM.SAMFUNDET_CHANGE_SAKSDOKUMENT]}
-                  element={<SaksdokumentFormAdminPage />}
+                  element={<CaseDocumentFormAdminPage />}
                 />
               }
             />

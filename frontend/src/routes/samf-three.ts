@@ -8,11 +8,6 @@ export const INFORMATION_PAGES = {
   informasjon_billetter: `${BASE_URL}/informasjon/billetter`,
 };
 
-// Saksdokumenter
-export const CASE_DOCUMENTS = {
-  saksdokumenter: `${BASE_URL}/saksdokumenter`,
-};
-
 export const ROUTES_SAMF_THREE = {
   information: {
     general: `${BASE_URL}/informasjon`,

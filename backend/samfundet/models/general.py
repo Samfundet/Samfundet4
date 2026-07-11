@@ -77,7 +77,7 @@ class Tag(CustomBaseModel):
 def image_upload_path(instance: Image, filename: str) -> str:
     """Partition images two levels deep by filename.
 
-    Example: images/9f/86/9f86d081.jpg.
+    Example: images/9f/86/9f86d081.jpg
     """
     return f'images/{filename[:2]}/{filename[2:4]}/{filename}'
 
@@ -853,17 +853,39 @@ class Menu(CustomBaseModel):
         return f'{self.name_nb}'
 
 
+def saksdokument_upload_path(instance: Saksdokument, filename: str) -> str:
+    """Partition case documents by upload date.
+
+    Example: saksdokumenter/2026/03/fsbok.pdf
+    """
+    s = '1970/01'
+    if instance.created_at:
+        s = instance.created_at.strftime('%Y/%m')
+    return f'saksdokumenter/{s}/{filename}'
+
+
 class Saksdokument(CustomBaseModel):
     title_nb = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Norsk)')
     title_en = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Engelsk)')
     publication_date = models.DateTimeField(blank=True, null=True)
 
     category = models.CharField(max_length=25, choices=SaksdokumentCategory.choices, default=SaksdokumentCategory.FS_REFERAT)
-    file = models.FileField(upload_to='saksdokument/', blank=True, null=True)
+    file = models.FileField(upload_to=saksdokument_upload_path, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Saksdokument'
         verbose_name_plural = 'Saksdokumenter'
+
+    @classmethod
+    def schedule_file_cleanup(cls, filename: str) -> None:
+        """Delete stored file once the current transaction commits (or immediately if none)"""
+        storage = cls._meta.get_field('file').storage
+
+        def delete_file() -> None:
+            if filename:
+                storage.delete(filename)
+
+        transaction.on_commit(delete_file)
 
     def __str__(self) -> str:
         return f'{self.title_nb}'

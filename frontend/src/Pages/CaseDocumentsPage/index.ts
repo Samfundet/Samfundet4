@@ -1,0 +1,1 @@
+export { CaseDocumentsPage } from './CaseDocumentsPage';
