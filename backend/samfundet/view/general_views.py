@@ -65,6 +65,7 @@ from samfundet.models.general import (
     InformationPage,
     UserFeedbackModel,
 )
+from samfundet.models.model_choices import SaksdokumentCategory
 
 
 class HomePageView(APIView):
@@ -203,6 +204,11 @@ class SaksdokumentView(ModelViewSet):
     )
     serializer_class = SaksdokumentSerializer
     queryset = Saksdokument.objects.all()
+
+    @action(detail=False, methods=['get'])
+    def categories(self, request: Request, **kwargs: Any) -> Response:
+        data = [{'value': value, 'label': label} for value, label in SaksdokumentCategory.choices]
+        return Response(data)
 
 
 class OrganizationView(ModelViewSet):

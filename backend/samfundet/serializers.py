@@ -740,6 +740,12 @@ class SaksdokumentSerializer(CustomBaseSerializer):
         document.save()
         return document
 
+    def get_created_by(self, obj: Saksdokument) -> dict | None:
+        return BasicUserSerializer(obj.created_by).data if obj.created_by else None
+
+    def get_updated_by(self, obj: Saksdokument) -> dict | None:
+        return BasicUserSerializer(obj.updated_by).data if obj.updated_by else None
+
 
 class TextItemSerializer(serializers.ModelSerializer):
     class Meta:

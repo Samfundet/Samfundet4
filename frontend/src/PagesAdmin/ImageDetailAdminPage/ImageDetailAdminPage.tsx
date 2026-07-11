@@ -3,13 +3,15 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { ImageForm } from '~/Components';
+import { ImageForm, LastUpdatedByHeader, TagChip } from '~/Components';
 import { getImage } from '~/api';
+import { useAuthContext } from '~/context/AuthContext';
+import { imageKeys } from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { imageKeys } from '~/queryKeys';
+import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
-import { formatDateYMDWithTime, getFullDisplayName, imageUrl } from '~/utils';
+import { hasPermissions, imageUrl } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageDetailAdminPage.module.scss';
 
@@ -35,38 +37,17 @@ export function ImageDetailAdminPage() {
     }
   }, [error, navigate, t]);
 
-  const pageTitle = image?.title ?? t(KEY.common_image);
+  const pageTitle = image ? `${t(KEY.common_edit)}: ${image?.title}` : t(KEY.common_image);
   useTitle(pageTitle);
 
-  const createdAtString = image?.created_at && `, ${formatDateYMDWithTime(new Date(image.created_at))}`;
-  const updatedAtString = image?.updated_at && `, ${formatDateYMDWithTime(new Date(image.updated_at))}`;
+  const { user } = useAuthContext();
 
-  // updated_at field always gets set, with a tiny ms delay. Formatted strings rounds this down
-  const isEdited =
-    image !== undefined &&
-    !!image.updated_at &&
-    (createdAtString !== updatedAtString || image.updated_by?.username !== image.created_by?.username);
+  const canChange = hasPermissions(user, [PERM.SAMFUNDET_CHANGE_IMAGE], undefined, true);
 
   return (
     <AdminPageLayout
       title={pageTitle}
-      header={
-        image && (
-          <>
-            {isEdited ? (
-              <>
-                {t(KEY.common_last_edited_by)} {image.updated_by ? getFullDisplayName(image.updated_by) : '—'}
-                {updatedAtString}
-              </>
-            ) : (
-              <>
-                {t(KEY.common_uploaded_by)} {image.created_by ? getFullDisplayName(image.created_by) : '—'}
-                {createdAtString}
-              </>
-            )}
-          </>
-        )
-      }
+      header={<LastUpdatedByHeader model={image} />}
       backendUrl={ROUTES.backend.admin__samfundet_image_changelist}
       loading={isLoading}
     >
@@ -75,6 +56,17 @@ export function ImageDetailAdminPage() {
           <a href={imageUrl(image, 'original')} target="_blank" rel="noreferrer" className={styles.imageLink}>
             <img src={imageUrl(image, 'original')} alt={image.title} className={styles.image} />
           </a>
+
+          {!canChange && (
+            <div>
+              <label>{t(KEY.common_tags)}</label>
+              <div className={styles.tag_chips}>
+                {image.tags.map((t) => (
+                  <TagChip tag={t} key={t.name} />
+                ))}
+              </div>
+            </div>
+          )}
 
           <ImageForm image={image} />
         </div>

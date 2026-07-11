@@ -84,10 +84,12 @@ function DropdownInner<T>(
 
   const selectedIndex = useMemo(() => {
     if (isControlled) {
-      return finalOptions.findIndex((opt) => opt.value === value);
+      const ret = finalOptions.findIndex((opt) => opt.value === value);
+      return ret > 0 ? ret : 0;
     }
     if (defaultValue !== undefined) {
-      return finalOptions.findIndex((opt) => opt.value === defaultValue);
+      const ret = finalOptions.findIndex((opt) => opt.value === defaultValue);
+      return ret > 0 ? ret : 0;
     }
     if (!isControlled) {
       return internalIndex;
@@ -112,7 +114,8 @@ function DropdownInner<T>(
         ref={ref}
         className={classNames(classNameSelect, styles.samf_select, {
           [styles.error]: error, // is defined by base-input mixin
-          [styles.italic]: nullOption && finalOptions[selectedIndex].value === finalOptions[0].value,
+          [styles.italic]:
+            nullOption && finalOptions.length > 0 && finalOptions[selectedIndex].value === finalOptions[0].value,
         })}
         onChange={handleChange}
         disabled={disabled}

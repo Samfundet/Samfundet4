@@ -16,8 +16,8 @@ import {
   TagChipInput,
 } from '~/Components';
 import { FormDescription } from '~/Components/Forms/Form';
-import { useImageMutations } from '~/Components/ImageForm/useImageMutations';
 import { useAuthContext } from '~/context/AuthContext';
+import { IMAGE_FILE, TAGS, TITLE, useImageMutations } from '~/domain';
 import type { ImageDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -25,8 +25,7 @@ import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
-import { IMAGE_FILE, TAGS, TITLE } from '~/schema/image';
-import { handleServerFormErrors, hasPermissions } from '~/utils';
+import { handleServerFormErrors, hasPermissions, lowerCapitalize } from '~/utils';
 import styles from './ImageForm.module.scss';
 
 const schema = z.object({
@@ -44,7 +43,7 @@ type ImageFormProps = {
 export function ImageForm({ image }: ImageFormProps) {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
-  const { postMutation, patchMutation, deleteMutation } = useImageMutations();
+  const { createImage, editImage, deleteImage } = useImageMutations();
 
   const { user } = useAuthContext();
 
@@ -72,7 +71,7 @@ export function ImageForm({ image }: ImageFormProps) {
     };
 
     if (image) {
-      patchMutation.mutate({ id: image.id, data });
+      editImage.mutate({ id: image.id, data });
       return;
     }
 
@@ -82,7 +81,7 @@ export function ImageForm({ image }: ImageFormProps) {
       return;
     }
 
-    postMutation.mutate(
+    createImage.mutate(
       {
         ...data,
         file: values.file,
@@ -104,8 +103,8 @@ export function ImageForm({ image }: ImageFormProps) {
   }
 
   function handleDelete() {
-    if (image && window.confirm(t(KEY.admin_images_confirm_delete) ?? '')) {
-      deleteMutation.mutate(image.id, {
+    if (image && window.confirm(t(KEY.admin_images_confirm_delete))) {
+      deleteImage.mutate(image.id, {
         onSuccess: () => {
           navigate({ url: ROUTES.frontend.admin_images });
         },
@@ -113,7 +112,9 @@ export function ImageForm({ image }: ImageFormProps) {
     }
   }
 
-  const isSubmitting = postMutation.isPending || patchMutation.isPending || deleteMutation.isPending;
+  const submitText = image ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_image)}`);
+
+  const isSubmitting = createImage.isPending || editImage.isPending || deleteImage.isPending;
 
   return (
     <Form {...form}>
@@ -187,10 +188,10 @@ export function ImageForm({ image }: ImageFormProps) {
               {t(KEY.common_delete)}
             </Button>
           )}
-          {canChange && (
+          {(canChange || canCreate) && (
             <Button type="submit" theme="primary" disabled={isSubmitting}>
               <Icon icon="mdi:floppy-disk" />
-              {t(KEY.common_save)}
+              {submitText}
             </Button>
           )}
         </div>
