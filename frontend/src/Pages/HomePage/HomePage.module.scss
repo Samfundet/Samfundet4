@@ -11,7 +11,6 @@
   width: 100vw;
   height: 100vh;
   max-height: 45vw;
-  top: -$navbar-height;
   position: relative;
   overflow: hidden;
 }
@@ -190,6 +189,5 @@
 
 .content {
   position: relative;
-  top: -$navbar-height;
   // max-width: 100%; // QUESTION: Why is this needed?
 }
