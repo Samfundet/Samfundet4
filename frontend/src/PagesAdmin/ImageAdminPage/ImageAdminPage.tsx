@@ -7,10 +7,10 @@ import { Button, Input, TagChip } from '~/Components';
 import { PagedPagination } from '~/Components/Pagination';
 import { getImagesPaginated, getPopularTags } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
+import { imageKeys, tagKeys } from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { PERM } from '~/permissions';
-import { imageKeys, tagKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { hasPermissions, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -111,7 +111,7 @@ export function ImageAdminPage() {
           icon="mdi:search"
           value={searchInput}
           onChange={(e) => handleSearchChange(e.target.value)}
-          placeholder={t(KEY.common_search)}
+          placeholder={`${t(KEY.common_search)}...`}
         />
       </div>
       {popularTags && popularTags.length > 0 && (

@@ -42,6 +42,7 @@ export { InputFile } from './InputFile';
 export { InputTime } from './InputTime';
 export { InterviewFormModal } from './InterviewForm';
 export { IsfitOutlet } from './IsfitOutlet';
+export { LastUpdatedByHeader } from './LastUpdatedByHeader';
 export { Link } from './Link';
 export { List } from './List';
 export { Logo } from './Logo';

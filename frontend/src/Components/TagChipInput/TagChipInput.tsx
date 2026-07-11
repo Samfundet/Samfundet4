@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Input, TagChip } from '~/Components';
 import { getTags } from '~/api';
+import { tagKeys } from '~/domain';
 import { KEY } from '~/i18n/constants';
-import { tagKeys } from '~/queryKeys';
 import styles from './TagChipInput.module.scss';
 
 type TagChipInputProps = {
@@ -62,7 +62,7 @@ export const TagChipInput = React.forwardRef<HTMLInputElement, TagChipInputProps
 
     return (
       <div>
-        <div className={styles.tagChips}>{tagChips}</div>
+        <div className={styles.tag_chips}>{tagChips}</div>
         {!readOnly && (
           <div className={styles.tag_input_row}>
             <Input

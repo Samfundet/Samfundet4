@@ -1,17 +1,17 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { deleteImage, patchImage, postImage } from '~/api';
+import { deleteImage as apiDeleteImage, patchImage, postImage } from '~/api';
+import { imageKeys, tagKeys } from '~/domain';
 import type { ImagePatchDto, ImagePostDto } from '~/dto';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
-import { imageKeys, tagKeys } from '~/queryKeys';
 
 export function useImageMutations() {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
-  const postMutation = useMutation({
+  const createImage = useMutation({
     mutationFn: (data: ImagePostDto) => postImage(data),
     onSuccess: () => {
       toast.success(t(KEY.common_save_successful));
@@ -22,7 +22,7 @@ export function useImageMutations() {
     },
   });
 
-  const patchMutation = useMutation({
+  const editImage = useMutation({
     mutationFn: ({ id, data }: { id: number; data: ImagePatchDto }) => patchImage(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: imageKeys.all });
@@ -35,8 +35,8 @@ export function useImageMutations() {
     },
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: (id: number) => deleteImage(id),
+  const deleteImage = useMutation({
+    mutationFn: (id: number) => apiDeleteImage(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: imageKeys.all });
       queryClient.invalidateQueries({ queryKey: tagKeys.all });
@@ -53,5 +53,5 @@ export function useImageMutations() {
     },
   });
 
-  return { postMutation, patchMutation, deleteMutation };
+  return { createImage, editImage, deleteImage };
 }

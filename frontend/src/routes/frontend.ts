@@ -15,7 +15,7 @@ export const ROUTES_FRONTEND = {
   event: '/events/:id/',
   information_page_list: '/information/',
   information_page_detail: '/information/:slugField/',
-  saksdokumenter: '/saksdokumenter/',
+  casedocuments: '/casedocuments/',
   membership: '/membership',
   luka: '/luka',
   contributors: '/contributors',
@@ -77,10 +77,10 @@ export const ROUTES_FRONTEND = {
   admin_images: '/control-panel/images/',
   admin_images_create: '/control-panel/images/create/',
   admin_images_detail: '/control-panel/images/:id/',
-  // Documents:
-  admin_saksdokumenter: '/control-panel/saksdokument/',
-  admin_saksdokumenter_create: '/control-panel/saksdokument/create/',
-  admin_saksdokumenter_edit: '/control-panel/saksdokument/edit/:id/',
+  // Case documents:
+  admin_casedocuments: '/control-panel/casedocuments/',
+  admin_casedocuments_create: '/control-panel/casedocuments/create/',
+  admin_casedocuments_edit: '/control-panel/casedocuments/edit/:id/',
   // Recruitment:
   admin_recruitment: '/control-panel/recruitment/',
   admin_recruitment_edit: '/control-panel/recruitment/edit/:recruitmentId',

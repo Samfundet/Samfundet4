@@ -49,10 +49,10 @@ export const appletCategories: AdminAppletCategory[] = [
       },
       {
         title_nb: 'Saksdokumenter',
-        title_en: 'Documents',
-        perm: PERM.SAMFUNDET_ADD_SAKSDOKUMENT,
+        title_en: 'Case documents',
+        perm: PERM.SAMFUNDET_VIEW_SAKSDOKUMENT,
         icon: 'mdi:file-document-outline',
-        url: ROUTES.frontend.admin_saksdokumenter,
+        url: ROUTES.frontend.admin_casedocuments,
         feature: 'documents',
       },
       {

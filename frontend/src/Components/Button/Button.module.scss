@@ -20,6 +20,8 @@
 }
 
 a.button {
+  display: inline-flex;
+
   &, &:hover {
     text-decoration: none;
   }
