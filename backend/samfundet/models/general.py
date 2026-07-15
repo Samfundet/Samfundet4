@@ -304,6 +304,8 @@ class User(AbstractUser):
 
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
+    mdb_last_updated = models.DateTimeField(null=True, blank=True, verbose_name='Last updated from mdb')
+
     username = LowerCaseField(
         _('username'),
         max_length=150,
