@@ -9,6 +9,7 @@ import { useAuthContext } from '~/context/AuthContext';
 import { imageKeys } from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 import { hasPermissions, imageUrl } from '~/utils';
@@ -48,7 +49,11 @@ export function ImageDetailAdminPage() {
     <AdminPageLayout
       title={pageTitle}
       header={<LastUpdatedByHeader model={image} />}
-      backendUrl={ROUTES.backend.admin__samfundet_image_changelist}
+      backendUrl={
+        image
+          ? reverse({ pattern: ROUTES.backend.adminsamfundetimage__objectId, urlParams: { objectId: image.id } })
+          : ROUTES.backend.admin__samfundet_image_changelist
+      }
       loading={isLoading}
     >
       {image && (
