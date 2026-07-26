@@ -5,12 +5,13 @@
 
 @use 'src/mixins' as *;
 
+$height: 32vw;
+
 .splash_container {
   max-width: 100%;
   min-width: 100%;
   width: 100vw;
-  height: 100vh;
-  max-height: 45vw;
+  height: $height;
   position: relative;
   overflow: hidden;
 }
@@ -19,8 +20,7 @@
   max-width: 100%;
   min-width: 100%;
   width: 100vw;
-  height: 100vh;
-  max-height: 45vw;
+  height: $height;
   object-fit: cover;
   position: absolute;
 
