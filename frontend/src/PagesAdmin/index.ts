@@ -8,7 +8,6 @@ export { GangsAdminPage } from './GangsAdminPage';
 export { GangsFormAdminPage } from './GangsFormAdminPage';
 export { ImageAdminPage } from './ImageAdminPage';
 export { ImageDetailAdminPage } from './ImageDetailAdminPage';
-export { ImageFormAdminPage } from './ImageFormAdminPage';
 export { InformationAdminPage } from './InformationAdminPage';
 export { InformationFormAdminPage } from './InformationFormAdminPage';
 export { OpeningHoursAdminPage } from './OpeningHoursAdminPage';
