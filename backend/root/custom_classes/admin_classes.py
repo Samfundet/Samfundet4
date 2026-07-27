@@ -11,6 +11,7 @@ from django.http import HttpRequest
 from django.urls import reverse
 from django.contrib import admin
 from django.db.models import QuerySet
+from django.utils.html import format_html
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 
 
@@ -48,7 +49,7 @@ def get_obj_link(obj: Any) -> str | None:
     if obj:
         href = get_admin_url(obj=obj)
 
-        return f'<a href="{href}">{obj}</a>'  # nosec: B308, B703
+        return format_html('<a href="{}">{}</a>', href, obj)  # nosec: B308, B703
     return None
 
 
