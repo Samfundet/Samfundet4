@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -48,8 +49,12 @@ export function ImageForm({ image }: ImageFormProps) {
   const { user } = useAuthContext();
 
   const canCreate = hasPermissions(user, [PERM.SAMFUNDET_ADD_IMAGE], undefined, true);
-  const canChange = hasPermissions(user, [PERM.SAMFUNDET_CHANGE_IMAGE], undefined, true);
-  const canDelete = hasPermissions(user, [PERM.SAMFUNDET_DELETE_IMAGE], undefined, true);
+  const canChange = useMemo(() => {
+    return hasPermissions(user, [PERM.SAMFUNDET_CHANGE_IMAGE], image?.id, true);
+  }, [user, image]);
+  const canDelete = useMemo(() => {
+    return hasPermissions(user, [PERM.SAMFUNDET_DELETE_IMAGE], image?.id, true);
+  }, [user, image]);
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
