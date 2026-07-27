@@ -1,13 +1,11 @@
-@use 'src/constants' as *;
-
-@use 'src/mixins' as *;
+@use '../../styles/colors' as c;
 
 .icon_button {
   display: flex;
   justify-content: center;
   align-items: center;
   border: none;
-  background-color: $grey-3;
+  background-color: c.$gray-400;
   border-radius: 100%;
   width: 1.75em;
   height: 1.75em;
