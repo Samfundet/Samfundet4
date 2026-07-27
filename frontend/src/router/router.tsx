@@ -50,7 +50,6 @@ import {
   GangsFormAdminPage,
   ImageAdminPage,
   ImageDetailAdminPage,
-  ImageFormAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
   MDBConnectFormAdminPage,
@@ -446,7 +445,7 @@ export const router = createBrowserRouter(
               element={
                 <PermissionRoute
                   requiredPermissions={[PERM.SAMFUNDET_ADD_IMAGE]}
-                  element={<ImageFormAdminPage />}
+                  element={<ImageDetailAdminPage />}
                   resolveWithRolePermissions={true}
                 />
               }
