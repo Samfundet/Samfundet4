@@ -16,7 +16,7 @@ import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import type { AdminApplet } from '~/types';
-import { dbT } from '~/utils';
+import { dbT, hasPermissionsAnywhere } from '~/utils';
 import styles from './AdminLayout.module.scss';
 
 /**
@@ -31,7 +31,7 @@ export function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [cookies] = useCookies(['impersonated_user_id']);
-  const { setUser, loading: authLoading } = useAuthContext();
+  const { user, setUser, loading: authLoading } = useAuthContext();
 
   const isImpersonating = Object.hasOwn(cookies, 'impersonated_user_id');
 
@@ -103,7 +103,9 @@ export function AdminLayout() {
         {appletCategories.map((category) => {
           // Keep only the applets with enabled features visible
           const visibleApplets = category.applets.filter(
-            (applet) => !applet.feature || isSiteFeatureEnabled(applet.feature),
+            (applet) =>
+              (!applet.feature || isSiteFeatureEnabled(applet.feature)) &&
+              (!applet.perm || hasPermissionsAnywhere(user, [applet.perm])),
           );
 
           if (visibleApplets.length === 0) return null;
