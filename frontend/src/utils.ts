@@ -6,7 +6,7 @@ import type { UseFormReturn } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import type { z } from 'zod';
 import { BACKEND_DOMAIN, THEME_KEY, type ThemeValue } from '~/constants';
-import type { BasicUserDto, EventDto, ImageDto, ImageSize, UserDto } from '~/dto';
+import type { BaseOwnedModelDto, BasicUserDto, EventDto, ImageDto, ImageSize, UserDto } from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
 import {
@@ -32,25 +32,22 @@ export function hasPerm({ user, permission, obj }: hasPerm): boolean {
 
   // Superuser always has permission.
   if (user.is_active && user.is_superuser) {
-    // console.log('superuser perm');
     return true;
   }
 
-  // Check permissions.
+  // Check model-level permissions.
   const foundPermission = user.permissions?.find((perm) => perm === permission);
   if (foundPermission) {
-    // console.log('permission');
     return true;
   }
 
-  // Check object permissions.
+  // Check object-level permissions.
   const foundObjectPermission = user.object_permissions?.find((object_perm) => {
     const isPermissionMatch = object_perm.permission === permission;
     const isObjMatch = object_perm.obj_pk.toString() === obj?.toString();
     return isPermissionMatch && isObjMatch;
   });
   if (foundObjectPermission) {
-    // console.log('object permission');
     return true;
   }
 
@@ -58,27 +55,142 @@ export function hasPerm({ user, permission, obj }: hasPerm): boolean {
   return false;
 }
 
-// Checks if user has ALL provided permissions
+function isOwnedModelDto(obj: unknown): obj is BaseOwnedModelDto {
+  if (!obj || typeof obj !== 'object') {
+    return false;
+  }
+  const dto = obj as BaseOwnedModelDto;
+
+  // Sometimes we provide just the org/gang/section ID with the model, other times the DTO itself.
+  return [dto.organization, dto.gang, dto.section].some(
+    (value) => typeof value === 'number' || (typeof value === 'object' && value !== null),
+  );
+}
+
+type ObjectId = string | number | undefined;
+
+type OwnedObjectType = 'org' | 'gang' | 'section';
+
+type OwnedObject = {
+  type: OwnedObjectType;
+  id: ObjectId;
+};
+
+// Attempts to find the ID from `value`.
+//
+// If `value` is a number or string, simply return it. If it's an object, attempt to return the primary key (defaults
+// to "id") if it exists.
+//
+// If `value` is an object and it doesn't contain `pkField`, an error is thrown.
+function getObjectId(value: ObjectId | object, pkField = 'id'): ObjectId {
+  if (value === undefined) {
+    return undefined;
+  }
+  if (typeof value === 'number' || typeof value === 'string') {
+    return value;
+  }
+  if (typeof value === 'object') {
+    if (!(pkField in value)) {
+      throw Error(`expected ${pkField} to be set in object `, value);
+    }
+    return (value as { [pkField]: ObjectId })?.[pkField];
+  }
+  return undefined;
+}
+
+// Checks if user has ALL provided permissions, at ANY level (even object-level).
+//
+// Note that this should be considered a somewhat niche check, so use with caution. The provided permissions don't
+// necessarily have to be found at the same level for the function to return true.
+export function hasPermissionsAnywhere(user: UserDto | null | undefined, permissions: string[]) {
+  if (!user || !permissions) return false;
+
+  if (user.is_active && user.is_superuser) {
+    return true;
+  }
+
+  const foundMap: Record<string, boolean> = Object.fromEntries(permissions.map((permission) => [permission, false]));
+
+  const foundModelPermissions = user.permissions?.filter((permission) => permissions.includes(permission)) ?? [];
+  for (const permission of foundModelPermissions) {
+    foundMap[permission] = true;
+  }
+
+  const foundObjectPermissions =
+    user.object_permissions?.filter((objectPerm) => permissions.includes(objectPerm.permission)) ?? [];
+  for (const objectPerm of foundObjectPermissions) {
+    foundMap[objectPerm.permission] = true;
+  }
+
+  const foundRolePermissions = user.role_permissions?.filter((permission) => permissions.includes(permission)) ?? [];
+  for (const permission of foundRolePermissions) {
+    foundMap[permission] = true;
+  }
+
+  return permissions.every((permission) => foundMap[permission]);
+}
+
+// Checks if user has ALL provided permissions.
+//
+// If `obj` is an object with either org/gang/section set, we use the user's role_permissions_grouped to ensure they
+// have access to that specific object. Otherwise, simply check if we have the permission in any way through the role
+// system (role_permissions). This means that if `obj` is an id (string/number) at this point, it's essentially ignored.
+//
+// Note that all the permissions must be found at the same level (model-level, object-level, or role system).
 export function hasPermissions(
   user: UserDto | null | undefined,
   permissions: string[] | undefined,
-  obj?: string | number,
+  obj?: string | BaseOwnedModelDto | number,
   resolveWithRolePermissions = false, // If true checks permissions granted through role system
+  objPkField = 'id',
 ): boolean {
   if (!user || !permissions) return false;
 
-  const hasAllModelPermissions = permissions.every((permission) => hasPerm({ user, permission, obj }));
+  // Superuser always has permission
+  if (user.is_active && user.is_superuser) {
+    return true;
+  }
+
+  // This checks both model-level and object-level permissions
+  const hasAllModelPermissions = permissions.every((permission) =>
+    hasPerm({ user, permission, obj: getObjectId(obj, objPkField) }),
+  );
 
   if (hasAllModelPermissions) {
     return true;
   }
 
-  const rolePermissions = user.role_permissions || [];
-  const hasAllRolePermissions = permissions.every((permission) =>
-    rolePermissions.some((rolePermission) => rolePermission.includes(permission)),
-  );
+  if (!resolveWithRolePermissions) {
+    return false;
+  }
 
-  return resolveWithRolePermissions && hasAllRolePermissions;
+  // Proceed to checking permissions using the role system.
+
+  if (isOwnedModelDto(obj)) {
+    const ownedObjects: OwnedObject[] = [
+      { type: 'org', id: getObjectId(obj.organization) },
+      { type: 'gang', id: getObjectId(obj.gang) },
+      { type: 'section', id: getObjectId(obj.section) },
+    ];
+
+    const rolePermissions = new Set(
+      user.role_permissions_grouped
+        ?.filter((role) =>
+          ownedObjects.some(({ type, id }) => {
+            if (id === undefined) return false;
+            if (type === 'org') return 'org' in role && role.org === id;
+            if (type === 'gang') return 'gang' in role && role.gang === id;
+            return 'section' in role && role.section === id;
+          }),
+        )
+        .flatMap((role) => role.permissions),
+    );
+
+    return permissions.every((permission) => rolePermissions.has(permission));
+  }
+
+  const rolePermissions = user.role_permissions || [];
+  return permissions.every((permission) => rolePermissions.includes(permission));
 }
 
 // ------------------------------
