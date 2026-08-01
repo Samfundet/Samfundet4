@@ -16,6 +16,18 @@ export type BaseModelDto = {
   updated_by?: BasicUserDto | UserDto | null;
 };
 
+// Models which are owned by an org/gang/section should extend this type.
+export type BaseOwnedModelDto = {
+  organization?: OrganizationDto | number;
+  gang?: GangDto | number;
+  section?: GangSectionDto | number;
+};
+
+export type RolePermissionsGrouped =
+  | { org: number; permissions: string[] }
+  | { gang: number; permissions: string[] }
+  | { section: number; permissions: string[] };
+
 export type UserDto = {
   id: number;
   username: string;
@@ -33,6 +45,7 @@ export type UserDto = {
   permissions?: string[];
   object_permissions?: ObjectPermissionDto[];
   role_permissions?: string[];
+  role_permissions_grouped?: RolePermissionsGrouped[];
   mdb_medlem_id?: number;
   date_of_birth?: string;
 };
