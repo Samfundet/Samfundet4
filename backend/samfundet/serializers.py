@@ -47,9 +47,9 @@ from .models.general import (
     Saksdokument,
     MerchVariation,
     UserPreference,
-    InformationPage,
     UserFeedbackModel,
 )
+from .infopages.models import InformationPage
 from .models.recruitment import (
     Interview,
     Recruitment,
@@ -641,7 +641,22 @@ class OrganizationSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+def info_page_slug_field() -> serializers.SlugRelatedField:
+    """
+    `Gang.info_page` references an information page by its numeric id, but that id is an internal
+    database detail. Read and write the relation as the page's slug instead.
+    """
+    return serializers.SlugRelatedField(
+        slug_field='slug_field',
+        queryset=InformationPage.objects.all(),
+        allow_null=True,
+        required=False,
+    )
+
+
 class GangSerializer(CustomBaseSerializer):
+    info_page = info_page_slug_field()
+
     class Meta:
         model = Gang
         fields = '__all__'
@@ -655,6 +670,7 @@ class GangSectionSerializer(CustomBaseSerializer):
 
 class RecruitmentGangSerializer(CustomBaseSerializer):
     recruitment_positions = serializers.SerializerMethodField(method_name='get_positions_count', read_only=True)
+    info_page = info_page_slug_field()
 
     class Meta:
         model = Gang
@@ -676,12 +692,6 @@ class GangTypeSerializer(CustomBaseSerializer):
 
     class Meta:
         model = GangType
-        fields = '__all__'
-
-
-class InformationPageSerializer(CustomBaseSerializer):
-    class Meta:
-        model = InformationPage
         fields = '__all__'
 
 

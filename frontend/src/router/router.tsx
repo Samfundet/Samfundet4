@@ -19,7 +19,6 @@ import {
   GangsPage,
   HealthPage,
   HomePage,
-  InformationListPage,
   InformationPage,
   LoginPage,
   LoginPickerPage,
@@ -52,6 +51,7 @@ import {
   ImageDetailAdminPage,
   InformationAdminPage,
   InformationFormAdminPage,
+  InformationHistoryAdminPage,
   MDBConnectFormAdminPage,
   OpeningHoursAdminPage,
   RecruitmentAdminPage,
@@ -138,7 +138,6 @@ export const router = createBrowserRouter(
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route element={ <SiteFeatureGate feature="information"><Outlet /></SiteFeatureGate>}>
             <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
-            <Route path={ROUTES.frontend.information_page_list} element={<InformationListPage />} />
           </Route>
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.gangs} element={<SiteFeatureGate feature="gangs"><GangsPage /></SiteFeatureGate>} />
@@ -971,38 +970,77 @@ export const router = createBrowserRouter(
             Custom layout for edit/create
           */}
           <Route
-            path={ROUTES.frontend.admin_information}
-            handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.information_page)}</Link> }}
             element={
               <SiteFeatureGate feature="information">
+                <Outlet />
+              </SiteFeatureGate>
+            }
+            handle={{ crumb: () => <Link url={ROUTES.frontend.admin_information}>{t(KEY.information_pages)}</Link> }}
+          >
+            <Route
+              path={ROUTES.frontend.admin_information}
+              element={
                 <PermissionRoute
                   required={[PERM.SAMFUNDET_VIEW_INFORMATIONPAGE]}
                   element={<InformationAdminPage />}
                   resolution="anywhere"
                 />
-              </SiteFeatureGate>
-            }
-          />
-          <Route
-            path={ROUTES.frontend.admin_information_create}
-            element={
-              <PermissionRoute
-                required={[PERM.SAMFUNDET_ADD_INFORMATIONPAGE]}
-                element={<InformationFormAdminPage />}
-                resolution="roles"
-              />
-            }
-          />
-          <Route
-            path={ROUTES.frontend.admin_information_edit}
-            element={
-              <PermissionRoute
-                required={[PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE]}
-                element={<InformationFormAdminPage />}
-                resolution="anywhere"
-              />
-            }
-          />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_information_create}
+              handle={{
+                crumb: () => <Link url={ROUTES.frontend.admin_information_create}>{t(KEY.common_create)}</Link>,
+              }}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_ADD_INFORMATIONPAGE]}
+                  element={<InformationFormAdminPage />}
+                  resolution="roles"
+                />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_information_history}
+              handle={{
+                crumb: ({ params }: UIMatch) => (
+                  <Link
+                    url={reverse({
+                      pattern: ROUTES.frontend.admin_information_history,
+                      urlParams: params,
+                    })}
+                  >{`${t(KEY.admin_information_history_title)} ${params.slugField ?? ''}`}</Link>
+                ),
+              }}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_VIEW_INFORMATIONPAGE]}
+                  element={<InformationHistoryAdminPage />}
+                  resolution="anywhere"
+                />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_information_edit}
+              handle={{
+                crumb: ({ params }: UIMatch) => (
+                  <Link
+                    url={reverse({
+                      pattern: ROUTES.frontend.admin_information_edit,
+                      urlParams: params,
+                    })}
+                  >{`${t(KEY.common_edit)} ${params.slugField ?? ''}`}</Link>
+                ),
+              }}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE]}
+                  element={<InformationFormAdminPage />}
+                  resolution="anywhere"
+                />
+              }
+            />
+          </Route>
           {/* MDB Connect Form */}
           <Route
             path={ROUTES.frontend.admin_mdb_connect}

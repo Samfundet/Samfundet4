@@ -45,7 +45,6 @@ from samfundet.serializers import (
     SaksdokumentSerializer,
     UserFeedbackSerializer,
     UserGangRoleSerializer,
-    InformationPageSerializer,
     UserGangSectionRoleSerializer,
 )
 from samfundet.models.general import (
@@ -62,7 +61,6 @@ from samfundet.models.general import (
     ClosedPeriod,
     Organization,
     Saksdokument,
-    InformationPage,
     UserFeedbackModel,
 )
 from samfundet.models.model_choices import SaksdokumentCategory
@@ -255,16 +253,6 @@ class GangTypeOrganizationView(APIView):
     def get(self, request: Request, organization: int) -> Response:
         data = GangType.objects.filter(organization=organization)
         return Response(data=self.serializer_class(data, many=True).data, status=status.HTTP_200_OK)
-
-
-class InformationPageView(ModelViewSet):
-    feature_key = WebFeatures.INFORMATION
-    permission_classes = (
-        RoleProtectedOrAnonReadOnlyObjectPermissions,
-        FeatureEnabled,
-    )
-    serializer_class = InformationPageSerializer
-    queryset = InformationPage.objects.all()
 
 
 class InfoboxView(ModelViewSet):

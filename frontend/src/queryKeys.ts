@@ -7,14 +7,6 @@ export const roleKeys = {
   users: (id: number) => [...roleKeys.detail(id), 'users'] as const,
 };
 
-export const infoPageKeys = {
-  all: ['infopages'] as const,
-  lists: () => [...infoPageKeys.all, 'list'] as const,
-  list: (filters: unknown[]) => [...infoPageKeys.lists(), { filters }] as const,
-  details: () => [...infoPageKeys.all, 'detail'] as const,
-  detail: (slug: string) => [...infoPageKeys.details(), slug] as const,
-};
-
 export const permissionKeys = {
   all: ['permissions'] as const,
   lists: () => [...permissionKeys.all, 'list'] as const,

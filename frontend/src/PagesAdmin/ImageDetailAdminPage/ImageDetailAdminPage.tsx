@@ -12,6 +12,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
+import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { hasPermissions, imageUrl } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageDetailAdminPage.module.scss';
@@ -76,7 +77,17 @@ export function ImageDetailAdminPage() {
           </div>
         )}
 
-        <ImageForm image={image} />
+        <ImageForm
+          image={image}
+          onCreated={(image) =>
+            navigate({
+              url: reverse({
+                pattern: ROUTES_FRONTEND.admin_images_detail,
+                urlParams: { id: image.id },
+              }),
+            })
+          }
+        />
       </div>
     </AdminPageLayout>
   );
