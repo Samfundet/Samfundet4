@@ -1,14 +1,6 @@
 from __future__ import annotations
 
-import os
-import logging
-
 from django.apps import AppConfig
-from django.core import management
-
-from root.constants import Environment
-
-LOG = logging.getLogger('samfundet')
 
 
 class SamfundetConfig(AppConfig):
@@ -17,10 +9,3 @@ class SamfundetConfig(AppConfig):
 
     def ready(self) -> None:
         from . import signals  # noqa: F401, PLC0415 # Important, this enables signals.
-
-        if os.environ['ENV'] == Environment.DEV:
-            try:
-                LOG.info(f"Attempt to create superuser '{os.environ.get('DJANGO_SUPERUSER_USERNAME')}'")
-                management.call_command('createsuperuser', interactive=False)
-            except Exception as e:
-                LOG.info(e)

@@ -6,42 +6,48 @@ from __future__ import annotations
 
 import re
 import secrets
+from io import BytesIO
 from typing import TYPE_CHECKING
+from pathlib import Path
 from datetime import date, time, datetime, timedelta
+from contextlib import contextmanager
 from collections import defaultdict
+from dataclasses import dataclass
 
-from guardian.shortcuts import assign_perm
+from PIL import Image as PilImage
+from PIL import ImageOps, JpegImagePlugin
 
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
 from django.db.models import Q
 from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractUser
+from django.db.models.functions import Lower
 
-from root.utils import permissions
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
+from samfundet.fields import LowerCaseField, PhoneNumberField
 from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
 
-from .utils.fields import LowerCaseField, PhoneNumberField
 from .utils.string_utils import ellipsize
 
 if TYPE_CHECKING:
     from typing import Any
+    from collections.abc import Iterator
 
     from django.db.models import Model
 
 
 class Tag(CustomBaseModel):
-    # TODO make name case-insensitive
-    # Kan tvinge alt til lowercase, er enklere.
     name = models.CharField(max_length=140)
     color = models.CharField(max_length=6, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Tag'
         verbose_name_plural = 'Tags'
+        constraints = [models.UniqueConstraint(Lower('name'), name='tag_name_case_insensitive_unique')]
 
     def __str__(self) -> str:
         return f'{self.name}'
@@ -56,12 +62,10 @@ class Tag(CustomBaseModel):
 
     @classmethod
     def find_or_create(cls, name: str) -> Tag:
-        # TODO make name case-insensitive
-        obj = Tag.objects.get(name=name)
-        if obj is not None:
-            return obj
-        # Create new tag if none exists
-        return Tag.objects.create(name=name, color=Tag.random_color())
+        """Find a tag by name (case-insensitive) or create it."""
+        name = name.strip()
+        existing = cls.objects.filter(name__iexact=name).first()
+        return existing or cls.objects.create(name=name)
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         # Saves with random color
@@ -70,10 +74,57 @@ class Tag(CustomBaseModel):
         super().save(*args, **kwargs)
 
 
+def image_upload_path(instance: Image, filename: str) -> str:
+    """Partition images two levels deep by filename.
+
+    Example: images/9f/86/9f86d081.jpg
+    """
+    return f'images/{filename[:2]}/{filename[2:4]}/{filename}'
+
+
+@dataclass(frozen=True, kw_only=True)
+class ImageVariant:
+    # longest side (px), never upscaled
+    max_size: int
+    # If lossy: WebP quality.
+    # If lossless: compression effort.
+    quality: int
+    # Images more elongated than this ratio (long side / short side) are
+    # center-cropped down to it before downscaling
+    max_aspect: float
+    lossless: bool
+
+
 class Image(CustomBaseModel):
+    # Accepted upload formats (PIL format names)
+    ALLOWED_FORMATS = ('JPEG', 'PNG', 'GIF', 'WEBP', 'TIFF')
+
+    # Originals at or below this size are served as-is, without generated variants
+    VARIANT_SIZE_THRESHOLD = 128 * 1024
+
+    # Smaller variants tolerate less extreme aspect ratios since they show in
+    # small containers, where extreme proportions leave too few usable pixels.
+    #
+    # If adding a variant, make sure to also add an ImageField field with a
+    # matching name (and update frontend).
+    VARIANTS = {
+        'large': ImageVariant(max_size=2560, quality=85, max_aspect=4.5, lossless=False),
+        'medium': ImageVariant(max_size=1536, quality=85, max_aspect=4.2, lossless=False),
+        'small': ImageVariant(max_size=768, quality=80, max_aspect=4.0, lossless=False),
+    }
+
     title = models.CharField(max_length=140)
     tags = models.ManyToManyField(Tag, blank=True, related_name='images')
-    image = models.ImageField(upload_to='images/', blank=False, null=False)
+    image = models.ImageField(upload_to=image_upload_path, blank=False, null=False)
+
+    # Downscaled copies generated automatically on upload.
+    # Empty for animated images, in which case urls falls back to the original.
+    image_large = models.ImageField(upload_to=image_upload_path, blank=True, editable=False)
+    image_medium = models.ImageField(upload_to=image_upload_path, blank=True, editable=False)
+    image_small = models.ImageField(upload_to=image_upload_path, blank=True, editable=False)
+
+    # All fields holding a stored file: the original plus one field per variant
+    FILE_FIELDS = ('image', *(f'image_{name}' for name in VARIANTS))
 
     class Meta:
         verbose_name = 'Image'
@@ -81,6 +132,158 @@ class Image(CustomBaseModel):
 
     def __str__(self) -> str:
         return f'{self.title}'
+
+    @property
+    def urls(self) -> dict[str, str]:
+        """URL for each size variant, falling back to the original when a variant is missing."""
+        original = self.image.url
+        urls = {'original': original}
+        for variant in self.VARIANTS:
+            file = getattr(self, f'image_{variant}')
+            urls[variant] = file.url if file else original
+        return urls
+
+    ORIENTATION_EXIF_TAG = 0x0112
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        stored_files = self._stored_file_names()
+        # New uploads carry a name not yet stored in db
+        image_changed = bool(self.image) and (stored_files is None or stored_files[0] != self.image.name)
+        if image_changed:
+            self._assign_random_name()
+            self._strip_metadata()
+            self.generate_variants()
+        super().save(*args, **kwargs)
+        if image_changed and stored_files:
+            # The save replaced the row's files, so the previous ones are orphans now
+            self.schedule_file_cleanup(stored_files)
+
+    def _stored_file_names(self) -> tuple[str, ...] | None:
+        """File names (original + variants) currently in the database, or None if the row is new."""
+        if not self.pk:
+            return None
+        return Image.objects.filter(pk=self.pk).values_list(*self.FILE_FIELDS).first()
+
+    @classmethod
+    def schedule_file_cleanup(cls, names: tuple[str, ...]) -> None:
+        """Delete stored files once the current transaction commits (or immediately if none)"""
+        storage = cls._meta.get_field('image').storage
+
+        def delete_files() -> None:
+            for name in names:
+                if name:
+                    storage.delete(name)
+
+        transaction.on_commit(delete_files)
+
+    @contextmanager
+    def _open_image(self) -> Iterator[PilImage.Image]:
+        file = self.image.file
+        file.seek(0)
+        with PilImage.open(file) as pil:
+            yield pil
+        file.seek(0)
+
+    def _assign_random_name(self) -> None:
+        """Name the file a random string. The extension is sniffed from the actual format"""
+        with self._open_image() as pil:
+            image_format = pil.format or ''
+        if image_format not in self.ALLOWED_FORMATS:
+            raise ValidationError(f'Unsupported image format: {image_format or "<unknown>"}')
+        # normalize both JPG/JPEG to use .jpg
+        extension = {'JPEG': '.jpg'}.get(image_format, f'.{image_format.lower()}')
+        name = f'{secrets.token_hex(8)}{extension}'
+        # Collisions are essentially impossible, but a silent Django rename would
+        # break the shared original/variant stem, so reroll rather than risk it.
+        while self.image.storage.exists(image_upload_path(self, name)):
+            name = f'{secrets.token_hex(8)}{extension}'
+        self.image.name = name
+
+    def _strip_metadata(self) -> None:
+        """Re-encode the original without metadata, so e.g. GPS EXIF from phone photos is never leaked.
+
+        - Only strips JPEG/PNG
+        - Orientation is baked into the pixels, the ICC color profile is kept
+        """
+        with self._open_image() as pil:
+            exif = pil.getexif()
+            has_metadata = exif or pil.info.get('exif') or pil.info.get('xmp')
+            strippable = pil.format in ('JPEG', 'PNG') and not getattr(pil, 'is_animated', False)
+            if not (strippable and has_metadata):
+                return
+
+            options: dict[str, Any] = {'exif': b'', 'xmp': b'', 'icc_profile': pil.info.get('icc_profile')}
+
+            # 1 means "no rotation needed"
+            needs_rotation = exif.get(self.ORIENTATION_EXIF_TAG, 1) != 1
+            stripped = (ImageOps.exif_transpose(pil) or pil) if needs_rotation else pil
+
+            if isinstance(pil, JpegImagePlugin.JpegImageFile):
+                # Inherit the source's compression instead of picking a new quality
+                if needs_rotation:
+                    options |= {'qtables': pil.quantization, 'subsampling': JpegImagePlugin.get_sampling(pil)}
+                else:
+                    options |= {'quality': 'keep', 'subsampling': 'keep'}
+
+            buffer = BytesIO()
+            stripped.save(buffer, format=pil.format, **options)
+        self.image.save(self.image.name, ContentFile(buffer.getvalue()), save=False)
+
+    def generate_variants(self) -> None:
+        """Generate a downscaled WebP copy of the image for each size in VARIANTS.
+
+        Small and animated originals get no variants, and urls falls back to the original.
+        """
+        if self.image.size <= self.VARIANT_SIZE_THRESHOLD:
+            self._clear_variants()
+            return
+        with self._open_image() as source:
+            if getattr(source, 'is_animated', False):
+                # Resizing would drop animation frames, serve the original instead.
+                self._clear_variants()
+                return
+            pil = self._normalize_for_webp(source)
+            stem = Path(self.image.name).stem
+            for name, variant in self.VARIANTS.items():
+                content = self._encode_variant(pil, variant)
+                getattr(self, f'image_{name}').save(f'{stem}_{name}.webp', content, save=False)
+
+    def _clear_variants(self) -> None:
+        for name in self.VARIANTS:
+            setattr(self, f'image_{name}', '')
+
+    @staticmethod
+    def _normalize_for_webp(source: PilImage.Image) -> PilImage.Image:
+        """Bake EXIF orientation into the pixels and convert to a mode WebP can encode."""
+        pil = ImageOps.exif_transpose(source) or source
+        if pil.mode not in ('RGB', 'RGBA'):
+            # Palette images may carry transparency, so they keep an alpha channel
+            pil = pil.convert('RGBA' if pil.mode == 'P' or 'A' in pil.getbands() else 'RGB')
+        return pil
+
+    @classmethod
+    def _encode_variant(cls, pil: PilImage.Image, variant: ImageVariant) -> ContentFile:
+        """Crop, downscale and encode one WebP variant of the (normalized) source image."""
+        resized = cls._center_crop(pil, variant.max_aspect)
+        resized.thumbnail((variant.max_size, variant.max_size), PilImage.Resampling.LANCZOS)
+        buffer = BytesIO()
+        resized.save(buffer, format='WEBP', lossless=variant.lossless, quality=variant.quality)
+        return ContentFile(buffer.getvalue())
+
+    @staticmethod
+    def _center_crop(pil: PilImage.Image, max_aspect: float) -> PilImage.Image:
+        """Center-crop the image so that no side exceeds max_aspect times the other."""
+        width, height = pil.size
+        if width > height * max_aspect:
+            crop_width = round(height * max_aspect)
+            left = (width - crop_width) // 2
+            return pil.crop((left, 0, left + crop_width, height))
+        if height > width * max_aspect:
+            crop_height = round(width * max_aspect)
+            top = (height - crop_height) // 2
+            return pil.crop((0, top, width, top + crop_height))
+        # Copy since thumbnail() mutates and the source is reused for other variants
+        return pil.copy()
 
 
 class Campus(FullCleanSaveMixin):
@@ -96,6 +299,9 @@ class Campus(FullCleanSaveMixin):
 
 
 class User(AbstractUser):
+    # REQUIRED_FIELDS is only used by the createsuperuser tool, setting which fields need to have a value, nothing else
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'phone_number', 'date_of_birth']
+
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     username = LowerCaseField(
@@ -129,6 +335,12 @@ class User(AbstractUser):
     )
 
     mdb_medlem_id = models.PositiveIntegerField(null=True, blank=False, unique=True, verbose_name='medlem_id in mdb2')
+
+    date_of_birth = models.DateField(
+        _('date of birth'),
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         permissions = [
@@ -164,8 +376,6 @@ class UserPreference(FullCleanSaveMixin):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     theme = models.CharField(max_length=30, choices=UserPreferenceTheme.choices, default=UserPreferenceTheme.LIGHT, blank=True, null=True)
-    mirror_dimension = models.BooleanField(default=False)
-    cursor_trail = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
@@ -176,29 +386,6 @@ class UserPreference(FullCleanSaveMixin):
 
     def __str__(self) -> str:
         return f'UserPreference ({self.user})'
-
-
-class Profile(FullCleanSaveMixin):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-    nickname = models.CharField(max_length=30, blank=True, null=True)
-
-    created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
-
-    class Meta:
-        verbose_name = 'Profile'
-        verbose_name_plural = 'Profiles'
-
-    def __str__(self) -> str:
-        return f'Profile ({self.user})'
-
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        """Additional operations on save."""
-        super().save(*args, **kwargs)
-
-        # Extend Profile to assign permission to whichever user is related to it.
-        assign_perm(perm=permissions.SAMFUNDET_VIEW_PROFILE, user_or_group=self.user, obj=self)
-        assign_perm(perm=permissions.SAMFUNDET_CHANGE_PROFILE, user_or_group=self.user, obj=self)
 
 
 class Venue(CustomBaseModel):
@@ -339,7 +526,7 @@ class Gang(CustomBaseModel):
 
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
     gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
-    info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
+    info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', related_name='+', blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = 'Gang'
@@ -357,7 +544,12 @@ class Gang(CustomBaseModel):
         return self
 
     def __str__(self) -> str:
-        return f'{self.gang_type} - {self.name_nb}'
+        ret = self.name_nb
+        if self.gang_type:
+            ret = f'{self.gang_type} - {ret}'
+        if self.organization:
+            ret = f'{self.organization.name} - {ret}'
+        return ret
 
 
 class GangSection(CustomBaseModel):
@@ -382,30 +574,6 @@ class GangSection(CustomBaseModel):
 
     def __str__(self) -> str:
         return f'{self.gang.name_nb} - {self.name_nb}'
-
-
-class InformationPage(CustomBaseModel):
-    slug_field = models.SlugField(
-        max_length=64,
-        blank=True,
-        null=False,
-        unique=True,
-        primary_key=True,
-        help_text='Primary key, this field will identify the object and be used in the URL.',
-    )
-
-    title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (norsk)')
-    text_nb = models.TextField(blank=True, null=True, verbose_name='Tekst (norsk)')
-
-    title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (engelsk)')
-    text_en = models.TextField(blank=True, null=True, verbose_name='Tekst (engelsk)')
-
-    class Meta:
-        verbose_name = 'InformationPage'
-        verbose_name_plural = 'InformationPages'
-
-    def __str__(self) -> str:
-        return f'{self.slug_field}'
 
 
 class BlogPost(CustomBaseModel):
@@ -666,17 +834,39 @@ class Menu(CustomBaseModel):
         return f'{self.name_nb}'
 
 
+def saksdokument_upload_path(instance: Saksdokument, filename: str) -> str:
+    """Partition case documents by upload date.
+
+    Example: saksdokumenter/2026/03/fsbok.pdf
+    """
+    s = '1970/01'
+    if instance.created_at:
+        s = instance.created_at.strftime('%Y/%m')
+    return f'saksdokumenter/{s}/{filename}'
+
+
 class Saksdokument(CustomBaseModel):
     title_nb = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Norsk)')
     title_en = models.CharField(max_length=80, blank=True, null=True, verbose_name='Tittel (Engelsk)')
     publication_date = models.DateTimeField(blank=True, null=True)
 
     category = models.CharField(max_length=25, choices=SaksdokumentCategory.choices, default=SaksdokumentCategory.FS_REFERAT)
-    file = models.FileField(upload_to='uploads/saksdokument/', blank=True, null=True)
+    file = models.FileField(upload_to=saksdokument_upload_path, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Saksdokument'
         verbose_name_plural = 'Saksdokumenter'
+
+    @classmethod
+    def schedule_file_cleanup(cls, filename: str) -> None:
+        """Delete stored file once the current transaction commits (or immediately if none)"""
+        storage = cls._meta.get_field('file').storage
+
+        def delete_file() -> None:
+            if filename:
+                storage.delete(filename)
+
+        transaction.on_commit(delete_file)
 
     def __str__(self) -> str:
         return f'{self.title_nb}'
