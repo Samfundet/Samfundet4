@@ -55,7 +55,6 @@ import type {
   RegistrationDto,
   RoleDto,
   RoleUsersDto,
-  SaksdokumentDto,
   SiteBannerDto,
   TagDto,
   TextItemDto,
