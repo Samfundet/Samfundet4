@@ -18,7 +18,7 @@ export const appletCategories: AdminAppletCategory[] = [
       {
         title_nb: 'Informasjonssider',
         title_en: 'Information pages',
-        perm: PERM.SAMFUNDET_ADD_INFORMATIONPAGE,
+        perm: PERM.SAMFUNDET_VIEW_INFORMATIONPAGE,
         icon: 'ph:note-pencil-light',
         url: ROUTES.frontend.admin_information,
         feature: 'information',

@@ -7,6 +7,9 @@ export type DropdownOption<T> = {
   label: string;
   value: T;
   disabled?: boolean;
+  // Renders consecutive options sharing a group inside an <optgroup>. Optiosn must already
+  // be ordered by group, so this does not work well with `sortAlphabetic`
+  group?: string;
 };
 
 type NullOption = {
@@ -38,6 +41,30 @@ type UncontrolledDropdownProps<T> = PrimitiveDropdownProps<T> & {
 };
 
 export type DropdownProps<T> = ControlledDropdownProps<T> | UncontrolledDropdownProps<T>;
+
+type IndexedOption<T> = DropdownOption<T> & { index: number };
+
+function renderOption<T>({ label, value, group, index, ...props }: IndexedOption<T>) {
+  return (
+    <option value={index} key={index} {...props}>
+      {label}
+    </option>
+  );
+}
+
+function groupOptions<T>(options: DropdownOption<T>[]): { group?: string; options: IndexedOption<T>[] }[] {
+  const segments: { group?: string; options: IndexedOption<T>[] }[] = [];
+
+  options.forEach((option, index) => {
+    const open = segments.at(-1);
+    if (!open || open.group !== option.group) {
+      segments.push({ group: option.group, options: [] });
+    }
+    segments.at(-1)?.options.push({ ...option, index });
+  });
+
+  return segments;
+}
 
 function DropdownInner<T>(
   {
@@ -122,12 +149,15 @@ function DropdownInner<T>(
         defaultValue={!isControlled ? selectedIndex : undefined}
         value={isControlled ? selectedIndex : undefined}
       >
-        {finalOptions.map(({ label, value, ...props }, index) => (
-          // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
-          <option value={index} key={index} {...props}>
-            {label}
-          </option>
-        ))}
+        {groupOptions(finalOptions).map((segment) =>
+          segment.group === undefined ? (
+            segment.options.map(renderOption)
+          ) : (
+            <optgroup label={segment.group} key={segment.group}>
+              {segment.options.map(renderOption)}
+            </optgroup>
+          ),
+        )}
       </select>
       {!disableIcon && (
         <div className={styles.arrow_container}>

@@ -6,7 +6,17 @@ import type { UseFormReturn } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import type { z } from 'zod';
 import { BACKEND_DOMAIN, THEME_KEY, type ThemeValue } from '~/constants';
-import type { BaseOwnedModelDto, BasicUserDto, EventDto, ImageDto, ImageSize, UserDto } from '~/dto';
+import type {
+  BaseOwnedModelDto,
+  BasicUserDto,
+  EventDto,
+  GangDto,
+  GangSectionDto,
+  ImageDto,
+  ImageSize,
+  OrganizationDto,
+  UserDto,
+} from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
 import {
@@ -82,8 +92,8 @@ type OwnedObject = {
 // to "id") if it exists.
 //
 // If `value` is an object and it doesn't contain `pkField`, an error is thrown.
-function getObjectId(value: ObjectId | object, pkField = 'id'): ObjectId {
-  if (value === undefined) {
+function getObjectId(value: ObjectId | object | null, pkField = 'id'): ObjectId {
+  if (value === undefined || value === null) {
     return undefined;
   }
   if (typeof value === 'number' || typeof value === 'string') {
@@ -495,6 +505,31 @@ export function formatCurrency(n: number): string {
     maximumFractionDigits: 0,
   }).format(n);
   return i18next.language === 'nb' ? s : s.replace(/kr/, 'NOK');
+}
+
+export function formatGangName(gang: GangDto, organization?: OrganizationDto | null): string {
+  const gangName = dbT(gang, 'name') ?? '';
+  return organization ? `${organization.name} - ${gangName}` : gangName;
+}
+
+// Intentionally does not use GangSectionDto's gang field, in case we don't want to display the gang name
+// (for instance if it's irrelevant in the context, such as when viewing a gang's page).
+export function formatSectionName(
+  section: GangSectionDto,
+  gang?: GangDto | null,
+  organization?: OrganizationDto | null,
+) {
+  let ret = dbT(section, 'name') ?? '';
+  if (gang) {
+    const gangName = dbT(gang, 'name') ?? '';
+    if (gangName) {
+      ret = `${gangName} - ${ret}`;
+    }
+  }
+  if (organization) {
+    ret = `${organization.name} - ${ret}`;
+  }
+  return ret;
 }
 
 /**

@@ -111,6 +111,7 @@ export const KEY = {
   common_create: 'common_create',
   common_search: 'common_search',
   common_choose: 'common_choose',
+  common_visible: 'common_visible',
   common_loading: 'common_loading',
   common_missing: 'common_missing',
   common_delete: 'common_delete',
@@ -130,6 +131,7 @@ export const KEY = {
   common_email: 'common_email',
   common_interval: 'common_interval',
   common_preview: 'common_preview',
+  common_version: 'common_version',
   common_email_subject: 'common_email_subject',
   common_total: 'common_total',
   common_out_of: 'common_out_of',
@@ -349,6 +351,7 @@ export const KEY = {
 
   // InformationPage
   information_page: 'information_page',
+  information_pages: 'information_pages',
   information_page_short: 'information_page_short',
 
   // Navigation links (used in both navbar and footer):
@@ -575,7 +578,6 @@ export const KEY = {
 
   not_wanted_short: 'not_wanted_short',
   not_wanted_long: 'not_wanted_long',
-  //not_wanted_guidance: 'not_wanted_guidance',
 
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
@@ -588,6 +590,13 @@ export const KEY = {
   admin_images_delete_in_use: 'admin_images_delete_in_use',
   admin_image_form_tag_description: 'admin_image_form_tag_description',
   admin_no_image_selected: 'admin_no_image_selected',
+  admin_markdown_insert_image: 'admin_markdown_insert_image',
+  admin_markdown_image_insert: 'admin_markdown_image_insert',
+  admin_markdown_image_choose_existing: 'admin_markdown_image_choose_existing',
+  admin_markdown_image_upload_new: 'admin_markdown_image_upload_new',
+  admin_markdown_image_alt_text: 'admin_markdown_image_alt_text',
+  admin_markdown_image_alt_text_description: 'admin_markdown_image_alt_text_description',
+  admin_markdown_image_not_found: 'admin_markdown_image_not_found',
   admin_steal_identity: 'admin_steal_identity',
   adminpage_gangs_title: 'adminpage_gangs_title',
   adminpage_gangs_create: 'adminpage_gangs_create',
@@ -599,10 +608,15 @@ export const KEY = {
   admin_events_recently_edited: 'admin_events_recently_edited',
   admin_events_administrate: 'admin_events_administrate',
   admin_closed_period_new_period: 'admin_closed_period_new_period',
+  admin_information_translations_difference: 'admin_information_translations_difference',
   admin_information_manage_title: 'admin_information_manage_title',
   admin_closed_period_edit_period: 'admin_closed_period_edit_period',
   admin_information_confirm_delete: 'admin_information_confirm_delete',
   admin_information_confirm_cancel: 'admin_information_confirm_cancel',
+  admin_information_history_title: 'admin_information_history_title',
+  admin_information_history_empty: 'admin_information_history_empty',
+  admin_information_history_select: 'admin_information_history_select',
+  admin_information_history_diff_failed: 'admin_information_history_diff_failed',
   admin_gangsadminpage_abbreviation: 'admin_gangsadminpage_abbreviation',
   admin_casedocuments_cannot_reupload: 'admin_casedocuments_cannot_reupload',
   admin_casedocuments_publication_date_note: 'admin_casedocuments_publication_date_note',
@@ -696,6 +710,7 @@ export const KEY = {
   error_server_error_description: 'error_server_error_description',
   error_submitting_reservation: 'error_submitting_reservation',
   error_invalid_reservation_data: 'error_invalid_reservation_data',
+  error_invalid_slug: 'error_invalid_slug',
 
   // Event form validation
   event_form_title_required: 'event_form_title_required',

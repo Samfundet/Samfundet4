@@ -7,7 +7,6 @@ export { EventsPage } from './EventsPage';
 export { GangsPage } from './GangsPage';
 export { HealthPage } from './HealthPage';
 export { HomePage } from './HomePage';
-export { InformationListPage } from './InformationListPage';
 export { InformationPage } from './InformationPage';
 export { LoginPage } from './LoginPage';
 export { LycheAboutPage } from './LycheAboutPage';

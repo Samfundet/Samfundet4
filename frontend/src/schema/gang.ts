@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { INFO_PAGE_SLUG } from '~/schema/infopage';
+import { INFO_PAGE_SLUG } from '~/domain/infopages/schema';
 
 export const NAME = z.string();
 
