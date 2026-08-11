@@ -40,7 +40,7 @@ export function LoginPickerPage() {
                 <p className={styles.description_note}>{t(KEY.loginpicker_page_old_platform_note)}</p>
               </div>
               <Icon icon="mdi:arrow-right" className={styles.arrowIcon} />
-            </Link>
+            </a>
           </nav>
         </div>
       </div>
