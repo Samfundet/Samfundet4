@@ -5,34 +5,29 @@ import { COLORS } from '~/types';
 import styles from './CrudButtons.module.scss';
 
 type CrudButtonsProps = {
-  onView?: () => void;
-  onManage?: () => void;
-  onEdit?: () => void;
-  onDelete?: () => void;
+  onView?: (() => void) | string | false;
+  onManage?: (() => void) | string | false;
+  onEdit?: (() => void) | string | false;
+  onDelete?: (() => void) | string | false;
 };
 
 export function CrudButtons({ onView, onEdit, onManage, onDelete }: CrudButtonsProps) {
   const { t } = useTranslation();
+
+  function createButton(title: string, color: string, icon: string, action?: (() => void) | string | false) {
+    if (!action) {
+      return null;
+    }
+    const props = typeof action === 'string' ? { url: action } : { onClick: action };
+    return <IconButton {...props} color={color} title={title} icon={icon} />;
+  }
+
   return (
     <div className={styles.row}>
-      {onManage && (
-        <IconButton
-          onClick={onManage}
-          color={COLORS.turquoise}
-          title={t(KEY.common_manage)}
-          icon="ic:baseline-dashboard"
-        />
-      )}
-      {onView && (
-        <IconButton
-          onClick={onView}
-          color={COLORS.green}
-          title={t(KEY.common_show)}
-          icon="ic:baseline-remove-red-eye"
-        />
-      )}
-      {onEdit && <IconButton onClick={onEdit} color={COLORS.blue} title={t(KEY.common_edit)} icon="mdi:pencil" />}
-      {onDelete && <IconButton onClick={onDelete} color={COLORS.red} title={t(KEY.common_delete)} icon="mdi:bin" />}
+      {createButton(t(KEY.common_manage), COLORS.turquoise, 'ic:baseline-dashboard', onManage)}
+      {createButton(t(KEY.common_show), COLORS.green, 'ic:baseline-remove-red-eye', onView)}
+      {createButton(t(KEY.common_edit), COLORS.blue, 'mdi:pencil', onEdit)}
+      {createButton(t(KEY.common_delete), COLORS.red, 'mdi:bin', onDelete)}
     </div>
   );
 }

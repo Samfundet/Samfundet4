@@ -1,9 +1,7 @@
-@use 'src/constants' as *;
-
-@use 'src/mixins' as *;
+@use '../../styles/colors' as c;
 
 .error {
-  color: $red;
+  color: c.$red-600;
 }
 
 .label {
@@ -13,9 +11,9 @@
 }
 
 .required {
-  color: $red;
+  color: c.$red-600;
 }
 
 .description {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
 }

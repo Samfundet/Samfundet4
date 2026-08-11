@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { type ReactNode, createContext, useContext, useEffect, useState } from 'react';
-import { getCsrfToken, getKeyValues, putUserPreference } from '~/api';
+import { getCsrfToken, getKeyValues } from '~/api';
 import { MIRROR_CLASS, MOBILE_NAVIGATION_OPEN, type ThemeValue, XCSRFTOKEN } from '~/constants';
-import { useMouseTrail, useTheme } from '~/hooks';
+import { useTheme } from '~/hooks';
 import type { KeyValueMap, SetState } from '~/types';
 import { useAuthContext } from './AuthContext';
 
@@ -15,15 +15,10 @@ type GlobalContextProps = {
   setTheme: SetState<ThemeValue>;
   switchTheme: () => ThemeValue;
 
-  // Mirror dimention
+  // Mirror dimension
   mirrorDimension: boolean;
   setMirrorDimension: SetState<boolean>;
   toggleMirrorDimension: () => boolean;
-
-  // Mouse trail
-  isMouseTrail: boolean;
-  setIsMouseTrail: SetState<boolean>;
-  toggleMouseTrail: () => boolean;
 
   // Navbar
   isMobileNavigation: boolean;
@@ -74,7 +69,6 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
   const { user } = useAuthContext();
 
   const [mirrorDimension, setMirrorDimension] = useState<boolean>(false);
-  const { isMouseTrail, setIsMouseTrail, toggleMouseTrail } = useMouseTrail();
 
   // =================================== //
   //               Effects               //
@@ -83,7 +77,7 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
   // Update preferences when user is loaded.
   useEffect(() => {
     if (!user || !enabled) return;
-    setMirrorDimension(user.user_preference.mirror_dimension);
+    // load any saved preferences here...
   }, [user, enabled]);
 
   // Stuff to do on first render.
@@ -134,9 +128,6 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
   function toggleMirrorDimension(): boolean {
     const toggledValue = !mirrorDimension;
     setMirrorDimension(toggledValue);
-    if (user) {
-      putUserPreference(user.user_preference.id, { mirror_dimension: toggledValue });
-    }
     return toggledValue;
   }
 
@@ -153,9 +144,6 @@ export function GlobalContextProvider({ children, enabled = true }: GlobalContex
     setIsMobileNavigation,
     mirrorDimension,
     setMirrorDimension,
-    isMouseTrail: isMouseTrail,
-    setIsMouseTrail: setIsMouseTrail,
-    toggleMouseTrail,
     toggleMirrorDimension,
     keyValues,
   };

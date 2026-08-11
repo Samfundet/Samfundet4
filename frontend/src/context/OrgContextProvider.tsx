@@ -14,7 +14,7 @@ export const organizationThemes: Record<OrgNameTypeValue, OrganizationTheme> = {
     organizationName: OrgNameType.SAMFUNDET_NAME,
     pagePrimaryColor: COLORS.red_samf,
     pageSecondaryColor: COLORS.background_primary,
-    buttonTheme: 'samf',
+    buttonTheme: 'primary',
   },
   [OrgNameType.UKA_NAME]: {
     organizationName: OrgNameType.UKA_NAME,
@@ -32,7 +32,7 @@ export const organizationThemes: Record<OrgNameTypeValue, OrganizationTheme> = {
     organizationName: OrgNameType.SAMFUNDET_NAME,
     pagePrimaryColor: COLORS.red_samf,
     pageSecondaryColor: COLORS.background_primary,
-    buttonTheme: 'samf',
+    buttonTheme: 'primary',
   },
 };
 

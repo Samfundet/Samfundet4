@@ -1,0 +1,37 @@
+@use '../../../../mixins' as m;
+
+@use '../../../../styles/colors' as c;
+
+@use '../../../../styles/variables' as v;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: min(40rem, 80vw);
+}
+
+.alt_field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.alt_label {
+  font-weight: v.$font-weight-semibold;
+}
+
+.alt_description {
+  font-size: v.$font-size-sm;
+  color: c.$gray-600;
+
+  @include m.theme-dark {
+    color: c.$gray-300;
+  }
+}
+
+.action_row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}

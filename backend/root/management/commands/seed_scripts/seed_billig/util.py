@@ -40,6 +40,7 @@ def create_event(
     sale_from: timezone.datetime | None = None,
     sale_to: timezone.datetime | None = None,
     hidden: bool | None = None,
+    ticket_fee: int | None = None,
 ) -> BilligEvent:
     """
     Utility for creating a BilligEvent with some default values.
@@ -70,7 +71,7 @@ def create_event(
         a4_ticket_layout=None,
         receipt_ticket_layout=None,
         tp_ticket_layout=None,
-        ticket_fee=None,
+        ticket_fee=ticket_fee,
         sale_from=sale_from,
         sale_to=sale_to,
         hidden=hidden,
