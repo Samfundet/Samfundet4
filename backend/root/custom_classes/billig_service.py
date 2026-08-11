@@ -335,17 +335,23 @@ class BilligService:
     @staticmethod
     def get_success_context(ticket_refs: list[str]) -> dict[str, Any]:
         refs_in_order = [ticket_ref.strip() for ticket_ref in ticket_refs if ticket_ref.strip()]
-        numeric_ticket_ids = [int(ticket_ref) for ticket_ref in refs_in_order if ticket_ref.isdigit()]
+        ticket_ids_by_ref = {
+            ticket_ref: int(ticket_ref[:-5])
+            for ticket_ref in refs_in_order
+            if ticket_ref.isdigit() and ticket_ref[:-5]
+        }
 
         tickets_by_id = {
             ticket.id: ticket
-            for ticket in BilligTicket.objects.select_related('price_group__ticket_group__event').filter(id__in=numeric_ticket_ids)
+            for ticket in BilligTicket.objects.select_related('price_group__ticket_group__event').filter(
+                id__in=ticket_ids_by_ref.values()
+            )
         }
 
         ticket_rows: list[dict[str, Any]] = []
         total_price = 0
         for ticket_ref in refs_in_order:
-            ticket_id = int(ticket_ref) if ticket_ref.isdigit() else None
+            ticket_id = ticket_ids_by_ref.get(ticket_ref)
             ticket = tickets_by_id.get(ticket_id) if ticket_id is not None else None
 
             row = {
