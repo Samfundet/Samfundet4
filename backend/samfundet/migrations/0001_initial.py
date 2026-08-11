@@ -5,7 +5,7 @@ import django.contrib.auth.models
 import django.contrib.auth.validators
 import django.db.models.deletion
 import django.utils.timezone
-import samfundet.models.utils.fields
+import samfundet.fields
 import uuid
 from django.conf import settings
 from django.db import migrations, models
@@ -115,8 +115,8 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-                ('username', samfundet.models.utils.fields.LowerCaseField(error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.', max_length=150, unique=True, validators=[django.contrib.auth.validators.UnicodeUsernameValidator()], verbose_name='username')),
-                ('phone_number', samfundet.models.utils.fields.PhoneNumberField(max_length=15, verbose_name='phone_number')),
+                ('username', samfundet.fields.LowerCaseField(error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.', max_length=150, unique=True, validators=[django.contrib.auth.validators.UnicodeUsernameValidator()], verbose_name='username')),
+                ('phone_number', samfundet.fields.PhoneNumberField(max_length=15, verbose_name='phone_number')),
                 ('email', models.EmailField(max_length=254, unique=True, verbose_name='email')),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),

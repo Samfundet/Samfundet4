@@ -1,0 +1,12 @@
+@use '../../../../styles/variables' as v;
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 12rem;
+}
+
+.value {
+  color: v.$primary-text-color;
+}

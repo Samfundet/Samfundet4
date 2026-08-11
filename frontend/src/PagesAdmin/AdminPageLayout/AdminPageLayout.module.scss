@@ -1,9 +1,33 @@
 @use 'src/constants' as *;
 
-@use 'src/mixins' as *;
+@use '../../mixins' as m;
+
+@use '../../styles/colors' as col;
 
 $page-padding: 2em;
 $header-bg-dark: #111111;
+
+.breadcrumb_bar {
+  width: 100%;
+  padding-left: 2rem;
+  background: col.$white-50;
+  border-bottom: 1px solid col.$gray-100;
+
+  @include m.theme-dark {
+    background: col.$gray-950;
+    border-color: col.$gray-800;
+  }
+}
+
+.wrapper {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  overflow: auto;
+}
 
 .header {
   padding-top: 1em;
@@ -12,9 +36,9 @@ $header-bg-dark: #111111;
   background-color: $white;
   border-bottom: 1px solid $grey-4;
 
-  @include theme-dark {
+  @include m.theme-dark {
     background-color: $header-bg-dark;
-    border-color: $grey-0;
+    border-color: col.$gray-800;
     color: $white;
   }
 }

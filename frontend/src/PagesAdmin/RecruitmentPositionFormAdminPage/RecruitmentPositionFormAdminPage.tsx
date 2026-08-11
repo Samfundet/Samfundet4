@@ -20,7 +20,7 @@ export function RecruitmentPositionFormAdminPage() {
   const [isSearching, setIsSearching] = useState(false);
 
   // Reference to store timeout ID for debouncing
-  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Function to handle user search with inline debounce
   const handleUserSearch = useCallback(

@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -51,11 +52,10 @@ export function ClosedPeriodAdminPage() {
   }
 
   const header = (
-    <>
-      <Button theme="success" rounded link={ROUTES.frontend.admin_closed_create}>
-        {t(KEY.admin_closed_period_new_period)}
-      </Button>
-    </>
+    <Button theme="primary" link={ROUTES.frontend.admin_closed_create}>
+      <Icon icon="lucide:plus" />
+      {t(KEY.admin_closed_period_new_period)}
+    </Button>
   );
   const backendUrl = ROUTES.backend.admin__samfundet_closedperiod_changelist;
 
@@ -85,7 +85,7 @@ export function ClosedPeriodAdminPage() {
                 content: (
                   <div className={styles.edit_buttons}>
                     <Button
-                      theme="blue"
+                      theme="secondary"
                       display="block"
                       className={styles.smallButtons}
                       link={reverse({
@@ -96,7 +96,7 @@ export function ClosedPeriodAdminPage() {
                       {t(KEY.common_edit)}
                     </Button>
                     <Button
-                      theme="samf"
+                      theme="primary"
                       display="block"
                       className={styles.smallButtons}
                       onClick={() => {

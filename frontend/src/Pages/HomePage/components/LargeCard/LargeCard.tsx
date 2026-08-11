@@ -1,9 +1,8 @@
 import { ContentCard } from '~/Components';
-import { BACKEND_DOMAIN } from '~/constants';
 import type { HomePageElementDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
+import { dbT, imageUrl } from '~/utils';
 import styles from './LargeCard.module.scss';
 
 type LargeCardProps = {
@@ -29,7 +28,7 @@ export function LargeCard({ element }: LargeCardProps) {
       <ContentCard
         title={dbT(element, 'title')}
         description={dbT(element, 'description')}
-        imageUrl={BACKEND_DOMAIN + event.image_url}
+        imageUrl={imageUrl(event.image, 'medium')}
         url={url}
         buttonText=""
       />
