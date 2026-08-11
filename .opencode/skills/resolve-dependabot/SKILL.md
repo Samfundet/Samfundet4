@@ -77,6 +77,22 @@ If CI **passed**, proceed normally.
 gh pr checkout <NUMBER>
 ```
 
+### 3b. Merge latest master into the PR branch
+
+Always merge the latest base branch (`master`) into the PR branch before running the pipeline. This ensures the branch is up to date and CI validates the merged state.
+
+```bash
+git fetch origin master
+git merge origin/master
+```
+
+If merge conflicts occur, abort (`git merge --abort`), flag the PR as "Merge conflict" in the report, and skip it. Never resolve conflicts automatically.
+
+After merging, push the updated branch so GitHub CI re-runs on the merged state:
+```bash
+git push origin HEAD
+```
+
 ### 4. Run pipeline in Docker
 
 **Always tear down first** to ensure a clean state:
@@ -228,12 +244,14 @@ The report uses this structure:
 ### Passing PRs — Ready for Manual Smoke Test
 #### #2253 — django 5.2.15→5.2.16 (patch, backend)
 **Pipeline:** PASS (ruff ✓, migrations ✓, pytest ✓, mypy ✓)
+**Branch:** up to date with master
 **Risk:** Low
 **Code impact:** 47 files
 <smoke test guide>
 
 #### #2254 — nanoid 3.3.11→3.3.18 (patch, frontend)
 **Pipeline:** PASS (biome ✓, tsc ✓, stylelint ✓)
+**Branch:** up to date with master
 **Risk:** Low
 **Transitive via:** (direct dependency)
 **Code impact:** 3 files
@@ -266,3 +284,4 @@ Omit the "Failed PRs" and "Superseded" sections if they are empty.
    - Backend: `docker compose exec backend uv run ./run-pipeline.sh`
    - Frontend: `docker compose exec frontend yarn verify`
 8. **Write report to correct path.** Always write the final report to `docs/dependabot-report/dependabot-report-<YYYY-MM-DD>-<HHMM>.md`. Create the directory if it doesn't exist.
+9. **Always merge master into the PR branch.** Before running the pipeline, `git fetch origin master && git merge origin/master` then `git push origin HEAD`. If merge conflicts, abort and skip the PR.

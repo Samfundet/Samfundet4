@@ -17,11 +17,12 @@ The project includes an OpenCode skill that automates the dependabot resolution 
 ```
 
 The skill will, for each PR:
-1. Run the full CI pipeline locally in Docker (backend: ruff + migrations + pytest + mypy, frontend: biome + tsc + stylelint)
-2. Analyze which production code imports or uses the dependency
-3. Detect and close superseded PRs (same package, older version)
-4. Generate a per-dependency smoke-test guide with manual verification steps
-5. Write a comprehensive report to `docs/dependabot-report/dependabot-report-<date>-<time>.md`
+1. Merge the latest master into the PR branch and push the update to GitHub
+2. Run the full CI pipeline locally in Docker (backend: ruff + migrations + pytest + mypy, frontend: biome + tsc + stylelint)
+3. Analyze which production code imports or uses the dependency
+4. Detect and close superseded PRs (same package, older version)
+5. Generate a per-dependency smoke-test guide with manual verification steps
+6. Write a comprehensive report to `docs/dependabot-report/dependabot-report-<date>-<time>.md`
 
 The skill **never auto-merges** — you review the report and smoke-test before merging manually.
 
@@ -32,6 +33,7 @@ See `.opencode/skills/resolve-dependabot/SKILL.md` for the full workflow specifi
 - Generally, to SAVE TIME you should check and approve dependabot pull requests in the order of when the last one was merged. That is; approve and merge a dependabot pull request, then go on to the next one.
 
 - You will save time by running the pipeline and merging up to date master into the dependabot branch (change branch) locally. That is; not doing it in GitHub.
+> The `/dependabot` skill does this automatically — it merges master into each PR branch and pushes the update before running the pipeline.
 
 - Tell Web when you approve and merge dependabot pull requests so that they can rebuild their docker instance after they pull from the new version of the master branch.
 
