@@ -28,6 +28,7 @@ import { EventPreviewCard } from './components/EventPreviewCard';
 import { GraphicsStep } from './steps/GraphicsStep';
 import { InfoStep } from './steps/InfoStep';
 import { PaymentStep } from './steps/PaymentStep';
+import { SOCIAL_KEYS, SocialMediaStep } from './steps/SocialMediaStep';
 import { SummaryStep } from './steps/SummaryStep';
 import { TextStep } from './steps/TextStep';
 
@@ -67,9 +68,12 @@ export function EventCreatorAdminPage() {
     text: <TextStep form={form} />,
     info: <InfoStep form={form} eventCategoryOptions={eventCategoryOptions} locationOptions={locationOptions} />,
     payment: <PaymentStep form={form} ageLimitOptions={ageLimitOptions} />,
+    socialmedia: <SocialMediaStep form={form} />,
     graphics: <GraphicsStep form={form} />,
     summary: <SummaryStep form={form} />,
   };
+
+  const hasSocialMediaErrors = SOCIAL_KEYS.some((name) => !!form.formState.errors[name]);
 
   // Fetch event data using the event ID
   useEffect(() => {
@@ -96,7 +100,7 @@ export function EventCreatorAdminPage() {
 
   const formTabs: Tab[] = steps.map((step: EventCreatorStep) => {
     const custom = step.customIcon !== undefined;
-    const valid = step.validate(watchedValues) && !custom;
+    const valid = !custom && (step.key === 'socialmedia' ? !hasSocialMediaErrors : step.validate(watchedValues));
 
     const visited = visitedTabs[step.key] === true && !custom;
     const error = !valid && visited && !custom;
@@ -158,7 +162,9 @@ export function EventCreatorAdminPage() {
   }
 
   // Ready to save?
-  const allStepsComplete = steps.every((step) => step.validate(watchedValues));
+  const allStepsComplete = steps.every((step) =>
+    step.key === 'socialmedia' ? !hasSocialMediaErrors : step.validate(watchedValues),
+  );
 
   // ================================== //
   //          Navigation Logic          //
@@ -185,7 +191,7 @@ export function EventCreatorAdminPage() {
   ) : null;
 
   const onInvalid = (errors: FieldErrors<FormType>) => {
-    toast.error(KEY.event_invalid_form_error);
+    toast.error(t(KEY.event_invalid_form_error));
     const allVisited: Record<string, boolean> = {};
     for (const s of steps) allVisited[s.key] = true;
     setVisitedTabs(allVisited);
