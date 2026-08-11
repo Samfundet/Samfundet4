@@ -1,6 +1,8 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { format } from 'date-fns';
+import enUS from 'date-fns/locale/en-US';
+import nb from 'date-fns/locale/nb';
 import { forwardRef, useMemo } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -28,7 +30,8 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
     const [date, setDate] = useState<Date | null>(null);
     const [open, setOpen] = useState(false);
 
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const locale = i18n.language === 'nb' ? nb : enUS;
 
     const clickOutsideRef = useClickOutside<HTMLDivElement>(() => setOpen(false));
 
@@ -54,7 +57,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
           ref={ref}
         >
           <Icon icon="material-symbols:calendar-month-outline-rounded" />
-          {value ? format(value, 'PPP') : <span>{label ?? t(KEY.pick_a_date)}</span>}
+          {value ? format(value, 'PPP', { locale }) : <span>{label ?? t(KEY.pick_a_date)}</span>}
         </button>
         <div className={classNames(styles.popover, !open && styles.hidden)}>
           <MiniCalendar

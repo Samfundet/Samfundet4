@@ -17,7 +17,7 @@ type NavbarItemProps = {
   setExpandedDropdown: SetState<string>;
 };
 
-const iconDown = 'carbon:chevron-down';
+const iconDown = 'ion:chevron-down';
 
 export function NavbarItem({
   label,

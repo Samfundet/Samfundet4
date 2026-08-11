@@ -78,6 +78,9 @@ class CustomDjangoObjectPermissions(DjangoObjectPermissions):
 
 
 def has_required_permissions(request: Request, perms: list[str]) -> bool:
+    if not request.user or not request.user.is_authenticated:
+        return False
+
     role_models = [UserOrgRole, UserGangRole, UserGangSectionRole]
     for role_model in role_models:
         user_roles = role_model.objects.filter(user=request.user)
@@ -185,10 +188,11 @@ class RoleProtectedOrAnonReadOnlyObjectPermissions(RoleProtectedObjectPermission
     authenticated_users_only = False
 
 
-def filter_queryset_by_permissions(queryset: QuerySet, user: User, permission: str) -> QuerySet:
+def filter_queryset_by_permissions(queryset: QuerySet, user: User, permission: str, primary_key_field: str = 'id') -> QuerySet:
     """
     Filters a queryset based on user's permissions.
 
+    :param primary_key_field: The primary key field of the model, typically 'id' or 'slug'
     :param queryset: The original queryset to filter
     :param user: The user to check permissions for
     :param permission: Permission to check.
@@ -203,9 +207,9 @@ def filter_queryset_by_permissions(queryset: QuerySet, user: User, permission: s
         return queryset
 
     # If no model-level permission, filter by object-level permissions
-    permitted_ids = [obj.id for obj in queryset if user.has_perm(permission, obj)]
+    permitted_ids = [getattr(obj, primary_key_field) for obj in queryset if user.has_perm(permission, obj)]
 
-    return queryset.filter(id__in=permitted_ids)
+    return queryset.filter(**{f'{primary_key_field}__in': permitted_ids})
 
 
 class FeatureEnabled(BasePermission):

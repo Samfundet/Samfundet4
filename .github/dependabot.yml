@@ -12,7 +12,7 @@ updates:
     labels:
       - "dependencies"
       - "frontend"
-  - package-ecosystem: "pip"
+  - package-ecosystem: "uv"
     directory: "/backend"
     schedule:
       interval: "monthly"
