@@ -6,7 +6,6 @@ import { EventCrudButtons } from '~/Components';
 import { BuyEventTicket } from '~/Components/BuyEventTicket/BuyEventTicket';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { getEvent } from '~/api';
-import { BACKEND_DOMAIN } from '~/constants';
 import { useAuthContext } from '~/context/AuthContext';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';

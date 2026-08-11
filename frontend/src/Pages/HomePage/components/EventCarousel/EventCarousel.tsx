@@ -1,10 +1,3 @@
-import { Carousel, ImageCard } from '~/Components';
-import { BuyEventTicket } from '~/Components/BuyEventTicket/BuyEventTicket';
-import { BACKEND_DOMAIN } from '~/constants';
-import type { EventDto, HomePageElementDto } from '~/dto';
-import { reverse } from '~/named-urls';
-import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
 import { Carousel, EventCard, ImageCard } from '~/Components';
 import type { EventDto, HomePageElementDto } from '~/dto';
 import styles from './EventCarousel.module.scss';
