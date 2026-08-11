@@ -28,7 +28,7 @@ export type ProtectedRouteProps = ProtectedRouteBaseResolution | ProtectedRouteA
  * Router component, to be used inside element of a route, and page that is requested
  * Allows for setting up routes that requires authentication, permissions, and staff.
  *
- * This assumes auth is already loaded. If it's not, then auth will likely be null.
+ * Waits for auth to load before making redirect decisions.
  *
  * `resolution` decides required permissions are checked.
  * -  'default': model-level and object-level (uses `obj`)
@@ -44,8 +44,13 @@ export function ProtectedRoute({
   redirectPath = ROUTES.frontend.home,
   resolution = 'default',
 }: ProtectedRouteProps) {
-  const { user } = useAuthContext();
+  const { user, loading } = useAuthContext();
   const location = useLocation();
+
+  // Wait for auth to load before making redirect decisions
+  if (loading) {
+    return null;
+  }
 
   const authOk = authState === Boolean(user);
   const staffOk = !requiresStaff || Boolean(user?.is_staff);
