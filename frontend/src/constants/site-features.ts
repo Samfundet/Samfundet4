@@ -1,5 +1,3 @@
-import { appletCategories } from '~/PagesAdmin/AdminLayout/applets';
-import { ROUTES_FRONTEND } from '~/routes/frontend';
 import type { SiteFeature } from '~/types';
 
 const SITE_FEATURES: Record<SiteFeature, boolean> = {
