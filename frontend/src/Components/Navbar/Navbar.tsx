@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { Button, Link, ThemeSwitch } from '~/Components';
 import { getActiveRecruitments, logout } from '~/api';
 import { logoWhite } from '~/assets';
-import { firstEnabledAdminPath } from '~/constants/site-features';
+import { firstEnabledAdminPath, isSiteFeatureEnabled } from '~/constants/site-features';
 import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { RecruitmentDto } from '~/dto';
@@ -15,7 +15,8 @@ import { useDesktop, useScrollY } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { SAMF3_MEMBER_URL } from '~/routes/samf-three';
+import { ROUTES_OTHER } from '~/routes/other';
+import { getDisplayName } from '~/utils';
 import styles from './Navbar.module.scss';
 import { HamburgerMenu, LanguageButton, NavbarItem } from './components';
 
@@ -28,7 +29,7 @@ export function Navbar() {
   const [activeRecruitments, setActiveRecruitments] = useState<RecruitmentDto[]>();
   const navigate = useNavigate();
   const isDesktop = useDesktop();
-  const [cookies, setCookie, removeCookie] = useCookies();
+  const [cookies, setCookie, removeCookie] = useCookies(['impersonated_user_id']);
 
   // Each NavbarItem can have a dropdown menu.
   // We want only one of them to be extended at any time, therefore this parent component
@@ -46,6 +47,20 @@ export function Navbar() {
 
   const isDecember = useMemo(() => new Date().getMonth() === 11, []);
 
+  const userDisplayName = useMemo(() => {
+    if (!user) {
+      return '';
+    }
+    const display = getDisplayName(user);
+    if (display.length > 28) {
+      if (user.first_name.length <= 16) {
+        return user.first_name;
+      }
+      return user.username;
+    }
+    return display;
+  }, [user]);
+
   useEffect(() => {
     // Close expanded dropdown menu whenever mobile navbar is closed, or we switch from mobile to desktop, like when
     // switching from portrait to landscape on iPad.
@@ -55,6 +70,9 @@ export function Navbar() {
   }, [isMobileNavigation, isDesktop]);
 
   useEffect(() => {
+    if (!isSiteFeatureEnabled('recruitment')) {
+      return;
+    }
     getActiveRecruitments().then((response) => {
       setActiveRecruitments(response.data);
     });
@@ -67,7 +85,7 @@ export function Navbar() {
     <div className={styles.navbar_profile_button}>
       <Icon icon="material-symbols:person" />
       <Link url={firstEnabledAdminPath()} className={styles.profile_text}>
-        {user?.username}
+        {userDisplayName}
       </Link>
     </div>
   );
@@ -149,7 +167,7 @@ export function Navbar() {
   const profileButton = user && (
     <Link url={firstEnabledAdminPath()} className={classNames(styles.navbar_profile_button, styles.profile_text)}>
       <Icon icon={isImpersonate ? 'ri:spy-fill' : 'material-symbols:person'} />
-      {user.username}
+      {userDisplayName}
     </Link>
   );
 
@@ -188,11 +206,11 @@ export function Navbar() {
 
   const memberButton = (
     <Button
-      theme="samf"
+      theme="primary"
       rounded={true}
       className={isDesktop ? styles.login_button : styles.popup_internal_button}
       onClick={() => {
-        window.location.href = SAMF3_MEMBER_URL.medlem;
+        window.location.href = ROUTES_OTHER.samf_medlem;
         setIsMobileNavigation(false);
       }}
     >

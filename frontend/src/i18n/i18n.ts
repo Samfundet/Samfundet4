@@ -14,7 +14,7 @@ export const resources = {
   [LANGUAGES.EN]: { [defaultNS]: en, zod: translationEN },
 };
 
-const devSetting = process.env.NODE_ENV === 'development';
+const devSetting = import.meta.env.DEV;
 
 use(initReactI18next).init({
   lng: localStorage.getItem(LOCALSTORAGE_KEY) || LANGUAGES.NB,

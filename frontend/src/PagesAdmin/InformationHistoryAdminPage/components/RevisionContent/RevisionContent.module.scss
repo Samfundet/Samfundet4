@@ -1,0 +1,17 @@
+@use '../../../../styles/colors' as c;
+
+@use '../../../../styles/variables' as v;
+
+.revision {
+  margin-top: 2rem;
+}
+
+.revision_title {
+  font-size: v.$font-size-xl;
+  margin-bottom: 0.5rem;
+}
+
+.diff_unavailable {
+  margin: 1rem 0;
+  color: c.$gray-500;
+}

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { OPTIONAL_IMAGE } from '~/domain';
 import {
   EVENT_AGE_RESTRICTION,
   EVENT_BILLIG_ID,
@@ -27,7 +28,6 @@ import {
   EVENT_YOUTUBE_EMBED,
   EVENT_YOUTUBE_LINK,
 } from '~/schema/event';
-import { OPTIONAL_IMAGE } from '~/schema/samfImage';
 
 const event_custom_ticket = z.object({
   id: z.number(),

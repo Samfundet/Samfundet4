@@ -1,8 +1,10 @@
 import type { TFunction } from 'i18next';
 import { z } from 'zod';
 import {
+  MAX_AGE,
   MEMBERSHIP_ID_LENGTH_MAX,
   MEMBERSHIP_ID_LENGTH_MIN,
+  MIN_AGE,
   PASSWORD_LENGTH_MAX,
   PASSWORD_LENGTH_MIN,
   PHONENUMBER_REGEX,
@@ -23,6 +25,28 @@ export const PHONE_NUMBER = (t: TFunction) => z.string().regex(PHONENUMBER_REGEX
 export const FIRST_NAME = z.string();
 
 export const LAST_NAME = z.string();
+
+// Date of birth as an ISO date string (YYYY-MM-DD)
+export const DATE_OF_BIRTH = (t: TFunction) =>
+  z.string().refine((value) => {
+    if (value === '' || Number.isNaN(Date.parse(value))) {
+      return false;
+    }
+    const dob = new Date(value);
+    const today = new Date();
+    if (dob > today) {
+      return false;
+    }
+    let age = today.getFullYear() - dob.getFullYear();
+
+    // check if we're past the birthday in the current year
+    const pastBirthday =
+      today.getMonth() > dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() >= dob.getDate());
+    if (!pastBirthday) {
+      age -= 1;
+    }
+    return age >= MIN_AGE && age <= MAX_AGE;
+  }, t(KEY.invalid_date_of_birth));
 
 export const MEMBERSHIPNUMBER = z.string().min(MEMBERSHIP_ID_LENGTH_MIN).max(MEMBERSHIP_ID_LENGTH_MAX).regex(/^\d+$/);
 

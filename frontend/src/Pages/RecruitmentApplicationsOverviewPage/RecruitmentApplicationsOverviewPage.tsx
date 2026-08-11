@@ -15,7 +15,7 @@ export function RecruitmentApplicationsOverviewPage() {
     <Page>
       <div className={styles.container}>
         <div className={styles.top_container}>
-          <Button link={ROUTES.frontend.recruitment} className={styles.back_button} theme="green">
+          <Button link={ROUTES.frontend.recruitment} className={styles.back_button} theme="success">
             {t(KEY.common_go_back)}
           </Button>
           <h1 className={styles.header}>{t(KEY.recruitment_my_applications)}</h1>
