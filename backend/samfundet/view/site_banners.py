@@ -7,6 +7,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.permissions import AllowAny
 
 from django.db import models
+from django.http import JsonResponse
 
 from samfundet.serializers import SiteBannerSerializer
 from samfundet.models.site_banner import SiteBanner
@@ -20,9 +21,9 @@ class SiteBannerView(ReadOnlyModelViewSet):
         return SiteBanner.active().order_by('-start_at', '-created_at')
 
     @decorators.action(detail=False, methods=['get'], url_path='active')
-    def active(self, request: Request) -> Response:
+    def active(self, request: Request) -> Response | JsonResponse:
         banner = self.get_queryset().first()
         if banner is None:
-            return Response(None)
+            return JsonResponse(None, safe=False)
         serializer = self.get_serializer(banner)
         return Response(serializer.data)
