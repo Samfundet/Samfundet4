@@ -5,6 +5,8 @@ import type { EventDto, HomePageElementDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
+import { Carousel, EventCard, ImageCard } from '~/Components';
+import type { EventDto, HomePageElementDto } from '~/dto';
 import styles from './EventCarousel.module.scss';
 
 type EventCarouselProps = {
@@ -30,29 +32,9 @@ export function EventCarousel({ element, skeletonCount = 0 }: EventCarouselProps
 
   return (
     <Carousel className={wrapperClass} header={element.title_nb} spacing={spacing}>
-      {element.events.map((event: EventDto) => {
-        const url = reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } });
-        const event_title = dbT(event, 'title') ?? '';
-        const event_short_dsc = dbT(event, 'description_short') ?? '';
-
-        return (
-          <ImageCard
-            className={styles.image_card}
-            key={event.id}
-            id={event.id.toString()}
-            title={event_title}
-            subtitle={event.location}
-            date={event.start_dt}
-            imageUrl={BACKEND_DOMAIN + event.image_url}
-            description={event_short_dsc}
-            url={url}
-            ticket_type={event.ticket_type}
-            host={event.host}
-          >
-            {event.billig && <BuyEventTicket event={event} ticketSaleState={event.billig} />}
-          </ImageCard>
-        );
-      })}
+      {element.events.map((event: EventDto) => (
+        <EventCard event={event} key={event.id} />
+      ))}
     </Carousel>
   );
 }

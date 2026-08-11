@@ -5,14 +5,13 @@ import { Button, EventCrudButtons, IconButton, InputField, Link, TimeDisplay } f
 import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
-import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { COLORS } from '~/types';
-import { dbT } from '~/utils';
+import { dbT, imageUrl } from '~/utils';
 import styles from './EventsList.module.scss';
 
 type EventsListProps = {
@@ -93,7 +92,7 @@ export function EventsList({ events }: EventsListProps) {
         <div className={styles.event_container} key={event.id}>
           <ImageCard
             date={event.start_dt.toString()}
-            imageUrl={BACKEND_DOMAIN + event.image_url}
+            imageUrl={imageUrl(event.image, 'small')}
             id={event.id.toString()}
             title={dbT(event, 'title') ?? ''}
             subtitle={time_display}

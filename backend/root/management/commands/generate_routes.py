@@ -70,6 +70,7 @@ OUTPUT_FRONTEND_FILE = '../frontend/src/routes/backend.ts'
 DOCSTRING = '"""'
 YAPF_DISABLE = '# yapf: disable'
 OUTPUT_BACKEND_FILE = 'root/utils/routes.py'
+IGNORED_ROUTES = ['__resource']
 
 ENTRY_MSG = f"""
 {DOCSTRING}
@@ -117,7 +118,7 @@ def parse_url(url: str) -> str:
 class Command(BaseCommand):
     """Generate frontend routes"""
 
-    def handle(self, *args, **options) -> None:  # type: ignore
+    def handle(self, *args, **options) -> None:  # type: ignore # noqa: C901
         # Get all urls as json.
         urls_json: str = management.call_command('show_urls', format_style='json')
 
@@ -161,6 +162,13 @@ class Command(BaseCommand):
                     # Parse url to frontend route.
                     parsed_url = parse_url(url.url)
                     parsed_name = parse_name(url.name or parsed_url)  # 'samfundet:new_tjeneste' -> 'samfundet__new_tjeneste'
+
+                    # Skip React routes
+                    if parsed_name.replace('samfundet__', '').startswith(settings.REACT_ROUTE_PREFIX):
+                        continue
+
+                    if parsed_name in IGNORED_ROUTES:
+                        continue
 
                     # Skip duplicates
                     if parsed_name in seen_names:

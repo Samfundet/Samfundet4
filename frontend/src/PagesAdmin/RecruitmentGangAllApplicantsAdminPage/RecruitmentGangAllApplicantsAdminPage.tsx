@@ -137,7 +137,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
       <Text as="strong" size="m" className={styles.headerBold}>
         {dbT(gang, 'name')} - {dbT(recruitment, 'name')}
       </Text>
-      <Button theme="outlined" display="pill" onClick={() => downloadCSV()}>
+      <Button theme="secondary" display="pill" onClick={() => downloadCSV()}>
         {t(KEY.recrutment_export_to_csv)}
       </Button>
     </div>

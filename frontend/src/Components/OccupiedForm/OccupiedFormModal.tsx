@@ -18,7 +18,7 @@ export function OccupiedFormModal({ recruitmentId = 1, isButtonRounded = false }
 
   return (
     <>
-      <Button theme="samf" rounded={isButtonRounded} onClick={() => setOpen(true)}>
+      <Button theme="primary" rounded={isButtonRounded} onClick={() => setOpen(true)}>
         {t(KEY.occupied_show)}
       </Button>
 

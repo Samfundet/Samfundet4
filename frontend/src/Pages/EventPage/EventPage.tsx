@@ -12,8 +12,7 @@ import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { PERM } from '~/permissions';
 import { eventKeys } from '~/queryKeys';
-import { dbT } from '~/utils';
-import { hasPerm } from '~/utils';
+import { dbT, imageUrl } from '~/utils';
 import styles from './EventPage.module.scss';
 import { EventInformation } from './components/EventInformation/EventInformation';
 import { EventTable } from './components/EventTable';
@@ -34,7 +33,7 @@ export function EventPage() {
   return (
     <Page className={styles.container} loading={isLoading}>
       <div className={styles.image_wrapper}>
-        {event && <Image src={BACKEND_DOMAIN + event.image_url} className={styles.event_image} />}
+        {event && <Image src={imageUrl(event.image, 'large') ?? ''} className={styles.event_image} />}
       </div>
 
       {canChangeEvent && (
@@ -66,7 +65,7 @@ export function EventPage() {
               <p className={styles.text_short}>{dbT(event, 'description_short')}</p>
             </div>
             <div className={styles.description_long}>
-              <SamfMarkdown>{dbT(event, 'description_long')}</SamfMarkdown>
+              <SamfMarkdown markdown={dbT(event, 'description_long')} />
             </div>
           </div>
           <ExpandableHeader label={t(KEY.common_details)} className={styles.expandable_header}>

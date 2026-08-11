@@ -46,8 +46,8 @@ To create an interpreter, click the button on the toolbar shown above,
 then `Add new interpreter -> Add Local Interpreter...`.
 
 Select `Samfundet4/backend/.venv` as the location, and select the correct Python version as the Base interpreter. If
-your system's Python version differs from what Samfundet4 expects (3.11 at the time of writing this), then you can
-use [pyenv](https://github.com/pyenv/pyenv) to easily download another version. Then click OK to add it.
+your system's Python version differs from what Samfundet4 expects, then you can use [uv](https://docs.astral.sh/uv/) to
+easily download another version (`uv python install`). Then click OK to add it.
 
 ![Add interpreter](./assets/pycharm_add_interpreter.png)
 
@@ -55,8 +55,7 @@ After the interpreter has been created and selected, you can then install the de
 environment:
 
 ```bash
-~/Samfundet4 » source .venv/bin/activate
-(.venv) ~/Samfundet4 » poetry install
+~/Samfundet4/backend » uv sync
 ```
 
 ---
