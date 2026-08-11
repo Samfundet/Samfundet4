@@ -1,12 +1,15 @@
 import { Icon } from '@iconify/react';
 import { default as classNames, default as classnames } from 'classnames';
-import React, { type ChangeEvent, type ReactNode, useMemo } from 'react';
+import React, { type ChangeEvent, type ReactNode, useMemo, useState } from 'react';
 import styles from './Dropdown.module.scss';
 
 export type DropdownOption<T> = {
   label: string;
   value: T;
   disabled?: boolean;
+  // Renders consecutive options sharing a group inside an <optgroup>. Optiosn must already
+  // be ordered by group, so this does not work well with `sortAlphabetic`
+  group?: string;
 };
 
 type NullOption = {
@@ -20,6 +23,7 @@ type PrimitiveDropdownProps<T> = {
   options?: DropdownOption<T>[];
   label?: string | ReactNode;
   disabled?: boolean;
+  sortAlphabetic?: boolean;
   error?: boolean;
   disableIcon?: boolean;
   nullOption?: boolean | NullOption;
@@ -38,6 +42,30 @@ type UncontrolledDropdownProps<T> = PrimitiveDropdownProps<T> & {
 
 export type DropdownProps<T> = ControlledDropdownProps<T> | UncontrolledDropdownProps<T>;
 
+type IndexedOption<T> = DropdownOption<T> & { index: number };
+
+function renderOption<T>({ label, value, group, index, ...props }: IndexedOption<T>) {
+  return (
+    <option value={index} key={index} {...props}>
+      {label}
+    </option>
+  );
+}
+
+function groupOptions<T>(options: DropdownOption<T>[]): { group?: string; options: IndexedOption<T>[] }[] {
+  const segments: { group?: string; options: IndexedOption<T>[] }[] = [];
+
+  options.forEach((option, index) => {
+    const open = segments.at(-1);
+    if (!open || open.group !== option.group) {
+      segments.push({ group: option.group, options: [] });
+    }
+    segments.at(-1)?.options.push({ ...option, index });
+  });
+
+  return segments;
+}
+
 function DropdownInner<T>(
   {
     options = [],
@@ -50,17 +78,24 @@ function DropdownInner<T>(
     disabled = false,
     disableIcon = false,
     nullOption = false,
+    sortAlphabetic = false,
     error,
   }: DropdownProps<T>,
   ref: React.Ref<HTMLSelectElement>,
 ) {
   const isControlled = value !== undefined;
 
+  const [internalIndex, setInternalIndex] = useState(0);
+
   const finalOptions = useMemo<DropdownOption<T>[]>(() => {
     let opts = [...options];
 
+    if (sortAlphabetic) {
+      opts.sort((a, b) => a.label.localeCompare(b.label));
+    }
+
     if (!nullOption) {
-      return options;
+      return opts;
     }
 
     if (nullOption) {
@@ -72,21 +107,29 @@ function DropdownInner<T>(
     }
 
     return opts;
-  }, [options, nullOption]);
+  }, [options, nullOption, sortAlphabetic]);
 
   const selectedIndex = useMemo(() => {
     if (isControlled) {
-      return finalOptions.findIndex((opt) => opt.value === value);
+      const ret = finalOptions.findIndex((opt) => opt.value === value);
+      return ret > 0 ? ret : 0;
     }
     if (defaultValue !== undefined) {
-      return finalOptions.findIndex((opt) => opt.value === defaultValue);
+      const ret = finalOptions.findIndex((opt) => opt.value === defaultValue);
+      return ret > 0 ? ret : 0;
+    }
+    if (!isControlled) {
+      return internalIndex;
     }
     return 0; // fall back to selecting first element
-  }, [isControlled, value, defaultValue, finalOptions]);
+  }, [isControlled, value, defaultValue, finalOptions, internalIndex]);
 
   function handleChange(event: ChangeEvent<HTMLSelectElement>) {
     const index = Number.parseInt(event.currentTarget.value, 10);
     if (index >= 0 && index < finalOptions.length) {
+      if (!isControlled) {
+        setInternalIndex(index);
+      }
       onChange?.(finalOptions[index].value);
     }
   }
@@ -96,24 +139,25 @@ function DropdownInner<T>(
       {label}
       <select
         ref={ref}
-        className={classNames(
-          classNameSelect,
-          styles.samf_select,
-          !disableIcon && styles.icon_disabled,
-          error && styles.error,
-          nullOption && finalOptions[selectedIndex].value === finalOptions[0].value && styles.italic,
-        )}
+        className={classNames(classNameSelect, styles.samf_select, {
+          [styles.error]: error, // is defined by base-input mixin
+          [styles.italic]:
+            nullOption && finalOptions.length > 0 && finalOptions[selectedIndex].value === finalOptions[0].value,
+        })}
         onChange={handleChange}
         disabled={disabled}
         defaultValue={!isControlled ? selectedIndex : undefined}
         value={isControlled ? selectedIndex : undefined}
       >
-        {finalOptions.map(({ label, value, ...props }, index) => (
-          // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
-          <option value={index} key={index} {...props}>
-            {label}
-          </option>
-        ))}
+        {groupOptions(finalOptions).map((segment) =>
+          segment.group === undefined ? (
+            segment.options.map(renderOption)
+          ) : (
+            <optgroup label={segment.group} key={segment.group}>
+              {segment.options.map(renderOption)}
+            </optgroup>
+          ),
+        )}
       </select>
       {!disableIcon && (
         <div className={styles.arrow_container}>

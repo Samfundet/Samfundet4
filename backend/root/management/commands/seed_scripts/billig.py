@@ -2,13 +2,14 @@
 # Creates and seeds the billig database.
 #
 # This seed script is a bit different because billig_dev
-# is not managed by django, but uses a different sqlite3
+# is not managed by django, but uses a different postgres
 # database simulating the real billig in prod (cirkus).
 #
 #
 from __future__ import annotations
 
 import os
+import random
 from collections.abc import Iterable
 
 import django
@@ -17,7 +18,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from samfundet.models.event import Event, EventTicketType
-from samfundet.models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
+from samfundet.models.billig import BilligEvent, BilligPriceGroup, BilligTicketCard, BilligTicketGroup
 
 from .seed_billig import util
 
@@ -35,7 +36,7 @@ SEED_DIRECTORY = os.path.join(os.path.dirname(__file__), 'seed_billig')
 
 
 def get_schema() -> str:
-    # Generate schema (pass schema.sql to sqlite3)
+    # Generate schema (pass schema.sql to postgres)
     seed_schema = os.path.join(SEED_DIRECTORY, 'schema.sql')
     with open(seed_schema) as f:
         schema = f.read()
@@ -43,7 +44,7 @@ def get_schema() -> str:
 
 
 def create_db() -> tuple[bool, str]:
-    """Creates a new sqlite3 database with schema using shell scripts"""
+    """Creates a new postgres database with schema using shell scripts"""
 
     schema = get_schema()
     schema_queries = schema.split(';')
@@ -61,6 +62,9 @@ def create_db() -> tuple[bool, str]:
 
 def seed_tables() -> Iterable[tuple[int, str]]:
     events, tickets, prices = [], [], []
+    ticket_cards = [
+        BilligTicketCard(card=100000 + i, owner_member_id=i, membership_ends=timezone.now().date() + timezone.timedelta(days=365)) for i in range(1, 26)
+    ]
 
     # Create a few billig events that are not used
     events.extend([util.create_event() for _ in range(COUNT)])
@@ -76,9 +80,14 @@ def seed_tables() -> Iterable[tuple[int, str]]:
             # Create billig event
             billig_event = util.create_event(
                 name=f'Billig - {event.title_nb}',
+                event_location=event.location,
+                event_note=event.description_short_nb,
+                event_time=event.start_dt,
+                event_type='samfundet',
                 sale_from=event.start_dt - timezone.timedelta(days=90),
                 sale_to=event.start_dt + timezone.timedelta(minutes=30),
                 hidden=False,
+                ticket_fee=random.randint(20, 50),
             )
             events.append(billig_event)
 
@@ -98,11 +107,14 @@ def seed_tables() -> Iterable[tuple[int, str]]:
     BilligEvent.objects.bulk_create(events)
     yield 80, 'Saved events'
 
+    BilligTicketCard.objects.bulk_create(ticket_cards)
+    yield 85, 'Saved ticket cards'
+
     # Create and save ticket groups
     for event in events:
         tickets.extend(util.create_tickets(event))
     BilligTicketGroup.objects.bulk_create(tickets)
-    yield 90, 'Saved tickets'
+    yield 90, 'Saved ticket groups'
 
     # Create and save price groups
     for ticket in tickets:

@@ -1,59 +1,78 @@
-@use 'src/mixins' as *;
+@use '../../mixins' as m;
 
-@use 'src/constants' as *;
+@use '../../styles/colors' as c;
 
-.eventCard {
-  flex-basis: calc(50% - 1em);
-  margin-bottom: 2em;
-  background-color: $white;
-  box-shadow: 2px 2px 20px 5px rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
-  border: 1px solid $grey-4;
-  overflow: hidden;
+@use '../../styles/variables' as v;
 
-  @include for-tablet-down {
-    flex-basis: 100%;
-    margin-left: 0;
-    margin-right: 0;
-    border-radius: 0;
-    margin-bottom: 0.5em;
+$border-radius: v.$border-radius-lg;
+$width: 400px;
+$min-width: 330px;
+
+.event_card {
+  width: $width;
+  min-width: $min-width;
+  transition: box-shadow 0.1s ease-in-out;
+  border-radius: $border-radius;
+  background-color: v.$primary-light-bg;
+
+  &:hover {
+    box-shadow: 0 1px 12px 0 rgba(0, 0, 0, 0.04);
+  }
+
+  @include m.theme-dark {
+    background-color: v.$primary-dark-bg;
   }
 }
 
-.row {
-  padding: 0 1em 0 1em;
-  display: flex;
-  justify-content: space-between;
+.header {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #EFEFEF; // gray-50 is too light, gray-100 is too dark
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom: none;
+
+  @include m.theme-dark {
+    border-color: c.$gray-900;
+  }
 }
 
 .title {
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 1.75em;
-  color: $black;
-  &:hover {
-    text-decoration: underline;
+  display: block; // the purpose of this is to expand the clickable area of the title
+  font-size: v.$font-size-lg;
+  font-weight: v.$font-weight-semibold;
+  text-decoration: none;
+  color: c.$gray-950;
+
+  @include m.theme-dark {
+    color: c.$white-50;
   }
 }
 
-.img {
-  width: 100%;
-  height: 200px;
-  max-height: 200px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  cursor: pointer;
-  transition: 0.5s;
-  overflow: hidden;
+.footer {
+  padding: 16px;
+  border: 1px solid c.$gray-100;
+  border-top: none;
+  border-bottom-left-radius: $border-radius;
+  border-bottom-right-radius: $border-radius;
 
-  &:hover {
-    filter: brightness(105%);
-    transform: scale(1.02);
-    transition: 0.5s;
+  @include m.theme-dark {
+    border-color: c.$gray-800;
   }
 }
 
-.button {
-  margin-bottom: 2%;
+.time_detail {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.ticket_row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.ticket_price {
+  flex: 1;
 }

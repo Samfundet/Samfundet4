@@ -7,6 +7,7 @@ from rest_framework import routers
 
 from django.urls import path, include
 
+import samfundet.view.mdb_views
 import samfundet.view.user_views
 import samfundet.view.event_views
 import samfundet.view.sulten_views
@@ -17,6 +18,10 @@ from . import views
 from .view import recruitment_views
 
 # End: imports -----------------------------------------------------------------
+#
+# NOTE: This module contains ONLY backend API routes. It is mounted under the
+# 'api/' prefix in root/urls.py, so every route here is reachable at '/api/...'.
+# React frontend routes live in samfundet/routing/urls.py.
 router = routers.DefaultRouter()
 router.register('images', samfundet.view.general_views.ImageView, 'images')
 router.register('tags', samfundet.view.general_views.TagView, 'tags')
@@ -26,17 +31,14 @@ router.register('venues', samfundet.view.general_views.VenueView, 'venues')
 router.register('closed', samfundet.view.general_views.ClosedPeriodView, 'closedperiods')
 router.register('gangs', samfundet.view.general_views.GangView, 'gangs')
 router.register('gangsorganized', samfundet.view.general_views.GangTypeView, 'gangsorganized')
-router.register('information', samfundet.view.general_views.InformationPageView, 'information')
 router.register('blog', samfundet.view.general_views.BlogPostView, 'blog')
 router.register('user-preference', samfundet.view.user_views.UserPreferenceView, 'user_preference')
 router.register('saksdokument', samfundet.view.general_views.SaksdokumentView, 'saksdokument')
-router.register('profile', samfundet.view.user_views.ProfileView, 'profile')
 router.register('permissions', samfundet.view.user_views.PermissionView, 'permissions')
 router.register('menu', samfundet.view.sulten_views.MenuView, 'menu')
 router.register('menu-items', samfundet.view.sulten_views.MenuItemView, 'menu_items')
 router.register('food-preference', samfundet.view.sulten_views.FoodPreferenceView, 'food_preference')
 router.register('food-category', samfundet.view.sulten_views.FoodCategoryView, 'food_category')
-router.register('booking', samfundet.view.sulten_views.BookingView, 'booking')
 router.register('table', samfundet.view.sulten_views.TableView, 'table')
 router.register('textitem', samfundet.view.general_views.TextItemView, 'text_item')
 router.register('interview-rooms', views.InterviewRoomView, 'interview_rooms')
@@ -69,8 +71,10 @@ router.register('billig-ticket-group', billig_views.BilligTicketGroupReadOnlyMod
 
 app_name = 'samfundet'
 
+
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
+    path('', include('samfundet.infopages.urls')),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='samfundet:schema'), name='swagger_ui'),
     path('schema/redoc/', SpectacularRedocView.as_view(url_name='samfundet:schema'), name='redoc'),
@@ -99,6 +103,8 @@ urlpatterns = [
     ########## Lyche ##########
     path('check-reservation/', samfundet.view.sulten_views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
     path('reservations/', samfundet.view.sulten_views.ReservationCreateView.as_view(), name='reservation-create'),
+    ######## MDB ########
+    path('mdb/connect', samfundet.view.mdb_views.ConnectToMDBView.as_view(), name='mdb_connect'),
     ########## Recruitment ##########
     path('active-recruitments/', views.ActiveRecruitmentsView.as_view(), name='active_recruitments'),
     path('recruitment-positions/', views.RecruitmentPositionsPerRecruitmentView.as_view(), name='recruitment_positions'),

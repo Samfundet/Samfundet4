@@ -1,1 +1,0 @@
-export { SaksdokumenterPage } from './SaksdokumenterPage';

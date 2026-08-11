@@ -297,6 +297,7 @@ class TestRecruitmentForRecruiterView:
         response = fixture_rest_client.delete(self.detail_url)
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_user_with_view_permission_in_correct_org(self, fixture_rest_client, fixture_user, user_org_role_factory):
         """Test that users with view permission in the correct org can view but not modify."""
         user_org_role_factory(user=fixture_user, organization=self.org1, permissions=SAMFUNDET_VIEW_RECRUITMENT)
@@ -328,6 +329,7 @@ class TestRecruitmentForRecruiterView:
         response = fixture_rest_client.delete(self.detail_url)
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_user_with_change_permission_in_correct_org(self, fixture_rest_client, fixture_user, user_org_role_factory):
         """Test that users with change permission in the correct org can modify but not delete."""
         user = fixture_user
@@ -386,6 +388,7 @@ class TestRecruitmentForRecruiterView:
         response = fixture_rest_client.delete(self.detail_url)
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_user_with_delete_permission_in_correct_org(self, fixture_rest_client, fixture_user, user_org_role_factory):
         """Test that users with delete permission in the correct org can delete."""
         user = fixture_user
@@ -400,6 +403,7 @@ class TestRecruitmentForRecruiterView:
         response = fixture_rest_client.get(self.detail_url)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_user_with_add_permission_in_correct_org(self, fixture_rest_client, fixture_user, user_org_role_factory):
         """Test that users with add permission can create new objects."""
         user = fixture_user
@@ -423,6 +427,7 @@ class TestRecruitmentForRecruiterView:
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data['name_nb'] == 'New Recruitment'
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_user_with_role_in_wrong_org_has_no_permission(self, fixture_rest_client, fixture_user, user_org_role_factory):
         """Test that users with roles in wrong org do not have permission."""
         user = fixture_user
@@ -451,6 +456,7 @@ class TestRecruitmentForRecruiterView:
         response = fixture_rest_client.delete(self.detail_url)
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_gang_roles_irrelevant_for_recruitment_view(self, fixture_rest_client, fixture_user, user_gang_role_factory):
         """Test that gang roles do not grant permissions for recruitment view."""
         user = fixture_user
@@ -466,6 +472,7 @@ class TestRecruitmentForRecruiterView:
         response = fixture_rest_client.get(self.detail_url)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_section_roles_irrelevant_for_recruitment_view(self, fixture_rest_client, fixture_user, user_gang_section_role_factory):
         """Test that section roles do not grant permissions for recruitment view."""
         user = fixture_user
@@ -481,6 +488,7 @@ class TestRecruitmentForRecruiterView:
         response = fixture_rest_client.get(self.detail_url)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_user_with_all_permissions(self, fixture_rest_client, fixture_user, user_org_role_factory):
         """Test that users with all permissions can perform all operations."""
         user = fixture_user

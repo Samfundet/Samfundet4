@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from . import (
+    mdb,
     menu,
     gangs,
     merch,
@@ -38,6 +39,7 @@ from . import (
 # It can also yield a text description of the current state (see example.py)
 
 SEED_SCRIPTS = [
+    ('mdb', mdb.seed),
     ('campus', campus.seed),
     ('users', superusers.seed),
     ('images', images.seed),

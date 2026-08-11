@@ -30,6 +30,7 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
 
   const rows = data.map((application) => {
     const applicantName = `${application.user.first_name} ${application.user.last_name}`;
+    const applicationComment = application.comment;
     return {
       cells: [
         {
@@ -63,7 +64,7 @@ export function ProcessedApplicants({ data, type, revertStateFunction }: Process
           content: (
             <Button
               display="pill"
-              theme="outlined"
+              theme="secondary"
               onClick={() => revertStateFunction(application.id, { recruiter_status: 0 })}
             >
               {t(KEY.recruitment_revert_status)}

@@ -1,5 +1,7 @@
 import type { Dispatch, ReactNode, SetStateAction } from 'react';
-import type { themeToStyleMap } from '~/Components/Button/utils';
+import type { UIMatch } from 'react-router';
+import type { buttonThemes } from '~/Components/Button/utils';
+import type { LinkTarget } from '~/Components/Link';
 import type { KV } from '~/constants';
 /** Module for global generic types. */
 
@@ -14,9 +16,6 @@ export type KeyValueMap = Map<string, string>;
 
 /** Type for the constant of KeyValue keys in the database. */
 export type Key = (typeof KV)[keyof typeof KV];
-
-/** Synonym for ReactNode, but easier to remember. */
-export type Children = ReactNode;
 
 /**Duplicate of colors and hex from _constants.scss */
 export const COLORS = {
@@ -102,6 +101,9 @@ export type ColorValue = (typeof COLORS)[ColorKey];
 /** Easy type when adding setStates to Context. */
 export type SetState<T> = Dispatch<SetStateAction<T>>;
 
+// biome-ignore lint/suspicious/noExplicitAny: required to be able to use it everywhere :-)
+export type DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K> : never;
+
 /** Days */
 export type Day = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 export const ALL_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -132,18 +134,34 @@ export type EventTicketTypeValue = (typeof EventTicketType)[keyof typeof EventTi
 export const ALL_TICKET_TYPES: EventTicketTypeValue[] = [
   EventTicketType.FREE,
   EventTicketType.INCLUDED,
-  EventTicketType.BILLIG,
   EventTicketType.REGISTRATION,
+  EventTicketType.BILLIG,
   EventTicketType.CUSTOM,
 ];
 export const PAID_TICKET_TYPES: EventTicketTypeValue[] = [
-  EventTicketType.BILLIG,
   EventTicketType.REGISTRATION,
+  EventTicketType.BILLIG,
   EventTicketType.CUSTOM,
 ];
 
 export const EventCategory = {
-  SAMFUNDET_MEETING: 'samfundsmote',
+  ART: 'art',
+  COURSE: 'course',
+  DJ: 'dj',
+  EXCENTERAFTEN: 'excenteraften',
+  FOOTBALL_MATCH: 'football_match',
+  HAPPENING: 'happening',
+  LUKA_EVENT: 'luka_event',
+  MEETING: 'meeting',
+  MOVIE: 'movie',
+  MUSIC: 'music',
+  PERFORMANCE: 'performance',
+  SHOW: 'show',
+  THEATER: 'theater',
+  THEME_PARTY: 'theme_party',
+  UKA_EVENT: 'uka_event',
+  PARTY_MEETING: 'party_meeting',
+  SAMFUNDET_MEETING: 'samfundet_meeting',
   CONCERT: 'concert',
   DEBATE: 'debate',
   QUIZ: 'quiz',
@@ -156,6 +174,39 @@ export type EventCategoryValue = (typeof EventCategory)[keyof typeof EventCatego
 export type CalendarMarker = {
   date: Date;
   className?: string;
+};
+
+export type SiteFeature =
+  | 'events'
+  | 'images'
+  | 'openingHours'
+  | 'closedHours'
+  | 'users'
+  | 'roles'
+  | 'gangs'
+  | 'information'
+  | 'documents'
+  | 'recruitment'
+  | 'sulten'
+  | 'faq'
+  // Frontend-exclusive features
+  | 'venues'
+  | 'membership';
+
+export type AdminApplet = {
+  title_en: string;
+  title_nb: string;
+  perm?: string;
+  icon: string;
+  url?: string;
+  target?: LinkTarget;
+  feature?: SiteFeature; // hidden in control panel if not enabled
+};
+
+export type AdminAppletCategory = {
+  title_en: string;
+  title_nb: string;
+  applets: AdminApplet[];
 };
 
 /*Names must be equal to what is found in the database*/
@@ -173,7 +224,7 @@ export type OrganizationTheme = {
   pagePrimaryColor: string;
   pageSecondaryColor: string;
   pageTertiaryColor?: string;
-  buttonTheme: keyof typeof themeToStyleMap;
+  buttonTheme: keyof typeof buttonThemes;
 };
 
 // Recruitment mappings
@@ -223,9 +274,23 @@ export interface PageNumberPaginationType<T> {
   results: T[];
 }
 
+export interface EventsPaginationType<T> extends PageNumberPaginationType<T> {
+  categories?: Array<[string, string]> | string[];
+  locations?: string[];
+  ticket_types?: Array<[string, string]> | string[];
+}
+
 /* For DRF pagination, see pagination.py */
 export interface CursorPaginatedResponse<T> {
   next: string | null; // URL or cursor for next page
   previous: string | null; // URL or cursor for previous page
   results: T[]; // Current page results
+}
+
+export type HandleWithCrumb = {
+  crumb: (match: UIMatch, data?: unknown) => ReactNode;
+};
+
+export interface MatchWithCrumb extends UIMatch {
+  handle: HandleWithCrumb;
 }

@@ -1,11 +1,11 @@
 import classNames from 'classnames';
-import type { Children } from '~/types';
+import type { ReactNode } from 'react';
 import { SamfundetLogoSpinner } from '../SamfundetLogoSpinner';
 import styles from './Page.module.scss';
 
 type PageProps = {
   className?: string;
-  children?: Children;
+  children?: ReactNode;
   loading?: boolean;
 };
 

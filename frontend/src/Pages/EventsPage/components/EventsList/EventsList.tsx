@@ -5,14 +5,13 @@ import { Button, IconButton, InputField, Link, TimeDisplay } from '~/Components'
 import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
-import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { COLORS } from '~/types';
-import { dbT } from '~/utils';
+import { dbT, imageUrl } from '~/utils';
 import styles from './EventsList.module.scss';
 
 type EventsListProps = {
@@ -20,7 +19,7 @@ type EventsListProps = {
 };
 
 export function EventsList({ events }: EventsListProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [tableView, setTableView] = useState(false);
   const [query, setQuery] = useState('');
   const isDesktop = useDesktop();
@@ -33,13 +32,20 @@ export function EventsList({ events }: EventsListProps) {
     { content: t(KEY.common_venue), sortable: true },
     { content: t(KEY.category), sortable: true },
     { content: t(KEY.admin_organizer), sortable: true },
-    t(KEY.common_buy),
+    { content: t(KEY.common_buy), sortable: true },
   ];
 
   // TODO debounce and move header/filtering stuff to a separate component
   function filteredEvents() {
     const allEvents = Object.keys(events).flatMap((k: string) => events[k]);
-    return eventQuery(allEvents, query);
+    const normalizedSearch = query.trim().toLowerCase();
+    const keywords = normalizedSearch.split(' ');
+
+    if (query === '') return eventQuery(allEvents, query);
+    return allEvents.filter((event) => {
+      const title = (dbT(event, 'title', i18n.language) as string)?.toLowerCase() ?? '';
+      return keywords.every((kw) => title.includes(kw));
+    });
   }
 
   // TODO improve table view for events
@@ -78,7 +84,7 @@ export function EventsList({ events }: EventsListProps) {
         <div className={styles.event_container} key={event.id}>
           <ImageCard
             date={event.start_dt.toString()}
-            imageUrl={BACKEND_DOMAIN + event.image_url}
+            imageUrl={imageUrl(event.image, 'small')}
             title={dbT(event, 'title') ?? ''}
             subtitle={time_display}
             description={dbT(event, 'description_short') ?? ''}
@@ -130,7 +136,7 @@ export function EventsList({ events }: EventsListProps) {
         {/* TODO translate */}
         <div className={styles.button_row}>
           {getButton(t(KEY.common_card), 'material-symbols:grid-view-rounded', () => setTableView(false), !tableView)}
-          {getButton(t(KEY.common_table), 'material-symbols:view-list', () => setTableView(true), tableView)}
+          {getButton(t(KEY.common_sheet), 'material-symbols:view-list', () => setTableView(true), tableView)}
         </div>
       </div>
 

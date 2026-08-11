@@ -22,7 +22,7 @@ from samfundet.models.event import (
 from samfundet.models.general import Venue
 
 # Number of events
-COUNT = 50
+COUNT = 100
 
 # Event time as offset plus/minus today
 DAY_RANGE = 365 // 2
@@ -196,7 +196,7 @@ def do_seed():  # noqa: C901
                 **metadata_this,
                 start_dt=event_start_dt,
                 end_dt=event_end_dt,
-                visibility_from_dt=event_visibility_from_dt - timezone.timedelta(days=random.randint(7, 21)),
+                visibility_from_dt=event_visibility_from_dt - timezone.timedelta(days=random.randint(7, 35)),
                 visibility_to_dt=event_visibility_to_dt,
                 event_group=group,
                 capacity=capacity,

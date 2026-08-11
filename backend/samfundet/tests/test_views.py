@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import time
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from datetime import date
+from datetime import time as dt_time
 
 import pytest
+import freezegun
 from guardian.shortcuts import assign_perm
 
 from rest_framework import status
@@ -28,7 +30,6 @@ from samfundet.models.general import (
     TextItem,
     Reservation,
     Organization,
-    InformationPage,
 )
 from samfundet.models.recruitment import (
     Interview,
@@ -60,6 +61,7 @@ class TestUserViews:
         'firstname': 'kebab',
         'lastname': 'mannen',
         'phone_number': '48278994',
+        'date_of_birth': '2000-01-01',
         'password': 'jeglikerkebab',
     }
 
@@ -84,6 +86,7 @@ class TestUserViews:
         response: Response = fixture_rest_client.post(path=url)
         assert status.is_success(code=response.status_code)
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_user(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
 
@@ -104,11 +107,72 @@ class TestUserViews:
         assert data['username'] == fixture_user.username
         # All users should have a UserPreference.
         assert data['user_preference']['id'] == fixture_user.userpreference.id
-        # All users should have a Profile.
-        assert data['profile']['id'] == fixture_user.profile.id
         # Check permission in list.
         assert some_perm_str in data['permissions']
 
+    def test_update_user(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__user)
+        data = {'first_name': 'Kebab', 'last_name': 'Mannen', 'phone_number': '48278994'}
+
+        ### Act ###
+        response: Response = fixture_rest_client.patch(path=url, data=data)
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        fixture_user.refresh_from_db()
+        assert fixture_user.first_name == 'Kebab'
+        assert fixture_user.last_name == 'Mannen'
+        assert fixture_user.phone_number == '48278994'
+
+    def test_update_user_disallowed_blank_fields(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_user.first_name = 'Kebab'
+        fixture_user.last_name = 'Mannen'
+        fixture_user.phone_number = '48278994'
+        fixture_user.save()
+
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__user)
+        data = {'first_name': '', 'last_name': '', 'phone_number': ''}
+
+        ### Act ###
+        response: Response = fixture_rest_client.patch(path=url, data=data, format='json')
+        res = response.json()
+
+        ### Assert ###
+        assert status.is_client_error(code=response.status_code)
+        fixture_user.refresh_from_db()
+        assert 'first_name' in res
+        assert 'last_name' in res
+        assert 'phone_number' in res
+        assert 'This field may not be blank.' in res['first_name']
+        assert 'This field may not be blank.' in res['last_name']
+        assert 'This field may not be blank.' in res['phone_number']
+
+    def test_update_user_forbidden_for_mdb_linked_user(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_user.first_name = 'Kebab'
+        fixture_user.mdb_medlem_id = 1000
+        fixture_user.save()
+
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__user)
+        data = {'first_name': 'Falafel'}
+
+        ### Act ###
+        response: Response = fixture_rest_client.patch(path=url, data=data, format='json')
+        res = response.json()
+
+        ### Assert ###
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        fixture_user.refresh_from_db()
+        assert fixture_user.first_name == 'Kebab'
+        assert 'detail' in res
+        assert 'Profile details are automatically synced from MDB and cannot be edited here.' in res['detail']
+
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_users(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_user)
@@ -120,6 +184,7 @@ class TestUserViews:
         ### Assert ###
         assert status.is_success(code=response.status_code)
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_groups(self, fixture_rest_client: APIClient, fixture_user: User):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_user)
@@ -131,6 +196,7 @@ class TestUserViews:
         ### Assert ###
         assert status.is_success(code=response.status_code)
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_register_clean(self, fixture_rest_client: APIClient):
         ### Arrange ###
         url = reverse(routes.samfundet__register)
@@ -199,6 +265,7 @@ class TestUserViews:
             'phone_number': '48278995',
             'firstname': 'kebab',
             'lastname': 'mannen',
+            'date_of_birth': '2000-01-01',
             'password': 'jeglikerkebab',
         }
 
@@ -217,111 +284,166 @@ class TestUserViews:
             assert RegisterSerializer.ALREADY_EXISTS_MESSAGE in data[field]
 
 
-class TestInformationPagesView:
-    def test_get_informationpage(
+@pytest.mark.django_db
+class TestVenueOpenViews:
+    # Assuming the route is named like this based on other tests
+    url = reverse(routes.samfundet__venues_open_venues)
+
+    def _create_venue(self, slug: str, **kwargs: Any) -> Venue:
+        """Helper to create a Venue object with minimal required fields and default opening hours."""
+        zero_time = dt_time(0, 0, 0)
+        default_data = {
+            'name': f'Venue {slug}',
+            'slug': slug,
+            # Set all opening/closing to default (8:00/20:00) or 00:00/00:00 if closed
+            'opening_monday': dt_time(8, 0),
+            'closing_monday': dt_time(20, 0),
+            'opening_tuesday': dt_time(8, 0),
+            'closing_tuesday': dt_time(20, 0),
+            'opening_wednesday': dt_time(8, 0),
+            'closing_wednesday': dt_time(20, 0),
+            'opening_thursday': dt_time(8, 0),
+            'closing_thursday': dt_time(20, 0),
+            'opening_friday': dt_time(8, 0),
+            'closing_friday': dt_time(20, 0),
+            'opening_saturday': dt_time(8, 0),
+            'closing_saturday': dt_time(1, 0),
+            'opening_sunday': zero_time,
+            'closing_sunday': zero_time,  # closed on Sunday
+        }
+        default_data.update(kwargs)
+        return Venue.objects.create(**default_data)
+
+    @pytest.mark.parametrize(
+        'day_of_week, open_slug, closed_slug, test_date',
+        [
+            ('monday', 'open_mon', 'closed_mon', '2023-10-23 12:00:00'),
+            ('thursday', 'open_thu', 'closed_thu', '2023-10-26 12:00:00'),
+            ('sunday', 'open_sun', 'closed_sun', '2023-10-29 12:00:00'),
+        ],
+    )
+    def test_open_venues_filtering(
         self,
         fixture_rest_client: APIClient,
-        fixture_user: User,
-        fixture_informationpage: InformationPage,
+        day_of_week: str,
+        open_slug: str,
+        closed_slug: str,
+        test_date: str,
     ):
-        ### Arrange ###
-        url = reverse(
-            routes.samfundet__information_detail,
-            kwargs={'pk': fixture_informationpage.slug_field},
+        """
+        Test that only venues with non-00:00-00:00 opening/closing hours for the
+        current day are returned.
+        """
+        zero_time = dt_time(0, 0, 0)
+        open_time = dt_time(10, 0, 0)
+        close_time = dt_time(18, 0, 0)
+
+        # 1. Venue that is explicitly open
+        open_venue_kwargs = {
+            'slug': open_slug,
+            f'opening_{day_of_week}': open_time,
+            f'closing_{day_of_week}': close_time,
+        }
+        self._create_venue(**open_venue_kwargs)
+
+        # 2. Venue that is explicitly closed (00:00 - 00:00)
+        closed_venue_kwargs = {
+            'slug': closed_slug,
+            f'opening_{day_of_week}': zero_time,
+            f'closing_{day_of_week}': zero_time,
+        }
+        self._create_venue(**closed_venue_kwargs)
+
+        # 3. Venue open on a different day (should be treated as closed on the test day if explicitly set to 0:00-0:00)
+        other_slug = 'other_day'
+        other_day_kwargs = {
+            'slug': other_slug,
+            'opening_tuesday': open_time,
+            'closing_tuesday': close_time,
+            f'opening_{day_of_week}': zero_time,
+            f'closing_{day_of_week}': zero_time,
+        }
+        self._create_venue(**other_day_kwargs)
+
+        # Use freezegun to set the current day and time
+        with freezegun.freeze_time(test_date):
+            # Act
+            response: Response = fixture_rest_client.get(path=self.url)
+
+            # Assert
+            assert status.is_success(code=response.status_code)
+            data = response.json()
+
+            # We expect only the venue with non-zero opening hours to be included
+            assert len(data) == 1
+            assert data[0]['slug'] == open_slug
+            # Check the returned times for the open venue
+            assert data[0][f'opening_{day_of_week}'] == open_time.strftime('%H:%M:%S')
+            assert data[0][f'closing_{day_of_week}'] == close_time.strftime('%H:%M:%S')
+
+    def test_open_venues_no_venues(self, fixture_rest_client: APIClient):
+        """Test with no venues in the database."""
+        with freezegun.freeze_time('2023-10-23 12:00:00'):  # Monday
+            # Act
+            response: Response = fixture_rest_client.get(path=self.url)
+
+            # Assert
+            assert status.is_success(code=response.status_code)
+            assert len(response.data) == 0
+
+    def test_open_venues_not_excluded_when_one_time_is_non_zero(self, fixture_rest_client: APIClient):
+        """
+        Test that a venue is included if only one of the opening or closing times is 00:00:00.
+        The view logic excludes ONLY when opening_day=00:00:00 AND closing_day=00:00:00.
+        """
+        open_venue_slug = 'partial_zero'
+
+        # Create a venue where opening is 00:00:00 but closing is NOT 00:00:00
+        self._create_venue(
+            slug=open_venue_slug,
+            opening_monday=dt_time(0, 0, 0),
+            closing_monday=dt_time(10, 0, 0),  # Non-zero closing time
         )
 
-        ### Act ###
-        response: Response = fixture_rest_client.get(path=url)
-        data = response.json()
+        with freezegun.freeze_time('2023-10-23 12:00:00'):  # Monday
+            # Act
+            response: Response = fixture_rest_client.get(path=self.url)
 
-        ### Assert ###
-        assert status.is_success(code=response.status_code)
-        assert data['slug_field'] == fixture_informationpage.slug_field
+            # Assert
+            assert status.is_success(code=response.status_code)
+            data = response.json()
 
-    def test_get_informationpages(
-        self,
-        fixture_rest_client: APIClient,
-        fixture_user: User,
-        fixture_informationpage: InformationPage,
-    ):
-        ### Arrange ###
-        url = reverse(routes.samfundet__information_list)
+            # Expected to be included
+            assert len(data) == 1
+            assert data[0]['slug'] == open_venue_slug
 
-        ### Act ###
-        response: Response = fixture_rest_client.get(path=url)
-        data = response.json()
+    def test_open_venues_late_night_shows_previous_day(self, fixture_rest_client: APIClient):
+        """
+        Test that accessing the API at 03:00 AM on Sunday returns the venue
+        based on Saturday's hours (03:00 - 4h = Saturday 23:00).
+        """
+        slug = 'saturday_night_venue'
+        self._create_venue(slug=slug)
 
-        ### Assert ###
-        assert status.is_success(code=response.status_code)
-        assert data[0]['slug_field'] == fixture_informationpage.slug_field
+        with freezegun.freeze_time('2023-10-29 03:00:00'):
+            response = fixture_rest_client.get(self.url)
 
-    def test_create_informationpage(self, fixture_rest_client: APIClient, fixture_user: User):
-        ### Arrange ###
-        fixture_rest_client.force_authenticate(user=fixture_user)
-        url = reverse(routes.samfundet__information_list)
+            assert status.is_success(response.status_code)
+            data = response.json()
 
-        post_data = {'slug_field': 'lol', 'title_en': 'lol'}
-        response: Response = fixture_rest_client.post(path=url, data=post_data)
+            assert len(data) == 1
+            assert data[0]['slug'] == slug
 
-        assert response.status_code == status.HTTP_403_FORBIDDEN
-        assign_perm(permissions.SAMFUNDET_ADD_INFORMATIONPAGE, fixture_user)
+            # 4. Verify the opening times correspond to Saturday (not Sunday)
+            assert data[0]['opening_saturday'] == '08:00:00'
+            assert data[0]['closing_saturday'] == '01:00:00'
 
-        del fixture_user._user_perm_cache
-        del fixture_user._perm_cache
-        response: Response = fixture_rest_client.post(path=url, data=post_data)
-        assert status.is_success(code=response.status_code)
-
-        data = response.json()
-        assert data['slug_field'] == post_data['slug_field']
-
-    def test_delete_informationpage(
-        self,
-        fixture_rest_client: APIClient,
-        fixture_user: User,
-        fixture_informationpage: InformationPage,
-    ):
-        fixture_rest_client.force_authenticate(user=fixture_user)
-        url = reverse(
-            routes.samfundet__information_detail,
-            kwargs={'pk': fixture_informationpage.slug_field},
-        )
-        response: Response = fixture_rest_client.delete(path=url)
-
-        assert response.status_code == status.HTTP_403_FORBIDDEN
-        assign_perm(permissions.SAMFUNDET_DELETE_INFORMATIONPAGE, fixture_user)
-        del fixture_user._user_perm_cache
-        del fixture_user._perm_cache
-        response: Response = fixture_rest_client.delete(path=url)
-
-        assert status.is_success(code=response.status_code)
-
-    def test_put_informationpage(
-        self,
-        fixture_rest_client: APIClient,
-        fixture_user: User,
-        fixture_informationpage: InformationPage,
-    ):
-        fixture_rest_client.force_authenticate(user=fixture_user)
-        url = reverse(
-            routes.samfundet__information_detail,
-            kwargs={'pk': fixture_informationpage.slug_field},
-        )
-        put_data = {'title_nb': 'lol'}
-        response: Response = fixture_rest_client.put(path=url, data=put_data)
-        assert response.status_code == status.HTTP_403_FORBIDDEN
-
-        assign_perm(permissions.SAMFUNDET_CHANGE_INFORMATIONPAGE, fixture_user)
-        del fixture_user._user_perm_cache
-        del fixture_user._perm_cache
-        response: Response = fixture_rest_client.put(path=url, data=put_data)
-        assert status.is_success(code=response.status_code)
-
-        data = response.json()
-
-        assert data['title_nb'] == put_data['title_nb']
+            # Verify Sunday is explicitly closed (00:00:00), confirming we didn't fetch Sunday logic
+            assert data[0]['opening_sunday'] == '00:00:00'
 
 
 class TestMerchView:
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_merch(
         self,
         fixture_rest_client: APIClient,
@@ -339,6 +461,7 @@ class TestMerchView:
         assert status.is_success(code=response.status_code)
         assert data['id'] == fixture_merch.id
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_merchs(
         self,
         fixture_rest_client: APIClient,
@@ -356,6 +479,7 @@ class TestMerchView:
         assert status.is_success(code=response.status_code)
         assert data[0]['id'] == fixture_merch.id
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_create_merch(
         self,
         fixture_rest_client: APIClient,
@@ -388,6 +512,7 @@ class TestMerchView:
         assert data['name_nb'] == post_data['name_nb']
         Merch.objects.get(id=data['id']).delete()
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_delete_merch(
         self,
         fixture_rest_client: APIClient,
@@ -406,6 +531,7 @@ class TestMerchView:
 
         assert status.is_success(code=response.status_code)
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_put_merch(
         self,
         fixture_rest_client: APIClient,
@@ -496,6 +622,7 @@ class TestVersionModel:
 
 
 class TestBlogPostView:
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_blogpost(
         self,
         fixture_rest_client: APIClient,
@@ -513,6 +640,7 @@ class TestBlogPostView:
         assert status.is_success(code=response.status_code)
         assert data['id'] == fixture_blogpost.id
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_blogposts(
         self,
         fixture_rest_client: APIClient,
@@ -530,6 +658,7 @@ class TestBlogPostView:
         assert status.is_success(code=response.status_code)
         assert data[0]['id'] == fixture_blogpost.id
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_create_blogpost(self, fixture_rest_client: APIClient, fixture_user: User, fixture_image: Image):
         ### Arrange ###
         fixture_rest_client.force_authenticate(user=fixture_user)
@@ -549,6 +678,7 @@ class TestBlogPostView:
         data = response.json()
         assert data['title_nb'] == post_data['title_nb']
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_delete_blogpost(
         self,
         fixture_rest_client: APIClient,
@@ -567,6 +697,7 @@ class TestBlogPostView:
 
         assert status.is_success(code=response.status_code)
 
+    @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_put_blogpost(
         self,
         fixture_rest_client: APIClient,
@@ -769,6 +900,7 @@ class TestAssignGroupView:
 # =============================== #
 
 
+@pytest.mark.skip(reason='This feature is temporarily disabled.')
 def test_get_recruitments(
     fixture_rest_client: APIClient,
     fixture_superuser: User,

@@ -1,11 +1,11 @@
 import classNames from 'classnames';
-import type { Children } from '~/types';
+import type { ReactNode } from 'react';
 import styles from './SultenPage.module.scss';
 
 type PageProps = {
   classNameInner?: string;
   classNameOuter?: string;
-  children?: Children;
+  children?: ReactNode;
 };
 
 /**

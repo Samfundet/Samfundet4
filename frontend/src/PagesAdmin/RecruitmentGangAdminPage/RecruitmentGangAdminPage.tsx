@@ -123,7 +123,8 @@ export function RecruitmentGangAdminPage() {
     };
   });
 
-  const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
+  // const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
+  const backendUrl = undefined;
   const header = (
     <div className={styles.headerRow}>
       <Button
@@ -139,7 +140,6 @@ export function RecruitmentGangAdminPage() {
         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.recruitment_position)}`)}
       </Button>
       <Button
-        theme="yellow"
         link={reverse({
           pattern: ROUTES.frontend.admin_recruitment_gang_users_without_interview,
           urlParams: {
@@ -151,7 +151,7 @@ export function RecruitmentGangAdminPage() {
         {t(KEY.recruitment_show_applicants_without_interview)}
       </Button>
       <Button
-        theme="outlined"
+        theme="secondary"
         link={reverse({
           pattern: ROUTES.frontend.admin_recruitment_gang_all_applications,
           urlParams: {

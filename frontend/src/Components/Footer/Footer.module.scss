@@ -8,25 +8,45 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  gap: 0.5rem;
   border-top: 1px solid #d9d9d9;
-  border-bottom: 4px solid $red-samf;
+  border-bottom: 5px solid $red-samf;
 
   @include theme-dark {
     border-top-color: #262626;
   }
 }
 
-.main_footer {
-  background: $grey-4;
+.footer_section_holder {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 3rem;
   width: 100%;
-  padding: 1.5rem 0;
+
+  @include for-mobile-down {
+    flex-direction: column;
+    gap: 3rem;
+    padding: 0 1.5rem;
+    align-items: center;
+  }
+}
+
+.main_footer {
+  background: $red-samf-dark;
+  color: $white;
+  width: 100%;
+  padding: 3.5rem 0 2.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 2.5rem;
+  position: relative;
+  border-top: 1px solid transparent;
 
   @include theme-dark {
     background: #151515;
+    border-top-color: #262626;
   }
 }
 
@@ -34,13 +54,19 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 4rem;
-  padding: 1.5rem 0;
+  gap: 6rem;
+  padding: 2rem 0;
+
+  @include for-mobile-down {
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: center;
+  }
 }
 
 .logo_row {
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
@@ -48,52 +74,294 @@
 
   @include for-mobile-down {
     flex-direction: column;
+    gap: 1.5rem;
   }
 }
 
 .logo {
   width: auto;
-  height: 60px;
+  height: 55px;
+  transition: opacity 0.2s ease;
+  max-width: 180px;
+  object-fit: contain;
+
+  &:hover {
+    opacity: 0.7;
+  }
 }
 
-.contact {
-  margin: 0 auto;
-  line-height: 1.5rem;
+.logo_link {
+  display: block;
+}
+
+.sponsors_header {
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: $grey-0;
+}
+
+.section_title {
+  text-transform: uppercase;
+  text-align: left;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: $white;
+  position: relative;
+  padding-bottom: 0.5rem;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 2rem;
+    height: 2px;
+    background-color: $red-samf;
+  }
+
+  @include for-mobile-down {
+    text-align: center;
+
+    &::after {
+      display: none;
+    }
+  }
+}
+
+.contact_link {
+  color: $white;
+  text-decoration: none;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: 1.1rem;
+  border-bottom: 2px solid $white;
+  padding-bottom: 2px;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    color: $white;
+    border-bottom-color: $red-samf;
+    text-decoration: none;
+  }
+}
+
+.contact_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact_item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1rem;
+  color: $white-muted;
+}
+
+.contact_icon {
+  color: $red-samf;
+  flex-shrink: 0;
+}
+
+.copyright {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 400;
+  margin-top: 1.25rem;
 }
 
 .socials {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  margin: 0.5rem 0;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+
+  @include for-mobile-down {
+    justify-content: center;
+  }
 }
 
-.header {
-  text-transform: capitalize;
-  text-align: center;
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-  font-weight: 200;
-  opacity: 0.8;
+.social_link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.08);
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.18);
+    transform: translateY(-3px);
+  }
 }
 
 .extra_info {
-  font-size: 0.75em;
-  font-weight: 200;
+  font-size: 0.9rem;
+  font-weight: 400;
   text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  position: relative;
+  z-index: 1;
+
+  a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover {
+      color: $white;
+    }
+  }
 }
 
 .contributors_link {
-  font-size: 0.75rem;
-  opacity: 0.8;
+  font-size: 0.85rem;
   text-decoration: none;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   display: inline-block;
-  color: inherit;
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.2s ease;
 
   &:hover {
+    color: rgba(255, 255, 255, 0.9);
     text-decoration: underline;
+  }
+}
+
+.footer_section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  position: relative;
+  z-index: 1;
+
+  .footer_list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    text-align: left;
+  }
+
+  .footer_list_item {
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: $white-muted;
+  }
+
+  .footer_link {
+    color: $white-muted;
+    text-decoration: none;
+    transition: color 0.15s ease;
+    position: relative;
+    font-weight: 500;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: $red-samf;
+      transition: width 0.25s ease;
+    }
+
+    &:hover {
+      color: $white;
+      text-decoration: none;
+
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+
+  @include for-mobile-down {
+    align-items: center;
+    text-align: center;
+
+    .footer_list {
+      text-align: center;
+    }
+
+    .footer_link::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+}
+
+.shortcuts_and_venues {
+  display: flex;
+  justify-content: flex-start;
+  gap: 5rem;
+  margin: 0;
+
+  @include for-mobile-down {
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: center;
+  }
+}
+
+.contact_and_socials {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0;
+
+  @include for-mobile-down {
+    align-items: center;
+  }
+}
+
+.logo_section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.desktop_logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+
+  @include for-mobile-down {
+    display: none;
+  }
+}
+
+.mobile_logo {
+  display: none;
+
+  @include for-mobile-down {
+    display: block;
+    margin: 2rem 0;
+    text-align: center;
   }
 }

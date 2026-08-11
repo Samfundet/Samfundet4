@@ -18,7 +18,8 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.models import Group, Permission
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 
-from root.constants import XCSRFTOKEN, AUTH_BACKEND, REQUESTED_IMPERSONATE_USER
+from root.constants import XCSRFTOKEN, AUTH_BACKEND, REQUESTED_IMPERSONATE_USER, WebFeatures
+from root.custom_classes.permission_classes import FeatureEnabled
 
 from samfundet.utils import get_user_by_search
 from samfundet.pagination import CustomPageNumberPagination
@@ -26,13 +27,13 @@ from samfundet.serializers import (
     UserSerializer,
     GroupSerializer,
     LoginSerializer,
-    ProfileSerializer,
     RegisterSerializer,
     PermissionSerializer,
+    UpdateUserSerializer,
     ChangePasswordSerializer,
     UserPreferenceSerializer,
 )
-from samfundet.models.general import User, Profile, UserPreference
+from samfundet.models.general import User, UserPreference
 
 
 @method_decorator(csrf_protect, 'dispatch')
@@ -116,9 +117,25 @@ class UserView(APIView):
     def get(self, request: Request) -> Response:
         return Response(data=UserSerializer(request.user, many=False).data)
 
+    def patch(self, request: Request) -> Response:
+        # Disallow for users linked to MDB, since their changes are automatically synced from there
+        if request.user.mdb_medlem_id is not None:
+            return Response(
+                {'detail': 'Profile details are automatically synced from MDB and cannot be edited here.'},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        serializer = UpdateUserSerializer(request.user, data=request.data, partial=True, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(data=UserSerializer(request.user, many=False).data)
+
 
 class AllUsersView(ListAPIView):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    feature_key = WebFeatures.USERS
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -128,7 +145,11 @@ class AllUsersView(ListAPIView):
 
 
 class PaginatedSearchUsersView(ListAPIView):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    feature_key = WebFeatures.USERS
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = UserSerializer
     pagination_class = CustomPageNumberPagination
 
@@ -152,7 +173,11 @@ class ImpersonateView(APIView):
 
 
 class AllGroupsView(ListAPIView):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    feature_key = WebFeatures.USERS
+    permission_classes = (
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    )
     serializer_class = GroupSerializer
     queryset = Group.objects.all()
 
@@ -170,12 +195,6 @@ class CsrfView(APIView):
 class UserPreferenceView(ModelViewSet):
     serializer_class = UserPreferenceSerializer
     queryset = UserPreference.objects.all()
-
-
-class ProfileView(ModelViewSet):
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
-    serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()
 
 
 class PermissionView(ModelViewSet):

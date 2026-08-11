@@ -10,6 +10,7 @@ import { AuthContextProvider } from '~/context/AuthContext';
 import { GlobalContextProvider } from '~/context/GlobalContextProvider';
 import { OrganizationContextProvider } from '~/context/OrgContextProvider';
 import '~/global.scss';
+import { CookiesProvider } from 'react-cookie';
 import { KEY } from '~/i18n/constants';
 import { reportWebVitals } from '~/reportWebVitals';
 import { router } from '~/router/router';
@@ -42,18 +43,20 @@ const queryClient = new QueryClient({
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <QueryClientProvider client={queryClient}>
-    <AuthContextProvider>
-      <GlobalContextProvider>
-        <OrganizationContextProvider>
-          <React.StrictMode>
-            <RouterProvider router={router} />
-          </React.StrictMode>
-        </OrganizationContextProvider>
-      </GlobalContextProvider>
-    </AuthContextProvider>
-    <ReactQueryDevtools />
-  </QueryClientProvider>,
+  <CookiesProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthContextProvider>
+        <GlobalContextProvider>
+          <OrganizationContextProvider>
+            <React.StrictMode>
+              <RouterProvider router={router} />
+            </React.StrictMode>
+          </OrganizationContextProvider>
+        </GlobalContextProvider>
+      </AuthContextProvider>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
+  </CookiesProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function

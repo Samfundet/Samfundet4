@@ -1,11 +1,10 @@
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
-import type { Children } from '~/types';
+import { type ReactNode, useEffect, useState } from 'react';
 import { useExpandableListContext } from '../ExpandableListContextProvider/ExpandableListContextProvider';
 import styles from './Parent.module.scss';
 
 type ParentProps = {
-  children: Children;
+  children: ReactNode;
   onClick?: () => void;
   content: string | number;
   nestedDepth?: number;

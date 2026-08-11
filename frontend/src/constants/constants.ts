@@ -16,12 +16,6 @@ export const MOBILE_NAVIGATION_OPEN = 'mobile-navigation-open';
  */
 export const MIRROR_CLASS = 'mirror-dimension';
 
-/**
- *  Class name for the cursor trail effect.
- * An equivalent should be found in global.scss.
- */
-export const CURSOR_TRAIL_CLASS = 'trail';
-
 export type ThemeKey = keyof typeof THEME;
 export type ThemeValue = (typeof THEME)[ThemeKey];
 
@@ -33,19 +27,30 @@ export const XCSRFTOKEN = 'X-CSRFToken';
  */
 export const THEME_KEY = 'data-theme'; // Valid html tag attribute.
 
+/**
+ * Whether the control panel side panel is open or minimized.
+ */
+export const CONTROL_PANEL_SIDEPANEL_KEY = 'control-panel-sidepanel';
+
 export const SUPPORT_EMAIL = 'mg-web@samfundet.no';
 
 export const PHONENUMBER_REGEX = /^\+?\s*(\d\s*){8,15}$/;
 
 export const LOCAL_DATETIME_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
+
+export const UPLOADS_PREFIX = '/uploads/';
+
 /**
  * Screen sizes, breakpoint (bp).
  * These values are also in _constants.scss
  */
 export const largeDesktopBpLower = 1201;
 export const desktopBpUpper = 1200;
-export const desktopBpLower = 993;
-export const tabletBpUpper = 992;
+// TODO: old breakpióints commented below, dont remove, fix breakpoints later (temparery navbar fix)
+// export const desktopBpLower = 993;
+// export const tabletBpUpper = 992;
+export const desktopBpLower = 1200;
+export const tabletBpUpper = 1199;
 export const tabletBpLower = 769;
 export const mobileBpUpper = 768;
 
@@ -84,6 +89,12 @@ export const USERNAME_LENGTH_MIN = 2;
 export const USERNAME_LENGTH_MAX = 32;
 export const PASSWORD_LENGTH_MIN = 8;
 export const PASSWORD_LENGTH_MAX = 2048;
+export const MEMBERSHIP_ID_LENGTH_MIN = 1;
+export const MEMBERSHIP_ID_LENGTH_MAX = 30;
+
+// Allowed age range for a user's date of birth. Mirrors the backend validator (backend/samfundet/validators.py)
+export const MIN_AGE = 18;
+export const MAX_AGE = 110;
 
 // see pagination.py CustomPageNumberPagination
 export const PAGE_SIZE = 25;

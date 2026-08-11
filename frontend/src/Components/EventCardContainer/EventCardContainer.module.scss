@@ -1,0 +1,54 @@
+@use 'src/constants' as v;
+
+@use 'src/mixins' as m;
+
+@use '../EventCard/EventCard.module' as ec;
+
+.wrapper {
+  margin: 2rem auto;
+  width: 1200px;
+  max-width: 100%;
+
+  @include m.for-tablet-down {
+    padding: 0 0.25rem;
+  }
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.5rem 0.5rem;
+}
+
+.card_container {
+  // 3 columns
+  flex-basis: calc((100% / 3) - 1rem);
+
+  // Last row has one card. Set its width to 50% and center it
+  &:last-child:nth-child(3n + 1) {
+    flex-basis: calc(50% - 0.75rem);
+    margin: 0 auto;
+  }
+  // Last row has two cards. Set each of their widths to 50%
+  &:last-child:nth-child(3n + 2),
+  &:nth-last-child(2):nth-child(3n + 1) {
+    flex-basis: calc(50% - 0.75rem);
+  }
+
+  // 2 columns
+  @media (max-width: calc((ec.$min-width * 3) + 3rem)) {
+    flex-basis: calc(50% - 0.5rem);
+
+    // Last row has one card. Set its width to 75% and center it
+    &:last-child:nth-child(2n + 1) {
+      flex-basis: calc(75% - 1rem);
+      margin: 0 auto;
+    }
+  }
+
+  // 1 column
+  @media (max-width: calc((ec.$min-width * 2) + 2rem)) {
+    flex-basis: 100%;
+  }
+}

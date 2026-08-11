@@ -169,9 +169,17 @@ class Event(CustomBaseModel):
     email_contact = models.EmailField(max_length=200, blank=True, null=True)
 
     host_link = models.URLField(max_length=200, blank=True, null=True)
-    instagram_link = models.URLField(max_length=200, blank=True, null=True)
+
+    spotify_uri = models.CharField(max_length=200, blank=True, null=True)
+    youtube_link = models.URLField(max_length=200, blank=True, null=True)
+    youtube_embed = models.URLField(max_length=200, blank=True, null=True)
     facebook_link = models.URLField(max_length=200, blank=True, null=True)
+    soundcloud_link = models.URLField(max_length=200, blank=True, null=True)
+    instagram_link = models.URLField(max_length=200, blank=True, null=True)
     x_link = models.URLField(max_length=200, blank=True, null=True)
+    lastfm_link = models.URLField(max_length=200, blank=True, null=True)
+    vimeo_link = models.URLField(max_length=200, blank=True, null=True)
+    general_link = models.URLField(max_length=200, blank=True, null=True)
 
     # ======================== #
     #       Venue/Entrance     #
@@ -197,7 +205,7 @@ class Event(CustomBaseModel):
     #      Ticket Related      #
     # ======================== #
 
-    capacity = models.PositiveIntegerField(blank=False, null=False)
+    capacity = models.PositiveIntegerField(blank=True, null=True)
     ticket_type = models.CharField(max_length=30, choices=EventTicketType.choices, blank=False, null=False, default=EventTicketType.FREE)
     registration = models.ForeignKey(EventRegistration, blank=True, null=True, on_delete=models.PROTECT, editable=False)
     custom_tickets = models.ManyToManyField(EventCustomTicket, blank=True)
@@ -216,10 +224,6 @@ class Event(CustomBaseModel):
         if self.ticket_type == EventTicketType.REGISTRATION and self.registration:
             return self.registration.count
         return 0
-
-    @property
-    def image_url(self) -> str:
-        return self.image.image.url
 
     @property
     def is_visible(self) -> bool:
@@ -308,7 +312,7 @@ class Event(CustomBaseModel):
         Try to register (påmelding) by email. Returns false if event
         is not registration type or if it is full.
         """
-        if self.ticket_type == EventTicketType.REGISTRATION and self.total_registrations < self.capacity:
+        if self.ticket_type == EventTicketType.REGISTRATION and (self.capacity is None or self.total_registrations < self.capacity):
             reg = NonMemberEmailRegistration.objects.create(email=email)
             self.get_or_create_registration().registered_emails.add(reg)
             return True
@@ -316,10 +320,10 @@ class Event(CustomBaseModel):
 
     def register_attendant_by_user(self, user: User) -> bool:
         """
-        Try to register (påmelding) by user. Returns false if event
+        Try to register (påmelding) by user. Returns False if event
         is not registration type or if it is full.
         """
-        if self.ticket_type == EventTicketType.REGISTRATION and self.total_registrations < self.capacity:
+        if self.ticket_type == EventTicketType.REGISTRATION and (self.capacity is None or self.total_registrations < self.capacity):
             self.get_or_create_registration().registered_users.add(user)
             return True
         return False

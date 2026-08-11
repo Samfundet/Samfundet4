@@ -15,9 +15,7 @@ the documentation are lacking, don't be afraid to create a PR to fix it!
 ## Resetting the database
 
 You'll likely encounter a situation where you'd like to "reset" the database, by deleting all its data and seeding it
-again. It's quite easy to do this, the first step is to stop the backend server. Then in the `backend/database`
-directory, delete either the `db.sqlite3` if you're running native (or WSL), or the `docker.db.sqlite3` file if you're
-running in Docker.
+again. It's quite easy to do this, the first step is to stop the backend server. Just run `./scripts/destroy-databases-dev-local.sh` from project root. You can then run `./scripts/start-databases-dev-local.sh` to recreate the databases. **You will have to migrate and seed the databases again!**
 
 Then simply start the backend server again. This will automatically create the database file and seed it automatically.
 
@@ -32,5 +30,5 @@ The easiest way to fix this is to simply delete the migration file you have crea
 command again:
 
 * Docker: `docker compose exec backend bash`
-    * Then run the same Poetry command as in the line below
-* Native: `poetry run python3 manage.py makemigrations`
+    * Then run the same uv command as in the line below
+* Native: `uv run python3 manage.py makemigrations`

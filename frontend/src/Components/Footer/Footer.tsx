@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
-import { Link } from '~/Components';
+import { Link, Logo } from '~/Components';
 import {
   isfit,
   isfitWhite,
@@ -8,6 +8,8 @@ import {
   kulturromWhite,
   reitan,
   reitanWhite,
+  sit,
+  sparebank1,
   trondheim,
   trondheimWhite,
   uka,
@@ -17,6 +19,7 @@ import { THEME } from '~/constants';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
+import { ROUTES_SAMF_THREE } from '~/routes/samf-three';
 import styles from './Footer.module.scss';
 
 export function Footer() {
@@ -24,7 +27,7 @@ export function Footer() {
 
   const { theme } = useGlobalContext();
 
-  const iconColor = theme === THEME.DARK ? 'white' : 'black';
+  const iconColor = theme === THEME.DARK ? 'white' : 'white';
   const trondheimLogo = theme === THEME.DARK ? trondheimWhite : trondheim;
   const kulturromLogo = theme === THEME.DARK ? kulturromWhite : kulturrom;
   const reitanLogo = theme === THEME.DARK ? reitanWhite : reitan;
@@ -34,7 +37,7 @@ export function Footer() {
   const sponsorsAndOrgs = (
     <div className={styles.sponsors_and_orgs}>
       <div>
-        <h2 className={styles.header}>{t(KEY.common_sponsor)}</h2>
+        <h2 className={styles.sponsors_header}>{t(KEY.common_sponsor)}</h2>
         <div className={styles.logo_row}>
           <Link className={styles.logo_link} target="external" url="https://www.trondheim.kommune.no/">
             <img src={trondheimLogo} className={styles.logo} alt="Trondheim Kommune" />
@@ -45,10 +48,16 @@ export function Footer() {
           <Link className={styles.logo_link} target="external" url="https://reitan.no/no">
             <img src={reitanLogo} className={styles.logo} alt="Reitan" />
           </Link>
+          <Link className={styles.logo_link} target="external" url="https://www.sit.no/">
+            <img src={sit} className={styles.logo} alt="Sit" />
+          </Link>
+          <Link className={styles.logo_link} target="external" url="https://www.sparebank1.no/nb/smn/privat.html">
+            <img src={sparebank1} className={styles.logo} alt="SpareBank 1 SMN" />
+          </Link>
         </div>
       </div>
       <div>
-        <h2 className={styles.header}>{t(KEY.common_festivals)}</h2>
+        <h2 className={styles.sponsors_header}>{t(KEY.common_festivals)}</h2>
         <div className={styles.logo_row}>
           <Link className={styles.logo_link} target="external" url="https://www.uka.no/">
             <img src={ukaLogo} className={styles.logo} style={{ padding: '0.75rem 0' }} alt="UKA" />
@@ -61,31 +70,53 @@ export function Footer() {
     </div>
   );
 
+  const logo = (
+    <div className={styles.logo_section}>
+      <Logo organization="Samfundet" color="light" size="xsmall" />
+    </div>
+  );
+
   const contact = (
-    <div className={styles.contact}>
-      <h2 className={styles.header}>{t(KEY.common_contact)}</h2>
-      <div>
-        <p>© Studentersamfundet i Trondhjem 2023</p>
-        <p>Org.nr: 970 088 466</p>
-        <p>Elgeseter gate 1</p>
-        <p>7030</p>
-      </div>
+    <div className={styles.footer_section}>
+      <h2 className={styles.section_title}>
+        {t(KEY.footer_have_questions)} {/*TODO: Replace samf3 contact link with samf4 */}
+        <Link plain className={styles.contact_link} target="samf3" url={ROUTES_SAMF_THREE.information.contact}>
+          {t(KEY.common_contact_us)}
+        </Link>
+      </h2>
+      <ul className={styles.contact_list}>
+        <li className={styles.contact_item}>
+          <Icon icon="mdi:map-marker" width={18} className={styles.contact_icon} />
+          <Link
+            className={styles.footer_link}
+            target="external"
+            url="https://maps.google.com/?q=Elgeseter+gate+1,+7030+Trondheim"
+          >
+            Elgeseter gate 1, 7030 Trondheim
+          </Link>
+        </li>
+        <li className={styles.contact_item}>
+          <Icon icon="mdi:domain" width={18} className={styles.contact_icon} />
+          <span>Org.nr: 970 088 466</span>
+        </li>
+      </ul>
+      <div className={styles.copyright}>© Studentersamfundet i Trondhjem 2024</div>
     </div>
   );
 
   const socials = (
     <div className={styles.socials}>
-      <Link target="external" url="https://www.facebook.com/samfundet">
-        <Icon color={iconColor} icon="bi:facebook" width={20} />
+      <Link className={styles.social_link} target="external" url="https://www.facebook.com/samfundet">
+        <Icon color={iconColor} icon="bi:facebook" width={24} />
       </Link>
-      <Link target="external" url="https://www.instagram.com/samfundet/">
-        <Icon color={iconColor} icon="bi:instagram" width={20} />
+      <Link className={styles.social_link} target="external" url="https://www.instagram.com/samfundet/">
+        <Icon color={iconColor} icon="bi:instagram" width={24} />
       </Link>
-      <Link target="external" url="https://www.tiktok.com/@samfundet">
-        <Icon color={iconColor} icon="bi:tiktok" width={20} />
+      <Link className={styles.social_link} target="external" url="https://www.tiktok.com/@samfundet">
+        <Icon color={iconColor} icon="bi:tiktok" width={24} />
       </Link>
-      <Link target="external" url="https://www.snapchat.com/add/samfundet">
-        <Icon color={iconColor} icon="bi:snapchat" width={20} />
+      <Link className={styles.social_link} target="external" url="https://www.snapchat.com/add/samfundet">
+        <Icon color={iconColor} icon="bi:snapchat" width={24} />
       </Link>
     </div>
   );
@@ -105,13 +136,93 @@ export function Footer() {
     </div>
   );
 
+  const shortcuts = (
+    <div className={styles.footer_section}>
+      <h2 className={styles.section_title}>{t(KEY.common_shortcuts)}</h2>
+      <ul className={styles.footer_list}>
+        <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
+          <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.information.general}>
+            {t(KEY.common_general)}
+          </Link>
+        </li>
+        <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
+          <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.information.membership}>
+            {t(KEY.common_membership)}
+          </Link>
+        </li>
+        <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
+          <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.information.openingHours}>
+            {t(KEY.common_opening_hours)}
+          </Link>
+        </li>
+        <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
+          <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.information.photos}>
+            {t(KEY.common_photos)}
+          </Link>
+        </li>
+        <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
+          <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.information.renting}>
+            {t(KEY.common_renting)}
+          </Link>
+        </li>
+      </ul>
+    </div>
+  );
+
+  const venues = (
+    <div className={styles.footer_section}>
+      <h2 className={styles.section_title}>{t(KEY.common_venues)}</h2>
+      <ul className={styles.footer_list}>
+        <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
+          <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.venues.restaurant}>
+            {t(KEY.common_restaurant)}
+          </Link>
+        </li>
+        <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
+          <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.venues.bar}>
+            {t(KEY.common_bar)}
+          </Link>
+        </li>
+        <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
+          <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.venues.scene}>
+            {t(KEY.common_stages)}
+          </Link>
+        </li>
+        <li className={styles.footer_list_item}>
+          {/*TODO: Replace samf3 link with samf4 */}
+          <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.venues.club}>
+            {t(KEY.common_club)}
+          </Link>
+        </li>
+      </ul>
+    </div>
+  );
+
   return (
     <div className={styles.container}>
       {sponsorsAndOrgs}
 
       <div className={styles.main_footer}>
-        {contact}
-        {socials}
+        <div className={styles.desktop_logo}>{logo}</div>
+        <div className={styles.footer_section_holder}>
+          <div className={styles.contact_and_socials}>
+            {contact}
+            {socials}
+          </div>
+          <div className={styles.shortcuts_and_venues}>
+            {shortcuts}
+            {venues}
+          </div>
+        </div>
+        <div className={styles.mobile_logo}>{logo}</div>
         {extraInfo}
       </div>
     </div>

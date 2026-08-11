@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { Button, Carousel, Link } from '~/Components';
+import { buttonThemes } from '~/Components/Button/utils';
 import { Page } from '~/Components/Page';
 import { runderode, splash } from '~/assets';
 import { TextItem } from '~/constants';
@@ -22,18 +23,17 @@ export function AboutPage() {
         <div className={styles.textBox}>
           <h2 className={styles.header}>{t(KEY.common_about_samfundet)}</h2>
           <p className={styles.text}>{useTextItem(TextItem.about_samfundet)}</p>
-          <Link url={ROUTES.frontend.membership}>
-            <Button theme="samf" className={styles.button}>
-              {t(KEY.common_membership).toUpperCase()}
-            </Button>
+          <Link url={ROUTES.frontend.membership} plain className={classNames(buttonThemes.primary, styles.button)}>
+            {t(KEY.common_membership).toUpperCase()}
           </Link>
+
           <Button theme="success" className={styles.button}>
             FAQ
           </Button>
           <Button theme="blue" className={styles.button}>
             {t(KEY.common_contact_information).toUpperCase()}
           </Button>
-          <Button theme="outlined" className={styles.button}>
+          <Button theme="secondary" className={styles.button}>
             {t(KEY.common_tickets).toUpperCase()}
           </Button>
         </div>
@@ -41,13 +41,14 @@ export function AboutPage() {
       <div className={classNames(styles.box, styles.textBox)}>
         <h2 className={styles.header}>{t(KEY.common_the_society_meeting)}</h2>
         <p className={styles.text}>{useTextItem(TextItem.the_society_meeting)}</p>
-        <Button theme="samf" className={styles.button}>
+        <Button theme="primary" className={styles.button}>
           {t(KEY.common_about_the_organisation).toUpperCase()}
         </Button>
-        <Button className={styles.button} theme="outlined">
+        <Link url={ROUTES.frontend.casedocuments} plain className={classNames(buttonThemes.secondary, styles.button)}>
           {t(KEY.common_documents).toUpperCase()}
-        </Button>
-        <Button className={styles.button} theme="outlined">
+        </Link>
+
+        <Button className={styles.button} theme="secondary">
           {t(KEY.common_our_history).toUpperCase()}
         </Button>
       </div>
@@ -76,10 +77,10 @@ export function AboutPage() {
       </div>
 
       <div className={styles.row}>
-        <Button className={styles.button} theme="outlined">
+        <Button className={styles.button} theme="secondary">
           {t(KEY.common_overview_map).toUpperCase()}
         </Button>
-        <Button className={styles.button} theme="outlined">
+        <Button className={styles.button} theme="secondary">
           {t(KEY.common_new_building).toUpperCase()}
         </Button>
       </div>
@@ -90,10 +91,10 @@ export function AboutPage() {
             <h2 className={styles.header}>{t(KEY.common_volunteering)}</h2>
             <p className={styles.text}>{useTextItem(TextItem.volunteering)}</p>
             <div className={styles.buttonTable}>
-              <Button className={styles.tableButton} theme="basic" link={ROUTES.frontend.gangs}>
+              <Button className={styles.tableButton} theme="primary" link={ROUTES.frontend.gangs}>
                 {t(KEY.common_the_gangs_at_samfundet).toUpperCase()}
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="white">
                 {t(KEY.common_volunteer).toUpperCase()}
               </Button>
             </div>
@@ -104,7 +105,7 @@ export function AboutPage() {
             <h3 className={styles.header_col}>UKA & ISFiT</h3>
             <p className={styles.text}>{useTextItem(TextItem.festivals)}</p>
             <div className={styles.buttonTable}>
-              <Button className={styles.tableButton} theme="samf">
+              <Button className={styles.tableButton} theme="primary">
                 UKA
               </Button>
               <Button className={styles.tableButton} theme="blue">
@@ -115,28 +116,28 @@ export function AboutPage() {
           <div className={styles.other_info}>
             <h3 className={styles.header_col}>{t(KEY.common_more_info)}</h3>
             <div className={styles.buttonTable}>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 {t(KEY.common_age_limit).toUpperCase()}
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 BOOKING
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 QUIZ
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 {t(KEY.common_rent_services).toUpperCase()}
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 {t(KEY.common_press).toUpperCase()}
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 {t(KEY.common_film_club).toUpperCase()}
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 {t(KEY.common_privacy_policy).toUpperCase()}
               </Button>
-              <Button className={styles.tableButton} theme="basic">
+              <Button className={styles.tableButton} theme="secondary">
                 {t(KEY.common_facilitation).toUpperCase()}
               </Button>
             </div>

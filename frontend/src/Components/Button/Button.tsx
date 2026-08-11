@@ -1,9 +1,10 @@
 import { default as classnames } from 'classnames';
+import type { ReactNode } from 'react';
 import { Link } from 'react-router';
-import type { ButtonType, Children } from '~/types';
+import type { ButtonType } from '~/types';
 import styles from './Button.module.scss';
 import type { ButtonDisplay, ButtonTheme } from './types';
-import { displayToStyleMap, themeToStyleMap } from './utils';
+import { buttonStyles, buttonThemes } from './utils';
 
 export type ButtonProps = {
   name?: string;
@@ -15,7 +16,7 @@ export type ButtonProps = {
   className?: string;
   disabled?: boolean;
   tabIndex?: number;
-  children?: Children;
+  children?: ReactNode;
   preventDefault?: boolean;
   onClick?: () => void;
   title?: string;
@@ -23,7 +24,7 @@ export type ButtonProps = {
 
 export function Button({
   name,
-  theme = 'basic',
+  theme = 'primary',
   display = 'basic',
   rounded = false,
   type = 'button',
@@ -35,15 +36,7 @@ export function Button({
   preventDefault = false,
   ...props
 }: ButtonProps) {
-  const isPure = theme === 'pure' || theme === 'text';
-
-  const classNames = classnames(
-    !isPure && styles.button,
-    themeToStyleMap[theme],
-    !isPure && displayToStyleMap[display],
-    rounded && styles.rounded,
-    className,
-  );
+  const classNames = classnames(buttonThemes[theme], buttonStyles[display], rounded && styles.rounded, className);
 
   function handleOnClick(e?: React.MouseEvent<HTMLElement>) {
     if (preventDefault) {

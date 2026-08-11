@@ -1,14 +1,14 @@
-import type { Children } from '~/types';
+import type { ReactNode } from 'react';
 import styles from './ExpandableList.module.scss';
 import { useExpandableListContext } from './components/ExpandableListContextProvider/ExpandableListContextProvider';
 
 type ExpandableListProps = {
-  children: Children;
+  children: ReactNode;
   header: string;
   depth: number;
 };
 
-export function ExpandableList({ children }: ExpandableListProps) {
+export function ExpandableList({ header, children }: ExpandableListProps) {
   const { depth, setDepth } = useExpandableListContext();
   const depthNotZero = depth > 0;
 
@@ -26,7 +26,7 @@ export function ExpandableList({ children }: ExpandableListProps) {
             ↩︎
           </button>
         )}
-        <h3>Saksdokumenter</h3>
+        {header && <strong>{header}</strong>}
       </div>
       {children}
     </div>

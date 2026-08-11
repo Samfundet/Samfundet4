@@ -59,7 +59,8 @@ export function RecruitmentGangOverviewPage() {
     [t, recruitmentId],
   );
 
-  const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
+  // const backendUrl = ROUTES.backend.admin__samfundet_informationpage_changelist;
+  const backendUrl = undefined;
   const header = (
     <>
       <AppletContainer recruitmentId={recruitmentId} />

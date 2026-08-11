@@ -7,14 +7,6 @@ export const roleKeys = {
   users: (id: number) => [...roleKeys.detail(id), 'users'] as const,
 };
 
-export const infoPageKeys = {
-  all: ['infopages'] as const,
-  lists: () => [...infoPageKeys.all, 'list'] as const,
-  list: (filters: unknown[]) => [...infoPageKeys.lists(), { filters }] as const,
-  details: () => [...infoPageKeys.all, 'detail'] as const,
-  detail: (slug: string) => [...infoPageKeys.details(), slug] as const,
-};
-
 export const permissionKeys = {
   all: ['permissions'] as const,
   lists: () => [...permissionKeys.all, 'list'] as const,
@@ -36,6 +28,12 @@ export const eventKeys = {
   all: ['events'] as const,
   lists: () => [...eventKeys.all, 'list'] as const,
   list: (filters: unknown[]) => [...eventKeys.lists(), { filters }] as const,
+  paginatedLists: () => [...eventKeys.all, 'paginated'] as const,
+  paginatedList: (
+    page: number,
+    pageSize: number,
+    filters?: { search?: string; venue?: string; category?: string; ticket_type?: string },
+  ) => [...eventKeys.paginatedLists(), { page, pageSize, ...filters }] as const,
   details: () => [...eventKeys.all, 'detail'] as const,
   detail: (id: number) => [...eventKeys.details(), id] as const,
 };
@@ -72,4 +70,13 @@ export const recruitmentGangKeys = {
   list: (filters: unknown[]) => [...recruitmentGangKeys.lists(), { filters }] as const,
   details: () => [...recruitmentGangKeys.all, 'detail'] as const,
   detail: (id: number) => [...recruitmentGangKeys.details(), id] as const,
+};
+
+export const venueKeys = {
+  all: ['venues'] as const,
+  lists: () => [...venueKeys.all, 'list'] as const,
+  list: (filters: unknown[]) => [...venueKeys.lists(), { filters }] as const,
+  details: () => [...venueKeys.all, 'detail'] as const,
+  detail: (slug: string) => [...venueKeys.details(), slug] as const,
+  open: () => [...venueKeys.list(['open'])] as const,
 };

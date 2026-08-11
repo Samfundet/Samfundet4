@@ -27,14 +27,16 @@ Samfundet4 is the latest and greatest iteration of samfundet.no. It's built usin
 - [Seed scripts](./docs/technical/backend/seed.md)
   - [Role seed scripts](./docs/technical/backend/seed_roles.md)
 - [Role system](./docs/technical/backend/rolesystem.md)
+- [Serving React through Django](./docs/technical/django_serving_react.md)
 
 ### Other
 
+- [Image resolution guidelines](./docs/images.md)
 - [Automatic Interview Scheduling](./docs/intervew-scheduling.md)
 
 ### Workflow
 
-- [Work Methodology](./docs/work-methodology.md) – How to contribute to the project
+- [Work Methodology and reviewing pull requests](./docs/work-methodology.md) – How to contribute to the project
 - [Useful Commands](./docs/useful-commands.md)
 - [Useful Docker aliases](./docs/docker-project-specific-commands.md)
 - [Common error messages](./docs/common-errors.md)

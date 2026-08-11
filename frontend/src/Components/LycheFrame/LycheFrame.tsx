@@ -1,8 +1,8 @@
-import type { Children } from '~/types';
+import type { ReactNode } from 'react';
 import styles from './LycheFrame.module.scss';
 
 type LycheFrameProps = {
-  children?: Children;
+  children?: ReactNode;
 };
 
 export function LycheFrame({ children }: LycheFrameProps) {

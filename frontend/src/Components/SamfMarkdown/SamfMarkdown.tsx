@@ -1,15 +1,31 @@
-import Markdown from 'react-markdown';
+import Markdown, { type Components, defaultUrlTransform } from 'react-markdown';
+import remarkDirective from 'remark-directive';
+import { BACKEND_DOMAIN, UPLOADS_PREFIX } from '~/constants';
+import { SamfImage } from './SamfImage';
 import styles from './SamfMarkdown.module.scss';
+import { remarkSamfImage } from './remarkSamfImage';
 
-type SamfMarkdownProps = {
-  children?: string;
+type Props = {
+  markdown: string | undefined;
 };
 
-/** Component for displaying markdown with samf styling */
-export function SamfMarkdown({ children = '' }: SamfMarkdownProps) {
+function urlTransform(url: string): string {
+  if (url.startsWith(UPLOADS_PREFIX)) {
+    return BACKEND_DOMAIN + url;
+  }
+  return defaultUrlTransform(url);
+}
+
+export function SamfMarkdown({ markdown }: Props) {
   return (
     <div className={styles.samf_markdown}>
-      <Markdown>{children}</Markdown>
+      <Markdown
+        remarkPlugins={[remarkDirective, remarkSamfImage]}
+        urlTransform={urlTransform}
+        components={{ samfimage: SamfImage } as Components}
+      >
+        {markdown ?? ''}
+      </Markdown>
     </div>
   );
 }

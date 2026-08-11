@@ -1,0 +1,59 @@
+@use '../../mixins' as m;
+
+@use '../../styles/variables' as v;
+
+@use '../../styles/colors' as c;
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 1rem;
+  background: c.$gray-100;
+  font-size: v.$font-size;
+  line-height: 1.5;
+  white-space: nowrap;
+
+  @include m.theme-dark {
+    background: c.$gray-800;
+  }
+}
+
+button.chip {
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.active {
+  outline: 2px solid v.$primary-dark-bg;
+  outline-offset: 1px;
+
+  @include m.theme-dark {
+    outline-color: v.$primary-light-bg;
+  }
+}
+
+.remove {
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.chip:has(.remove) {
+  padding-right: 8px;
+}

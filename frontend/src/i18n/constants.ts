@@ -57,6 +57,7 @@ export const KEY = {
   pick_a_date: 'pick_a_date',
 
   // No category:
+  common_connect: 'common_connect',
   common_content: 'common_content',
   common_url: 'common_url',
   common_manage: 'common_manage',
@@ -72,6 +73,7 @@ export const KEY = {
   common_not: 'common_not',
   common_now: 'common_now',
   common_time: 'common_time',
+  common_minutes: 'common_minutes',
   common_here: 'common_here',
   common_name: 'common_name',
   common_save: 'common_save',
@@ -79,7 +81,7 @@ export const KEY = {
   common_date: 'common_date',
   common_show: 'common_show',
   common_menu: 'common_menu',
-  common_table: 'common_table',
+  common_table: 'common_table', // this one gives "bord" in Norwegian, not "tabell"
   common_sheet: 'common_sheet',
   common_max: 'common_max',
   common_edit: 'common_edit',
@@ -94,6 +96,7 @@ export const KEY = {
   common_event: 'common_event',
   common_login: 'common_login',
   common_image: 'common_image',
+  common_file: 'common_file',
   common_title: 'common_title',
   common_venue: 'common_venue',
   common_active: 'common_active',
@@ -101,16 +104,19 @@ export const KEY = {
   common_events: 'common_events',
   common_repeat: 'common_repeat',
   common_venues: 'common_venues',
+  common_shortcuts: 'common_shortcuts',
   common_sulten: 'common_sulten',
   common_logout: 'common_logout',
   common_go_back: 'common_go_back',
   common_create: 'common_create',
   common_search: 'common_search',
   common_choose: 'common_choose',
+  common_visible: 'common_visible',
   common_loading: 'common_loading',
   common_missing: 'common_missing',
   common_delete: 'common_delete',
   common_profile: 'common_profile',
+  common_account: 'common_account',
   common_message: 'common_message',
   common_english: 'common_english',
   common_whatsup: 'common_whatsup',
@@ -125,6 +131,7 @@ export const KEY = {
   common_email: 'common_email',
   common_interval: 'common_interval',
   common_preview: 'common_preview',
+  common_version: 'common_version',
   common_email_subject: 'common_email_subject',
   common_total: 'common_total',
   common_out_of: 'common_out_of',
@@ -133,6 +140,7 @@ export const KEY = {
   common_guests: 'common_guests',
   common_occasion: 'common_occasion',
   common_phonenumber: 'common_phonenumber',
+  common_date_of_birth: 'common_date_of_birth',
   common_password: 'common_password',
   common_current: 'common_current',
   common_about_us: 'common_about_us',
@@ -163,7 +171,6 @@ export const KEY = {
   common_contributors: 'common_contributors',
   common_unselect_all: 'common_unselect_all',
   common_opening_hours: 'common_opening_hours',
-  common_general: 'common_general',
   common_long_description: 'common_long_description',
   common_short_description: 'common_short_description',
   common_back_to_samfundet: 'common_back_to_samfundet',
@@ -199,6 +206,18 @@ export const KEY = {
   common_list_view: 'common_list_view',
   common_tab_view: 'common_tab_view',
   common_available: 'common_available',
+  common_comment: 'common_comment',
+  common_capacity: 'common_capacity',
+  common_link: 'common_link',
+  common_read_more: 'common_read_more',
+  common_created_by: 'common_created_by',
+  common_uploaded_by: 'common_uploaded_by',
+  common_last_edited_by: 'common_last_edited_by',
+  common_casedocuments: 'common_casedocuments',
+
+  common_membership_number: 'common_membership_number',
+  common_to_payment: 'common_to_payment',
+
   //About page
   common_age_limit: 'common_age_limit',
   common_rent_services: 'common_rent_services',
@@ -215,11 +234,14 @@ export const KEY = {
   common_about_the_organisation: 'common_about_the_organisation',
   common_the_society_meeting: 'common_the_society_meeting',
   common_tickets: 'common_tickets',
+  common_the_ticket_type: 'common_the_ticket_type',
   common_contact_information: 'common_contact_information',
   common_about_samfundet: 'common_about_samfundet',
   // Price groups:
+  common_ticket: 'common_ticket',
   common_ticket_type: 'common_ticket_type',
   common_ticket_type_free: 'common_ticket_type_free',
+  common_ticket_type_free_with_registration: 'common_ticket_type_free_with_registration',
   common_ticket_type_custom: 'common_ticket_type_custom',
   common_ticket_type_billig: 'common_ticket_type_billig',
   common_ticket_type_included: 'common_ticket_type_included',
@@ -227,8 +249,11 @@ export const KEY = {
 
   // Billig
 
+  common_buy_ticket: 'common_buy_ticket',
   common_sold_out: 'common_sold_out',
   common_almost_sold_out: 'common_almost_sold_out',
+
+  common_member_database: 'common_member_database',
   // ==================== //
   //        Others        //
   // ==================== //
@@ -245,11 +270,26 @@ export const KEY = {
   loginpage_passwords_must_match: 'loginpage_passwords_must_match',
   loginpage_login_failed: 'loginpage_login_failed',
 
+  signuppage_register_failed: 'signuppage_register_failed',
+  signuppage_login_link: 'signuppage_login_link',
+
+  // LoginPickerPage:
+  loginpicker_page_title: 'loginpicker_page_title',
+  loginpicker_page_description: 'loginpicker_page_description',
+  loginpicker_page_nav_aria_label: 'loginpicker_page_nav_aria_label',
+  loginpicker_page_new_platform_title: 'loginpicker_page_new_platform_title',
+  loginpicker_page_new_platform_description: 'loginpicker_page_new_platform_description',
+  loginpicker_page_old_platform_title: 'loginpicker_page_old_platform_title',
+  loginpicker_page_old_platform_description: 'loginpicker_page_old_platform_description',
+  loginpicker_page_old_platform_note: 'loginpicker_page_old_platform_note',
+
   contributors_page_title: 'contributors_page_title',
   contributors_page_text: 'contributors_page_text',
   contributors_page_past_developers: 'contributors_page_past_developers',
 
   role_edit_could_not_load_permissions: 'role_edit_could_not_load_permissions',
+
+  preferences_page_account_connected_mdb: 'preferences_page_account_connected_mdb',
 
   // GangsPage:
   gangspage_title: 'gangspage_title',
@@ -260,21 +300,91 @@ export const KEY = {
   none: 'none',
   mix: 'mix',
 
+  // EventPage:
+  event_registration_url: 'event_registration_url',
+  event_general_link: 'event_general_link',
+  event_spotify_uri_help: 'event_spotify_uri_help',
+  event_youtube_link_help: 'event_youtube_link_help',
+  event_youtube_embed_help: 'event_youtube_embed_help',
+  event_add_ticket: 'event_add_ticket',
+  event_invalid_form_error: 'event_invalid_form_error',
+  event_must_be_valid_url: 'event_must_be_valid_url',
+  event_must_be_valid_spotify_uri: 'event_must_be_valid_spotify_uri',
+  event_publication_date_required: 'event_publication_date_required',
+
+  // Purchase Ticket Info:
+  invalid_email_message: 'invalid_email_message',
+  email_or_membership_number_message: 'email_or_membership_number_message',
+  email_or_membership_number: 'email_or_membership_number',
+  no_tickets_selected_message: 'no_tickets_selected_message',
+  kr_per_ticket: 'kr_per_ticket',
+  enter_membership_number: 'enter_membership_number',
+  enter_email: 'enter_email',
+  ticketless_description: 'ticketless_description',
+  ticketless_description_note: 'ticketless_description_note',
+  email_ticket_description: 'email_ticket_description',
+  stripe_info: 'stripe_info',
+  pay_info: 'pay_info',
+  sales_conditions: 'sales_conditions',
+
   event_external_host_message: 'event_external_host_message',
+
+  // Event categories
+  event_category_art: 'event_category_art',
+  event_category_concert: 'event_category_concert',
+  event_category_course: 'event_category_course',
+  event_category_debate: 'event_category_debate',
+  event_category_dj: 'event_category_dj',
+  event_category_excenteraften: 'event_category_excenteraften',
+  event_category_football_match: 'event_category_football_match',
+  event_category_happening: 'event_category_happening',
+  event_category_lecture: 'event_category_lecture',
+  event_category_luka_event: 'event_category_luka_event',
+  event_category_meeting: 'event_category_meeting',
+  event_category_movie: 'event_category_movie',
+  event_category_music: 'event_category_music',
+  event_category_other: 'event_category_other',
+  event_category_party_meeting: 'event_category_party_meeting',
+  event_category_performance: 'event_category_performance',
+  event_category_quiz: 'event_category_quiz',
+  event_category_samfundet_meeting: 'event_category_samfundet_meeting',
+  event_category_show: 'event_category_show',
+  event_category_theater: 'event_category_theater',
+  event_category_theme_party: 'event_category_theme_party',
+  event_category_uka_event: 'event_category_uka_event',
+  event_call_to_action_register: 'event_call_to_action_register',
 
   // Venue Page:
   venuepage_title: 'venuepage_title',
 
   // InformationPage
   information_page: 'information_page',
+  information_pages: 'information_pages',
   information_page_short: 'information_page_short',
 
-  // Navbar:
+  // Navigation links (used in both navbar and footer):
+  // Links for samf 3
+
+  // Shortcuts
+  common_general: 'common_general',
+  common_renting: 'common_renting',
+  common_photos: 'common_photos',
+
+  //Venues
+  common_bar: 'common_bar',
+  common_stages: 'common_stages',
+  common_club: 'common_club',
+
+  // Navbar only:
   navbar_map: 'navbar_map',
   navbar_photos: 'navbar_photos',
   navbar_nybygg: 'navbar_nybygg',
+  navbar_bar: 'navbar_bar',
+  navbar_stages: 'navbar_stages',
+  navbar_club: 'navbar_club',
 
   footer_developed_by: 'footer_developed_by',
+  footer_have_questions: 'footer_have_questions',
 
   // Sulten / Lyche:
   sulten_dishes: 'sulten_dishes',
@@ -476,36 +586,62 @@ export const KEY = {
 
   not_wanted_short: 'not_wanted_short',
   not_wanted_long: 'not_wanted_long',
-  //not_wanted_guidance: 'not_wanted_guidance',
 
   // Admin:
   admin_users_last_active: 'admin_users_last_active',
   admin_organizer: 'admin_organizer',
-  admin_saksdokument: 'admin_saksdokument',
+  admin_casedocument: 'admin_casedocument',
   admin_images_title: 'admin_images_title',
   admin_images_create: 'admin_images_create',
+  admin_images_confirm_delete: 'admin_images_confirm_delete',
+  admin_images_add_tag: 'admin_images_add_tag',
+  admin_images_delete_in_use: 'admin_images_delete_in_use',
+  admin_image_form_tag_description: 'admin_image_form_tag_description',
+  admin_no_image_selected: 'admin_no_image_selected',
+  admin_markdown_insert_image: 'admin_markdown_insert_image',
+  admin_markdown_image_insert: 'admin_markdown_image_insert',
+  admin_markdown_image_choose_existing: 'admin_markdown_image_choose_existing',
+  admin_markdown_image_upload_new: 'admin_markdown_image_upload_new',
+  admin_markdown_image_alt_text: 'admin_markdown_image_alt_text',
+  admin_markdown_image_alt_text_description: 'admin_markdown_image_alt_text_description',
+  admin_markdown_image_not_found: 'admin_markdown_image_not_found',
   admin_steal_identity: 'admin_steal_identity',
   adminpage_gangs_title: 'adminpage_gangs_title',
   adminpage_gangs_create: 'adminpage_gangs_create',
   admin_opening_hours_hint: 'admin_opening_hours_hint',
   admin_closed_period_title: 'admin_closed_period_title',
-  admin_saksdokumenter_title: 'admin_saksdokumenter_title',
+  admin_casedocuments_title: 'admin_casedocuments_title',
   admin_sultenmenu_title: 'admin_sultenmenu_title',
   admin_gangsadminpage_webpage: 'admin_gangsadminpage_webpage',
   admin_events_recently_edited: 'admin_events_recently_edited',
   admin_events_administrate: 'admin_events_administrate',
   admin_closed_period_new_period: 'admin_closed_period_new_period',
+  admin_information_translations_difference: 'admin_information_translations_difference',
   admin_information_manage_title: 'admin_information_manage_title',
   admin_closed_period_edit_period: 'admin_closed_period_edit_period',
   admin_information_confirm_delete: 'admin_information_confirm_delete',
   admin_information_confirm_cancel: 'admin_information_confirm_cancel',
+  admin_information_history_title: 'admin_information_history_title',
+  admin_information_history_empty: 'admin_information_history_empty',
+  admin_information_history_select: 'admin_information_history_select',
+  admin_information_history_diff_failed: 'admin_information_history_diff_failed',
   admin_gangsadminpage_abbreviation: 'admin_gangsadminpage_abbreviation',
-  admin_saksdokumenter_cannot_reupload: 'admin_saksdokumenter_cannot_reupload',
+  admin_casedocuments_cannot_reupload: 'admin_casedocuments_cannot_reupload',
+  admin_casedocuments_publication_date_note: 'admin_casedocuments_publication_date_note',
+  admin_casedocuments_title_used_as_filename: 'admin_casedocuments_title_used_as_filename',
+  admin_casedocuments_confirm_delete: 'admin_casedocuments_confirm_delete',
   admin_impersonate: 'admin_impersonate',
   admin_stop_impersonate: 'admin_stop_impersonate',
   admin_role_page_orggangsection: 'admin_role_page_orggangsection',
   admin_role_page_role_since: 'admin_role_page_role_since',
   admin_role_page_given_by: 'admin_role_page_given_by',
+  adminpage_connect_mdb: 'adminpage_connect_mdb',
+  adminpage_connect_mdb_succesful_toast: 'adminpage_connect_mdb_succesful_toast',
+  adminpage_connect_mdb_invalid_email: 'adminpage_connect_mdb_invalid_email',
+  adminpage_connect_mdb_invalid_membership_id: 'adminpage_connect_mdb_invalid_membership_id',
+  adminpage_connect_mdb_common_error: 'adminpage_connect_mdb_common_error',
+  adminpage_connect_mdb_password_notice_1: 'adminpage_connect_mdb_password_notice_1',
+  adminpage_connect_mdb_password_notice_2: 'adminpage_connect_mdb_password_notice_2',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
@@ -545,6 +681,8 @@ export const KEY = {
   feedback_type_heading: 'feedback_type_heading',
   feedback_your_feedback: 'feedback_your_feedback',
   feedback_thank_you_for_feedback: 'feedback_thank_you_for_feedback',
+  feedback_helper_text: 'feedback_helper_text',
+  feedback_want_contact_text: 'feedback_want_contact_text',
 
   // No category:
   owner: 'owner',
@@ -559,12 +697,13 @@ export const KEY = {
   we_use_cookies: 'we_use_cookies',
   control_panel_faq: 'control_panel_faq',
   invalid_phonenumber: 'invalid_phonenumber',
+  invalid_date_of_birth: 'invalid_date_of_birth',
   control_panel_title: 'control_panel_title',
   inputfile_choose_a_file: 'inputfile_choose_a_file',
   inputfile_no_file_selected: 'inputfile_no_file_selected',
   notfoundpage_title: 'notfoundpage_title',
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',
-  saksdokumentpage_publication_date: 'saksdokumentpage_publication_date',
+  common_publication_date: 'common_publication_date',
   eventsadminpage_successful_delete_toast: 'eventsadminpage_successful_delete_toast',
   promo_media_description: 'promo_media_description',
   promo_media_invalid: 'promo_media_invalid',
@@ -579,6 +718,22 @@ export const KEY = {
   error_server_error_description: 'error_server_error_description',
   error_submitting_reservation: 'error_submitting_reservation',
   error_invalid_reservation_data: 'error_invalid_reservation_data',
+  error_invalid_slug: 'error_invalid_slug',
+
+  // Event form validation
+  event_form_title_required: 'event_form_title_required',
+  event_form_description_long_required: 'event_form_description_long_required',
+  event_form_description_short_required: 'event_form_description_short_required',
+  event_form_start_dt_required: 'event_form_start_dt_required',
+  event_form_duration_min: 'event_form_duration_min',
+  event_form_host_required: 'event_form_host_required',
+  event_form_location_required: 'event_form_location_required',
+  event_form_capacity_min: 'event_form_capacity_min',
+  event_form_visibility_from_required: 'event_form_visibility_from_required',
+
+  event_form_category_required: 'event_form_category_required',
+  event_form_age_restriction_required: 'event_form_age_restriction_required',
+  event_form_ticket_type_required: 'event_form_ticket_type_required',
 } as const;
 
 // This will ensure that each value matches the key exactly.

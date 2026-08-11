@@ -34,8 +34,10 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 
 from root.constants import (
     GITHUB_SIGNATURE_HEADER,
+    WebFeatures,
 )
 from root.utils.permissions import SAMFUNDET_VIEW_INTERVIEW, SAMFUNDET_VIEW_INTERVIEWROOM
+from root.custom_classes.permission_classes import FeatureEnabled
 
 from .utils import generate_timeslots, get_occupied_timeslots_from_request
 from .serializers import (
@@ -123,7 +125,11 @@ class WebhookView(APIView):
 
 @method_decorator(ensure_csrf_cookie, 'dispatch')
 class RecruitmentStatisticsView(ModelViewSet):
-    permission_classes = (DjangoModelPermissions,)  # Allow read only to permissions on perms
+    feature_key = WebFeatures.RECRUITMENT
+    permission_classes = (
+        DjangoModelPermissions,
+        FeatureEnabled,
+    )  # Allow read only to permissions on perms
     serializer_class = RecruitmentStatisticsSerializer
     queryset = RecruitmentStatistics.objects.all()
 
@@ -632,7 +638,11 @@ class ActiveRecruitmentPositionsView(ListAPIView):
 
 
 class ActiveRecruitmentsView(ListAPIView):
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+    feature_key = WebFeatures.RECRUITMENT
+    permission_classes = [
+        DjangoModelPermissionsOrAnonReadOnly,
+        FeatureEnabled,
+    ]
     serializer_class = RecruitmentSerializer
 
     def get_queryset(self) -> Response:

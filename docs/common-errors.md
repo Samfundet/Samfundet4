@@ -8,13 +8,39 @@ If running the project in Docker, many issues are solved by running a `docker sy
 
 If you find something that is not listed, please add it to this document!
 
+## Seeding problems
+
+If you are having problems with seeding the database there is usually one single reason; your current local database is out of date. You can solve it by deleting the current database, then seeding again.
+
+Delete volumes:
+``` bash
+docker compose down --volumes
+```
+
+Build, migrate and seed:
+``` bash
+docker compose up -d --build
+docker compose exec backend bash
+migrate
+seed
+```
+
 ## Entrypoint.sh
 ### Error message:
 ```
 exec /app/entrypoint.sh: no such file or directory
 ```
 ### Fix
- Make sure `/backend/entrypoint.sh` has `End of Line sequence set` to `LF` (Happens when running on windows).
+ Make sure `/backend/entrypoint.sh` has `End of Line sequence` set to `LF` (Happens when running on windows). \
+Sometimes VScode will lie, so you can double check by running the command below, and checking if any of the lines end in "^M". If they do, the file still has `CRLF` as the line ending. 
+``` bash
+cat -v <filename>
+```
+To fix this, you can force change the line ending to ´LF´:
+``` bash
+dos2unix <filename>
+```
+```
 
 ## Docker daemon not running
 ### Error message:

@@ -44,4 +44,13 @@ DATABASES = {
         'HOST': os.environ['BILLIG_DB_HOST'],
         'PORT': os.environ['BILLIG_DB_PORT'],
     },
+    # The database for the membership database (mdb)
+    'mdb': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['MDB_DB_NAME'],
+        'USER': os.environ['MDB_DB_USER'],
+        'PASSWORD': os.environ['MDB_DB_PASSWORD'],
+        'HOST': os.environ['MDB_DB_HOST'],
+        'PORT': os.environ['MDB_DB_PORT'],
+    },
 }

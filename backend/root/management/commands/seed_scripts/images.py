@@ -33,11 +33,13 @@ def do_seed():  # noqa: C901
     yield 0, 'Deleted old images and tags'
 
     for _ in range(int(COUNT / 2)):
-        Tag.objects.create(name=words(1))
+        # find_or_create since random words can collide with the case-insensitive unique constraint
+        Tag.find_or_create(name=words(1))
 
     for i in range(COUNT):
         image_file = random.choice(image_files)
-        random_image = ImageFile(image_file, name=f'img_{i}')
+        extension = os.path.splitext(image_file.name)[1]
+        random_image = ImageFile(image_file, name=f'img_{i}{extension}')
         title = words(random.randint(1, 2))
         image = Image.objects.create(title=title, image=random_image)
         image.tags.set(

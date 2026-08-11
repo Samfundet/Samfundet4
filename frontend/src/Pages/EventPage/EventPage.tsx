@@ -2,14 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { ExpandableHeader, ExternalHostBox, H1, Image, Page } from '~/Components';
-import { BuyButton } from '~/Components/BuyButton/BuyButton';
+import { BuyEventTicket } from '~/Components/BuyEventTicket/BuyEventTicket';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { getEvent } from '~/api';
-import { BACKEND_DOMAIN } from '~/constants';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { eventKeys } from '~/queryKeys';
-import { dbT } from '~/utils';
+import { dbT, imageUrl } from '~/utils';
 import styles from './EventPage.module.scss';
 import { EventInformation } from './components/EventInformation/EventInformation';
 import { EventTable } from './components/EventTable';
@@ -28,7 +27,7 @@ export function EventPage() {
   return (
     <Page className={styles.container} loading={isLoading}>
       <div className={styles.image_wrapper}>
-        {event && <Image src={BACKEND_DOMAIN + event.image_url} className={styles.event_image} />}
+        {event && <Image src={imageUrl(event.image, 'large') ?? ''} className={styles.event_image} />}
       </div>
 
       <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>
@@ -43,7 +42,9 @@ export function EventPage() {
           />
         )}
         {event?.billig && (
-          <BuyButton ticketSaleState={event.billig.ticket_groups} eventId={event.id} billigId={event.billig.id} />
+          <>
+            <BuyEventTicket event={event} ticketSaleState={event.billig} />
+          </>
         )}
         {/* Text */}
         <div className={styles.text_container}>
@@ -52,7 +53,7 @@ export function EventPage() {
               <p className={styles.text_short}>{dbT(event, 'description_short')}</p>
             </div>
             <div className={styles.description_long}>
-              <SamfMarkdown>{dbT(event, 'description_long')}</SamfMarkdown>
+              <SamfMarkdown markdown={dbT(event, 'description_long')} />
             </div>
           </div>
           <ExpandableHeader label={t(KEY.common_details)} className={styles.expandable_header}>

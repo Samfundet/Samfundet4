@@ -1,7 +1,15 @@
+import { Icon } from '@iconify/react';
+import { addDays, addMinutes } from 'date-fns';
 import { useState } from 'react';
 import {
+  Block,
+  BlockContainer,
+  BlockContent,
+  BlockFooter,
+  BlockTitle,
   Button,
   Countdown,
+  EventCard,
   H1,
   H2,
   H3,
@@ -14,15 +22,19 @@ import {
   RadioButton,
   ToolTip,
 } from '~/Components';
+import type { ButtonTheme } from '~/Components/Button';
+import { buttonThemes } from '~/Components/Button/utils';
 import { Checkbox } from '~/Components/Checkbox';
 import { Link } from '~/Components/Link';
 import { List } from '~/Components/List';
 import { MultiSelect } from '~/Components/MultiSelect';
 import { ShrimpFishing } from '~/Components/ShrimpFishing/ShrimpFishing';
-import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay/SnowflakesOverlay';
 import { ExampleForm } from '~/Pages/ComponentPage/ExampleForm';
+import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
+import type { EventDto } from '~/dto';
+import { EventCategory, EventTicketType } from '~/types';
 import styles from './ComponentPage.module.scss';
 
 /**
@@ -32,10 +44,169 @@ import styles from './ComponentPage.module.scss';
 export function ComponentPage() {
   const [showShrimpFishing, setShowShrimpFishing] = useState(false);
 
+  function createFakeEvent(override: Partial<EventDto>, billig?: Partial<BilligEventDto>): EventDto {
+    return {
+      age_restriction: 'eighteen',
+      category: 'concert',
+      custom_tickets: [],
+      description_long_en: '',
+      description_long_nb: '',
+      description_short_en: "Von August's coming to Samfundet with their dreamy synth and heartfelt vocal harmonies!",
+      description_short_nb: 'Von August kommer til Samfundet med sin drømmende synth og indelige vokalharmonier!',
+      duration: 60,
+      end_dt: new Date().toISOString(),
+      event_group: {
+        id: 1,
+        name: 'foobar',
+      },
+      host: 'KLST',
+      id: 1,
+      location: 'Vuelie',
+      visibility_from_dt: new Date().toISOString(),
+      visibility_to_dt: '',
+      start_dt: new Date().toISOString(),
+      status: 'active',
+      ticket_type: EventTicketType.FREE,
+      title_en: 'Von August with a very long title just like this // 23:59',
+      title_nb: 'Von August // 23:59',
+      billig: billig
+        ? {
+            is_almost_sold_out: false,
+            id: 0,
+            in_sale_period: '',
+            is_sold_out: false,
+            name: '',
+            sale_from: '',
+            sale_to: '',
+            ticket_groups: [
+              {
+                id: 0,
+                is_almost_sold_out: false,
+                is_sold_out: false,
+                name: 'Billettgruppe 1',
+                price_groups: [
+                  {
+                    can_be_put_on_card: false,
+                    id: 0,
+                    membership_needed: true,
+                    name: 'Medlem',
+                    netsale: false,
+                    price: 50,
+                    ticket_fee: 20,
+                  },
+                  {
+                    can_be_put_on_card: false,
+                    id: 1,
+                    membership_needed: false,
+                    name: 'Ikke-medlem',
+                    netsale: false,
+                    price: 150,
+                    ticket_fee: 30,
+                  },
+                ],
+                ticket_limit: 0,
+              },
+            ],
+            ...billig,
+          }
+        : undefined,
+      spotify_uri: '',
+      youtube_link: '',
+      youtube_embed: '',
+      facebook_link: '',
+      soundcloud_link: '',
+      instagram_link: '',
+      x_link: '',
+      lastfm_link: '',
+      vimeo_link: '',
+      general_link: '',
+      ...override,
+    };
+  }
+
   return (
     <Page className={styles.wrapper}>
       <div>
-        <H1>Example form</H1>
+        <H1 style={{ margin: '2rem 0 0.5rem' }}>Buttons</H1>
+
+        <div className={styles.button_row}>
+          <Button disabled>Disabled button</Button>
+          <Button disabled>
+            <Icon icon="ph:ticket-bold" />
+            With icon
+          </Button>
+          <Button disabled rounded>
+            Rounded button
+          </Button>
+          <Button disabled display="pill">
+            Pill button
+          </Button>
+        </div>
+        {Object.keys(buttonThemes).map((theme) => (
+          <div className={styles.button_row} key={theme}>
+            <Button theme={theme as ButtonTheme}>Theme: {theme}</Button>
+            <Button theme={theme as ButtonTheme}>
+              <Icon icon="ph:ticket-bold" />
+              With icon
+            </Button>
+            <Button theme={theme as ButtonTheme} rounded>
+              Rounded button
+            </Button>
+            <Button theme={theme as ButtonTheme} display="pill">
+              Pill button
+            </Button>
+          </div>
+        ))}
+      </div>
+
+      <H1 style={{ margin: '2rem 0 0.5rem' }}>Event Cards</H1>
+
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem' }}>
+        <EventCard
+          event={createFakeEvent(
+            {
+              title_nb: 'Richard Layout',
+              start_dt: addDays(new Date(), 1).toISOString(),
+              location: 'Storsalen',
+              ticket_type: EventTicketType.BILLIG,
+            },
+            { is_almost_sold_out: true },
+          )}
+        />
+        <EventCard
+          event={createFakeEvent(
+            {
+              title_nb: 'Richard Layout',
+              start_dt: addDays(new Date(), 1).toISOString(),
+              location: 'Storsalen',
+              ticket_type: EventTicketType.BILLIG,
+            },
+            { is_sold_out: true },
+          )}
+        />
+        <EventCard
+          event={createFakeEvent({
+            title_nb: 'Villmarksforedrag med Lars Monsen',
+            category: EventCategory.QUIZ,
+            start_dt: addDays(addMinutes(new Date(), 87), 5).toISOString(),
+            location: 'Hele huset',
+          })}
+        />
+        <EventCard
+          event={createFakeEvent({
+            category: 'debate',
+            title_nb: 'Onsdagsdebatt: Lorem ipsum',
+            start_dt: new Date(2026, 11, 23).toISOString(),
+            location: 'Skala',
+            ticket_type: EventTicketType.INCLUDED,
+          })}
+        />
+      </div>
+
+      <br />
+
+      <div>
+        <H1 style={{ margin: '2rem 0 0.5rem' }}>Form</H1>
 
         <ExampleForm />
       </div>
@@ -49,6 +220,36 @@ export function ComponentPage() {
 
       <br />
 
+      <BlockContainer>
+        <Block theme="green">
+          <a href="/" style={{ color: 'inherit' }}>
+            <BlockContent>
+              <BlockTitle>
+                Samfundet
+                <br /> har
+                <br /> opptak!
+              </BlockTitle>
+            </BlockContent>
+            <BlockFooter
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                width: '100%',
+              }}
+            >
+              <div>Frist i dag</div>
+              <a href="/" style={{ color: 'inherit', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                Les mer
+                <Icon icon="line-md:arrow-up" width={16} rotate={1} />
+              </a>
+            </BlockFooter>
+          </a>
+        </Block>
+      </BlockContainer>
+
+      <br />
+
       <MultiSelect options={Array.from({ length: 20 }).map((_, i) => ({ label: String(i), value: i }))} />
       <br />
       <br />
@@ -57,9 +258,9 @@ export function ComponentPage() {
       <h1>Components:</h1>
       <div>
         <h2>Buttons:</h2>
-        <Button theme="samf">Test</Button>
+        <Button theme="primary">Test</Button>
         <br />
-        <Button theme="samf" disabled>
+        <Button theme="primary" disabled>
           Disabled
         </Button>
         <br />
@@ -120,7 +321,6 @@ export function ComponentPage() {
         <ProgressBar value={75} max={100} />
       </div>
       <div>
-        <SnowflakesOverlay />
         <h2>
           <Countdown targetDate={new Date(new Date().getTime() + HOUR_MILLIS)}>
             <img src={norwegianFlag} alt="Flag" />

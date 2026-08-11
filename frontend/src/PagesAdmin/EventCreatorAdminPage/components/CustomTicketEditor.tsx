@@ -107,8 +107,7 @@ export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: P
   const tableColumns = [
     `${t(KEY.common_name)} (${t(KEY.common_english)})`,
     `${t(KEY.common_name)} (${t(KEY.common_norwegian)})`,
-    'Pris',
-    '',
+    `${t(KEY.common_price)}`,
   ];
 
   return (
@@ -116,8 +115,8 @@ export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: P
       <div className={styles.custom_ticket_container}>
         <Table columns={tableColumns} data={customTickets.map((ticket) => ticketRow(ticket))} />
         <div className={styles.add_custom_ticket}>
-          <Button rounded={true} theme="green" preventDefault={true} onClick={newTicket}>
-            Legg til billett
+          <Button rounded={true} theme="success" preventDefault={true} onClick={newTicket}>
+            {t(KEY.event_add_ticket)}
             <Icon icon="mdi:plus" />
           </Button>
         </div>
