@@ -2,23 +2,38 @@ import type { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router';
 import { useAuthContext } from '~/context/AuthContext';
 import { ROUTES } from '~/routes';
-import { hasPermissions } from '~/utils';
+import { hasPermissions, hasPermissionsAnywhere } from '~/utils';
 
-type ProtectedRouteProps = {
+type ProtectedRoutePropsBase = {
   authState: boolean; // require user to be either logged in (true) or logged out (false)
   requirePermissions?: string[] | undefined; // user must have ALL provided permissions in this list
-  obj?: string | number; // for permission checking
   redirectPath?: string; // path to redirect to if auth state or permissions are not valid
   requiresStaff?: boolean; // requires user to have is_staff flag
   element: ReactNode; // If protection passes, this element is returned
-  resolveWithRolePermissions?: boolean; // If true, will resolve permissions with role permissions
 };
+
+type ProtectedRouteAnywhereResolution = ProtectedRoutePropsBase & {
+  resolution: 'anywhere';
+  obj?: never;
+};
+
+type ProtectedRouteBaseResolution = ProtectedRoutePropsBase & {
+  resolution?: 'default' | 'roles';
+  obj?: string | number;
+};
+
+export type ProtectedRouteProps = ProtectedRouteBaseResolution | ProtectedRouteAnywhereResolution;
 
 /**
  * Router component, to be used inside element of a route, and page that is requested
  * Allows for setting up routes that requires authentication, permissions, and staff.
  *
  * Waits for auth to load before making redirect decisions.
+ *
+ * `resolution` decides required permissions are checked.
+ * -  'default': model-level and object-level (uses `obj`)
+ * -    'roles': same as 'default', but also resolves through the role system.
+ * - 'anywhere': any level (ignores `obj`)
  */
 export function ProtectedRoute({
   authState,
@@ -27,7 +42,7 @@ export function ProtectedRoute({
   element,
   requiresStaff = false,
   redirectPath = ROUTES.frontend.home,
-  resolveWithRolePermissions = false,
+  resolution = 'default',
 }: ProtectedRouteProps) {
   const { user, loading } = useAuthContext();
   const location = useLocation();
@@ -37,17 +52,15 @@ export function ProtectedRoute({
     return null;
   }
 
-  if ((authState && !user) || (!authState && user)) {
-    return <Navigate to={redirectPath} replace state={{ path: location.pathname }} />;
-  }
+  const authOk = authState === Boolean(user);
+  const staffOk = !requiresStaff || Boolean(user?.is_staff);
+  const permissionsOk =
+    requirePermissions === undefined ||
+    (resolution === 'anywhere'
+      ? hasPermissionsAnywhere(user, requirePermissions)
+      : hasPermissions(user, requirePermissions, obj, resolution === 'roles'));
 
-  // TODO: Redirect to access denied page if we don't have permission. Issue #1236
-
-  // If permissions is provided but authState=false, hasPermissions returns false, so we navigate away
-  if (requirePermissions !== undefined && !hasPermissions(user, requirePermissions, obj, resolveWithRolePermissions)) {
-    return <Navigate to={redirectPath} replace state={{ path: location.pathname }} />;
-  }
-  if (requiresStaff && !user?.is_staff) {
+  if (!authOk || !staffOk || !permissionsOk) {
     return <Navigate to={redirectPath} replace state={{ path: location.pathname }} />;
   }
 

@@ -77,7 +77,7 @@ interface BuyTicketFormProps {
   event: EventDto;
 }
 
-export function BuyTicketForm({ event }: BuyTicketFormProps) {
+function BuyTicketForm({ event }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const [totalPrice, setTotalPrice] = useState(0);
   const [ticketType, setTicketType] = useState<TicketType>(TICKET_TYPE_MEMBERSHIP);

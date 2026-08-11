@@ -35,6 +35,7 @@ SIMPLE_FILTERS = {
     'event_group': 'event_group__id',
     'category': 'category__icontains',
     'venue': 'location__icontains',
+    'ticket_type': 'ticket_type',
 }
 
 

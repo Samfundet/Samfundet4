@@ -1,8 +1,13 @@
 import axios, { type AxiosResponse } from 'axios';
 import type {
+  CaseDocumentCategoryDto,
+  CaseDocumentDto,
+  CaseDocumentPostDto,
   ClosedPeriodDto,
+  EditInformationPageDto,
   EventDto,
   EventGroupDto,
+  EventWriteDto,
   FeedbackDto,
   FoodCategoryDto,
   FoodPreferenceDto,
@@ -10,8 +15,12 @@ import type {
   GangTypeDto,
   HomePageDto,
   ImageDto,
+  ImagePatchDto,
   ImagePostDto,
   InformationPageDto,
+  InformationPageOwnerOptionDto,
+  InformationPageRevisionDetailDto,
+  InformationPageRevisionDto,
   InterviewDto,
   InterviewRoomDto,
   InterviewerAvailabilityDto,
@@ -46,7 +55,7 @@ import type {
   RegistrationDto,
   RoleDto,
   RoleUsersDto,
-  SaksdokumentDto,
+  TagDto,
   TextItemDto,
   UserDto,
   UserPreferenceDto,
@@ -57,7 +66,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import type { BilligEventDto } from './apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from './constants';
-import type { PageNumberPaginationType } from './types';
+import type { EventsPaginationType, PageNumberPaginationType } from './types';
 import { buildPaginatedUrl } from './utils';
 
 export async function getCsrfToken(): Promise<string> {
@@ -105,6 +114,19 @@ export async function getUser(): Promise<UserDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__user;
   const response = await axios.get<UserDto>(url, { withCredentials: true });
 
+  return response.data;
+}
+
+export type UpdateUserDto = {
+  first_name: string;
+  last_name: string;
+  phone_number?: string;
+  date_of_birth?: string;
+};
+
+export async function updateUser(data: UpdateUserDto): Promise<UserDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__user;
+  const response = await axios.patch<UserDto>(url, data, { withCredentials: true });
   return response.data;
 }
 
@@ -201,43 +223,93 @@ export async function getPermissions(): Promise<PermissionDto[]> {
   return response.data;
 }
 
-export async function getInformationPages(): Promise<InformationPageDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__information_list;
+export async function getInformationPage(slug_field: string): Promise<InformationPageDto> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__information_pages_detail, urlParams: { slugField: slug_field } });
+  const response = await axios.get<InformationPageDto>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function getAdminInformationPages(): Promise<InformationPageDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__admin_information_pages_list;
   const response = await axios.get<InformationPageDto[]>(url, { withCredentials: true });
 
   return response.data;
 }
 
-export async function getInformationPage(slug_field: string): Promise<InformationPageDto> {
+export async function getAdminInformationPage(slug_field: string): Promise<InformationPageDto> {
   const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: slug_field } });
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__admin_information_pages_detail,
+      urlParams: { slugField: slug_field },
+    });
   const response = await axios.get<InformationPageDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getAdminInformationPageHistory(slug_field: string): Promise<InformationPageRevisionDto[]> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__admin_information_pages_history,
+      urlParams: { slugField: slug_field },
+    });
+  const response = await axios.get<InformationPageRevisionDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getAdminInformationPageRevision(
+  slug_field: string,
+  version: number,
+): Promise<InformationPageRevisionDetailDto> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__admin_information_pages_history_detail,
+      urlParams: { slugField: slug_field, version: version },
+    });
+  const response = await axios.get<InformationPageRevisionDetailDto>(url, { withCredentials: true });
 
   return response.data;
 }
 
 export async function deleteInformationPage(slug_field: string): Promise<AxiosResponse> {
   const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: slug_field } });
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__admin_information_pages_detail,
+      urlParams: { slugField: slug_field },
+    });
   const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
 
   return response.data;
 }
 
-export async function postInformationPage(data: InformationPageDto): Promise<InformationPageDto> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__information_list;
+export async function getInformationPageOwnerOptions(): Promise<InformationPageOwnerOptionDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__admin_information_pages_owner_options;
+  const response = await axios.get<InformationPageOwnerOptionDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function postInformationPage(data: EditInformationPageDto): Promise<InformationPageDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__admin_information_pages_list;
   const response = await axios.post<InformationPageDto>(url, data, { withCredentials: true });
   return response.data;
 }
 
-export async function putInformationPage(
-  slug_field: string,
-  page: Partial<InformationPageDto>,
-): Promise<AxiosResponse> {
+export async function putInformationPage(slug: string, page: EditInformationPageDto): Promise<AxiosResponse> {
   const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__information_detail, urlParams: { pk: slug_field } });
-  const response = await axios.put<InformationPageDto>(url, page, { withCredentials: true });
-  return response;
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__admin_information_pages_detail,
+      urlParams: { slugField: slug },
+    });
+  return await axios.put<InformationPageDto>(url, page, { withCredentials: true });
 }
 
 export async function getEventsPerDay(): Promise<EventDto[]> {
@@ -286,6 +358,26 @@ export async function getEventsUpcomming(params: {
   };
 }
 
+export async function getEventsUpcommingPaginated(
+  page: number,
+  pageSize?: number,
+  params?: {
+    search?: string;
+    venue?: string;
+    category?: string;
+    ticket_type?: string;
+  },
+): Promise<EventsPaginationType<EventDto>> {
+  const url = buildPaginatedUrl(BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcomming, page, pageSize, {
+    ...(params?.search ? { search: params.search } : {}),
+    ...(params?.venue ? { venue: params.venue } : {}),
+    ...(params?.category ? { category: params.category } : {}),
+    ...(params?.ticket_type ? { ticket_type: params.ticket_type } : {}),
+  });
+  const response = await axios.get<EventsPaginationType<EventDto>>(url, { withCredentials: true });
+  return response.data;
+}
+
 export async function getEvents(): Promise<EventDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_list;
   const response = await axios.get<EventDto[]>(url, { withCredentials: true });
@@ -293,14 +385,13 @@ export async function getEvents(): Promise<EventDto[]> {
   return response.data;
 }
 
-export async function postEvent(data: Partial<EventDto>): Promise<AxiosResponse<EventDto>> {
-  const transformed = { ...data, image_id: data.image?.id };
+export async function postEvent(data: Partial<EventWriteDto>): Promise<AxiosResponse<EventDto>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_list;
-  const response = await axios.post<EventDto>(url, transformed, { withCredentials: true });
+  const response = await axios.post<EventDto>(url, data, { withCredentials: true });
   return response;
 }
 
-export async function putEvent(id: string | number, data: Partial<EventDto>): Promise<AxiosResponse<EventDto>> {
+export async function putEvent(id: string | number, data: Partial<EventWriteDto>): Promise<AxiosResponse<EventDto>> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
   const response = await axios.put<EventDto>(url, data, { withCredentials: true });
   return response;
@@ -410,34 +501,48 @@ export async function getTextItem(pk: string): Promise<TextItemDto> {
   return response.data;
 }
 
-export async function getSaksdokumenter(): Promise<SaksdokumentDto[]> {
+export async function getCaseDocuments(): Promise<CaseDocumentDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__saksdokument_list;
-  const response = await axios.get<SaksdokumentDto[]>(url, { withCredentials: true });
-
+  const response = await axios.get<CaseDocumentDto[]>(url, { withCredentials: true });
   return response.data;
 }
 
-export async function getSaksdokument(pk: string | number): Promise<SaksdokumentDto> {
+export async function getCaseDocumentCategories(): Promise<CaseDocumentCategoryDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__saksdokument_categories;
+  const response = await axios.get<CaseDocumentCategoryDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function getCaseDocument(id: number): Promise<CaseDocumentDto> {
   const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_detail, urlParams: { pk: pk } });
-  const response = await axios.get<SaksdokumentDto>(url, { withCredentials: true });
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_detail, urlParams: { pk: id } });
+  const response = await axios.get<CaseDocumentDto>(url, { withCredentials: true });
 
   return response.data;
 }
 
-export async function postSaksdokument(data: SaksdokumentDto): Promise<SaksdokumentDto> {
+export async function postCaseDocument(data: CaseDocumentPostDto): Promise<CaseDocumentDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__saksdokument_list;
-  const response = await axios.postForm<SaksdokumentDto>(url, data, {
+  const response = await axios.postForm<CaseDocumentDto>(url, data, {
     withCredentials: true,
   });
   return response.data;
 }
 
-export async function putSaksdokument(id: string | number, data: Partial<SaksdokumentDto>): Promise<AxiosResponse> {
+export async function putCaseDocument(id: string | number, data: Partial<CaseDocumentDto>): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_detail, urlParams: { pk: id } });
-  const response = await axios.put<SaksdokumentDto>(url, data, { withCredentials: true });
-  return response;
+  return await axios.put<CaseDocumentDto>(url, data, { withCredentials: true });
+}
+
+export async function deleteCaseDocument(id: number): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__saksdokument_detail,
+      urlParams: { pk: id },
+    });
+  return await axios.delete<CaseDocumentDto>(url, { withCredentials: true });
 }
 
 export async function getOrganizations(): Promise<OrganizationDto[]> {
@@ -568,13 +673,12 @@ export async function getImagesPaginated(
   page: number,
   pageSize?: number,
   search?: string,
+  tag?: string,
 ): Promise<PageNumberPaginationType<ImageDto>> {
-  const url = buildPaginatedUrl(
-    BACKEND_DOMAIN + ROUTES.backend.samfundet__images_list,
-    page,
-    pageSize,
-    search ? { search } : undefined,
-  );
+  const url = buildPaginatedUrl(BACKEND_DOMAIN + ROUTES.backend.samfundet__images_list, page, pageSize, {
+    search: search || undefined,
+    tag: tag || undefined,
+  });
   const response = await axios.get<PageNumberPaginationType<ImageDto>>(url, { withCredentials: true });
   return response.data;
 }
@@ -591,10 +695,33 @@ export async function postImage(data: ImagePostDto): Promise<ImageDto> {
   return response.data;
 }
 
-export async function putImage(id: string | number, data: Partial<ImageDto>): Promise<AxiosResponse> {
+export async function patchImage(id: number, data: ImagePatchDto): Promise<ImageDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
-  const response = await axios.put<ImageDto>(url, data, { withCredentials: true });
+  const response = await axios.patchForm<ImageDto>(url, data, { withCredentials: true });
+  return response.data;
+}
+
+export async function deleteImage(id: number): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
+  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
   return response;
+}
+
+export async function getTags(): Promise<TagDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__tags_list;
+  const response = await axios.get<TagDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function getPopularTags(): Promise<TagDto[]> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__tags_list,
+      queryParams: { popular: 'true' },
+    });
+  const response = await axios.get<TagDto[]>(url, { withCredentials: true });
+  return response.data;
 }
 
 /** Fetch all KeyValues from backend. */
@@ -1312,5 +1439,18 @@ export async function getPositionsByTag(
   }?tags=${encodeURIComponent(tags)}&position_id=${currentPositionId}`;
 
   const response = await axios.get<PositionsByTagResponse>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function connectToMdb(
+  member_login: string, //email or member_id
+  password: string,
+) {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({
+      pattern: ROUTES.backend.samfundet__mdb_connect,
+    });
+  const response = await axios.post(url, { member_login, password }, { withCredentials: true });
   return response.data;
 }

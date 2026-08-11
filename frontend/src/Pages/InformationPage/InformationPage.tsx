@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { Button } from '~/Components';
+import { Button, H1 } from '~/Components';
 import { Page } from '~/Components/Page';
 import { getInformationPage } from '~/api';
 import type { InformationPageDto } from '~/dto';
@@ -72,7 +72,8 @@ export function InformationPage() {
           <br />
         </>
       )}
-      <SamfMarkdown>{`# ${title} \n ${text}`}</SamfMarkdown>
+      <H1>{title}</H1>
+      <SamfMarkdown markdown={text} />
     </Page>
   );
 }

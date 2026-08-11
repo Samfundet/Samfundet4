@@ -30,5 +30,5 @@ The easiest way to fix this is to simply delete the migration file you have crea
 command again:
 
 * Docker: `docker compose exec backend bash`
-    * Then run the same Poetry command as in the line below
-* Native: `poetry run python3 manage.py makemigrations`
+    * Then run the same uv command as in the line below
+* Native: `uv run python3 manage.py makemigrations`
