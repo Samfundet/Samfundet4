@@ -1,0 +1,38 @@
+@use '../../mixins' as m;
+
+@use '../../styles/colors' as c;
+
+@use '../../styles/variables' as v;
+
+.row {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  align-items: flex-end;
+
+  @include m.for-mobile-down {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.form_item {
+  flex: 1;
+}
+
+.action_row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.cannot_reupload {
+  color: c.$gray-400;
+  font-family: v.$font-family-italic;
+}
+
+.delete_btn:only-child {
+  margin-right: auto;
+}

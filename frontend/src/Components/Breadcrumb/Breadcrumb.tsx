@@ -1,17 +1,9 @@
 import { Icon } from '@iconify/react';
-import type { ReactNode } from 'react';
-import { type UIMatch, useMatches } from 'react-router';
+import { useMatches } from 'react-router';
 import { Link } from '~/Components';
 import { ROUTES } from '~/routes';
+import type { MatchWithCrumb } from '~/types';
 import styles from './Breadcrumb.module.scss';
-
-type HandleWithCrumb = {
-  crumb: (match: UIMatch, data?: unknown) => ReactNode;
-};
-
-interface MatchWithCrumb extends UIMatch {
-  handle: HandleWithCrumb;
-}
 
 export function Breadcrumb() {
   const matches = useMatches();
@@ -27,8 +19,8 @@ export function Breadcrumb() {
       </Link>
       {crumbs.map((crumb, i) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
-        <div key={i}>
-          <span className={styles.separator}>&gt;</span>
+        <div key={i} className={styles.crumb}>
+          <Icon icon="carbon:chevron-right" className={styles.separator} />
           {crumb}
         </div>
       ))}

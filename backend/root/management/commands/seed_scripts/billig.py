@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import os
+import random
 from collections.abc import Iterable
 
 import django
@@ -86,6 +87,7 @@ def seed_tables() -> Iterable[tuple[int, str]]:
                 sale_from=event.start_dt - timezone.timedelta(days=90),
                 sale_to=event.start_dt + timezone.timedelta(minutes=30),
                 hidden=False,
+                ticket_fee=random.randint(20, 50),
             )
             events.append(billig_event)
 

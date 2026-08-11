@@ -95,7 +95,6 @@ function toTicketGroups(event: EventDto): BilligTicketGroupOption[] {
         if (priceGroups.length === 0) {
           return undefined;
         }
-
         const perPriceGroupLimit = ticketGroup.ticket_limit ?? DEFAULT_PRICE_GROUP_LIMIT;
         const groupLimit = ticketGroup.ticket_limit ?? DEFAULT_PRICE_GROUP_LIMIT * priceGroups.length;
 

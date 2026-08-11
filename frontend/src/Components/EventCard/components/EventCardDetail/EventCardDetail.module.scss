@@ -1,0 +1,27 @@
+@use '../../../../mixins' as m;
+
+@use '../../../../styles/colors' as c;
+
+@use '../../../../styles/variables' as v;
+
+.detail_container {
+  display: flex;
+  color: c.$gray-400;
+  margin-top: 0.5rem;
+  font-size: v.$font-size;
+  gap: 0.25rem;
+  justify-content: space-between;
+}
+
+.detail_group {
+  display: flex;
+  gap: 0.25rem;
+  align-items: flex-start;
+}
+
+.detail {
+  display: flex;
+  gap: 0.125rem;
+  align-items: center;
+  color: c.$gray-400;
+}

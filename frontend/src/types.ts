@@ -1,5 +1,6 @@
-import type { Dispatch, SetStateAction } from 'react';
-import type { themeToStyleMap } from '~/Components/Button/utils';
+import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type { UIMatch } from 'react-router';
+import type { buttonThemes } from '~/Components/Button/utils';
 import type { KV } from '~/constants';
 /** Module for global generic types. */
 
@@ -99,6 +100,9 @@ export type ColorValue = (typeof COLORS)[ColorKey];
 /** Easy type when adding setStates to Context. */
 export type SetState<T> = Dispatch<SetStateAction<T>>;
 
+// biome-ignore lint/suspicious/noExplicitAny: required to be able to use it everywhere :-)
+export type DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K> : never;
+
 /** Days */
 export type Day = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 export const ALL_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -172,8 +176,6 @@ export type CalendarMarker = {
 };
 
 export type SiteFeature =
-  | 'profile'
-  | 'changePassword'
   | 'events'
   | 'images'
   | 'openingHours'
@@ -220,7 +222,7 @@ export type OrganizationTheme = {
   pagePrimaryColor: string;
   pageSecondaryColor: string;
   pageTertiaryColor?: string;
-  buttonTheme: keyof typeof themeToStyleMap;
+  buttonTheme: keyof typeof buttonThemes;
 };
 
 // Recruitment mappings
@@ -281,4 +283,12 @@ export interface CursorPaginatedResponse<T> {
   next: string | null; // URL or cursor for next page
   previous: string | null; // URL or cursor for previous page
   results: T[]; // Current page results
+}
+
+export type HandleWithCrumb = {
+  crumb: (match: UIMatch, data?: unknown) => ReactNode;
+};
+
+export interface MatchWithCrumb extends UIMatch {
+  handle: HandleWithCrumb;
 }

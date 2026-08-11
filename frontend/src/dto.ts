@@ -8,6 +8,26 @@ import type {
   HomePageElementVariation,
 } from './types';
 
+export type BaseModelDto = {
+  version?: number;
+  created_at?: string;
+  updated_at?: string;
+  created_by?: BasicUserDto | UserDto | null;
+  updated_by?: BasicUserDto | UserDto | null;
+};
+
+// Models which are owned by an org/gang/section should extend this type.
+export type BaseOwnedModelDto = {
+  organization?: OrganizationDto | number | null;
+  gang?: GangDto | number | null;
+  section?: GangSectionDto | number | null;
+};
+
+export type RolePermissionsGrouped =
+  | { org: number; permissions: string[] }
+  | { gang: number; permissions: string[] }
+  | { section: number; permissions: string[] };
+
 export type UserDto = {
   id: number;
   username: string;
@@ -21,12 +41,16 @@ export type UserDto = {
   date_joined: Date;
   last_login: Date | null;
   user_preference: UserPreferenceDto;
-  profile: ProfileDto;
   groups: GroupDto[];
   permissions?: string[];
   object_permissions?: ObjectPermissionDto[];
   role_permissions?: string[];
+  role_permissions_grouped?: RolePermissionsGrouped[];
+  mdb_medlem_id?: number;
+  date_of_birth?: string;
 };
+
+export type BasicUserDto = Pick<UserDto, 'username' | 'first_name' | 'last_name'>;
 
 export type CampusDto = {
   id: number;
@@ -185,7 +209,6 @@ export type EventDto = {
   custom_tickets: EventCustomTicketDto[];
 
   image?: ImageDto;
-  image_url: string;
 
   capacity?: number;
 };
@@ -223,19 +246,27 @@ export type EventGroupDto = {
   name: string;
 };
 
-export type ProfileDto = {
-  id: number;
-  nickname: string;
-};
-
 export type UserPreferenceDto = {
   id: number;
   theme: ThemeValue;
-  mirror_dimension: boolean;
-  cursor_trail: boolean;
 };
 
-export type InformationPageDto = {
+export type EditInformationPageDto = {
+  slug_field: string;
+  title_nb: string;
+  text_nb: string;
+  title_en: string;
+  text_en: string;
+  visible: boolean;
+
+  // Exactly one of these is set, never both
+  gang_id?: number;
+  section_id?: number;
+};
+
+export type InformationPageDto = BaseModelDto & {
+  // Only admin endpoints include id
+  id?: number;
   slug_field: string;
 
   title_nb?: string;
@@ -243,6 +274,35 @@ export type InformationPageDto = {
 
   title_en?: string;
   text_en?: string;
+
+  visible?: boolean;
+
+  // `section` is only set when the page is owned by a section
+  section?: GangSectionDto | null;
+  gang?: GangDto | null;
+  organization?: OrganizationDto | null;
+};
+
+export type InformationPageRevisionDto = {
+  version: number;
+  title_nb?: string | null;
+  title_en?: string | null;
+  created_at: string;
+  created_by?: string | null;
+};
+
+export type InformationPageRevisionDetailDto = InformationPageRevisionDto & {
+  text_nb?: string | null;
+  text_en?: string | null;
+};
+
+export type InformationPageOwnerOptionDto = {
+  gang: GangDto;
+  section: GangSectionDto | null;
+  organization: OrganizationDto | null;
+  can_create: boolean;
+  can_change: boolean;
+  can_delete: boolean;
 };
 
 export type ReservationTableDto = {
@@ -324,7 +384,12 @@ export type ReservationDto = {
   // internal_message?: string;
 };
 
-export type SaksdokumentDto = {
+export type CaseDocumentCategoryDto = {
+  label: string;
+  value: string;
+};
+
+export type CaseDocumentDto = BaseModelDto & {
   id: number;
   title_nb: string;
   title_en: string;
@@ -332,6 +397,14 @@ export type SaksdokumentDto = {
   publication_date: string;
   file?: string; // For posting to backend
   url?: string; // Read only backend url
+};
+
+export type CaseDocumentPostDto = {
+  title_nb: string;
+  title_en: string;
+  category: string;
+  publication_date?: string;
+  file: File;
 };
 
 export type TextItemDto = {
@@ -389,18 +462,32 @@ export type TagDto = {
   id: number;
   name: string;
   color: string;
+
+  // Only set by endpoints that annotate usage
+  // TODO: maybe make this generic...? but maybe it's too much of a hassle,
+  //  since we'll likely only ever add event_count
+  image_count?: number | null;
 };
 
-export type ImageDto = {
+export type ImageSize = 'original' | 'large' | 'medium' | 'small';
+
+export type ImageDto = BaseModelDto & {
   id: number;
   title: string;
-  url: string;
+  urls: Record<ImageSize, string>;
   tags: TagDto[];
 };
 
-export type ImagePostDto = ImageDto & {
+export type ImagePostDto = {
+  title: string;
   tag_string: string;
   file: File;
+};
+
+export type ImagePatchDto = {
+  title?: string;
+  tag_string?: string;
+  file?: File;
 };
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -423,12 +510,11 @@ export type RoleDto = {
   content_type?: string | null;
 };
 
-export type UserRole = {
+export type UserRole = BaseModelDto & {
   id: number;
   user: UserDto;
   created_at: Date;
   obj: OrganizationDto | GangDto | GangSectionDto;
-  created_by?: UserDto;
 };
 
 export type UserGangRoleDto = Omit<UserRole, 'obj'> & {
@@ -598,7 +684,7 @@ export type RecruitmentPositionOrganizedApplicationsDto = {
   hardtoget: RecruitmentApplicationDto[];
 };
 
-export type RecruitmentApplicationDto = {
+export type RecruitmentApplicationDto = BaseModelDto & {
   id: string;
   interview?: InterviewDto;
   interview_time?: Date;
@@ -610,7 +696,6 @@ export type RecruitmentApplicationDto = {
   recruiter_priority?: number;
   recruiter_status?: number;
   applicant_state?: number;
-  created_at: string;
   withdrawn: boolean;
   application_count?: number;
   comment?: string;
@@ -734,5 +819,6 @@ export type RegistrationDto = {
   phone_number: string;
   firstname: string;
   lastname: string;
+  date_of_birth: string;
   password: string;
 };

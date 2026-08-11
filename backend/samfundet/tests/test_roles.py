@@ -1,7 +1,10 @@
 from __future__ import annotations
 
-from django.contrib.auth.models import Permission
+import pytest
 
+from django.contrib.auth.models import Permission, AnonymousUser
+
+from samfundet.roles import get_owner_permission_map
 from samfundet.models import Gang, User, GangSection, Organization
 from samfundet.backend import RoleAuthBackend
 from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
@@ -270,3 +273,170 @@ def test_has_perm_section_upward(
     UserGangRole.objects.create(user=fixture_user, role=fixture_role, obj=fixture_gang)
 
     assert not backend.has_perm(fixture_user, fixture_org_permission.codename, fixture_organization)
+
+
+def perm(full_name: str) -> Permission:
+    return Permission.objects.get(codename=full_name.split('.')[1])
+
+
+def grant(user: User, role: Role, obj: Organization | Gang | GangSection, *perms: str) -> None:
+    """Gives the user a role on an object, carrying the named permissions."""
+    role.permissions.add(*[perm(p) for p in perms])
+    if isinstance(obj, Organization):
+        UserOrgRole.objects.create(user=user, role=role, obj=obj)
+    elif isinstance(obj, Gang):
+        UserGangRole.objects.create(user=user, role=role, obj=obj)
+    else:
+        UserGangSectionRole.objects.create(user=user, role=role, obj=obj)
+
+
+# These perms must be distinct
+PERM_A = 'samfundet.test_org_permission'
+PERM_B = 'samfundet.test_gang_permission'
+PERM_C = 'samfundet.test_gang_section_permission'
+
+
+@pytest.fixture
+def fixture_permissions(
+    fixture_org_permission: Permission,
+    fixture_gang_permission: Permission,
+    fixture_gang_section_permission: Permission,
+) -> tuple[str, ...]:
+    return PERM_A, PERM_B, PERM_C
+
+
+@pytest.fixture
+def gang_in_same_org(fixture_organization: Organization) -> Gang:
+    return Gang.objects.create(name_nb='Sibling', name_en='Sibling', abbreviation='SIB', organization=fixture_organization)
+
+
+class TestOwnerPermissionMap:
+    """
+    get_owner_permission_map resolves the same hierarchy as RoleAuthBackend above, but in bulk:
+    given a set of permissions, which gangs and sections does the user hold them for.
+    """
+
+    def test_gang_role_grants_only_that_gang(
+        self,
+        fixture_user: User,
+        fixture_role: Role,
+        fixture_gang: Gang,
+        fixture_gang2: Gang,
+        fixture_permissions: tuple[str, ...],
+    ):
+        grant(fixture_user, fixture_role, fixture_gang, PERM_A)
+
+        capabilities = get_owner_permission_map(user=fixture_user, permissions=fixture_permissions)
+
+        assert capabilities.gangs == {fixture_gang.id: {PERM_A}}
+
+    def test_org_role_expands_to_all_gangs_in_org(
+        self,
+        fixture_user: User,
+        fixture_role: Role,
+        fixture_organization: Organization,
+        fixture_gang: Gang,
+        fixture_gang2: Gang,
+        gang_in_same_org: Gang,
+        fixture_permissions: tuple[str, ...],
+    ):
+        grant(fixture_user, fixture_role, fixture_organization, PERM_A)
+
+        capabilities = get_owner_permission_map(user=fixture_user, permissions=fixture_permissions)
+
+        assert set(capabilities.gangs) == {fixture_gang.id, gang_in_same_org.id}
+        assert fixture_gang2.id not in capabilities.gangs
+
+    def test_section_role_grants_only_that_section(
+        self,
+        fixture_user: User,
+        fixture_role: Role,
+        fixture_gang_section: GangSection,
+        fixture_gang_section2: GangSection,
+        fixture_permissions: tuple[str, ...],
+    ):
+        """Permissions do not flow upwards, so the section's gang is left out."""
+        grant(fixture_user, fixture_role, fixture_gang_section, PERM_A)
+
+        capabilities = get_owner_permission_map(user=fixture_user, permissions=fixture_permissions)
+
+        assert capabilities.sections == {fixture_gang_section.id: {PERM_A}}
+        assert capabilities.gangs == {}
+
+    def test_gang_role_reaches_its_sections(
+        self,
+        fixture_user: User,
+        fixture_role: Role,
+        fixture_gang_section: GangSection,
+        fixture_gang_section2: GangSection,
+        fixture_permissions: tuple[str, ...],
+    ):
+        grant(fixture_user, fixture_role, fixture_gang_section.gang, PERM_A)
+
+        capabilities = get_owner_permission_map(user=fixture_user, permissions=fixture_permissions)
+
+        assert capabilities.for_section(fixture_gang_section.id) == {PERM_A}
+        assert capabilities.for_section(fixture_gang_section2.id) == set()
+
+    def test_org_role_reaches_sections_of_its_gangs(
+        self,
+        fixture_user: User,
+        fixture_role: Role,
+        fixture_organization: Organization,
+        fixture_gang_section: GangSection,
+        fixture_permissions: tuple[str, ...],
+    ):
+        grant(fixture_user, fixture_role, fixture_organization, PERM_A)
+
+        capabilities = get_owner_permission_map(user=fixture_user, permissions=fixture_permissions)
+
+        assert capabilities.for_section(fixture_gang_section.id) == {PERM_A}
+
+    def test_superuser_gets_every_owner(
+        self,
+        fixture_superuser: User,
+        fixture_gang: Gang,
+        fixture_gang2: Gang,
+        fixture_gang_section: GangSection,
+        fixture_permissions: tuple[str, ...],
+    ):
+        capabilities = get_owner_permission_map(user=fixture_superuser, permissions=fixture_permissions)
+
+        assert set(capabilities.gangs) == {fixture_gang.id, fixture_gang2.id}
+        assert set(capabilities.sections) == {fixture_gang_section.id}
+        assert capabilities.for_gang(fixture_gang.id) == set(fixture_permissions)
+        assert capabilities.for_section(fixture_gang_section.id) == set(fixture_permissions)
+
+    def test_roles_are_merged_per_gang(
+        self,
+        fixture_user: User,
+        fixture_gang: Gang,
+        fixture_organization: Organization,
+        fixture_permissions: tuple[str, ...],
+    ):
+        grant(fixture_user, Role.objects.create(name='Org role'), fixture_organization, PERM_B)
+        grant(fixture_user, Role.objects.create(name='Gang role'), fixture_gang, PERM_C)
+
+        capabilities = get_owner_permission_map(user=fixture_user, permissions=fixture_permissions)
+
+        assert capabilities.for_gang(fixture_gang.id) == {PERM_B, PERM_C}
+
+    def test_section_role_merges_with_what_the_gang_grants(
+        self,
+        fixture_user: User,
+        fixture_gang_section: GangSection,
+        fixture_permissions: tuple[str, ...],
+    ):
+        grant(fixture_user, Role.objects.create(name='Gang role'), fixture_gang_section.gang, PERM_B)
+        grant(fixture_user, Role.objects.create(name='Section role'), fixture_gang_section, PERM_C)
+
+        capabilities = get_owner_permission_map(user=fixture_user, permissions=fixture_permissions)
+
+        assert capabilities.for_section(fixture_gang_section.id) == {PERM_B, PERM_C}
+        assert capabilities.for_gang(fixture_gang_section.gang_id) == {PERM_B}
+
+    def test_anonymous_user_gets_nothing(self, fixture_gang: Gang, fixture_permissions: tuple[str, ...]):
+        capabilities = get_owner_permission_map(user=AnonymousUser(), permissions=fixture_permissions)
+
+        assert capabilities.gangs == {}
+        assert capabilities.sections == {}
