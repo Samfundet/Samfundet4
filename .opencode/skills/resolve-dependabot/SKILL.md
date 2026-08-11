@@ -249,7 +249,7 @@ The report uses this structure:
 ### Action for User
 1. Review each smoke-test guide above
 2. Manually verify the checked-out PR behaviors on the [branch](URL)
-3. Merge passing PRs with: `gh pr merge <NUMBER> --squash`
+3. Approve passing PRs with: `gh pr review <NUMBER> --approve`
 ```
 
 Omit the "Failed PRs" and "Superseded" sections if they are empty.

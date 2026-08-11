@@ -5,6 +5,28 @@ Dependabot suggests packages/dependencies which need to be updated. When there i
 
 When approving dependabot pull requests and merging them, the main goal is to NOT break master in a major way for other developers. It is time-consuming to check that every little dependency upgrade does not break any of our code. If you follow these tips and steps, the pull request should be good to approve and merge.
 
+## Automated Pipeline (Recommended)
+
+The project includes an OpenCode skill that automates the dependabot resolution workflow. Instead of manually following every step below, run the `/dependabot` command in OpenCode:
+
+```
+/dependabot all        → process all open dependabot PRs
+/dependabot frontend   → frontend PRs only
+/dependabot backend    → backend PRs only
+/dependabot 2253       → a single PR by number
+```
+
+The skill will, for each PR:
+1. Run the full CI pipeline locally in Docker (backend: ruff + migrations + pytest + mypy, frontend: biome + tsc + stylelint)
+2. Analyze which production code imports or uses the dependency
+3. Detect and close superseded PRs (same package, older version)
+4. Generate a per-dependency smoke-test guide with manual verification steps
+5. Write a comprehensive report to `docs/dependabot-report/dependabot-report-<date>-<time>.md`
+
+The skill **never auto-merges** — you review the report and smoke-test before merging manually.
+
+See `.opencode/skills/resolve-dependabot/SKILL.md` for the full workflow specification.
+
 ## Tips:
 
 - Generally, to SAVE TIME you should check and approve dependabot pull requests in the order of when the last one was merged. That is; approve and merge a dependabot pull request, then go on to the next one.
