@@ -11,7 +11,7 @@ import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { PERM } from '~/permissions';
 import { eventKeys } from '~/queryKeys';
-import { dbT, imageUrl } from '~/utils';
+import { dbT, hasPerm, imageUrl } from '~/utils';
 import styles from './EventPage.module.scss';
 import { EventInformation } from './components/EventInformation/EventInformation';
 import { EventTable } from './components/EventTable';
