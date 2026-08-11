@@ -54,7 +54,6 @@ export function HomePage() {
   return (
     <>
       <Splash events={homePage?.splash} showInfo={true} />
-      <OpeningHoursContainer />
       <div className={styles.content}>
         {/*<SplashHeaderBox />*/}
         {isLoading && skeleton}
