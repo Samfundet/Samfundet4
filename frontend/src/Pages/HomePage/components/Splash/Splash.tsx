@@ -3,13 +3,12 @@ import classNames from 'classnames';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, IconButton } from '~/Components';
-import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { COLORS, PAID_TICKET_TYPES } from '~/types';
-import { dbT, lowerCapitalize } from '~/utils';
+import { dbT, lowerCapitalize, imageUrl as resolveImageUrl } from '~/utils';
 import styles from '../../HomePage.module.scss';
 
 type SplashProps = {
@@ -29,9 +28,9 @@ export function Splash({ events, showInfo }: SplashProps) {
   const nextIndex = events ? (index + 1) % events?.length : 0;
   const prevIndex = events ? (index - 1 + events.length) % events.length : 0;
 
-  const imageUrl = events ? BACKEND_DOMAIN + events[index].image_url : '';
-  const nextImageUrl = events ? BACKEND_DOMAIN + events[nextIndex].image_url : '';
-  const prevImageUrl = events ? BACKEND_DOMAIN + events[prevIndex].image_url : '';
+  const imageUrl = events ? resolveImageUrl(events[index].image, 'large') ?? '' : '';
+  const nextImageUrl = events ? resolveImageUrl(events[nextIndex].image, 'large') ?? '' : '';
+  const prevImageUrl = events ? resolveImageUrl(events[prevIndex].image, 'large') ?? '' : '';
 
   const description = events ? dbT(events[index], 'description_short') : '';
 

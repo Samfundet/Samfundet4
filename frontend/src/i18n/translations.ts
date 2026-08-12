@@ -82,6 +82,7 @@ export const nb = prepareTranslations({
   [KEY.common_tags]: 'Merkelapper',
   [KEY.common_contributors]: 'Bidragsytere',
   [KEY.common_image]: 'Bilde',
+  [KEY.common_file]: 'Fil',
   [KEY.common_venue]: 'Lokale',
   [KEY.common_title]: 'Tittel',
   [KEY.common_login]: 'Logg inn',
@@ -101,8 +102,10 @@ export const nb = prepareTranslations({
   [KEY.common_go_back]: 'Tilbake',
   [KEY.common_interval]: 'Intervall',
   [KEY.common_preview]: 'Forhåndsvisning',
+  [KEY.common_version]: 'Versjon',
   [KEY.common_search]: 'Søk',
   [KEY.common_choose]: 'Velg',
+  [KEY.common_visible]: 'Synlig',
   [KEY.common_sulten]: 'Lyche',
   [KEY.common_missing]: 'Mangler',
   [KEY.common_contact]: 'Kontakt',
@@ -189,10 +192,16 @@ export const nb = prepareTranslations({
   [KEY.common_available]: 'Tilgjengelig',
   [KEY.common_comment]: 'Kommentar',
   [KEY.common_capacity]: 'Kapasitet',
+  [KEY.common_link]: 'Lenke',
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
   [KEY.common_read_more]: 'Les mer',
+  [KEY.common_created_by]: 'Opprettet av',
+  [KEY.common_uploaded_by]: 'Lastet opp av',
+  [KEY.common_last_edited_by]: 'Sist endret av',
+  [KEY.common_publication_date]: 'Publiseringsdato',
+  [KEY.common_casedocuments]: 'Saksdokumenter',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -260,7 +269,7 @@ export const nb = prepareTranslations({
     'Vi jobber for tiden med å bygge en helt ny nettside for Samfundet.no. Funksjoner fra den gamle nettsiden vil gradvis bli tilgjengelige på den nye nettsiden, så foreløpig må du velge hvor du vil logge inn basert på hvilken funksjon du trenger.',
   [KEY.loginpicker_page_nav_aria_label]: 'Velg innlogging',
   [KEY.loginpicker_page_new_platform_title]: 'Ny nettside (samf4)',
-  [KEY.loginpicker_page_new_platform_description]: 'Arrangementer og generell bruk',
+  [KEY.loginpicker_page_new_platform_description]: 'Arrangementer, saksdokumenter, infosider, og generell bruk',
   [KEY.loginpicker_page_old_platform_title]: 'Eldre nettside (samf3)',
   [KEY.loginpicker_page_old_platform_description]: 'Gruppeadministrasjon, opptak, og andre administrative oppgaver.',
   [KEY.loginpicker_page_old_platform_note]: 'NB: Kun tilgjengelig for frivillige',
@@ -283,8 +292,16 @@ export const nb = prepareTranslations({
 
   // EventPage:
   [KEY.event_registration_url]: 'Registreringslenke',
+  [KEY.event_general_link]: 'Generell lenke',
+  [KEY.event_spotify_uri_help]:
+    'Legg til Spotify URI-en til en spilleliste, og en widget med denne listen vil dukke opp på arrangementsiden.',
+  [KEY.event_youtube_link_help]: 'Legg til YouTube-video som skal linkes til',
+  [KEY.event_youtube_embed_help]: 'Legg til YouTube-video som skal embeddes, så vil den vises på arrangementsiden.',
   [KEY.event_add_ticket]: 'Legg til billett',
   [KEY.event_invalid_form_error]: 'Skjemaet inneholder valideringsfeil. Vennligst sjekk de uthevede feltene.',
+  [KEY.event_must_be_valid_url]: 'Må være en gyldig URL',
+  [KEY.event_must_be_valid_spotify_uri]: 'Må være en gyldig Spotify URI',
+  [KEY.event_publication_date_required]: 'Publiseringsdato er påkrevd',
 
   // Event categories
   [KEY.event_category_art]: 'Kunst',
@@ -346,11 +363,9 @@ export const nb = prepareTranslations({
   [KEY.adminpage_connect_mdb_password_notice_1]: 'Passordet ditt til ',
   [KEY.adminpage_connect_mdb_password_notice_2]: 'medlemsdatabasen',
 
-  // SaksdokumentPage:
-  [KEY.saksdokumentpage_publication_date]: 'Publiseringsdato',
-
   // InformationPage
   [KEY.information_page]: 'Informasjonsside',
+  [KEY.information_pages]: 'Informasjonssider',
   [KEY.information_page_short]: 'Side',
 
   // Navbar:
@@ -513,24 +528,43 @@ export const nb = prepareTranslations({
     'Her har man oversikt over dine kommende intervjuer, stillinger du har noe å gjøre med, og kan sette tider du er tilgjengelig til å avholde intervjuer',
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
-  [KEY.admin_saksdokument]: 'Saksdokument',
+  [KEY.admin_casedocument]: 'Saksdokument',
   [KEY.admin_images_title]: 'Bildearkiv',
-  [KEY.admin_images_create]: 'Nytt Bilde',
+  [KEY.admin_images_create]: 'Nytt bilde',
+  [KEY.admin_images_confirm_delete]: 'Er du sikker på at du vil slette dette bildet? Dette kan ikke angres.',
+  [KEY.admin_images_add_tag]: 'Legg til merkelapp',
+  [KEY.admin_images_delete_in_use]: 'Bildet er i bruk og kan dermed ikke slettes.',
+  [KEY.admin_image_form_tag_description]: 'Skriv inn merkelapp og tast Enter eller Komma for å legge den til i listen',
   [KEY.admin_no_image_selected]: 'Ingen bilde valgt',
+  [KEY.admin_markdown_insert_image]: 'Sett inn bilde',
+  [KEY.admin_markdown_image_insert]: 'Sett inn',
+  [KEY.admin_markdown_image_choose_existing]: 'Velg eksisterende',
+  [KEY.admin_markdown_image_upload_new]: 'Last opp nytt',
+  [KEY.admin_markdown_image_alt_text]: 'Alternativ tekst',
+  [KEY.admin_markdown_image_alt_text_description]:
+    'Beskrivelse for skjermlesere. Navnet på bildet brukes hvis feltet står tomt.',
+  [KEY.admin_markdown_image_not_found]: 'Bildet finnes ikke',
   [KEY.admin_steal_identity]: 'Stjel identitet',
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
-  [KEY.admin_saksdokumenter_title]: 'Administrer saksdokumenter',
+  [KEY.admin_casedocuments_title]: 'Administrer saksdokumenter',
   [KEY.admin_sultenmenu_title]: 'Administrer Lyche meny',
   [KEY.admin_users_last_active]: 'Sist aktiv',
   [KEY.admin_events_recently_edited]: 'Nylig redigert',
   [KEY.admin_events_administrate]: 'Administrer arrangementer',
   [KEY.admin_gangsadminpage_webpage]: 'Nettside',
+  [KEY.admin_information_translations_difference]:
+    'Det er en stor forskjell i antall karakterer mellom de norske og engelske tekstene. Er du sikker på at du vil lagre?',
   [KEY.admin_information_manage_title]: 'Administrer sider',
   [KEY.admin_closed_period_new_period]: 'Legg til ny periode',
   [KEY.admin_closed_period_edit_period]: 'Endre periode',
   [KEY.admin_information_confirm_delete]: 'Er du sikker du vil slette denne informasjonssiden?',
   [KEY.admin_information_confirm_cancel]: 'Er du sikker på at du vil gå tilbake uten å lagre?',
+  [KEY.admin_information_history_title]: 'Endringslogg',
+  [KEY.admin_information_history_empty]: 'Denne siden har ingen versjoner enda.',
+  [KEY.admin_information_history_select]: 'Velg en versjon for å se innholdet.',
+  [KEY.admin_information_history_diff_failed]:
+    'Klarte ikke hente forrige versjon, så endringene kan ikke vises. Viser innholdet slik det var i denne versjonen.',
   [KEY.admin_gangsadminpage_abbreviation]: 'Forkortelse',
   [KEY.recruitment_create_room]: 'Opprett rom',
   [KEY.recruitment_separate_recruitment]: 'Separat opptak',
@@ -689,7 +723,12 @@ export const nb = prepareTranslations({
   [KEY.inputfile_no_file_selected]: 'Ingen fil er valgt',
   [KEY.notfoundpage_title]: 'Side ikke funnet',
   [KEY.notfoundpage_contact_prompt]: 'Hvis du tror dette er en feil, vennligst',
-  [KEY.admin_saksdokumenter_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
+  [KEY.admin_casedocuments_cannot_reupload]: 'Det er ikke mulig å endre filen som er lastet opp.',
+  [KEY.admin_casedocuments_publication_date_note]:
+    'Dato og tid for offentliggjøring. Merk at filen vil være tilgjengelig via direktelenke før dette.',
+  [KEY.admin_casedocuments_title_used_as_filename]: 'Dette vil bli brukt som det synlige filnavnet.',
+  [KEY.admin_casedocuments_confirm_delete]:
+    'Er du sikker på at du vil slette dette saksdokumentet? Dette kan ikke angres.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
 
   [KEY.promo_media_description]: 'Lenke eller ID til en YouTube-video',
@@ -706,6 +745,7 @@ export const nb = prepareTranslations({
   [KEY.error_server_error_description]: 'En serverfeil har opptstått',
   [KEY.error_submitting_reservation]: 'Det skjedde en feil ved innsending av reservasjon',
   [KEY.error_invalid_reservation_data]: 'Ugyldig reservasjonsdata',
+  [KEY.error_invalid_slug]: 'Ugyldig slug. Kan bare inneholde a-z, 0-9, og enkle bindestreker',
 
   // Event form validation
   [KEY.event_form_title_required]: 'Tittel er påkrevd',
@@ -803,6 +843,7 @@ export const en = prepareTranslations({
   [KEY.common_section]: 'Section',
   [KEY.common_max]: 'Max',
   [KEY.common_image]: 'Image',
+  [KEY.common_file]: 'File',
   [KEY.common_venue]: 'Venue',
   [KEY.common_event]: 'Event',
   [KEY.common_title]: 'Title',
@@ -822,9 +863,11 @@ export const en = prepareTranslations({
   [KEY.common_go_back]: 'Go back',
   [KEY.common_interval]: 'Interval',
   [KEY.common_preview]: 'Preview',
+  [KEY.common_version]: 'Version',
   [KEY.common_sulten]: 'Lyche',
   [KEY.common_search]: 'Search',
   [KEY.common_choose]: 'Choose',
+  [KEY.common_visible]: 'Visible',
   [KEY.common_missing]: 'Missing',
   [KEY.common_message]: 'Message',
   [KEY.common_sponsor]: 'Sponsors',
@@ -909,9 +952,15 @@ export const en = prepareTranslations({
   [KEY.common_available]: 'Available',
   [KEY.common_comment]: 'Comment',
   [KEY.common_capacity]: 'Capacity',
+  [KEY.common_link]: 'Link',
   [KEY.common_membership_number]: 'Membership number',
   [KEY.common_to_payment]: 'To payment',
   [KEY.common_read_more]: 'Read more',
+  [KEY.common_created_by]: 'Created by',
+  [KEY.common_uploaded_by]: 'Uploaded by',
+  [KEY.common_last_edited_by]: 'Last edited by',
+  [KEY.common_publication_date]: 'Publication date',
+  [KEY.common_casedocuments]: 'Case documents',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -981,7 +1030,7 @@ export const en = prepareTranslations({
     'We are currently building a brand new website for Samfundet.no. Features from the old website will gradually become available on the new one, so for now you need to choose where to log in based on which features you need.',
   [KEY.loginpicker_page_nav_aria_label]: 'Choose login',
   [KEY.loginpicker_page_new_platform_title]: 'New site (samf4)',
-  [KEY.loginpicker_page_new_platform_description]: 'Events and general use',
+  [KEY.loginpicker_page_new_platform_description]: 'Events, case documents, info pages, and general use',
   [KEY.loginpicker_page_old_platform_title]: 'Legacy site (samf3)',
   [KEY.loginpicker_page_old_platform_description]: 'Group administration, recruitment, and other administrative tasks.',
   [KEY.loginpicker_page_old_platform_note]: 'NB: only available for volunteers',
@@ -1024,8 +1073,16 @@ export const en = prepareTranslations({
 
   // EventPage:
   [KEY.event_registration_url]: 'Registration URL',
+  [KEY.event_general_link]: 'General link',
+  [KEY.event_spotify_uri_help]:
+    'Add the Spotify URI of a playlist, and a widget will appear on the event page with the chosen playlist.',
+  [KEY.event_youtube_link_help]: 'Add a link to a YouTube video',
+  [KEY.event_youtube_embed_help]: 'Add a link to a YouTube video to be embedded, and it will appear on the event page.',
   [KEY.event_add_ticket]: 'Add ticket',
   [KEY.event_invalid_form_error]: 'Form contains validation errors. Please check highlighted fields.',
+  [KEY.event_must_be_valid_url]: 'Must be a valid URL',
+  [KEY.event_must_be_valid_spotify_uri]: 'Must be a valid Spotify URI',
+  [KEY.event_publication_date_required]: 'Publication date is required',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',
@@ -1056,11 +1113,9 @@ export const en = prepareTranslations({
   [KEY.admin_gangsadminpage_webpage]: 'Webpage',
   [KEY.admin_gangsadminpage_abbreviation]: 'Abbreviation',
 
-  // SaksdokumentPage:
-  [KEY.saksdokumentpage_publication_date]: 'Publication date',
-
   // InformationPage
   [KEY.information_page]: 'Information page',
+  [KEY.information_pages]: 'Information pages',
   [KEY.information_page_short]: 'Page',
 
   // Navbar:
@@ -1283,26 +1338,50 @@ export const en = prepareTranslations({
 
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
-  [KEY.admin_saksdokument]: 'Case document',
+  [KEY.admin_casedocument]: 'Case document',
   [KEY.admin_images_title]: 'Image Archive',
-  [KEY.admin_images_create]: 'New Image',
+  [KEY.admin_images_create]: 'New image',
+  [KEY.admin_images_confirm_delete]: 'Are you sure you want to delete this image? This cannot be undone.',
+  [KEY.admin_images_add_tag]: 'Add tag',
+  [KEY.admin_images_delete_in_use]: 'The image cannot be deleted because it is in use.',
+  [KEY.admin_image_form_tag_description]: 'Write a tag and hit Enter or Comma to add it to the list',
   [KEY.admin_no_image_selected]: 'No image selected',
+  [KEY.admin_markdown_insert_image]: 'Insert image',
+  [KEY.admin_markdown_image_insert]: 'Insert',
+  [KEY.admin_markdown_image_choose_existing]: 'Choose existing',
+  [KEY.admin_markdown_image_upload_new]: 'Upload new',
+  [KEY.admin_markdown_image_alt_text]: 'Alt text',
+  [KEY.admin_markdown_image_alt_text_description]:
+    'Description for screen readers. The image name is used if left empty.',
+  [KEY.admin_markdown_image_not_found]: 'Image not found',
   [KEY.admin_steal_identity]: 'Steal identity',
   [KEY.adminpage_gangs_title]: 'Groups administration',
   [KEY.adminpage_gangs_create]: 'Create group',
   [KEY.admin_users_last_active]: 'Last active',
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
-  [KEY.admin_saksdokumenter_title]: 'Manage Documents',
+  [KEY.admin_casedocuments_title]: 'Manage Documents',
   [KEY.admin_sultenmenu_title]: 'Manage Lyche menu',
   [KEY.admin_events_recently_edited]: 'Recently edited',
   [KEY.admin_events_administrate]: 'Administrate events',
+  [KEY.admin_information_translations_difference]:
+    "There is a big difference in the number of characters between the Norwegian and English texts. Are you sure you'd like to save?",
   [KEY.admin_information_manage_title]: 'Administrate pages',
   [KEY.admin_closed_period_new_period]: 'Add new closed period',
   [KEY.admin_closed_period_edit_period]: 'Edit closed period',
   [KEY.admin_information_confirm_delete]: 'Are you sure to delete this informationpage?',
   [KEY.admin_information_confirm_cancel]: 'Are you sure you want to exit without saving?',
-  [KEY.admin_saksdokumenter_cannot_reupload]: 'It is not possible to change the uploaded file.',
+  [KEY.admin_information_history_title]: 'Change history',
+  [KEY.admin_information_history_empty]: 'This page has no versions yet.',
+  [KEY.admin_information_history_select]: 'Select a version to see its content.',
+  [KEY.admin_information_history_diff_failed]:
+    'Could not load the previous version, so changes cannot be shown. Showing the content as it was in this version.',
+  [KEY.admin_casedocuments_cannot_reupload]: 'It is not possible to change the uploaded file.',
+  [KEY.admin_casedocuments_publication_date_note]:
+    'Publication date on the the saksdokumenter page. Note that the file will be accessible through direct URL before this time.',
+  [KEY.admin_casedocuments_title_used_as_filename]: 'This will be used as the visible file name.',
+  [KEY.admin_casedocuments_confirm_delete]:
+    'Are you sure you want to delete this case document? This cannot be undone.',
   [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
 
   [KEY.promo_media_description]: 'Link or ID of a YouTube video',
@@ -1419,6 +1498,7 @@ export const en = prepareTranslations({
   [KEY.error_server_error_description]: 'A server error has occurred',
   [KEY.error_submitting_reservation]: 'An error occurred while submitting the reservation',
   [KEY.error_invalid_reservation_data]: 'Invalid reservation data',
+  [KEY.error_invalid_slug]: 'Invalid slug. Can only contain a-z, 0-9, and single hyphens',
 
   // Event form validation
   [KEY.event_form_title_required]: 'Title is required',

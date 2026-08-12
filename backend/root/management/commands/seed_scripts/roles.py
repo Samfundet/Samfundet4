@@ -22,6 +22,9 @@ STYRET = 'styret'
 RAADET = 'raadet'
 EVENT_MANAGER = 'eventmanager'
 VENUE_MANAGER = 'venuemanager'
+INFOPAGE_VIEWER = 'infopage-viewer'
+INFOPAGE_EDITOR = 'infopage-editor'
+INFOPAGE_MANAGER = 'infopage-manager'
 
 # role level constans
 ORG_LEVEL = 'org'
@@ -377,6 +380,30 @@ SPECIAL_ROLES = {
 }
 
 
+# Roles which can be given at any hierarchical level (content_type is null)
+LEVEL_AGNOSTIC_ROLES = {
+    INFOPAGE_VIEWER: {
+        'permissions': [
+            perm.SAMFUNDET_VIEW_INFORMATIONPAGE,
+        ],
+    },
+    INFOPAGE_EDITOR: {
+        'permissions': [
+            perm.SAMFUNDET_VIEW_INFORMATIONPAGE,
+            perm.SAMFUNDET_CHANGE_INFORMATIONPAGE,
+        ],
+    },
+    INFOPAGE_MANAGER: {
+        'permissions': [
+            perm.SAMFUNDET_VIEW_INFORMATIONPAGE,
+            perm.SAMFUNDET_CHANGE_INFORMATIONPAGE,
+            perm.SAMFUNDET_ADD_INFORMATIONPAGE,
+            perm.SAMFUNDET_DELETE_INFORMATIONPAGE,
+        ],
+    },
+}
+
+
 def create_role(*, name: str, permissions: list[str], content_type=None) -> Role:
     """Helper function to create a role with given permissions."""
     role, _ = Role.objects.get_or_create(name=name, content_type=content_type)
@@ -469,6 +496,17 @@ def create_special_roles(org_content_type, gang_content_type, section_content_ty
     return created_count
 
 
+def create_level_agnostic_roles():
+    """Creates roles without a content type, meaning they can be given at any hierarchy level"""
+    created_count = 0
+
+    for role_name, role_data in LEVEL_AGNOSTIC_ROLES.items():
+        create_role(name=role_name, permissions=role_data['permissions'], content_type=None)
+        created_count += 1
+
+    return created_count
+
+
 def seed():
     """
     Main seeding function for roles.
@@ -477,6 +515,7 @@ def seed():
     1. Basic Gang Roles - Fundamental permissions for different gang roles
     2. Recruitment Roles - Various levels of recruitment management
     3. Special Roles - Organization-specific functional roles
+    4. Level-agnostic Roles - Roles which can be given at any level
 
     The roles are created with appropriate content_types to determine at which
     level (organization, gang, or section) they can be assigned.
@@ -484,7 +523,7 @@ def seed():
     Yields:
         Tuples of (progress_percentage, status_message)
     """
-    total_steps = len(BASIC_GANG_ROLES) + len(RECRUITMENT_ROLES) + len(SPECIAL_ROLES)
+    total_steps = len(BASIC_GANG_ROLES) + len(RECRUITMENT_ROLES) + len(SPECIAL_ROLES) + len(LEVEL_AGNOSTIC_ROLES)
     current_step = 0
 
     yield 0, 'Starting role creation'
@@ -525,6 +564,12 @@ def seed():
     )
     current_step += special_roles_count
     yield (current_step / total_steps) * 100, f'Created {special_roles_count} special roles'
+
+    # Create hierarchy level-agnostic roles
+    yield 90, 'Creating hierarchy level-agnostic roles'
+    level_agnostic_roles_count = create_level_agnostic_roles()
+    current_step += level_agnostic_roles_count
+    yield (current_step / total_steps) * 100, f'Created {level_agnostic_roles_count} hierarchy level-agnostic roles'
 
     total_roles = Role.objects.count()
     yield 100, f'Created {total_roles} roles successfully'

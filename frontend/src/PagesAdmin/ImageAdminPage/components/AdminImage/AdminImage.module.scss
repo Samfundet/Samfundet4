@@ -5,13 +5,17 @@
 .imageContainer {
   @include rounded;
   @include shadow-light;
+  display: block;
   overflow: hidden;
+  color: inherit;
+  text-decoration: none;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   transition: 0.2s;
   &:hover {
     transform: scale(1.02);
+    text-decoration: none;
   }
 }
 

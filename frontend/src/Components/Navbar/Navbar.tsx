@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { Button, Link, ThemeSwitch } from '~/Components';
 import { getActiveRecruitments, logout } from '~/api';
 import { logoWhite } from '~/assets';
-import { firstEnabledAdminPath, isSiteFeatureEnabled } from '~/constants/site-features';
+import { isSiteFeatureEnabled } from '~/constants/site-features';
 import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { RecruitmentDto } from '~/dto';
@@ -84,7 +84,7 @@ export function Navbar() {
   const mobileProfileButton = (
     <div className={styles.navbar_profile_button}>
       <Icon icon="material-symbols:person" />
-      <Link url={firstEnabledAdminPath()} className={styles.profile_text}>
+      <Link url={ROUTES.frontend.admin} className={styles.profile_text}>
         {userDisplayName}
       </Link>
     </div>
@@ -165,7 +165,7 @@ export function Navbar() {
   const isImpersonate = Object.hasOwn(cookies, 'impersonated_user_id');
 
   const profileButton = user && (
-    <Link url={firstEnabledAdminPath()} className={classNames(styles.navbar_profile_button, styles.profile_text)}>
+    <Link url={ROUTES.frontend.admin} className={classNames(styles.navbar_profile_button, styles.profile_text)}>
       <Icon icon={isImpersonate ? 'ri:spy-fill' : 'material-symbols:person'} />
       {userDisplayName}
     </Link>

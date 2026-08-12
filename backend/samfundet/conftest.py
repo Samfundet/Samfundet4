@@ -35,8 +35,9 @@ from samfundet.models.general import (
     Reservation,
     Organization,
     MerchVariation,
-    InformationPage,
 )
+from samfundet.infopages.models import InformationPage
+from samfundet.infopages.services import create_information_page
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentApplication
 from samfundet.models.model_choices import EventTicketType, EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
 
@@ -413,8 +414,29 @@ def fixture_recruitment_position2(fixture_recruitment: Recruitment, fixture_gang
 
 
 @pytest.fixture
-def fixture_informationpage() -> Iterator[InformationPage]:
-    informationpage = InformationPage.objects.create(title_nb='Norsk tittel', title_en='Engel', slug_field='Sygard')
+def fixture_informationpage(fixture_gang: Gang) -> Iterator[InformationPage]:
+    informationpage = create_information_page(
+        slug_field='Foobar',
+        gang=fixture_gang,
+        section=None,
+        visible=True,
+        content={'title_nb': 'Norsk tittel', 'title_en': 'Engelsk', 'text_nb': None, 'text_en': None},
+        user=None,
+    )
+    yield informationpage
+    informationpage.delete()
+
+
+@pytest.fixture
+def fixture_informationpage_section(fixture_gang_section: GangSection) -> Iterator[InformationPage]:
+    informationpage = create_information_page(
+        slug_field='Foobar-section',
+        gang=None,
+        section=fixture_gang_section,
+        visible=True,
+        content={'title_nb': 'Norsk tittel', 'title_en': 'Engelsk', 'text_nb': None, 'text_en': None},
+        user=None,
+    )
     yield informationpage
     informationpage.delete()
 
