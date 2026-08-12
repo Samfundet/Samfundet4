@@ -3,54 +3,129 @@
 @use 'src/mixins' as *;
 
 .container {
-  @include flex-row-center;
-  justify-content: space-evenly;
-  gap: 0.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  border-radius: 1.5rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 244, 244, 0.96)),
+    $grey-5;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+
+  @include theme-dark {
+    background:
+      linear-gradient(180deg, rgba(24, 24, 24, 0.96), rgba(34, 34, 34, 0.96)),
+      $theme-dark-bg;
+  }
 }
 
 .image_title {
-  font-size: 1.25em;
+  margin: 0;
+  font-size: 0.9rem;
   font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $grey-2;
 }
 
 .selected_container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5em;
+  gap: 0.85rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  @include theme-dark {
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+  }
 }
 
-.selected {
-  @include rounded;
-  @include flex-row-center;
+.selected_preview_frame {
+  display: inline-flex;
+  max-width: 100%;
+  align-self: flex-start;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  background: $black-1;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.selected_preview {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: none;
+}
+
+.selected_preview_frame,
+.selected_preview {
+  pointer-events: none;
+}
+
+.selected_empty {
+  display: flex;
   flex-direction: column;
-  min-width: 20em;
-  min-height: 8em;
-  border: 3px solid black;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  min-height: 24rem;
+  padding: 2rem 1.5rem;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at top, rgba(51, 122, 183, 0.1), transparent 45%),
+    rgba(255, 255, 255, 0.85);
   text-align: center;
-  background-size: cover;
-  background-position: center;
+
+  @include theme-dark {
+    border-color: rgba(255, 255, 255, 0.12);
+    background:
+      radial-gradient(circle at top, rgba(51, 122, 183, 0.18), transparent 45%),
+      rgba(255, 255, 255, 0.03);
+  }
+}
+
+.selected_empty_icon {
+  @include flex-row-center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 999px;
+  background: rgba(51, 122, 183, 0.12);
+  color: $blue;
+}
+
+.selected_empty_title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.selected_empty_description {
+  margin: 0;
+  color: $grey-2;
+  font-size: 0.9rem;
 }
 
 .image_container {
-  max-height: 25em;
-  overflow-y: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
-  gap: 0.5em;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.9rem;
   width: 100%;
   align-content: start;
-  padding-right: 0.25rem;
+  padding-right: 0.2rem;
 }
 
 .image_box {
   overflow: hidden;
   width: 100%;
-  aspect-ratio: 5 / 4;
+  aspect-ratio: 1 / 1.08;
   box-sizing: border-box;
-  background-color: $grey-1;
-  transform: scale(0.9);
+  background-color: transparent;
+  transform: none;
 }
 
 .search_wrapper {
@@ -58,14 +133,20 @@
   flex-direction: column;
   flex: 1;
   min-width: 0;
+  gap: 1rem;
 }
 
 .pagination_wrapper {
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  padding-top: 0.5rem;
 }
 
 .error {
-  margin-top: 1rem;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-radius: 0.9rem;
+  background: rgba(220, 16, 16, 0.08);
+  color: $red;
+  font-weight: 600;
 }
