@@ -1,7 +1,10 @@
 @use 'src/constants' as *;
 
-.wrapper {
+.button {
   cursor: pointer;
+  background: none;
+  border: none;
+  color: inherit;
 }
 
 .icon:hover {

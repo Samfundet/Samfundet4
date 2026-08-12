@@ -7,14 +7,6 @@ export const roleKeys = {
   users: (id: number) => [...roleKeys.detail(id), 'users'] as const,
 };
 
-export const infoPageKeys = {
-  all: ['infopages'] as const,
-  lists: () => [...infoPageKeys.all, 'list'] as const,
-  list: (filters: unknown[]) => [...infoPageKeys.lists(), { filters }] as const,
-  details: () => [...infoPageKeys.all, 'detail'] as const,
-  detail: (slug: string) => [...infoPageKeys.details(), slug] as const,
-};
-
 export const permissionKeys = {
   all: ['permissions'] as const,
   lists: () => [...permissionKeys.all, 'list'] as const,
@@ -87,12 +79,4 @@ export const venueKeys = {
   details: () => [...venueKeys.all, 'detail'] as const,
   detail: (slug: string) => [...venueKeys.details(), slug] as const,
   open: () => [...venueKeys.list(['open'])] as const,
-};
-
-export const imageKeys = {
-  all: ['images'] as const,
-  lists: () => [...imageKeys.all, 'list'] as const,
-  list: (page: number, search?: string) => [...imageKeys.lists(), { page, search }] as const,
-  details: () => [...imageKeys.all, 'detail'] as const,
-  detail: (id: number) => [...imageKeys.details(), id] as const,
 };

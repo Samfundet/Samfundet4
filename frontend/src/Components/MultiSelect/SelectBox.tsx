@@ -16,7 +16,7 @@ export function SelectBox<T>({
   items,
   label,
   onItemClick,
-  itemButtonTheme = 'samf',
+  itemButtonTheme = 'primary',
   loading = false,
   emptyMessage,
 }: Props<T>) {

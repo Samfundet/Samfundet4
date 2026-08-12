@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { makeZodI18nMap } from 'zod-i18n-map';
 import { CommandMenu, UserFeedback, useScrollToTop } from './Components';
 import './i18n/i18n';
+import { SnowflakesOverlay } from '~/Components/SnowflakesOverlay';
 
 export function App() {
   const goatCounterCode = import.meta.env.VITE_GOATCOUNTER_CODE;
@@ -25,6 +26,9 @@ export function App() {
   // Must be called within <BrowserRouter> because it uses hook useLocation().
   useGoatCounter();
   useScrollToTop();
+
+  const now = new Date();
+  const showSnowflakes = now.getMonth() === 11 && now.getDate() >= 7;
 
   return (
     <HelmetProvider>
@@ -43,6 +47,7 @@ export function App() {
       )}
       <CommandMenu />
       <Outlet />
+      {showSnowflakes && <SnowflakesOverlay />}
       {/* Move down from navbar. */}
       <ToastContainer style={{ marginTop: '45px' }} theme={isDarkTheme ? 'dark' : 'light'} />
     </HelmetProvider>

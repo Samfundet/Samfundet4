@@ -16,7 +16,7 @@ import styles from './OpeningHoursAdminPage.module.scss';
 export function OpeningHoursAdminPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [saveTimer, setSaveTimer] = useState<Record<string, NodeJS.Timeout>>({});
+  const [saveTimer, setSaveTimer] = useState<Record<string, ReturnType<typeof setTimeout>>>({});
   useTitle(lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_opening_hours)}`));
 
   // Use React Query to fetch venues
