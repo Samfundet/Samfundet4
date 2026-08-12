@@ -22,7 +22,7 @@ from samfundet.models.billig import (
 logger = logging.getLogger(__name__)
 
 class BilligService:
-    PDF_BASE_URL = 'http://billig.samfundet.no/pdf'
+    PDF_BASE_URL = 'https://billig.samfundet.no/pdf'
 
     @staticmethod
     def get_contact_fields(data: dict[str, Any]) -> tuple[str, str]:
