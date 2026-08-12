@@ -4,6 +4,7 @@ import logging
 import re
 import uuid
 from typing import Any
+from urllib.parse import urlencode
 
 from django.db import connections, transaction
 from django.db.models import F, Max
@@ -25,6 +26,8 @@ SEAT_FIELD_PATTERN = re.compile(r'^seat_(\d+)_(\d+)$')
 
 
 class BilligService:
+    PDF_BASE_URL = 'http://billig.samfundet.no/pdf'
+
     @staticmethod
     def get_contact_fields(data: dict[str, Any]) -> tuple[str, str]:
         membercard = str(data.get('membercard') or data.get('cardnumber') or '').strip()
@@ -95,8 +98,6 @@ class BilligService:
         membercard, email = BilligService.get_contact_fields(data)
         if bool(membercard) == bool(email):
             return False, 'Exactly one of membercard or email must be set'
-        if email and any(online_price_groups[price_group_id].membership_needed for price_group_id in selected_price_groups):
-            return False, 'Selected tickets require a membership card'
         if membercard and any(not online_price_groups[price_group_id].can_be_put_on_card for price_group_id in selected_price_groups):
             return False, 'Selected tickets cannot be put on card'
 
@@ -287,3 +288,93 @@ class BilligService:
                         )
 
         return error_id
+
+    @staticmethod
+    def get_payment_error_context(error_id: str) -> dict[str, Any]:
+        payment_error = BilligPaymentError.objects.filter(error=error_id).first()
+        if payment_error is None:
+            return {
+                'found': False,
+                'retry_possible': False,
+                'message': 'An unknown payment error occurred.',
+            }
+
+        cart_rows: list[dict[str, int]] = []
+        event_ids: set[int] = set()
+        with connections['billig'].cursor() as cursor:
+            cursor.execute(
+                '''
+                SELECT pepg.price_group, pepg.number_of_tickets, tg.event
+                FROM "billig.payment_error_price_group" pepg
+                JOIN "billig.price_group" pg ON pg.price_group = pepg.price_group
+                JOIN "billig.ticket_group" tg ON tg.ticket_group = pg.ticket_group
+                WHERE pepg.error = %s
+                ORDER BY pepg.price_group
+                ''',
+                [error_id],
+            )
+            for price_group_id, number_of_tickets, event_id in cursor.fetchall():
+                cart_rows.append(
+                    {
+                        'price_group': int(price_group_id),
+                        'number_of_tickets': int(number_of_tickets),
+                    }
+                )
+                event_ids.add(int(event_id))
+
+        return {
+            'found': True,
+            'retry_possible': bool(cart_rows),
+            'message': payment_error.message,
+            'owner_cardno': payment_error.owner_cardno,
+            'owner_email': payment_error.owner_email,
+            'cart_rows': cart_rows,
+            'event_id': next(iter(event_ids)) if len(event_ids) == 1 else None,
+        }
+
+    @staticmethod
+    def get_success_context(ticket_refs: list[str]) -> dict[str, Any]:
+        refs_in_order = [ticket_ref.strip() for ticket_ref in ticket_refs if ticket_ref.strip()]
+        numeric_ticket_ids = [int(ticket_ref) for ticket_ref in refs_in_order if ticket_ref.isdigit()]
+
+        tickets_by_id = {
+            ticket.id: ticket
+            for ticket in BilligTicket.objects.select_related('price_group__ticket_group__event').filter(id__in=numeric_ticket_ids)
+        }
+
+        ticket_rows: list[dict[str, Any]] = []
+        total_price = 0
+        for ticket_ref in refs_in_order:
+            ticket_id = int(ticket_ref) if ticket_ref.isdigit() else None
+            ticket = tickets_by_id.get(ticket_id) if ticket_id is not None else None
+
+            row = {
+                'ticketno': ticket_ref,
+                'on_card': ticket.on_card if ticket is not None else None,
+                'price_group': None,
+                'price_group_name': None,
+                'price': None,
+                'event': None,
+                'event_name': None,
+                'event_time': None,
+            }
+            if ticket is not None:
+                row.update(
+                    {
+                        'price_group': ticket.price_group_id,
+                        'price_group_name': ticket.price_group.name,
+                        'price': ticket.price_group.price,
+                        'event': ticket.price_group.ticket_group.event_id,
+                        'event_name': ticket.price_group.ticket_group.event.name,
+                        'event_time': ticket.price_group.ticket_group.event.event_time,
+                    }
+                )
+                total_price += ticket.price_group.price
+            ticket_rows.append(row)
+
+        pdf_query = urlencode({f'ticket{i}': ticket_ref for i, ticket_ref in enumerate(refs_in_order)})
+        return {
+            'tickets': ticket_rows,
+            'total_price': total_price,
+            'pdf_url': f'{BilligService.PDF_BASE_URL}?{pdf_query}' if refs_in_order else None,
+        }
