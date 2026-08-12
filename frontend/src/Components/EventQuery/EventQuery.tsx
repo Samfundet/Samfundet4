@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { InputField } from '~/Components';
+import { Input } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import type { EventCategoryValue, EventTicketTypeValue, SetState } from '~/types';
 import { getEventCategoryKey, getTicketTypeKey, lowerCapitalize } from '~/utils';
@@ -47,10 +47,11 @@ export function EventQuery({
 
   return (
     <div className={styles.queryBar}>
-      <InputField
-        onChange={setSearch}
+      <Input
+        type="text"
+        onChange={(e) => setSearch(e.target.value)}
         placeholder={t(KEY.common_search)}
-        labelClassName={styles.searchBar}
+        className={styles.search}
         icon="ic:baseline-search"
       />
       <Dropdown

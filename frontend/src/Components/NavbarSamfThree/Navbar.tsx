@@ -4,20 +4,22 @@
 
 import { Icon } from '@iconify/react';
 import { default as classNames } from 'classnames';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 import { Button, Link, ThemeSwitch } from '~/Components';
 import { getActiveRecruitments } from '~/api';
 import { logoWhite } from '~/assets';
+import { isSiteFeatureEnabled } from '~/constants/site-features';
 import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { RecruitmentDto } from '~/dto';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { SAMF3_MEMBER_URL } from '~/routes/samf-three';
+import { ROUTES_OTHER } from '~/routes/other';
+import { getDisplayName } from '~/utils';
 import styles from './Navbar.module.scss';
 import { HamburgerMenu, LanguageButton } from './components';
 import { NavbarItem } from './components/NavbarItem';
@@ -42,6 +44,20 @@ export function Navbar() {
   // Navbar style.
   const isRootPath = useLocation().pathname === ROUTES.frontend.home;
 
+  const userDisplayName = useMemo(() => {
+    if (!user) {
+      return '';
+    }
+    const display = getDisplayName(user);
+    if (display.length > 28) {
+      if (user.first_name.length <= 16) {
+        return user.first_name;
+      }
+      return user.username;
+    }
+    return display;
+  }, [user]);
+
   useEffect(() => {
     // Close expanded dropdown menu whenever mobile navbar is closed, or we switch from mobile to desktop, like when
     // switching from portrait to landscape on iPad.
@@ -51,6 +67,9 @@ export function Navbar() {
   }, [isMobileNavigation, isDesktop]);
 
   useEffect(() => {
+    if (!isSiteFeatureEnabled('recruitment')) {
+      return;
+    }
     getActiveRecruitments().then((response) => {
       setActiveRecruitments(response.data);
     });
@@ -63,7 +82,7 @@ export function Navbar() {
     <div className={styles.navbar_profile_button}>
       <Icon icon="material-symbols:person" />
       <Link url={ROUTES.frontend.admin} className={styles.profile_text}>
-        {user?.username}
+        {userDisplayName}
       </Link>
     </div>
   );
@@ -181,7 +200,7 @@ export function Navbar() {
   const profileButton = user && (
     <Link url={ROUTES.frontend.admin} className={classNames(styles.profile_text, styles.navbar_profile_button)}>
       <Icon icon="material-symbols:person" />
-      {user?.username}
+      {userDisplayName}
     </Link>
   );
 
@@ -201,11 +220,11 @@ export function Navbar() {
 
   const memberButton = (
     <Button
-      theme="samf"
+      theme="primary"
       rounded={true}
       className={isDesktop ? styles.login_button : styles.popup_internal_button}
       onClick={() => {
-        window.location.href = SAMF3_MEMBER_URL.medlem;
+        window.location.href = ROUTES_OTHER.samf_medlem;
         setIsMobileNavigation(false);
       }}
     >

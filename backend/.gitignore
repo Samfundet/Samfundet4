@@ -5,12 +5,16 @@
 ### Django ###
 staticroot/
 mediaroot/
+uploads/
 __pycache__
 .pytest_cache
 *.pyc
 *.pyo
 .log
 tmp/
+
+# Frontend, which we serve from Django
+reactapp/
 
 # Script for debugging purposes.
 root/scripts/testing.py
