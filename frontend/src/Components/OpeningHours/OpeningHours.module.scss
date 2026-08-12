@@ -1,6 +1,8 @@
-@use 'src/constants' as *;
+@use 'src/styles/colors' as c;
 
-@use 'src/mixins' as *;
+@use 'src/styles/variables' as v;
+
+@use 'src/mixins' as m;
 
 .container {
   text-align: center;
@@ -9,14 +11,14 @@
   flex-direction: column;
   align-items: center;
 
-  @include theme-dark {
-    background-color: $theme-dark-bg;
-    color: $theme-dark-color;
+  @include m.theme-dark {
+    background-color: v.$primary-dark-bg;
+    color: c.$white-500;
   }
 }
 
 .tableCell {
-  @include theme-dark {
+  @include m.theme-dark {
     border-left: 0;
     border-right: 0;
   }
@@ -27,7 +29,7 @@
 }
 
 .closedBox {
-  border: 2px $red_samf solid;
+  border: 2px c.$samf-red-primary solid;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 2rem;

@@ -7,6 +7,7 @@ import { Text } from '~/Components/Text/Text';
 import { getActiveClosedPeriods } from '~/api';
 import type { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { dbT } from '~/utils';
 import styles from './OpeningHours.module.scss';
 
@@ -18,8 +19,8 @@ type OpeningHoursProps = {
 
 export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) {
   const { t } = useTranslation();
-  const [isClosed, setIsClosed] = useState<boolean>(false);
-  const [closedText, setClosedText] = useState<string | undefined>(undefined);
+  const [isClosed, setIsClosed] = useState(false);
+  const [closedText, setClosedText] = useState<string>();
 
   useEffect(() => {
     getActiveClosedPeriods()
@@ -27,7 +28,6 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
         if (periods.length !== 0) {
           setIsClosed(true);
           setClosedText(dbT(periods[0], 'message'));
-          return;
         }
       })
       .catch((error) => {
@@ -61,7 +61,7 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
             return (
               <tr key={venue.name} className={styles.openingRow}>
                 <td className={styles.tableCell}>
-                  <Link url={`information/${venue.name}`}>
+                  <Link url={reverse({ pattern: 'information/:param', urlParams: { param: venue.name } })}>
                     <p className={styles.openingHoursText}>{venue.name}</p>
                   </Link>
                 </td>
