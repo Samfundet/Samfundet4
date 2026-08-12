@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { Button, Dropdown, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
-import { getInformationPages, getOrganizedGangList, postGang, putGang } from '~/api';
+import { getAdminInformationPages, getOrganizedGangList, postGang, putGang } from '~/api';
 import type { GangDto, GangTypeDto, InformationPageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ABBREVIATION, GANG_INFO_PAGE, GANG_TYPE, NAME } from '~/schema/gang';
@@ -40,7 +40,7 @@ export function GangForm({ gang, onSuccess, onError }: Props) {
   useEffect(() => {
     setLoadingInfoPages(true);
     setLoadingGangTypes(true);
-    getInformationPages()
+    getAdminInformationPages()
       .then(setInfoPages)
       .finally(() => setLoadingInfoPages(false));
     getOrganizedGangList()

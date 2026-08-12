@@ -8,6 +8,7 @@ export type PrimitiveCheckboxProps = Omit<
   'checked' | 'defaultChecked' | 'type'
 > & {
   className?: string;
+  boxClassName?: string;
 };
 
 /**
@@ -32,7 +33,7 @@ interface UncontrolledCheckboxProps extends PrimitiveCheckboxProps {
 export type CheckboxProps = ControlledCheckboxProps | UncontrolledCheckboxProps;
 
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ className, checked, defaultChecked, onChange, disabled, ...props }, ref) => {
+  ({ className, boxClassName, checked, defaultChecked, onChange, disabled, ...props }, ref) => {
     const isControlled = checked !== undefined;
 
     return (
@@ -47,7 +48,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           disabled={disabled}
           {...props}
         />
-        <div className={styles.checkbox__box} />
+        <div className={classNames(styles.checkbox__box, boxClassName)} />
         <Icon icon="fluent:checkmark-12-filled" className={styles.check} />
       </label>
     );
