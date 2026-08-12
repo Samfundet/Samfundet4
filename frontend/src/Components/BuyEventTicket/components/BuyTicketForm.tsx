@@ -18,7 +18,7 @@ import {
   RadioButton,
 } from '~/Components';
 import { validEmail } from '~/Forms/util';
-import { BILLIG_PURCHASE_CONTEXT_KEY, prepareBilligPurchase, submitBilligForm } from '~/apis/billig/billigApi';
+import { BILLIG_PURCHASE_CONTEXT_KEY, buildBilligFormData, submitBilligForm } from '~/apis/billig/billigApi';
 import type { BilligPriceGroupDto, BilligTicketGroupDto } from '~/apis/billig/billigDtos';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
@@ -235,8 +235,8 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
     [ticketOptions, ticketQuantities],
   );
 
-  async function onSubmit(data: BuyTicketFormType): Promise<void> {
-    if (!event.billig?.id) {
+  function onSubmit(data: BuyTicketFormType): void {
+    if (!event.billig?.payment_url) {
       toast.error(t(KEY.common_something_went_wrong));
       return;
     }
@@ -260,8 +260,7 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
       selectedSeats[ticketGroup.id] = seatSelection;
     }
 
-    const preparedPurchase = await prepareBilligPurchase({
-      eventId: event.billig.id,
+    const formData = buildBilligFormData({
       ticketQuantities: Object.fromEntries(
         Object.entries(data.ticketQuantities).map(([priceGroupId, quantity]) => [Number(priceGroupId), quantity]),
       ),
@@ -274,14 +273,14 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
       BILLIG_PURCHASE_CONTEXT_KEY,
       JSON.stringify({
         event,
-        paymentUrl: preparedPurchase.payment_url,
+        paymentUrl: event.billig.payment_url,
         selectedSeats,
       }),
     );
 
     submitBilligForm({
-      paymentUrl: preparedPurchase.payment_url,
-      formData: preparedPurchase.form_data,
+      paymentUrl: event.billig.payment_url,
+      formData,
     });
   }
 
@@ -289,9 +288,9 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
     <div className={styles.container}>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(async (data) => {
+          onSubmit={form.handleSubmit((data) => {
             try {
-              await onSubmit(data);
+              onSubmit(data);
             } catch (error) {
               console.error(error);
               toast.error(t(KEY.common_something_went_wrong));

@@ -76,6 +76,7 @@ export function ComponentPage() {
             in_sale_period: '',
             is_sold_out: false,
             name: '',
+            payment_url: 'http://localhost:8000/api/billig/dev/pay/',
             sale_from: '',
             sale_to: '',
             ticket_groups: [

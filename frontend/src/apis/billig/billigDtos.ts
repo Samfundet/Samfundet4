@@ -23,6 +23,7 @@ export type BilligTicketGroupDto = {
 export type BilligEventDto = {
   id: number;
   name: string;
+  payment_url: string;
   ticket_groups: BilligTicketGroupDto[];
   sale_from: string;
   sale_to: string;
