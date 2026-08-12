@@ -123,7 +123,13 @@ class BilligDevPayView(APIView):
                 cart_rows.append((price_group_id, count))
                 ticket_count += count
 
-        should_fail = ticket_count == 0 or (email is None and membercard is None)
+        submitted_price_group_ids = {price_group_id for price_group_id, _ in cart_rows}
+        known_price_group_ids = set(
+            BilligPriceGroup.objects.filter(id__in=submitted_price_group_ids).values_list('id', flat=True)
+        )
+        has_unknown_price_groups = submitted_price_group_ids != known_price_group_ids
+
+        should_fail = ticket_count == 0 or (email is None and membercard is None) or has_unknown_price_groups
         failure_message = 'Some error occurred.'
         if email and 'fail' in email.lower():
             should_fail = True
@@ -141,7 +147,7 @@ class BilligDevPayView(APIView):
                 cart_rows=cart_rows,
                 membercard=membercard,
                 email=email,
-                persist_cart=bool(cart_rows),
+                persist_cart=bool(cart_rows) and not has_unknown_price_groups,
             )
             failure_url = request.build_absolute_uri(reverse('samfundet:purchase_failure'))
             return HttpResponseRedirect(f'{failure_url}?bsession={error_id}')
