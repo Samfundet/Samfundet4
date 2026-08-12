@@ -1,5 +1,6 @@
 export { AboutPage } from './AboutPage';
 export { AccountPage } from './AccountPage';
+export { ApiTestingPage } from './ApiTestingPage';
 export { ComponentPage } from './ComponentPage';
 export { ContributorsPage } from './ContributorsPage';
 export { EventPage } from './EventPage';
