@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-import re
 import uuid
 from typing import Any
 from urllib.parse import urlencode
@@ -21,9 +20,6 @@ from samfundet.models.billig import (
 )
 
 logger = logging.getLogger(__name__)
-
-SEAT_FIELD_PATTERN = re.compile(r'^seat_(\d+)_(\d+)$')
-
 
 class BilligService:
     PDF_BASE_URL = 'http://billig.samfundet.no/pdf'
@@ -61,85 +57,6 @@ class BilligService:
         return True, None
 
     @staticmethod
-    def get_online_price_groups(event: BilligEvent) -> dict[int, BilligPriceGroup]:
-        online_price_groups: dict[int, BilligPriceGroup] = {}
-        for ticket_group in event.ticket_groups.all():
-            for price_group in ticket_group.price_groups.all():
-                if price_group.netsale:
-                    online_price_groups[price_group.id] = price_group
-        return online_price_groups
-
-    @staticmethod
-    def validate_purchase_data(data: dict[str, Any], *, event: BilligEvent) -> tuple[bool, str | None]:
-        online_price_groups = BilligService.get_online_price_groups(event)
-
-        selected_price_groups: dict[int, int] = {}
-        for key, value in data.items():
-            if not key.startswith('price_group_'):
-                continue
-            try:
-                price_group_id = int(key.replace('price_group_', ''))
-                count = int(value)
-            except (TypeError, ValueError):
-                return False, 'Invalid ticket quantity'
-
-            if count < 0:
-                return False, 'Invalid ticket quantity'
-            if count > 0:
-                selected_price_groups[price_group_id] = count
-
-        if not selected_price_groups:
-            return False, 'No tickets selected'
-
-        invalid_price_groups = [price_group_id for price_group_id in selected_price_groups if price_group_id not in online_price_groups]
-        if invalid_price_groups:
-            return False, 'Invalid price group selection'
-
-        membercard, email = BilligService.get_contact_fields(data)
-        if bool(membercard) == bool(email):
-            return False, 'Exactly one of membercard or email must be set'
-        if membercard and any(not online_price_groups[price_group_id].can_be_put_on_card for price_group_id in selected_price_groups):
-            return False, 'Selected tickets cannot be put on card'
-
-        selected_seats_by_ticket_group: dict[int, set[int]] = {}
-        for key, value in data.items():
-            match = SEAT_FIELD_PATTERN.fullmatch(key)
-            if not match or not value:
-                continue
-            ticket_group_id = int(match.group(1))
-            seat_id = int(match.group(2))
-            if seat_id <= 0:
-                return False, 'Invalid seat selection'
-            selected_seats_by_ticket_group.setdefault(ticket_group_id, set()).add(seat_id)
-
-        for ticket_group in event.ticket_groups.all():
-            online_group_price_groups = [price_group for price_group in ticket_group.price_groups.all() if price_group.netsale]
-            if not online_group_price_groups:
-                continue
-
-            selected_count = sum(selected_price_groups.get(price_group.id, 0) for price_group in online_group_price_groups)
-            if selected_count == 0:
-                continue
-
-            for price_group in online_group_price_groups:
-                selected_price_group_count = selected_price_groups.get(price_group.id, 0)
-                if selected_price_group_count > ticket_group.price_group_ticket_limit:
-                    return False, 'Ticket selection exceeds available limit'
-
-            remaining_tickets = max(ticket_group.num - ticket_group.num_sold, 0)
-            ticket_group_limit = min(
-                ticket_group.group_ticket_limit(price_group_count=len(online_group_price_groups)),
-                remaining_tickets,
-            )
-            if selected_count > ticket_group_limit:
-                return False, 'Ticket selection exceeds available limit'
-
-            if ticket_group.is_theater_ticket_group and len(selected_seats_by_ticket_group.get(ticket_group.id, set())) != selected_count:
-                return False, 'Selected theater tickets must have matching seats'
-
-        return True, None
-
-    @staticmethod
     def get_ticket_groups_for_event(event_id: int) -> list[dict[str, Any]]:
         event = BilligService.get_event_with_tickets(event_id)
         if not event:
@@ -173,44 +90,6 @@ class BilligService:
                 result.append(ticket_group_data)
 
         return result
-
-    @staticmethod
-    def prepare_purchase_data(request_data: dict[str, Any], *, event: BilligEvent) -> dict[str, Any]:
-        purchase_data: dict[str, Any] = {}
-        online_price_groups = BilligService.get_online_price_groups(event)
-
-        for key, value in request_data.items():
-            if not key.startswith('price_group_'):
-                continue
-            try:
-                price_group_id = int(key.replace('price_group_', ''))
-                count = int(value)
-            except (TypeError, ValueError):
-                continue
-
-            if count > 0 and price_group_id in online_price_groups:
-                purchase_data[f'price_{price_group_id}_count'] = count
-
-        valid_ticket_group_ids = {ticket_group.id for ticket_group in event.ticket_groups.all()}
-        for key, value in request_data.items():
-            match = SEAT_FIELD_PATTERN.fullmatch(key)
-            if not match or not value:
-                continue
-            ticket_group_id = int(match.group(1))
-            if ticket_group_id in valid_ticket_group_ids:
-                purchase_data[key] = value
-
-        membercard, email = BilligService.get_contact_fields(request_data)
-        if membercard:
-            purchase_data['ticket_type'] = 'card'
-        if email:
-            purchase_data['ticket_type'] = 'paper'
-        if membercard:
-            purchase_data['membercard'] = membercard
-        if email:
-            purchase_data['email'] = email
-
-        return purchase_data
 
     @staticmethod
     def create_fake_purchase(

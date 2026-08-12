@@ -355,7 +355,6 @@ export const ROUTES_BACKEND = {
   samfundet__assign_group: '/api/assign_group/',
   samfundet__webhook: '/api/webhook/',
   samfundet__gangsorganized: '/api/gangtypes/:organization/',
-  samfundet__purchase: '/api/billig/purchase/',
   samfundet__event_tickets: '/api/billig/event/:eventId/tickets/',
   samfundet__purchase_success: '/api/billig/callback/success/',
   samfundet__purchase_failure: '/api/billig/callback/failure/',
