@@ -96,7 +96,6 @@ urlpatterns = [
     path('webhook/', views.WebhookView.as_view(), name='webhook'),
     path('gangtypes/<int:organization>/', samfundet.view.general_views.GangTypeOrganizationView.as_view(), name='gangsorganized'),
     ########## Billig ##########
-    path('billig/purchase/', billig_views.BilligPurchaseView.as_view(), name='purchase'),
     path('billig/event/<int:event_id>/tickets/', billig_views.BilligEventTicketsView.as_view(), name='event_tickets'),
     path('billig/callback/success/', billig_views.BilligPurchaseSuccessView.as_view(), name='purchase_success'),
     path('billig/callback/failure/', billig_views.BilligPurchaseFailureView.as_view(), name='purchase_failure'),

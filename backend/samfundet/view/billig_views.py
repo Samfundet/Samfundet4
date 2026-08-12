@@ -50,42 +50,6 @@ class BilligTicketGroupReadOnlyModelViewSet(ReadOnlyModelViewSet):
     queryset = BilligTicketGroup.objects.all()
 
 
-class BilligPurchaseView(APIView):
-    """
-    Validate a Billig purchase request and return the form payload expected by /pay.
-    """
-
-    permission_classes = [AllowAny]
-
-    def post(self, request, format=None):
-        try:
-            event_id = int(request.data.get('event_id'))
-        except (TypeError, ValueError):
-            return Response({'error': 'Missing or invalid event_id'}, status=status.HTTP_400_BAD_REQUEST)
-
-        event = BilligService.get_event_with_tickets(event_id)
-        if not event:
-            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        can_purchase, reason = BilligService.can_purchase_tickets(event_id)
-        if not can_purchase:
-            return Response({'error': reason}, status=status.HTTP_400_BAD_REQUEST)
-
-        is_valid, error = BilligService.validate_purchase_data(request.data, event=event)
-        if not is_valid:
-            return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
-
-        form_data = BilligService.prepare_purchase_data(request.data, event=event)
-
-        return Response(
-            {
-                'success': True,
-                'form_data': form_data,
-                'payment_url': settings.BILLIG_PAYMENT_URL,
-            }
-        )
-
-
 class BilligEventTicketsView(APIView):
     permission_classes = [AllowAny]
 
