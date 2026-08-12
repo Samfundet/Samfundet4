@@ -163,7 +163,7 @@ export function AdminLayout() {
           )}
 
           {!user?.mdb_medlem_id ? (
-          <Link
+            <Link
               url={ROUTES.frontend.admin_mdb_connect}
               className={classNames(styles.panel_item, {
                 [styles.selected]: location.pathname === ROUTES.frontend.admin_mdb_connect,
@@ -172,7 +172,7 @@ export function AdminLayout() {
               <Icon icon="mdi:connection" />
               {isPanelOpen && t(KEY.common_member_database)}
             </Link>
-        ) : null}
+          ) : null}
 
           <button
             type="button"
