@@ -11,15 +11,19 @@ type ImageTileProps = {
 };
 
 function TileContent({ image }: Pick<ImageTileProps, 'image'>) {
-  const imageTags = image.tags.map((tag) => ` ${tag.name}`).toString();
-
   return (
-    <>
-      <div className={styles.imageTitle}>
-        <p className={styles.text}>{image.title}</p>
-        <p className={styles.tags}>{imageTags}</p>
-      </div>
-    </>
+    <div className={styles.imageTitle}>
+      <p className={styles.text}>{image.title}</p>
+      {image.tags.length > 0 && (
+        <div className={styles.tags}>
+          {image.tags.map((tag) => (
+            <span key={tag.id} className={styles.tag}>
+              {tag.name}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -35,7 +39,13 @@ export function ImageTile({ image, className, selected = false, onClick }: Image
 
   if (onClick !== undefined) {
     return (
-      <button type="button" className={tileClassName} style={backgroundImageFromUrl(bgUrl)} onClick={onClick}>
+      <button
+        type="button"
+        aria-label={`Select ${image.title}`}
+        className={tileClassName}
+        style={backgroundImageFromUrl(bgUrl)}
+        onClick={onClick}
+      >
         <TileContent image={image} />
       </button>
     );

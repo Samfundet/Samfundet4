@@ -130,7 +130,7 @@ export function ImageAdminPage() {
           <ImageTile key={element.id} image={element} className={styles.imageBox} />
         ))}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+      <div className={styles.pagination_wrapper}>
         <PagedPagination
           currentPage={currentPage}
           totalItems={totalCount}
