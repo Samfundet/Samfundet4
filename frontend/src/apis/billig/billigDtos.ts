@@ -32,23 +32,6 @@ export type BilligEventDto = {
   is_sold_out: boolean;
 };
 
-export type BilligPurchaseSuccessTicketDto = {
-  ticketno: string;
-  on_card: boolean | null;
-  price_group: number | null;
-  price_group_name: string | null;
-  price: number | null;
-  event: number | null;
-  event_name: string | null;
-  event_time: string | null;
-};
-
-export type BilligPurchaseSuccessDto = {
-  tickets: BilligPurchaseSuccessTicketDto[];
-  total_price: number;
-  pdf_url: string | null;
-};
-
 export type BilligPaymentErrorRowDto = {
   price_group: number;
   number_of_tickets: number;

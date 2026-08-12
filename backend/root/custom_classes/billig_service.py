@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 import uuid
 from typing import Any
-from urllib.parse import urlencode
 
 from django.db import connections, transaction
 from django.db.models import F, Max
@@ -22,8 +21,6 @@ from samfundet.models.billig import (
 logger = logging.getLogger(__name__)
 
 class BilligService:
-    PDF_BASE_URL = 'http://billig.samfundet.no/pdf'
-
     @staticmethod
     def get_contact_fields(data: dict[str, Any]) -> tuple[str, str]:
         membercard = str(data.get('membercard') or data.get('cardnumber') or '').strip()
@@ -209,57 +206,4 @@ class BilligService:
             'owner_email': payment_error.owner_email,
             'cart_rows': cart_rows,
             'event_id': next(iter(event_ids)) if len(event_ids) == 1 else None,
-        }
-
-    @staticmethod
-    def get_success_context(ticket_refs: list[str]) -> dict[str, Any]:
-        refs_in_order = [ticket_ref.strip() for ticket_ref in ticket_refs if ticket_ref.strip()]
-        ticket_ids_by_ref = {
-            ticket_ref: int(ticket_ref[:-5])
-            for ticket_ref in refs_in_order
-            if ticket_ref.isdigit() and ticket_ref[:-5]
-        }
-
-        tickets_by_id = {
-            ticket.id: ticket
-            for ticket in BilligTicket.objects.select_related('price_group__ticket_group__event').filter(
-                id__in=ticket_ids_by_ref.values()
-            )
-        }
-
-        ticket_rows: list[dict[str, Any]] = []
-        total_price = 0
-        for ticket_ref in refs_in_order:
-            ticket_id = ticket_ids_by_ref.get(ticket_ref)
-            ticket = tickets_by_id.get(ticket_id) if ticket_id is not None else None
-
-            row = {
-                'ticketno': ticket_ref,
-                'on_card': ticket.on_card if ticket is not None else None,
-                'price_group': None,
-                'price_group_name': None,
-                'price': None,
-                'event': None,
-                'event_name': None,
-                'event_time': None,
-            }
-            if ticket is not None:
-                row.update(
-                    {
-                        'price_group': ticket.price_group_id,
-                        'price_group_name': ticket.price_group.name,
-                        'price': ticket.price_group.price,
-                        'event': ticket.price_group.ticket_group.event_id,
-                        'event_name': ticket.price_group.ticket_group.event.name,
-                        'event_time': ticket.price_group.ticket_group.event.event_time,
-                    }
-                )
-                total_price += ticket.price_group.price
-            ticket_rows.append(row)
-
-        pdf_query = urlencode({f'ticket{i}': ticket_ref for i, ticket_ref in enumerate(refs_in_order)})
-        return {
-            'tickets': ticket_rows,
-            'total_price': total_price,
-            'pdf_url': f'{BilligService.PDF_BASE_URL}?{pdf_query}' if refs_in_order else None,
         }

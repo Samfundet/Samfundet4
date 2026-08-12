@@ -86,14 +86,6 @@ class BilligPurchaseFailureView(APIView):
         return HttpResponseRedirect(failure_url)
 
 
-class BilligPurchaseSuccessDataView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request, format=None):
-        ticket_refs = [ticket.strip() for ticket in request.GET.get('tickets', '').split(',') if ticket.strip()]
-        return Response(BilligService.get_success_context(ticket_refs))
-
-
 class BilligPurchaseFailureDataView(APIView):
     permission_classes = [AllowAny]
 
