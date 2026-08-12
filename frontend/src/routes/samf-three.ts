@@ -8,11 +8,6 @@ export const INFORMATION_PAGES = {
   informasjon_billetter: `${BASE_URL}/informasjon/billetter`,
 };
 
-// Saksdokumenter
-export const CASE_DOCUMENTS = {
-  saksdokumenter: `${BASE_URL}/saksdokumenter`,
-};
-
 export const ROUTES_SAMF_THREE = {
   information: {
     general: `${BASE_URL}/informasjon`,
@@ -29,6 +24,7 @@ export const ROUTES_SAMF_THREE = {
     club: `${BASE_URL}/informasjon/klubb`,
   },
   volunteer: `${BASE_URL}/opptak`,
+  controlPanel: `${BASE_URL}/medlemmer/kontrollpanel`,
 } as const;
 
 // Samfundet3 innlogging

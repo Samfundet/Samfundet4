@@ -1,0 +1,9 @@
+@use '../../styles/colors' as c;
+
+.visible {
+  color: c.$green-600;
+}
+
+.not_visible {
+  color: c.$gray-200;
+}

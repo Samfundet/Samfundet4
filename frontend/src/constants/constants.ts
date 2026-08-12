@@ -37,6 +37,9 @@ export const SUPPORT_EMAIL = 'mg-web@samfundet.no';
 export const PHONENUMBER_REGEX = /^\+?\s*(\d\s*){8,15}$/;
 
 export const LOCAL_DATETIME_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
+
+export const UPLOADS_PREFIX = '/uploads/';
+
 /**
  * Screen sizes, breakpoint (bp).
  * These values are also in _constants.scss
