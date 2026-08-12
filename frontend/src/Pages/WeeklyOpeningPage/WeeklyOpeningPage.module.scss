@@ -2,6 +2,8 @@
 
 @use 'src/constants' as *;
 
+@use 'src/styles/_variables' as *;
+
 .page {
   margin: 0 auto;
   padding-top: 1em;
