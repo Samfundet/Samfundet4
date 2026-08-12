@@ -1,14 +1,12 @@
 import classNames from 'classnames';
-import { BACKEND_DOMAIN } from '~/constants';
 import type { ImageDto } from '~/dto';
-import { backgroundImageFromUrl } from '~/utils';
+import { backgroundImageFromUrl, imageUrl } from '~/utils';
 import styles from './ImageTile.module.scss';
 
 type ImageTileProps = {
   image: ImageDto;
   className?: string;
   selected?: boolean;
-  selectedClassName?: string;
   onClick?(): void;
 };
 
@@ -25,30 +23,26 @@ function TileContent({ image }: Pick<ImageTileProps, 'image'>) {
   );
 }
 
-export function ImageTile({ image, className, selected = false, selectedClassName, onClick }: ImageTileProps) {
+export function ImageTile({ image, className, selected = false, onClick }: ImageTileProps) {
   const tileClassName = classNames(
     styles.imageContainer,
     className,
     selected && styles.selected,
-    selected && selectedClassName,
     onClick && styles.clickable,
   );
 
+  const bgUrl = imageUrl(image, 'small');
+
   if (onClick !== undefined) {
     return (
-      <button
-        type="button"
-        className={tileClassName}
-        style={backgroundImageFromUrl(BACKEND_DOMAIN + image.url)}
-        onClick={onClick}
-      >
+      <button type="button" className={tileClassName} style={backgroundImageFromUrl(bgUrl)} onClick={onClick}>
         <TileContent image={image} />
       </button>
     );
   }
 
   return (
-    <div className={tileClassName} style={backgroundImageFromUrl(BACKEND_DOMAIN + image.url)}>
+    <div className={tileClassName} style={backgroundImageFromUrl(bgUrl)}>
       <TileContent image={image} />
     </div>
   );
