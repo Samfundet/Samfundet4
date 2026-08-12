@@ -69,6 +69,7 @@ export function AdminLayout() {
           key={index}
           className={classNames(styles.panel_item, selected && styles.selected)}
           url={applet.url}
+          target={applet.target}
           onAfterClick={() => isMobile && isPanelOpen && setPanelOpen(false)}
           plain={true}
         >
@@ -87,6 +88,18 @@ export function AdminLayout() {
 
   const userApplets = userAppletsRaw.filter((a) => !a.feature || isSiteFeatureEnabled(a.feature));
 
+  const navigationAppletsRaw: AdminApplet[] = [
+    {
+      url: ROUTES.samfThree.controlPanel,
+      icon: 'bx:link-external',
+      title_nb: 'Gå til gammelt kontrollpanel',
+      title_en: 'Go to old control panel',
+      target: 'samf3',
+    },
+  ];
+
+  const navigationApplets = navigationAppletsRaw.filter((a) => !a.feature);
+
   const panel = (
     <>
       <div className={classNames(styles.panel, !isPanelOpen && styles.panel_closed)}>
@@ -98,6 +111,9 @@ export function AdminLayout() {
         </div>
         {userApplets.map((applet, index) => makeAppletShortcut(applet, index))}
 
+        <br />
+        {/* Samf3 navigation */}
+        {navigationApplets.map((applet, index) => makeAppletShortcut(applet, index))}
         <br />
 
         {appletCategories.map((category) => {
