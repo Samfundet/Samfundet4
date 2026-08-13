@@ -8,7 +8,6 @@ import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
-import { eventKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { hasPerm } from '~/utils';
 import { CrudButtons } from '../CrudButtons';
@@ -56,11 +55,11 @@ export function EventCrudButtons({ title = 'event', id, have_view = true, height
       onDelete={
         canChangeEvent || isStaff
           ? () => {
-            const con = window.confirm(`${t(KEY.common_ask_delete)} ${title}`);
-            if (con && id) {
-              deleteMutation.mutate(id);
+              const con = window.confirm(`${t(KEY.common_ask_delete)} ${title}`);
+              if (con && id) {
+                deleteMutation.mutate(id);
+              }
             }
-          }
           : undefined
       }
       onManage={isStaff ? () => nav({ linkTarget: 'backend', url: djangoUrl }) : undefined}
