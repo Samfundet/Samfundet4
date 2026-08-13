@@ -1,4 +1,5 @@
 import type { Decorator, Meta, StoryObj } from '@storybook/react';
+import { MockAuthContextProvider } from '~/context/AuthContext';
 import { EventCrudButtons } from './EventCrudButtons';
 
 const flexDecorator: Decorator = (Story) => (
@@ -7,10 +8,16 @@ const flexDecorator: Decorator = (Story) => (
   </div>
 );
 
+const userDecorator: Decorator = (Story) => (
+  <MockAuthContextProvider>
+    <Story />
+  </MockAuthContextProvider>
+);
+
 const meta: Meta<typeof EventCrudButtons> = {
   title: 'Components/EventCrudButtons',
   component: EventCrudButtons,
-  decorators: [flexDecorator],
+  decorators: [flexDecorator, userDecorator],
 };
 
 export default meta;
@@ -19,7 +26,6 @@ type Story = StoryObj<typeof EventCrudButtons>;
 
 export const Default: Story = {
   args: {
-    is_staff_overwrite: true,
     id: '123',
     title: 'Test event',
     height: undefined,
