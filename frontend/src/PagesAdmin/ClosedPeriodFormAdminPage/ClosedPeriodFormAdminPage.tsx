@@ -13,6 +13,7 @@ import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import { closedPeriodKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { DATE, MESSAGE } from '~/schema/closedPeriod';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -50,7 +51,7 @@ export function ClosedPeriodFormAdminPage() {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['closed-period', id],
+    queryKey: closedPeriodKeys.detail(id as string),
     queryFn: () => getClosedPeriod(id as string),
     enabled: !!id,
     select: (data) => ({
@@ -80,7 +81,7 @@ export function ClosedPeriodFormAdminPage() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data: formType) => postClosedPeriod(data),
+    mutationFn: postClosedPeriod,
     onSuccess: () => {
       toast.success(t(KEY.common_creation_successful));
       navigate({ url: reverse({ pattern: ROUTES.frontend.admin_closed }) });

@@ -8,6 +8,7 @@ import { deleteClosedPeriod, getClosedPeriods } from '~/api';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import { closedPeriodKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodAdminPage.module.scss';
@@ -17,12 +18,8 @@ export function ClosedPeriodAdminPage() {
   const { t } = useTranslation();
   useTitle(t(KEY.command_menu_shortcut_closed));
 
-  const {
-    data: closedPeriods,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['closed-periods'],
+  const { data: closedPeriods, isLoading } = useQuery({
+    queryKey: closedPeriodKeys.all,
     queryFn: () => getClosedPeriods(),
   });
 

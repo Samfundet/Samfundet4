@@ -1,6 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { TimeDuration } from '~/Components';
 import { Link } from '~/Components/Link/Link';
 import { Text } from '~/Components/Text/Text';
@@ -8,6 +8,7 @@ import { getActiveClosedPeriods } from '~/api';
 import type { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import { closedPeriodKeys } from '~/queryKeys';
 import { dbT } from '~/utils';
 import styles from './OpeningHours.module.scss';
 
@@ -17,24 +18,22 @@ type OpeningHoursProps = {
   isError: boolean;
 };
 
-export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) {
+export function OpeningHours({ venues }: OpeningHoursProps) {
   const { t } = useTranslation();
   const [isClosed, setIsClosed] = useState(false);
   const [closedText, setClosedText] = useState<string>();
 
+  const { data, isLoading, isError } = useQuery({
+    queryKey: closedPeriodKeys.all,
+    queryFn: getActiveClosedPeriods,
+  });
+
   useEffect(() => {
-    getActiveClosedPeriods()
-      .then((periods) => {
-        if (periods.length !== 0) {
-          setIsClosed(true);
-          setClosedText(dbT(periods[0], 'message'));
-        }
-      })
-      .catch((error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
-      });
-  }, [t]);
+    if (!isLoading && data && data.length !== 0) {
+      setIsClosed(true);
+      setClosedText(dbT(data[0], 'message'));
+    }
+  }, [isLoading, data]);
 
   if (isLoading) {
     return <Text>{t(KEY.common_loading)}</Text>;
