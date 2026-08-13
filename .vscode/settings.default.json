@@ -24,10 +24,10 @@
   "python.testing.pytestArgs": ["-c", "./backend/pytest.ini"],
   "python.testing.unittestEnabled": false,
 
+  // ruff: format + fix on save. Mirrors 'backend:ruff-fix' / 'backend:ruff-format-fix' in lefthook.yml.
   "[python]": {
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit",
-      "source.lintOnSave": "explicit",
       "source.organizeImports": "never"
     },
     "editor.defaultFormatter": "charliermarsh.ruff",
@@ -38,65 +38,27 @@
   //             Frontend
   // ================================
   "html.format.enable": false,
-  "[javascript][javascriptreact][typescript]": {
+
+  // biome: format + lint-fix + organize imports on save. Mirrors 'frontend:biome-fix' in lefthook.yml.
+  "[javascript][javascriptreact][typescript][typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome",
     "editor.codeActionsOnSave": {
-      "source.fixAll": "always",
-      "source.organizeImports": "always"
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
     }
   },
+
+  // stylelint: format + fix on save. Mirrors 'frontend:stylelint-fix' in lefthook.yml.
   "[css][scss]": {
-    "editor.defaultFormatter": "stylelint.vscode-stylelint"
+    "editor.defaultFormatter": "stylelint.vscode-stylelint",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit"
+    }
   },
   "css.validate": true,
   "less.validate": true,
   "scss.validate": true,
   "stylelint.configFile": "frontend/.stylelintrc",
   "stylelint.enable": true,
-  "stylelint.validate": ["css", "scss"],
-
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit",
-      "source.organizeImports": "explicit"
-    }
-  },
-
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit",
-      "source.organizeImports": "explicit"
-    }
-  },
-
-  "[javascript]": {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit",
-      "source.organizeImports": "explicit"
-    }
-  },
-
-  "[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit",
-      "source.organizeImports": "explicit"
-    }
-  },
-
-  "[scss]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit",
-      "source.organizeImports": "explicit"
-    }
-  },
-  "[javascript][javascriptreact][scss][typescript][typescriptreact]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit",
-      "source.organizeImports": "explicit"
-    }
-  }
+  "stylelint.validate": ["css", "scss"]
 }
