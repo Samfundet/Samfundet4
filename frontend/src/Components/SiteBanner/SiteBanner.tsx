@@ -2,24 +2,24 @@ import { useQuery } from '@tanstack/react-query';
 import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getActiveSiteBanner } from '~/api';
+import { MINUTE_MILLIS } from '~/constants';
 import { useScrollY } from '~/hooks';
 import { siteBannerKeys } from '~/queryKeys';
 import { dbT } from '~/utils';
 import styles from './SiteBanner.module.scss';
 
-type Props = {
-  hideAfterPx?: number;
-};
+const NAVBAR_COVER_THRESHOLD_PX = 1000;
 
-export function SiteBanner({ hideAfterPx = 1000 }: Props): JSX.Element | null {
+export function SiteBanner(): JSX.Element | null {
   const ref = useRef<HTMLDivElement | null>(null);
   const { i18n } = useTranslation();
   const scrollY = useScrollY();
-  const isCoveredByNavbar = scrollY > hideAfterPx;
+  const isCoveredByNavbar = scrollY > NAVBAR_COVER_THRESHOLD_PX;
 
   const { data: visibleBanner } = useQuery({
     queryKey: siteBannerKeys.active(),
     queryFn: getActiveSiteBanner,
+    refetchInterval: MINUTE_MILLIS,
   });
 
   useLayoutEffect(() => {
@@ -33,18 +33,16 @@ export function SiteBanner({ hideAfterPx = 1000 }: Props): JSX.Element | null {
     }
 
     const updateOffset = () => {
-      setOffset(el.offsetHeight);
+      setOffset(el.getBoundingClientRect().height);
     };
 
     updateOffset();
 
     const observer = new ResizeObserver(updateOffset);
     observer.observe(el);
-    window.addEventListener('resize', updateOffset);
 
     return () => {
       observer.disconnect();
-      window.removeEventListener('resize', updateOffset);
       setOffset(0);
     };
   }, [visibleBanner]);
