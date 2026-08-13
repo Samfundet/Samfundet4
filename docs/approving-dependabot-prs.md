@@ -5,11 +5,33 @@ Dependabot suggests packages/dependencies which need to be updated. When there i
 
 When approving dependabot pull requests and merging them, the main goal is to NOT break master in a major way for other developers. It is time-consuming to check that every little dependency upgrade does not break any of our code. If you follow these tips and steps, the pull request should be good to approve and merge.
 
+## Automated Pipeline (Recommended)
+
+The workflow below has been automated (e.g. as a personal OpenCode skill/command) and is used regularly to resolve dependabot PRs. AI skills and commands are personal per developer and kept out of the repository, so if you want to use the automation you have to set it up yourself. The automated workflow is:
+
+```
+all        → process all open dependabot PRs
+frontend   → frontend PRs only
+backend    → backend PRs only
+2253       → a single PR by number
+```
+
+For each PR it will:
+1. Merge the latest master into the PR branch and push the update to GitHub
+2. Run the full CI pipeline locally in Docker (backend: ruff + migrations + pytest + mypy, frontend: biome + tsc + stylelint)
+3. Analyze which production code imports or uses the dependency
+4. Detect and close superseded PRs (same package, older version)
+5. Generate a per-dependency smoke-test guide with manual verification steps
+6. Write a comprehensive report to `docs/dependabot-report/dependabot-report-<date>-<time>.md`
+
+It **never auto-merges** — you review the report and smoke-test before merging manually.
+
 ## Tips:
 
 - Generally, to SAVE TIME you should check and approve dependabot pull requests in the order of when the last one was merged. That is; approve and merge a dependabot pull request, then go on to the next one.
 
 - You will save time by running the pipeline and merging up to date master into the dependabot branch (change branch) locally. That is; not doing it in GitHub.
+> The automated pipeline does this for you — it merges master into each PR branch and pushes the update before running the pipeline.
 
 - Tell Web when you approve and merge dependabot pull requests so that they can rebuild their docker instance after they pull from the new version of the master branch.
 
@@ -55,7 +77,7 @@ Dependabot makes changes in one or multiple of these files:
 frontend/package.json
 frontend/yarn.lock
 
-backend/poetry.lock
+backend/uv.lock
 backend/pyproject.toml
 ```
 
@@ -123,7 +145,7 @@ Direct dependency (depends on constraint):
 "react": "~18.2.0" and 18.2.1 → 18.3.0 → both files change (doesn't satisfy ~18.2.0)
 
 
-**A diff file in `backend/poetry.lock` of a pull request created by dependabot might look something like this:**
+**A diff file in `backend/uv.lock` of a pull request created by dependabot might look something like this:**
 
 The package being upgraded in
 [this PR](https://github.com/Samfundet/Samfundet4/pull/1898/files)

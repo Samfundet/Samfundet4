@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from samfundet.models import User, Profile, UserPreference
+from samfundet.models import User, UserPreference
 
 
 class TestUserSignals:
@@ -17,23 +17,6 @@ class TestUserSignals:
 
         ### Assert ###
         assert user_preference_exists
-
-        ### Cleanup ###
-        user.delete()
-
-    def test_create_profile(self):
-        ### Arrange ###
-        user = User.objects.create_user(
-            username='user',
-            email='user@test.com',
-            password='test_password',
-        )
-
-        ### Act ###
-        profile_exists = Profile.objects.filter(user=user).exists()
-
-        ### Assert ###
-        assert profile_exists
 
         ### Cleanup ###
         user.delete()

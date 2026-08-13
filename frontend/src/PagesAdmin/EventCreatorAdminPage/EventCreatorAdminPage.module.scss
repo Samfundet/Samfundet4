@@ -90,6 +90,23 @@
   gap: 0.5em;
 }
 
+.socialMediaGrid {
+  display: grid;
+  gap: 2em;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  align-items: start;
+}
+
+.socialMediaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.socialMediaInput {
+  height: 2.25em;
+}
+
 .template_search_wrapper {
   flex: 0 0 50%;
   width: 50%;
