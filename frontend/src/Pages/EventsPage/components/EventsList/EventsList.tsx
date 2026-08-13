@@ -1,7 +1,8 @@
 import { Icon } from '@iconify/react';
-import { type ReactNode, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, EventCrudButtons, IconButton, InputField, Link, TimeDisplay } from '~/Components';
+import { useSearchParams } from 'react-router-dom';
+import { Button, IconButton, EventCrudButtons, InputField, Link, TimeDisplay } from '~/Components';
 import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
@@ -21,7 +22,8 @@ type EventsListProps = {
 export function EventsList({ events }: EventsListProps) {
   const { t, i18n } = useTranslation();
   const [tableView, setTableView] = useState(false);
-  const [query, setQuery] = useState('');
+  const [searchParam, setSearchParam] = useSearchParams();
+  const [query, setQuery] = useState(searchParam.get('q') ?? '');
   const isDesktop = useDesktop();
 
   const eventColumns = [
@@ -106,6 +108,18 @@ export function EventsList({ events }: EventsListProps) {
       );
     });
   }
+
+  useEffect(() => {
+    setSearchParam((prev) => {
+      const next = new URLSearchParams(prev);
+      if (query) {
+        next.set('q', query);
+      } else {
+        next.delete('q');
+      }
+      return next;
+    });
+  }, [query, setSearchParam]);
 
   function getButton(title: string, icon: string, func: () => void, chosen: boolean) {
     return (
