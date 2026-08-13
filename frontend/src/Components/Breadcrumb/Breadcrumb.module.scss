@@ -1,21 +1,43 @@
 @use 'src/constants' as *;
 
-@use 'src/mixins' as *;
+@use '../../mixins' as m;
+
+@use '../../styles/colors' as col;
 
 .breadcrumb {
   display: flex;
   padding: 1rem 0;
   margin: 0;
+  gap: 0.25rem;
+}
+
+.crumb {
+  display: flex;
+  align-items: center;
 }
 
 .separator {
-  margin: 0 0.3rem;
-  user-select: none;
+  color: col.$gray-300;
+
+  @include m.theme-dark {
+    color: col.$gray-600;
+  }
 }
 
-.link {
+.breadcrumb a, .link {
   display: flex;
   align-items: center;
+  color: col.$gray-800;
+
+  @include m.theme-dark {
+    color: col.$gray-200;
+  }
+}
+
+.crumb:last-child {
+  a, .link {
+    font-weight: 500;
+  }
 }
 
 .icon {

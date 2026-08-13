@@ -31,7 +31,16 @@ seed
 exec /app/entrypoint.sh: no such file or directory
 ```
 ### Fix
- Make sure `/backend/entrypoint.sh` has `End of Line sequence set` to `LF` (Happens when running on windows).
+ Make sure `/backend/entrypoint.sh` has `End of Line sequence` set to `LF` (Happens when running on windows). \
+Sometimes VScode will lie, so you can double check by running the command below, and checking if any of the lines end in "^M". If they do, the file still has `CRLF` as the line ending. 
+``` bash
+cat -v <filename>
+```
+To fix this, you can force change the line ending to ´LF´:
+``` bash
+dos2unix <filename>
+```
+```
 
 ## Docker daemon not running
 ### Error message:

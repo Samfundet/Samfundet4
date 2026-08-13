@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 import datetime
 import itertools
-from typing import TYPE_CHECKING
+from typing import Any
 from collections import defaultdict
 
 from PIL import Image as PilImage
@@ -11,6 +11,7 @@ from PIL import UnidentifiedImageError
 from guardian.models import UserObjectPermission, GroupObjectPermission
 
 from rest_framework import serializers
+from rest_framework.utils.serializer_helpers import ReturnList
 
 from django.db.models import Q, QuerySet
 from django.core.files import File
@@ -23,6 +24,7 @@ from django.contrib.auth.password_validation import validate_password
 from root.constants import PHONE_NUMBER_REGEX
 from root.utils.mixins import CustomBaseSerializer
 
+from .validators import validate_date_of_birth
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
 from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
@@ -35,7 +37,6 @@ from .models.general import (
     Venue,
     Campus,
     Infobox,
-    Profile,
     BlogPost,
     GangType,
     KeyValue,
@@ -46,9 +47,9 @@ from .models.general import (
     Saksdokument,
     MerchVariation,
     UserPreference,
-    InformationPage,
     UserFeedbackModel,
 )
+from .infopages.models import InformationPage
 from .models.recruitment import (
     Interview,
     Recruitment,
@@ -67,79 +68,111 @@ from .models.recruitment import (
 )
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
-if TYPE_CHECKING:
-    from typing import Any
-
-if TYPE_CHECKING:
-    from typing import Any
-
-from rest_framework.utils.serializer_helpers import ReturnList
-
 
 class TagSerializer(CustomBaseSerializer):
+    # Number of images using the tag, only set when the view annotates it (e.g. ?popular=true)
+    image_count = serializers.SerializerMethodField(method_name='get_image_count', read_only=True)
+
     class Meta:
         model = Tag
         fields = '__all__'
+
+    def validate(self, attributes: dict) -> dict:
+        # Uniqueness is checked manually since the base validate full_cleans a fresh
+        # instance, which cannot exclude the row being updated from the constraint check
+        name = attributes.get('name')
+        if name:
+            duplicates = Tag.objects.filter(name__iexact=name.strip())
+            if self.instance is not None:
+                duplicates = duplicates.exclude(pk=self.instance.pk)
+            if duplicates.exists():
+                raise serializers.ValidationError({'name': 'A tag with this name already exists.'})
+        instance = Tag(**attributes)
+        instance.full_clean(validate_constraints=False)
+        return attributes
+
+    def get_image_count(self, tag: Tag) -> int | None:
+        return getattr(tag, 'image_count', None)
+
+
+class BasicUserSerializer(serializers.ModelSerializer):
+    """Minimal user representation for display purposes, e.g. created_by/updated_by."""
+
+    class Meta:
+        model = User
+        # TODO: maybe include email here if logged-in user has permission to see
+        fields = ['username', 'first_name', 'last_name']
 
 
 class ImageSerializer(CustomBaseSerializer):
     # Read only tags used in frontend.
     tags = TagSerializer(many=True, read_only=True)
-    url = serializers.SerializerMethodField(method_name='get_url', read_only=True)
+    urls = serializers.SerializerMethodField(method_name='get_urls', read_only=True)
 
-    # Write only fields for posting new images.
-    file = serializers.FileField(write_only=True, required=True)
+    # Write only fields for posting new images. File is required on create, optional on update (replace).
+    file = serializers.FileField(write_only=True, required=False)
     # Comma separated tag string "tag_a,tag_b" is automatically parsed to list of tag models.
     tag_string = serializers.CharField(write_only=True, allow_blank=True, required=False)
 
     class Meta:
         model = Image
-        exclude = ['image']
+        exclude = ['image', *(f'image_{name}' for name in Image.VARIANTS)]
 
     def validate(self, attributes: dict) -> dict:
+        is_create = self.instance is None
+
         title = attributes.get('title')
-        if not title:
+        if not title and (is_create or 'title' in attributes):
             raise serializers.ValidationError({'title': 'This field is required.'})
 
         file = attributes.get('file')
-        if not file:
+        if file:
+            self._validate_file(file)
+        elif is_create:
             raise serializers.ValidationError({'file': 'An image file is required.'})
 
-        # Validate that the uploaded file is a valid image
+        return attributes
+
+    @staticmethod
+    def _validate_file(file: File) -> None:
+        """Validate that the uploaded file is a valid image of an accepted format."""
         try:
             file.seek(0)
-            PilImage.open(file).verify()
+            pil_image = PilImage.open(file)
+            pil_image.verify()
             file.seek(0)
         except UnidentifiedImageError as error:
             raise serializers.ValidationError('Invalid image') from error
 
-        return attributes
+        if pil_image.format not in Image.ALLOWED_FORMATS:
+            allowed = ', '.join(Image.ALLOWED_FORMATS)
+            raise serializers.ValidationError({'file': f'Unsupported image format {pil_image.format}. Allowed formats: {allowed}.'})
+
+    @staticmethod
+    def _parse_tag_string(raw_tag_string: str) -> list[Tag]:
+        """Find/create tags from a comma-separated string"""
+        tag_names = [name.strip() for name in raw_tag_string.split(',')]
+        tag_names = [name for name in tag_names if name]
+
+        # De-duplicate (case-insensitive) while preserving order
+        seen: set[str] = set()
+        unique_tag_names = []
+        for name in tag_names:
+            if name.lower() not in seen:
+                seen.add(name.lower())
+                unique_tag_names.append(name)
+        return [Tag.find_or_create(name) for name in unique_tag_names]
 
     def create(self, validated_data: dict) -> Image:
         """
         Uses the write_only file field to create new image file.
-        Automatically finds/creates new tags based on comma-separated string.
-        Strips whitespace and drops empty tag names
+        Automatically finds/creates new tags based on comma-separated string
         and preserves the original filename when saving the image
         """
         file = validated_data.pop('file')
         raw_tag_string = validated_data.pop('tag_string', None)
-        if raw_tag_string is not None:
-            # Split on comma, strip whitespace and drop empties
-            tag_names = [name.strip() for name in raw_tag_string.split(',')]
-            tag_names = [name for name in tag_names if name]
+        tags = self._parse_tag_string(raw_tag_string) if raw_tag_string is not None else []
 
-            # De-duplicate while preserving order
-            seen: set[str] = set()
-            unique_tag_names = []
-            for name in tag_names:
-                if name not in seen:
-                    seen.add(name)
-                    unique_tag_names.append(name)
-            tags = [Tag.objects.get_or_create(name=name)[0] for name in unique_tag_names]
-        else:
-            tags = []
-        # Preserve original filename if available; fallback to title
         original_name = getattr(file, 'name', None) or validated_data.get('title')
         image = Image.objects.create(
             image=ImageFile(file, original_name),
@@ -149,8 +182,35 @@ class ImageSerializer(CustomBaseSerializer):
         image.save()
         return image
 
-    def get_url(self, image: Image) -> str:
-        return image.image.url
+    def update(self, instance: Image, validated_data: dict) -> Image:
+        """
+        Supports replacing the image file (variants are regenerated and old files
+        cleaned up by the model) and replacing the tag set from tag_string.
+        """
+        file = validated_data.pop('file', None)
+        raw_tag_string = validated_data.pop('tag_string', None)
+
+        for attribute, value in validated_data.items():
+            setattr(instance, attribute, value)
+
+        if file is not None:
+            original_name = getattr(file, 'name', None) or instance.title
+            instance.image = ImageFile(file, original_name)
+
+        if raw_tag_string is not None:
+            instance.tags.set(self._parse_tag_string(raw_tag_string))
+
+        instance.save()
+        return instance
+
+    def get_urls(self, image: Image) -> dict[str, str]:
+        return image.urls
+
+    def get_created_by(self, obj: Image) -> dict | None:
+        return BasicUserSerializer(obj.created_by).data if obj.created_by else None
+
+    def get_updated_by(self, obj: Image) -> dict | None:
+        return BasicUserSerializer(obj.updated_by).data if obj.updated_by else None
 
 
 class EventCustomTicketSerializer(CustomBaseSerializer):
@@ -224,18 +284,36 @@ class EventSerializer(CustomBaseSerializer):
         model = Event
         list_serializer_class = EventListSerializer
         # Warning: registration object contains sensitive data, don't include it!
-        exclude = ['image', 'registration', 'event_group', 'billig_id']
+        exclude = ['registration', 'event_group', 'billig_id']
 
     # Read only properties (computed property, foreign model).
     total_registrations = serializers.IntegerField(read_only=True)
-    image_url = serializers.CharField(read_only=True)
+    image = serializers.SerializerMethodField(read_only=True)
 
     # Custom tickets/billig
     custom_tickets = EventCustomTicketSerializer(many=True, read_only=True)
     billig = BilligEventSerializer(read_only=True)
 
     # For post/put (change image by id).
-    image_id = serializers.IntegerField(write_only=True)
+    image_id = serializers.IntegerField(write_only=True, required=True)
+
+    def get_image(self, obj: Event) -> dict:
+        img = obj.image
+        return {'id': img.id, 'urls': img.urls, 'title': img.title, 'tags': list(img.tags.values_list('id', flat=True))}
+
+    def update(self, instance: Event, validated_data: dict[str, Any]) -> Event:
+        image_id = validated_data.pop('image_id', None)
+        if image_id is not None:
+            try:
+                instance.image = Image.objects.get(pk=image_id)
+            except Image.DoesNotExist as err:
+                raise serializers.ValidationError({'image_id': 'Invalid image id'}) from err
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
 
     def validate(self, data: dict) -> dict:
         # Check if all required fields are present for validation
@@ -260,7 +338,8 @@ class EventSerializer(CustomBaseSerializer):
         and sets it in the new event. Read/write only fields enable
         us to use the same serializer for both reading and writing.
         """
-        validated_data['image'] = Image.objects.get(pk=validated_data['image_id'])
+        image_id = validated_data.pop('image_id')
+        validated_data['image'] = Image.objects.get(pk=image_id)
         event = Event(**validated_data)
         event.save()
         return event
@@ -348,6 +427,7 @@ class RegisterSerializer(serializers.Serializer):
       * phone_number
       * firstname
       * lastname
+      * date_of_birth
       * password
     """
 
@@ -360,6 +440,7 @@ class RegisterSerializer(serializers.Serializer):
     )
     firstname = serializers.CharField(label='First name', write_only=True)
     lastname = serializers.CharField(label='Last name', write_only=True)
+    date_of_birth = serializers.DateField(label='Date of birth', write_only=True, validators=[validate_date_of_birth])
     password = serializers.CharField(
         label='Password',
         # This will be used when the DRF browsable API is enabled.
@@ -378,6 +459,7 @@ class RegisterSerializer(serializers.Serializer):
         phone_number = attrs.get('phone_number')
         firstname = attrs.get('firstname')
         lastname = attrs.get('lastname')
+        date_of_birth = attrs.get('date_of_birth')
         password = attrs.get('password')
         # Check for unique
         existing_users = User.objects.filter(Q(username=username) | Q(email=email) | Q(phone_number=phone_number))
@@ -395,7 +477,13 @@ class RegisterSerializer(serializers.Serializer):
         if username and password:
             # Try to authenticate the user using Django auth framework.
             user = User.objects.create_user(
-                first_name=firstname, last_name=lastname, username=username, email=email, phone_number=phone_number, password=password
+                first_name=firstname,
+                last_name=lastname,
+                username=username,
+                email=email,
+                phone_number=phone_number,
+                date_of_birth=date_of_birth,
+                password=password,
             )
             user = authenticate(request=self.context.get('request'), username=username, password=password)
         else:
@@ -405,6 +493,24 @@ class RegisterSerializer(serializers.Serializer):
         # It will be used in the view.
         attrs['user'] = user
         return attrs
+
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for letting the logged-in user update their own profile details.
+
+    Blank values are allowed and stored as empty strings.
+    """
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'phone_number', 'date_of_birth']
+        extra_kwargs = {
+            'first_name': {'required': False, 'allow_blank': False},
+            'last_name': {'required': False, 'allow_blank': False},
+            'phone_number': {'required': False, 'allow_blank': False},
+            'date_of_birth': {'required': False, 'allow_null': True, 'validators': [validate_date_of_birth]},
+        }
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -417,12 +523,6 @@ class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission
         fields = '__all__'
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ['id', 'nickname']
 
 
 class UserPreferenceSerializer(serializers.ModelSerializer):
@@ -439,19 +539,19 @@ class CampusSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True, read_only=True)
-    profile = ProfileSerializer(many=False, read_only=True)
     campus = CampusSerializer(read_only=True)
     permissions = serializers.SerializerMethodField(method_name='get_permissions', read_only=True)
     object_permissions = serializers.SerializerMethodField(method_name='get_object_permissions', read_only=True)
     user_preference = serializers.SerializerMethodField(method_name='get_user_preference', read_only=True)
     role_permissions = serializers.SerializerMethodField(method_name='get_role_permissions', read_only=True)
+    role_permissions_grouped = serializers.SerializerMethodField(method_name='get_role_permissions_grouped', read_only=True)
 
     class Meta:
         model = User
         exclude = ['password', 'user_permissions']
 
     def get_permissions(self, user: User) -> list[str]:
-        return user.get_all_permissions()
+        return list(user.get_all_permissions())
 
     @staticmethod
     def _permission_to_str(permission: Permission) -> str:
@@ -478,6 +578,37 @@ class UserSerializer(serializers.ModelSerializer):
     def get_user_preference(self, user: User) -> dict:
         user_preference, _created = UserPreference.objects.get_or_create(user=user)
         return UserPreferenceSerializer(user_preference, many=False).data
+
+    def get_role_permissions_grouped(
+        self,
+        user: User,
+    ) -> list[dict[str, int | list[str]]]:
+        """
+        Returns role permissions, grouped by org/gang/section
+        :param user:
+        :return:
+        """
+        return [
+            {
+                object_type: role.obj.id,
+                'permissions': [f'{permission.content_type.app_label}.{permission.codename}' for permission in role.role.permissions.all()],
+            }
+            for object_type, roles in (
+                (
+                    'org',
+                    UserOrgRole.objects.filter(user=user).prefetch_related('role__permissions__content_type'),
+                ),
+                (
+                    'gang',
+                    UserGangRole.objects.filter(user=user).prefetch_related('role__permissions__content_type'),
+                ),
+                (
+                    'section',
+                    UserGangSectionRole.objects.filter(user=user).prefetch_related('role__permissions__content_type'),
+                ),
+            )
+            for role in roles
+        ]
 
     def get_role_permissions(self, user: User) -> list[str]:
         """
@@ -510,7 +641,22 @@ class OrganizationSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+def info_page_slug_field() -> serializers.SlugRelatedField:
+    """
+    `Gang.info_page` references an information page by its numeric id, but that id is an internal
+    database detail. Read and write the relation as the page's slug instead.
+    """
+    return serializers.SlugRelatedField(
+        slug_field='slug_field',
+        queryset=InformationPage.objects.all(),
+        allow_null=True,
+        required=False,
+    )
+
+
 class GangSerializer(CustomBaseSerializer):
+    info_page = info_page_slug_field()
+
     class Meta:
         model = Gang
         fields = '__all__'
@@ -524,6 +670,7 @@ class GangSectionSerializer(CustomBaseSerializer):
 
 class RecruitmentGangSerializer(CustomBaseSerializer):
     recruitment_positions = serializers.SerializerMethodField(method_name='get_positions_count', read_only=True)
+    info_page = info_page_slug_field()
 
     class Meta:
         model = Gang
@@ -545,12 +692,6 @@ class GangTypeSerializer(CustomBaseSerializer):
 
     class Meta:
         model = GangType
-        fields = '__all__'
-
-
-class InformationPageSerializer(CustomBaseSerializer):
-    class Meta:
-        model = InformationPage
         fields = '__all__'
 
 
@@ -640,6 +781,12 @@ class SaksdokumentSerializer(CustomBaseSerializer):
         )
         document.save()
         return document
+
+    def get_created_by(self, obj: Saksdokument) -> dict | None:
+        return BasicUserSerializer(obj.created_by).data if obj.created_by else None
+
+    def get_updated_by(self, obj: Saksdokument) -> dict | None:
+        return BasicUserSerializer(obj.updated_by).data if obj.updated_by else None
 
 
 class TextItemSerializer(serializers.ModelSerializer):

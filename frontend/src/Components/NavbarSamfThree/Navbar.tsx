@@ -4,21 +4,22 @@
 
 import { Icon } from '@iconify/react';
 import { default as classNames } from 'classnames';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 import { Button, Link, ThemeSwitch } from '~/Components';
-import { getActiveRecruitments, logout, stopImpersonatingUser } from '~/api';
+import { getActiveRecruitments } from '~/api';
 import { logoWhite } from '~/assets';
+import { isSiteFeatureEnabled } from '~/constants/site-features';
 import { useAuthContext } from '~/context/AuthContext';
 import { useGlobalContext } from '~/context/GlobalContextProvider';
 import type { RecruitmentDto } from '~/dto';
 import { useDesktop } from '~/hooks';
-import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { SAMF3_MEMBER_URL } from '~/routes/samf-three';
+import { ROUTES_OTHER } from '~/routes/other';
+import { getDisplayName } from '~/utils';
 import styles from './Navbar.module.scss';
 import { HamburgerMenu, LanguageButton } from './components';
 import { NavbarItem } from './components/NavbarItem';
@@ -43,6 +44,20 @@ export function Navbar() {
   // Navbar style.
   const isRootPath = useLocation().pathname === ROUTES.frontend.home;
 
+  const userDisplayName = useMemo(() => {
+    if (!user) {
+      return '';
+    }
+    const display = getDisplayName(user);
+    if (display.length > 28) {
+      if (user.first_name.length <= 16) {
+        return user.first_name;
+      }
+      return user.username;
+    }
+    return display;
+  }, [user]);
+
   useEffect(() => {
     // Close expanded dropdown menu whenever mobile navbar is closed, or we switch from mobile to desktop, like when
     // switching from portrait to landscape on iPad.
@@ -52,6 +67,9 @@ export function Navbar() {
   }, [isMobileNavigation, isDesktop]);
 
   useEffect(() => {
+    if (!isSiteFeatureEnabled('recruitment')) {
+      return;
+    }
     getActiveRecruitments().then((response) => {
       setActiveRecruitments(response.data);
     });
@@ -64,7 +82,7 @@ export function Navbar() {
     <div className={styles.navbar_profile_button}>
       <Icon icon="material-symbols:person" />
       <Link url={ROUTES.frontend.admin} className={styles.profile_text}>
-        {user?.username}
+        {userDisplayName}
       </Link>
     </div>
   );
@@ -148,7 +166,7 @@ export function Navbar() {
         setExpandedDropdown={setExpandedDropdown}
         expandedDropdown={expandedDropdown}
         route={ROUTES.frontend.events}
-        label={t(KEY.common_event)}
+        label={t(KEY.common_events)}
       />
       <NavbarItem
         setExpandedDropdown={setExpandedDropdown}
@@ -179,64 +197,11 @@ export function Navbar() {
     </div>
   );
 
-  // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
-  const isImpersonate = cookies.hasOwnProperty('impersonated_user_id');
-
-  const userDropdownLinks = (
-    <>
-      <Link url={ROUTES.frontend.admin} className={styles.navbar_dropdown_link}>
-        <Icon icon="material-symbols:settings" />
-        {t(KEY.control_panel_title)}
-      </Link>
-      {isImpersonate && (
-        <button
-          type="button"
-          className={classNames(styles.navbar_dropdown_link, styles.navbar_logout_button)}
-          onClick={() => {
-            stopImpersonatingUser()
-              .then(() => {
-                window.location.reload();
-              })
-              .catch(console.error);
-            setIsMobileNavigation(false);
-          }}
-        >
-          <Icon icon="ri:spy-fill" />
-          {t(KEY.admin_stop_impersonate)}
-        </button>
-      )}
-      <button
-        type="button"
-        className={classNames(styles.navbar_dropdown_link, styles.navbar_logout_button)}
-        onClick={(e) => {
-          e.preventDefault();
-          setExpandedDropdown('');
-          logout()
-            .then((response) => {
-              response.status === STATUS.HTTP_200_OK && setUser(undefined);
-            })
-            .catch(console.error);
-
-          setIsMobileNavigation(false);
-        }}
-      >
-        <Icon icon="material-symbols:logout" />
-        {t(KEY.common_logout)}
-      </button>
-    </>
-  );
-
   const profileButton = user && (
-    <div className={classNames(styles.navbar_profile_button, styles.profile_text, styles.dropdown_container_left)}>
-      <NavbarItem
-        setExpandedDropdown={setExpandedDropdown}
-        expandedDropdown={expandedDropdown}
-        route={'#'}
-        label={user.username}
-        icon={isImpersonate ? 'mdi:eye' : 'material-symbols:person'}
-        dropdownLinks={userDropdownLinks}
-      />
-    </div>
+    <Link url={ROUTES.frontend.admin} className={classNames(styles.profile_text, styles.navbar_profile_button)}>
+      <Icon icon="material-symbols:person" />
+      {userDisplayName}
+    </Link>
   );
 
   const loginButton = !user && (
@@ -255,11 +220,11 @@ export function Navbar() {
 
   const memberButton = (
     <Button
-      theme="samf"
+      theme="primary"
       rounded={true}
       className={isDesktop ? styles.login_button : styles.popup_internal_button}
       onClick={() => {
-        window.location.href = SAMF3_MEMBER_URL.medlem;
+        window.location.href = ROUTES_OTHER.samf_medlem;
         setIsMobileNavigation(false);
       }}
     >

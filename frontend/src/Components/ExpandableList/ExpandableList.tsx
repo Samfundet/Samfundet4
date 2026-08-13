@@ -8,7 +8,7 @@ type ExpandableListProps = {
   depth: number;
 };
 
-export function ExpandableList({ children }: ExpandableListProps) {
+export function ExpandableList({ header, children }: ExpandableListProps) {
   const { depth, setDepth } = useExpandableListContext();
   const depthNotZero = depth > 0;
 
@@ -26,7 +26,7 @@ export function ExpandableList({ children }: ExpandableListProps) {
             ↩︎
           </button>
         )}
-        <h3>Saksdokumenter</h3>
+        {header && <strong>{header}</strong>}
       </div>
       {children}
     </div>

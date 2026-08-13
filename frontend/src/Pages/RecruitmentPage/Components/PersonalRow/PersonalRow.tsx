@@ -20,7 +20,7 @@ export function PersonalRow({ recruitmentId, organizationName, showRecruitmentBt
     <>
       {showRecruitmentBtn && (
         <Button
-          theme="green"
+          theme="success"
           onClick={() => {
             navigate({
               url: reverse({
@@ -35,7 +35,7 @@ export function PersonalRow({ recruitmentId, organizationName, showRecruitmentBt
       )}
       {user ? (
         <Button
-          theme="samf"
+          theme="primary"
           onClick={() => {
             navigate({
               url: reverse({
@@ -49,7 +49,7 @@ export function PersonalRow({ recruitmentId, organizationName, showRecruitmentBt
         </Button>
       ) : (
         <Button
-          theme="samf"
+          theme="primary"
           onClick={() =>
             navigate({
               url: ROUTES.frontend.login,

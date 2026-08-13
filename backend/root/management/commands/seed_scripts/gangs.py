@@ -68,7 +68,7 @@ GANGS = {
 
 
 def seed():  # noqa: C901
-    total_gangs = sum(len(gangs) for org_name, org_data in GANGS.items() for gang_type, gangs in org_data.items())
+    total_gangs = sum(len(gangs) for org_data in GANGS.values() for gangs in org_data.values())
     created_count = 0
 
     yield 0, 'Creating gangs'

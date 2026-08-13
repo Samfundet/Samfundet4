@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import type { SaksdokumentDto } from '~/dto';
+import type { CaseDocumentCategoryDto, CaseDocumentDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 
 export function monthValueToString(month: number | '' | undefined) {
@@ -25,50 +25,49 @@ export function getFormattedDate(publication_date: string) {
   return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
 }
 
-export function getSaksdokumenterForFilters(
-  category?: string,
+export function getCaseDocumentsForFilters(
+  category: CaseDocumentCategoryDto,
   year?: number | '',
   month?: number | '',
-  saksdokumenter?: SaksdokumentDto[],
+  caseDocuments?: CaseDocumentDto[],
 ) {
-  const currentSaksdokument = saksdokumenter?.filter(
-    (saksdokument) =>
-      saksdokument.category === category &&
-      saksdokument.publication_date &&
-      new Date(saksdokument.publication_date).getFullYear() === year &&
-      new Date(saksdokument.publication_date).getMonth() === month,
+  return caseDocuments?.filter(
+    (document) =>
+      document.category === category.value &&
+      document.publication_date &&
+      new Date(document.publication_date).getFullYear() === year &&
+      new Date(document.publication_date).getMonth() === month,
   );
-  return currentSaksdokument;
 }
 
-export function getMonthForYearAndCategory(category?: string, year?: number | '', saksdokumenter?: SaksdokumentDto[]) {
-  const currentSaksdokument = saksdokumenter?.filter(
-    (saksdokument) =>
-      saksdokument.category === category &&
-      saksdokument.publication_date &&
-      new Date(saksdokument.publication_date).getFullYear() === year,
+export function getMonthForYearAndCategory(
+  category: CaseDocumentCategoryDto,
+  year?: number | '',
+  caseDocuments?: CaseDocumentDto[],
+) {
+  const currentDocument = caseDocuments?.filter(
+    (document) =>
+      document.category === category.value &&
+      document.publication_date &&
+      new Date(document.publication_date).getFullYear() === year,
   );
-  const months = [
+  return [
     ...new Set(
-      currentSaksdokument?.map(
-        (saksdokument) => saksdokument.publication_date && new Date(saksdokument.publication_date).getMonth(),
-      ),
+      currentDocument?.map((document) => document.publication_date && new Date(document.publication_date).getMonth()),
     ),
   ];
-  return months;
 }
 
-export function getYearsForCategory(category: string | undefined, saksdokumenter?: SaksdokumentDto[]) {
+export function getYearsForCategory(category: CaseDocumentCategoryDto, caseDocuments?: CaseDocumentDto[]) {
   if (!category) {
     return [];
   }
-  const currentSaksdokument = saksdokumenter?.filter((saksdokument) => saksdokument.category === category);
-  const years = [
+  const currentDocument = caseDocuments?.filter((document) => document.category === category.value);
+  return [
     ...new Set(
-      currentSaksdokument?.map(
-        (saksdokument) => saksdokument.publication_date && new Date(saksdokument.publication_date).getFullYear(),
+      currentDocument?.map(
+        (document) => document.publication_date && new Date(document.publication_date).getFullYear(),
       ),
     ),
   ];
-  return years;
 }

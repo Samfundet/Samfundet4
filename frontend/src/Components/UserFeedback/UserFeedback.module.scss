@@ -1,7 +1,3 @@
-@use 'src/constants' as *;
-
-@use 'src/mixins' as *;
-
 .feedback_button {
   position: fixed;
   bottom: 10vh;
@@ -9,6 +5,15 @@
   z-index: 1000;
   height: 50px;
   width: 50px;
+}
+
+.heading {
+  margin-bottom: 1rem;
+}
+
+.modal {
+  width: 600px;
+  max-width: 100%;
 }
 
 .modal_close_button {

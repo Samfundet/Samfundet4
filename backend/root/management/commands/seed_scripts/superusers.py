@@ -2,12 +2,22 @@ from __future__ import annotations
 
 import os
 import random
+from datetime import date, timedelta
 
 from root.constants import Environment
 
 from samfundet.models.general import User, Campus
 
 # End: imports -----------------------------------------------------
+
+
+def random_date_of_birth() -> date:
+    """Return a random date of birth for a user roughly 18-30 years old."""
+    today = date.today()
+    start = today - timedelta(days=30 * 365)
+    end = today - timedelta(days=18 * 365)
+    return start + timedelta(days=random.randint(0, (end - start).days))
+
 
 ENV = os.environ.get('ENV', Environment.DEV)
 
@@ -43,6 +53,7 @@ def create_test_superusers(*, username, firstname, lastname, campus):
         last_name=lastname,
         is_superuser=(ENV == Environment.DEV),
         campus=campus,
+        date_of_birth=random_date_of_birth(),
     )
 
 

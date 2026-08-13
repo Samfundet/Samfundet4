@@ -30,7 +30,6 @@ from samfundet.models.general import (
     TextItem,
     Reservation,
     Organization,
-    InformationPage,
 )
 from samfundet.models.recruitment import (
     Interview,
@@ -62,6 +61,7 @@ class TestUserViews:
         'firstname': 'kebab',
         'lastname': 'mannen',
         'phone_number': '48278994',
+        'date_of_birth': '2000-01-01',
         'password': 'jeglikerkebab',
     }
 
@@ -107,10 +107,70 @@ class TestUserViews:
         assert data['username'] == fixture_user.username
         # All users should have a UserPreference.
         assert data['user_preference']['id'] == fixture_user.userpreference.id
-        # All users should have a Profile.
-        assert data['profile']['id'] == fixture_user.profile.id
         # Check permission in list.
         assert some_perm_str in data['permissions']
+
+    def test_update_user(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__user)
+        data = {'first_name': 'Kebab', 'last_name': 'Mannen', 'phone_number': '48278994'}
+
+        ### Act ###
+        response: Response = fixture_rest_client.patch(path=url, data=data)
+
+        ### Assert ###
+        assert status.is_success(code=response.status_code)
+        fixture_user.refresh_from_db()
+        assert fixture_user.first_name == 'Kebab'
+        assert fixture_user.last_name == 'Mannen'
+        assert fixture_user.phone_number == '48278994'
+
+    def test_update_user_disallowed_blank_fields(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_user.first_name = 'Kebab'
+        fixture_user.last_name = 'Mannen'
+        fixture_user.phone_number = '48278994'
+        fixture_user.save()
+
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__user)
+        data = {'first_name': '', 'last_name': '', 'phone_number': ''}
+
+        ### Act ###
+        response: Response = fixture_rest_client.patch(path=url, data=data, format='json')
+        res = response.json()
+
+        ### Assert ###
+        assert status.is_client_error(code=response.status_code)
+        fixture_user.refresh_from_db()
+        assert 'first_name' in res
+        assert 'last_name' in res
+        assert 'phone_number' in res
+        assert 'This field may not be blank.' in res['first_name']
+        assert 'This field may not be blank.' in res['last_name']
+        assert 'This field may not be blank.' in res['phone_number']
+
+    def test_update_user_forbidden_for_mdb_linked_user(self, fixture_rest_client: APIClient, fixture_user: User):
+        ### Arrange ###
+        fixture_user.first_name = 'Kebab'
+        fixture_user.mdb_medlem_id = 1000
+        fixture_user.save()
+
+        fixture_rest_client.force_authenticate(user=fixture_user)
+        url = reverse(routes.samfundet__user)
+        data = {'first_name': 'Falafel'}
+
+        ### Act ###
+        response: Response = fixture_rest_client.patch(path=url, data=data, format='json')
+        res = response.json()
+
+        ### Assert ###
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        fixture_user.refresh_from_db()
+        assert fixture_user.first_name == 'Kebab'
+        assert 'detail' in res
+        assert 'Profile details are automatically synced from MDB and cannot be edited here.' in res['detail']
 
     @pytest.mark.skip(reason='This feature is temporarily disabled.')
     def test_get_users(self, fixture_rest_client: APIClient, fixture_user: User):
@@ -205,6 +265,7 @@ class TestUserViews:
             'phone_number': '48278995',
             'firstname': 'kebab',
             'lastname': 'mannen',
+            'date_of_birth': '2000-01-01',
             'password': 'jeglikerkebab',
         }
 
@@ -382,115 +443,6 @@ class TestVenueOpenViews:
 
             # Verify Sunday is explicitly closed (00:00:00), confirming we didn't fetch Sunday logic
             assert data[0]['opening_sunday'] == '00:00:00'
-
-
-class TestInformationPagesView:
-    @pytest.mark.skip(reason='This feature is temporarily disabled.')
-    def test_get_informationpage(
-        self,
-        fixture_rest_client: APIClient,
-        fixture_user: User,
-        fixture_informationpage: InformationPage,
-    ):
-        ### Arrange ###
-        url = reverse(
-            routes.samfundet__information_detail,
-            kwargs={'pk': fixture_informationpage.slug_field},
-        )
-
-        ### Act ###
-        response: Response = fixture_rest_client.get(path=url)
-        data = response.json()
-
-        ### Assert ###
-        assert status.is_success(code=response.status_code)
-        assert data['slug_field'] == fixture_informationpage.slug_field
-
-    @pytest.mark.skip(reason='This feature is temporarily disabled.')
-    def test_get_informationpages(
-        self,
-        fixture_rest_client: APIClient,
-        fixture_user: User,
-        fixture_informationpage: InformationPage,
-    ):
-        ### Arrange ###
-        url = reverse(routes.samfundet__information_list)
-
-        ### Act ###
-        response: Response = fixture_rest_client.get(path=url)
-        data = response.json()
-
-        ### Assert ###
-        assert status.is_success(code=response.status_code)
-        assert data[0]['slug_field'] == fixture_informationpage.slug_field
-
-    @pytest.mark.skip(reason='This feature is temporarily disabled.')
-    def test_create_informationpage(self, fixture_rest_client: APIClient, fixture_user: User):
-        ### Arrange ###
-        fixture_rest_client.force_authenticate(user=fixture_user)
-        url = reverse(routes.samfundet__information_list)
-
-        post_data = {'slug_field': 'lol', 'title_en': 'lol'}
-        response: Response = fixture_rest_client.post(path=url, data=post_data)
-
-        assert response.status_code == status.HTTP_403_FORBIDDEN
-        assign_perm(permissions.SAMFUNDET_ADD_INFORMATIONPAGE, fixture_user)
-
-        del fixture_user._user_perm_cache
-        del fixture_user._perm_cache
-        response: Response = fixture_rest_client.post(path=url, data=post_data)
-        assert status.is_success(code=response.status_code)
-
-        data = response.json()
-        assert data['slug_field'] == post_data['slug_field']
-
-    @pytest.mark.skip(reason='This feature is temporarily disabled.')
-    def test_delete_informationpage(
-        self,
-        fixture_rest_client: APIClient,
-        fixture_user: User,
-        fixture_informationpage: InformationPage,
-    ):
-        fixture_rest_client.force_authenticate(user=fixture_user)
-        url = reverse(
-            routes.samfundet__information_detail,
-            kwargs={'pk': fixture_informationpage.slug_field},
-        )
-        response: Response = fixture_rest_client.delete(path=url)
-
-        assert response.status_code == status.HTTP_403_FORBIDDEN
-        assign_perm(permissions.SAMFUNDET_DELETE_INFORMATIONPAGE, fixture_user)
-        del fixture_user._user_perm_cache
-        del fixture_user._perm_cache
-        response: Response = fixture_rest_client.delete(path=url)
-
-        assert status.is_success(code=response.status_code)
-
-    @pytest.mark.skip(reason='This feature is temporarily disabled.')
-    def test_put_informationpage(
-        self,
-        fixture_rest_client: APIClient,
-        fixture_user: User,
-        fixture_informationpage: InformationPage,
-    ):
-        fixture_rest_client.force_authenticate(user=fixture_user)
-        url = reverse(
-            routes.samfundet__information_detail,
-            kwargs={'pk': fixture_informationpage.slug_field},
-        )
-        put_data = {'title_nb': 'lol'}
-        response: Response = fixture_rest_client.put(path=url, data=put_data)
-        assert response.status_code == status.HTTP_403_FORBIDDEN
-
-        assign_perm(permissions.SAMFUNDET_CHANGE_INFORMATIONPAGE, fixture_user)
-        del fixture_user._user_perm_cache
-        del fixture_user._perm_cache
-        response: Response = fixture_rest_client.put(path=url, data=put_data)
-        assert status.is_success(code=response.status_code)
-
-        data = response.json()
-
-        assert data['title_nb'] == put_data['title_nb']
 
 
 class TestMerchView:
