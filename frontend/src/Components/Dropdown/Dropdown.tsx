@@ -7,6 +7,9 @@ export type DropdownOption<T> = {
   label: string;
   value: T;
   disabled?: boolean;
+  // Renders consecutive options sharing a group inside an <optgroup>. Optiosn must already
+  // be ordered by group, so this does not work well with `sortAlphabetic`
+  group?: string;
 };
 
 type NullOption = {
@@ -38,6 +41,30 @@ type UncontrolledDropdownProps<T> = PrimitiveDropdownProps<T> & {
 };
 
 export type DropdownProps<T> = ControlledDropdownProps<T> | UncontrolledDropdownProps<T>;
+
+type IndexedOption<T> = DropdownOption<T> & { index: number };
+
+function renderOption<T>({ label, value, group, index, ...props }: IndexedOption<T>) {
+  return (
+    <option value={index} key={index} {...props}>
+      {label}
+    </option>
+  );
+}
+
+function groupOptions<T>(options: DropdownOption<T>[]): { group?: string; options: IndexedOption<T>[] }[] {
+  const segments: { group?: string; options: IndexedOption<T>[] }[] = [];
+
+  options.forEach((option, index) => {
+    const open = segments.at(-1);
+    if (!open || open.group !== option.group) {
+      segments.push({ group: option.group, options: [] });
+    }
+    segments.at(-1)?.options.push({ ...option, index });
+  });
+
+  return segments;
+}
 
 function DropdownInner<T>(
   {
@@ -84,10 +111,12 @@ function DropdownInner<T>(
 
   const selectedIndex = useMemo(() => {
     if (isControlled) {
-      return finalOptions.findIndex((opt) => opt.value === value);
+      const ret = finalOptions.findIndex((opt) => opt.value === value);
+      return ret > 0 ? ret : 0;
     }
     if (defaultValue !== undefined) {
-      return finalOptions.findIndex((opt) => opt.value === defaultValue);
+      const ret = finalOptions.findIndex((opt) => opt.value === defaultValue);
+      return ret > 0 ? ret : 0;
     }
     if (!isControlled) {
       return internalIndex;
@@ -112,19 +141,23 @@ function DropdownInner<T>(
         ref={ref}
         className={classNames(classNameSelect, styles.samf_select, {
           [styles.error]: error, // is defined by base-input mixin
-          [styles.italic]: nullOption && finalOptions[selectedIndex].value === finalOptions[0].value,
+          [styles.italic]:
+            nullOption && finalOptions.length > 0 && finalOptions[selectedIndex].value === finalOptions[0].value,
         })}
         onChange={handleChange}
         disabled={disabled}
         defaultValue={!isControlled ? selectedIndex : undefined}
         value={isControlled ? selectedIndex : undefined}
       >
-        {finalOptions.map(({ label, value, ...props }, index) => (
-          // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
-          <option value={index} key={index} {...props}>
-            {label}
-          </option>
-        ))}
+        {groupOptions(finalOptions).map((segment) =>
+          segment.group === undefined ? (
+            segment.options.map(renderOption)
+          ) : (
+            <optgroup label={segment.group} key={segment.group}>
+              {segment.options.map(renderOption)}
+            </optgroup>
+          ),
+        )}
       </select>
       {!disableIcon && (
         <div className={styles.arrow_container}>

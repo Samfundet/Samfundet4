@@ -16,7 +16,7 @@ import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import type { AdminApplet } from '~/types';
-import { dbT } from '~/utils';
+import { dbT, hasPermissionsAnywhere } from '~/utils';
 import styles from './AdminLayout.module.scss';
 
 /**
@@ -31,7 +31,7 @@ export function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [cookies] = useCookies(['impersonated_user_id']);
-  const { setUser, loading: authLoading } = useAuthContext();
+  const { user, setUser, loading: authLoading } = useAuthContext();
 
   const isImpersonating = Object.hasOwn(cookies, 'impersonated_user_id');
 
@@ -69,6 +69,7 @@ export function AdminLayout() {
           key={index}
           className={classNames(styles.panel_item, selected && styles.selected)}
           url={applet.url}
+          target={applet.target}
           onAfterClick={() => isMobile && isPanelOpen && setPanelOpen(false)}
           plain={true}
         >
@@ -87,6 +88,18 @@ export function AdminLayout() {
 
   const userApplets = userAppletsRaw.filter((a) => !a.feature || isSiteFeatureEnabled(a.feature));
 
+  const navigationAppletsRaw: AdminApplet[] = [
+    {
+      url: ROUTES.samfThree.controlPanel,
+      icon: 'bx:link-external',
+      title_nb: 'Gå til gammelt kontrollpanel',
+      title_en: 'Go to old control panel',
+      target: 'samf3',
+    },
+  ];
+
+  const navigationApplets = navigationAppletsRaw.filter((a) => !a.feature);
+
   const panel = (
     <>
       <div className={classNames(styles.panel, !isPanelOpen && styles.panel_closed)}>
@@ -99,11 +112,16 @@ export function AdminLayout() {
         {userApplets.map((applet, index) => makeAppletShortcut(applet, index))}
 
         <br />
+        {/* Samf3 navigation */}
+        {navigationApplets.map((applet, index) => makeAppletShortcut(applet, index))}
+        <br />
 
         {appletCategories.map((category) => {
           // Keep only the applets with enabled features visible
           const visibleApplets = category.applets.filter(
-            (applet) => !applet.feature || isSiteFeatureEnabled(applet.feature),
+            (applet) =>
+              (!applet.feature || isSiteFeatureEnabled(applet.feature)) &&
+              (!applet.perm || hasPermissionsAnywhere(user, [applet.perm])),
           );
 
           if (visibleApplets.length === 0) return null;

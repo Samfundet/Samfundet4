@@ -1,0 +1,200 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Icon } from '@iconify/react';
+import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
+import {
+  Button,
+  FileInput,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  TagChipInput,
+} from '~/Components';
+import { FormDescription } from '~/Components/Forms/Form';
+import { useAuthContext } from '~/context/AuthContext';
+import { IMAGE_FILE, TAGS, TITLE, useImageMutations } from '~/domain';
+import type { ImageDto } from '~/dto';
+import { useCustomNavigate } from '~/hooks';
+import { KEY } from '~/i18n/constants';
+import { PERM } from '~/permissions';
+import { ROUTES } from '~/routes';
+import { handleServerFormErrors, hasPermissions, lowerCapitalize } from '~/utils';
+import styles from './ImageForm.module.scss';
+
+const schema = z.object({
+  file: IMAGE_FILE.optional(),
+  title: TITLE,
+  tags: TAGS,
+});
+
+type SchemaType = z.infer<typeof schema>;
+
+type ImageFormProps = {
+  image?: ImageDto;
+  onCreated?: (image: ImageDto) => void;
+};
+
+export function ImageForm({ image, onCreated }: ImageFormProps) {
+  const { t } = useTranslation();
+  const navigate = useCustomNavigate();
+  const { createImage, editImage, deleteImage } = useImageMutations();
+
+  const { user } = useAuthContext();
+
+  const canCreate = hasPermissions(user, [PERM.SAMFUNDET_ADD_IMAGE], undefined, true);
+  const canChange = useMemo(() => {
+    return hasPermissions(user, [PERM.SAMFUNDET_CHANGE_IMAGE], image?.id, true);
+  }, [user, image]);
+  const canDelete = useMemo(() => {
+    return hasPermissions(user, [PERM.SAMFUNDET_DELETE_IMAGE], image?.id, true);
+  }, [user, image]);
+
+  const form = useForm<SchemaType>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      title: image?.title ?? '',
+      tags: image?.tags.map((t) => t.name) ?? [],
+    },
+  });
+
+  if ((!image && !canCreate) || (image && !canChange && !canDelete)) {
+    return null;
+  }
+
+  function onSubmit(values: SchemaType) {
+    const data = {
+      title: values.title.trim(),
+      tag_string: values.tags.join(','),
+      file: values.file,
+    };
+
+    if (image) {
+      editImage.mutate({ id: image.id, data });
+      return;
+    }
+
+    if (!values.file) {
+      // file is required when creating a new image
+      form.setError('file', { message: t(KEY.common_required) });
+      return;
+    }
+
+    createImage.mutate(
+      {
+        ...data,
+        file: values.file,
+      },
+      {
+        onSuccess: (image) => {
+          onCreated?.(image);
+        },
+        onError: (err) => {
+          handleServerFormErrors(err, form);
+        },
+      },
+    );
+  }
+
+  function handleDelete() {
+    if (image && window.confirm(t(KEY.admin_images_confirm_delete))) {
+      deleteImage.mutate(image.id, {
+        onSuccess: () => {
+          navigate({ url: ROUTES.frontend.admin_images });
+        },
+      });
+    }
+  }
+
+  const submitText = image ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_image)}`);
+
+  const isSubmitting = createImage.isPending || editImage.isPending || deleteImage.isPending;
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        {((image && canChange) || (!image && canCreate)) && (
+          <>
+            <FormField
+              name="file"
+              control={form.control}
+              disabled={isSubmitting}
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>{t(KEY.common_image)}</FormLabel>
+                  <FormControl>
+                    <FileInput
+                      type="file"
+                      ref={field.ref}
+                      onChange={field.onChange}
+                      accept="image/png, image/gif, image/jpeg, image/webp, image/tiff"
+                      showPreview
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="title"
+              control={form.control}
+              disabled={isSubmitting}
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>{t(KEY.common_name)}</FormLabel>
+                  <FormControl>
+                    <Input type="text" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="tags"
+              control={form.control}
+              disabled={isSubmitting}
+              render={({ field }) => (
+                <FormItem className={styles.form_item}>
+                  <FormLabel>{t(KEY.common_tags)}</FormLabel>
+                  <FormDescription>{t(KEY.admin_image_form_tag_description)}</FormDescription>
+                  <FormControl>
+                    <TagChipInput {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        )}
+
+        <div className={styles.action_row}>
+          {image && canDelete && (
+            <Button
+              type="button"
+              theme="ghost"
+              disabled={isSubmitting}
+              className={styles.delete_btn}
+              onClick={handleDelete}
+            >
+              <Icon icon="mdi:bin" />
+              {t(KEY.common_delete)}
+            </Button>
+          )}
+          {(canChange || canCreate) && (
+            <Button type="submit" theme="primary" disabled={isSubmitting}>
+              <Icon icon="mdi:floppy-disk" />
+              {submitText}
+            </Button>
+          )}
+        </div>
+      </form>
+    </Form>
+  );
+}

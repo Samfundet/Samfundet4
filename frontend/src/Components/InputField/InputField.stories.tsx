@@ -1,5 +1,5 @@
-import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
+import { action } from 'storybook/actions';
 import { InputField } from './InputField';
 
 // Define the meta object, which contains metadata about your component.

@@ -75,3 +75,4 @@ alias uv-run-collectstatic='uv run python manage.py collectstatic --noinput' # C
 alias uv-run-pytest-run='uv run pytest' # Run pytest on project.
 alias uv-run-pipeline='uv-run-mypy-run && uv-run-ruff-check && uv-run-ruff-format-check && uv-run-migrations-verify && uv-run-pytest-run' # Run all checks in pipeline.
 alias uv-run-seed='uv run python manage.py seed' # Apply seed of database.
+alias uv-run-regenerate-image-variants='uv run python manage.py generate_image_variants --force --workers 4' # Regenerate small/medium/large image variants

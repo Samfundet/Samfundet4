@@ -9,7 +9,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { EventTicketType } from '~/types';
-import { dbT, formatCurrency, getCheapestPrice, getEventCategoryKey } from '~/utils';
+import { dbT, formatCurrency, getCheapestPrice, getEventCategoryKey, imageUrl } from '~/utils';
 import styles from './EventCard.module.scss';
 import {
   EventCardBanner,
@@ -45,8 +45,8 @@ export function EventCard({ event, className, ...props }: Props) {
   const callToActionButton = useMemo(() => {
     if (event.ticket_type === EventTicketType.FREE) {
       return (
-        <Link url={eventUrl} plain className={buttonThemes.success}>
-          {t(KEY.common_ticket_type_free)}!
+        <Link url={eventUrl} plain className={buttonThemes.ghost}>
+          {t(KEY.common_ticket_type_free)}
         </Link>
       );
     }
@@ -96,7 +96,7 @@ export function EventCard({ event, className, ...props }: Props) {
       <Link url={eventUrl} plain>
         <div className={styles.header}>
           {banners}
-          <EventCardImage imageUrl={event.image_url} />
+          <EventCardImage imageUrl={imageUrl(event.image, 'small')} />
         </div>
       </Link>
 

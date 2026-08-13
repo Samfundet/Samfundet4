@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import os
 import sys
+import mimetypes
 from pathlib import Path
 
 import environ
@@ -54,9 +55,13 @@ STATICFILES_DIRS = [
 # so /robots.txt, /favicon.ico, /manifest.json, etc. resolve at / directly from the build directory
 WHITENOISE_ROOT = BASE_DIR / REACT_BUILD_DIR
 
-# Media
-MEDIA_ROOT = BASE_DIR / 'mediaroot'
-MEDIA_URL = '/media/'
+# User-uploaded files
+MEDIA_ROOT = BASE_DIR / 'uploads'
+MEDIA_URL = '/uploads/'
+
+# Before 3.13, mimetypes only knows webp as a non-strict type, which Django's static serving ignores
+# TODO: Remove after cirkus updates to >=3.13
+mimetypes.add_type('image/webp', '.webp')
 
 # Production settings:
 X_FRAME_OPTIONS = 'DENY'
@@ -317,6 +322,11 @@ LOGGING = {
             'propagate': False,  # Don't pass up to 'django'.
             'level': 'INFO',
         },
+        # PIL logs image internals (EXIF tags, stream reads, plugin imports) are at DEBUG
+        'PIL': {
+            'level': 'INFO',
+            'propagate': True,
+        },
     },
 }
 
@@ -340,6 +350,8 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'mg-web@samfundet.no'
 
 # For enabled features in the control panel
-CP_ENABLED = {s.strip() for s in os.getenv('CP_ENABLED', 'users,events,images,opening_hours,closed_hours,venue').split(',') if s.strip()} & CP_FEATURES_ALL
+CP_ENABLED = {
+    s.strip() for s in os.getenv('CP_ENABLED', 'users,events,information,documents,images,opening_hours,closed_hours,venue').split(',') if s.strip()
+} & CP_FEATURES_ALL
 
 REACT_ROUTE_PREFIX = 'reactapp'

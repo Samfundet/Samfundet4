@@ -1,13 +1,13 @@
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { Button, Carousel, Link } from '~/Components';
+import { buttonThemes } from '~/Components/Button/utils';
 import { Page } from '~/Components/Page';
 import { runderode, splash } from '~/assets';
 import { TextItem } from '~/constants';
 import { useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { CASE_DOCUMENTS } from '~/routes/samf-three';
 import { backgroundImageFromUrl } from '~/utils';
 import styles from './AboutPage.module.scss';
 import { VENUES } from './data';
@@ -23,11 +23,10 @@ export function AboutPage() {
         <div className={styles.textBox}>
           <h2 className={styles.header}>{t(KEY.common_about_samfundet)}</h2>
           <p className={styles.text}>{useTextItem(TextItem.about_samfundet)}</p>
-          <Link url={ROUTES.frontend.membership}>
-            <Button theme="primary" className={styles.button}>
-              {t(KEY.common_membership).toUpperCase()}
-            </Button>
+          <Link url={ROUTES.frontend.membership} plain className={classNames(buttonThemes.primary, styles.button)}>
+            {t(KEY.common_membership).toUpperCase()}
           </Link>
+
           <Button theme="success" className={styles.button}>
             FAQ
           </Button>
@@ -45,9 +44,10 @@ export function AboutPage() {
         <Button theme="primary" className={styles.button}>
           {t(KEY.common_about_the_organisation).toUpperCase()}
         </Button>
-        <Button className={styles.button} theme="secondary" link={CASE_DOCUMENTS.saksdokumenter}>
+        <Link url={ROUTES.frontend.casedocuments} plain className={classNames(buttonThemes.secondary, styles.button)}>
           {t(KEY.common_documents).toUpperCase()}
-        </Button>
+        </Link>
+
         <Button className={styles.button} theme="secondary">
           {t(KEY.common_our_history).toUpperCase()}
         </Button>

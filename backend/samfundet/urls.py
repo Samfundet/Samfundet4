@@ -31,7 +31,6 @@ router.register('venues', samfundet.view.general_views.VenueView, 'venues')
 router.register('closed', samfundet.view.general_views.ClosedPeriodView, 'closedperiods')
 router.register('gangs', samfundet.view.general_views.GangView, 'gangs')
 router.register('gangsorganized', samfundet.view.general_views.GangTypeView, 'gangsorganized')
-router.register('information', samfundet.view.general_views.InformationPageView, 'information')
 router.register('blog', samfundet.view.general_views.BlogPostView, 'blog')
 router.register('user-preference', samfundet.view.user_views.UserPreferenceView, 'user_preference')
 router.register('saksdokument', samfundet.view.general_views.SaksdokumentView, 'saksdokument')
@@ -75,6 +74,7 @@ app_name = 'samfundet'
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('', include('samfundet.infopages.urls')),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='samfundet:schema'), name='swagger_ui'),
     path('schema/redoc/', SpectacularRedocView.as_view(url_name='samfundet:schema'), name='redoc'),
