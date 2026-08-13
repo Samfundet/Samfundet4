@@ -309,6 +309,15 @@ wheels = [
 ]
 
 [[package]]
+name = "lefthook"
+version = "1.13.6"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/aa/f2/26e8014966b6c5b3ea1e170afb773967b5dc2eebcae77b20b66d958264ee/lefthook-1.13.6.tar.gz", hash = "sha256:1e46aa23bcefcf58c05542bb987f975b3b6a1fc6c1e902c48d1cddfc9b39fad7", size = 55409157, upload-time = "2025-09-30T13:08:37.875Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fd/38/83f3e214893cacb1e0d48c780ec715815e0fbb2c88e1d0af5d1b56d536d6/lefthook-1.13.6-py3-none-any.whl", hash = "sha256:46a72eee2b6a04d248b5defdbe803d089067a613443513b4f139b9aff9cad26d", size = 55676007, upload-time = "2025-09-30T13:08:34.143Z" },
+]
+
+[[package]]
 name = "librt"
 version = "0.11.0"
 source = { registry = "https://pypi.org/simple" }
@@ -664,6 +673,7 @@ dev = [
     { name = "debugpy" },
     { name = "drf-spectacular" },
     { name = "freezegun" },
+    { name = "lefthook" },
     { name = "mypy" },
     { name = "pillow" },
     { name = "pytest" },
@@ -694,6 +704,7 @@ dev = [
     { name = "debugpy", specifier = "==1.*" },
     { name = "drf-spectacular", specifier = "==0.29.*" },
     { name = "freezegun", specifier = ">=1.5.5,<2" },
+    { name = "lefthook", specifier = "==1.*" },
     { name = "mypy", specifier = "==2.*" },
     { name = "pillow", specifier = "==12.*" },
     { name = "pytest", specifier = "==9.*" },
