@@ -70,7 +70,7 @@ export function SocialMediaStep({ form }: Props) {
             control={form.control}
             render={({ field }) => (
               <FormItem className={styles.socialMediaItem}>
-                <FormLabel className={styles.socialMediaLabel}>{SOCIAL_LABELS[name]}</FormLabel>
+                <FormLabel>{SOCIAL_LABELS[name]}</FormLabel>
                 <FormControl>
                   <Input
                     className={styles.socialMediaInput}
