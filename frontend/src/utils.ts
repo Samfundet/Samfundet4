@@ -369,7 +369,7 @@ type VenueScheduleISO = {
  * Returns ISO date strings for a venue's schedule on the current venue day.
  * Handles overnight hours (e.g., 22:00-02:00) by adding a day to the end time.
  */
-export function getVenueScheduleISO(venue: VenueDto): VenueScheduleISO {
+export function getTodayVenueScheduleISO(venue: VenueDto): VenueScheduleISO {
   const day = getVenueDay();
   const { opening, closing, isOpen } = getVenueDaySchedule(venue, day);
 

@@ -4,7 +4,7 @@ import { Link } from '~/Components/Link/Link';
 import { Text } from '~/Components/Text/Text';
 import type { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { getVenueScheduleISO } from '~/utils';
+import { getTodayVenueScheduleISO } from '~/utils';
 import styles from './OpeningHours.module.scss';
 
 type OpeningHoursProps = {
@@ -31,7 +31,7 @@ export function OpeningHours({ venues, isLoading, isError }: OpeningHoursProps) 
       </Text>
       <table className={styles.timeTable}>
         {venues.map((venue) => {
-          const { startISO, endISO } = getVenueScheduleISO(venue);
+          const { startISO, endISO } = getTodayVenueScheduleISO(venue);
           return (
             <tr key={venue.name} className={styles.openingRow}>
               <td className={styles.tableCell}>
