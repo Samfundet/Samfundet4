@@ -10,11 +10,6 @@ import { mapEventToFormValues } from '../utils';
 
 export type FormType = z.infer<typeof eventSchema>;
 
-function computeDurationMinutes(startIso?: string, endIso?: string) {
-  if (!startIso || !endIso) return 0;
-  return Math.round((new Date(endIso).getTime() - new Date(startIso).getTime()) / 60000);
-}
-
 export function useEventCreatorForm(params: {
   event?: Partial<EventDto>;
   defaultCategory: EventCategoryValue;
