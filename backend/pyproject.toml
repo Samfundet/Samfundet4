@@ -167,7 +167,7 @@ dev = [
     "requests==2.*",
     "pytest==9.*",
     "pytest-django==4.*",
-    "drf-spectacular==0.29.*",
+    "drf-spectacular==0.30.*",
     "freezegun>=1.5.5,<2",
 ]
 
