@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -9,11 +8,9 @@ import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { Button, Form, FormField, FormItem, FormLabel, Input, Textarea } from '~/Components';
 import { FormControl, FormMessage } from '~/Components/Forms/Form';
-import { getClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
+import { useClosedPeriodMutations, useGetClosedPeriod } from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { reverse } from '~/named-urls';
-import { closedPeriodKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { DATE, MESSAGE } from '~/schema/closedPeriod';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -23,6 +20,12 @@ export function ClosedPeriodFormAdminPage() {
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
   const { id } = useParams();
+
+  useEffect(() => {
+    if (Number.isNaN(id)) {
+      navigate({ url: ROUTES.frontend.admin_casedocuments, replace: true });
+    }
+  }, [id, navigate]);
 
   const schema = z
     .object({
@@ -46,21 +49,7 @@ export function ClosedPeriodFormAdminPage() {
     resolver: zodResolver(schema),
   });
 
-  const {
-    data: initialData,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: closedPeriodKeys.detail(id as string),
-    queryFn: () => getClosedPeriod(id as string),
-    enabled: !!id,
-    select: (data) => ({
-      message_nb: data.message_nb,
-      message_en: data.message_en,
-      start_dt: data.start_dt,
-      end_dt: data.end_dt,
-    }),
-  });
+  const { data: initialData, isLoading, isError } = useGetClosedPeriod(Number(id));
 
   useEffect(() => {
     if (isError) {
@@ -69,33 +58,13 @@ export function ClosedPeriodFormAdminPage() {
     }
   }, [isError, t, navigate]);
 
-  const updateMutation = useMutation({
-    mutationFn: (data: formType) => putClosedPeriod(id as string, data),
-    onSuccess: () => {
-      toast.success(t(KEY.common_update_successful));
-      navigate({ url: reverse({ pattern: ROUTES.frontend.admin_closed }) });
-    },
-    onError: () => {
-      toast.error(t(KEY.common_something_went_wrong));
-    },
-  });
-
-  const createMutation = useMutation({
-    mutationFn: postClosedPeriod,
-    onSuccess: () => {
-      toast.success(t(KEY.common_creation_successful));
-      navigate({ url: reverse({ pattern: ROUTES.frontend.admin_closed }) });
-    },
-    onError: () => {
-      toast.error(t(KEY.common_something_went_wrong));
-    },
-  });
+  const { updateClosedPeriod, createClosedPeriod } = useClosedPeriodMutations();
 
   function onSubmit(data: formType) {
     if (id) {
-      updateMutation.mutate(data);
+      updateClosedPeriod.mutate({ id: Number(id), data });
     } else {
-      createMutation.mutate(data);
+      createClosedPeriod.mutate(data);
     }
   }
 

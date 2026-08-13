@@ -1,13 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { TimeDuration } from '~/Components';
 import { Link } from '~/Components/Link/Link';
 import { Text } from '~/Components/Text/Text';
-import { getActiveClosedPeriods } from '~/api';
+import { useGetActiveClosedPeriods } from '~/domain';
 import type { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
-import { closedPeriodKeys } from '~/queryKeys';
 import { dbT } from '~/utils';
 import styles from './OpeningHours.module.scss';
 
@@ -20,14 +18,7 @@ type OpeningHoursProps = {
 export function OpeningHours({ venues, isLoading: isLoadingVenues, isError: isErrorVenues }: OpeningHoursProps) {
   const { t } = useTranslation();
 
-  const {
-    data,
-    isLoading: isLoadingClosedPeriods,
-    isError: isErrorClosedPeriods,
-  } = useQuery({
-    queryKey: closedPeriodKeys.all,
-    queryFn: getActiveClosedPeriods,
-  });
+  const { data, isLoading: isLoadingClosedPeriods, isError: isErrorClosedPeriods } = useGetActiveClosedPeriods();
 
   const isLoading = isLoadingVenues || isLoadingClosedPeriods;
   const isError = isErrorVenues || isErrorClosedPeriods;

@@ -680,7 +680,7 @@ export async function postClosedPeriod(data: Partial<ClosedPeriodDto>): Promise<
   return response.data;
 }
 
-export async function deleteClosedPeriod(id: string | number): Promise<AxiosResponse> {
+export async function apiDeleteClosedPeriod(id: string | number): Promise<AxiosResponse> {
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
   const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });

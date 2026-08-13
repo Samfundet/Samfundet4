@@ -80,8 +80,3 @@ export const venueKeys = {
   detail: (slug: string) => [...venueKeys.details(), slug] as const,
   open: () => [...venueKeys.list(['open'])] as const,
 };
-
-export const closedPeriodKeys = {
-  all: ['closed-periods'] as const,
-  detail: (id: string) => [closedPeriodKeys.all, id] as const,
-};

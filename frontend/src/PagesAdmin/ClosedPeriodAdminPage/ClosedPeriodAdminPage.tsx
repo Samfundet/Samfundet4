@@ -1,38 +1,21 @@
 import { Icon } from '@iconify/react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { Button, TimeDisplay } from '~/Components';
 import { Table } from '~/Components/Table';
-import { deleteClosedPeriod, getClosedPeriods } from '~/api';
+import { useClosedPeriodMutations, useGetClosedPeriods } from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
-import { closedPeriodKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodAdminPage.module.scss';
 
 export function ClosedPeriodAdminPage() {
-  const queryClient = useQueryClient();
   const { t } = useTranslation();
   useTitle(t(KEY.command_menu_shortcut_closed));
 
-  const { data: closedPeriods, isLoading } = useQuery({
-    queryKey: closedPeriodKeys.all,
-    queryFn: () => getClosedPeriods(),
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: (id: number) => deleteClosedPeriod(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: closedPeriodKeys.all });
-      toast.success(t(KEY.common_delete_successful));
-    },
-    onError: () => {
-      toast.error(t(KEY.common_something_went_wrong));
-    },
-  });
+  const { data: closedPeriods, isLoading } = useGetClosedPeriods();
+  const { deleteClosedPeriod } = useClosedPeriodMutations();
 
   const header = (
     <Button theme="primary" link={ROUTES.frontend.admin_closed_create}>
@@ -89,7 +72,7 @@ export function ClosedPeriodAdminPage() {
                               if (
                                 window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_nb}`)
                               ) {
-                                deleteMutation.mutate(element.id);
+                                deleteClosedPeriod.mutate(element.id);
                               }
                             }}
                           >
