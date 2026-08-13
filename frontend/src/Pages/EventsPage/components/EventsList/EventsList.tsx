@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import { type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
-import { Button, IconButton, EventCrudButtons, InputField, Link, TimeDisplay } from '~/Components';
+import { Button, EventCrudButtons, IconButton, InputField, Link, TimeDisplay } from '~/Components';
 import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
