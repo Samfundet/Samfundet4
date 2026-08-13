@@ -1,0 +1,84 @@
+@use '../../../../mixins' as m;
+
+@use '../../../../styles/colors' as c;
+
+@use '../../../../styles/variables' as v;
+
+.toolbar {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.container {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 100%;
+  padding: 0.25rem;
+  border: 1px solid transparent;
+  border-radius: v.$border-radius-md;
+
+  &:hover, &:focus-within {
+    border-color: c.$gray-200;
+
+    @include m.theme-dark {
+      border-color: c.$gray-800;
+    }
+
+    .toolbar {
+      opacity: 1;
+    }
+  }
+}
+
+.toolbar_button {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem;
+  cursor: pointer;
+  border: none;
+  border-radius: v.$border-radius-sm;
+  color: c.$white-50;
+  background-color: rgba(0, 0, 0, 0.6);
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.85);
+  }
+}
+
+.image {
+  display: block;
+  max-width: 100%;
+  border-radius: v.$border-radius;
+}
+
+.skeleton {
+  width: 16rem;
+  height: 10rem;
+  border-radius: v.$border-radius;
+}
+
+.caption {
+  font-size: v.$font-size-sm;
+  color: c.$gray-600;
+
+  @include m.theme-dark {
+    color: c.$gray-300;
+  }
+}
+
+.missing {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px dashed c.$red-500;
+  border-radius: v.$border-radius;
+  color: c.$red-500;
+}

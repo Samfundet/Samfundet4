@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -21,10 +22,8 @@ import { IMAGE_FILE, TAGS, TITLE, useImageMutations } from '~/domain';
 import type { ImageDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
-import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { handleServerFormErrors, hasPermissions, lowerCapitalize } from '~/utils';
 import styles from './ImageForm.module.scss';
 
@@ -38,9 +37,10 @@ type SchemaType = z.infer<typeof schema>;
 
 type ImageFormProps = {
   image?: ImageDto;
+  onCreated?: (image: ImageDto) => void;
 };
 
-export function ImageForm({ image }: ImageFormProps) {
+export function ImageForm({ image, onCreated }: ImageFormProps) {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
   const { createImage, editImage, deleteImage } = useImageMutations();
@@ -48,8 +48,12 @@ export function ImageForm({ image }: ImageFormProps) {
   const { user } = useAuthContext();
 
   const canCreate = hasPermissions(user, [PERM.SAMFUNDET_ADD_IMAGE], undefined, true);
-  const canChange = hasPermissions(user, [PERM.SAMFUNDET_CHANGE_IMAGE], undefined, true);
-  const canDelete = hasPermissions(user, [PERM.SAMFUNDET_DELETE_IMAGE], undefined, true);
+  const canChange = useMemo(() => {
+    return hasPermissions(user, [PERM.SAMFUNDET_CHANGE_IMAGE], image?.id, true);
+  }, [user, image]);
+  const canDelete = useMemo(() => {
+    return hasPermissions(user, [PERM.SAMFUNDET_DELETE_IMAGE], image?.id, true);
+  }, [user, image]);
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -87,13 +91,8 @@ export function ImageForm({ image }: ImageFormProps) {
         file: values.file,
       },
       {
-        onSuccess: (data) => {
-          navigate({
-            url: reverse({
-              pattern: ROUTES_FRONTEND.admin_images_detail,
-              urlParams: { id: data.id },
-            }),
-          });
+        onSuccess: (image) => {
+          onCreated?.(image);
         },
         onError: (err) => {
           handleServerFormErrors(err, form);

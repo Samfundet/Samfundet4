@@ -53,7 +53,7 @@ export function EventPage() {
               <p className={styles.text_short}>{dbT(event, 'description_short')}</p>
             </div>
             <div className={styles.description_long}>
-              <SamfMarkdown>{dbT(event, 'description_long')}</SamfMarkdown>
+              <SamfMarkdown markdown={dbT(event, 'description_long')} />
             </div>
           </div>
           <ExpandableHeader label={t(KEY.common_details)} className={styles.expandable_header}>

@@ -21,4 +21,13 @@ export {
   TAGS,
   TITLE,
 } from './images';
+export {
+  infoPageKeys,
+  useInfoPageMutations,
+  useGetAdminInfoPages,
+  useGetAdminInfoPage,
+  useGetAdminInfoPageHistory,
+  useGetAdminInfoPageRevision,
+  useGetInfoPageOwnerOptions,
+} from './infopages';
 export { tagKeys } from './tags';

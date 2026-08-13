@@ -1,1 +1,0 @@
-export { InformationListPage } from './InformationListPage';

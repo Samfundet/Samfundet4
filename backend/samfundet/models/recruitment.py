@@ -283,7 +283,7 @@ class InterviewRoom(CustomBaseModel):
 
     def resolve_gang(self, *, return_id: bool = False) -> Gang | int:
         if return_id:
-            # noinspection PyTypeChecker
+            # noinspection PyTypeChecker,PyUnresolvedReferences
             return self.gang_id
         return self.gang
 
