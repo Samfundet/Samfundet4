@@ -108,13 +108,14 @@ export function useEventCreatorForm(params: {
   const watchedValues = form.watch();
 
   function buildPayload(values: FormType): EventWriteDto {
-    const start = values.start_dt ? new Date(values.start_dt) : null;
-    const computedEndDt = start ? new Date(start?.getTime() + (values.duration ?? 0) * 60_000) : null;
+    // end_dt is kept in sync with start_dt/duration by InfoStep's change handlers, so it's
+    // already authoritative here - no need to re-derive it from duration.
+    const endDt = values.end_dt ? new Date(values.end_dt) : null;
 
     return {
       ...values,
-      visibility_to_dt: computedEndDt ? computedEndDt.toISOString() : '',
-      end_dt: computedEndDt ? computedEndDt.toISOString() : '',
+      visibility_to_dt: endDt ? endDt.toISOString() : '',
+      end_dt: endDt ? endDt.toISOString() : '',
       image_id: values.image?.id,
     };
   }
