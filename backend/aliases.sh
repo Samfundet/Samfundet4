@@ -76,3 +76,11 @@ alias uv-run-pytest-run='uv run pytest' # Run pytest on project.
 alias uv-run-pipeline='uv-run-mypy-run && uv-run-ruff-check && uv-run-ruff-format-check && uv-run-migrations-verify && uv-run-pytest-run' # Run all checks in pipeline.
 alias uv-run-seed='uv run python manage.py seed' # Apply seed of database.
 alias uv-run-regenerate-image-variants='uv run python manage.py generate_image_variants --force --workers 4' # Regenerate small/medium/large image variants
+
+
+##########################
+#        lefthook:       #
+##########################
+# Registers the shared git hooks defined in the repo-root 'lefthook.yml'.
+# Only needed if you never run 'yarn install' in frontend/ (that installs the hooks too, via postinstall).
+alias uv-run-lefthook-install='uv run lefthook install' # One-time setup: register git hooks for this clone.
