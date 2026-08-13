@@ -16,6 +16,18 @@ export type BaseModelDto = {
   updated_by?: BasicUserDto | UserDto | null;
 };
 
+// Models which are owned by an org/gang/section should extend this type.
+export type BaseOwnedModelDto = {
+  organization?: OrganizationDto | number | null;
+  gang?: GangDto | number | null;
+  section?: GangSectionDto | number | null;
+};
+
+export type RolePermissionsGrouped =
+  | { org: number; permissions: string[] }
+  | { gang: number; permissions: string[] }
+  | { section: number; permissions: string[] };
+
 export type UserDto = {
   id: number;
   username: string;
@@ -33,6 +45,7 @@ export type UserDto = {
   permissions?: string[];
   object_permissions?: ObjectPermissionDto[];
   role_permissions?: string[];
+  role_permissions_grouped?: RolePermissionsGrouped[];
   mdb_medlem_id?: number;
   date_of_birth?: string;
 };
@@ -198,6 +211,17 @@ export type EventDto = {
   image?: ImageDto;
 
   capacity?: number;
+
+  spotify_uri?: string;
+  youtube_link?: string;
+  youtube_embed?: string;
+  facebook_link?: string;
+  soundcloud_link?: string;
+  instagram_link?: string;
+  x_link?: string;
+  lastfm_link?: string;
+  vimeo_link?: string;
+  general_link?: string;
 };
 
 export type EventWriteDto = {
@@ -238,7 +262,22 @@ export type UserPreferenceDto = {
   theme: ThemeValue;
 };
 
-export type InformationPageDto = {
+export type EditInformationPageDto = {
+  slug_field: string;
+  title_nb: string;
+  text_nb: string;
+  title_en: string;
+  text_en: string;
+  visible: boolean;
+
+  // Exactly one of these is set, never both
+  gang_id?: number;
+  section_id?: number;
+};
+
+export type InformationPageDto = BaseModelDto & {
+  // Only admin endpoints include id
+  id?: number;
   slug_field: string;
 
   title_nb?: string;
@@ -246,6 +285,35 @@ export type InformationPageDto = {
 
   title_en?: string;
   text_en?: string;
+
+  visible?: boolean;
+
+  // `section` is only set when the page is owned by a section
+  section?: GangSectionDto | null;
+  gang?: GangDto | null;
+  organization?: OrganizationDto | null;
+};
+
+export type InformationPageRevisionDto = {
+  version: number;
+  title_nb?: string | null;
+  title_en?: string | null;
+  created_at: string;
+  created_by?: string | null;
+};
+
+export type InformationPageRevisionDetailDto = InformationPageRevisionDto & {
+  text_nb?: string | null;
+  text_en?: string | null;
+};
+
+export type InformationPageOwnerOptionDto = {
+  gang: GangDto;
+  section: GangSectionDto | null;
+  organization: OrganizationDto | null;
+  can_create: boolean;
+  can_change: boolean;
+  can_delete: boolean;
 };
 
 export type ReservationTableDto = {

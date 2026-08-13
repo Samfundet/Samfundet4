@@ -23,6 +23,11 @@ from root.custom_classes.admin_classes import (
 
 from samfundet.utils import register_if_feature_enabled
 
+# Admin modules living in a domain subpackage must be imported here for their registrations to run.
+# Django's admin autodiscovery only imports '<app>.admin', so it never reaches them on its own.
+# Aliased because the plain name 'admin' is django.contrib.admin in this module.
+from samfundet.infopages import admin as infopages_admin  # noqa: F401
+
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .models.event import Event, EventGroup, EventRegistration, PurchaseFeedbackModel
 from .models.general import (
@@ -50,7 +55,6 @@ from .models.general import (
     FoodPreference,
     MerchVariation,
     UserPreference,
-    InformationPage,
     UserFeedbackModel,
 )
 from .models.recruitment import (
@@ -400,12 +404,12 @@ class VenueAdmin(CustomBaseAdmin):
 class GangAdmin(CustomBaseAdmin):
     # ordering = []
     sortable_by = ['id', 'name_nb', 'abbreviation', 'gang_type', 'created_at', 'updated_at']
-    list_filter = ['gang_type']
-    list_display = ['id', '__str__', 'name_nb', 'abbreviation', 'gang_type', 'created_at', 'updated_at']
+    list_filter = ['gang_type', 'organization']
+    list_display = ['id', 'organization', 'name_nb', 'abbreviation', 'gang_type', 'created_at', 'updated_at']
     search_fields = ['id', 'name_nb', 'abbreviation']
     # filter_horizontal = []
-    list_display_links = ['id', '__str__']
-    autocomplete_fields = ['gang_type']
+    list_display_links = ['id', 'name_nb']
+    autocomplete_fields = ['gang_type', 'organization']
     list_select_related = True
 
 
@@ -435,19 +439,6 @@ class GangSectionAdmin(CustomBaseAdmin):
     list_display_links = ['id', 'name_nb']
     list_select_related = True
     related_links = ['gang']
-
-
-@register_if_feature_enabled(WebFeatures.INFORMATION, InformationPage)
-class InformationPageAdmin(CustomBaseAdmin):
-    # ordering = []
-    sortable_by = ['slug_field', 'created_at', 'updated_at']
-    # list_filter = []
-    list_display = ['__str__', 'slug_field', 'created_at', 'updated_at']
-    search_fields = ['slug_field', 'title_nb', 'title_en']
-    # filter_horizontal = []
-    list_display_links = ['__str__', 'slug_field']
-    # autocomplete_fields = []
-    list_select_related = True
 
 
 @register_if_feature_enabled(WebFeatures.BLOG, BlogPost)

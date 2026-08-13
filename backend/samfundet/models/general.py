@@ -28,9 +28,9 @@ from django.db.models.functions import Lower
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
+from samfundet.fields import LowerCaseField, PhoneNumberField
 from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
 
-from .utils.fields import LowerCaseField, PhoneNumberField
 from .utils.string_utils import ellipsize
 
 if TYPE_CHECKING:
@@ -526,7 +526,7 @@ class Gang(CustomBaseModel):
 
     logo = models.ImageField(upload_to='ganglogos/', blank=True, null=True, verbose_name='Logo')
     gang_type = models.ForeignKey(to=GangType, related_name='gangs', verbose_name='Gruppetype', blank=True, null=True, on_delete=models.SET_NULL)
-    info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', blank=True, null=True, on_delete=models.SET_NULL)
+    info_page = models.ForeignKey(to='samfundet.InformationPage', verbose_name='Infoside', related_name='+', blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = 'Gang'
@@ -544,7 +544,12 @@ class Gang(CustomBaseModel):
         return self
 
     def __str__(self) -> str:
-        return f'{self.gang_type} - {self.name_nb}'
+        ret = self.name_nb
+        if self.gang_type:
+            ret = f'{self.gang_type} - {ret}'
+        if self.organization:
+            ret = f'{self.organization.name} - {ret}'
+        return ret
 
 
 class GangSection(CustomBaseModel):
@@ -569,30 +574,6 @@ class GangSection(CustomBaseModel):
 
     def __str__(self) -> str:
         return f'{self.gang.name_nb} - {self.name_nb}'
-
-
-class InformationPage(CustomBaseModel):
-    slug_field = models.SlugField(
-        max_length=64,
-        blank=True,
-        null=False,
-        unique=True,
-        primary_key=True,
-        help_text='Primary key, this field will identify the object and be used in the URL.',
-    )
-
-    title_nb = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (norsk)')
-    text_nb = models.TextField(blank=True, null=True, verbose_name='Tekst (norsk)')
-
-    title_en = models.CharField(max_length=64, blank=True, null=True, verbose_name='Tittel (engelsk)')
-    text_en = models.TextField(blank=True, null=True, verbose_name='Tekst (engelsk)')
-
-    class Meta:
-        verbose_name = 'InformationPage'
-        verbose_name_plural = 'InformationPages'
-
-    def __str__(self) -> str:
-        return f'{self.slug_field}'
 
 
 class BlogPost(CustomBaseModel):

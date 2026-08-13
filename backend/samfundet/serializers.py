@@ -47,9 +47,9 @@ from .models.general import (
     Saksdokument,
     MerchVariation,
     UserPreference,
-    InformationPage,
     UserFeedbackModel,
 )
+from .infopages.models import InformationPage
 from .models.recruitment import (
     Interview,
     Recruitment,
@@ -544,13 +544,14 @@ class UserSerializer(serializers.ModelSerializer):
     object_permissions = serializers.SerializerMethodField(method_name='get_object_permissions', read_only=True)
     user_preference = serializers.SerializerMethodField(method_name='get_user_preference', read_only=True)
     role_permissions = serializers.SerializerMethodField(method_name='get_role_permissions', read_only=True)
+    role_permissions_grouped = serializers.SerializerMethodField(method_name='get_role_permissions_grouped', read_only=True)
 
     class Meta:
         model = User
         exclude = ['password', 'user_permissions']
 
     def get_permissions(self, user: User) -> list[str]:
-        return user.get_all_permissions()
+        return list(user.get_all_permissions())
 
     @staticmethod
     def _permission_to_str(permission: Permission) -> str:
@@ -577,6 +578,37 @@ class UserSerializer(serializers.ModelSerializer):
     def get_user_preference(self, user: User) -> dict:
         user_preference, _created = UserPreference.objects.get_or_create(user=user)
         return UserPreferenceSerializer(user_preference, many=False).data
+
+    def get_role_permissions_grouped(
+        self,
+        user: User,
+    ) -> list[dict[str, int | list[str]]]:
+        """
+        Returns role permissions, grouped by org/gang/section
+        :param user:
+        :return:
+        """
+        return [
+            {
+                object_type: role.obj.id,
+                'permissions': [f'{permission.content_type.app_label}.{permission.codename}' for permission in role.role.permissions.all()],
+            }
+            for object_type, roles in (
+                (
+                    'org',
+                    UserOrgRole.objects.filter(user=user).prefetch_related('role__permissions__content_type'),
+                ),
+                (
+                    'gang',
+                    UserGangRole.objects.filter(user=user).prefetch_related('role__permissions__content_type'),
+                ),
+                (
+                    'section',
+                    UserGangSectionRole.objects.filter(user=user).prefetch_related('role__permissions__content_type'),
+                ),
+            )
+            for role in roles
+        ]
 
     def get_role_permissions(self, user: User) -> list[str]:
         """
@@ -609,7 +641,22 @@ class OrganizationSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
+def info_page_slug_field() -> serializers.SlugRelatedField:
+    """
+    `Gang.info_page` references an information page by its numeric id, but that id is an internal
+    database detail. Read and write the relation as the page's slug instead.
+    """
+    return serializers.SlugRelatedField(
+        slug_field='slug_field',
+        queryset=InformationPage.objects.all(),
+        allow_null=True,
+        required=False,
+    )
+
+
 class GangSerializer(CustomBaseSerializer):
+    info_page = info_page_slug_field()
+
     class Meta:
         model = Gang
         fields = '__all__'
@@ -623,6 +670,7 @@ class GangSectionSerializer(CustomBaseSerializer):
 
 class RecruitmentGangSerializer(CustomBaseSerializer):
     recruitment_positions = serializers.SerializerMethodField(method_name='get_positions_count', read_only=True)
+    info_page = info_page_slug_field()
 
     class Meta:
         model = Gang
@@ -644,12 +692,6 @@ class GangTypeSerializer(CustomBaseSerializer):
 
     class Meta:
         model = GangType
-        fields = '__all__'
-
-
-class InformationPageSerializer(CustomBaseSerializer):
-    class Meta:
-        model = InformationPage
         fields = '__all__'
 
 

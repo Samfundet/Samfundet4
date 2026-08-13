@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Link, Page } from '~/Components';
 import { KEY } from '~/i18n/constants';
+import { ROUTES } from '~/routes';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { SAMF3_LOGIN_URL } from '~/routes/samf-three';
 import styles from './LoginPickerPage.module.scss';
@@ -14,7 +15,7 @@ export function LoginPickerPage() {
   return (
     <Page>
       <div className={styles.container}>
-        <button type="button" className={styles.backLink} onClick={() => navigate(-1)}>
+        <button type="button" className={styles.backLink} onClick={() => navigate(ROUTES.frontend.home)}>
           <Icon icon="mdi:chevron-left" className={styles.backIcon} />
           {t(KEY.common_go_back)}
         </button>

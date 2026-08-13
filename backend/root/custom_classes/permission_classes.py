@@ -78,6 +78,9 @@ class CustomDjangoObjectPermissions(DjangoObjectPermissions):
 
 
 def has_required_permissions(request: Request, perms: list[str]) -> bool:
+    if not request.user or not request.user.is_authenticated:
+        return False
+
     role_models = [UserOrgRole, UserGangRole, UserGangSectionRole]
     for role_model in role_models:
         user_roles = role_model.objects.filter(user=request.user)
