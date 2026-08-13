@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import i18next from 'i18next';
 import type { CSSProperties } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
@@ -384,7 +384,7 @@ export function getVenueScheduleISO(venue: VenueDto): VenueScheduleISO {
   const [closeHour, closeMin] = closing.split(':').map(Number);
   const isOvernight = closeHour < openHour || (closeHour === openHour && closeMin <= openMin);
 
-  const endDate = isOvernight ? new Date(startDate.getTime() + 24 * 60 * 60 * 1000) : startDate;
+  const endDate = isOvernight ? addDays(startDate, 1) : startDate;
 
   const dateToISO = (date: Date) => date.toISOString().split('T')[0];
   const startISO = `${dateToISO(startDate)}T${opening}`;
