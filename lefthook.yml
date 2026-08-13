@@ -1,0 +1,45 @@
+# Shared, version-controlled git hooks. https://lefthook.dev/configuration/
+#
+# Install (one-time per clone):
+#   backend-only:  uv run lefthook install   (or: uv-run-lefthook-install)
+#   frontend:      registered via `yarn install`'s postinstall (fresh installs only;
+#                  run `uv run lefthook install` if you already had node_modules)
+#
+# These jobs auto-fix what they can and re-stage the result (stage_fixed), so a
+# commit only fails on issues that need a human (unfixable lint errors, etc.).
+# CI (.github/workflows/verify.yml) still runs the check-only versions of the
+# same tools as the actual gate.
+
+pre-commit:
+  parallel: true
+  jobs:
+    # ruff check --fix and ruff format both rewrite the same *.py files, so they
+    # can't run in parallel with each other (one's write can land mid-write of
+    # the other, or clobber the other's output). Piping them inside this group
+    # keeps them sequential while the group as a whole still runs in parallel
+    # with the frontend jobs below.
+    - name: backend:ruff
+      root: "backend/"
+      glob: "*.py"
+      group:
+        piped: true
+        jobs:
+          - name: backend:ruff-fix
+            run: uv run ruff check --fix {staged_files}
+            stage_fixed: true
+
+          - name: backend:ruff-format-fix
+            run: uv run ruff format {staged_files}
+            stage_fixed: true
+
+    - name: frontend:biome-fix
+      root: "frontend/"
+      glob: "*.{js,jsx,ts,tsx}"
+      run: yarn biome:fix {staged_files}
+      stage_fixed: true
+
+    - name: frontend:stylelint-fix
+      root: "frontend/"
+      glob: "*.{css,scss}"
+      run: yarn stylelint:fix {staged_files}
+      stage_fixed: true
