@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TimeDuration } from '~/Components';
 import { Link } from '~/Components/Link/Link';
@@ -18,22 +17,22 @@ type OpeningHoursProps = {
   isError: boolean;
 };
 
-export function OpeningHours({ venues }: OpeningHoursProps) {
+export function OpeningHours({ venues, isLoading: isLoadingVenues, isError: isErrorVenues }: OpeningHoursProps) {
   const { t } = useTranslation();
-  const [isClosed, setIsClosed] = useState(false);
-  const [closedText, setClosedText] = useState<string>();
 
-  const { data, isLoading, isError } = useQuery({
+  const {
+    data,
+    isLoading: isLoadingClosedPeriods,
+    isError: isErrorClosedPeriods,
+  } = useQuery({
     queryKey: closedPeriodKeys.all,
     queryFn: getActiveClosedPeriods,
   });
 
-  useEffect(() => {
-    if (!isLoading && data && data.length !== 0) {
-      setIsClosed(true);
-      setClosedText(dbT(data[0], 'message'));
-    }
-  }, [isLoading, data]);
+  const isLoading = isLoadingVenues || isLoadingClosedPeriods;
+  const isError = isErrorVenues || isErrorClosedPeriods;
+  const isClosed = !isLoadingClosedPeriods && (data?.length ?? 0) > 0;
+  const closedText = data?.[0] ? dbT(data[0], 'message') : undefined;
 
   if (isLoading) {
     return <Text>{t(KEY.common_loading)}</Text>;

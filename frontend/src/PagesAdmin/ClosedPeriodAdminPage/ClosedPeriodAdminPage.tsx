@@ -26,7 +26,7 @@ export function ClosedPeriodAdminPage() {
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteClosedPeriod(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['closed-periods'] });
+      queryClient.invalidateQueries({ queryKey: closedPeriodKeys.all });
       toast.success(t(KEY.common_delete_successful));
     },
     onError: () => {
