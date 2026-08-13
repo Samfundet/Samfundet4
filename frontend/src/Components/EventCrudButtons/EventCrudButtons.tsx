@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { t } from 'i18next';
 import type { ReactNode } from 'react';
 import { toast } from 'react-toastify';
@@ -8,6 +8,7 @@ import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
+import { eventKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { hasPerm } from '~/utils';
 import { CrudButtons } from '../CrudButtons';
@@ -22,6 +23,7 @@ type EventCrudButtons = {
 export function EventCrudButtons({ title = 'event', id, have_view = true, height }: EventCrudButtons) {
   const { user } = useAuthContext();
   const nav = useCustomNavigate();
+  const queryClient = useQueryClient();
   const isStaff = user?.is_staff;
   const canChangeEvent = hasPerm({ user: user, permission: PERM.SAMFUNDET_CHANGE_EVENT, obj: id });
 
@@ -36,6 +38,11 @@ export function EventCrudButtons({ title = 'event', id, have_view = true, height
     mutationFn: deleteEvent,
     onSuccess: () => {
       toast.success(t(KEY.common_delete_successful));
+      // when useQuery and queryKeys are better implemented this function can be used to reload the event page and load only valid events (non deleted ones)
+      // queryClient.invalidateQueries({ queryKey: eventKeys.all });
+
+      // temp solution is just reload of page
+      window.location.reload();
     },
     onError: () => {
       toast.error(t(KEY.common_something_went_wrong));
@@ -49,11 +56,11 @@ export function EventCrudButtons({ title = 'event', id, have_view = true, height
       onDelete={
         canChangeEvent || isStaff
           ? () => {
-              const con = window.confirm(`${t(KEY.common_ask_delete)} ${title}`);
-              if (con && id) {
-                deleteMutation.mutate(id);
-              }
+            const con = window.confirm(`${t(KEY.common_ask_delete)} ${title}`);
+            if (con && id) {
+              deleteMutation.mutate(id);
             }
+          }
           : undefined
       }
       onManage={isStaff ? () => nav({ linkTarget: 'backend', url: djangoUrl }) : undefined}

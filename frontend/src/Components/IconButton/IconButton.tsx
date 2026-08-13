@@ -30,6 +30,7 @@ export function IconButton({
 }: IconButtonProps) {
   function handleOnClick(e?: React.MouseEvent<HTMLElement>) {
     e?.preventDefault();
+    e?.stopPropagation();
     onClick?.();
   }
 
