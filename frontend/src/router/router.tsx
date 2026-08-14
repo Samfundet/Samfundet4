@@ -86,6 +86,7 @@ import { t } from 'i18next';
 import { App } from '~/App';
 import { DynamicOrgOutlet } from '~/Components/DynamicOrgOutlet/DynamicOrgOutlet';
 import { AdminHomePage } from '~/Pages/AdminHomePage';
+import { WeeklyOpeningPage } from '~/Pages/WeeklyOpeningPage/WeeklyOpeningPage';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -118,6 +119,8 @@ export const router = createBrowserRouter(
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.venues} element={<SiteFeatureGate feature="venues"><VenuePage /></SiteFeatureGate>}/>
           <Route path={ROUTES.frontend.health} element={<HealthPage />} />
+          <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
+          <Route path={ROUTES.frontend.weekly_opening_hours} element={<WeeklyOpeningPage />} />
           {import.meta.env.DEV && <Route path={ROUTES.frontend.components} element={<ComponentPage />} />}
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
             <Route path={ROUTES.frontend.login} element={<LoginPickerPage />} />
