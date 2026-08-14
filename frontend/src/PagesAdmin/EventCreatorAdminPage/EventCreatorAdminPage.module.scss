@@ -170,3 +170,20 @@
   color: $green;
   flex-shrink: 0;
 }
+
+.socialMediaGrid {
+  display: grid;
+  gap: 2em;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  align-items: start;
+}
+
+.socialMediaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.socialMediaInput {
+  height: 2.25em;
+}

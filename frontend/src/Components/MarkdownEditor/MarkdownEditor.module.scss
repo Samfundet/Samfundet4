@@ -1,0 +1,101 @@
+@use '../../styles/colors' as c;
+
+@use '../../styles/variables' as v;
+
+@use '../../mixins' as m;
+
+.container {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid c.$gray-200;
+
+  @include m.theme-dark {
+    border-color: c.$gray-800;
+  }
+
+  button[role="combobox"] {
+    cursor: pointer;
+
+    @include m.theme-dark {
+      background-color: c.$black-800;
+
+      // stylelint-disable max-nesting-depth, selector-max-combinators, selector-max-compound-selectors, selector-max-type
+      span {
+        color: c.$white-50;
+      }
+      // stylelint-enable max-nesting-depth, selector-max-combinators, selector-max-compound-selectors, selector-max-type
+    }
+  }
+}
+
+.content_editable {
+  min-height: 300px;
+  line-height: 1.5rem;
+
+  ul, ol {
+    margin-left: 20px;
+  }
+
+  hr {
+    border: none;
+    border-bottom: 1px solid c.$gray-400;
+
+    @include m.theme-dark {
+      border-color: c.$gray-700;
+    }
+  }
+
+  // These are copied from our H1/H2/etc components
+
+  h1 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    letter-spacing: -0.05rem;
+    font-weight: 800;
+    padding-bottom: 0.5rem;
+
+    @include m.for-desktop-up {
+      font-size: 2.25rem;
+      line-height: 2.5rem;
+    }
+  }
+
+  h2 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    letter-spacing: -0.05rem;
+    font-weight: 600;
+    padding-bottom: 0.5rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    letter-spacing: -0.05rem;
+    font-weight: 600;
+    padding-bottom: 0.25rem;
+  }
+
+  h4 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    letter-spacing: -0.05rem;
+    font-weight: 600;
+    padding-bottom: 0.25rem;
+  }
+
+  h5 {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    letter-spacing: -0.05rem;
+    font-weight: 600;
+    padding-bottom: 0.25rem;
+  }
+
+  h6 {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    letter-spacing: -0.05rem;
+    font-weight: 600;
+  }
+}

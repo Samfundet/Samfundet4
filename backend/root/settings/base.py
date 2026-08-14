@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import os
 import sys
+import mimetypes
 from pathlib import Path
 
 import environ
@@ -22,6 +23,9 @@ from root.constants import CP_FEATURES_ALL, Environment
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+# React frontend
+REACT_BUILD_DIR = 'reactapp'
 
 IS_DOCKER = os.environ.get('IS_DOCKER') == 'yes'
 
@@ -40,11 +44,24 @@ ENV = os.environ.get('ENV')
 
 # Static
 STATIC_ROOT = BASE_DIR / 'staticroot'
-STATIC_URL = '/static/'
+STATIC_URL = '/assets/'
 
-# Media
-MEDIA_ROOT = BASE_DIR / 'mediaroot'
-MEDIA_URL = '/media/'
+STATICFILES_DIRS = [
+    BASE_DIR / REACT_BUILD_DIR,
+    BASE_DIR / REACT_BUILD_DIR / 'assets',
+]
+
+# Tells WhiteNoise to additionally serve the build files in backend/reactapp/ at the site root,
+# so /robots.txt, /favicon.ico, /manifest.json, etc. resolve at / directly from the build directory
+WHITENOISE_ROOT = BASE_DIR / REACT_BUILD_DIR
+
+# User-uploaded files
+MEDIA_ROOT = BASE_DIR / 'uploads'
+MEDIA_URL = '/uploads/'
+
+# Before 3.13, mimetypes only knows webp as a non-strict type, which Django's static serving ignores
+# TODO: Remove after cirkus updates to >=3.13
+mimetypes.add_type('image/webp', '.webp')
 
 # Production settings:
 X_FRAME_OPTIONS = 'DENY'
@@ -93,6 +110,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'root.custom_classes.middlewares.RequestLogMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -304,6 +322,11 @@ LOGGING = {
             'propagate': False,  # Don't pass up to 'django'.
             'level': 'INFO',
         },
+        # PIL logs image internals (EXIF tags, stream reads, plugin imports) are at DEBUG
+        'PIL': {
+            'level': 'INFO',
+            'propagate': True,
+        },
     },
 }
 
@@ -327,4 +350,8 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'mg-web@samfundet.no'
 
 # For enabled features in the control panel
-CP_ENABLED = {s.strip() for s in os.getenv('CP_ENABLED', 'events,images,opening_hours,closed_hours,venue').split(',') if s.strip()} & CP_FEATURES_ALL
+CP_ENABLED = {
+    s.strip() for s in os.getenv('CP_ENABLED', 'users,events,information,documents,images,opening_hours,closed_hours,venue').split(',') if s.strip()
+} & CP_FEATURES_ALL
+
+REACT_ROUTE_PREFIX = 'reactapp'

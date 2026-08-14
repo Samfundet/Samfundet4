@@ -48,7 +48,6 @@ PHONE_NUMBER_REGEX = r'^\+?\s*(\d\s*){8,15}$'
 
 
 class WebFeatures:
-    PROFILE = 'profile'
     CHANGE_P = 'change_p'
     EVENTS = 'events'
     IMAGES = 'images'
@@ -69,7 +68,6 @@ class WebFeatures:
 
 
 CP_FEATURES_ALL = {
-    WebFeatures.PROFILE,
     WebFeatures.CHANGE_P,
     WebFeatures.EVENTS,
     WebFeatures.IMAGES,

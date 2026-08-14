@@ -1,18 +1,18 @@
 import { Icon } from '@iconify/react';
-import { type ReactNode, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { Button, IconButton, InputField, Link, TimeDisplay } from '~/Components';
 import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
-import { BACKEND_DOMAIN } from '~/constants';
 import type { EventDto } from '~/dto';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { COLORS } from '~/types';
-import { dbT } from '~/utils';
+import { dbT, imageUrl } from '~/utils';
 import styles from './EventsList.module.scss';
 
 type EventsListProps = {
@@ -22,7 +22,8 @@ type EventsListProps = {
 export function EventsList({ events }: EventsListProps) {
   const { t, i18n } = useTranslation();
   const [tableView, setTableView] = useState(false);
-  const [query, setQuery] = useState('');
+  const [searchParam, setSearchParam] = useSearchParams();
+  const [query, setQuery] = useState(searchParam.get('q') ?? '');
   const isDesktop = useDesktop();
 
   const eventColumns = [
@@ -85,7 +86,7 @@ export function EventsList({ events }: EventsListProps) {
         <div className={styles.event_container} key={event.id}>
           <ImageCard
             date={event.start_dt.toString()}
-            imageUrl={BACKEND_DOMAIN + event.image_url}
+            imageUrl={imageUrl(event.image, 'small')}
             title={dbT(event, 'title') ?? ''}
             subtitle={time_display}
             description={dbT(event, 'description_short') ?? ''}
@@ -98,6 +99,18 @@ export function EventsList({ events }: EventsListProps) {
       );
     });
   }
+
+  useEffect(() => {
+    setSearchParam((prev) => {
+      const next = new URLSearchParams(prev);
+      if (query) {
+        next.set('q', query);
+      } else {
+        next.delete('q');
+      }
+      return next;
+    });
+  }, [query, setSearchParam]);
 
   function getButton(title: string, icon: string, func: () => void, chosen: boolean) {
     return (

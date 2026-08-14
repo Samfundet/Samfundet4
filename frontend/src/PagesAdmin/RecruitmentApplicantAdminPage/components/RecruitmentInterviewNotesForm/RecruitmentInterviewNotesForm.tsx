@@ -22,7 +22,7 @@ function MarkdownPreview({ notes, onFocus }: MarkdownPreviewProps) {
     <div className={styles.markdownWrapper}>
       <button type="button" onClick={onFocus} className={styles.markdownButton}>
         <div className={styles.markdownContent}>
-          <SamfMarkdown>{notes}</SamfMarkdown>
+          <SamfMarkdown markdown={notes} />
         </div>
       </button>
     </div>

@@ -10,11 +10,6 @@ import { mapEventToFormValues } from '../utils';
 
 export type FormType = z.infer<typeof eventSchema>;
 
-function computeDurationMinutes(startIso?: string, endIso?: string) {
-  if (!startIso || !endIso) return 0;
-  return Math.round((new Date(endIso).getTime() - new Date(startIso).getTime()) / 60000);
-}
-
 export function useEventCreatorForm(params: {
   event?: Partial<EventDto>;
   defaultCategory: EventCategoryValue;
@@ -45,6 +40,16 @@ export function useEventCreatorForm(params: {
       ticket_type: 'free',
       custom_tickets: [],
       billig_id: undefined,
+      spotify_uri: '',
+      youtube_link: '',
+      youtube_embed: '',
+      soundcloud_link: '',
+      instagram_link: '',
+      facebook_link: '',
+      x_link: '',
+      lastfm_link: '',
+      vimeo_link: '',
+      general_link: '',
       image: undefined,
       visibility_from_dt: '',
       visibility_to_dt: '',
