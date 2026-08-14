@@ -305,6 +305,7 @@ export const nb = prepareTranslations({
   [KEY.event_create_from_existing_event]: 'Opprett fra eksisterende arrangement',
   [KEY.event_search_for_an_existing_event]: 'Søk etter et eksisterende arrangement',
   [KEY.event_selected_existing_event]: 'Valgte eksisterende arrangement',
+  [KEY.event_no_results]: 'Ingen resultater',
 
   // Event categories
   [KEY.event_category_art]: 'Kunst',
@@ -1089,6 +1090,7 @@ export const en = prepareTranslations({
   [KEY.event_create_from_existing_event]: 'Create from existing event',
   [KEY.event_search_for_an_existing_event]: 'Search for an existing event',
   [KEY.event_selected_existing_event]: 'Selected existing event',
+  [KEY.event_no_results]: 'No results',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',

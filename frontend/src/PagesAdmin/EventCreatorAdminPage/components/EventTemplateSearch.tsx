@@ -25,8 +25,7 @@ export function EventTemplateSearch({ events, onSelectEvent }: EventTemplateSear
       return keywords.every((kw) => title.includes(kw));
     });
   }, [events, query, i18n.language]);
-  const showResults = query.trim() !== '' && selectedEvent === null && filteredEvents.length > 0;
-  // TODO: add translations
+  const showResults = query.trim() !== '' && selectedEvent === null;
 
   function handleChange(value: string) {
     setQuery(value);
@@ -60,23 +59,27 @@ export function EventTemplateSearch({ events, onSelectEvent }: EventTemplateSear
       )}
       {showResults && (
         <div className={styles.search_results}>
-          {filteredEvents.map((e) => (
-            <button
-              key={e.id}
-              type="button"
-              className={styles.search_result_item}
-              onClick={() => {
-                onSelectEvent(e);
-                SetSelectedEvent(e);
-                setQuery((dbT(e, 'title', i18n.language) as string) ?? '');
-              }}
-            >
-              <span className={styles.search_result_title}>{dbT(e, 'title', i18n.language)}</span>
-              <span className={styles.search_result_meta}>
-                {new Date(e.start_dt).toLocaleDateString(i18n.language)}
-              </span>
-            </button>
-          ))}
+          {filteredEvents.length > 0 ? (
+            filteredEvents.map((e) => (
+              <button
+                key={e.id}
+                type="button"
+                className={styles.search_result_item}
+                onClick={() => {
+                  onSelectEvent(e);
+                  SetSelectedEvent(e);
+                  setQuery((dbT(e, 'title', i18n.language) as string) ?? '');
+                }}
+              >
+                <span className={styles.search_result_title}>{dbT(e, 'title', i18n.language)}</span>
+                <span className={styles.search_result_meta}>
+                  {new Date(e.start_dt).toLocaleDateString(i18n.language)}
+                </span>
+              </button>
+            ))
+          ) : (
+            <div className={styles.search_result_item}>{t(KEY.event_no_results)}</div>
+          )}
         </div>
       )}
     </div>

@@ -314,6 +314,7 @@ export const KEY = {
   event_create_from_existing_event: 'event_create_from_existing_event',
   event_search_for_an_existing_event: 'event_search_for_an_existing_event',
   event_selected_existing_event: 'event_selected_existing_event',
+  event_no_results: 'event_no_results',
 
   // Purchase Ticket Info:
   invalid_email_message: 'invalid_email_message',
