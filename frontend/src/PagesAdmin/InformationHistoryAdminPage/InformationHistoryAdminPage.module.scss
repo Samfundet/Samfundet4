@@ -1,0 +1,6 @@
+@use '../../styles/colors' as c;
+
+.empty {
+  margin: 1rem 0;
+  color: c.$gray-500;
+}

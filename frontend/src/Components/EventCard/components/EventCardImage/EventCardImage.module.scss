@@ -1,0 +1,21 @@
+@use '../../../../mixins' as m;
+
+@use '../../EventCard.module' as ec;
+
+$image-height: 180px;
+$image-height-mobile: 160px;
+
+.image {
+  background-size: cover;
+  background-position: center center;
+  display: block;
+  height: $image-height;
+  width: 100%;
+  cursor: pointer;
+  border-top-left-radius: ec.$border-radius;
+  border-top-right-radius: ec.$border-radius;
+
+  @include m.for-mobile-down {
+    height: $image-height-mobile;
+  }
+}

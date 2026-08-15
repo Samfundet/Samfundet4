@@ -1,0 +1,1 @@
+export { TagChip } from './TagChip';
