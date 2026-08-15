@@ -8,6 +8,15 @@ $border-radius: v.$border-radius-lg;
 $width: 400px;
 $min-width: 330px;
 
+.crud_buttons {
+  bottom: .5rem;
+  right: -.5rem;
+  position: absolute;
+  opacity: 0%;
+  transition: all 200ms ease-in-out;
+  pointer-events: none;
+}
+
 .event_card {
   width: $width;
   min-width: $min-width;
@@ -17,6 +26,11 @@ $min-width: 330px;
 
   &:hover {
     box-shadow: 0 1px 12px 0 rgba(0, 0, 0, 0.04);
+
+    .crud_buttons {
+      opacity: 1;
+      right: .5rem;
+    }
   }
 
   @include m.theme-dark {

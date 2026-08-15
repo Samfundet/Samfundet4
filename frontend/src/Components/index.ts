@@ -21,6 +21,7 @@ export { EventCardContainer } from './EventCardContainer';
 export { EventQuery } from './EventQuery';
 export { ExpandableHeader } from './ExpandableHeader';
 export { ExpandableList } from './ExpandableList';
+export { EventCrudButtons } from './EventCrudButtons';
 export { ExternalHostBox } from './ExternalHostBox';
 export { FileInput } from './FileInput';
 export { Footer } from './Footer';
