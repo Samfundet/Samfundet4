@@ -1,6 +1,5 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { t } from 'i18next';
-import type { ReactNode } from 'react';
 import { toast } from 'react-toastify';
 import { deleteEvent } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
@@ -13,16 +12,16 @@ import { hasPerm } from '~/utils';
 import { CrudButtons } from '../CrudButtons';
 
 type EventCrudButtons = {
-  title?: ReactNode;
-  id?: string;
-  have_view?: boolean;
+  id?: string | number;
+  removeView?: boolean;
   height?: string | number;
+  deleteRedirect?: boolean;
 };
 
-export function EventCrudButtons({ title = 'event', id, have_view = true, height }: EventCrudButtons) {
+export function EventCrudButtons({ id, removeView = false, height, deleteRedirect = false }: EventCrudButtons) {
   const { user } = useAuthContext();
   const nav = useCustomNavigate();
-  const queryClient = useQueryClient();
+  //const queryClient = useQueryClient();
   const isStaff = user?.is_staff;
   const canChangeEvent = hasPerm({ user: user, permission: PERM.SAMFUNDET_CHANGE_EVENT, obj: id });
 
@@ -50,14 +49,15 @@ export function EventCrudButtons({ title = 'event', id, have_view = true, height
 
   return (
     <CrudButtons
-      onView={have_view ? () => nav({ url: viewUrl }) : undefined}
+      onView={!removeView ? () => nav({ url: viewUrl }) : undefined}
       onEdit={canChangeEvent || isStaff ? () => nav({ url: editUrl }) : undefined}
       onDelete={
         canChangeEvent || isStaff
           ? () => {
-              const con = window.confirm(`${t(KEY.common_ask_delete)} ${title}`);
+              const con = window.confirm(t(KEY.common_ask_delete));
               if (con && id) {
                 deleteMutation.mutate(id);
+                if (deleteRedirect) nav({ url: -1 });
               }
             }
           : undefined

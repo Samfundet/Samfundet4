@@ -98,7 +98,7 @@ export function EventCard({ event, className, ...props }: Props) {
           {banners}
           <EventCardImage imageUrl={imageUrl(event.image, 'small')} />
           <div className={styles.crud_buttons}>
-            <EventCrudButtons title={dbT(event, 'title')} id={event.id.toString()} have_view={false} />
+            <EventCrudButtons id={event.id} removeView={true} />
           </div>
         </div>
       </Link>

@@ -25,7 +25,7 @@ export function IconButton({
   border,
   url,
   target,
-  height,
+  height = 30,
   avatarColor,
 }: IconButtonProps) {
   function handleOnClick(e?: React.MouseEvent<HTMLElement>) {

@@ -12,7 +12,7 @@ type CrudButtonsProps = {
   height?: string | number;
 };
 
-export function CrudButtons({ onView, onEdit, onManage, onDelete, height }: CrudButtonsProps) {
+export function CrudButtons({ onView, onEdit, onManage, onDelete, height = 25 }: CrudButtonsProps) {
   const { t } = useTranslation();
 
   function createButton(title: string, color: string, icon: string, action?: (() => void) | string | false) {
@@ -25,9 +25,9 @@ export function CrudButtons({ onView, onEdit, onManage, onDelete, height }: Crud
 
   return (
     <div className={styles.row}>
-      {createButton(t(KEY.common_manage), COLORS.turquoise, 'ic:baseline-dashboard', onManage)}
       {createButton(t(KEY.common_show), COLORS.green, 'ic:baseline-remove-red-eye', onView)}
       {createButton(t(KEY.common_edit), COLORS.blue, 'mdi:pencil', onEdit)}
+      {createButton(t(KEY.common_manage), COLORS.turquoise, 'ic:baseline-dashboard', onManage)}
       {createButton(t(KEY.common_delete), COLORS.red, 'mdi:bin', onDelete)}
     </div>
   );

@@ -123,7 +123,7 @@ export function EventsAdminPage() {
       event.location,
       t(getTicketTypeKey(event.ticket_type)),
       {
-        content: <EventCrudButtons title={dbT(event, 'title')} id={event.id.toString()} />,
+        content: <EventCrudButtons id={event.id} />,
       },
     ],
   }));

@@ -193,7 +193,7 @@ export const nb = prepareTranslations({
   [KEY.common_comment]: 'Kommentar',
   [KEY.common_capacity]: 'Kapasitet',
   [KEY.common_link]: 'Lenke',
-  [KEY.common_ask_delete]: 'Vil du slette',
+  [KEY.common_ask_delete]: 'Vil du slette?',
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
@@ -962,7 +962,7 @@ export const en = prepareTranslations({
   [KEY.common_last_edited_by]: 'Last edited by',
   [KEY.common_publication_date]: 'Publication date',
   [KEY.common_casedocuments]: 'Case documents',
-  [KEY.common_ask_delete]: 'Do you want to delete',
+  [KEY.common_ask_delete]: 'Do you want to delete?',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
