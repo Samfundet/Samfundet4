@@ -308,8 +308,10 @@ if [ "$(ls Samfundet4/README.md)" ] ; then # Simple check if an arbitrary file e
 
     # Register shared git hooks (lefthook.yml). Uses the uv dev-dependency installed
     # above, so this works regardless of whether frontend/ ever gets a `yarn install`.
+    # Answering "n" here, or later running `uv run lefthook uninstall`, opts out — see
+    # docs/development-tools.md#git-hooks-lefthook for other opt-out options.
     echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Register shared git hooks (lefthook)?" "(cd backend && uv run lefthook install)" "$X_INTERACTIVE"
+    do_action "$BOT: Register shared git hooks (lefthook)? (auto-fixes lint/format on commit, optional)" "(cd backend && uv run lefthook install)" "$X_INTERACTIVE"
 
     # Build project.
     echo ; echo ; echo ; echo "================================================================================================================"
