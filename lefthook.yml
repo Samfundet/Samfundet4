@@ -8,6 +8,9 @@
 # commit only fails on issues that need a human (unfixable lint errors, etc.).
 # CI (.github/workflows/verify.yml) still runs the check-only versions of the
 # same tools as the actual gate.
+#
+# Don't want this running on your machine? See lefthook-local.yml.example and
+# docs/development-tools.md#git-hooks-lefthook for opt-out options.
 
 pre-commit:
   parallel: true
