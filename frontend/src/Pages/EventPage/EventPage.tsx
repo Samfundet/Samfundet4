@@ -1,13 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { ExpandableHeader, ExternalHostBox, H1, Image, Page } from '~/Components';
 import { BuyEventTicket } from '~/Components/BuyEventTicket/BuyEventTicket';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
-import { getEvent } from '~/api';
+import { useGetEvent } from '~/domain/events';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { eventKeys } from '~/queryKeys';
 import { dbT, imageUrl } from '~/utils';
 import styles from './EventPage.module.scss';
 import { EventInformation } from './components/EventInformation/EventInformation';
@@ -17,11 +15,7 @@ export function EventPage() {
   const { t } = useTranslation();
   const { id } = useParams();
 
-  const { data: event, isLoading } = useQuery({
-    queryKey: id ? eventKeys.detail(Number(id)) : ['events', 'no-id'],
-    queryFn: () => getEvent(id as string),
-    enabled: !!id,
-  });
+  const { data: event, isLoading } = useGetEvent(id);
 
   useTitle((event && dbT(event, 'title')) || t(KEY.common_event));
   return (

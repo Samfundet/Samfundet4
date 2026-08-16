@@ -1,14 +1,14 @@
 import { Icon } from '@iconify/react';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
-import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
+import { type ReactElement, type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { getEvent, getVenues } from '~/api';
+import { getVenues } from '~/api';
 import type { EventDto } from '~/dto';
 import { usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -18,12 +18,12 @@ import { dbT, getAgeRestrictionKey, getEventCategoryKey, lowerCapitalize } from 
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { type FormType, useEventCreatorForm } from './hooks/useEventCreatorForm';
-import { useEventMutations } from './hooks/useEventMutations';
 
 import { type EventCreatorStep, type StepKey, steps } from './steps/stepConfig';
 
 import type { FieldErrors } from 'react-hook-form';
-import { eventSchema } from './EventCreatorSchema';
+import { useCreateEvent, useGetEvent, useUpdateEvent } from '~/domain/events';
+import { eventSchema } from '~/domain/events/schema';
 import { EventPreviewCard } from './components/EventPreviewCard';
 import { GraphicsStep } from './steps/GraphicsStep';
 import { InfoStep } from './steps/InfoStep';
@@ -34,10 +34,7 @@ import { TextStep } from './steps/TextStep';
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
-  const [event, setEvent] = useState<Partial<EventDto>>();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
-  const { createEventMutation, editEventMutation } = useEventMutations();
 
   const { data: venues = [] } = useQuery({
     queryKey: venueKeys.all,
@@ -58,6 +55,8 @@ export function EventCreatorAdminPage() {
     label: t(getAgeRestrictionKey(age)),
   }));
 
+  const { data: event, isLoading } = useGetEvent(id);
+
   const { form, watchedValues, buildPayload } = useEventCreatorForm({
     event,
     defaultCategory: eventCategoryOptions[0]?.value ?? EventCategory.ART,
@@ -74,22 +73,6 @@ export function EventCreatorAdminPage() {
   };
 
   const hasSocialMediaErrors = SOCIAL_KEYS.some((name) => !!form.formState.errors[name]);
-
-  // Fetch event data using the event ID
-  useEffect(() => {
-    if (id) {
-      getEvent(id)
-        .then((eventData) => {
-          setEvent(eventData);
-          setShowSpinner(false);
-        })
-        .catch((error) => {
-          toast.error(t(KEY.common_something_went_wrong));
-        });
-    } else {
-      setShowSpinner(false);
-    }
-  }, [id, t]);
 
   // ================================== //
   //          Creation Steps            //
@@ -129,6 +112,9 @@ export function EventCreatorAdminPage() {
   //             Save Logic             //
   // ================================== //
 
+  const { mutate: updateEvent } = useUpdateEvent();
+  const { mutate: createEvent } = useCreateEvent();
+
   function onSubmit(values: FormType) {
     let payload: Partial<EventDto> = buildPayload(values);
 
@@ -138,9 +124,9 @@ export function EventCreatorAdminPage() {
     }
 
     if (id) {
-      editEventMutation.mutate({ id, payload });
+      updateEvent({ id, data: payload });
     } else {
-      createEventMutation.mutate(payload);
+      createEvent(payload);
     }
   }
 
@@ -222,7 +208,7 @@ export function EventCreatorAdminPage() {
   useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true}>
+    <AdminPageLayout title={title} loading={isLoading} header={true}>
       <TabBar
         tabs={formTabs}
         selected={currentFormTab}

@@ -312,20 +312,20 @@ export async function putInformationPage(slug: string, page: EditInformationPage
   return await axios.put<InformationPageDto>(url, page, { withCredentials: true });
 }
 
-export async function getEventsPerDay(): Promise<EventDto[]> {
+export async function getEventsPerDay(): Promise<Record<string, EventDto[]>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsperday;
-  const response = await axios.get<EventDto[]>(url, { withCredentials: true });
+  const response = await axios.get<Record<string, EventDto[]>>(url, { withCredentials: true });
 
   return response.data;
 }
 
-type EventsUpcomingBackendResponse = {
+export type EventsUpcomingBackendResponse = {
   events: EventDto[]; // Array of events
   categories: [string, string][]; // Categories as value-label pairs
   locations: string[]; // Locations as value-label pairs
 };
 
-type EventsUpcomingResponse = {
+export type EventsUpcomingResponse = {
   events: EventDto[]; // Array of events
   categories: string[]; // Categories as value-label pairs
   locations: string[]; // Locations as value-label pairs

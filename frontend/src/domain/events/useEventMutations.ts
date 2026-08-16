@@ -1,19 +1,21 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { deleteCaseDocument as apiDeleteCaseDocument, postCaseDocument, putCaseDocument } from '~/api';
-import { caseDocumentKeys } from '~/domain';
-import type { CaseDocumentDto, CaseDocumentPostDto } from '~/dto';
+import { deleteEvent, postEvent, putEvent } from '~/api';
+import type { EventWriteDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { eventKeys } from './queryKeys';
 
-export function useCreateCaseDocument() {
+export function useCreateEvent(onCreate?: () => void) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: (data: CaseDocumentPostDto) => postCaseDocument(data),
+    mutationFn: (data: Partial<EventWriteDto>) => postEvent(data),
     onSuccess: () => {
-      toast.success(t(KEY.common_save_successful));
+      toast.success(t(KEY.common_creation_successful));
+      queryClient.invalidateQueries({ queryKey: eventKeys.all });
+      onCreate?.();
     },
     onError: (err) => {
       toast.error(t(KEY.common_something_went_wrong));
@@ -22,44 +24,38 @@ export function useCreateCaseDocument() {
   });
 }
 
-export function useCaseDocumentMutations() {
+export function useUpdateEvent(onUpdate?: () => void) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
-  const createCaseDocument = useMutation({
-    mutationFn: (data: CaseDocumentPostDto) => postCaseDocument(data),
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string | number; data: Partial<EventWriteDto> }) => putEvent(id, data),
     onSuccess: () => {
-      toast.success(t(KEY.common_save_successful));
+      toast.success(t(KEY.common_update_successful));
+      queryClient.invalidateQueries({ queryKey: eventKeys.all });
+      onUpdate?.();
     },
     onError: (err) => {
       toast.error(t(KEY.common_something_went_wrong));
       console.error(err);
     },
   });
+}
 
-  const editCaseDocument = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: Partial<CaseDocumentDto> }) => putCaseDocument(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: caseDocumentKeys.all });
-      toast.success(t(KEY.common_save_successful));
-    },
-    onError: (err) => {
-      toast.error(t(KEY.common_something_went_wrong));
-      console.error(err);
-    },
-  });
+export function useDeleteEvent(onDelete?: () => void) {
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
-  const deleteCaseDocument = useMutation({
-    mutationFn: (id: number) => apiDeleteCaseDocument(id),
+  return useMutation({
+    mutationFn: (id: string | number) => deleteEvent(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: caseDocumentKeys.all });
       toast.success(t(KEY.common_delete_successful));
+      queryClient.invalidateQueries({ queryKey: eventKeys.all });
+      onDelete?.();
     },
     onError: (err) => {
       toast.error(t(KEY.common_something_went_wrong));
       console.error(err);
     },
   });
-
-  return { createCaseDocument, editCaseDocument, deleteCaseDocument };
 }
