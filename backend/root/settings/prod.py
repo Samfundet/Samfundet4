@@ -13,6 +13,7 @@ DEBUG = False
 
 # Ensure correct ENV
 ENV = Environment.PROD
+BILLIG_PAYMENT_URL = os.environ.get('BILLIG_PAYMENT_URL', 'https://billettsalg.samfundet.no/pay')
 
 # Security
 X_FRAME_OPTIONS = 'DENY'

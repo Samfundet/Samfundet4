@@ -13,6 +13,7 @@ from guardian.models import UserObjectPermission, GroupObjectPermission
 from rest_framework import serializers
 from rest_framework.utils.serializer_helpers import ReturnList
 
+from django.conf import settings
 from django.db.models import Q, QuerySet
 from django.core.files import File
 from django.contrib.auth import authenticate
@@ -242,6 +243,7 @@ class BilligTicketGroupSerializer(CustomBaseSerializer):
             'name',
             'is_sold_out',
             'is_almost_sold_out',
+            'is_theater_ticket_group',
             'ticket_limit',
             'price_groups',
         ]
@@ -249,12 +251,17 @@ class BilligTicketGroupSerializer(CustomBaseSerializer):
 
 class BilligEventSerializer(CustomBaseSerializer):
     ticket_groups = BilligTicketGroupSerializer(many=True, read_only=True)
+    payment_url = serializers.SerializerMethodField()
+
+    def get_payment_url(self, _obj: BilligEvent) -> str:
+        return settings.BILLIG_PAYMENT_URL
 
     class Meta:
         model = BilligEvent
         fields = [
             'id',
             'name',
+            'payment_url',
             'ticket_groups',
             'sale_from',
             'sale_to',

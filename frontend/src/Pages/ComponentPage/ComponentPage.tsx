@@ -76,6 +76,7 @@ export function ComponentPage() {
             in_sale_period: '',
             is_sold_out: false,
             name: '',
+            payment_url: 'http://localhost:8000/api/billig/dev/pay/',
             sale_from: '',
             sale_to: '',
             ticket_groups: [
@@ -83,6 +84,7 @@ export function ComponentPage() {
                 id: 0,
                 is_almost_sold_out: false,
                 is_sold_out: false,
+                is_theater_ticket_group: false,
                 name: 'Billettgruppe 1',
                 price_groups: [
                   {
