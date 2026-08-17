@@ -18,7 +18,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from root.utils import routes
 
 from samfundet.serializers import ImageSerializer
-from samfundet.models.general import Tag, User, Image, Merch
+from samfundet.models.general import Tag, User, Image, Merch, BlogPost, Infobox, GangSection
 
 if TYPE_CHECKING:
     from rest_framework.test import APIClient
@@ -380,3 +380,23 @@ class TestImageApi:
         assert data['created_by'] == {'username': fixture_superuser.username, 'first_name': 'Super', 'last_name': 'User'}
         assert data['created_at']
         assert data['updated_at']
+
+    def test_detail_includes_database_references(
+        self,
+        fixture_rest_client: APIClient,
+        fixture_image: Image,
+        fixture_event: Any,
+        fixture_gang_section: GangSection,
+    ):
+        fixture_gang_section.logo = fixture_image
+        fixture_gang_section.save()
+
+        BlogPost.objects.create(title_nb='News', title_en='News', text_nb='text', text_en='text', image=fixture_image)
+        Infobox.objects.create(title_nb='Info', title_en='Info', text_nb='text', text_en='text', color='#FFFFFF', image=fixture_image)
+        Merch.objects.create(name_nb='T-Shirt', name_en='T-Shirt', description_nb='desc', description_en='desc', base_price=100, image=fixture_image)
+
+        response = fixture_rest_client.get(reverse(routes.samfundet__images_detail, kwargs={'pk': fixture_image.id}))
+
+        assert status.is_success(response.status_code)
+        references = response.json()['references']
+        assert {reference['model'] for reference in references} == {'event', 'gang_section', 'blog_post', 'infobox', 'merch'}

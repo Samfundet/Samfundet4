@@ -37,3 +37,22 @@
   flex-wrap: wrap;
   gap: 0.5rem;
 }
+
+.referencesSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.referenceList {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.emptyReferences {
+  margin: 0;
+  color: var(--text-secondary);
+}

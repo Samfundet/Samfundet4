@@ -15,6 +15,7 @@ from rest_framework.utils.serializer_helpers import ReturnList
 
 from django.db.models import Q, QuerySet
 from django.core.files import File
+from django.urls import NoReverseMatch, reverse
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.core.files.images import ImageFile
@@ -108,6 +109,7 @@ class ImageSerializer(CustomBaseSerializer):
     # Read only tags used in frontend.
     tags = TagSerializer(many=True, read_only=True)
     urls = serializers.SerializerMethodField(method_name='get_urls', read_only=True)
+    references = serializers.SerializerMethodField(method_name='get_references', read_only=True)
 
     # Write only fields for posting new images. File is required on create, optional on update (replace).
     file = serializers.FileField(write_only=True, required=False)
@@ -205,6 +207,76 @@ class ImageSerializer(CustomBaseSerializer):
 
     def get_urls(self, image: Image) -> dict[str, str]:
         return image.urls
+
+    @staticmethod
+    def _admin_change_url(model_name: str, object_id: int) -> str | None:
+        try:
+            return reverse(f'admin:samfundet_{model_name}_change', args=[object_id])
+        except NoReverseMatch:
+            return None
+
+    def get_references(self, image: Image) -> list[dict[str, Any]]:
+        # Keep list views fast; only resolve relational usage on detail fetches.
+        view = self.context.get('view')
+        if getattr(view, 'action', None) != 'retrieve':
+            return []
+
+        references: list[dict[str, Any]] = []
+
+        for event in image.event_set.only('id', 'title_nb', 'title_en').order_by('id'):
+            references.append(
+                {
+                    'model': 'event',
+                    'id': event.id,
+                    'label': event.title_nb or event.title_en or f'Event #{event.id}',
+                    'admin_url': self._admin_change_url('event', event.id),
+                }
+            )
+
+        for gang_section in image.gangsection_set.select_related('gang').only('id', 'name_nb', 'name_en', 'gang__name_nb').order_by('id'):
+            section_name = gang_section.name_nb or gang_section.name_en or f'Section #{gang_section.id}'
+            gang_name = getattr(gang_section.gang, 'name_nb', None)
+            label = f'{gang_name} - {section_name}' if gang_name else section_name
+            references.append(
+                {
+                    'model': 'gang_section',
+                    'id': gang_section.id,
+                    'label': label,
+                    'admin_url': self._admin_change_url('gangsection', gang_section.id),
+                }
+            )
+
+        for blog_post in image.blogpost_set.only('id', 'title_nb', 'title_en').order_by('id'):
+            references.append(
+                {
+                    'model': 'blog_post',
+                    'id': blog_post.id,
+                    'label': blog_post.title_nb or blog_post.title_en or f'Blog post #{blog_post.id}',
+                    'admin_url': self._admin_change_url('blogpost', blog_post.id),
+                }
+            )
+
+        for infobox in image.infobox_set.only('id', 'title_nb', 'title_en').order_by('id'):
+            references.append(
+                {
+                    'model': 'infobox',
+                    'id': infobox.id,
+                    'label': infobox.title_nb or infobox.title_en or f'Infobox #{infobox.id}',
+                    'admin_url': self._admin_change_url('infobox', infobox.id),
+                }
+            )
+
+        for merch in image.merch_set.only('id', 'name_nb', 'name_en').order_by('id'):
+            references.append(
+                {
+                    'model': 'merch',
+                    'id': merch.id,
+                    'label': merch.name_nb or merch.name_en or f'Merch #{merch.id}',
+                    'admin_url': self._admin_change_url('merch', merch.id),
+                }
+            )
+
+        return references
 
     def get_created_by(self, obj: Image) -> dict | None:
         return BasicUserSerializer(obj.created_by).data if obj.created_by else None
