@@ -1,0 +1,149 @@
+@use '../../mixins' as m;
+@use '../../styles/colors' as c;
+@use '../../styles/spacing' as s;
+@use '../../styles/variables' as v;
+
+.description {
+  max-width: 48rem;
+  margin: 0;
+  color: c.$gray-600;
+  line-height: 1.5;
+
+  @include m.theme-dark {
+    color: c.$gray-300;
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: 64rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: s.$spacing-lg;
+}
+
+.field_grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: s.$spacing-lg;
+
+  @include m.for-mobile-down {
+    grid-template-columns: 1fr;
+    gap: s.$spacing-md;
+  }
+}
+
+.form_item {
+  display: flex;
+  flex-direction: column;
+  gap: s.$spacing-xs;
+  min-width: 0;
+}
+
+.checkbox_item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: s.$spacing-sm;
+  align-items: start;
+  width: fit-content;
+}
+
+.checkbox_copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.checkbox_label {
+  margin: 0;
+  cursor: pointer;
+  font-weight: v.$font-weight-medium;
+}
+
+.action_row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.preview_section {
+  display: flex;
+  flex-direction: column;
+  gap: s.$spacing-md;
+  padding: s.$spacing-lg 0;
+  border-top: 1px solid c.$gray-100;
+  border-bottom: 1px solid c.$gray-100;
+
+  @include m.theme-dark {
+    border-color: c.$gray-800;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: v.$font-size-xl;
+  }
+}
+
+.preview_list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: s.$spacing-md;
+
+  @include m.for-mobile-down {
+    grid-template-columns: 1fr;
+  }
+}
+
+.preview_item {
+  display: flex;
+  flex-direction: column;
+  gap: s.$spacing-sm;
+}
+
+.language {
+  color: c.$gray-500;
+  font-size: v.$font-size-sm;
+  font-weight: v.$font-weight-semibold;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+
+  @include m.theme-dark {
+    color: c.$gray-400;
+  }
+}
+
+.banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: s.$spacing-sm;
+  min-height: 3.5rem;
+  padding: s.$spacing-sm s.$spacing-md;
+  border-radius: v.$border-radius-md;
+  background: c.$samf-red-primary;
+  color: c.$white-50;
+  text-align: center;
+}
+
+.preview_text {
+  overflow-wrap: anywhere;
+  font-weight: v.$font-weight-semibold;
+}
+
+.preview_link {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.placeholder {
+  opacity: 0.62;
+  font-weight: v.$font-weight-normal;
+}
+
+.external_icon {
+  flex: 0 0 auto;
+  width: 1rem;
+  height: 1rem;
+}
