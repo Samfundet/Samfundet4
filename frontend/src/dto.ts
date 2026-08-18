@@ -835,6 +835,10 @@ export type SiteBannerDto = {
   end_at: string | null;
 };
 
+export type SiteBannerWriteDto = Omit<SiteBannerDto, 'id' | 'version' | 'end_at'> & {
+  end_at: string;
+};
+
 export type RegistrationDto = {
   username: string;
   email: string;

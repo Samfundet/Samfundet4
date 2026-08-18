@@ -48,6 +48,9 @@ export const ROUTES_FRONTEND = {
   // ==================== //
   admin: '/control-panel/',
   admin_mdb_connect: '/control-panel/mdb',
+  // Site banners:
+  admin_site_banners: '/control-panel/site-banners/',
+
   // Users
   admin_users: '/control-panel/users/',
   // Roles
