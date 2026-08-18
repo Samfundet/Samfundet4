@@ -17,3 +17,18 @@
   border-radius: 0.2em;
   overflow-x: scroll;
 }
+
+.template_search_container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  width: 20rem;
+
+  @include for-mobile-only {
+    width: 100%;
+  }
+}
+
+.template_search_label {
+  font-weight: 600;
+}

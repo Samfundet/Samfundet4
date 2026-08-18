@@ -8,7 +8,7 @@ import { Button, EventQuery, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { PagedPagination } from '~/Components/Pagination';
 import { Table } from '~/Components/Table';
-import { deleteEvent, getEventsUpcommingPaginated } from '~/api';
+import { deleteEvent, getEvents, getEventsUpcommingPaginated } from '~/api';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -18,6 +18,7 @@ import { ROUTES } from '~/routes';
 import type { EventCategoryValue } from '~/types';
 import { dbT, getTicketTypeKey, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { EventTemplateSearch } from '../EventCreatorAdminPage/components/EventTemplateSearch';
 import styles from './EventsAdminPage.module.scss';
 
 const PAGE_SIZE = 20;
@@ -74,6 +75,12 @@ export function EventsAdminPage() {
 
   const events = data?.results ?? [];
   const totalCount = data?.count ?? 0;
+
+  // Fetch all events for the template search (create from existing event)
+  const { data: templateEvents = [] } = useQuery({
+    queryKey: ['events'],
+    queryFn: getEvents,
+  });
 
   // Extract metadata from API response
   useEffect(() => {
@@ -163,6 +170,20 @@ export function EventsAdminPage() {
         <Icon icon="lucide:plus" />
         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`)}
       </Button>
+      <div className={styles.template_search_container}>
+        <label className={styles.template_search_label}>{t(KEY.event_copy_from_registered_event)}</label>
+        <EventTemplateSearch
+          events={templateEvents}
+          onSelectEvent={(event) =>
+            navigate(
+              reverse({
+                pattern: ROUTES.frontend.admin_events_create,
+                queryParams: { template: event.id },
+              }),
+            )
+          }
+        />
+      </div>
     </>
   );
 

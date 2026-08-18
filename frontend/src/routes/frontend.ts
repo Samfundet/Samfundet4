@@ -63,7 +63,6 @@ export const ROUTES_FRONTEND = {
   admin_events: '/control-panel/events/',
   admin_events_edit: '/control-panel/events/edit/:id/',
   admin_events_create: '/control-panel/events/create/',
-  admin_events_create_form: '/control-panel/events/create/form/',
   // Info pages:
   admin_information: '/control-panel/information/',
   admin_information_edit: '/control-panel/information/edit/:slugField/',
