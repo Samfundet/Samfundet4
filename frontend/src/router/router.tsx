@@ -43,6 +43,7 @@ import {
   ClosedPeriodAdminPage,
   ClosedPeriodFormAdminPage,
   CreateInterviewRoomPage,
+  EventCreateLandingPage,
   EventCreatorAdminPage,
   EventsAdminPage,
   GangsAdminPage,
@@ -337,6 +338,17 @@ export const router = createBrowserRouter(
             />
             <Route
               path={ROUTES.frontend.admin_events_create}
+              handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_ADD_EVENT]}
+                  element={<EventCreateLandingPage />}
+                  resolution="roles"
+                />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_events_create_form}
               handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
               element={
                 <PermissionRoute

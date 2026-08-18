@@ -90,7 +90,25 @@
   gap: 0.5em;
 }
 
-.template_search_wrapper {
+.landing {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5em;
+}
+
+.landing_row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5em;
+}
+
+.landing_header {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.landing_search_wrapper {
   flex: 0 0 50%;
   width: 50%;
 

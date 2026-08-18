@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
@@ -37,6 +37,8 @@ export function EventCreatorAdminPage() {
   const [event, setEvent] = useState<Partial<EventDto>>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const templateId = id === undefined ? searchParams.get('template') : undefined;
   const { createEventMutation, editEventMutation } = useEventMutations();
 
   const { data: venues = [] } = useQuery({
@@ -62,17 +64,11 @@ export function EventCreatorAdminPage() {
     event,
     defaultCategory: eventCategoryOptions[0]?.value ?? EventCategory.ART,
     defaultLocation: locationOptions[0]?.value ?? '',
+    forTemplate: templateId !== undefined,
   });
 
   const stepComponentMap: Record<StepKey, ReactElement> = {
-    text: (
-      <TextStep
-        form={form}
-        defaultCategory={eventCategoryOptions[0]?.value ?? EventCategory.ART}
-        defaultLocation={locationOptions[0]?.value ?? ''}
-        isEditMode={id !== undefined}
-      />
-    ),
+    text: <TextStep form={form} />,
     info: <InfoStep form={form} eventCategoryOptions={eventCategoryOptions} locationOptions={locationOptions} />,
     payment: <PaymentStep form={form} ageLimitOptions={ageLimitOptions} />,
     socialmedia: <SocialMediaStep form={form} />,
@@ -84,19 +80,20 @@ export function EventCreatorAdminPage() {
 
   // Fetch event data using the event ID
   useEffect(() => {
-    if (id) {
-      getEvent(id)
+    const eventId = id ?? templateId;
+    if (eventId) {
+      getEvent(eventId)
         .then((eventData) => {
           setEvent(eventData);
           setShowSpinner(false);
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(t(KEY.common_something_went_wrong));
         });
     } else {
       setShowSpinner(false);
     }
-  }, [id, t]);
+  }, [id, templateId, t]);
 
   // ================================== //
   //          Creation Steps            //

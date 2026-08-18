@@ -14,9 +14,10 @@ export function useEventCreatorForm(params: {
   event?: Partial<EventDto>;
   defaultCategory: EventCategoryValue;
   defaultLocation: string;
+  forTemplate?: boolean;
 }) {
   // TODO: remove defaults since we set them to undefined now
-  const { event, defaultCategory, defaultLocation } = params;
+  const { event, defaultCategory, defaultLocation, forTemplate = false } = params;
 
   // Setup React Hook Form
   const form = useForm<FormType>({
@@ -63,8 +64,9 @@ export function useEventCreatorForm(params: {
       event,
       defaultCategory,
       defaultLocation,
+      forTemplate,
     });
-  }, [event, defaultCategory, defaultLocation]);
+  }, [event, defaultCategory, defaultLocation, forTemplate]);
 
   useEffect(() => {
     if (!resetValues) return;

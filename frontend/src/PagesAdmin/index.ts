@@ -3,6 +3,7 @@ export { AdminPage } from './AdminPageLayout';
 export { ClosedPeriodAdminPage } from './ClosedPeriodAdminPage';
 export { ClosedPeriodFormAdminPage } from './ClosedPeriodFormAdminPage';
 export { EventCreatorAdminPage } from './EventCreatorAdminPage';
+export { EventCreateLandingPage } from './EventCreatorAdminPage/components/EventCreateLandingPage';
 export { EventsAdminPage } from './EventsAdminPage';
 export { GangsAdminPage } from './GangsAdminPage';
 export { GangsFormAdminPage } from './GangsFormAdminPage';
