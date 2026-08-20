@@ -5,6 +5,7 @@ import { deleteEvent, postEvent, putEvent } from '~/api';
 import type { EventWriteDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { eventKeys } from './queryKeys';
+import { onError } from '../utils';
 
 export function useCreateEvent(onCreate?: () => void) {
   const queryClient = useQueryClient();
@@ -17,10 +18,7 @@ export function useCreateEvent(onCreate?: () => void) {
       queryClient.invalidateQueries({ queryKey: eventKeys.all });
       onCreate?.();
     },
-    onError: (err) => {
-      toast.error(t(KEY.common_something_went_wrong));
-      console.error(err);
-    },
+    onError,
   });
 }
 
@@ -35,10 +33,7 @@ export function useUpdateEvent(onUpdate?: () => void) {
       queryClient.invalidateQueries({ queryKey: eventKeys.all });
       onUpdate?.();
     },
-    onError: (err) => {
-      toast.error(t(KEY.common_something_went_wrong));
-      console.error(err);
-    },
+    onError,
   });
 }
 
@@ -53,9 +48,6 @@ export function useDeleteEvent(onDelete?: () => void) {
       queryClient.invalidateQueries({ queryKey: eventKeys.all });
       onDelete?.();
     },
-    onError: (err) => {
-      toast.error(t(KEY.common_something_went_wrong));
-      console.error(err);
-    },
+    onError,
   });
 }
