@@ -6,20 +6,41 @@ import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Form, FormField, FormItem, FormLabel, Input, Textarea } from '~/Components';
 import { FormControl, FormMessage } from '~/Components/Forms/Form';
-import { useClosedPeriodMutations, useGetClosedPeriod, type ClosedPeriodFormType, closedPeriodSchema } from '~/domain';
+import { useClosedPeriodMutations, useGetClosedPeriod, MESSAGE, DATE } from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
+import { z } from 'zod';
+import { t } from 'i18next';
+import { format } from 'date-fns/esm';
+
+export const schema = z
+  .object({
+    message_nb: MESSAGE,
+    message_en: MESSAGE,
+    start_dt: DATE,
+    end_dt: DATE,
+  })
+  .refine((data) => data.end_dt > data.start_dt, {
+    message: t(KEY.admin_closed_period_end_before_start),
+    path: ['end_dt'],
+  })
+  .refine((data) => data.end_dt >= format(new Date(), 'yyyy-MM-dd'), {
+    message: t(KEY.admin_closed_period_end_before_today),
+    path: ['end_dt'],
+  });
+
+export type FormType = z.infer<typeof schema>;
 
 export function ClosedPeriodFormAdminPage() {
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
   const { id } = useParams();
 
-  const form = useForm<ClosedPeriodFormType>({
-    resolver: zodResolver(closedPeriodSchema),
+  const form = useForm<FormType>({
+    resolver: zodResolver(schema),
   });
 
   const { data: initialData, isLoading, isError } = useGetClosedPeriod(Number(id));
@@ -33,7 +54,7 @@ export function ClosedPeriodFormAdminPage() {
 
   const { updateClosedPeriod, createClosedPeriod } = useClosedPeriodMutations();
 
-  function onSubmit(data: ClosedPeriodFormType) {
+  function onSubmit(data: FormType) {
     if (id) {
       updateClosedPeriod.mutate({ id: Number(id), data });
     } else {

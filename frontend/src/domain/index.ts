@@ -37,6 +37,6 @@ export {
   useGetActiveClosedPeriods,
   useGetClosedPeriod,
   useGetClosedPeriods,
-  closedPeriodSchema,
-  type ClosedPeriodFormType,
+  MESSAGE,
+  DATE,
 } from './closedPeriods';
