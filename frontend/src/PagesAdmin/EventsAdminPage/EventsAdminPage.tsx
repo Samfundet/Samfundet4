@@ -166,7 +166,11 @@ export function EventsAdminPage() {
   const backendUrl = ROUTES.backend.admin__samfundet_event_changelist;
   const header = (
     <>
-      <Button theme="primary" onClick={() => navigate(ROUTES.frontend.admin_events_create)}>
+      <Button
+        theme="primary"
+        className={styles.header_button}
+        onClick={() => navigate(ROUTES.frontend.admin_events_create)}
+      >
         <Icon icon="lucide:plus" />
         {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`)}
       </Button>
