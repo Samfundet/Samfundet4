@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { ImageForm, LastUpdatedByHeader, Link, TagChip } from '~/Components';
+import { ImageForm, LastUpdatedByHeader, TagChip } from '~/Components';
 import type { LinkTarget } from '~/Components/Link/Link';
 import { getImage } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
@@ -66,6 +66,7 @@ export function ImageDetailAdminPage() {
   const { id } = useParams();
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
+  const location = useLocation();
 
   const {
     data: image,
@@ -121,9 +122,21 @@ export function ImageDetailAdminPage() {
                 const { label, url, target } = imageReferenceToLink(reference);
                 return (
                   <li className={styles.referenceItem} key={`${reference.model}-${reference.id}`}>
-                    <Link url={url} target={target}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const returnTo = `${location.pathname}${location.search}${location.hash}`;
+
+                        console.log('Navigating to form, returnTo:', returnTo);
+
+                        navigate({
+                          url,
+                          state: { returnTo },
+                        });
+                      }}
+                    >
                       {label}
-                    </Link>
+                    </button>
                   </li>
                 );
               })}

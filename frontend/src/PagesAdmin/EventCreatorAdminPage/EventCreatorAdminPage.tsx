@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
@@ -37,7 +37,9 @@ export function EventCreatorAdminPage() {
   const [event, setEvent] = useState<Partial<EventDto>>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
-  const { createEventMutation, editEventMutation } = useEventMutations();
+  const location = useLocation();
+  const returnTo = location.state?.returnTo;
+  const { createEventMutation, editEventMutation } = useEventMutations(returnTo);
 
   const { data: venues = [] } = useQuery({
     queryKey: venueKeys.all,
