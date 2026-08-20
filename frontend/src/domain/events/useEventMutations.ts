@@ -4,8 +4,8 @@ import { toast } from 'react-toastify';
 import { deleteEvent, postEvent, putEvent } from '~/api';
 import type { EventWriteDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { eventKeys } from './queryKeys';
 import { onError } from '../utils';
+import { eventKeys } from './queryKeys';
 
 export function useCreateEvent(onCreate?: () => void) {
   const queryClient = useQueryClient();
