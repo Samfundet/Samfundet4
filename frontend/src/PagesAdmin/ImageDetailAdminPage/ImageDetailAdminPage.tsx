@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { ImageForm, LastUpdatedByHeader, Link, TagChip } from '~/Components';
-import type { ImageReferenceDto } from '~/dto';
+import type { LinkTarget } from '~/Components/Link/Link';
 import { getImage } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
 import { imageKeys } from '~/domain';
+import type { ImageReferenceDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -15,7 +16,6 @@ import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 import { ROUTES_FRONTEND } from '~/routes/frontend';
 import { hasPermissions, imageUrl } from '~/utils';
-import type { LinkTarget } from '~/Components/Link/Link';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageDetailAdminPage.module.scss';
 
@@ -113,25 +113,21 @@ export function ImageDetailAdminPage() {
           </a>
         )}
 
-        {image && (
+        {image && references.length !== 0 && (
           <section className={styles.referencesSection}>
-            <label>Used by ({references.length})</label>
-            {references.length === 0 ? (
-              <p className={styles.emptyReferences}>No database references found.</p>
-            ) : (
-              <ul className={styles.referenceList}>
-                {references.map((reference) => {
-                  const { label, url, target } = imageReferenceToLink(reference);
-                  return (
-                    <li key={`${reference.model}-${reference.id}`}>
-                      <Link url={url} target={target}>
-                        {label}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
+            <label className={styles.referenceLabel}>{t(KEY.common_bound_by)}:</label>
+            <ul className={styles.referenceList}>
+              {references.map((reference) => {
+                const { label, url, target } = imageReferenceToLink(reference);
+                return (
+                  <li className={styles.referenceItem} key={`${reference.model}-${reference.id}`}>
+                    <Link url={url} target={target}>
+                      {label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
           </section>
         )}
 

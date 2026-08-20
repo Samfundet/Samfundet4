@@ -42,6 +42,15 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  background-color: #FFF4E5;
+  border: 2px solid #F4A261;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.referenceLabel {
+  font-weight: 700;
+  color: #C65D00;
 }
 
 .referenceList {
@@ -52,7 +61,11 @@
   gap: 0.4rem;
 }
 
-.emptyReferences {
-  margin: 0;
-  color: var(--text-secondary);
+.referenceItem {
+  color: #C65D00;
+  text-decoration: underline;
+}
+
+.referenceItem a {
+  color: #C65D00;
 }
