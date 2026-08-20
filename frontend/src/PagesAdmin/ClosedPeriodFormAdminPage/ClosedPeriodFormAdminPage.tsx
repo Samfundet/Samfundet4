@@ -1,43 +1,42 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
+import { z } from 'zod';
 import { Button, Form, FormField, FormItem, FormLabel, Input, Textarea } from '~/Components';
 import { FormControl, FormMessage } from '~/Components/Forms/Form';
-import { useClosedPeriodMutations, useGetClosedPeriod, MESSAGE, DATE } from '~/domain';
+import { DATE, MESSAGE, useClosedPeriodMutations, useGetClosedPeriod } from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
-import { z } from 'zod';
-import { t } from 'i18next';
-import { format } from 'date-fns/esm';
-
-export const schema = z
-  .object({
-    message_nb: MESSAGE,
-    message_en: MESSAGE,
-    start_dt: DATE,
-    end_dt: DATE,
-  })
-  .refine((data) => data.end_dt > data.start_dt, {
-    message: t(KEY.admin_closed_period_end_before_start),
-    path: ['end_dt'],
-  })
-  .refine((data) => data.end_dt >= format(new Date(), 'yyyy-MM-dd'), {
-    message: t(KEY.admin_closed_period_end_before_today),
-    path: ['end_dt'],
-  });
-
-export type FormType = z.infer<typeof schema>;
 
 export function ClosedPeriodFormAdminPage() {
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
   const { id } = useParams();
+
+  const schema = z
+    .object({
+      message_nb: MESSAGE,
+      message_en: MESSAGE,
+      start_dt: DATE,
+      end_dt: DATE,
+    })
+    .refine((data) => data.end_dt > data.start_dt, {
+      message: t(KEY.admin_closed_period_end_before_start),
+      path: ['end_dt'],
+    })
+    .refine((data) => data.end_dt >= format(new Date(), 'yyyy-MM-dd'), {
+      message: t(KEY.admin_closed_period_end_before_today),
+      path: ['end_dt'],
+    });
+
+  type FormType = z.infer<typeof schema>;
 
   const form = useForm<FormType>({
     resolver: zodResolver(schema),
@@ -46,11 +45,15 @@ export function ClosedPeriodFormAdminPage() {
   const { data: initialData, isLoading, isError } = useGetClosedPeriod(Number(id));
 
   useEffect(() => {
+    if (id !== undefined && Number.isNaN(Number(id))) {
+      navigate({ url: ROUTES.frontend.admin_closed, replace: true });
+      return;
+    }
     if (isError) {
       navigate({ url: ROUTES.frontend.admin_closed, replace: true });
       toast.error(t(KEY.common_something_went_wrong));
     }
-  }, [isError, t, navigate]);
+  }, [id, isError, t, navigate]);
 
   const { updateClosedPeriod, createClosedPeriod } = useClosedPeriodMutations();
 
