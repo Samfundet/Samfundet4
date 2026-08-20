@@ -2,12 +2,11 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Dropdown, FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
-import { useGetBilligEvents } from '~/domain/events';
+import { type EventFormType, useGetBilligEvents } from '~/domain';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ALL_TICKET_TYPES, type EventTicketTypeValue } from '~/types';
 import { getTicketTypeKey } from '~/utils';
-import type { EventFormType } from '../EventCreatorSchema';
 import { CustomTicketEditor } from './CustomTicketEditor';
 
 type PaymentFormProps = {

@@ -4,6 +4,7 @@ import {
   getBilligEvents,
   getEvent,
   getEventGroups,
+  getEvents,
   getEventsPerDay,
   getEventsUpcomming,
   getEventsUpcommingPaginated,
@@ -28,9 +29,17 @@ export function useGetEventsPerDay(props?: Partial<UseQueryOptions<Record<string
   });
 }
 
+export function useGetEvents(props?: Partial<UseQueryOptions<EventDto[]>>) {
+  return useQuery({
+    queryKey: eventKeys.list(),
+    queryFn: getEvents,
+    ...props,
+  });
+}
+
 export function useGetEventsUpcomming(filters: Filters, props?: Partial<UseQueryOptions<EventsUpcomingResponse>>) {
   return useQuery({
-    queryKey: eventKeys.all,
+    queryKey: eventKeys.list(filters),
     queryFn: () => getEventsUpcomming(filters),
     ...props,
   });
@@ -49,10 +58,10 @@ export function useGetEventsUpcommingPaginated(
   });
 }
 
-export function useGetEvent(id: string | number = 'no-id', props?: Partial<UseQueryOptions<EventDto>>) {
+export function useGetEvent(id?: string | number, props?: Partial<UseQueryOptions<EventDto>>) {
   return useQuery({
-    queryKey: eventKeys.detail(id),
-    queryFn: () => getEvent(id),
+    queryKey: eventKeys.detail(id ?? 'no-id'),
+    queryFn: () => getEvent(id as string | number),
     enabled: !!id,
     ...props,
   });
@@ -60,7 +69,7 @@ export function useGetEvent(id: string | number = 'no-id', props?: Partial<UseQu
 
 export function useGetEventGroups(props?: Partial<UseQueryOptions<EventGroupDto[]>>) {
   return useQuery({
-    queryKey: eventKeys.details(),
+    queryKey: eventKeys.groups(),
     queryFn: getEventGroups,
     ...props,
   });
@@ -68,7 +77,7 @@ export function useGetEventGroups(props?: Partial<UseQueryOptions<EventGroupDto[
 
 export function useGetBilligEvents(props?: Partial<UseQueryOptions<BilligEventDto[]>>) {
   return useQuery({
-    queryKey: eventKeys.all,
+    queryKey: eventKeys.billig,
     queryFn: getBilligEvents,
     ...props,
   });

@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
-import { eventSchema } from '~/domain/events/schema';
+import { eventSchema } from '~/domain';
 import type { EventDto, EventWriteDto } from '~/dto';
 import type { EventCategoryValue } from '~/types';
 import { utcTimestampToLocal } from '~/utils';

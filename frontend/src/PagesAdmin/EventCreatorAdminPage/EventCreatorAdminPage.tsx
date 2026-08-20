@@ -10,9 +10,10 @@ import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getVenues } from '~/api';
 import type { EventDto } from '~/dto';
-import { usePrevious, useTitle } from '~/hooks';
+import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { venueKeys } from '~/queryKeys';
+import { ROUTES } from '~/routes';
 import { EventAgeRestriction, type EventAgeRestrictionValue, EventCategory, type EventCategoryValue } from '~/types';
 import { dbT, getAgeRestrictionKey, getEventCategoryKey, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -22,8 +23,7 @@ import { type FormType, useEventCreatorForm } from './hooks/useEventCreatorForm'
 import { type EventCreatorStep, type StepKey, steps } from './steps/stepConfig';
 
 import type { FieldErrors } from 'react-hook-form';
-import { useCreateEvent, useGetEvent, useUpdateEvent } from '~/domain/events';
-import { eventSchema } from '~/domain/events/schema';
+import { eventSchema, useCreateEvent, useGetEvent, useUpdateEvent } from '~/domain';
 import { EventPreviewCard } from './components/EventPreviewCard';
 import { GraphicsStep } from './steps/GraphicsStep';
 import { InfoStep } from './steps/InfoStep';
@@ -112,8 +112,11 @@ export function EventCreatorAdminPage() {
   //             Save Logic             //
   // ================================== //
 
-  const { mutate: updateEvent } = useUpdateEvent();
-  const { mutate: createEvent } = useCreateEvent();
+  const navigate = useCustomNavigate();
+  const goToEventsList = () => navigate({ url: ROUTES.frontend.admin_events });
+
+  const { mutate: updateEvent } = useUpdateEvent(goToEventsList);
+  const { mutate: createEvent } = useCreateEvent(goToEventsList);
 
   function onSubmit(values: FormType) {
     let payload: Partial<EventDto> = buildPayload(values);

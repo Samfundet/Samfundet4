@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { OPTIONAL_IMAGE } from '~/domain';
+import { OPTIONAL_IMAGE } from '~/domain/images';
 import {
   EVENT_AGE_RESTRICTION,
   EVENT_BILLIG_ID,

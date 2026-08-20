@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import { ExpandableHeader, ExternalHostBox, H1, Image, Page } from '~/Components';
 import { BuyEventTicket } from '~/Components/BuyEventTicket/BuyEventTicket';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
-import { useGetEvent } from '~/domain/events';
+import { useGetEvent } from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { dbT, imageUrl } from '~/utils';
