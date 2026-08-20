@@ -1,15 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Dropdown, FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
-import { getBilligEvents } from '~/api';
-import type { BilligEventDto } from '~/apis/billig/billigDtos';
+import { type EventFormType, useGetBilligEvents } from '~/domain';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ALL_TICKET_TYPES, type EventTicketTypeValue } from '~/types';
 import { getTicketTypeKey } from '~/utils';
-import type { EventFormType } from '../EventCreatorSchema';
 import { CustomTicketEditor } from './CustomTicketEditor';
 
 type PaymentFormProps = {
@@ -38,9 +35,7 @@ export function PaymentForm({ event, onChange }: PaymentFormProps) {
     { value: 'ikke-medlem', label: 'Ikke-medlem' },
   ];
 
-  const { data: billigEvents = [] } = useQuery<BilligEventDto[]>({
-    queryKey: ['billigEvents'],
-    queryFn: getBilligEvents,
+  const { data: billigEvents = [] } = useGetBilligEvents({
     enabled: ticketType === 'billig',
   });
 

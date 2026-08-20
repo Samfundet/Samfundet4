@@ -1,19 +1,17 @@
 import { Icon } from '@iconify/react';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
 import { Button, EventQuery, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { PagedPagination } from '~/Components/Pagination';
 import { Table } from '~/Components/Table';
-import { deleteEvent, getEventsUpcommingPaginated } from '~/api';
+import { useDeleteEvent, useGetEventsUpcommingPaginated } from '~/domain';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
-import { eventKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import type { EventCategoryValue } from '~/types';
 import { dbT, getTicketTypeKey, lowerCapitalize } from '~/utils';
@@ -54,24 +52,16 @@ export function EventsAdminPage() {
     setCurrentPage(1);
   }, [debouncedSearch, selectedVenue, selectedCategory, selectedTicketType]);
 
-  // Fetch paginated events
-  const { data, isLoading } = useQuery({
-    queryKey: eventKeys.paginatedList(currentPage, PAGE_SIZE, {
-      search: debouncedSearch || undefined,
-      venue: selectedVenue || undefined,
-      category: selectedCategory || undefined,
-      ticket_type: selectedTicketType || undefined,
-    }),
-    queryFn: () =>
-      getEventsUpcommingPaginated(currentPage, PAGE_SIZE, {
-        search: debouncedSearch || undefined,
-        venue: selectedVenue || undefined,
-        category: selectedCategory || undefined,
-        ticket_type: selectedTicketType || undefined,
-      }),
+  const filters = {
+    search: debouncedSearch || undefined,
+    venue: selectedVenue || undefined,
+    category: selectedCategory || undefined,
+    ticket_type: selectedTicketType || undefined,
+  };
+
+  const { data, isLoading } = useGetEventsUpcommingPaginated(currentPage, PAGE_SIZE, filters, {
     placeholderData: keepPreviousData,
   });
-
   const events = data?.results ?? [];
   const totalCount = data?.count ?? 0;
 
@@ -92,19 +82,7 @@ export function EventsAdminPage() {
     }
   }, [data]);
 
-  function deleteSelectedEvent(id: number) {
-    deleteEvent(id)
-      .then(() => {
-        // Refetch the current page
-        toast.success(t(KEY.eventsadminpage_successful_delete_toast));
-        // Force a refetch by triggering the query again
-        navigate(ROUTES.frontend.admin_events);
-      })
-      .catch((error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
-      });
-  }
+  const { mutate: deleteSelectedEvent } = useDeleteEvent(() => navigate(ROUTES.frontend.admin_events));
 
   const tableColumns = [
     { content: t(KEY.common_title) },
