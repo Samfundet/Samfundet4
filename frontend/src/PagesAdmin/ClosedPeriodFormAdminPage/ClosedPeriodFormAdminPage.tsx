@@ -1,18 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { z } from 'zod';
 import { Button, Form, FormField, FormItem, FormLabel, Input, Textarea } from '~/Components';
 import { FormControl, FormMessage } from '~/Components/Forms/Form';
-import { useClosedPeriodMutations, useGetClosedPeriod } from '~/domain';
+import { useClosedPeriodMutations, useGetClosedPeriod, type ClosedPeriodFormType, closedPeriodSchema } from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { DATE, MESSAGE } from '~/schema/closedPeriod';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ClosedPeriodFormAdminPage.module.scss';
 
@@ -21,32 +18,8 @@ export function ClosedPeriodFormAdminPage() {
   const { t } = useTranslation();
   const { id } = useParams();
 
-  useEffect(() => {
-    if (Number.isNaN(id)) {
-      navigate({ url: ROUTES.frontend.admin_casedocuments, replace: true });
-    }
-  }, [id, navigate]);
-
-  const schema = z
-    .object({
-      message_nb: MESSAGE,
-      message_en: MESSAGE,
-      start_dt: DATE,
-      end_dt: DATE,
-    })
-    .refine((data) => data.end_dt > data.start_dt, {
-      message: t(KEY.admin_closed_period_end_before_start),
-      path: ['end_dt'],
-    })
-    .refine((data) => data.end_dt >= format(new Date(), 'yyyy-MM-dd'), {
-      message: t(KEY.admin_closed_period_end_before_today),
-      path: ['end_dt'],
-    });
-
-  type formType = z.infer<typeof schema>;
-
-  const form = useForm<formType>({
-    resolver: zodResolver(schema),
+  const form = useForm<ClosedPeriodFormType>({
+    resolver: zodResolver(closedPeriodSchema),
   });
 
   const { data: initialData, isLoading, isError } = useGetClosedPeriod(Number(id));
@@ -60,7 +33,7 @@ export function ClosedPeriodFormAdminPage() {
 
   const { updateClosedPeriod, createClosedPeriod } = useClosedPeriodMutations();
 
-  function onSubmit(data: formType) {
+  function onSubmit(data: ClosedPeriodFormType) {
     if (id) {
       updateClosedPeriod.mutate({ id: Number(id), data });
     } else {

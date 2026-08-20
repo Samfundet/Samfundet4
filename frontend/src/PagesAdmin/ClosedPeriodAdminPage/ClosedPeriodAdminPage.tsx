@@ -44,45 +44,45 @@ export function ClosedPeriodAdminPage() {
           data={
             closedPeriods
               ? closedPeriods.map((element) => ({
-                  cells: [
-                    element.message_nb,
-                    element.message_en,
-                    { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
-                    { content: <TimeDisplay displayType="date" timestamp={element.end_dt} /> },
-                    {
-                      content: (
-                        <div className={styles.edit_buttons}>
-                          <Button
-                            theme="secondary"
-                            display="block"
-                            className={styles.smallButtons}
-                            link={reverse({
-                              pattern: ROUTES.frontend.admin_closed_edit,
-                              urlParams: { id: element.id },
-                            })}
-                          >
-                            {t(KEY.common_edit)}
-                          </Button>
-                          <Button
-                            theme="primary"
-                            display="block"
-                            className={styles.smallButtons}
-                            onClick={() => {
-                              // :TODO: window.confirm should be replaced with a non-browser implementation (not built-in popup)
-                              if (
-                                window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_nb}`)
-                              ) {
-                                deleteClosedPeriod.mutate(element.id);
-                              }
-                            }}
-                          >
-                            {t(KEY.common_delete)}
-                          </Button>{' '}
-                        </div>
-                      ),
-                    },
-                  ],
-                }))
+                cells: [
+                  element.message_nb,
+                  element.message_en,
+                  { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
+                  { content: <TimeDisplay displayType="date" timestamp={element.end_dt} /> },
+                  {
+                    content: (
+                      <div className={styles.edit_buttons}>
+                        <Button
+                          theme="secondary"
+                          display="block"
+                          className={styles.smallButtons}
+                          link={reverse({
+                            pattern: ROUTES.frontend.admin_closed_edit,
+                            urlParams: { id: element.id },
+                          })}
+                        >
+                          {t(KEY.common_edit)}
+                        </Button>
+                        <Button
+                          theme="primary"
+                          display="block"
+                          className={styles.smallButtons}
+                          onClick={() => {
+                            // :TODO: window.confirm should be replaced with a non-browser implementation (not built-in popup)
+                            if (
+                              window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_nb}`)
+                            ) {
+                              deleteClosedPeriod.mutate(element.id);
+                            }
+                          }}
+                        >
+                          {t(KEY.common_delete)}
+                        </Button>{' '}
+                      </div>
+                    ),
+                  },
+                ],
+              }))
               : []
           }
         />
