@@ -21,6 +21,7 @@ from root.custom_classes.billig_service import BilligService
 
 from samfundet.serializers import BilligEventSerializer, BilligPriceGroupSerializer, BilligTicketGroupSerializer
 from samfundet.models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
+from samfundet.routing.frontend_routes import BILLIG_STATUS, BILLIG_HANDLEKURV
 
 
 def parse_cart_rows(data: dict) -> list[tuple[int, int]]:
@@ -108,7 +109,8 @@ class BilligPurchaseSuccessView(APIView):
 
     def get(self, request: Request) -> HttpResponseRedirect:
         tickets = request.GET.get('tickets', '').strip()
-        status_url = build_frontend_callback_url(f'/arrangement/billetter/status/{tickets}/')
+        status_path = BILLIG_STATUS.replace('<tickets>', tickets)
+        status_url = build_frontend_callback_url(status_path)
         return HttpResponseRedirect(status_url)
 
 
@@ -119,7 +121,7 @@ class BilligPurchaseFailureView(APIView):
 
     def get(self, request: Request) -> HttpResponseRedirect:
         query_string = urlencode(request.GET.dict())
-        failure_url = build_frontend_callback_url('/arrangement/billetter/handlekurv/')
+        failure_url = build_frontend_callback_url(BILLIG_HANDLEKURV)
         if query_string:
             failure_url = f'{failure_url}?{query_string}'
         return HttpResponseRedirect(failure_url)
