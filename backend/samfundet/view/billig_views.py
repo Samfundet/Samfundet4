@@ -13,6 +13,7 @@ from rest_framework.authentication import BaseAuthentication
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
@@ -62,15 +63,11 @@ def should_fake_purchase_fail(
 
 
 def build_frontend_callback_url(path: str) -> str:
-    frontend_base_url = getattr(settings, 'BILLIG_FRONTEND_BASE_URL', '')
-    if frontend_base_url:
-        return f'{frontend_base_url.rstrip("/")}{path}'
+    frontend_base_url = getattr(settings, 'BILLIG_FRONTEND_BASE_URL', '').strip()
+    if not frontend_base_url:
+        raise ImproperlyConfigured('BILLIG_FRONTEND_BASE_URL must be configured for Billig callbacks')
 
-    allowed_origins = getattr(settings, 'CORS_ALLOWED_ORIGINS', [])
-    if allowed_origins:
-        return f'{allowed_origins[0].rstrip("/")}{path}'
-
-    return path
+    return f'{frontend_base_url.rstrip("/")}{path}'
 
 
 class BilligEventReadOnlyModelViewSet(ReadOnlyModelViewSet):

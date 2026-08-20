@@ -9,6 +9,7 @@ from rest_framework import status
 
 from django.test import override_settings
 from django.urls import reverse
+from django.core.exceptions import ImproperlyConfigured
 
 from root.utils import routes
 from root.constants import Environment
@@ -84,13 +85,9 @@ def test_build_frontend_callback_url_uses_explicit_setting() -> None:
 
 
 @override_settings(BILLIG_FRONTEND_BASE_URL='', CORS_ALLOWED_ORIGINS=['https://cors.example/'])
-def test_build_frontend_callback_url_falls_back_to_cors_origin() -> None:
-    assert build_frontend_callback_url('/callback/') == 'https://cors.example/callback/'
-
-
-@override_settings(BILLIG_FRONTEND_BASE_URL='', CORS_ALLOWED_ORIGINS=[])
-def test_build_frontend_callback_url_falls_back_to_relative_path() -> None:
-    assert build_frontend_callback_url('/callback/') == '/callback/'
+def test_build_frontend_callback_url_requires_explicit_setting() -> None:
+    with pytest.raises(ImproperlyConfigured, match='BILLIG_FRONTEND_BASE_URL'):
+        build_frontend_callback_url('/callback/')
 
 
 @override_settings(BILLIG_PAYMENT_URL='https://billig.example/pay')

@@ -14,6 +14,7 @@ DEBUG = False
 # Ensure correct ENV
 ENV = Environment.PROD
 BILLIG_PAYMENT_URL = os.environ.get('BILLIG_PAYMENT_URL', 'https://billettsalg.samfundet.no/pay')
+BILLIG_FRONTEND_BASE_URL = os.environ.get('BILLIG_FRONTEND_BASE_URL', f'https://{os.environ["DOMAIN"]}')
 
 # Security
 X_FRAME_OPTIONS = 'DENY'
