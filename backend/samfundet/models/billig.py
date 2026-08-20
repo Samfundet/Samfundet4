@@ -169,6 +169,7 @@ class BilligTicketGroup(models.Model):
         percent_sold = self.num_sold / self.num
         return percent_sold >= LIMIT_FOR_ALMOST_SOLD_OUT
 
+
 # ======================== #
 #   Billig Price Group     #
 # ======================== #
