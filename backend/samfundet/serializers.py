@@ -262,6 +262,7 @@ class BilligEventSerializer(CustomBaseSerializer):
             'id',
             'name',
             'payment_url',
+            'ticket_fee',
             'ticket_groups',
             'sale_from',
             'sale_to',

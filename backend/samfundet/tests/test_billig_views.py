@@ -91,8 +91,12 @@ def test_build_frontend_callback_url_requires_explicit_setting() -> None:
 
 
 @override_settings(BILLIG_PAYMENT_URL='https://billig.example/pay')
-def test_billig_event_serializer_includes_payment_url(fixture_billig_event: BilligEvent) -> None:
-    assert BilligEventSerializer(fixture_billig_event).data['payment_url'] == 'https://billig.example/pay'
+def test_billig_event_serializer_contract(fixture_billig_event: BilligEvent) -> None:
+    fixture_billig_event.ticket_fee = 25
+    data = BilligEventSerializer(fixture_billig_event).data
+
+    assert data['payment_url'] == 'https://billig.example/pay'
+    assert data['ticket_fee'] == 25
 
 
 def test_billig_ticket_group_serializer_contract(
@@ -112,6 +116,7 @@ def test_billig_ticket_group_serializer_contract(
     }
     assert data['is_theater_ticket_group'] is False
     assert data['ticket_limit'] is None
+    assert 'ticket_fee' not in data['price_groups'][0]
 
 
 def test_event_tickets_returns_public_ticket_groups(

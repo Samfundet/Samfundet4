@@ -123,8 +123,6 @@ class BilligTicketGroup(models.Model):
     may have something like "Dinner and concert" or "Just the concert"
     """
 
-    DEFAULT_TICKET_LIMIT = 9
-
     # The primary billig ticket group id
     id = models.IntegerField(null=False, blank=False, primary_key=True, db_column='ticket_group')
     name = models.CharField(max_length=140, blank=False, null=False, db_column='ticket_group_name')
@@ -170,16 +168,6 @@ class BilligTicketGroup(models.Model):
     def is_almost_sold_out(self) -> bool:
         percent_sold = self.num_sold / self.num
         return percent_sold >= LIMIT_FOR_ALMOST_SOLD_OUT
-
-    @property
-    def price_group_ticket_limit(self) -> int:
-        return self.ticket_limit if self.ticket_limit is not None else self.DEFAULT_TICKET_LIMIT
-
-    def group_ticket_limit(self, *, price_group_count: int) -> int:
-        if self.ticket_limit is not None:
-            return self.ticket_limit
-        return self.DEFAULT_TICKET_LIMIT * max(price_group_count, 1)
-
 
 # ======================== #
 #   Billig Price Group     #
