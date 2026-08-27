@@ -79,12 +79,17 @@ const eventSchemaBase = z.object({
   visibility_to_dt: EVENT_VISIBILITY_TO_DT,
 });
 
-export const eventSchema = eventSchemaBase.refine(
-  (data) => !data.visibility_from_dt || !data.start_dt || new Date(data.visibility_from_dt) < new Date(data.start_dt),
-  {
-    message: KEY.event_publication_date_must_be_before_start,
-    path: ['visibility_from_dt'],
-  },
-);
+export const eventSchema = eventSchemaBase
+  .refine(
+    (data) => !data.visibility_from_dt || !data.start_dt || new Date(data.visibility_from_dt) < new Date(data.start_dt),
+    {
+      message: KEY.event_publication_date_must_be_before_start,
+      path: ['visibility_from_dt'],
+    },
+  )
+  .refine((data) => !data.start_dt || !data.end_dt || new Date(data.end_dt) >= new Date(data.start_dt), {
+    message: KEY.event_form_end_dt_before_start_dt,
+    path: ['end_dt'],
+  });
 
 export type EventFormType = z.infer<typeof eventSchema>;
