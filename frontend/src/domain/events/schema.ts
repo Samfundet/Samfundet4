@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { KEY } from '~/i18n/constants';
 import { EventAgeRestriction, EventCategory, EventTicketType } from '~/types';
-import { zodEnum } from '../utils';
 import { OPTIONAL_IMAGE } from '../images';
+import { zodEnum } from '../utils';
 
 const validUrl = z
   .string()
