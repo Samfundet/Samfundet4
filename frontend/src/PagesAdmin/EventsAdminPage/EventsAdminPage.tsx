@@ -166,14 +166,17 @@ export function EventsAdminPage() {
   const backendUrl = ROUTES.backend.admin__samfundet_event_changelist;
   const header = (
     <>
-      <Button
-        theme="primary"
-        className={styles.header_button}
-        onClick={() => navigate(ROUTES.frontend.admin_events_create)}
-      >
-        <Icon icon="lucide:plus" />
-        {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`)}
-      </Button>
+      <div className={styles.template_search_container}>
+        <label className={styles.template_search_label}>{t(KEY.event_create_new_event)}</label>
+        <Button
+          theme="primary"
+          className={styles.header_button}
+          onClick={() => navigate(ROUTES.frontend.admin_events_create)}
+        >
+          <Icon icon="lucide:plus" />
+          {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`)}
+        </Button>
+      </div>
       <div className={styles.template_search_container}>
         <label className={styles.template_search_label}>{t(KEY.event_copy_from_registered_event)}</label>
         <EventTemplateSearch

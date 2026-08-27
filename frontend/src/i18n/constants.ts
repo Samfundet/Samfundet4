@@ -313,6 +313,7 @@ export const KEY = {
   event_publication_date_required: 'event_publication_date_required',
   event_create_from_existing_event: 'event_create_from_existing_event',
   event_copy_from_registered_event: 'event_copy_from_registered_event',
+  event_create_new_event: 'event_create_new_event',
   event_search_for_an_existing_event: 'event_search_for_an_existing_event',
   event_selected_existing_event: 'event_selected_existing_event',
   event_no_results: 'event_no_results',
