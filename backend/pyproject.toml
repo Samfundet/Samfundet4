@@ -170,6 +170,7 @@ dev = [
     "pytest-django==4.*",
     "drf-spectacular==0.30.*",
     "freezegun>=1.5.5,<2",
+    "lefthook>=2.1.7,<3",
 ]
 
 [tool.uv]

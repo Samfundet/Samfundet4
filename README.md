@@ -40,6 +40,7 @@ Samfundet4 is the latest and greatest iteration of samfundet.no. It's built usin
 - [Useful Commands](./docs/useful-commands.md)
 - [Useful Docker aliases](./docs/docker-project-specific-commands.md)
 - [Common error messages](./docs/common-errors.md)
+- [Development tools](./docs/development-tools.md)
 
 ### Pipelines & Deployment
 
