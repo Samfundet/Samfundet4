@@ -63,6 +63,7 @@ export function ClosedPeriodFormAdminPage() {
     } else {
       createClosedPeriod.mutate(data);
     }
+    navigate({ url: -1 });
   }
 
   useEffect(() => {
