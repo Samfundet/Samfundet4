@@ -3,7 +3,8 @@ import { Input, type InputProps } from '~/Components';
 
 type ControlledInputProps = Extract<InputProps, { value: string | number | readonly string[] }>;
 
-export interface NumberInputProps extends Omit<ControlledInputProps, 'onChange'> {
+export interface NumberInputProps extends Omit<ControlledInputProps, 'onChange' | 'value'> {
+  value?: string | number | readonly string[] | undefined;
   onChange?: (...event: unknown[]) => void;
   allowDecimal?: boolean;
   clamp?: boolean;
@@ -11,10 +12,10 @@ export interface NumberInputProps extends Omit<ControlledInputProps, 'onChange'>
 
 export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
   ({ onChange, value, type, min, max, allowDecimal = true, clamp = true, onBlur, ...props }, ref) => {
-    const [inputValue, setInputValue] = useState(value || '');
+    const [inputValue, setInputValue] = useState(value ?? '');
 
     useEffect(() => {
-      setInputValue(value || '');
+      setInputValue(value ?? '');
     }, [value]);
 
     const canClamp = clamp && (min !== undefined || max !== undefined);
