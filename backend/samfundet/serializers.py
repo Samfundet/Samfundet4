@@ -66,6 +66,7 @@ from .models.recruitment import (
     RecruitmentInterviewAvailability,
     RecruitmentPositionSharedInterviewGroup,
 )
+from .models.site_banner import SiteBanner
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 
@@ -361,6 +362,29 @@ class ClosedPeriodSerializer(CustomBaseSerializer):
     class Meta:
         model = ClosedPeriod
         fields = '__all__'
+
+
+class SiteBannerSerializer(CustomBaseSerializer):
+    class Meta:
+        model = SiteBanner
+        fields = [
+            'id',
+            'version',
+            'text_nb',
+            'text_en',
+            'url',
+            'new_tab',
+            'start_at',
+            'end_at',
+        ]
+        extra_kwargs = {'end_at': {'allow_null': False, 'required': True}}
+
+    def validate(self, attrs: dict) -> dict:
+        start_at = attrs.get('start_at')
+        end_at = attrs.get('end_at')
+        if start_at is not None and end_at is not None and end_at <= start_at:
+            raise serializers.ValidationError({'end_at': 'End time must be after start time.'})
+        return attrs
 
 
 class ChangePasswordSerializer(serializers.Serializer):

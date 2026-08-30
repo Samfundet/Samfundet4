@@ -38,5 +38,6 @@ export { CaseDocumentFormAdminPage } from './CaseDocumentFormAdminPage';
 export { SultenMenuAdminPage } from './SultenMenuAdminPage';
 export { SultenMenuItemFormAdminPage } from './SultenMenuItemFormAdminPage';
 export { SultenReservationAdminPage } from './SultenReservationAdminPage';
+export { SiteBannerAdminPage } from './SiteBannerAdminPage';
 export { UsersAdminPage } from './UsersAdminPage';
 export { MDBConnectFormAdminPage } from './MDBConnectFormAdminPage';
