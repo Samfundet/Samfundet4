@@ -726,6 +726,7 @@ export const KEY = {
   event_form_description_short_required: 'event_form_description_short_required',
   event_form_start_dt_required: 'event_form_start_dt_required',
   event_form_duration_min: 'event_form_duration_min',
+  event_form_end_dt_before_start_dt: 'event_form_end_dt_before_start_dt',
   event_form_host_required: 'event_form_host_required',
   event_form_location_required: 'event_form_location_required',
   event_form_capacity_min: 'event_form_capacity_min',
