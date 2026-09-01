@@ -5,46 +5,46 @@ import { apiDeleteClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api'
 import type { ClosedPeriodDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { closedPeriodKeys } from './queryKeys';
+import { defaultOnError } from '../utils';
 
-export function useClosedPeriodMutations() {
+export function useUpdateClosedPeriod() {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
-  const updateClosedPeriod = useMutation({
+  return useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<ClosedPeriodDto> }) => putClosedPeriod(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: closedPeriodKeys.all });
       toast.success(t(KEY.common_update_successful));
     },
-    onError: (err) => {
-      toast.error(t(KEY.common_something_went_wrong));
-      console.error(err);
-    },
+    onError: defaultOnError,
   });
+}
 
-  const createClosedPeriod = useMutation({
+export function useCreateClosedPeriod() {
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+
+  return useMutation({
     mutationFn: postClosedPeriod,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: closedPeriodKeys.all });
       toast.success(t(KEY.common_creation_successful));
     },
-    onError: (err) => {
-      toast.error(t(KEY.common_something_went_wrong));
-      console.error(err);
-    },
+    onError: defaultOnError,
   });
+}
 
-  const deleteClosedPeriod = useMutation({
+export function useDeleteClosedPeriod() {
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+
+  return useMutation({
     mutationFn: (id: number) => apiDeleteClosedPeriod(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: closedPeriodKeys.all });
       toast.success(t(KEY.common_delete_successful));
     },
-    onError: (err) => {
-      toast.error(t(KEY.common_something_went_wrong));
-      console.error(err);
-    },
+    onError: defaultOnError,
   });
-
-  return { createClosedPeriod, updateClosedPeriod, deleteClosedPeriod };
 }

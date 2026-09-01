@@ -31,12 +31,5 @@ export {
   useGetInfoPageOwnerOptions,
 } from './infopages';
 export { tagKeys } from './tags';
-export {
-  closedPeriodKeys,
-  useClosedPeriodMutations,
-  useGetActiveClosedPeriods,
-  useGetClosedPeriod,
-  useGetClosedPeriods,
-  MESSAGE,
-  DATE,
-} from './closedPeriods';
+export * from './closedPeriods';
+export * from './utils';

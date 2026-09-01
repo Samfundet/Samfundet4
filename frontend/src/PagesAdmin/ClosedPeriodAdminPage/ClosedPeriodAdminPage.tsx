@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
 import { Button, TimeDisplay } from '~/Components';
 import { Table } from '~/Components/Table';
-import { useClosedPeriodMutations, useGetClosedPeriods } from '~/domain';
+import { useDeleteClosedPeriod, useGetClosedPeriods } from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -15,7 +15,7 @@ export function ClosedPeriodAdminPage() {
   useTitle(t(KEY.command_menu_shortcut_closed));
 
   const { data: closedPeriods, isLoading } = useGetClosedPeriods();
-  const { deleteClosedPeriod } = useClosedPeriodMutations();
+  const { mutate: deleteClosedPeriod } = useDeleteClosedPeriod();
 
   const header = (
     <Button theme="primary" link={ROUTES.frontend.admin_closed_create}>
@@ -44,45 +44,45 @@ export function ClosedPeriodAdminPage() {
           data={
             closedPeriods
               ? closedPeriods.map((element) => ({
-                  cells: [
-                    element.message_nb,
-                    element.message_en,
-                    { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
-                    { content: <TimeDisplay displayType="date" timestamp={element.end_dt} /> },
-                    {
-                      content: (
-                        <div className={styles.edit_buttons}>
-                          <Button
-                            theme="secondary"
-                            display="block"
-                            className={styles.smallButtons}
-                            link={reverse({
-                              pattern: ROUTES.frontend.admin_closed_edit,
-                              urlParams: { id: element.id },
-                            })}
-                          >
-                            {t(KEY.common_edit)}
-                          </Button>
-                          <Button
-                            theme="primary"
-                            display="block"
-                            className={styles.smallButtons}
-                            onClick={() => {
-                              // :TODO: window.confirm should be replaced with a non-browser implementation (not built-in popup)
-                              if (
-                                window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_nb}`)
-                              ) {
-                                deleteClosedPeriod.mutate(element.id);
-                              }
-                            }}
-                          >
-                            {t(KEY.common_delete)}
-                          </Button>{' '}
-                        </div>
-                      ),
-                    },
-                  ],
-                }))
+                cells: [
+                  element.message_nb,
+                  element.message_en,
+                  { content: <TimeDisplay displayType="date" timestamp={element.start_dt} /> },
+                  { content: <TimeDisplay displayType="date" timestamp={element.end_dt} /> },
+                  {
+                    content: (
+                      <div className={styles.edit_buttons}>
+                        <Button
+                          theme="secondary"
+                          display="block"
+                          className={styles.smallButtons}
+                          link={reverse({
+                            pattern: ROUTES.frontend.admin_closed_edit,
+                            urlParams: { id: element.id },
+                          })}
+                        >
+                          {t(KEY.common_edit)}
+                        </Button>
+                        <Button
+                          theme="primary"
+                          display="block"
+                          className={styles.smallButtons}
+                          onClick={() => {
+                            // :TODO: window.confirm should be replaced with a non-browser implementation (not built-in popup)
+                            if (
+                              window.confirm(`${t(KEY.form_confirm)} ${t(KEY.common_delete)} ${element.message_nb}`)
+                            ) {
+                              deleteClosedPeriod(element.id);
+                            }
+                          }}
+                        >
+                          {t(KEY.common_delete)}
+                        </Button>{' '}
+                      </div>
+                    ),
+                  },
+                ],
+              }))
               : []
           }
         />
