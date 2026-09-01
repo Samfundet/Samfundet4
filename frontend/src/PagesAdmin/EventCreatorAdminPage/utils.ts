@@ -1,5 +1,5 @@
 import type { EventCloneDto, EventDto } from '~/dto';
-import type { EventCategoryValue } from '~/types';
+import { type EventCategoryValue, EventStatusChoice } from '~/types';
 import { utcTimestampToLocal } from '~/utils';
 import type { FormType } from './hooks/useEventCreatorForm';
 
@@ -49,6 +49,7 @@ export function mapEventToFormValues(params: {
     vimeo_link: event.vimeo_link || '',
     general_link: event.general_link || '',
     image: event.image ?? undefined,
+    status: 'status' in event ? event.status ?? EventStatusChoice.PUBLIC : EventStatusChoice.PUBLIC,
 
     visibility_from_dt: forTemplate
       ? ''
