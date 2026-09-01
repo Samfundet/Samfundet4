@@ -89,6 +89,7 @@ export const KEY = {
   common_tags: 'common_tags',
   common_gang: 'common_gang',
   common_section: 'common_section',
+  common_sections: 'common_sections',
   common_next: 'common_next',
   common_open: 'common_open',
   common_send: 'common_send',
@@ -96,6 +97,7 @@ export const KEY = {
   common_event: 'common_event',
   common_login: 'common_login',
   common_image: 'common_image',
+  common_logo: 'common_logo',
   common_file: 'common_file',
   common_title: 'common_title',
   common_venue: 'common_venue',
@@ -215,9 +217,12 @@ export const KEY = {
   common_uploaded_by: 'common_uploaded_by',
   common_last_edited_by: 'common_last_edited_by',
   common_casedocuments: 'common_casedocuments',
+  common_positions: 'common_positions',
 
   common_membership_number: 'common_membership_number',
   common_to_payment: 'common_to_payment',
+
+  organization: 'organization',
 
   //About page
   common_age_limit: 'common_age_limit',
@@ -659,6 +664,7 @@ export const KEY = {
   adminpage_connect_mdb_common_error: 'adminpage_connect_mdb_common_error',
   adminpage_connect_mdb_password_notice_1: 'adminpage_connect_mdb_password_notice_1',
   adminpage_connect_mdb_password_notice_2: 'adminpage_connect_mdb_password_notice_2',
+  admin_gang_has_no_sections: 'admin_gang_has_no_sections',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
@@ -703,6 +709,7 @@ export const KEY = {
 
   // No category:
   owner: 'owner',
+  affiliation: 'affiliation',
   end_time: 'end_time',
   start_date: 'start_date',
   end_date: 'end_date',
@@ -711,6 +718,7 @@ export const KEY = {
   start_time: 'start_time',
   last_updated: 'last_updated',
   form_confirm: 'form_confirm',
+  form_confirm_delete: 'form_confirm_delete',
   we_use_cookies: 'we_use_cookies',
   control_panel_faq: 'control_panel_faq',
   invalid_phonenumber: 'invalid_phonenumber',
