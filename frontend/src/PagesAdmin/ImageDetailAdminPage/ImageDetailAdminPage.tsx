@@ -3,9 +3,10 @@ import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
+import { getImage } from '~/api';
 import { ImageForm, LastUpdatedByHeader, TagChip } from '~/Components';
 import type { LinkTarget } from '~/Components/Link/Link';
-import { getImage } from '~/api';
+import { Link } from '~/Components/Link/Link';
 import { useAuthContext } from '~/context/AuthContext';
 import { imageKeys } from '~/domain';
 import type { ImageReferenceDto } from '~/dto';
@@ -122,21 +123,13 @@ export function ImageDetailAdminPage() {
                 const { label, url, target } = imageReferenceToLink(reference);
                 return (
                   <li className={styles.referenceItem} key={`${reference.model}-${reference.id}`}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const returnTo = `${location.pathname}${location.search}${location.hash}`;
-
-                        console.log('Navigating to form, returnTo:', returnTo);
-
-                        navigate({
-                          url,
-                          state: { returnTo },
-                        });
-                      }}
-                    >
+                    <Link
+                      url={url}
+                      state={{
+                        returnTo: `${location.pathname}${location.search}${location.hash}`,
+                      }}>
                       {label}
-                    </button>
+                    </Link>
                   </li>
                 );
               })}

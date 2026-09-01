@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import type { CSSProperties, ReactNode } from 'react';
+import type { NavigateOptions } from 'react-router';
 import { BACKEND_DOMAIN } from '~/constants';
 import { useCustomNavigate } from '~/hooks';
 import styles from './Link.module.scss';
@@ -16,6 +17,7 @@ export type LinkProps = {
   target?: LinkTarget;
   onAfterClick?: () => void;
   children?: ReactNode;
+  state?: NavigateOptions['state'];
 };
 
 export function Link({
@@ -28,12 +30,13 @@ export function Link({
   plain,
   target = 'frontend',
   onAfterClick,
+  state,
 }: LinkProps) {
   const navigate = useCustomNavigate();
   const finalUrl = target === 'backend' ? BACKEND_DOMAIN + url : url;
 
   function handleClick(event: React.MouseEvent) {
-    navigate({ linkTarget: target, url: url, event: event });
+    navigate({ linkTarget: target, url: url, event: event, state: state });
 
     // External callback can add additional functionality on click.
     onAfterClick?.();
