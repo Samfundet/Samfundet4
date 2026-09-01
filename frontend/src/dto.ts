@@ -214,7 +214,7 @@ export type EventDto = {
 
   spotify_uri?: string;
   youtube_link?: string;
-  youtube_embed?: string;
+  youtube_embed?: boolean;
   facebook_link?: string;
   soundcloud_link?: string;
   instagram_link?: string;

@@ -25,7 +25,6 @@ import {
   EVENT_VISIBILITY_FROM_DT,
   EVENT_VISIBILITY_TO_DT,
   EVENT_X_LINK,
-  EVENT_YOUTUBE_EMBED,
   EVENT_YOUTUBE_LINK,
 } from '~/schema/event';
 
@@ -61,7 +60,7 @@ export const eventSchema = z.object({
   // Social media links
   spotify_uri: EVENT_SPOTIFY_URI.optional(),
   youtube_link: EVENT_YOUTUBE_LINK.optional(),
-  youtube_embed: EVENT_YOUTUBE_EMBED.optional(),
+  youtube_embed: z.boolean(),
   facebook_link: EVENT_FACEBOOK_LINK.optional(),
   soundcloud_link: EVENT_SOUNDCLOUD_LINK.optional(),
   instagram_link: EVENT_INSTAGRAM_LINK.optional(),

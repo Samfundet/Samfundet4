@@ -172,7 +172,7 @@ class Event(CustomBaseModel):
 
     spotify_uri = models.CharField(max_length=200, blank=True, null=True)
     youtube_link = models.URLField(max_length=200, blank=True, null=True)
-    youtube_embed = models.URLField(max_length=200, blank=True, null=True)
+    youtube_embed = models.BooleanField(default=False)
     facebook_link = models.URLField(max_length=200, blank=True, null=True)
     soundcloud_link = models.URLField(max_length=200, blank=True, null=True)
     instagram_link = models.URLField(max_length=200, blank=True, null=True)

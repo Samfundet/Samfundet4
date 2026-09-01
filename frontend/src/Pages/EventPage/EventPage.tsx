@@ -61,6 +61,54 @@ export function EventPage() {
             <div className={styles.info_list}>{event && <EventTable event={event} />}</div>
           </ExpandableHeader>
         </div>
+        {/* Social Media links */}
+        <div>
+          {event?.spotify_uri && (
+            <a href={event.spotify_uri} target="_blank" rel="noopener noreferrer">
+              {event.spotify_uri}
+            </a>
+          )}
+          {event?.youtube_link && (
+            <a href={event.youtube_link} target="_blank" rel="noopener noreferrer">
+              {event.youtube_link}
+            </a>
+          )}
+          {event?.facebook_link && (
+            <a href={event.facebook_link} target="_blank" rel="noopener noreferrer">
+              {event.facebook_link}
+            </a>
+          )}
+          {event?.soundcloud_link && (
+            <a href={event.soundcloud_link} target="_blank" rel="noopener noreferrer">
+              {event.soundcloud_link}
+            </a>
+          )}
+          {event?.instagram_link && (
+            <a href={event.instagram_link} target="_blank" rel="noopener noreferrer">
+              {event.instagram_link}
+            </a>
+          )}
+          {event?.x_link && (
+            <a href={event.x_link} target="_blank" rel="noopener noreferrer">
+              {event.x_link}
+            </a>
+          )}
+          {event?.lastfm_link && (
+            <a href={event.lastfm_link} target="_blank" rel="noopener noreferrer">
+              {event.lastfm_link}
+            </a>
+          )}
+          {event?.vimeo_link && (
+            <a href={event.vimeo_link} target="_blank" rel="noopener noreferrer">
+              {event.vimeo_link}
+            </a>
+          )}
+          {event?.general_link && (
+            <a href={event.general_link} target="_blank" rel="noopener noreferrer">
+              {event.general_link}
+            </a>
+          )}
+        </div>
       </div>
     </Page>
   );

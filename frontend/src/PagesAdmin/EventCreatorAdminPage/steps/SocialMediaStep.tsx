@@ -1,6 +1,6 @@
 import type { UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage, Input, ToggleSwitch } from '~/Components';
 import { FormDescription } from '~/Components/Forms/Form';
 import { KEY } from '~/i18n/constants';
 import styles from '../EventCreatorAdminPage.module.scss';
@@ -57,7 +57,6 @@ export function SocialMediaStep({ form }: Props) {
   const SOCIAL_MEDIA_HELP: Partial<Record<SocialLinkKey, string>> = {
     spotify_uri: t(KEY.event_spotify_uri_help),
     youtube_link: t(KEY.event_youtube_link_help),
-    youtube_embed: t(KEY.event_youtube_embed_help),
   };
 
   return (
@@ -68,21 +67,34 @@ export function SocialMediaStep({ form }: Props) {
             key={name}
             name={name}
             control={form.control}
-            render={({ field }) => (
-              <FormItem className={styles.socialMediaItem}>
+            render={({ field }) => {
+              const { value, ...fieldWithoutValue } = field;
+
+              return (
+                <FormItem className={styles.socialMediaItem}>
                 <FormLabel>{SOCIAL_LABELS[name]}</FormLabel>
                 <FormControl>
-                  <Input
-                    className={styles.socialMediaInput}
-                    type="text"
-                    {...field}
-                    placeholder={name === 'spotify_uri' ? 'spotify:...' : 'https://...'}
-                  />
+                  {name !== 'youtube_embed' ? (
+                    <Input
+                      className={styles.socialMediaInput}
+                      type="text"
+                      {...fieldWithoutValue}
+                      value={value as string}
+                      placeholder={name === 'spotify_uri' ? 'spotify:...' : 'https://...'}
+                    />
+                  ) : (
+                    <ToggleSwitch
+                      checked={value as boolean}
+                      onChange={field.onChange}
+                      disabled={field.disabled}
+                    />
+                  )}
                 </FormControl>
                 {SOCIAL_MEDIA_HELP[name] ? <FormDescription>{SOCIAL_MEDIA_HELP[name]}</FormDescription> : null}
                 <FormMessage />
-              </FormItem>
-            )}
+                </FormItem>
+              );
+            }}
           />
         ))}
       </div>

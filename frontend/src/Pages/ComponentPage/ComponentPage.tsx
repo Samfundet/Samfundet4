@@ -112,7 +112,7 @@ export function ComponentPage() {
         : undefined,
       spotify_uri: '',
       youtube_link: '',
-      youtube_embed: '',
+      youtube_embed: false,
       facebook_link: '',
       soundcloud_link: '',
       instagram_link: '',
