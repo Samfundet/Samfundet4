@@ -24,6 +24,7 @@ import {
   EventAgeRestriction,
   type EventAgeRestrictionValue,
   type EventCategoryValue,
+  type EventStatus,
   EventTicketType,
   type EventTicketTypeValue,
 } from './types';
@@ -449,6 +450,34 @@ export function getAgeRestrictionKey(age: EventAgeRestrictionValue): Translation
     case EventAgeRestriction.MIXED:
       return KEY.mix;
   }
+}
+
+/**
+ * Gets the translation key for a given event status
+ */
+export function getEventStatusTranslationKey(status: EventStatus): TranslationKeys {
+  const map: Record<EventStatus, TranslationKeys> = {
+    public: KEY.event_status_public,
+    private: KEY.event_status_private,
+    archived: KEY.event_status_archived,
+    cancelled: KEY.event_status_cancelled,
+    deleted: KEY.event_status_deleted,
+  };
+  return map[status];
+}
+
+/**
+ * Gets the description translation key for a given event status
+ */
+export function getEventStatusDescriptionTranslationKey(status: EventStatus): TranslationKeys {
+  const map: Record<EventStatus, TranslationKeys> = {
+    public: KEY.event_status_help_public,
+    private: KEY.event_status_help_private,
+    archived: KEY.event_status_help_archived,
+    cancelled: KEY.event_status_help_cancelled,
+    deleted: KEY.event_status_help_deleted,
+  };
+  return map[status];
 }
 
 /**
