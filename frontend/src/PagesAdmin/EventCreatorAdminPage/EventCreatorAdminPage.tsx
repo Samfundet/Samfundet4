@@ -86,9 +86,9 @@ export function EventCreatorAdminPage() {
       return;
     }
 
-    async function loadEvent() {
+    async function loadEvent(pk: string) {
       try {
-        const eventData = templateId !== undefined ? await getEventForCloning(eventId) : await getEvent(eventId);
+        const eventData = templateId !== undefined ? await getEventForCloning(pk) : await getEvent(pk);
         setEvent(eventData);
       } catch {
         toast.error(t(KEY.common_something_went_wrong));
@@ -97,7 +97,7 @@ export function EventCreatorAdminPage() {
       }
     }
 
-    loadEvent();
+    loadEvent(eventId);
   }, [id, templateId, t]);
 
   // ================================== //
