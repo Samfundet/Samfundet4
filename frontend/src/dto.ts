@@ -263,6 +263,8 @@ export type EventCloneDto = {
 };
 
 export type EventWriteDto = {
+  status?: EventStatus;
+
   title_nb: string;
   title_en: string;
   description_long_nb: string;

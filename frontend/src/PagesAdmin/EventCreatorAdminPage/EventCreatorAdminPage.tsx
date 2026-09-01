@@ -13,8 +13,22 @@ import type { EventCloneDto, EventDto } from '~/dto';
 import { usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { venueKeys } from '~/queryKeys';
-import { EventAgeRestriction, type EventAgeRestrictionValue, EventCategory, type EventCategoryValue } from '~/types';
-import { dbT, getAgeRestrictionKey, getEventCategoryKey, lowerCapitalize } from '~/utils';
+import {
+  EventAgeRestriction,
+  type EventAgeRestrictionValue,
+  EventCategory,
+  type EventCategoryValue,
+  type EventStatus,
+  EventStatusChoice,
+} from '~/types';
+import {
+  dbT,
+  getAgeRestrictionKey,
+  getEventCategoryKey,
+  getEventStatusDescriptionTranslationKey,
+  getEventStatusTranslationKey,
+  lowerCapitalize,
+} from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { type FormType, useEventCreatorForm } from './hooks/useEventCreatorForm';
@@ -31,6 +45,7 @@ import { PaymentStep } from './steps/PaymentStep';
 import { SOCIAL_KEYS, SocialMediaStep } from './steps/SocialMediaStep';
 import { SummaryStep } from './steps/SummaryStep';
 import { TextStep } from './steps/TextStep';
+import type { EventStatusOption } from './types';
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
@@ -60,6 +75,16 @@ export function EventCreatorAdminPage() {
     label: t(getAgeRestrictionKey(age)),
   }));
 
+  const availableEventStatuses: EventStatus[] = id
+    ? Object.values(EventStatusChoice)
+    : [EventStatusChoice.PUBLIC, EventStatusChoice.PRIVATE];
+
+  const eventStatusOptions: EventStatusOption[] = availableEventStatuses.map((status) => ({
+    value: status,
+    label: t(getEventStatusTranslationKey(status)),
+    description: t(getEventStatusDescriptionTranslationKey(status)),
+  }));
+
   const { form, watchedValues, buildPayload } = useEventCreatorForm({
     event,
     defaultCategory: eventCategoryOptions[0]?.value ?? EventCategory.ART,
@@ -73,7 +98,7 @@ export function EventCreatorAdminPage() {
     payment: <PaymentStep form={form} ageLimitOptions={ageLimitOptions} />,
     socialmedia: <SocialMediaStep form={form} />,
     graphics: <GraphicsStep form={form} />,
-    summary: <SummaryStep form={form} />,
+    summary: <SummaryStep form={form} eventStatusOptions={eventStatusOptions} />,
   };
 
   const hasSocialMediaErrors = SOCIAL_KEYS.some((name) => !!form.formState.errors[name]);

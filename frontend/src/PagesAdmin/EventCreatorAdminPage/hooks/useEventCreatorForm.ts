@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
 import type { EventCloneDto, EventDto, EventWriteDto } from '~/dto';
-import type { EventCategoryValue } from '~/types';
+import { type EventCategoryValue, EventStatusChoice } from '~/types';
 import { eventSchema } from '../EventCreatorSchema';
 import { mapEventToFormValues } from '../utils';
 
@@ -52,6 +52,7 @@ export function useEventCreatorForm(params: {
       vimeo_link: '',
       general_link: '',
       image: undefined,
+      status: EventStatusChoice.PUBLIC,
       visibility_from_dt: '',
       visibility_to_dt: '',
     },
