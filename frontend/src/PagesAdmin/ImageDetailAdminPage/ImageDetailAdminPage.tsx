@@ -3,10 +3,10 @@ import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { getImage } from '~/api';
 import { ImageForm, LastUpdatedByHeader, TagChip } from '~/Components';
 import type { LinkTarget } from '~/Components/Link/Link';
 import { Link } from '~/Components/Link/Link';
+import { getImage } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
 import { imageKeys } from '~/domain';
 import type { ImageReferenceDto } from '~/dto';
@@ -127,7 +127,8 @@ export function ImageDetailAdminPage() {
                       url={url}
                       state={{
                         returnTo: `${location.pathname}${location.search}${location.hash}`,
-                      }}>
+                      }}
+                    >
                       {label}
                     </Link>
                   </li>
