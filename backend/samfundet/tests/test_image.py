@@ -391,12 +391,19 @@ class TestImageApi:
         fixture_gang_section.logo = fixture_image
         fixture_gang_section.save()
 
-        BlogPost.objects.create(title_nb='News', title_en='News', text_nb='text', text_en='text', image=fixture_image)
-        Infobox.objects.create(title_nb='Info', title_en='Info', text_nb='text', text_en='text', color='#FFFFFF', image=fixture_image)
-        Merch.objects.create(name_nb='T-Shirt', name_en='T-Shirt', description_nb='desc', description_en='desc', base_price=100, image=fixture_image)
+        blog_post = BlogPost.objects.create(title_nb='News', title_en='News', text_nb='text', text_en='text', image=fixture_image)
+        infobox = Infobox.objects.create(title_nb='Info', title_en='Info', text_nb='text', text_en='text', color='#FFFFFF', image=fixture_image)
+        merch = Merch.objects.create(name_nb='T-Shirt', name_en='T-Shirt', description_nb='desc', description_en='desc', base_price=100, image=fixture_image)
 
         response = fixture_rest_client.get(reverse(routes.samfundet__images_detail, kwargs={'pk': fixture_image.id}))
 
         assert status.is_success(response.status_code)
         references = response.json()['references']
         assert {reference['model'] for reference in references} == {'event', 'gang_section', 'blog_post', 'infobox', 'merch'}
+
+        # Cleanup: Delete related objects before the image is cleaned up
+        blog_post.delete()
+        infobox.delete()
+        merch.delete()
+        fixture_gang_section.logo = None
+        fixture_gang_section.save()

@@ -223,58 +223,69 @@ class ImageSerializer(CustomBaseSerializer):
 
         references: list[dict[str, Any]] = []
 
-        for event in image.event_set.only('id', 'title_nb', 'title_en').order_by('id'):
-            references.append(
-                {
-                    'model': 'event',
-                    'id': event.id,
-                    'label': event.title_nb or event.title_en or f'Event #{event.id}',
-                    'admin_url': self._admin_change_url('event', event.id),
-                }
+        # Define relationships: (queryset_attr, model_name, admin_model_name, only_fields, label_builder)
+        relationships: list[tuple[str, str, str, tuple[str, ...], Any]] = [
+            (
+                'event_set',
+                'event',
+                'event',
+                ('id', 'title_nb', 'title_en'),
+                lambda obj: obj.title_nb or obj.title_en or f'Event #{obj.id}',
+            ),
+            (
+                'blogpost_set',
+                'blog_post',
+                'blogpost',
+                ('id', 'title_nb', 'title_en'),
+                lambda obj: obj.title_nb or obj.title_en or f'Blog post #{obj.id}',
+            ),
+            (
+                'infobox_set',
+                'infobox',
+                'infobox',
+                ('id', 'title_nb', 'title_en'),
+                lambda obj: obj.title_nb or obj.title_en or f'Infobox #{obj.id}',
+            ),
+            (
+                'merch_set',
+                'merch',
+                'merch',
+                ('id', 'name_nb', 'name_en'),
+                lambda obj: obj.name_nb or obj.name_en or f'Merch #{obj.id}',
+            ),
+        ]
+
+        for queryset_attr, model_name, admin_model_name, only_fields, label_builder in relationships:
+            queryset = getattr(image, queryset_attr).only(*only_fields).order_by('id')
+            references.extend(
+                [
+                    {
+                        'model': model_name,
+                        'id': obj.id,
+                        'label': label_builder(obj),
+                        'admin_url': self._admin_change_url(admin_model_name, obj.id),
+                    }
+                    for obj in queryset
+                ]
             )
 
-        for gang_section in image.gangsection_set.select_related('gang').only('id', 'name_nb', 'name_en', 'gang__name_nb').order_by('id'):
-            section_name = gang_section.name_nb or gang_section.name_en or f'Section #{gang_section.id}'
-            gang_name = getattr(gang_section.gang, 'name_nb', None)
-            label = f'{gang_name} - {section_name}' if gang_name else section_name
-            references.append(
+        # Handle gang_section separately due to related gang name
+        gang_sections = image.gangsection_set.select_related('gang').only('id', 'name_nb', 'name_en', 'gang__name_nb').order_by('id')
+        references.extend(
+            [
                 {
                     'model': 'gang_section',
                     'id': gang_section.id,
-                    'label': label,
+                    'label': (
+                        f'{getattr(gang_section.gang, "name_nb", None)} - {gang_section.name_nb or gang_section.name_en or f"Section #{gang_section.id}"}'
+                        if getattr(gang_section.gang, 'name_nb', None)
+                        else gang_section.name_nb or gang_section.name_en or f'Section #{gang_section.id}'
+                    ),
                     'admin_url': self._admin_change_url('gangsection', gang_section.id),
                 }
-            )
-
-        for blog_post in image.blogpost_set.only('id', 'title_nb', 'title_en').order_by('id'):
-            references.append(
-                {
-                    'model': 'blog_post',
-                    'id': blog_post.id,
-                    'label': blog_post.title_nb or blog_post.title_en or f'Blog post #{blog_post.id}',
-                    'admin_url': self._admin_change_url('blogpost', blog_post.id),
-                }
-            )
-
-        for infobox in image.infobox_set.only('id', 'title_nb', 'title_en').order_by('id'):
-            references.append(
-                {
-                    'model': 'infobox',
-                    'id': infobox.id,
-                    'label': infobox.title_nb or infobox.title_en or f'Infobox #{infobox.id}',
-                    'admin_url': self._admin_change_url('infobox', infobox.id),
-                }
-            )
-
-        for merch in image.merch_set.only('id', 'name_nb', 'name_en').order_by('id'):
-            references.append(
-                {
-                    'model': 'merch',
-                    'id': merch.id,
-                    'label': merch.name_nb or merch.name_en or f'Merch #{merch.id}',
-                    'admin_url': self._admin_change_url('merch', merch.id),
-                }
-            )
+                for gang_section in gang_sections
+            ]
+        )
 
         return references
 
