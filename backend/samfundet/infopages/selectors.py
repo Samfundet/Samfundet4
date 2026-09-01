@@ -10,7 +10,7 @@ from root.utils.permissions import (
 )
 
 from samfundet.roles import get_owner_permission_map
-from samfundet.models.general import Gang, GangSection
+from samfundet.organization.models import Gang, GangSection
 from samfundet.infopages.permissions import INFORMATION_PAGE_OWNER_PERMISSIONS
 
 if TYPE_CHECKING:

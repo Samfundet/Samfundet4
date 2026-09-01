@@ -1,0 +1,26 @@
+@use '../../../../mixins' as m;
+
+.form_item {
+  flex-grow: 1;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem 1.5rem;
+
+  &:not(:first-child) {
+    margin-top: 0.5rem;
+  }
+
+  @include m.for-tablet-up {
+    flex-direction: row;
+  }
+}
+
+.action_row {
+  display: flex;
+  margin: 1rem 0 0.5rem;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
