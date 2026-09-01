@@ -1,5 +1,5 @@
 export { eventKeys } from './queryKeys';
-export { useCreateEvent, useDeleteEvent, useUpdateEvent } from './useEventMutations';
+export { useCreateEvent, useDeleteEvent, useUpdateEvent } from './mutations';
 export {
   type Filters,
   useGetBilligEvents,

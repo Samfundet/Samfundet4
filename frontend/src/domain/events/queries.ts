@@ -14,12 +14,9 @@ import type { EventDto, EventGroupDto } from '~/dto';
 import type { EventsPaginationType } from '~/types';
 import { eventKeys } from './queryKeys';
 
-export interface Filters {
-  search?: string;
-  event_group?: string;
-  venue?: string;
-  category?: string;
-}
+// Derived from the API function so the two can't drift; this is the filter
+// shape the upcoming-events endpoints actually accept.
+export type Filters = NonNullable<Parameters<typeof getEventsUpcommingPaginated>[2]>;
 
 export function useGetEventsPerDay(props?: Partial<UseQueryOptions<Record<string, EventDto[]>>>) {
   return useQuery({
