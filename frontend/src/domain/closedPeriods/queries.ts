@@ -1,6 +1,6 @@
 import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { getActiveClosedPeriods, getClosedPeriod, getClosedPeriods } from '~/api';
 import type { ClosedPeriodDto } from '~/dto';
+import { getActiveClosedPeriods, getClosedPeriod, getClosedPeriods } from './api';
 import { closedPeriodKeys } from './queryKeys';
 
 export function useGetClosedPeriod(id: number, props?: Partial<UseQueryOptions<ClosedPeriodDto>>) {

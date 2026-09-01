@@ -1,50 +1,70 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { type UseMutationOptions, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { apiDeleteClosedPeriod, postClosedPeriod, putClosedPeriod } from '~/api';
 import type { ClosedPeriodDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import { deleteClosedPeriod, postClosedPeriod, putClosedPeriod } from './api';
 import { closedPeriodKeys } from './queryKeys';
-import { defaultOnError } from '../utils';
 
-export function useUpdateClosedPeriod() {
+type UpdateParams = { id: number; data: Partial<ClosedPeriodDto> };
+export function useUpdateClosedPeriod(
+  options?: Omit<UseMutationOptions<ClosedPeriodDto, Error, UpdateParams>, 'mutationFn'>,
+) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: Partial<ClosedPeriodDto> }) => putClosedPeriod(id, data),
-    onSuccess: () => {
+    mutationFn: ({ id, data }: UpdateParams) => putClosedPeriod(id, data),
+    onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({ queryKey: closedPeriodKeys.all });
       toast.success(t(KEY.common_update_successful));
+      options?.onSuccess?.(data, variables, context);
     },
-    onError: defaultOnError,
+    onError: (err, variables, context) => {
+      toast.error(t(KEY.common_something_went_wrong));
+      console.error(err);
+      options?.onError?.(err, variables, context);
+    },
   });
 }
 
-export function useCreateClosedPeriod() {
+type CreateParams = Partial<ClosedPeriodDto>;
+export function useCreateClosedPeriod(
+  options?: Omit<UseMutationOptions<ClosedPeriodDto, Error, CreateParams>, 'mutationFn'>,
+) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: postClosedPeriod,
-    onSuccess: () => {
+    mutationFn: (data: CreateParams) => postClosedPeriod(data),
+    onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({ queryKey: closedPeriodKeys.all });
       toast.success(t(KEY.common_creation_successful));
+      options?.onSuccess?.(data, variables, context);
     },
-    onError: defaultOnError,
+    onError: (err, variables, context) => {
+      toast.error(t(KEY.common_something_went_wrong));
+      console.error(err);
+      options?.onError?.(err, variables, context);
+    },
   });
 }
 
-export function useDeleteClosedPeriod() {
+export function useDeleteClosedPeriod(options?: Omit<UseMutationOptions<void, Error, number>, 'mutationFn'>) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: (id: number) => apiDeleteClosedPeriod(id),
-    onSuccess: () => {
+    mutationFn: (id: number) => deleteClosedPeriod(id),
+    onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({ queryKey: closedPeriodKeys.all });
       toast.success(t(KEY.common_delete_successful));
+      options?.onSuccess?.(data, variables, context);
     },
-    onError: defaultOnError,
+    onError: (err, variables, context) => {
+      toast.error(t(KEY.common_something_went_wrong));
+      console.error(err);
+      options?.onError?.(err, variables, context);
+    },
   });
 }

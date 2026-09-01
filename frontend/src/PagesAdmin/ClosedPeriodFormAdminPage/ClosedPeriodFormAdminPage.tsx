@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { Button, Form, FormField, FormItem, FormLabel, Input, Textarea } from '~/Components';
 import { FormControl, FormMessage } from '~/Components/Forms/Form';
-import { DATE, MESSAGE, useUpdateClosedPeriod, useCreateClosedPeriod, useGetClosedPeriod } from '~/domain';
+import { DATE, MESSAGE, useCreateClosedPeriod, useGetClosedPeriod, useUpdateClosedPeriod } from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -55,8 +55,10 @@ export function ClosedPeriodFormAdminPage() {
     }
   }, [id, isError, t, navigate]);
 
-  const { mutate: createClosedPeriod } = useCreateClosedPeriod();
-  const { mutate: updateClosedPeriod } = useUpdateClosedPeriod();
+  const onSuccess = () => navigate({ url: -1 });
+
+  const { mutate: createClosedPeriod } = useCreateClosedPeriod({ onSuccess });
+  const { mutate: updateClosedPeriod } = useUpdateClosedPeriod({ onSuccess });
 
   function onSubmit(data: FormType) {
     if (id) {
@@ -64,7 +66,6 @@ export function ClosedPeriodFormAdminPage() {
     } else {
       createClosedPeriod(data);
     }
-    navigate({ url: -1 });
   }
 
   useEffect(() => {
