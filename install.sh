@@ -67,30 +67,37 @@ require "ps" # procps
 
 
 ### brew ###
-# Install brew if it doesn't exist.
-if [ ! "$(which brew)" ]; then
-    echo ; echo ; echo ; echo "================================================================================================================"
-    echo "Homebrew is a packet manager such as 'apt' for Linux."
-    do_action "$BOT: Install Homebrew (required)?" "" "$X_INTERACTIVE"
-    if [ "$?" == 0 ]; then
-        # Non-X_INTERACTIVE install.
-        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        # Update PATH and current shell.
-        # Must be wrapped by single quotes.
-        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> "$HOME"/.bash_profile
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# Homebrew is only required on macOS. Ubuntu uses apt/native packages.
+if [ $IS_MAC == 0 ]; then
+    # Install brew if it doesn't exist.
+    if [ ! "$(which brew)" ]; then
+        echo ; echo ; echo ; echo "================================================================================================================"
+        echo "Homebrew is a package manager for macOS."
+        do_action "$BOT: Install Homebrew (required)?" "" "$X_INTERACTIVE"
+        if [ "$?" == 0 ]; then
+            # Non-X_INTERACTIVE install.
+            NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            # Update PATH and current shell (Apple Silicon vs Intel).
+            if [ -x /opt/homebrew/bin/brew ]; then
+                echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME"/.bash_profile
+                eval "$(/opt/homebrew/bin/brew shellenv)"
+            elif [ -x /usr/local/bin/brew ]; then
+                echo 'eval "$(/usr/local/bin/brew shellenv)"' >> "$HOME"/.bash_profile
+                eval "$(/usr/local/bin/brew shellenv)"
+            fi
+        fi
     fi
-fi
 
-# Update and upgrade brew if it exists.
-echo ; echo ; echo ; echo "================================================================================================================"
-do_action "$BOT: Update and upgrade Homebrew (required)?" "" "$X_INTERACTIVE"
-if [ "$?" == 0 ] && [ "$(which brew)" ]; then
-    # Update brew.
-    echo "Updating and upgrading brew:"
-    brew update && brew upgrade && brew upgrade --cask
-    echo ; echo "Installing gcc"
-    brew install gcc # Recommended by brew.
+    # Update and upgrade brew if it exists.
+    echo ; echo ; echo ; echo "================================================================================================================"
+    do_action "$BOT: Update and upgrade Homebrew (required)?" "" "$X_INTERACTIVE"
+    if [ "$?" == 0 ] && [ "$(which brew)" ]; then
+        # Update brew.
+        echo "Updating and upgrading brew:"
+        brew update && brew upgrade && brew upgrade --cask
+        echo ; echo "Installing gcc"
+        brew install gcc # Recommended by brew.
+    fi
 fi
 
 
@@ -173,7 +180,20 @@ fi
 ### github-cli ###
 if [ ! "$(which gh)" ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Install github-cli (gh) (required)?" "brew install gh" "$X_INTERACTIVE"
+    if [ $IS_UBUNTU == 0 ]; then
+        # https://github.com/cli/cli/blob/trunk/docs/install_linux.md
+        do_action "$BOT: Install github-cli (gh) (required)?" "" "$X_INTERACTIVE"
+        if [ "$?" == 0 ]; then
+            sudo mkdir -p -m 755 /etc/apt/keyrings
+            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
+            sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+            sudo apt update
+            sudo apt install -y gh
+        fi
+    elif [ $IS_MAC == 0 ]; then
+        do_action "$BOT: Install github-cli (gh) (required)?" "brew install gh" "$X_INTERACTIVE"
+    fi
 fi
 
 
