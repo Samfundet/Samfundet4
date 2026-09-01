@@ -166,6 +166,7 @@ class BilligTicketGroup(models.Model):
 
     @property
     def is_almost_sold_out(self) -> bool:
+        if self.num == 0: return False
         percent_sold = self.num_sold / self.num
         return percent_sold >= LIMIT_FOR_ALMOST_SOLD_OUT
 
