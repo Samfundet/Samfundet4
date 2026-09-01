@@ -13,6 +13,7 @@ from guardian.models import UserObjectPermission, GroupObjectPermission
 from rest_framework import serializers
 from rest_framework.utils.serializer_helpers import ReturnList
 
+from django.urls import NoReverseMatch, reverse
 from django.db.models import Q, QuerySet
 from django.core.files import File
 from django.contrib.auth import authenticate
@@ -108,6 +109,7 @@ class ImageSerializer(CustomBaseSerializer):
     # Read only tags used in frontend.
     tags = TagSerializer(many=True, read_only=True)
     urls = serializers.SerializerMethodField(method_name='get_urls', read_only=True)
+    references = serializers.SerializerMethodField(method_name='get_references', read_only=True)
 
     # Write only fields for posting new images. File is required on create, optional on update (replace).
     file = serializers.FileField(write_only=True, required=False)
@@ -205,6 +207,87 @@ class ImageSerializer(CustomBaseSerializer):
 
     def get_urls(self, image: Image) -> dict[str, str]:
         return image.urls
+
+    @staticmethod
+    def _admin_change_url(model_name: str, object_id: int) -> str | None:
+        try:
+            return reverse(f'admin:samfundet_{model_name}_change', args=[object_id])
+        except NoReverseMatch:
+            return None
+
+    def get_references(self, image: Image) -> list[dict[str, Any]]:
+        # Keep list views fast; only resolve relational usage on detail fetches.
+        view = self.context.get('view')
+        if getattr(view, 'action', None) != 'retrieve':
+            return []
+
+        references: list[dict[str, Any]] = []
+
+        # Define relationships: (queryset_attr, model_name, admin_model_name, only_fields, label_builder)
+        relationships: list[tuple[str, str, str, tuple[str, ...], Any]] = [
+            (
+                'event_set',
+                'event',
+                'event',
+                ('id', 'title_nb', 'title_en'),
+                lambda obj: obj.title_nb or obj.title_en or f'Event #{obj.id}',
+            ),
+            (
+                'blogpost_set',
+                'blog_post',
+                'blogpost',
+                ('id', 'title_nb', 'title_en'),
+                lambda obj: obj.title_nb or obj.title_en or f'Blog post #{obj.id}',
+            ),
+            (
+                'infobox_set',
+                'infobox',
+                'infobox',
+                ('id', 'title_nb', 'title_en'),
+                lambda obj: obj.title_nb or obj.title_en or f'Infobox #{obj.id}',
+            ),
+            (
+                'merch_set',
+                'merch',
+                'merch',
+                ('id', 'name_nb', 'name_en'),
+                lambda obj: obj.name_nb or obj.name_en or f'Merch #{obj.id}',
+            ),
+        ]
+
+        for queryset_attr, model_name, admin_model_name, only_fields, label_builder in relationships:
+            queryset = getattr(image, queryset_attr).only(*only_fields).order_by('id')
+            references.extend(
+                [
+                    {
+                        'model': model_name,
+                        'id': obj.id,
+                        'label': label_builder(obj),
+                        'admin_url': self._admin_change_url(admin_model_name, obj.id),
+                    }
+                    for obj in queryset
+                ]
+            )
+
+        # Handle gang_section separately due to related gang name
+        gang_sections = image.gangsection_set.select_related('gang').only('id', 'name_nb', 'name_en', 'gang__name_nb').order_by('id')
+        references.extend(
+            [
+                {
+                    'model': 'gang_section',
+                    'id': gang_section.id,
+                    'label': (
+                        f'{getattr(gang_section.gang, "name_nb", None)} - {gang_section.name_nb or gang_section.name_en or f"Section #{gang_section.id}"}'
+                        if getattr(gang_section.gang, 'name_nb', None)
+                        else gang_section.name_nb or gang_section.name_en or f'Section #{gang_section.id}'
+                    ),
+                    'admin_url': self._admin_change_url('gangsection', gang_section.id),
+                }
+                for gang_section in gang_sections
+            ]
+        )
+
+        return references
 
     def get_created_by(self, obj: Image) -> dict | None:
         return BasicUserSerializer(obj.created_by).data if obj.created_by else None

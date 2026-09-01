@@ -484,11 +484,21 @@ export type TagDto = {
 
 export type ImageSize = 'original' | 'large' | 'medium' | 'small';
 
+export type ImageReferenceModel = 'event' | 'gang_section' | 'blog_post' | 'infobox' | 'merch';
+
+export type ImageReferenceDto = {
+  model: ImageReferenceModel;
+  id: number;
+  label: string;
+  admin_url?: string | null;
+};
+
 export type ImageDto = BaseModelDto & {
   id: number;
   title: string;
   urls: Record<ImageSize, string>;
   tags: TagDto[];
+  references?: ImageReferenceDto[];
 };
 
 export type ImagePostDto = {

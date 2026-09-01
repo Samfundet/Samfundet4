@@ -194,6 +194,7 @@ export const nb = prepareTranslations({
   [KEY.common_comment]: 'Kommentar',
   [KEY.common_capacity]: 'Kapasitet',
   [KEY.common_link]: 'Lenke',
+  [KEY.common_bound_by]: 'Bildet må fjernes fra disse elementene før det kan slettes',
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
@@ -981,6 +982,7 @@ export const en = prepareTranslations({
   [KEY.common_last_edited_by]: 'Last edited by',
   [KEY.common_publication_date]: 'Publication date',
   [KEY.common_casedocuments]: 'Case documents',
+  [KEY.common_bound_by]: 'Image must be removed from the following elements before it can be deleted',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
