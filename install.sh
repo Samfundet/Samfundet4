@@ -151,17 +151,6 @@ if [ ! "$(which jq)" ]; then
 fi
 
 
-### postgresql ###
-if [ ! "$(which psql)" ]; then
-    echo ; echo ; echo ; echo "================================================================================================================"
-    if [ $IS_UBUNTU == 0 ]; then
-        do_action "$BOT: Install postgresql (required)?" "sudo apt install -y postgresql libpq-dev && sudo service postgresql restart" "$X_INTERACTIVE"
-    elif [ $IS_MAC == 0 ]; then
-        do_action "$BOT: Install postgresql (required)?" "brew install postgresql && brew services restart postgresql" "$X_INTERACTIVE"
-    fi
-fi
-
-
 ### uv ###
 # uv is the Python package and project manager. It replaces pip, poetry, pyenv
 # and virtualenv: it manages the Python version (defined in backend/.python-version),
