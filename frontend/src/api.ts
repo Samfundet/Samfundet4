@@ -6,6 +6,7 @@ import type {
   ClosedPeriodDto,
   EditInformationPageDto,
   EventDto,
+  EventCloneDto,
   EventGroupDto,
   EventWriteDto,
   FeedbackDto,
@@ -406,6 +407,13 @@ export async function deleteEvent(id: string | number): Promise<AxiosResponse> {
 export async function getEvent(pk: string | number): Promise<EventDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: pk } });
   const response = await axios.get<EventDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getEventForCloning(pk: string | number): Promise<EventCloneDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__event_clone, urlParams: { pk: pk } });
+  const response = await axios.get<EventCloneDto>(url, { withCredentials: true });
 
   return response.data;
 }

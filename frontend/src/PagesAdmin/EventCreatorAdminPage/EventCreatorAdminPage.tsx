@@ -8,8 +8,8 @@ import { toast } from 'react-toastify';
 import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { getEvent, getVenues } from '~/api';
-import type { EventDto } from '~/dto';
+import { getEvent, getEventForCloning, getVenues } from '~/api';
+import type { EventCloneDto, EventDto } from '~/dto';
 import { usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { venueKeys } from '~/queryKeys';
@@ -34,7 +34,7 @@ import { TextStep } from './steps/TextStep';
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
-  const [event, setEvent] = useState<Partial<EventDto>>();
+  const [event, setEvent] = useState<Partial<EventDto> | EventCloneDto>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -81,18 +81,23 @@ export function EventCreatorAdminPage() {
   // Fetch event data using the event ID
   useEffect(() => {
     const eventId = id ?? templateId;
-    if (eventId) {
-      getEvent(eventId)
-        .then((eventData) => {
-          setEvent(eventData);
-          setShowSpinner(false);
-        })
-        .catch(() => {
-          toast.error(t(KEY.common_something_went_wrong));
-        });
-    } else {
+    if (!eventId) {
       setShowSpinner(false);
+      return;
     }
+
+    async function loadEvent() {
+      try {
+        const eventData = templateId !== undefined ? await getEventForCloning(eventId) : await getEvent(eventId);
+        setEvent(eventData);
+      } catch {
+        toast.error(t(KEY.common_something_went_wrong));
+      } finally {
+        setShowSpinner(false);
+      }
+    }
+
+    loadEvent();
   }, [id, templateId, t]);
 
   // ================================== //

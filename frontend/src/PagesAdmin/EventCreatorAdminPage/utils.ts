@@ -1,4 +1,4 @@
-import type { EventDto } from '~/dto';
+import type { EventCloneDto, EventDto } from '~/dto';
 import type { EventCategoryValue } from '~/types';
 import { utcTimestampToLocal } from '~/utils';
 import type { FormType } from './hooks/useEventCreatorForm';
@@ -9,7 +9,7 @@ function computeDurationMinutes(startIso?: string, endIso?: string) {
 }
 
 export function mapEventToFormValues(params: {
-  event: Partial<EventDto>;
+  event: Partial<EventDto> | EventCloneDto;
   defaultCategory: EventCategoryValue;
   defaultLocation: string;
   forTemplate?: boolean;
@@ -37,7 +37,7 @@ export function mapEventToFormValues(params: {
     age_restriction: event.age_restriction || 'none',
     ticket_type: event.ticket_type || 'free',
     custom_tickets: event.custom_tickets || [],
-    billig_id: event.billig?.id,
+    billig_id: 'billig' in event ? event.billig?.id : undefined,
     spotify_uri: event.spotify_uri || '',
     youtube_link: event.youtube_link || '',
     youtube_embed: event.youtube_embed || '',
