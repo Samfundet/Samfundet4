@@ -21,7 +21,14 @@ import {
   type EventStatus,
   EventStatusChoice,
 } from '~/types';
-import { dbT, getAgeRestrictionKey, getEventCategoryKey, getEventStatusTranslationKey, lowerCapitalize } from '~/utils';
+import {
+  dbT,
+  getAgeRestrictionKey,
+  getEventCategoryKey,
+  getEventStatusDescriptionTranslationKey,
+  getEventStatusTranslationKey,
+  lowerCapitalize,
+} from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { type FormType, useEventCreatorForm } from './hooks/useEventCreatorForm';
@@ -38,6 +45,7 @@ import { PaymentStep } from './steps/PaymentStep';
 import { SOCIAL_KEYS, SocialMediaStep } from './steps/SocialMediaStep';
 import { SummaryStep } from './steps/SummaryStep';
 import { TextStep } from './steps/TextStep';
+import type { EventStatusOption } from './types';
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
@@ -69,9 +77,10 @@ export function EventCreatorAdminPage() {
     ? Object.values(EventStatusChoice)
     : [EventStatusChoice.PUBLIC, EventStatusChoice.PRIVATE];
 
-  const eventStatusOptions: DropdownOption<EventStatus>[] = availableEventStatuses.map((status) => ({
+  const eventStatusOptions: EventStatusOption[] = availableEventStatuses.map((status) => ({
     value: status,
     label: t(getEventStatusTranslationKey(status)),
+    description: t(getEventStatusDescriptionTranslationKey(status)),
   }));
 
   const { form, watchedValues, buildPayload } = useEventCreatorForm({
