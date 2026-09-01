@@ -34,7 +34,7 @@ import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
 import type { EventDto } from '~/dto';
-import { EventCategory, EventTicketType } from '~/types';
+import { EventCategory, EventStatusChoice, EventTicketType } from '~/types';
 import styles from './ComponentPage.module.scss';
 
 /**
@@ -65,7 +65,7 @@ export function ComponentPage() {
       visibility_from_dt: new Date().toISOString(),
       visibility_to_dt: '',
       start_dt: new Date().toISOString(),
-      status: 'active',
+      status: EventStatusChoice.PUBLIC,
       ticket_type: EventTicketType.FREE,
       title_en: 'Von August with a very long title just like this // 23:59',
       title_nb: 'Von August // 23:59',

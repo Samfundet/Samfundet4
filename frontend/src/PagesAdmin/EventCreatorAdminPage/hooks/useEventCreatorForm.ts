@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
 import type { EventDto, EventWriteDto } from '~/dto';
-import type { EventCategoryValue } from '~/types';
+import { type EventCategoryValue, EventStatusChoice } from '~/types';
 import { utcTimestampToLocal } from '~/utils';
 import { eventSchema } from '../EventCreatorSchema';
 
@@ -56,6 +56,7 @@ export function useEventCreatorForm(params: {
       vimeo_link: '',
       general_link: '',
       image: undefined,
+      status: EventStatusChoice.PUBLIC,
       visibility_from_dt: '',
       visibility_to_dt: '',
     },
@@ -95,6 +96,7 @@ export function useEventCreatorForm(params: {
       vimeo_link: event.vimeo_link || '',
       general_link: event.general_link || '',
       image: event.image ?? undefined,
+      status: event.status || EventStatusChoice.PUBLIC,
       visibility_from_dt: event.visibility_from_dt ? utcTimestampToLocal(event.visibility_from_dt, false) : '',
       visibility_to_dt: event.visibility_to_dt ? utcTimestampToLocal(event.visibility_to_dt, false) : '',
     };
