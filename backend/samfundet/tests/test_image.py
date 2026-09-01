@@ -18,7 +18,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from root.utils import routes
 
 from samfundet.serializers import ImageSerializer
-from samfundet.models.general import Tag, User, Image, Merch, BlogPost, Infobox, GangSection
+from samfundet.models.general import Tag, User, Image, Merch, Infobox, BlogPost, GangSection
 
 if TYPE_CHECKING:
     from rest_framework.test import APIClient
