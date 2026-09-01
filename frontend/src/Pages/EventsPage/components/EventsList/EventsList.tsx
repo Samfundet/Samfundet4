@@ -3,7 +3,6 @@ import { type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { Button, IconButton, InputField, Link, TimeDisplay } from '~/Components';
-import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
 import type { EventDto } from '~/dto';
@@ -24,6 +23,8 @@ export function EventsList({ events }: EventsListProps) {
   const [tableView, setTableView] = useState(false);
   const [searchParam, setSearchParam] = useSearchParams();
   const [query, setQuery] = useState(searchParam.get('q') ?? '');
+  const [category, setCategory] = useState(searchParam.get('category') ?? '');
+  const [place, setPlace] = useState(searchParam.get('place') ?? '');
   const isDesktop = useDesktop();
 
   const eventColumns = [
@@ -40,13 +41,22 @@ export function EventsList({ events }: EventsListProps) {
   // TODO debounce and move header/filtering stuff to a separate component
   function filteredEvents() {
     const allEvents = Object.keys(events).flatMap((k: string) => events[k]);
+    const normalizedCategory = category.trim().toLowerCase();
+    const normalizedPlace = place.trim().toLowerCase();
     const normalizedSearch = query.trim().toLowerCase();
     const keywords = normalizedSearch.split(' ');
 
-    if (query === '') return eventQuery(allEvents, query);
-    return allEvents.filter((event) => {
+    const matchesText = (event: EventDto) => {
       const title = (dbT(event, 'title', i18n.language) as string)?.toLowerCase() ?? '';
       return keywords.every((kw) => title.includes(kw));
+    };
+
+    return allEvents.filter((event) => {
+      const matchesCategory = !normalizedCategory || event.category.toLowerCase() === normalizedCategory;
+      const matchesPlace = !normalizedPlace || (event.location ?? '').toLowerCase().includes(normalizedPlace);
+      const matchesQuery = query === '' || matchesText(event);
+
+      return matchesCategory && matchesPlace && matchesQuery;
     });
   }
 
@@ -101,6 +111,12 @@ export function EventsList({ events }: EventsListProps) {
   }
 
   useEffect(() => {
+    setQuery(searchParam.get('q') ?? '');
+    setCategory(searchParam.get('category') ?? '');
+    setPlace(searchParam.get('place') ?? '');
+  }, [searchParam]);
+
+  useEffect(() => {
     setSearchParam((prev) => {
       const next = new URLSearchParams(prev);
       if (query) {
@@ -108,9 +124,19 @@ export function EventsList({ events }: EventsListProps) {
       } else {
         next.delete('q');
       }
+      if (category) {
+        next.set('category', category);
+      } else {
+        next.delete('category');
+      }
+      if (place) {
+        next.set('place', place);
+      } else {
+        next.delete('place');
+      }
       return next;
     });
-  }, [query, setSearchParam]);
+  }, [category, place, query, setSearchParam]);
 
   function getButton(title: string, icon: string, func: () => void, chosen: boolean) {
     return (
