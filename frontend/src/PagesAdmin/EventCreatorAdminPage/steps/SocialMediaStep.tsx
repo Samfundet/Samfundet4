@@ -2,9 +2,9 @@ import type { UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
 import { FormDescription } from '~/Components/Forms/Form';
-import type { EventFormType } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import styles from '../EventCreatorAdminPage.module.scss';
+import type { EventFormType } from '../EventCreatorSchema';
 import type { FormType } from '../hooks/useEventCreatorForm';
 
 type SocialLinkKey = Extract<
