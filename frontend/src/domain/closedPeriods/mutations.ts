@@ -15,15 +15,15 @@ export function useUpdateClosedPeriod(
 
   return useMutation({
     mutationFn: ({ id, data }: UpdateParams) => putClosedPeriod(id, data),
-    onSuccess: (data, variables, context) => {
+    onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.invalidateQueries({ queryKey: closedPeriodKeys.all });
       toast.success(t(KEY.common_update_successful));
-      options?.onSuccess?.(data, variables, context);
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
-    onError: (err, variables, context) => {
+    onError: (err, variables, onMutateResult, context) => {
       toast.error(t(KEY.common_something_went_wrong));
       console.error(err);
-      options?.onError?.(err, variables, context);
+      options?.onError?.(err, variables, onMutateResult, context);
     },
   });
 }
@@ -37,15 +37,15 @@ export function useCreateClosedPeriod(
 
   return useMutation({
     mutationFn: (data: CreateParams) => postClosedPeriod(data),
-    onSuccess: (data, variables, context) => {
+    onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.invalidateQueries({ queryKey: closedPeriodKeys.all });
       toast.success(t(KEY.common_creation_successful));
-      options?.onSuccess?.(data, variables, context);
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
-    onError: (err, variables, context) => {
+    onError: (err, variables, onMutateResult, context) => {
       toast.error(t(KEY.common_something_went_wrong));
       console.error(err);
-      options?.onError?.(err, variables, context);
+      options?.onError?.(err, variables, onMutateResult, context);
     },
   });
 }
@@ -56,15 +56,15 @@ export function useDeleteClosedPeriod(options?: Omit<UseMutationOptions<void, Er
 
   return useMutation({
     mutationFn: (id: number) => deleteClosedPeriod(id),
-    onSuccess: (data, variables, context) => {
+    onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.invalidateQueries({ queryKey: closedPeriodKeys.all });
       toast.success(t(KEY.common_delete_successful));
-      options?.onSuccess?.(data, variables, context);
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
-    onError: (err, variables, context) => {
+    onError: (err, variables, onMutateResult, context) => {
       toast.error(t(KEY.common_something_went_wrong));
       console.error(err);
-      options?.onError?.(err, variables, context);
+      options?.onError?.(err, variables, onMutateResult, context);
     },
   });
 }

@@ -10,9 +10,6 @@ export async function getClosedPeriods(): Promise<ClosedPeriodDto[]> {
   return response.data;
 }
 
-/**
- * Returns a list of all currently active/closed closedPeriods, Samfundet is open if the array is empty
- */
 export async function getActiveClosedPeriods(): Promise<ClosedPeriodDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__isclosed;
   const response = await axios.get<ClosedPeriodDto[]>(url, { withCredentials: true });
