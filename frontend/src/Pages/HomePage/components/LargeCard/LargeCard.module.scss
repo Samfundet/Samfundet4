@@ -2,6 +2,16 @@
 
 @use 'src/mixins' as *;
 
+.crud_buttons {
+  top: 1rem;
+  right: -1rem;
+  position: absolute;
+  opacity: 0%;
+  z-index: 10;
+  transition: all 200ms ease-in-out;
+  pointer-events: none;
+}
+
 .layout {
   position: relative;
   display: flex;
@@ -21,14 +31,4 @@
       right: 1rem;
     }
   }
-}
-
-.crud_buttons {
-  top: 1rem;
-  right: -1rem;
-  position: absolute;
-  opacity: 0%;
-  z-index: 10;
-  transition: all 200ms ease-in-out;
-  pointer-events: none;
 }
