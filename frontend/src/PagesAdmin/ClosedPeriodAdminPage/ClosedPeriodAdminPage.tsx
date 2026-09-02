@@ -1,4 +1,5 @@
 import { Icon } from '@iconify/react';
+import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Button, TimeDisplay } from '~/Components';
 import { Table } from '~/Components/Table';
@@ -53,6 +54,7 @@ export function ClosedPeriodAdminPage() {
                       content: (
                         <div className={styles.edit_buttons}>
                           <Button
+                            disabled={element.end_dt < format(new Date(), 'yyyy-MM-dd')}
                             theme="secondary"
                             display="block"
                             className={styles.smallButtons}

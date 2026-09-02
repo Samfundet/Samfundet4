@@ -57,22 +57,25 @@ export function ClosedPeriodFormAdminPage() {
 
   const onSuccess = () => navigate({ url: -1 });
 
-  const { mutate: createClosedPeriod } = useCreateClosedPeriod({ onSuccess });
-  const { mutate: updateClosedPeriod } = useUpdateClosedPeriod({ onSuccess });
+  const { mutate: createClosedPeriod } = useCreateClosedPeriod();
+  const { mutate: updateClosedPeriod } = useUpdateClosedPeriod();
 
   function onSubmit(data: FormType) {
     if (id) {
-      updateClosedPeriod({ id: Number(id), data });
+      updateClosedPeriod({ id: Number(id), data }, { onSuccess });
     } else {
-      createClosedPeriod(data);
+      createClosedPeriod(data, { onSuccess });
     }
   }
 
   useEffect(() => {
     if (initialData) {
+      if (initialData.end_dt < format(new Date(), 'yyyy-MM-dd')) {
+        navigate({ url: ROUTES.frontend.admin_closed, replace: true });
+      }
       form.reset(initialData);
     }
-  }, [initialData, form]);
+  }, [initialData, form, navigate]);
 
   const title = id ? t(KEY.admin_closed_period_edit_period) : t(KEY.admin_closed_period_new_period);
   useTitle(title);
