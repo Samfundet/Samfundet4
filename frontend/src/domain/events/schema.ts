@@ -35,10 +35,10 @@ export const EVENT_END_DT = z.string().optional();
 export const EVENT_CATEGORY = zodEnum(EventCategory, KEY.event_form_category_required);
 export const EVENT_HOST = z.string().min(1, { message: KEY.event_form_host_required });
 export const EVENT_LOCATION = z.string().min(1, { message: KEY.event_form_location_required });
-export const EVENT_CAPACITY = z.number().min(1, { message: KEY.event_form_capacity_min }).optional();
-// Payment/registration
+export const EVENT_CAPACITY = optionalNumber({ min: 1, message: KEY.event_form_capacity_min });
 export const EVENT_AGE_RESTRICTION = zodEnum(EventAgeRestriction, KEY.event_form_age_restriction_required);
 export const EVENT_TICKET_TYPE = zodEnum(EventTicketType, KEY.event_form_ticket_type_required);
+export const EVENT_STATUS = zodEnum(EventStatusChoice, KEY.event_form_status_required);
 export const EVENT_CUSTOM_TICKET = z.object({
   id: z.number(),
   name_nb: z.string().min(1),

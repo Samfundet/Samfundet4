@@ -29,14 +29,12 @@ from samfundet.pagination import CustomPageNumberPagination
 from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from samfundet.serializers import (
     TagSerializer,
-    GangSerializer,
     RoleSerializer,
     ImageSerializer,
     MerchSerializer,
     VenueSerializer,
     InfoboxSerializer,
     BlogPostSerializer,
-    GangTypeSerializer,
     KeyValueSerializer,
     TextItemSerializer,
     UserOrgRoleSerializer,
@@ -49,21 +47,20 @@ from samfundet.serializers import (
 )
 from samfundet.models.general import (
     Tag,
-    Gang,
     Image,
     Merch,
     Venue,
     Infobox,
     BlogPost,
-    GangType,
     KeyValue,
     TextItem,
     ClosedPeriod,
-    Organization,
     Saksdokument,
     UserFeedbackModel,
 )
+from samfundet.organization.models import Gang, Organization
 from samfundet.models.model_choices import SaksdokumentCategory
+from samfundet.organization.serializers.public import PublicGangSerializer
 
 
 class HomePageView(APIView):
@@ -222,37 +219,8 @@ class OrganizationView(ModelViewSet):
     def gangs(self, request: Request, **kwargs: Any) -> Response:
         organization = self.get_object()
         gangs = Gang.objects.filter(organization=organization)
-        serializer = GangSerializer(gangs, many=True)
+        serializer = PublicGangSerializer(gangs, many=True)
         return Response(serializer.data)
-
-
-class GangView(ModelViewSet):
-    feature_key = WebFeatures.GANGS
-    permission_classes = (
-        RoleProtectedOrAnonReadOnlyObjectPermissions,
-        FeatureEnabled,
-    )
-    serializer_class = GangSerializer
-    queryset = Gang.objects.all()
-
-
-class GangTypeView(ModelViewSet):
-    feature_key = WebFeatures.GANGS
-    permission_classes = (
-        RoleProtectedOrAnonReadOnlyObjectPermissions,
-        FeatureEnabled,
-    )
-    serializer_class = GangTypeSerializer
-    queryset = GangType.objects.all()
-
-
-class GangTypeOrganizationView(APIView):
-    permission_classes = [AllowAny]
-    serializer_class = GangTypeSerializer
-
-    def get(self, request: Request, organization: int) -> Response:
-        data = GangType.objects.filter(organization=organization)
-        return Response(data=self.serializer_class(data, many=True).data, status=status.HTTP_200_OK)
 
 
 class InfoboxView(ModelViewSet):

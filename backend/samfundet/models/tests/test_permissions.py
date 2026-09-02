@@ -12,8 +12,8 @@ from root.utils import routes
 from root.utils.permissions import SAMFUNDET_ADD_RECRUITMENT, SAMFUNDET_VIEW_RECRUITMENT, SAMFUNDET_CHANGE_RECRUITMENT, SAMFUNDET_DELETE_RECRUITMENT
 
 from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
-from samfundet.models.general import Organization
 from samfundet.models.recruitment import Recruitment
+from samfundet.organization.models import Organization
 
 
 @pytest.fixture
