@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { KEY } from '~/i18n/constants';
+import { optionalNumber } from '~/schema/utils';
 import { EventAgeRestriction, EventCategory, EventStatusChoice, EventTicketType } from '~/types';
 import { zodEnum } from '../utils';
-import { optionalNumber } from '~/schema/utils';
 
 export interface Filters {
   search?: string;

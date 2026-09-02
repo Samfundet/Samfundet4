@@ -38,6 +38,7 @@ import { type EventCreatorStep, type StepKey, steps } from './steps/stepConfig';
 
 import type { FieldErrors } from 'react-hook-form';
 import { useCreateEvent, useGetEvent, useUpdateEvent } from '~/domain';
+import { eventSchema } from './EventCreatorSchema';
 import { EventPreviewCard } from './components/EventPreviewCard';
 import { GraphicsStep } from './steps/GraphicsStep';
 import { InfoStep } from './steps/InfoStep';
@@ -46,7 +47,6 @@ import { SOCIAL_KEYS, SocialMediaStep } from './steps/SocialMediaStep';
 import { SummaryStep } from './steps/SummaryStep';
 import { TextStep } from './steps/TextStep';
 import type { EventStatusOption } from './types';
-import { eventSchema } from './EventCreatorSchema';
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
