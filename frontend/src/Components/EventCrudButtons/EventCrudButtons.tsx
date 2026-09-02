@@ -54,11 +54,11 @@ export function EventCrudButtons({ id, removeView = false, height, deleteRedirec
       onDelete={
         canChangeEvent || isStaff
           ? () => {
-            const con = window.confirm(t(KEY.common_ask_delete));
-            if (con && id) {
-              deleteMutation.mutate(id, { onSuccess: () => deleteRedirect && nav({ url: -1 }) });
+              const con = window.confirm(t(KEY.common_ask_delete));
+              if (con && id) {
+                deleteMutation.mutate(id, { onSuccess: () => deleteRedirect && nav({ url: -1 }) });
+              }
             }
-          }
           : undefined
       }
       onManage={isStaff ? () => nav({ linkTarget: 'backend', url: djangoUrl }) : undefined}
