@@ -1,7 +1,21 @@
 import type { LoaderFunctionArgs } from 'react-router';
-import { getGang, getRecruitment, getRecruitmentPosition, getRecruitmentSeparatePosition, getRole } from '~/api';
+import {
+  getAdminGang,
+  getAdminGangSection,
+  getRecruitment,
+  getRecruitmentPosition,
+  getRecruitmentSeparatePosition,
+  getRole,
+} from '~/api';
 import { isSiteFeatureEnabled } from '~/constants/site-features';
-import type { GangDto, RecruitmentDto, RecruitmentPositionDto, RecruitmentSeparatePositionDto, RoleDto } from '~/dto';
+import type {
+  GangDto,
+  GangSectionDto,
+  RecruitmentDto,
+  RecruitmentPositionDto,
+  RecruitmentSeparatePositionDto,
+  RoleDto,
+} from '~/dto';
 
 export type RecruitmentLoader = {
   recruitment: RecruitmentDto | undefined;
@@ -9,6 +23,10 @@ export type RecruitmentLoader = {
 
 export type GangLoader = {
   gang: GangDto | undefined;
+};
+
+export type GangSectionLoader = {
+  section: GangSectionDto | undefined;
 };
 
 export type PositionLoader = {
@@ -43,7 +61,11 @@ export async function positionLoader({ params }: LoaderFunctionArgs): Promise<Po
 }
 
 export async function gangLoader({ params }: LoaderFunctionArgs): Promise<GangLoader> {
-  return { gang: await getGang(params.gangId as string) };
+  return { gang: await getAdminGang(params.gangId as string) };
+}
+
+export async function gangSectionLoader({ params }: LoaderFunctionArgs): Promise<GangSectionLoader> {
+  return { section: await getAdminGangSection(params.sectionId as string) };
 }
 
 export async function recruitmentGangLoader(params: LoaderFunctionArgs): Promise<RecruitmentLoader & GangLoader> {

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { KEY } from '~/i18n/constants';
-import { EventAgeRestriction, EventCategory, EventTicketType } from '~/types';
+import { EventAgeRestriction, EventCategory, EventStatusChoice, EventTicketType } from '~/types';
 import { optionalNumber, zodEnum } from './utils';
 
 const validUrl = z
@@ -29,6 +29,7 @@ export const EVENT_LOCATION = z.string().min(1, { message: KEY.event_form_locati
 export const EVENT_CAPACITY = optionalNumber({ min: 1, message: KEY.event_form_capacity_min });
 export const EVENT_AGE_RESTRICTION = zodEnum(EventAgeRestriction, KEY.event_form_age_restriction_required);
 export const EVENT_TICKET_TYPE = zodEnum(EventTicketType, KEY.event_form_ticket_type_required);
+export const EVENT_STATUS = zodEnum(EventStatusChoice, KEY.event_form_status_required);
 export const EVENT_CUSTOM_TICKET = z.object({
   id: z.number(),
   name_nb: z.string().min(1),

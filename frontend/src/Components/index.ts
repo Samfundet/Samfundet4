@@ -26,6 +26,7 @@ export { ExternalHostBox } from './ExternalHostBox';
 export { FileInput } from './FileInput';
 export { Footer } from './Footer';
 export { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, useFormField } from './Forms';
+export { FormBox } from './FormBox';
 export { H1 } from './H1';
 export { H2 } from './H2';
 export { H3 } from './H3';
