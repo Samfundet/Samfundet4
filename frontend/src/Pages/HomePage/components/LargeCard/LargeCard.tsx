@@ -1,4 +1,4 @@
-import { ContentCard } from '~/Components';
+import { ContentCard, EventCrudButtons } from '~/Components';
 import type { HomePageElementDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
@@ -25,6 +25,9 @@ export function LargeCard({ element }: LargeCardProps) {
 
   return (
     <div className={layoutStyle}>
+      <div className={styles.crud_buttons}>
+        <EventCrudButtons id={event.id} removeView={true} />
+      </div>
       <ContentCard
         title={dbT(element, 'title')}
         description={dbT(element, 'description')}

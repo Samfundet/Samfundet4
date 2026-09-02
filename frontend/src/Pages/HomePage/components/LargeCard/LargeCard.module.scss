@@ -3,7 +3,9 @@
 @use 'src/mixins' as *;
 
 .layout {
+  position: relative;
   display: flex;
+  overflow: hidden;
   justify-content: center;
   margin: 1em auto;
   width: $primary-content-width-wide;
@@ -12,4 +14,21 @@
   @include for-mobile-only {
     max-width: 100%;
   }
+
+  &:hover {
+    .crud_buttons {
+      opacity: 1;
+      right: 1rem;
+    }
+  }
+}
+
+.crud_buttons {
+  top: 1rem;
+  right: -1rem;
+  position: absolute;
+  opacity: 0%;
+  z-index: 10;
+  transition: all 200ms ease-in-out;
+  pointer-events: none;
 }
