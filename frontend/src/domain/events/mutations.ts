@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { deleteEvent, postEvent, putEvent } from '~/api';
 import type { EventWriteDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { onError } from '../utils';
+import { deleteEvent, postEvent, putEvent } from './api';
 import { eventKeys } from './queryKeys';
 
-export function useCreateEvent(onCreate?: () => void) {
+export function useCreateEvent() {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
@@ -16,13 +16,12 @@ export function useCreateEvent(onCreate?: () => void) {
     onSuccess: () => {
       toast.success(t(KEY.common_creation_successful));
       queryClient.invalidateQueries({ queryKey: eventKeys.all });
-      onCreate?.();
     },
     onError,
   });
 }
 
-export function useUpdateEvent(onUpdate?: () => void) {
+export function useUpdateEvent() {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
@@ -31,13 +30,12 @@ export function useUpdateEvent(onUpdate?: () => void) {
     onSuccess: () => {
       toast.success(t(KEY.common_update_successful));
       queryClient.invalidateQueries({ queryKey: eventKeys.all });
-      onUpdate?.();
     },
     onError,
   });
 }
 
-export function useDeleteEvent(onDelete?: () => void) {
+export function useDeleteEvent() {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
@@ -46,7 +44,6 @@ export function useDeleteEvent(onDelete?: () => void) {
     onSuccess: () => {
       toast.success(t(KEY.common_delete_successful));
       queryClient.invalidateQueries({ queryKey: eventKeys.all });
-      onDelete?.();
     },
     onError,
   });

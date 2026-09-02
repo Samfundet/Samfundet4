@@ -1,4 +1,4 @@
-import type { Filters } from './queries';
+import type { Filters } from './schema';
 
 export const eventKeys = {
   all: ['events'] as const,

@@ -1,7 +1,6 @@
 export { eventKeys } from './queryKeys';
 export { useCreateEvent, useDeleteEvent, useUpdateEvent } from './mutations';
 export {
-  type Filters,
   useGetBilligEvents,
   useGetEvent,
   useGetEventGroups,
@@ -10,4 +9,4 @@ export {
   useGetEventsUpcomming,
   useGetEventsUpcommingPaginated,
 } from './queries';
-export { eventSchema, type EventFormType } from './schema';
+export { eventSchema, type EventFormType, type Filters } from './schema';

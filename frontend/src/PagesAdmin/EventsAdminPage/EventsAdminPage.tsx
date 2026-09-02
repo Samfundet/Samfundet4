@@ -82,7 +82,7 @@ export function EventsAdminPage() {
     }
   }, [data]);
 
-  const { mutate: deleteSelectedEvent } = useDeleteEvent(() => navigate(ROUTES.frontend.admin_events));
+  const { mutate: deleteSelectedEvent } = useDeleteEvent();
 
   const tableColumns = [
     { content: t(KEY.common_title) },
@@ -124,7 +124,9 @@ export function EventsAdminPage() {
             onDelete={() => {
               const msg = lowerCapitalize(`${t(KEY.form_confirm)} ${t(KEY.common_delete)}`);
               if (window.confirm(`${msg} ${dbT(event, 'title')}`)) {
-                deleteSelectedEvent(event.id);
+                deleteSelectedEvent(event.id, {
+                  onSuccess: () => navigate(ROUTES.frontend.admin_events),
+                });
               }
             }}
           />

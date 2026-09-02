@@ -4,6 +4,14 @@ import { EventAgeRestriction, EventCategory, EventTicketType } from '~/types';
 import { OPTIONAL_IMAGE } from '../images';
 import { zodEnum } from '../utils';
 
+export interface Filters {
+  search?: string;
+  event_group?: string;
+  ticket_type?: string;
+  venue?: string;
+  category?: string;
+}
+
 const validUrl = z
   .string()
   .trim()

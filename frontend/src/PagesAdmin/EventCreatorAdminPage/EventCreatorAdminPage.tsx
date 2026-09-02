@@ -115,8 +115,8 @@ export function EventCreatorAdminPage() {
   const navigate = useCustomNavigate();
   const goToEventsList = () => navigate({ url: ROUTES.frontend.admin_events });
 
-  const { mutate: updateEvent } = useUpdateEvent(goToEventsList);
-  const { mutate: createEvent } = useCreateEvent(goToEventsList);
+  const { mutate: updateEvent } = useUpdateEvent();
+  const { mutate: createEvent } = useCreateEvent();
 
   function onSubmit(values: FormType) {
     let payload: Partial<EventDto> = buildPayload(values);
@@ -127,9 +127,9 @@ export function EventCreatorAdminPage() {
     }
 
     if (id) {
-      updateEvent({ id, data: payload });
+      updateEvent({ id, data: payload }, { onSuccess: goToEventsList });
     } else {
-      createEvent(payload);
+      createEvent(payload, { onSuccess: goToEventsList });
     }
   }
 

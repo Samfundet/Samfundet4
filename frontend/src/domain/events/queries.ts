@@ -1,4 +1,7 @@
 import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import type { BilligEventDto } from '~/apis/billig/billigDtos';
+import type { EventDto, EventGroupDto } from '~/dto';
+import type { EventsPaginationType } from '~/types';
 import {
   type EventsUpcomingResponse,
   getBilligEvents,
@@ -8,15 +11,9 @@ import {
   getEventsPerDay,
   getEventsUpcomming,
   getEventsUpcommingPaginated,
-} from '~/api';
-import type { BilligEventDto } from '~/apis/billig/billigDtos';
-import type { EventDto, EventGroupDto } from '~/dto';
-import type { EventsPaginationType } from '~/types';
+} from './api';
 import { eventKeys } from './queryKeys';
-
-// Derived from the API function so the two can't drift; this is the filter
-// shape the upcoming-events endpoints actually accept.
-export type Filters = NonNullable<Parameters<typeof getEventsUpcommingPaginated>[2]>;
+import type { Filters } from './schema';
 
 export function useGetEventsPerDay(props?: Partial<UseQueryOptions<Record<string, EventDto[]>>>) {
   return useQuery({
