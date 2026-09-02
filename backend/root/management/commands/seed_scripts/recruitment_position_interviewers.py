@@ -4,8 +4,9 @@ from random import sample, randint
 from collections import defaultdict
 
 from samfundet.models.role import Role, UserGangSectionRole
-from samfundet.models.general import Gang, User
+from samfundet.models.general import User
 from samfundet.models.recruitment import RecruitmentPosition, RecruitmentApplication
+from samfundet.organization.models import Gang
 
 from .roles import SECTION_INTERVIEWER
 

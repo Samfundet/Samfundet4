@@ -89,6 +89,7 @@ export const KEY = {
   common_tags: 'common_tags',
   common_gang: 'common_gang',
   common_section: 'common_section',
+  common_sections: 'common_sections',
   common_next: 'common_next',
   common_open: 'common_open',
   common_closed: 'common_closed',
@@ -98,11 +99,13 @@ export const KEY = {
   common_event: 'common_event',
   common_login: 'common_login',
   common_image: 'common_image',
+  common_logo: 'common_logo',
   common_file: 'common_file',
   common_title: 'common_title',
   common_venue: 'common_venue',
   common_active: 'common_active',
   common_cancel: 'common_cancel',
+  common_close: 'common_close',
   common_events: 'common_events',
   common_repeat: 'common_repeat',
   common_venues: 'common_venues',
@@ -216,9 +219,12 @@ export const KEY = {
   common_uploaded_by: 'common_uploaded_by',
   common_last_edited_by: 'common_last_edited_by',
   common_casedocuments: 'common_casedocuments',
+  common_positions: 'common_positions',
 
   common_membership_number: 'common_membership_number',
   common_to_payment: 'common_to_payment',
+
+  organization: 'organization',
 
   //About page
   common_age_limit: 'common_age_limit',
@@ -355,6 +361,22 @@ export const KEY = {
   event_category_theme_party: 'event_category_theme_party',
   event_category_uka_event: 'event_category_uka_event',
   event_call_to_action_register: 'event_call_to_action_register',
+
+  // Event statuses
+  event_status: 'event_status',
+  event_status_public: 'event_status_public',
+  event_status_private: 'event_status_private',
+  event_status_archived: 'event_status_archived',
+  event_status_cancelled: 'event_status_cancelled',
+  event_status_deleted: 'event_status_deleted',
+  event_status_help_title: 'event_status_help_title',
+  event_status_help_intro: 'event_status_help_intro',
+  event_status_help_button_aria_label: 'event_status_help_button_aria_label',
+  event_status_help_public: 'event_status_help_public',
+  event_status_help_private: 'event_status_help_private',
+  event_status_help_archived: 'event_status_help_archived',
+  event_status_help_cancelled: 'event_status_help_cancelled',
+  event_status_help_deleted: 'event_status_help_deleted',
 
   // Venue Page:
   venuepage_title: 'venuepage_title',
@@ -647,6 +669,7 @@ export const KEY = {
   adminpage_connect_mdb_common_error: 'adminpage_connect_mdb_common_error',
   adminpage_connect_mdb_password_notice_1: 'adminpage_connect_mdb_password_notice_1',
   adminpage_connect_mdb_password_notice_2: 'adminpage_connect_mdb_password_notice_2',
+  admin_gang_has_no_sections: 'admin_gang_has_no_sections',
 
   // CommandMenu:
   command_menu_label: 'command_menu_label',
@@ -691,6 +714,7 @@ export const KEY = {
 
   // No category:
   owner: 'owner',
+  affiliation: 'affiliation',
   end_time: 'end_time',
   start_date: 'start_date',
   end_date: 'end_date',
@@ -699,6 +723,7 @@ export const KEY = {
   start_time: 'start_time',
   last_updated: 'last_updated',
   form_confirm: 'form_confirm',
+  form_confirm_delete: 'form_confirm_delete',
   we_use_cookies: 'we_use_cookies',
   control_panel_faq: 'control_panel_faq',
   invalid_phonenumber: 'invalid_phonenumber',
@@ -739,6 +764,7 @@ export const KEY = {
   event_form_category_required: 'event_form_category_required',
   event_form_age_restriction_required: 'event_form_age_restriction_required',
   event_form_ticket_type_required: 'event_form_ticket_type_required',
+  event_form_status_required: 'event_form_status_required',
 } as const;
 
 // This will ensure that each value matches the key exactly.

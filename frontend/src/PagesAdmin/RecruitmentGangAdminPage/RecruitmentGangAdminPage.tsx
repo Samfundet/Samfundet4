@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getGang, getRecruitment, getRecruitmentPositionsGangForGang } from '~/api';
+import { getAdminGang, getRecruitment, getRecruitmentPositionsGangForGang } from '~/api';
 import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
@@ -36,7 +36,7 @@ export function RecruitmentGangAdminPage() {
         getRecruitmentPositionsGangForGang(recruitmentId, gangId).then((data) => {
           setRecruitmentPositions(data.data);
         }),
-        getGang(gangId).then((data) => {
+        getAdminGang(gangId).then((data) => {
           setGang(data);
         }),
         getRecruitment(recruitmentId).then(async (data) => {

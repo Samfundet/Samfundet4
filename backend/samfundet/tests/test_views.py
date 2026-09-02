@@ -19,7 +19,6 @@ from root.utils import routes, permissions
 
 from samfundet.serializers import UserSerializer, RegisterSerializer
 from samfundet.models.general import (
-    Gang,
     User,
     Image,
     Merch,
@@ -29,7 +28,6 @@ from samfundet.models.general import (
     KeyValue,
     TextItem,
     Reservation,
-    Organization,
 )
 from samfundet.models.recruitment import (
     Interview,
@@ -37,6 +35,7 @@ from samfundet.models.recruitment import (
     RecruitmentPosition,
     RecruitmentApplication,
 )
+from samfundet.organization.models import Gang, Organization
 from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 if TYPE_CHECKING:

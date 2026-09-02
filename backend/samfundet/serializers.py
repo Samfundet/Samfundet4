@@ -30,7 +30,6 @@ from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedback
 from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
     Tag,
-    Gang,
     User,
     Image,
     Merch,
@@ -38,18 +37,14 @@ from .models.general import (
     Campus,
     Infobox,
     BlogPost,
-    GangType,
     KeyValue,
     TextItem,
-    GangSection,
     ClosedPeriod,
-    Organization,
     Saksdokument,
     MerchVariation,
     UserPreference,
     UserFeedbackModel,
 )
-from .infopages.models import InformationPage
 from .models.recruitment import (
     Interview,
     Recruitment,
@@ -66,7 +61,10 @@ from .models.recruitment import (
     RecruitmentInterviewAvailability,
     RecruitmentPositionSharedInterviewGroup,
 )
+from .organization.models import Gang, Organization
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
+from .infopages.serializers.fields import info_page_slug_field
+from .organization.serializers.public import PublicGangSerializer, PublicGangSectionSerializer
 
 
 class TagSerializer(CustomBaseSerializer):
@@ -641,33 +639,6 @@ class OrganizationSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
-def info_page_slug_field() -> serializers.SlugRelatedField:
-    """
-    `Gang.info_page` references an information page by its numeric id, but that id is an internal
-    database detail. Read and write the relation as the page's slug instead.
-    """
-    return serializers.SlugRelatedField(
-        slug_field='slug_field',
-        queryset=InformationPage.objects.all(),
-        allow_null=True,
-        required=False,
-    )
-
-
-class GangSerializer(CustomBaseSerializer):
-    info_page = info_page_slug_field()
-
-    class Meta:
-        model = Gang
-        fields = '__all__'
-
-
-class GangSectionSerializer(CustomBaseSerializer):
-    class Meta:
-        model = GangSection
-        fields = '__all__'
-
-
 class RecruitmentGangSerializer(CustomBaseSerializer):
     recruitment_positions = serializers.SerializerMethodField(method_name='get_positions_count', read_only=True)
     info_page = info_page_slug_field()
@@ -685,14 +656,6 @@ class RecruitmentGangSerializer(CustomBaseSerializer):
     def get_positions_count(self, obj: Gang) -> list[int]:
         """Return total number of positions for this gang's recruitment."""
         return RecruitmentPosition.objects.filter(recruitment=self.recruitment, gang=obj).count()
-
-
-class GangTypeSerializer(CustomBaseSerializer):
-    gangs = GangSerializer(read_only=True, many=True)
-
-    class Meta:
-        model = GangType
-        fields = '__all__'
 
 
 class BlogPostSerializer(CustomBaseSerializer):
@@ -735,7 +698,7 @@ class UserGangRoleSerializer(CustomBaseSerializer):
         return {
             'created_at': obj.created_at,
             'created_by': UserSerializer(obj.created_by).data,
-            'gang': GangSerializer(obj.obj).data,
+            'gang': PublicGangSerializer(obj.obj).data,
         }
 
 
@@ -751,7 +714,7 @@ class UserGangSectionRoleSerializer(CustomBaseSerializer):
         return {
             'created_at': obj.created_at,
             'created_by': UserSerializer(obj.created_by).data,
-            'section': GangSectionSerializer(obj.obj).data,
+            'section': PublicGangSectionSerializer(obj.obj).data,
         }
 
 
@@ -863,7 +826,7 @@ class RecruitmentCampusStatSerializer(serializers.ModelSerializer):
 
 
 class RecruitmentGangStatSerializer(serializers.ModelSerializer):
-    gang = GangSerializer(read_only=True)
+    gang = PublicGangSerializer(read_only=True)
 
     class Meta:
         model = RecruitmentGangStat
@@ -1028,7 +991,7 @@ class RecruitmentPositionSerializer(CustomBaseSerializer):
     processed_applicants = serializers.SerializerMethodField(method_name='get_processed_applicants', read_only=True)
     accepted_applicants = serializers.SerializerMethodField(method_name='get_accepted_applicants', read_only=True)
 
-    gang = GangSerializer(read_only=True)
+    gang = PublicGangSerializer(read_only=True)
     interviewers = InterviewerSerializer(many=True, read_only=True)
     interviewer_ids = serializers.ListField(child=serializers.IntegerField(), write_only=True, required=False)
 
@@ -1106,7 +1069,7 @@ class ApplicantInterviewSerializer(serializers.ModelSerializer):
 
 
 class RecruitmentPositionForApplicantSerializer(serializers.ModelSerializer):
-    gang = GangSerializer()
+    gang = PublicGangSerializer()
 
     class Meta:
         model = RecruitmentPosition
