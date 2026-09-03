@@ -6,7 +6,67 @@
 
 Billig is the ticket/payment system implemented by ITK.
 We need to integrate with this system on cirkus to support
-a payment form with tickets and showing ticket pdfs. 
+a payment form with tickets and showing ticket PDFs.
+
+## API endpoints
+
+All callback endpoints are public because Billig returns the user's browser to them after payment. The development payment endpoint is also public, but returns `404 Not Found` unless the backend is running with `ENV=development`.
+
+| Path | Method | Authentication | Purpose |
+| --- | --- | --- | --- |
+| `/api/billig/event/<event_id>/tickets/` | `GET` | Public (`AllowAny`) | Returns the event's ticket groups and price groups that are available for online sale. |
+| `/api/billig/callback/success/` | `GET` | Public (`AllowAny`) | Receives the `tickets` parameter after a successful purchase and redirects the browser to `/arrangement/billetter/status/<tickets>/`. |
+| `/api/billig/callback/failure/` | `GET` | Public (`AllowAny`) | Preserves Billig's query parameters, including `bsession`, and redirects the browser to `/arrangement/billetter/handlekurv/`. |
+| `/api/billig/callback/failure-data/` | `GET` | Public (`AllowAny`) | Looks up `bsession` in Billig's `payment_error` tables and returns the error and retryable cart data. |
+| `/api/billig/dev/pay/` | `POST` | Public (`AllowAny`), development only | Simulates Billig locally by creating fake purchases or payment errors in the development Billig database. |
+
+## Configuration
+
+`BILLIG_PAYMENT_URL` is the URL to which the browser posts the purchase form:
+
+- Development default: `http://localhost:8000/api/billig/dev/pay/`
+- Production default: `https://billettsalg.samfundet.no/pay`
+
+`BILLIG_FRONTEND_BASE_URL` is prepended to the frontend path when a backend callback redirects the browser:
+
+- Development default: `http://localhost:3000`
+- Production deployment: `https://samfundet.no`
+
+Both variables can be overridden through the backend process environment. For local Django runs, put overrides in `backend/.env`, using `backend/.env.example` as the template. For Docker, put backend process overrides in `backend/.docker.env`. The repository `.env.example` also records the expected local values, but its `.env` configures Compose interpolation and does not by itself inject arbitrary variables into the backend container.
+
+## Purchase callback sequence
+
+1. The browser posts the purchase form directly to `BILLIG_PAYMENT_URL`. The Samfundet backend does not proxy or process the real payment.
+2. In production, Billig validates the order, reserves the tickets, processes payment, and sends email as appropriate.
+3. Billig returns the browser to `/api/billig/callback/success/` with ticket references, or `/api/billig/callback/failure/` with an error session in `bsession`.
+4. The backend callback redirects the browser to the registered frontend status or cart route.
+5. After a failure, the frontend requests `/api/billig/callback/failure-data/?bsession=<id>`. The backend reads Billig's error tables and returns the message and cart data. The frontend only offers a retry when Billig stored cart rows for that error.
+
+Ticket references and `bsession` values are opaque values supplied by Billig and should not be decoded or modified by the frontend.
+
+## Development payment mock
+
+The development `BILLIG_PAYMENT_URL` points to `/api/billig/dev/pay/` instead of the real payment service. A request is simulated as a failure when:
+
+- The cart is empty.
+- Neither an email address nor a member card is provided.
+- A submitted price group does not exist in the development Billig database.
+- The email address contains `fail`.
+- The member card number ends in `0000`.
+- The member card number contains non-digit characters.
+
+Known cart rows are stored with retryable mock errors. Empty carts and carts containing unknown price groups produce non-retryable errors. Successful mock purchases create local purchase and ticket rows, increment the ticket group's sold count, and return fake ticket references ending in `12345`.
+
+## Production setup
+
+Register these callback URLs in Billig's production configuration before enabling purchases:
+
+```text
+https://samfundet.no/api/billig/callback/success/
+https://samfundet.no/api/billig/callback/failure/
+```
+
+The success callback must provide ticket references in `tickets`; the failure callback must provide the Billig error session in `bsession`. Verify both redirects and the failure-data lookup against the production Billig configuration during deployment. The development payment endpoint is disabled in production.
 
 ## Databases
 
