@@ -6,7 +6,20 @@
 
 Billig is the ticket/payment system implemented by ITK.
 We need to integrate with this system on cirkus to support
-a payment form with tickets and showing ticket pdfs. 
+a payment form with tickets and showing ticket PDFs.
+
+## API endpoints
+
+All callback endpoints are public because Billig returns the user's browser to them after payment. The development payment endpoint is also public, but returns `404 Not Found` unless the backend is running with `ENV=development`.
+
+| Path | Method | Authentication | Purpose |
+| --- | --- | --- | --- |
+| `/api/billig/event/<event_id>/tickets/` | `GET` | Public (`AllowAny`) | Returns the event's ticket groups and price groups that are available for online sale. |
+| `/api/billig/callback/success/` | `GET` | Public (`AllowAny`) | Receives the `tickets` parameter after a successful purchase and redirects the browser to `/arrangement/billetter/status/<tickets>/`. |
+| `/api/billig/callback/failure/` | `GET` | Public (`AllowAny`) | Preserves Billig's query parameters, including `bsession`, and redirects the browser to `/arrangement/billetter/handlekurv/`. |
+| `/api/billig/callback/failure-data/` | `GET` | Public (`AllowAny`) | Looks up `bsession` in Billig's `payment_error` tables and returns the error and retryable cart data. |
+| `/api/billig/dev/pay/` | `POST` | Public (`AllowAny`), development only | Simulates Billig locally by creating fake purchases or payment errors in the development Billig database. |
+
 
 ## Databases
 
