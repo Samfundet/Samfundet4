@@ -170,27 +170,9 @@ fi
 if [ $IS_MAC == 0 ]; then
     # Cask packages are MacOS only.
 
-    ### google-chrome ###
-    echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Install google-chrome (optional)?" "brew install --cask google-chrome" "y"
-
-    ### iterm2 ###
-    echo ; echo ; echo ; echo "================================================================================================================"
-    echo "Iterm2 is an improved version of Terminal."
-    do_action "$BOT: Install iterm2 (optional)?" "brew install --cask iterm2" "y"
-
-
     ### visual-studio-code ###
     echo ; echo ; echo ; echo "================================================================================================================"
     do_action "$BOT: Install visual-studio-code (optional)?" "brew install visual-studio-code" "y"
-
-
-    ### alt-tab ###
-    # Enables tabbing similar to Windows.
-    # https://alt-tab-macos.netlify.app/
-    echo ; echo ; echo ; echo "================================================================================================================"
-    echo ; echo ; echo "AltTab is an application that provides a tabbing experience similar to Windows."
-    do_action "$BOT: Install alt-tab (optional)?" "brew install --cask alt-tab" "y"
 fi
 
 
