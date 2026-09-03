@@ -1,5 +1,7 @@
 @use '../../styles/colors' as c;
 
+@use 'src/mixins' as *;
+
 .checkbox {
   position: relative;
   display: inline-flex;
@@ -23,6 +25,9 @@
   margin-right: 10px;
   margin-left: 10px;
   flex-shrink: 0;
+  @include theme-dark {
+    border-color: c.$gray-700;
+  }
 }
 
 .checkbox__input:checked + .checkbox__box {

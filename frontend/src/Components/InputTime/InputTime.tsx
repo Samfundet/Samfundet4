@@ -11,7 +11,7 @@ type InputTimeProps = {
   error?: string;
 };
 
-export function InputTime({ onChange, onBlur, value, error }: InputTimeProps) {
+export function InputTime({ className, disabled, onChange, onBlur, value, error }: InputTimeProps) {
   const [hour, setHour] = useState('');
   const [minute, setMinute] = useState('');
 
@@ -56,13 +56,14 @@ export function InputTime({ onChange, onBlur, value, error }: InputTimeProps) {
   }
 
   return (
-    <div className={styles.inputTime_wrap}>
+    <div className={classNames(styles.inputTime_wrap, className)}>
       <div className={classNames(styles.inputTime, error && styles.error)}>
         <input
           type="text"
           className={classNames(styles.number, error && styles.error)}
           name="hour"
           value={hour}
+          disabled={disabled}
           onChange={handleChange}
           onBlur={handleBlur}
         />
@@ -72,6 +73,7 @@ export function InputTime({ onChange, onBlur, value, error }: InputTimeProps) {
           className={classNames(styles.number, error && styles.error)}
           name="minute"
           value={minute}
+          disabled={disabled}
           onChange={handleChange}
           onBlur={handleBlur}
         />
