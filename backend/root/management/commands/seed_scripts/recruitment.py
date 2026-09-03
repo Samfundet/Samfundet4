@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from django.utils import timezone
 
-from samfundet.models.general import Organization
 from samfundet.models.recruitment import Recruitment
+from samfundet.organization.models import Organization
 
 recruitments = [
     {

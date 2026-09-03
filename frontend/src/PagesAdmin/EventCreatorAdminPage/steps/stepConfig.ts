@@ -1,6 +1,6 @@
 import type { FormType } from '../hooks/useEventCreatorForm';
 
-export type StepKey = 'text' | 'info' | 'payment' | 'graphics' | 'summary';
+export type StepKey = 'text' | 'info' | 'payment' | 'socialmedia' | 'graphics' | 'summary';
 
 export type EventCreatorStep = {
   key: StepKey;
@@ -30,16 +30,7 @@ export const steps: EventCreatorStep[] = [
     title_nb: 'Dato og informasjon',
     title_en: 'Date & info',
     validate: (d) => {
-      return !!(
-        d.start_dt &&
-        d.duration !== undefined &&
-        d.duration > 0 &&
-        d.category &&
-        d.host &&
-        d.location &&
-        d.capacity !== undefined &&
-        d.capacity > 0
-      );
+      return !!(d.start_dt && d.duration !== undefined && d.duration > 0 && d.category && d.host && d.location);
     },
   },
   {
@@ -47,6 +38,13 @@ export const steps: EventCreatorStep[] = [
     title_nb: 'Betaling/påmelding',
     title_en: 'Payment/registration',
     validate: (d) => !!d.age_restriction && !!d.ticket_type,
+  },
+  // Social media links
+  {
+    key: 'socialmedia',
+    title_nb: 'Sosiale medier',
+    title_en: 'Social media',
+    validate: () => true,
   },
   {
     key: 'graphics',
@@ -59,6 +57,6 @@ export const steps: EventCreatorStep[] = [
     title_nb: 'Oppsummering',
     title_en: 'Summary',
     customIcon: 'ic:outline-remove-red-eye',
-    validate: (d) => !!d.visibility_from_dt,
+    validate: (d) => !!d.visibility_from_dt && !!d.status,
   },
 ];

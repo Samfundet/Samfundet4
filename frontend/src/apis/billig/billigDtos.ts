@@ -5,9 +5,6 @@ export type BilligPriceGroupDto = {
   membership_needed: boolean;
   netsale: boolean;
   price: number;
-
-  // Ticket fee (included in price)
-  ticket_fee?: number;
 };
 
 export type BilligTicketGroupDto = {
@@ -24,10 +21,11 @@ export type BilligEventDto = {
   id: number;
   name: string;
   payment_url: string;
+  ticket_fee: number | null;
   ticket_groups: BilligTicketGroupDto[];
   sale_from: string;
   sale_to: string;
-  in_sale_period: string;
+  in_sale_period: boolean;
   is_almost_sold_out: boolean;
   is_sold_out: boolean;
 };

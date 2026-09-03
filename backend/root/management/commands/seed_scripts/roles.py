@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from root.utils import permissions as perm
 
 from samfundet.models.role import Role
-from samfundet.models.general import Gang, GangSection, Organization
+from samfundet.organization.models import Gang, GangSection, Organization
 
 # role name constants
 GANG_LEADER = 'gang_leader'

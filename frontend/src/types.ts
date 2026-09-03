@@ -1,6 +1,7 @@
 import type { Dispatch, ReactNode, SetStateAction } from 'react';
 import type { UIMatch } from 'react-router';
 import type { buttonThemes } from '~/Components/Button/utils';
+import type { LinkTarget } from '~/Components/Link';
 import type { KV } from '~/constants';
 /** Module for global generic types. */
 
@@ -109,7 +110,15 @@ export const ALL_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'f
 export const WEEK_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
 
 /** Event types */
-export type EventStatus = 'active' | 'cancelled' | 'archived' | 'deleted';
+export const EventStatusChoice = {
+  PUBLIC: 'public',
+  PRIVATE: 'private',
+  ARCHIVED: 'archived',
+  CANCELLED: 'cancelled',
+  DELETED: 'deleted',
+} as const;
+
+export type EventStatus = (typeof EventStatusChoice)[keyof typeof EventStatusChoice];
 
 export const EventAgeRestriction = {
   NONE: 'none',
@@ -198,6 +207,7 @@ export type AdminApplet = {
   perm?: string;
   icon: string;
   url?: string;
+  target?: LinkTarget;
   feature?: SiteFeature; // hidden in control panel if not enabled
 };
 

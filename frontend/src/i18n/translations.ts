@@ -73,6 +73,7 @@ export const nb = prepareTranslations({
   [KEY.common_gang]: 'Gjeng',
   [KEY.common_gangs]: 'Gjenger',
   [KEY.common_section]: 'Seksjon',
+  [KEY.common_sections]: 'Seksjoner',
   [KEY.common_table]: 'Bord',
   [KEY.common_gang_type]: 'Gjengtype',
   [KEY.common_edit]: 'Rediger',
@@ -82,6 +83,7 @@ export const nb = prepareTranslations({
   [KEY.common_tags]: 'Merkelapper',
   [KEY.common_contributors]: 'Bidragsytere',
   [KEY.common_image]: 'Bilde',
+  [KEY.common_logo]: 'Logo',
   [KEY.common_file]: 'Fil',
   [KEY.common_venue]: 'Lokale',
   [KEY.common_title]: 'Tittel',
@@ -99,6 +101,7 @@ export const nb = prepareTranslations({
   [KEY.common_delete]: 'Slett',
   [KEY.common_logout]: 'Logg ut',
   [KEY.common_cancel]: 'Avbryt',
+  [KEY.common_close]: 'Lukk',
   [KEY.common_go_back]: 'Tilbake',
   [KEY.common_interval]: 'Intervall',
   [KEY.common_preview]: 'Forhåndsvisning',
@@ -192,6 +195,7 @@ export const nb = prepareTranslations({
   [KEY.common_available]: 'Tilgjengelig',
   [KEY.common_comment]: 'Kommentar',
   [KEY.common_capacity]: 'Kapasitet',
+  [KEY.common_link]: 'Lenke',
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
@@ -201,6 +205,9 @@ export const nb = prepareTranslations({
   [KEY.common_last_edited_by]: 'Sist endret av',
   [KEY.common_publication_date]: 'Publiseringsdato',
   [KEY.common_casedocuments]: 'Saksdokumenter',
+  [KEY.common_positions]: 'Stillinger',
+
+  [KEY.organization]: 'Organisasjon',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -291,8 +298,16 @@ export const nb = prepareTranslations({
 
   // EventPage:
   [KEY.event_registration_url]: 'Registreringslenke',
+  [KEY.event_general_link]: 'Generell lenke',
+  [KEY.event_spotify_uri_help]:
+    'Legg til Spotify URI-en til en spilleliste, og en widget med denne listen vil dukke opp på arrangementsiden.',
+  [KEY.event_youtube_link_help]: 'Legg til YouTube-video som skal linkes til',
+  [KEY.event_youtube_embed_help]: 'Legg til YouTube-video som skal embeddes, så vil den vises på arrangementsiden.',
   [KEY.event_add_ticket]: 'Legg til billett',
   [KEY.event_invalid_form_error]: 'Skjemaet inneholder valideringsfeil. Vennligst sjekk de uthevede feltene.',
+  [KEY.event_must_be_valid_url]: 'Må være en gyldig URL',
+  [KEY.event_must_be_valid_spotify_uri]: 'Må være en gyldig Spotify URI',
+  [KEY.event_publication_date_required]: 'Publiseringsdato er påkrevd',
 
   // Event categories
   [KEY.event_category_art]: 'Kunst',
@@ -318,6 +333,23 @@ export const nb = prepareTranslations({
   [KEY.event_category_theme_party]: 'Temafest',
   [KEY.event_category_uka_event]: 'UKE-arrangement',
   [KEY.event_call_to_action_register]: 'Meld på',
+
+  // Event statuses
+  [KEY.event_status]: 'Status',
+  [KEY.event_status_public]: 'Offentlig',
+  [KEY.event_status_private]: 'Privat',
+  [KEY.event_status_archived]: 'Arkivert',
+  [KEY.event_status_cancelled]: 'Avlyst',
+  [KEY.event_status_deleted]: 'Slettet',
+  [KEY.event_status_help_title]: 'Hva betyr statusene?',
+  [KEY.event_status_help_intro]: 'Status styrer hvordan arrangementet vises og håndteres.',
+  [KEY.event_status_help_button_aria_label]: 'Vis forklaring av arrangementsstatus',
+  [KEY.event_status_help_public]: 'Arrangementet er synlig for alle.',
+  [KEY.event_status_help_private]:
+    'Arrangementet er skjult i alle oversikter, men kan kun nås via direkte lenke. Dette er nyttig for interne arrangementer.',
+  [KEY.event_status_help_archived]: 'Arrangementet er avsluttet og flyttet til historikk.',
+  [KEY.event_status_help_cancelled]: 'Arrangementet er avlyst og vises således.',
+  [KEY.event_status_help_deleted]: 'Arrangementet er markert som slettet og vises ikke i det hele tatt.',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',
@@ -362,6 +394,8 @@ export const nb = prepareTranslations({
     'Kunne ikke koble til medlemsdatabasen. Vennligst sjekk at alle felter er skrevet riktig',
   [KEY.adminpage_connect_mdb_password_notice_1]: 'Passordet ditt til ',
   [KEY.adminpage_connect_mdb_password_notice_2]: 'medlemsdatabasen',
+
+  [KEY.admin_gang_has_no_sections]: 'Denne gjengen har ingen seksjoner.',
 
   // InformationPage
   [KEY.information_page]: 'Informasjonsside',
@@ -732,6 +766,7 @@ export const nb = prepareTranslations({
 
   // No category:
   [KEY.owner]: 'Eier',
+  [KEY.affiliation]: 'Tilhørighet',
   [KEY.end_time]: 'Sluttid',
   [KEY.category]: 'Kategori',
   [KEY.event_type]: 'Arrangementstype',
@@ -740,6 +775,7 @@ export const nb = prepareTranslations({
   [KEY.end_date]: 'Sluttdato',
   [KEY.last_updated]: 'Sist oppdatert',
   [KEY.form_confirm]: 'Er du sikker på at du vil',
+  [KEY.form_confirm_delete]: 'Er du sikker på at du vil slette',
   [KEY.we_use_cookies]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no. Les mer om cookies',
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
 
@@ -788,6 +824,7 @@ export const nb = prepareTranslations({
   [KEY.event_form_category_required]: 'Kategori er påkrevd',
   [KEY.event_form_age_restriction_required]: 'Aldersgrense er påkrevd',
   [KEY.event_form_ticket_type_required]: 'Billetttype er påkrevd',
+  [KEY.event_form_status_required]: 'Status er påkrevd',
 });
 
 export const en = prepareTranslations({
@@ -868,8 +905,10 @@ export const en = prepareTranslations({
   [KEY.common_gangs]: 'Gangs',
   [KEY.common_gang_type]: 'Gang type',
   [KEY.common_section]: 'Section',
+  [KEY.common_sections]: 'Sections',
   [KEY.common_max]: 'Max',
   [KEY.common_image]: 'Image',
+  [KEY.common_logo]: 'Logo',
   [KEY.common_file]: 'File',
   [KEY.common_venue]: 'Venue',
   [KEY.common_event]: 'Event',
@@ -880,6 +919,7 @@ export const en = prepareTranslations({
   [KEY.common_role]: 'Role',
   [KEY.common_active]: 'Active',
   [KEY.common_cancel]: 'Cancel',
+  [KEY.common_close]: 'Close',
   [KEY.common_venues]: 'Venues',
   [KEY.common_shortcuts]: 'Shortcuts',
   [KEY.common_events]: 'Events',
@@ -979,6 +1019,7 @@ export const en = prepareTranslations({
   [KEY.common_available]: 'Available',
   [KEY.common_comment]: 'Comment',
   [KEY.common_capacity]: 'Capacity',
+  [KEY.common_link]: 'Link',
   [KEY.common_membership_number]: 'Membership number',
   [KEY.common_to_payment]: 'To payment',
   [KEY.common_read_more]: 'Read more',
@@ -987,6 +1028,9 @@ export const en = prepareTranslations({
   [KEY.common_last_edited_by]: 'Last edited by',
   [KEY.common_publication_date]: 'Publication date',
   [KEY.common_casedocuments]: 'Case documents',
+  [KEY.common_positions]: 'Positions',
+
+  [KEY.organization]: 'Organization',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -1097,10 +1141,35 @@ export const en = prepareTranslations({
   [KEY.event_category_uka_event]: 'UKA event',
   [KEY.event_call_to_action_register]: 'Register here',
 
+  // Event statuses
+  [KEY.event_status]: 'Status',
+  [KEY.event_status_public]: 'Public',
+  [KEY.event_status_private]: 'Private',
+  [KEY.event_status_archived]: 'Archived',
+  [KEY.event_status_cancelled]: 'Cancelled',
+  [KEY.event_status_deleted]: 'Deleted',
+  [KEY.event_status_help_title]: 'What do the statuses mean?',
+  [KEY.event_status_help_intro]: 'Status controls how the event is shown and handled.',
+  [KEY.event_status_help_button_aria_label]: 'Show event status explanation',
+  [KEY.event_status_help_public]: 'The event is visible to everyone.',
+  [KEY.event_status_help_private]:
+    'The event is hidden in all overviews, but can only be reached through a direct link. This is useful for internal events.',
+  [KEY.event_status_help_archived]: 'The event is finished and moved to history.',
+  [KEY.event_status_help_cancelled]: 'The event is cancelled and shown as such.',
+  [KEY.event_status_help_deleted]: 'The event is marked as deleted and is not shown at all.',
+
   // EventPage:
   [KEY.event_registration_url]: 'Registration URL',
+  [KEY.event_general_link]: 'General link',
+  [KEY.event_spotify_uri_help]:
+    'Add the Spotify URI of a playlist, and a widget will appear on the event page with the chosen playlist.',
+  [KEY.event_youtube_link_help]: 'Add a link to a YouTube video',
+  [KEY.event_youtube_embed_help]: 'Add a link to a YouTube video to be embedded, and it will appear on the event page.',
   [KEY.event_add_ticket]: 'Add ticket',
   [KEY.event_invalid_form_error]: 'Form contains validation errors. Please check highlighted fields.',
+  [KEY.event_must_be_valid_url]: 'Must be a valid URL',
+  [KEY.event_must_be_valid_spotify_uri]: 'Must be a valid Spotify URI',
+  [KEY.event_publication_date_required]: 'Publication date is required',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',
@@ -1522,8 +1591,11 @@ export const en = prepareTranslations({
   [KEY.adminpage_connect_mdb_password_notice_1]: 'Your password to the',
   [KEY.adminpage_connect_mdb_password_notice_2]: 'membership database',
 
+  [KEY.admin_gang_has_no_sections]: 'This gang has no sections.',
+
   // No category:
   [KEY.owner]: 'Owner',
+  [KEY.affiliation]: 'Affiliation',
   [KEY.end_time]: 'End time',
   [KEY.category]: 'Category',
   [KEY.event_type]: 'Event type',
@@ -1533,6 +1605,7 @@ export const en = prepareTranslations({
   [KEY.last_updated]: 'Last updated',
 
   [KEY.form_confirm]: 'Are you sure you want do',
+  [KEY.form_confirm_delete]: 'Are you sure you want to delete',
   [KEY.we_use_cookies]: 'We use cookies to give you the best experience on Samfundet.no. Read more about cookies',
   [KEY.control_panel_faq]: 'Help/questions',
   [KEY.control_panel_title]: 'Control panel',
@@ -1569,4 +1642,5 @@ export const en = prepareTranslations({
   [KEY.event_form_category_required]: 'Category is required',
   [KEY.event_form_age_restriction_required]: 'Age restriction is required',
   [KEY.event_form_ticket_type_required]: 'Ticket type is required',
+  [KEY.event_form_status_required]: 'Status is required',
 });

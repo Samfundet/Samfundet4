@@ -1,28 +1,29 @@
 from __future__ import annotations
 
-import logging
 import uuid
+import logging
 from typing import Any
+from collections.abc import Mapping
 
 from django.db import connections, transaction
-from django.db.models import F, Max
 from django.utils import timezone
+from django.db.models import F, Max
 
 from samfundet.models.billig import (
     BilligEvent,
-    BilligPaymentError,
-    BilligPriceGroup,
-    BilligPurchase,
     BilligTicket,
+    BilligPurchase,
+    BilligPriceGroup,
     BilligTicketCard,
     BilligTicketGroup,
+    BilligPaymentError,
 )
 
 logger = logging.getLogger(__name__)
 
 class BilligService:
     @staticmethod
-    def get_contact_fields(data: dict[str, Any]) -> tuple[str, str]:
+    def get_contact_fields(data: Mapping[str, Any]) -> tuple[str, str]:
         membercard = str(data.get('membercard') or data.get('cardnumber') or '').strip()
         email = str(data.get('email', '')).strip()
         return membercard, email
@@ -42,16 +43,45 @@ class BilligService:
             return False, 'Event not found'
 
         now = timezone.make_naive(timezone.now())
-        if event.hidden:
-            return False, 'Event is hidden'
-        if now < event.sale_from:
-            return False, 'Ticket sale has not started yet'
-        if now > event.sale_to:
-            return False, 'Ticket sale has ended'
-        if event.is_sold_out:
-            return False, 'Event is sold out'
+        reason = next(
+            (
+                reason
+                for condition, reason in (
+                    (event.hidden, 'Event is hidden'),
+                    (now < event.sale_from, 'Ticket sale has not started yet'),
+                    (now > event.sale_to, 'Ticket sale has ended'),
+                    (event.is_sold_out, 'Event is sold out'),
+                )
+                if condition
+            ),
+            None,
+        )
+        return reason is None, reason
 
-        return True, None
+    @staticmethod
+    def get_ticket_group_data(ticket_group: BilligTicketGroup) -> dict[str, Any] | None:
+        price_groups = [
+            {
+                'id': price_group.id,
+                'name': price_group.name,
+                'price': price_group.price,
+                'membership_needed': price_group.membership_needed,
+                'can_be_put_on_card': price_group.can_be_put_on_card,
+            }
+            for price_group in ticket_group.price_groups.all()
+            if price_group.netsale
+        ]
+        if not price_groups:
+            return None
+
+        return {
+            'id': ticket_group.id,
+            'name': ticket_group.name,
+            'is_sold_out': ticket_group.is_sold_out,
+            'is_almost_sold_out': ticket_group.is_almost_sold_out,
+            'ticket_limit': ticket_group.ticket_limit,
+            'price_groups': price_groups,
+        }
 
     @staticmethod
     def get_ticket_groups_for_event(event_id: int) -> list[dict[str, Any]]:
@@ -59,34 +89,11 @@ class BilligService:
         if not event:
             return []
 
-        result = []
-        for ticket_group in event.ticket_groups.all():
-            ticket_group_data = {
-                'id': ticket_group.id,
-                'name': ticket_group.name,
-                'is_sold_out': ticket_group.is_sold_out,
-                'is_almost_sold_out': ticket_group.is_almost_sold_out,
-                'ticket_limit': ticket_group.ticket_limit,
-                'price_groups': [],
-            }
-
-            for price_group in ticket_group.price_groups.all():
-                if not price_group.netsale:
-                    continue
-
-                price_group_data = {
-                    'id': price_group.id,
-                    'name': price_group.name,
-                    'price': price_group.price,
-                    'membership_needed': price_group.membership_needed,
-                    'can_be_put_on_card': price_group.can_be_put_on_card,
-                }
-                ticket_group_data['price_groups'].append(price_group_data)
-
-            if ticket_group_data['price_groups']:
-                result.append(ticket_group_data)
-
-        return result
+        return [
+            ticket_group_data
+            for ticket_group in event.ticket_groups.all()
+            if (ticket_group_data := BilligService.get_ticket_group_data(ticket_group)) is not None
+        ]
 
     @staticmethod
     def create_fake_purchase(
@@ -179,14 +186,14 @@ class BilligService:
         event_ids: set[int] = set()
         with connections['billig'].cursor() as cursor:
             cursor.execute(
-                '''
+                """
                 SELECT pepg.price_group, pepg.number_of_tickets, tg.event
                 FROM "billig.payment_error_price_group" pepg
                 JOIN "billig.price_group" pg ON pg.price_group = pepg.price_group
                 JOIN "billig.ticket_group" tg ON tg.ticket_group = pg.ticket_group
                 WHERE pepg.error = %s
                 ORDER BY pepg.price_group
-                ''',
+                """,
                 [error_id],
             )
             for price_group_id, number_of_tickets, event_id in cursor.fetchall():

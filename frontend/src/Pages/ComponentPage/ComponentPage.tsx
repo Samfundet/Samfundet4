@@ -34,7 +34,7 @@ import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
 import type { EventDto } from '~/dto';
-import { EventCategory, EventTicketType } from '~/types';
+import { EventCategory, EventStatusChoice, EventTicketType } from '~/types';
 import styles from './ComponentPage.module.scss';
 
 /**
@@ -65,7 +65,7 @@ export function ComponentPage() {
       visibility_from_dt: new Date().toISOString(),
       visibility_to_dt: '',
       start_dt: new Date().toISOString(),
-      status: 'active',
+      status: EventStatusChoice.PUBLIC,
       ticket_type: EventTicketType.FREE,
       title_en: 'Von August with a very long title just like this // 23:59',
       title_nb: 'Von August // 23:59',
@@ -73,12 +73,13 @@ export function ComponentPage() {
         ? {
             is_almost_sold_out: false,
             id: 0,
-            in_sale_period: '',
+            in_sale_period: false,
             is_sold_out: false,
             name: '',
-            payment_url: 'http://localhost:8000/api/billig/dev/pay/',
+            payment_url: 'https://billettsalg.samfundet.no/pay',
             sale_from: '',
             sale_to: '',
+            ticket_fee: 20,
             ticket_groups: [
               {
                 id: 0,
@@ -94,7 +95,6 @@ export function ComponentPage() {
                     name: 'Medlem',
                     netsale: false,
                     price: 50,
-                    ticket_fee: 20,
                   },
                   {
                     can_be_put_on_card: false,
@@ -103,7 +103,6 @@ export function ComponentPage() {
                     name: 'Ikke-medlem',
                     netsale: false,
                     price: 150,
-                    ticket_fee: 30,
                   },
                 ],
                 ticket_limit: 0,
@@ -112,6 +111,16 @@ export function ComponentPage() {
             ...billig,
           }
         : undefined,
+      spotify_uri: '',
+      youtube_link: '',
+      youtube_embed: '',
+      facebook_link: '',
+      soundcloud_link: '',
+      instagram_link: '',
+      x_link: '',
+      lastfm_link: '',
+      vimeo_link: '',
+      general_link: '',
       ...override,
     };
   }

@@ -17,7 +17,8 @@ from django.db.models import Prefetch, QuerySet
 from root.utils.mixins import CustomBaseModel
 
 from samfundet.models.billig import BilligEvent, BilligTicketGroup
-from samfundet.models.general import Gang, User, Image, Organization
+from samfundet.models.general import User, Image
+from samfundet.organization.models import Gang, Organization
 from samfundet.models.model_choices import EventStatus, EventCategory, EventTicketType, EventAgeRestriction
 
 # ======================== #
@@ -169,9 +170,17 @@ class Event(CustomBaseModel):
     email_contact = models.EmailField(max_length=200, blank=True, null=True)
 
     host_link = models.URLField(max_length=200, blank=True, null=True)
-    instagram_link = models.URLField(max_length=200, blank=True, null=True)
+
+    spotify_uri = models.CharField(max_length=200, blank=True, null=True)
+    youtube_link = models.URLField(max_length=200, blank=True, null=True)
+    youtube_embed = models.URLField(max_length=200, blank=True, null=True)
     facebook_link = models.URLField(max_length=200, blank=True, null=True)
+    soundcloud_link = models.URLField(max_length=200, blank=True, null=True)
+    instagram_link = models.URLField(max_length=200, blank=True, null=True)
     x_link = models.URLField(max_length=200, blank=True, null=True)
+    lastfm_link = models.URLField(max_length=200, blank=True, null=True)
+    vimeo_link = models.URLField(max_length=200, blank=True, null=True)
+    general_link = models.URLField(max_length=200, blank=True, null=True)
 
     # ======================== #
     #       Venue/Entrance     #

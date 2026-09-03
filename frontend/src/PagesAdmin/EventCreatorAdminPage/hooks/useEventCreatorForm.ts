@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
 import type { EventDto, EventWriteDto } from '~/dto';
-import type { EventCategoryValue } from '~/types';
+import { type EventCategoryValue, EventStatusChoice } from '~/types';
 import { utcTimestampToLocal } from '~/utils';
 import { eventSchema } from '../EventCreatorSchema';
 
@@ -45,7 +45,18 @@ export function useEventCreatorForm(params: {
       ticket_type: 'free',
       custom_tickets: [],
       billig_id: undefined,
+      spotify_uri: '',
+      youtube_link: '',
+      youtube_embed: '',
+      soundcloud_link: '',
+      instagram_link: '',
+      facebook_link: '',
+      x_link: '',
+      lastfm_link: '',
+      vimeo_link: '',
+      general_link: '',
       image: undefined,
+      status: EventStatusChoice.PUBLIC,
       visibility_from_dt: '',
       visibility_to_dt: '',
     },
@@ -74,7 +85,18 @@ export function useEventCreatorForm(params: {
       ticket_type: event.ticket_type || 'free',
       custom_tickets: event.custom_tickets || [],
       billig_id: event.billig?.id,
+      spotify_uri: event.spotify_uri || '',
+      youtube_link: event.youtube_link || '',
+      youtube_embed: event.youtube_embed || '',
+      facebook_link: event.facebook_link || '',
+      soundcloud_link: event.soundcloud_link || '',
+      instagram_link: event.instagram_link || '',
+      x_link: event.x_link || '',
+      lastfm_link: event.lastfm_link || '',
+      vimeo_link: event.vimeo_link || '',
+      general_link: event.general_link || '',
       image: event.image ?? undefined,
+      status: event.status || EventStatusChoice.PUBLIC,
       visibility_from_dt: event.visibility_from_dt ? utcTimestampToLocal(event.visibility_from_dt, false) : '',
       visibility_to_dt: event.visibility_to_dt ? utcTimestampToLocal(event.visibility_to_dt, false) : '',
     };

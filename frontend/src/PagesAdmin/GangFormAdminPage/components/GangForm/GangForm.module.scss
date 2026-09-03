@@ -1,14 +1,17 @@
 @use 'src/mixins' as *;
 
-@use 'src/constants' as *;
+@use '../../../../mixins' as m;
 
 .row {
   display: flex;
   flex-direction: column;
-  margin-top: 0.5rem;
   gap: 0.5rem 1.5rem;
 
-  @include for-tablet-up {
+  &:not(:first-child) {
+    margin-top: 0.5rem;
+  }
+
+  @include m.for-tablet-up {
     flex-direction: row;
   }
 }
@@ -19,6 +22,11 @@
 
 .action_row {
   display: flex;
+  margin: 1rem 0 0.5rem;
   justify-content: flex-end;
-  margin: 1rem 0;
+  gap: 0.5rem;
+}
+
+.delete_btn:only-child {
+  margin-right: auto;
 }
