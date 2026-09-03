@@ -51,7 +51,7 @@ do_action "\"I understand\"" "echo '$BOT: Here we go!'; sleep 1;" "y" || eval "e
 # Attempt to install requirements first.
 echo ; echo ; echo ; echo "================================================================================================================"
 if [ $IS_UBUNTU == 0 ]; then
-    do_action "$BOT: Attempt to install requirements (build-essential, procps, curl, file, git, ssh)" "sudo apt update -y ; sudo apt upgrade -y ; sudo apt install -y build-essential procps curl file git ssh" "$X_INTERACTIVE"
+    do_action "$BOT: Attempt to install requirements (build-essential, procps, curl, file, git, ssh)" "sudo apt update ; sudo apt install -y build-essential procps curl file git ssh" "$X_INTERACTIVE"
 elif [ $IS_MAC == 0 ]; then
     do_action "$BOT: Attempt to install requirements (curl, git)" "brew install git curl" "$X_INTERACTIVE"
     do_action "$BOT: Install xcode-select" "xcode-select --install" "$X_INTERACTIVE"
@@ -88,16 +88,6 @@ if [ $IS_MAC == 0 ]; then
         fi
     fi
 
-    # Update and upgrade brew if it exists.
-    echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Update and upgrade Homebrew (required)?" "" "$X_INTERACTIVE"
-    if [ "$?" == 0 ] && [ "$(which brew)" ]; then
-        # Update brew.
-        echo "Updating and upgrading brew:"
-        brew update && brew upgrade && brew upgrade --cask
-        echo ; echo "Installing gcc"
-        brew install gcc # Recommended by brew.
-    fi
 fi
 
 
