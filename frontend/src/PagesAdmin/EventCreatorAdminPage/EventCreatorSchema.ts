@@ -28,7 +28,7 @@ import {
   EVENT_X_LINK,
   EVENT_YOUTUBE_EMBED,
   EVENT_YOUTUBE_LINK,
-} from '~/schema/event';
+} from '~/domain';
 
 const event_custom_ticket = z.object({
   id: z.number(),
