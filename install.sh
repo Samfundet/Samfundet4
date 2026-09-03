@@ -80,13 +80,13 @@ echo ; echo ; echo ; echo "=====================================================
 if [ $IS_LINUX == 0 ]; then
     case "$LINUX_DISTRO" in
         ubuntu)
-            do_action "$BOT: Attempt to install requirements (build-essential, procps, curl, file, git, ssh)" "sudo apt update ; sudo apt install -y build-essential procps curl file git ssh" "$X_INTERACTIVE"
+            do_action "$BOT: Attempt to install requirements (curl, git, ssh)" "sudo apt update ; sudo apt install -y curl git ssh" "$X_INTERACTIVE"
             ;;
         fedora)
-            do_action "$BOT: Attempt to install requirements (development tools, procps, curl, file, git, ssh)" "sudo dnf install -y @development-tools procps-ng curl file git openssh-clients" "$X_INTERACTIVE"
+            do_action "$BOT: Attempt to install requirements (curl, git, ssh)" "sudo dnf install -y curl git openssh-clients" "$X_INTERACTIVE"
             ;;
         arch)
-            do_action "$BOT: Attempt to install requirements (base-devel, procps, curl, file, git, ssh)" "sudo pacman -S --needed base-devel procps-ng curl file git openssh" "$X_INTERACTIVE"
+            do_action "$BOT: Attempt to install requirements (curl, git, ssh)" "sudo pacman -S --needed curl git openssh" "$X_INTERACTIVE"
             ;;
     esac
 elif [ $IS_MAC == 0 ]; then
@@ -98,8 +98,6 @@ fi
 require "git"
 require "curl"
 require "ssh"
-require "file"
-require "ps" # procps
 ### End: requirements ###
 
 
