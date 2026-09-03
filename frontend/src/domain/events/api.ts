@@ -6,7 +6,7 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import type { EventsPaginationType } from '~/types';
 import { buildPaginatedUrl } from '~/utils';
-import type { Filters } from './schema';
+import type { Filters } from './queries';
 
 export async function getEventsPerDay(): Promise<Record<string, EventDto[]>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsperday;
@@ -16,19 +16,19 @@ export async function getEventsPerDay(): Promise<Record<string, EventDto[]>> {
 }
 
 export type EventsUpcomingBackendResponse = {
-  events: EventDto[]; // Array of events
-  categories: [string, string][]; // Categories as value-label pairs
-  locations: string[]; // Locations as value-label pairs
+  events: EventDto[];
+  categories: [string, string][];
+  locations: string[];
 };
 
 export type EventsUpcomingResponse = {
-  events: EventDto[]; // Array of events
-  categories: string[]; // Categories as value-label pairs
-  locations: string[]; // Locations as value-label pairs
+  events: EventDto[];
+  categories: string[];
+  locations: string[];
 };
 
-export async function getEventsUpcomming(params: Filters): Promise<EventsUpcomingResponse> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcomming;
+export async function getEventsUpcoming(params: Filters): Promise<EventsUpcomingResponse> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcoming;
 
   const response = await axios.get<EventsUpcomingBackendResponse>(url, {
     withCredentials: true,
@@ -50,12 +50,12 @@ export async function getEventsUpcomming(params: Filters): Promise<EventsUpcomin
   };
 }
 
-export async function getEventsUpcommingPaginated(
+export async function getEventsUpcomingPaginated(
   page: number,
   pageSize?: number,
   params?: Filters,
 ): Promise<EventsPaginationType<EventDto>> {
-  const url = buildPaginatedUrl(BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcomming, page, pageSize, {
+  const url = buildPaginatedUrl(BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcoming, page, pageSize, {
     ...(params?.search ? { search: params.search } : {}),
     ...(params?.venue ? { venue: params.venue } : {}),
     ...(params?.category ? { category: params.category } : {}),
@@ -106,7 +106,7 @@ export async function getEventGroups(): Promise<EventGroupDto[]> {
 }
 
 export async function getBilligEvents(): Promise<BilligEventDto[]> {
-  const url = `${BACKEND_DOMAIN}/${ROUTES.backend.samfundet__billig_event_list}`;
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__billig_event_list;
   const response = await axios.get<BilligEventDto[]>(url, { withCredentials: true });
   return response.data;
 }

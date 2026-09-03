@@ -4,14 +4,6 @@ import { optionalNumber } from '~/schema/utils';
 import { EventAgeRestriction, EventCategory, EventStatusChoice, EventTicketType } from '~/types';
 import { zodEnum } from '../utils';
 
-export interface Filters {
-  search?: string;
-  event_group?: string;
-  ticket_type?: string;
-  venue?: string;
-  category?: string;
-}
-
 const validUrl = z
   .string()
   .trim()

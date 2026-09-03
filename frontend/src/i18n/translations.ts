@@ -1321,7 +1321,7 @@ export const en = prepareTranslations({
   [KEY.error_recruitment_form_3]: 'Reprioritization deadline cannot be before the actual deadline',
   [KEY.error_recruitment_form_4]: 'Group reprioritization deadline cannot be before the reprioritization deadline',
   [KEY.recruitment_dashboard_description]:
-    'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcomming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
+    'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcoming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
   [KEY.recruitment_create_room]: 'Create room',
   [KEY.recruitment_separate_recruitment]: 'Seperate recruitment',
 

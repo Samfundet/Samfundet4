@@ -71,7 +71,7 @@ export function EventCreatorAdminPage() {
     label: t(getAgeRestrictionKey(age)),
   }));
 
-  const { data: event, isLoading } = useGetEvent(id);
+  const { data: event, isLoading } = useGetEvent(id ?? '');
   const availableEventStatuses: EventStatus[] = id
     ? Object.values(EventStatusChoice)
     : [EventStatusChoice.PUBLIC, EventStatusChoice.PRIVATE];

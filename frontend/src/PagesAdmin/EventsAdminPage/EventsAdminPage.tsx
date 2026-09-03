@@ -7,7 +7,7 @@ import { Button, EventQuery, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { PagedPagination } from '~/Components/Pagination';
 import { Table } from '~/Components/Table';
-import { useDeleteEvent, useGetEventsUpcommingPaginated } from '~/domain';
+import { useDeleteEvent, useGetEventsUpcomingPaginated } from '~/domain';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -59,7 +59,7 @@ export function EventsAdminPage() {
     ticket_type: selectedTicketType || undefined,
   };
 
-  const { data, isLoading } = useGetEventsUpcommingPaginated(currentPage, PAGE_SIZE, filters, {
+  const { data, isLoading } = useGetEventsUpcomingPaginated(currentPage, PAGE_SIZE, filters, {
     placeholderData: keepPreviousData,
   });
   const events = data?.results ?? [];

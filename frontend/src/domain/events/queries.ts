@@ -9,11 +9,18 @@ import {
   getEventGroups,
   getEvents,
   getEventsPerDay,
-  getEventsUpcomming,
-  getEventsUpcommingPaginated,
+  getEventsUpcoming,
+  getEventsUpcomingPaginated,
 } from './api';
 import { eventKeys } from './queryKeys';
-import type { Filters } from './schema';
+
+export interface Filters {
+  search?: string;
+  event_group?: string;
+  ticket_type?: string;
+  venue?: string;
+  category?: string;
+}
 
 export function useGetEventsPerDay(props?: Partial<UseQueryOptions<Record<string, EventDto[]>>>) {
   return useQuery({
@@ -31,15 +38,15 @@ export function useGetEvents(props?: Partial<UseQueryOptions<EventDto[]>>) {
   });
 }
 
-export function useGetEventsUpcomming(filters: Filters, props?: Partial<UseQueryOptions<EventsUpcomingResponse>>) {
+export function useGetEventsUpcoming(filters: Filters, props?: Partial<UseQueryOptions<EventsUpcomingResponse>>) {
   return useQuery({
     queryKey: eventKeys.list(filters),
-    queryFn: () => getEventsUpcomming(filters),
+    queryFn: () => getEventsUpcoming(filters),
     ...props,
   });
 }
 
-export function useGetEventsUpcommingPaginated(
+export function useGetEventsUpcomingPaginated(
   page: number,
   pageSize?: number,
   filters: Filters = {},
@@ -47,15 +54,15 @@ export function useGetEventsUpcommingPaginated(
 ) {
   return useQuery({
     queryKey: eventKeys.paginatedList(page, pageSize, filters),
-    queryFn: () => getEventsUpcommingPaginated(page, pageSize, filters),
+    queryFn: () => getEventsUpcomingPaginated(page, pageSize, filters),
     ...props,
   });
 }
 
-export function useGetEvent(id?: string | number, props?: Partial<UseQueryOptions<EventDto>>) {
+export function useGetEvent(id: string, props?: Partial<UseQueryOptions<EventDto>>) {
   return useQuery({
-    queryKey: eventKeys.detail(id ?? 'no-id'),
-    queryFn: () => getEvent(id as string | number),
+    queryKey: eventKeys.detail(id),
+    queryFn: () => getEvent(id),
     enabled: !!id,
     ...props,
   });

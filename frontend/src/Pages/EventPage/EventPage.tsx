@@ -15,7 +15,7 @@ export function EventPage() {
   const { t } = useTranslation();
   const { id } = useParams();
 
-  const { data: event, isLoading } = useGetEvent(id);
+  const { data: event, isLoading } = useGetEvent(id ?? '');
 
   useTitle((event && dbT(event, 'title')) || t(KEY.common_event));
   return (
