@@ -37,35 +37,3 @@
   flex-wrap: wrap;
   gap: 0.5rem;
 }
-
-.referencesSection {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  background-color: #FFF4E5;
-  border: 2px solid #F4A261;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-}
-
-.referenceLabel {
-  font-weight: 700;
-  color: #C65D00;
-}
-
-.referenceList {
-  margin: 0;
-  padding-left: 1.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.referenceItem {
-  color: #C65D00;
-  text-decoration: underline;
-}
-
-.referenceItem a {
-  color: #C65D00;
-}
