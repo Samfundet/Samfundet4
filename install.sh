@@ -128,7 +128,7 @@ fi
 
 
 ### docker ###
-if [[ ! "$(docker compose)" ]]; then
+if ! docker compose version >/dev/null 2>&1; then
     echo ; echo ; echo ; echo "================================================================================================================"
     if [ $IS_LINUX == 0 ]; then
         do_action "$BOT: Install docker (required)?" "" "$X_INTERACTIVE"
