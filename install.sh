@@ -136,16 +136,38 @@ if ! docker compose version >/dev/null 2>&1; then
             case "$LINUX_DISTRO" in
                 ubuntu)
                     # https://docs.docker.com/engine/install/ubuntu/
-                    sudo apt-get remove docker docker-engine docker.io containerd runc
-                    sudo apt-get update
-                    sudo apt-get install -y ca-certificates curl gnupg lsb-release
-                    sudo mkdir -p /etc/apt/keyrings
-                    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-                    echo \
-                        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-                        $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-                    sudo apt-get update
-                    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+                    DOCKER_CONFLICTS=()
+                    for package in docker.io docker-compose docker-compose-v2 docker-doc docker-buildx podman-docker containerd runc; do
+                        if [ "$(dpkg-query -W -f='${Status}' "$package" 2>/dev/null)" = "install ok installed" ]; then
+                            DOCKER_CONFLICTS+=("$package")
+                        fi
+                    done
+
+                    if [ ${#DOCKER_CONFLICTS[@]} -gt 0 ]; then
+                        echo "$BOT: Docker cannot be installed while these conflicting packages are present:"
+                        printf '  %s\n' "${DOCKER_CONFLICTS[@]}"
+                        echo
+                        echo "$BOT: No packages were removed. Review the packages above, then remove them yourself and rerun this script."
+                        echo "$BOT: Docker's suggested command is:"
+                        echo "  sudo apt remove ${DOCKER_CONFLICTS[*]}"
+                        exit 1
+                    fi
+
+                    sudo apt update
+                    sudo apt install -y ca-certificates curl
+                    sudo install -m 0755 -d /etc/apt/keyrings
+                    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+                    sudo chmod a+r /etc/apt/keyrings/docker.asc
+                    sudo tee /etc/apt/sources.list.d/docker.sources > /dev/null <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: ${UBUNTU_CODENAME:-$VERSION_CODENAME}
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+                    sudo apt update
+                    sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
                     ;;
                 fedora)
                     # https://docs.docker.com/engine/install/fedora/
