@@ -151,7 +151,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.22.5, @babel/runtime@npm:^7.29.2":
+"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.22.5":
   version: 7.29.7
   resolution: "@babel/runtime@npm:7.29.7"
   checksum: 10c0/ca11572f7146b21e0bde6a9ed4bb6a89eafbee5f0944c7eb54d0d8a2dac962c33638a1d611e14faa71dfbb92b4b5f9236232208568a6b7d5c6f3f39ddb91771e
@@ -6308,7 +6308,7 @@ __metadata:
     cypress-fail-on-console-error: "npm:^5.0.1"
     cypress-vite: "npm:^1.4.2"
     date-fns: "npm:^2.30.0"
-    i18next: "npm:^25.8.5"
+    i18next: "npm:^26.4.0"
     knip: "npm:^6.17.1"
     path-to-regexp: "npm:^8.4.0"
     postcss: "npm:^8.5.23"
@@ -6723,17 +6723,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^25.8.5":
-  version: 25.10.10
-  resolution: "i18next@npm:25.10.10"
-  dependencies:
-    "@babel/runtime": "npm:^7.29.2"
+"i18next@npm:^26.4.0":
+  version: 26.4.0
+  resolution: "i18next@npm:26.4.0"
   peerDependencies:
-    typescript: ^5 || ^6
+    typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/6ff601b52363c9c974ef293af4a6de04d9f76b4bf2ad9a56c8546235aaf19ff1a7c2109ddba3a73922d418e208ec5b688e5afb323eba6e27c75d629e93827ae1
+  checksum: 10c0/3edc8b329e61f627278b83668fae9c68d9d5d187fac9d96403b3e69f7afa42cfb7bce8d5bec345dde082483cb57528a837bb2ea3f2a9d377ff23c2b86d6afdcd
   languageName: node
   linkType: hard
 
