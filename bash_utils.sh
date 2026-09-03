@@ -1,7 +1,7 @@
 
 ### functions ###
 function is_yes {
-    [ "$1" = "y" ] || [ "$1" = "Y" ]
+    [ -z "$1" ] || [ "$1" = "y" ] || [ "$1" = "Y" ]
     return $?
 }
 
@@ -11,7 +11,7 @@ function is_no {
 }
 
 function is_valid_answer {
-    is_yes $1 || is_no $1
+    [ -z "$1" ] || is_yes "$1" || is_no "$1"
     return $?
 }
 
@@ -22,18 +22,22 @@ function do_action {
     # Utilises global 'interactive' to prompt user. Defaults to "y" if missing.
     local interactive=$3
     local should_ask=${interactive:="y"}
-    local do_action_ans=0
+    local do_action_ans="?"
 
     # Ask to do action if interactive mode.
     if [ "$should_ask" = "y" ]; then
-        while ! is_valid_answer $do_action_ans ; do
-            read -p "$1 [y/n]: " do_action_ans
+        while ! is_valid_answer "$do_action_ans" ; do
+            read -p "$1 [Y/n]: " do_action_ans
         done
-        # Make lowercase.
-        do_action_ans=`echo $do_action_ans | tr "[:upper:]" "[:lower:]"`
-    else 
+        # Empty = Yes (traditional default). Normalize to lowercase.
+        if [ -z "$do_action_ans" ]; then
+            do_action_ans="y"
+        else
+            do_action_ans=`echo $do_action_ans | tr "[:upper:]" "[:lower:]"`
+        fi
+    else
         do_action_ans="y" # Manually set action to run.
-        echo "$1 [y/n]: $do_action_ans" # Show header of current step even if non-interactive.
+        echo "$1 [Y/n]: $do_action_ans" # Show header of current step even if non-interactive.
     fi
     # Run command if accepted.
     if [ "$do_action_ans" = "y" ]; then
@@ -73,7 +77,7 @@ function get_var_with_confirm {
     local confirm=n
     while ! is_yes $confirm ; do
         read -p "$2" user_input
-        read -p "Is this correct? ($1=$user_input) [y/n]: " confirm
+        read -p "Is this correct? ($1=$user_input) [Y/n]: " confirm
     done
     # echo "confirm $confirm"
     printf -v "$1" "%s" "$user_input"
@@ -87,7 +91,7 @@ function get_hidden_var_with_confirm {
     local confirm=n
     while ! is_yes $confirm ; do
         read -s -p "$2" user_input
-        read -p "Confirm that you want to proceed [y/n]: " confirm
+        read -p "Confirm that you want to proceed [Y/n]: " confirm
     done
     # echo "confirm $confirm"
     printf -v "$1" "%s" "$user_input"

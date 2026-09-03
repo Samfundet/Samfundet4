@@ -44,14 +44,51 @@ do_action "\"I understand\"" "echo '$BOT: Here we go!'; sleep 1;" "y" || eval "e
 
 ### Requirements ###
 
-# OS
-[[ "$OSTYPE" == "darwin"* ]] ; IS_MAC=$?
-[[ "$OSTYPE" == "linux-gnu"* ]] ; IS_UBUNTU=$?
+# OS and Linux distribution.
+IS_MAC=1
+IS_LINUX=1
+LINUX_DISTRO=""
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    IS_MAC=0
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    IS_LINUX=0
+
+    if [ ! -r /etc/os-release ]; then
+        echo "$BOT: Cannot determine the Linux distribution because /etc/os-release is unavailable."
+        exit 1
+    fi
+
+    . /etc/os-release
+    case "${ID:-}" in
+        ubuntu|fedora|arch)
+            LINUX_DISTRO="$ID"
+            ;;
+        *)
+            echo "$BOT: Unsupported Linux distribution: ${PRETTY_NAME:-${ID:-unknown}}"
+            echo "$BOT: Supported Linux distributions are Ubuntu, Fedora, and Arch Linux."
+            exit 1
+            ;;
+    esac
+else
+    echo "$BOT: Unsupported operating system: $OSTYPE"
+    exit 1
+fi
 
 # Attempt to install requirements first.
 echo ; echo ; echo ; echo "================================================================================================================"
-if [ $IS_UBUNTU == 0 ]; then
-    do_action "$BOT: Attempt to install requirements (build-essential, procps, curl, file, git, ssh)" "sudo apt update -y ; sudo apt upgrade -y ; sudo apt install -y build-essential procps curl file git ssh" "$X_INTERACTIVE"
+if [ $IS_LINUX == 0 ]; then
+    case "$LINUX_DISTRO" in
+        ubuntu)
+            do_action "$BOT: Attempt to install requirements (curl, git, ssh)" "sudo apt update ; sudo apt install -y curl git ssh" "$X_INTERACTIVE"
+            ;;
+        fedora)
+            do_action "$BOT: Attempt to install requirements (curl, git, ssh)" "sudo dnf install -y curl git openssh-clients" "$X_INTERACTIVE"
+            ;;
+        arch)
+            do_action "$BOT: Attempt to install requirements (curl, git, ssh)" "sudo pacman -S --needed curl git openssh" "$X_INTERACTIVE"
+            ;;
+    esac
 elif [ $IS_MAC == 0 ]; then
     do_action "$BOT: Attempt to install requirements (curl, git)" "brew install git curl" "$X_INTERACTIVE"
     do_action "$BOT: Install xcode-select" "xcode-select --install" "$X_INTERACTIVE"
@@ -61,56 +98,87 @@ fi
 require "git"
 require "curl"
 require "ssh"
-require "file"
-require "ps" # procps
 ### End: requirements ###
 
 
 ### brew ###
-# Install brew if it doesn't exist.
-if [ ! "$(which brew)" ]; then
-    echo ; echo ; echo ; echo "================================================================================================================"
-    echo "Homebrew is a packet manager such as 'apt' for Linux."
-    do_action "$BOT: Install Homebrew (required)?" "" "$X_INTERACTIVE"
-    if [ "$?" == 0 ]; then
-        # Non-X_INTERACTIVE install.
-        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        # Update PATH and current shell.
-        # Must be wrapped by single quotes.
-        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> "$HOME"/.bash_profile
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# Homebrew is only required on macOS. Linux uses its distribution's package manager.
+if [ $IS_MAC == 0 ]; then
+    # Install brew if it doesn't exist.
+    if [ ! "$(which brew)" ]; then
+        echo ; echo ; echo ; echo "================================================================================================================"
+        echo "Homebrew is a package manager for macOS."
+        do_action "$BOT: Install Homebrew (required)?" "" "$X_INTERACTIVE"
+        if [ "$?" == 0 ]; then
+            # Non-X_INTERACTIVE install.
+            NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            # Update PATH and current shell (Apple Silicon vs Intel).
+            if [ -x /opt/homebrew/bin/brew ]; then
+                echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME"/.bash_profile
+                eval "$(/opt/homebrew/bin/brew shellenv)"
+            elif [ -x /usr/local/bin/brew ]; then
+                echo 'eval "$(/usr/local/bin/brew shellenv)"' >> "$HOME"/.bash_profile
+                eval "$(/usr/local/bin/brew shellenv)"
+            fi
+        fi
     fi
-fi
-
-# Update and upgrade brew if it exists.
-echo ; echo ; echo ; echo "================================================================================================================"
-do_action "$BOT: Update and upgrade Homebrew (required)?" "" "$X_INTERACTIVE"
-if [ "$?" == 0 ] && [ "$(which brew)" ]; then
-    # Update brew.
-    echo "Updating and upgrading brew:"
-    brew update && brew upgrade && brew upgrade --cask
-    echo ; echo "Installing gcc"
-    brew install gcc # Recommended by brew.
 fi
 
 
 ### docker ###
-if [[ ! "$(docker compose)" ]]; then
+if ! docker compose version >/dev/null 2>&1; then
     echo ; echo ; echo ; echo "================================================================================================================"
-    if [ $IS_UBUNTU == 0 ]; then
+    if [ $IS_LINUX == 0 ]; then
         do_action "$BOT: Install docker (required)?" "" "$X_INTERACTIVE"
         if [ "$?" == 0 ]; then
-            # https://docs.docker.com/engine/install/ubuntu/
-            sudo apt-get remove docker docker-engine docker.io containerd runc
-            sudo apt-get update
-            sudo apt-get install -y ca-certificates curl gnupg lsb-release
-            sudo mkdir -p /etc/apt/keyrings
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-            echo \
-                "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-                $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-            sudo apt-get update
-            sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+            case "$LINUX_DISTRO" in
+                ubuntu)
+                    # https://docs.docker.com/engine/install/ubuntu/
+                    DOCKER_CONFLICTS=()
+                    for package in docker.io docker-compose docker-compose-v2 docker-doc docker-buildx podman-docker containerd runc; do
+                        if [ "$(dpkg-query -W -f='${Status}' "$package" 2>/dev/null)" = "install ok installed" ]; then
+                            DOCKER_CONFLICTS+=("$package")
+                        fi
+                    done
+
+                    if [ ${#DOCKER_CONFLICTS[@]} -gt 0 ]; then
+                        echo "$BOT: Docker cannot be installed while these conflicting packages are present:"
+                        printf '  %s\n' "${DOCKER_CONFLICTS[@]}"
+                        echo
+                        echo "$BOT: No packages were removed. Review the packages above, then remove them yourself and rerun this script."
+                        echo "$BOT: Docker's suggested command is:"
+                        echo "  sudo apt remove ${DOCKER_CONFLICTS[*]}"
+                        exit 1
+                    fi
+
+                    sudo apt update
+                    sudo apt install -y ca-certificates curl
+                    sudo install -m 0755 -d /etc/apt/keyrings
+                    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+                    sudo chmod a+r /etc/apt/keyrings/docker.asc
+                    sudo tee /etc/apt/sources.list.d/docker.sources > /dev/null <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: ${UBUNTU_CODENAME:-$VERSION_CODENAME}
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+                    sudo apt update
+                    sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+                    ;;
+                fedora)
+                    # https://docs.docker.com/engine/install/fedora/
+                    sudo dnf config-manager addrepo --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo
+                    sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+                    sudo systemctl enable --now docker
+                    ;;
+                arch)
+                    # https://wiki.archlinux.org/title/Docker
+                    sudo pacman -S --needed docker docker-buildx docker-compose
+                    sudo systemctl enable --now docker
+                    ;;
+            esac
         fi
     elif [ $IS_MAC == 0 ]; then
         do_action "$BOT: Install docker (required)?" "brew install docker docker-compose; mkdir -p ~/.docker/cli-plugins; ln -sfn /usr/local/opt/docker-compose/bin/docker-compose ~/.docker/cli-plugins/docker-compose" "$X_INTERACTIVE"
@@ -136,21 +204,20 @@ if [ ! "$(which jq)" ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
     echo "Json parser."
     echo "Used to parse extensions.json for VSCode setup."
-    if [ $IS_UBUNTU == 0 ]; then
-        do_action "$BOT: Install jq (optional)?" "sudo apt install -y jq" "$X_INTERACTIVE"
+    if [ $IS_LINUX == 0 ]; then
+        case "$LINUX_DISTRO" in
+            ubuntu)
+                do_action "$BOT: Install jq (optional)?" "sudo apt install -y jq" "$X_INTERACTIVE"
+                ;;
+            fedora)
+                do_action "$BOT: Install jq (optional)?" "sudo dnf install -y jq" "$X_INTERACTIVE"
+                ;;
+            arch)
+                do_action "$BOT: Install jq (optional)?" "sudo pacman -S --needed jq" "$X_INTERACTIVE"
+                ;;
+        esac
     elif [ $IS_MAC == 0 ]; then
         do_action "$BOT: Install jq (optional)?" "brew install jq" "$X_INTERACTIVE"
-    fi
-fi
-
-
-### postgresql ###
-if [ ! "$(which psql)" ]; then
-    echo ; echo ; echo ; echo "================================================================================================================"
-    if [ $IS_UBUNTU == 0 ]; then
-        do_action "$BOT: Install postgresql (required)?" "sudo apt install -y postgresql libpq-dev && sudo service postgresql restart" "$X_INTERACTIVE"
-    elif [ $IS_MAC == 0 ]; then
-        do_action "$BOT: Install postgresql (required)?" "brew install postgresql && brew services restart postgresql" "$X_INTERACTIVE"
     fi
 fi
 
@@ -162,7 +229,7 @@ fi
 # https://docs.astral.sh/uv/
 if [ ! "$(which uv)" ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
-    if [ $IS_UBUNTU == 0 ]; then
+    if [ $IS_LINUX == 0 ]; then
         do_action "$BOT: Install uv (required)?" "curl -LsSf https://astral.sh/uv/install.sh | sh ; . ~/.bash_profile" "$X_INTERACTIVE"
     elif [ $IS_MAC == 0 ]; then
         do_action "$BOT: Install uv (required)?" "brew install uv" "$X_INTERACTIVE"
@@ -170,97 +237,40 @@ if [ ! "$(which uv)" ]; then
 fi
 
 
-### github-cli ###
-if [ ! "$(which gh)" ]; then
-    echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Install github-cli (gh) (required)?" "brew install gh" "$X_INTERACTIVE"
-fi
-
-
 ### Offer to install applications to MacOS ###
 if [ $IS_MAC == 0 ]; then
     # Cask packages are MacOS only.
 
-    ### google-chrome ###
-    echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Install google-chrome (optional)?" "brew install --cask google-chrome" "y"
-
-    ### iterm2 ###
-    echo ; echo ; echo ; echo "================================================================================================================"
-    echo "Iterm2 is an improved version of Terminal."
-    do_action "$BOT: Install iterm2 (optional)?" "brew install --cask iterm2" "y"
-
-
     ### visual-studio-code ###
     echo ; echo ; echo ; echo "================================================================================================================"
     do_action "$BOT: Install visual-studio-code (optional)?" "brew install visual-studio-code" "y"
-
-
-    ### alt-tab ###
-    # Enables tabbing similar to Windows.
-    # https://alt-tab-macos.netlify.app/
-    echo ; echo ; echo ; echo "================================================================================================================"
-    echo ; echo ; echo "AltTab is an application that provides a tabbing experience similar to Windows."
-    do_action "$BOT: Install alt-tab (optional)?" "brew install --cask alt-tab" "y"
 fi
 
 
 ### Setup project ###
-if [ "$(which gh)" ]; then
-    echo ; echo ; echo ; echo "================================================================================================================"
-    echo "Make a PAT (Personal Access Token) here: https://github.com/settings/tokens/new"
-    echo "Select scopes (repo, read:org, admin:public_key)."
-    echo "This token is important. Store it someplace safe, preferably a password manager (github will never show it again)."
-    echo
-    do_action "$BOT: I have created (or already have) a PAT." "" "$X_INTERACTIVE"
-
-    # Get email.
-    # echo ; echo ; echo ; echo "================================================================================================================"
-    # get_var_with_confirm "EMAIL" "Email at github.com: "
-
-    # Create ssh key.
-    echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Do you wish to create a new ssh key?" "" "y"
-    if [ "$?" == 0 ]; then
-        get_var_with_confirm "EMAIL" "Email at github.com: "
-        ssh-keygen -t ed25519 -C "$EMAIL"
-    fi
-
-    # Get private ssh key to use further.
-    # echo ; echo ; echo ; echo "================================================================================================================"
-    # shopt -s extglob # Enable enhanced globbing.
-    # ls ~/.ssh/!(*.pub) # Show all private keys to user.
-    # ls -lad ~/.ssh/*
-    # get_var_with_confirm "KEY_PRIV" "Please give me the path to a PRIVATE ssh key: "
-
-    # Add ssh key to github.
-    echo ; echo ; echo ; echo "================================================================================================================"
-    # Github will ask to add ssh-key on authentication.
-    echo "You should skip if you have done this step before."
-    echo "If you generate/add ssh key, select SSH as preferred method, then use PAT to authenticate."
-    do_action "$BOT: Add ssh key to your Github account?" "gh auth login" "y"
-    
-    # Add ssh key to ~/ssh/config.
-    echo ; echo ; echo ; echo "================================================================================================================"
-    echo "You should skip if you have done this step before."
-    do_action "$BOT: Add an ssh key to ~/.ssh/config with host (github.com)?" "echo 'I have listed the content in ~/.ssh for you:'; ls -lad ~/.ssh/*" "y"
-    if [ "$?" == 0 ]; then
-        get_var_with_confirm "KEY_PRIV" "Please give me the path to a PRIVATE ssh key: "
-        echo $'\nHost github.com\n\tPreferredauthentications publickey\n\tIdentityFile '"$KEY_PRIV" >> ~/.ssh/config
-    fi
-
-    # Start ssh-agent.
-    echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Start ssh-agent (required)?" "echo 'I have listed the content in ~/.ssh for you:'; ls -lad ~/.ssh/*" "y"
-    if [ "$?" == 0 ]; then
-        get_var_with_confirm "KEY_PRIV" "Please give me the path to a PRIVATE ssh key: "
-        # chmod 600 $KEY_PRIV # Only accessible to you.
-        eval "$(ssh-agent -s)" # Start ssh-agent.
-        ssh-add "$KEY_PRIV" # Add key to ssh-agent session.
-        # echo $'\neval "$(ssh-agent -s)" # Start ssh-agent.\nssh-add '$KEY_PRIV$' # Add key to ssh-agent session.\n' >> ~/.bash_profile
-        # . ~/.bash_profile
-    fi
+echo ; echo ; echo ; echo "================================================================================================================"
+SSH_KEY_FOUND=$(find "$HOME/.ssh" -maxdepth 1 -type f -name '*.pub' -print -quit 2>/dev/null)
+SSH_KEY_PROMPT="$BOT: Do you wish to create a new SSH key?"
+if [ -n "$SSH_KEY_FOUND" ]; then
+    echo "$BOT: Found an existing SSH key: $SSH_KEY_FOUND"
+    SSH_KEY_PROMPT="$BOT: Do you wish to create another SSH key?"
 fi
+do_action "$SSH_KEY_PROMPT" "" "$X_INTERACTIVE"
+if [ "$?" == 0 ]; then
+    get_var_with_confirm "EMAIL" "Email at github.com: "
+    ssh-keygen -t ed25519 -C "$EMAIL"
+fi
+
+echo ; echo ; echo ; echo "================================================================================================================"
+echo "Add your public SSH key to GitHub if you have not already done so:"
+echo "  https://github.com/settings/ssh/new"
+echo
+echo "Public SSH keys found on this machine:"
+find "$HOME/.ssh" -maxdepth 1 -type f -name '*.pub' -print 2>/dev/null
+echo
+echo "Copy the contents of the public key (the file ending in .pub) to GitHub."
+echo "Never copy or share the corresponding private key."
+do_action "$BOT: My public SSH key is registered with GitHub" "" "$X_INTERACTIVE" || exit 1
 
 
 # Clone project.
@@ -310,7 +320,7 @@ if [ "$(ls Samfundet4/README.md)" ] ; then # Simple check if an arbitrary file e
     echo ; echo ; echo ; echo "================================================================================================================"
     do_action "$BOT: Build project?" "" "$X_INTERACTIVE"
     if [ "$?" == 0 ]; then
-        if [ $IS_UBUNTU == 0 ]; then
+        if [ $IS_LINUX == 0 ]; then
             sudo docker compose build
         elif [ $IS_MAC == 0 ]; then
             docker compose build # Mac doesn't need to use sudo.
@@ -322,7 +332,8 @@ fi
 ### Cleanup ###
 unset X_INTERACTIVE
 unset EMAIL
-unset KEY_PRIV
+unset SSH_KEY_FOUND
+unset SSH_KEY_PROMPT
 
 
 ### Final messages ###
@@ -348,7 +359,7 @@ echo "NOTE: See Dockerfile for more useful commands."
 echo
 do_action "$BOT: I can also start the project if you'd like" "" "y"
 if [ "$?" == 0 ]; then
-    if [ $IS_UBUNTU == 0 ]; then
+    if [ $IS_LINUX == 0 ]; then
         sudo docker compose up
     elif [ $IS_MAC == 0 ]; then
         # Mac doesn't need to use sudo.
