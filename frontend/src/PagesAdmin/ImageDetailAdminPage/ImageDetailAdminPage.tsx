@@ -21,46 +21,47 @@ import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageDetailAdminPage.module.scss';
 
 function imageReferenceToLink(reference: ImageReferenceDto): { label: string; url: string; target: LinkTarget } {
-  if (reference.model === 'event') {
-    return {
-      label: `Event: ${reference.label}`,
-      url: reverse({
-        pattern: ROUTES.frontend.admin_events_edit,
-        urlParams: { id: reference.id },
-      }),
-      target: 'frontend',
+  switch (reference.model) {
+    case 'event':
+      return {
+        label: `Event: ${reference.label}`,
+        url: reverse({
+          pattern: ROUTES.frontend.admin_events_edit,
+          urlParams: { id: reference.id },
+        }),
+        target: 'frontend',
     };
-  }
-
-  if (reference.model === 'gang_section') {
-    return {
+    case 'gang_section':
+        return {
       label: `Gang section: ${reference.label}`,
       url: reference.admin_url ?? `/admin/samfundet/gangsection/${reference.id}/change/`,
       target: 'backend',
     };
+    case 'blog_post':
+      return {
+        label: `Blog post: ${reference.label}`,
+        url: reference.admin_url ?? `/admin/samfundet/blogpost/${reference.id}/change/`,
+        target: 'backend',
+      };
+    case 'infobox':
+      return {
+        label: `Infobox: ${reference.label}`,
+        url: reference.admin_url ?? `/admin/samfundet/infobox/${reference.id}/change/`,
+        target: 'backend',
+      };
+    case 'merch':
+      return {
+        label: `Merch: ${reference.label}`,
+        url: reference.admin_url ?? `/admin/samfundet/merch/${reference.id}/change/`,
+        target: 'backend',
+      };
+    default:
+      return {
+        label: `Default: ${reference.model}: ${reference.label}`,
+        url: reference.admin_url ?? `/admin/samfundet/${reference.model}/${reference.id}/change/`,
+        target: 'backend',
+      };
   }
-
-  if (reference.model === 'blog_post') {
-    return {
-      label: `Blog post: ${reference.label}`,
-      url: reference.admin_url ?? `/admin/samfundet/blogpost/${reference.id}/change/`,
-      target: 'backend',
-    };
-  }
-
-  if (reference.model === 'infobox') {
-    return {
-      label: `Infobox: ${reference.label}`,
-      url: reference.admin_url ?? `/admin/samfundet/infobox/${reference.id}/change/`,
-      target: 'backend',
-    };
-  }
-
-  return {
-    label: `Merch: ${reference.label}`,
-    url: reference.admin_url ?? `/admin/samfundet/merch/${reference.id}/change/`,
-    target: 'backend',
-  };
 }
 
 export function ImageDetailAdminPage() {
@@ -120,7 +121,7 @@ export function ImageDetailAdminPage() {
             <label className={styles.referenceLabel}>{t(KEY.common_bound_by)}:</label>
             <ul className={styles.referenceList}>
               {references.map((reference) => {
-                const { label, url, target } = imageReferenceToLink(reference);
+                const { label, url } = imageReferenceToLink(reference);
                 return (
                   <li className={styles.referenceItem} key={`${reference.model}-${reference.id}`}>
                     <Link
