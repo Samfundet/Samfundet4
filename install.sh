@@ -166,26 +166,6 @@ if [ ! "$(which uv)" ]; then
 fi
 
 
-### github-cli ###
-if [ ! "$(which gh)" ]; then
-    echo ; echo ; echo ; echo "================================================================================================================"
-    if [ $IS_UBUNTU == 0 ]; then
-        # https://github.com/cli/cli/blob/trunk/docs/install_linux.md
-        do_action "$BOT: Install github-cli (gh) (required)?" "" "$X_INTERACTIVE"
-        if [ "$?" == 0 ]; then
-            sudo mkdir -p -m 755 /etc/apt/keyrings
-            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
-            sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
-            echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-            sudo apt update
-            sudo apt install -y gh
-        fi
-    elif [ $IS_MAC == 0 ]; then
-        do_action "$BOT: Install github-cli (gh) (required)?" "brew install gh" "$X_INTERACTIVE"
-    fi
-fi
-
-
 ### Offer to install applications to MacOS ###
 if [ $IS_MAC == 0 ]; then
     # Cask packages are MacOS only.
@@ -215,61 +195,23 @@ fi
 
 
 ### Setup project ###
-if [ "$(which gh)" ]; then
-    echo ; echo ; echo ; echo "================================================================================================================"
-    echo "Make a PAT (Personal Access Token) here: https://github.com/settings/tokens/new"
-    echo "Select scopes (repo, read:org, admin:public_key)."
-    echo "This token is important. Store it someplace safe, preferably a password manager (github will never show it again)."
-    echo
-    do_action "$BOT: I have created (or already have) a PAT." "" "$X_INTERACTIVE"
-
-    # Get email.
-    # echo ; echo ; echo ; echo "================================================================================================================"
-    # get_var_with_confirm "EMAIL" "Email at github.com: "
-
-    # Create ssh key.
-    echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Do you wish to create a new ssh key?" "" "y"
-    if [ "$?" == 0 ]; then
-        get_var_with_confirm "EMAIL" "Email at github.com: "
-        ssh-keygen -t ed25519 -C "$EMAIL"
-    fi
-
-    # Get private ssh key to use further.
-    # echo ; echo ; echo ; echo "================================================================================================================"
-    # shopt -s extglob # Enable enhanced globbing.
-    # ls ~/.ssh/!(*.pub) # Show all private keys to user.
-    # ls -lad ~/.ssh/*
-    # get_var_with_confirm "KEY_PRIV" "Please give me the path to a PRIVATE ssh key: "
-
-    # Add ssh key to github.
-    echo ; echo ; echo ; echo "================================================================================================================"
-    # Github will ask to add ssh-key on authentication.
-    echo "You should skip if you have done this step before."
-    echo "If you generate/add ssh key, select SSH as preferred method, then use PAT to authenticate."
-    do_action "$BOT: Add ssh key to your Github account?" "gh auth login" "y"
-    
-    # Add ssh key to ~/ssh/config.
-    echo ; echo ; echo ; echo "================================================================================================================"
-    echo "You should skip if you have done this step before."
-    do_action "$BOT: Add an ssh key to ~/.ssh/config with host (github.com)?" "echo 'I have listed the content in ~/.ssh for you:'; ls -lad ~/.ssh/*" "y"
-    if [ "$?" == 0 ]; then
-        get_var_with_confirm "KEY_PRIV" "Please give me the path to a PRIVATE ssh key: "
-        echo $'\nHost github.com\n\tPreferredauthentications publickey\n\tIdentityFile '"$KEY_PRIV" >> ~/.ssh/config
-    fi
-
-    # Start ssh-agent.
-    echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Start ssh-agent (required)?" "echo 'I have listed the content in ~/.ssh for you:'; ls -lad ~/.ssh/*" "y"
-    if [ "$?" == 0 ]; then
-        get_var_with_confirm "KEY_PRIV" "Please give me the path to a PRIVATE ssh key: "
-        # chmod 600 $KEY_PRIV # Only accessible to you.
-        eval "$(ssh-agent -s)" # Start ssh-agent.
-        ssh-add "$KEY_PRIV" # Add key to ssh-agent session.
-        # echo $'\neval "$(ssh-agent -s)" # Start ssh-agent.\nssh-add '$KEY_PRIV$' # Add key to ssh-agent session.\n' >> ~/.bash_profile
-        # . ~/.bash_profile
-    fi
+echo ; echo ; echo ; echo "================================================================================================================"
+do_action "$BOT: Do you wish to create a new SSH key?" "" "$X_INTERACTIVE"
+if [ "$?" == 0 ]; then
+    get_var_with_confirm "EMAIL" "Email at github.com: "
+    ssh-keygen -t ed25519 -C "$EMAIL"
 fi
+
+echo ; echo ; echo ; echo "================================================================================================================"
+echo "Add your public SSH key to GitHub if you have not already done so:"
+echo "  https://github.com/settings/ssh/new"
+echo
+echo "Public SSH keys found on this machine:"
+find "$HOME/.ssh" -maxdepth 1 -type f -name '*.pub' -print 2>/dev/null
+echo
+echo "Copy the contents of the public key (the file ending in .pub) to GitHub."
+echo "Never copy or share the corresponding private key."
+do_action "$BOT: My public SSH key is registered with GitHub" "" "$X_INTERACTIVE" || exit 1
 
 
 # Clone project.
@@ -331,7 +273,6 @@ fi
 ### Cleanup ###
 unset X_INTERACTIVE
 unset EMAIL
-unset KEY_PRIV
 
 
 ### Final messages ###
