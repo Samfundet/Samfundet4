@@ -20,6 +20,28 @@ All callback endpoints are public because Billig returns the user's browser to t
 | `/api/billig/callback/failure-data/` | `GET` | Public (`AllowAny`) | Looks up `bsession` in Billig's `payment_error` tables and returns the error and retryable cart data. |
 | `/api/billig/dev/pay/` | `POST` | Public (`AllowAny`), development only | Simulates Billig locally by creating fake purchases or payment errors in the development Billig database. |
 
+## Purchase callback sequence
+
+1. The browser posts the purchase form directly to `BILLIG_PAYMENT_URL`. The Samfundet backend does not proxy or process the real payment.
+2. In production, Billig validates the order, reserves the tickets, processes payment, and sends email as appropriate.
+3. Billig returns the browser to `/api/billig/callback/success/` with ticket references, or `/api/billig/callback/failure/` with an error session in `bsession`.
+4. The backend callback redirects the browser to the registered frontend status or cart route.
+5. After a failure, the frontend requests `/api/billig/callback/failure-data/?bsession=<id>`. The backend reads Billig's error tables and returns the message and cart data. The frontend only offers a retry when Billig stored cart rows for that error.
+
+Ticket references and `bsession` values are opaque values supplied by Billig and should not be decoded or modified by the frontend.
+
+## Development payment mock
+
+The development `BILLIG_PAYMENT_URL` points to `/api/billig/dev/pay/` instead of the real payment service. A request is simulated as a failure when:
+
+- The cart is empty.
+- Neither an email address nor a member card is provided.
+- A submitted price group does not exist in the development Billig database.
+- The email address contains `fail`.
+- The member card number ends in `0000`.
+- The member card number contains non-digit characters.
+
+Known cart rows are stored with retryable mock errors. Empty carts and carts containing unknown price groups produce non-retryable errors. Successful mock purchases create local purchase and ticket rows, increment the ticket group's sold count, and return fake ticket references ending in `12345`.
 
 ## Databases
 
