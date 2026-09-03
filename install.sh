@@ -44,14 +44,51 @@ do_action "\"I understand\"" "echo '$BOT: Here we go!'; sleep 1;" "y" || eval "e
 
 ### Requirements ###
 
-# OS
-[[ "$OSTYPE" == "darwin"* ]] ; IS_MAC=$?
-[[ "$OSTYPE" == "linux-gnu"* ]] ; IS_UBUNTU=$?
+# OS and Linux distribution.
+IS_MAC=1
+IS_LINUX=1
+LINUX_DISTRO=""
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    IS_MAC=0
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    IS_LINUX=0
+
+    if [ ! -r /etc/os-release ]; then
+        echo "$BOT: Cannot determine the Linux distribution because /etc/os-release is unavailable."
+        exit 1
+    fi
+
+    . /etc/os-release
+    case "${ID:-}" in
+        ubuntu|fedora|arch)
+            LINUX_DISTRO="$ID"
+            ;;
+        *)
+            echo "$BOT: Unsupported Linux distribution: ${PRETTY_NAME:-${ID:-unknown}}"
+            echo "$BOT: Supported Linux distributions are Ubuntu, Fedora, and Arch Linux."
+            exit 1
+            ;;
+    esac
+else
+    echo "$BOT: Unsupported operating system: $OSTYPE"
+    exit 1
+fi
 
 # Attempt to install requirements first.
 echo ; echo ; echo ; echo "================================================================================================================"
-if [ $IS_UBUNTU == 0 ]; then
-    do_action "$BOT: Attempt to install requirements (build-essential, procps, curl, file, git, ssh)" "sudo apt update ; sudo apt install -y build-essential procps curl file git ssh" "$X_INTERACTIVE"
+if [ $IS_LINUX == 0 ]; then
+    case "$LINUX_DISTRO" in
+        ubuntu)
+            do_action "$BOT: Attempt to install requirements (build-essential, procps, curl, file, git, ssh)" "sudo apt update ; sudo apt install -y build-essential procps curl file git ssh" "$X_INTERACTIVE"
+            ;;
+        fedora)
+            do_action "$BOT: Attempt to install requirements (development tools, procps, curl, file, git, ssh)" "sudo dnf install -y @development-tools procps-ng curl file git openssh-clients" "$X_INTERACTIVE"
+            ;;
+        arch)
+            do_action "$BOT: Attempt to install requirements (base-devel, procps, curl, file, git, ssh)" "sudo pacman -S --needed base-devel procps-ng curl file git openssh" "$X_INTERACTIVE"
+            ;;
+    esac
 elif [ $IS_MAC == 0 ]; then
     do_action "$BOT: Attempt to install requirements (curl, git)" "brew install git curl" "$X_INTERACTIVE"
     do_action "$BOT: Install xcode-select" "xcode-select --install" "$X_INTERACTIVE"
@@ -67,7 +104,7 @@ require "ps" # procps
 
 
 ### brew ###
-# Homebrew is only required on macOS. Ubuntu uses apt/native packages.
+# Homebrew is only required on macOS. Linux uses its distribution's package manager.
 if [ $IS_MAC == 0 ]; then
     # Install brew if it doesn't exist.
     if [ ! "$(which brew)" ]; then
@@ -87,27 +124,41 @@ if [ $IS_MAC == 0 ]; then
             fi
         fi
     fi
-
 fi
 
 
 ### docker ###
 if [[ ! "$(docker compose)" ]]; then
     echo ; echo ; echo ; echo "================================================================================================================"
-    if [ $IS_UBUNTU == 0 ]; then
+    if [ $IS_LINUX == 0 ]; then
         do_action "$BOT: Install docker (required)?" "" "$X_INTERACTIVE"
         if [ "$?" == 0 ]; then
-            # https://docs.docker.com/engine/install/ubuntu/
-            sudo apt-get remove docker docker-engine docker.io containerd runc
-            sudo apt-get update
-            sudo apt-get install -y ca-certificates curl gnupg lsb-release
-            sudo mkdir -p /etc/apt/keyrings
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-            echo \
-                "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-                $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-            sudo apt-get update
-            sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+            case "$LINUX_DISTRO" in
+                ubuntu)
+                    # https://docs.docker.com/engine/install/ubuntu/
+                    sudo apt-get remove docker docker-engine docker.io containerd runc
+                    sudo apt-get update
+                    sudo apt-get install -y ca-certificates curl gnupg lsb-release
+                    sudo mkdir -p /etc/apt/keyrings
+                    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+                    echo \
+                        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+                        $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+                    sudo apt-get update
+                    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+                    ;;
+                fedora)
+                    # https://docs.docker.com/engine/install/fedora/
+                    sudo dnf config-manager addrepo --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo
+                    sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+                    sudo systemctl enable --now docker
+                    ;;
+                arch)
+                    # https://wiki.archlinux.org/title/Docker
+                    sudo pacman -S --needed docker docker-buildx docker-compose
+                    sudo systemctl enable --now docker
+                    ;;
+            esac
         fi
     elif [ $IS_MAC == 0 ]; then
         do_action "$BOT: Install docker (required)?" "brew install docker docker-compose; mkdir -p ~/.docker/cli-plugins; ln -sfn /usr/local/opt/docker-compose/bin/docker-compose ~/.docker/cli-plugins/docker-compose" "$X_INTERACTIVE"
@@ -133,8 +184,18 @@ if [ ! "$(which jq)" ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
     echo "Json parser."
     echo "Used to parse extensions.json for VSCode setup."
-    if [ $IS_UBUNTU == 0 ]; then
-        do_action "$BOT: Install jq (optional)?" "sudo apt install -y jq" "$X_INTERACTIVE"
+    if [ $IS_LINUX == 0 ]; then
+        case "$LINUX_DISTRO" in
+            ubuntu)
+                do_action "$BOT: Install jq (optional)?" "sudo apt install -y jq" "$X_INTERACTIVE"
+                ;;
+            fedora)
+                do_action "$BOT: Install jq (optional)?" "sudo dnf install -y jq" "$X_INTERACTIVE"
+                ;;
+            arch)
+                do_action "$BOT: Install jq (optional)?" "sudo pacman -S --needed jq" "$X_INTERACTIVE"
+                ;;
+        esac
     elif [ $IS_MAC == 0 ]; then
         do_action "$BOT: Install jq (optional)?" "brew install jq" "$X_INTERACTIVE"
     fi
@@ -148,7 +209,7 @@ fi
 # https://docs.astral.sh/uv/
 if [ ! "$(which uv)" ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
-    if [ $IS_UBUNTU == 0 ]; then
+    if [ $IS_LINUX == 0 ]; then
         do_action "$BOT: Install uv (required)?" "curl -LsSf https://astral.sh/uv/install.sh | sh ; . ~/.bash_profile" "$X_INTERACTIVE"
     elif [ $IS_MAC == 0 ]; then
         do_action "$BOT: Install uv (required)?" "brew install uv" "$X_INTERACTIVE"
@@ -233,7 +294,7 @@ if [ "$(ls Samfundet4/README.md)" ] ; then # Simple check if an arbitrary file e
     echo ; echo ; echo ; echo "================================================================================================================"
     do_action "$BOT: Build project?" "" "$X_INTERACTIVE"
     if [ "$?" == 0 ]; then
-        if [ $IS_UBUNTU == 0 ]; then
+        if [ $IS_LINUX == 0 ]; then
             sudo docker compose build
         elif [ $IS_MAC == 0 ]; then
             docker compose build # Mac doesn't need to use sudo.
@@ -270,7 +331,7 @@ echo "NOTE: See Dockerfile for more useful commands."
 echo
 do_action "$BOT: I can also start the project if you'd like" "" "y"
 if [ "$?" == 0 ]; then
-    if [ $IS_UBUNTU == 0 ]; then
+    if [ $IS_LINUX == 0 ]; then
         sudo docker compose up
     elif [ $IS_MAC == 0 ]; then
         # Mac doesn't need to use sudo.
