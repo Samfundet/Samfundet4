@@ -249,7 +249,13 @@ fi
 
 ### Setup project ###
 echo ; echo ; echo ; echo "================================================================================================================"
-do_action "$BOT: Do you wish to create a new SSH key?" "" "$X_INTERACTIVE"
+SSH_KEY_FOUND=$(find "$HOME/.ssh" -maxdepth 1 -type f -name '*.pub' -print -quit 2>/dev/null)
+SSH_KEY_PROMPT="$BOT: Do you wish to create a new SSH key?"
+if [ -n "$SSH_KEY_FOUND" ]; then
+    echo "$BOT: Found an existing SSH key: $SSH_KEY_FOUND"
+    SSH_KEY_PROMPT="$BOT: Do you wish to create another SSH key?"
+fi
+do_action "$SSH_KEY_PROMPT" "" "$X_INTERACTIVE"
 if [ "$?" == 0 ]; then
     get_var_with_confirm "EMAIL" "Email at github.com: "
     ssh-keygen -t ed25519 -C "$EMAIL"
@@ -326,6 +332,8 @@ fi
 ### Cleanup ###
 unset X_INTERACTIVE
 unset EMAIL
+unset SSH_KEY_FOUND
+unset SSH_KEY_PROMPT
 
 
 ### Final messages ###
