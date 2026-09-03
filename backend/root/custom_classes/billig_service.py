@@ -3,6 +3,7 @@ from __future__ import annotations
 import uuid
 import logging
 from typing import Any
+from collections.abc import Mapping
 
 from django.db import connections, transaction
 from django.utils import timezone
@@ -23,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 class BilligService:
     @staticmethod
-    def get_contact_fields(data: dict[str, Any]) -> tuple[str, str]:
+    def get_contact_fields(data: Mapping[str, Any]) -> tuple[str, str]:
         membercard = str(data.get('membercard') or data.get('cardnumber') or '').strip()
         email = str(data.get('email', '')).strip()
         return membercard, email

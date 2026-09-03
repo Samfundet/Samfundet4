@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from typing import Any, cast
 from urllib.parse import urlencode
+from collections.abc import Mapping
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -25,7 +27,7 @@ from samfundet.models.billig import BilligEvent, BilligPriceGroup, BilligTicketG
 from samfundet.routing.frontend_routes import BILLIG_STATUS, BILLIG_HANDLEKURV
 
 
-def parse_cart_rows(data: dict) -> list[tuple[int, int]]:
+def parse_cart_rows(data: Mapping[str, Any]) -> list[tuple[int, int]]:
     cart_rows = []
     for key, value in data.items():
         if not key.startswith('price_') or not key.endswith('_count'):
@@ -143,10 +145,11 @@ class BilligDevPayView(APIView):
         if settings.ENV != Environment.DEV:
             return Response({'error': 'Fake Billig pay is only available in development'}, status=status.HTTP_404_NOT_FOUND)
 
-        raw_membercard, raw_email = BilligService.get_contact_fields(request.data)
+        request_data = cast(Mapping[str, Any], request.data)
+        raw_membercard, raw_email = BilligService.get_contact_fields(request_data)
         membercard = raw_membercard or None
         email = raw_email or None
-        cart_rows = parse_cart_rows(request.data)
+        cart_rows = parse_cart_rows(request_data)
         has_unknown_price_group = has_unknown_price_groups(cart_rows)
         should_fail = should_fake_purchase_fail(
             cart_rows=cart_rows,
