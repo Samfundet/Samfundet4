@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
-import { downloadCSVGangRecruitment, getGang, getRecruitment, getRecruitmentApplicationsForGang } from '~/api';
+import { downloadCSVGangRecruitment, getAdminGang, getRecruitment, getRecruitmentApplicationsForGang } from '~/api';
 import type { GangDto, RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
@@ -51,7 +51,7 @@ export function RecruitmentGangAllApplicantsAdminPage() {
   // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (gangId) {
-      getGang(gangId)
+      getAdminGang(gangId)
         .then((gang) => {
           setGang(gang);
         })

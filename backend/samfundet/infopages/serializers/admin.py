@@ -7,11 +7,13 @@ from rest_framework import serializers
 from root.utils.permissions import SAMFUNDET_ADD_INFORMATIONPAGE, SAMFUNDET_CHANGE_INFORMATIONPAGE, SAMFUNDET_DELETE_INFORMATIONPAGE
 
 from samfundet.roles import OwnerPermissionMap, get_owner_permission_map
-from samfundet.serializers import GangSerializer, BasicUserSerializer, GangSectionSerializer, OrganizationSerializer
-from samfundet.models.general import Gang, User, GangSection
+from samfundet.serializers import BasicUserSerializer, OrganizationSerializer
+from samfundet.models.general import User
 from samfundet.infopages.models import NO_OWNER_ERROR, ONLY_ONE_OWNER_ERROR, InformationPage, InformationPageRevision
 from samfundet.infopages.services import create_information_page, update_information_page
+from samfundet.organization.models import Gang, GangSection
 from samfundet.infopages.permissions import INFORMATION_PAGE_OWNER_PERMISSIONS
+from samfundet.organization.serializers.public import PublicGangSerializer, PublicGangSectionSerializer
 
 # An information page owner. Exactly one of the two is set.
 Owner = tuple[Gang | None, GangSection | None]
@@ -47,8 +49,8 @@ def _exactly_one_owner(attrs: dict) -> Owner:
 
 
 class OwnerOptionSerializer(serializers.Serializer):
-    gang = GangSerializer(read_only=True)
-    section = GangSectionSerializer(read_only=True, allow_null=True)
+    gang = PublicGangSerializer(read_only=True)
+    section = PublicGangSectionSerializer(read_only=True, allow_null=True)
     organization = OrganizationSerializer(source='gang.organization', read_only=True, allow_null=True)
     can_create = serializers.BooleanField(read_only=True)
     can_change = serializers.BooleanField(read_only=True)
@@ -160,14 +162,14 @@ class AdminInformationPageListSerializer(serializers.ModelSerializer):
 
     gang = serializers.SerializerMethodField(read_only=True)
     organization = serializers.SerializerMethodField(read_only=True)
-    section = GangSectionSerializer(read_only=True, allow_null=True)
+    section = PublicGangSectionSerializer(read_only=True, allow_null=True)
 
     title_nb = serializers.CharField(source='current_revision.title_nb', read_only=True, allow_null=True)
     title_en = serializers.CharField(source='current_revision.title_en', read_only=True, allow_null=True)
 
     def get_gang(self, page: InformationPage) -> dict | None:
         gang = page.owner_gang()
-        return GangSerializer(gang).data if gang else None
+        return PublicGangSerializer(gang).data if gang else None
 
     def get_organization(self, page: InformationPage) -> dict | None:
         gang = page.owner_gang()

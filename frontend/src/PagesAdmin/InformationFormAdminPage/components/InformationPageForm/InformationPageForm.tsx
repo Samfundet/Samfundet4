@@ -9,6 +9,7 @@ import {
   Button,
   Checkbox,
   Form,
+  FormBox,
   FormControl,
   FormField,
   FormItem,
@@ -196,8 +197,7 @@ export function InformationPageForm({ infoPage, onSuccess }: Props) {
         <div className={styles.wrapper}>
           {actionRow}
 
-          <span className={styles.box_label}>{t(KEY.common_general)}</span>
-          <div className={styles.box}>
+          <FormBox label={t(KEY.common_general)}>
             <FormField
               control={form.control}
               disabled={isSubmitting}
@@ -265,10 +265,9 @@ export function InformationPageForm({ infoPage, onSuccess }: Props) {
                 </FormItem>
               )}
             />
-          </div>
+          </FormBox>
 
-          <span className={styles.box_label}>{t(KEY.common_content)}</span>
-          <div className={classNames(styles.box, styles.content_box)}>
+          <FormBox className={styles.content_box} label={t(KEY.common_content)}>
             <div className={styles.lang_tabs}>
               {createLangTab('nb')}
               {createLangTab('en')}
@@ -319,7 +318,7 @@ export function InformationPageForm({ infoPage, onSuccess }: Props) {
                 />
               </div>
             ))}
-          </div>
+          </FormBox>
 
           {actionRow}
         </div>

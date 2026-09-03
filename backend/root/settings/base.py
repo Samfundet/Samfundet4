@@ -351,7 +351,9 @@ DEFAULT_FROM_EMAIL = 'mg-web@samfundet.no'
 
 # For enabled features in the control panel
 CP_ENABLED = {
-    s.strip() for s in os.getenv('CP_ENABLED', 'users,events,information,documents,images,opening_hours,closed_hours,venue').split(',') if s.strip()
+    s.strip()
+    for s in os.getenv('CP_ENABLED', 'users,gangs,events,organization,information,documents,images,opening_hours,closed_hours,venue').split(',')
+    if s.strip()
 } & CP_FEATURES_ALL
 
 REACT_ROUTE_PREFIX = 'reactapp'

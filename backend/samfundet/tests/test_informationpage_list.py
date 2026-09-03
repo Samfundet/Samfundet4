@@ -13,9 +13,10 @@ from root.utils import routes
 from root.constants import WebFeatures
 from root.utils.permissions import SAMFUNDET_VIEW_INFORMATIONPAGE
 
-from samfundet.models import Gang, User, GangSection, Organization
+from samfundet.models import Gang, User, GangSection
 from samfundet.infopages.models import InformationPage
 from samfundet.infopages.services import create_information_page, update_information_page
+from samfundet.organization.models import Organization
 
 
 @pytest.fixture(autouse=True)
