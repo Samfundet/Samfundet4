@@ -252,7 +252,7 @@ export function ImageForm({ image, onCreated }: ImageFormProps) {
           {image && canDelete && (
             <Button
               type="button"
-              theme="ghost"
+              theme="danger"
               disabled={isSubmitting}
               className={styles.delete_btn}
               onClick={handleDelete}
@@ -262,7 +262,7 @@ export function ImageForm({ image, onCreated }: ImageFormProps) {
             </Button>
           )}
           {(canChange || canCreate) && (
-            <Button type="submit" theme="primary" disabled={isSubmitting}>
+            <Button type="submit" theme="success" disabled={isSubmitting}>
               <Icon icon="mdi:floppy-disk" />
               {submitText}
             </Button>
