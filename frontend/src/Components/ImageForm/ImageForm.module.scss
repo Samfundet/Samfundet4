@@ -1,3 +1,6 @@
+
+@use 'src/constants' as *;
+
 .action_row {
   display: flex;
   margin: 1rem 0 0.5rem;
@@ -13,3 +16,20 @@
   margin-bottom: 0.5rem;
 }
 
+.flash {
+  animation: incompleteFlash 0.3s ease 3;
+}
+
+@keyframes incompleteFlash {
+  0% {
+    color: inherit;
+  }
+
+  50% {
+    color: $yellow;
+  }
+
+  100% {
+    color: inherit;
+  }
+}

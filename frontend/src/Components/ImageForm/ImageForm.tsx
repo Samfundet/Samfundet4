@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
@@ -54,13 +54,13 @@ function imageReferenceToLink(reference: ImageReferenceDto): { label: string; ur
           urlParams: { id: reference.id },
         }),
         target: 'frontend',
-    };
+      };
     case 'gang_section':
-        return {
-      label: `Gang section: ${reference.label}`,
-      url: reference.admin_url ?? `/admin/samfundet/gangsection/${reference.id}/change/`,
-      target: 'backend',
-    };
+      return {
+        label: `Gang section: ${reference.label}`,
+        url: reference.admin_url ?? `/admin/samfundet/gangsection/${reference.id}/change/`,
+        target: 'backend',
+      };
     case 'blog_post':
       return {
         label: `Blog post: ${reference.label}`,
@@ -92,6 +92,7 @@ export function ImageForm({ image, onCreated }: ImageFormProps) {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
   const { createImage, editImage, deleteImage } = useImageMutations();
+  const [flash, setFlash] = useState(false);
 
   const { user } = useAuthContext();
   const location = useLocation();
@@ -151,20 +152,63 @@ export function ImageForm({ image, onCreated }: ImageFormProps) {
   }
 
   function handleDelete() {
+    const triggerFlash = () => {
+      setFlash(true);
+
+      setTimeout(() => {
+        setFlash(false);
+      }, 1200);
+    };
+
     if (image && window.confirm(t(KEY.admin_images_confirm_delete))) {
       deleteImage.mutate(image.id, {
         onSuccess: () => {
           navigate({ url: ROUTES.frontend.admin_images });
         },
+        onError: (error) => {
+          if (error.response?.status === 409) {
+            triggerFlash();
+          }
+        },
       });
     }
+  }
+
+  function renderReferences() {
+    const references = image?.references ?? [];
+
+    return (
+      <div className={styles.references}>
+        {image && references.length !== 0 && (
+          <section className={styles.referencesSection}>
+            <label className={styles.referenceLabel}>{t(KEY.common_bound_by)}:</label>
+            <ul className={styles.referenceList}>
+              {references.map((reference) => {
+                const { label, url } = imageReferenceToLink(reference);
+                return (
+                  <li className={styles.referenceItem} key={`${reference.model}-${reference.id}`}>
+                    <Link
+                      url={url}
+                      state={{
+                        returnTo: `${location.pathname}${location.search}${location.hash}`,
+                      }}
+                      className={`${styles.referenceLink} ${flash ? styles.flash : ''}`}
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
+      </div>
+    );
   }
 
   const submitText = image ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_image)}`);
 
   const isSubmitting = createImage.isPending || editImage.isPending || deleteImage.isPending;
-
-  const references = image?.references ?? [];
 
   return (
     <Form {...form}>
@@ -225,28 +269,7 @@ export function ImageForm({ image, onCreated }: ImageFormProps) {
           </>
         )}
 
-        {image && references.length !== 0 && (
-          <section className={styles.referencesSection}>
-            <label className={styles.referenceLabel}>{t(KEY.common_bound_by)}:</label>
-            <ul className={styles.referenceList}>
-              {references.map((reference) => {
-                const { label, url } = imageReferenceToLink(reference);
-                return (
-                  <li className={styles.referenceItem} key={`${reference.model}-${reference.id}`}>
-                    <Link
-                      url={url}
-                      state={{
-                        returnTo: `${location.pathname}${location.search}${location.hash}`,
-                      }}
-                    >
-                      {label}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        )}
+        {renderReferences()}
 
         <div className={styles.action_row}>
           {image && canDelete && (

@@ -17,8 +17,6 @@ import { hasPermissions, imageUrl } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageDetailAdminPage.module.scss';
 
-
-
 export function ImageDetailAdminPage() {
   const { id } = useParams();
   const { t } = useTranslation();
@@ -49,8 +47,6 @@ export function ImageDetailAdminPage() {
   const canChange = useMemo(() => {
     return hasPermissions(user, [PERM.SAMFUNDET_CHANGE_IMAGE], image?.id, true);
   }, [user, image]);
-
-
 
   return (
     <AdminPageLayout
