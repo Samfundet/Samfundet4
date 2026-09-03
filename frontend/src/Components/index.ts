@@ -36,6 +36,7 @@ export { IconButton } from './IconButton';
 export { Image } from './Image';
 export { ImageCard } from './ImageCard';
 export { ImageList } from './ImageList';
+export { ImageTile } from './ImageTile';
 export { ImageQuery } from './ImageQuery';
 export { Input, type InputProps } from './Input';
 export { InputField } from './InputField';
