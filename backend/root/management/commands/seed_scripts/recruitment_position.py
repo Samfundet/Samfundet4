@@ -6,8 +6,8 @@ from django.db import transaction
 
 from root.utils.samfundet_random import words
 
-from samfundet.models.general import Gang
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition
+from samfundet.organization.models import Gang
 
 # Define position types with their associated tags
 POSITION_TYPES = {

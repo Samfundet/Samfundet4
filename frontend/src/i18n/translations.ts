@@ -73,6 +73,7 @@ export const nb = prepareTranslations({
   [KEY.common_gang]: 'Gjeng',
   [KEY.common_gangs]: 'Gjenger',
   [KEY.common_section]: 'Seksjon',
+  [KEY.common_sections]: 'Seksjoner',
   [KEY.common_table]: 'Bord',
   [KEY.common_gang_type]: 'Gjengtype',
   [KEY.common_edit]: 'Rediger',
@@ -82,6 +83,7 @@ export const nb = prepareTranslations({
   [KEY.common_tags]: 'Merkelapper',
   [KEY.common_contributors]: 'Bidragsytere',
   [KEY.common_image]: 'Bilde',
+  [KEY.common_logo]: 'Logo',
   [KEY.common_file]: 'Fil',
   [KEY.common_venue]: 'Lokale',
   [KEY.common_title]: 'Tittel',
@@ -203,6 +205,9 @@ export const nb = prepareTranslations({
   [KEY.common_last_edited_by]: 'Sist endret av',
   [KEY.common_publication_date]: 'Publiseringsdato',
   [KEY.common_casedocuments]: 'Saksdokumenter',
+  [KEY.common_positions]: 'Stillinger',
+
+  [KEY.organization]: 'Organisasjon',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -386,6 +391,8 @@ export const nb = prepareTranslations({
     'Kunne ikke koble til medlemsdatabasen. Vennligst sjekk at alle felter er skrevet riktig',
   [KEY.adminpage_connect_mdb_password_notice_1]: 'Passordet ditt til ',
   [KEY.adminpage_connect_mdb_password_notice_2]: 'medlemsdatabasen',
+
+  [KEY.admin_gang_has_no_sections]: 'Denne gjengen har ingen seksjoner.',
 
   // InformationPage
   [KEY.information_page]: 'Informasjonsside',
@@ -729,6 +736,7 @@ export const nb = prepareTranslations({
 
   // No category:
   [KEY.owner]: 'Eier',
+  [KEY.affiliation]: 'Tilhørighet',
   [KEY.end_time]: 'Sluttid',
   [KEY.category]: 'Kategori',
   [KEY.event_type]: 'Arrangementstype',
@@ -737,6 +745,7 @@ export const nb = prepareTranslations({
   [KEY.end_date]: 'Sluttdato',
   [KEY.last_updated]: 'Sist oppdatert',
   [KEY.form_confirm]: 'Er du sikker på at du vil',
+  [KEY.form_confirm_delete]: 'Er du sikker på at du vil slette',
   [KEY.we_use_cookies]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no. Les mer om cookies',
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
 
@@ -866,8 +875,10 @@ export const en = prepareTranslations({
   [KEY.common_gangs]: 'Gangs',
   [KEY.common_gang_type]: 'Gang type',
   [KEY.common_section]: 'Section',
+  [KEY.common_sections]: 'Sections',
   [KEY.common_max]: 'Max',
   [KEY.common_image]: 'Image',
+  [KEY.common_logo]: 'Logo',
   [KEY.common_file]: 'File',
   [KEY.common_venue]: 'Venue',
   [KEY.common_event]: 'Event',
@@ -987,6 +998,9 @@ export const en = prepareTranslations({
   [KEY.common_last_edited_by]: 'Last edited by',
   [KEY.common_publication_date]: 'Publication date',
   [KEY.common_casedocuments]: 'Case documents',
+  [KEY.common_positions]: 'Positions',
+
+  [KEY.organization]: 'Organization',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -1516,8 +1530,11 @@ export const en = prepareTranslations({
   [KEY.adminpage_connect_mdb_password_notice_1]: 'Your password to the',
   [KEY.adminpage_connect_mdb_password_notice_2]: 'membership database',
 
+  [KEY.admin_gang_has_no_sections]: 'This gang has no sections.',
+
   // No category:
   [KEY.owner]: 'Owner',
+  [KEY.affiliation]: 'Affiliation',
   [KEY.end_time]: 'End time',
   [KEY.category]: 'Category',
   [KEY.event_type]: 'Event type',
@@ -1527,6 +1544,7 @@ export const en = prepareTranslations({
   [KEY.last_updated]: 'Last updated',
 
   [KEY.form_confirm]: 'Are you sure you want do',
+  [KEY.form_confirm_delete]: 'Are you sure you want to delete',
   [KEY.we_use_cookies]: 'We use cookies to give you the best experience on Samfundet.no. Read more about cookies',
   [KEY.control_panel_faq]: 'Help/questions',
   [KEY.control_panel_title]: 'Control panel',

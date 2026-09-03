@@ -22,7 +22,6 @@ from samfundet.models.role import Role
 from samfundet.models.event import Event
 from samfundet.models.billig import BilligEvent
 from samfundet.models.general import (
-    Gang,
     User,
     Image,
     Merch,
@@ -31,14 +30,13 @@ from samfundet.models.general import (
     Campus,
     BlogPost,
     TextItem,
-    GangSection,
     Reservation,
-    Organization,
     MerchVariation,
 )
 from samfundet.infopages.models import InformationPage
 from samfundet.infopages.services import create_information_page
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentApplication
+from samfundet.organization.models import Gang, GangSection, Organization
 from samfundet.models.model_choices import EventTicketType, EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 """

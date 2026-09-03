@@ -17,7 +17,8 @@ from django.db.models import Prefetch, QuerySet
 from root.utils.mixins import CustomBaseModel
 
 from samfundet.models.billig import BilligEvent, BilligTicketGroup
-from samfundet.models.general import Gang, User, Image, Organization
+from samfundet.models.general import User, Image
+from samfundet.organization.models import Gang, Organization
 from samfundet.models.model_choices import EventStatus, EventCategory, EventTicketType, EventAgeRestriction
 
 # ======================== #

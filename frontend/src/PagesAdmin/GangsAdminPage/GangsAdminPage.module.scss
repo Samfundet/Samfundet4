@@ -1,3 +1,11 @@
-@use 'src/mixins' as *;
+.logo {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+}
 
-@use 'src/constants' as *;
+.row {
+  td:first-child {
+    padding-right: 4px;
+  }
+}
