@@ -25,8 +25,9 @@ export const ROUTES_FRONTEND = {
   recruitment_application_overview: '/recruitment/:recruitmentId/my-applications/',
   organization_recruitment: '/recruitment/:recruitmentId/',
   contact: '/contact',
-  // Purchase callback:
-  purchase_callback: '/purchase-callback/:eventId',
+  // Billig purchase callbacks:
+  billig_status: '/arrangement/billetter/status/:tickets/',
+  billig_handlekurv: '/arrangement/billetter/handlekurv/',
 
   // ==================== //
   //        Sulten        //
