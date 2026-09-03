@@ -8,14 +8,14 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/frontend" # Location of package manifests
     schedule:
-      interval: "monthly"
+      interval: "quarterly"
     labels:
       - "dependencies"
       - "frontend"
   - package-ecosystem: "uv"
     directory: "/backend"
     schedule:
-      interval: "monthly"
+      interval: "quarterly"
     labels:
       - "dependencies"
       - "backend"

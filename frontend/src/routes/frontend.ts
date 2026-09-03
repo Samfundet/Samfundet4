@@ -59,7 +59,11 @@ export const ROUTES_FRONTEND = {
   // Gangs:
   admin_gangs: '/control-panel/gangs/',
   admin_gangs_create: '/control-panel/gangs/create/',
-  admin_gangs_edit: '/control-panel/gangs/edit/:gangId/',
+  admin_gangs_edit: '/control-panel/gangs/:gangId/edit/',
+  admin_gangs_view: '/control-panel/gangs/:gangId/',
+  admin_gang_section_create: '/control-panel/gangs/:gangId/sections/create/',
+  admin_gang_section_view: '/control-panel/gangs/:gangId/sections/:sectionId/',
+  admin_gang_section_edit: '/control-panel/gangs/:gangId/sections/:sectionId/edit/',
   // Events:
   admin_events: '/control-panel/events/',
   admin_events_edit: '/control-panel/events/edit/:id/',

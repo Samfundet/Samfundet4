@@ -16,6 +16,8 @@ from samfundet.view import billig_views
 
 from . import views
 from .view import recruitment_views
+from .infopages.urls import register as register_infopages
+from .organization.urls import register as register_gangs
 
 # End: imports -----------------------------------------------------------------
 #
@@ -29,8 +31,6 @@ router.register('events', samfundet.view.event_views.EventView, 'events')
 router.register('eventgroups', samfundet.view.event_views.EventGroupView, 'eventgroups')
 router.register('venues', samfundet.view.general_views.VenueView, 'venues')
 router.register('closed', samfundet.view.general_views.ClosedPeriodView, 'closedperiods')
-router.register('gangs', samfundet.view.general_views.GangView, 'gangs')
-router.register('gangsorganized', samfundet.view.general_views.GangTypeView, 'gangsorganized')
 router.register('blog', samfundet.view.general_views.BlogPostView, 'blog')
 router.register('user-preference', samfundet.view.user_views.UserPreferenceView, 'user_preference')
 router.register('saksdokument', samfundet.view.general_views.SaksdokumentView, 'saksdokument')
@@ -69,12 +69,19 @@ router.register('billig-ticket-group', billig_views.BilligTicketGroupReadOnlyMod
 ######## Lyche #########
 # Lyche routes go here
 
+########## Subpackages ##########
+admin_router = routers.DefaultRouter()
+admin_router.root_view_name = 'admin-api-root'
+
+register_infopages(router, admin_router)
+register_gangs(router, admin_router)
+
 app_name = 'samfundet'
 
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('', include('samfundet.infopages.urls')),
+    path('admin/', include(admin_router.urls)),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='samfundet:schema'), name='swagger_ui'),
     path('schema/redoc/', SpectacularRedocView.as_view(url_name='samfundet:schema'), name='redoc'),
@@ -94,7 +101,6 @@ urlpatterns = [
     path('home/', samfundet.view.general_views.HomePageView().as_view(), name='home'),
     path('assign_group/', samfundet.view.user_views.AssignGroupView.as_view(), name='assign_group'),
     path('webhook/', views.WebhookView.as_view(), name='webhook'),
-    path('gangtypes/<int:organization>/', samfundet.view.general_views.GangTypeOrganizationView.as_view(), name='gangsorganized'),
     ########## Billig ##########
     path('billig/event/<int:event_id>/tickets/', billig_views.BilligEventTicketsView.as_view(), name='event_tickets'),
     path('billig/callback/success/', billig_views.BilligPurchaseSuccessView.as_view(), name='purchase_success'),

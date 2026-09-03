@@ -307,7 +307,10 @@ export function getDisplayName(u: BasicUserDto): string {
   return fullName ? fullName : u.username;
 }
 
-export function getFullDisplayName(u: BasicUserDto): string {
+export function getFullDisplayName(u: BasicUserDto | string): string {
+  if (typeof u === 'string') {
+    return u;
+  }
   const fullName = getFullName(u);
   if (!fullName) {
     return u.username;

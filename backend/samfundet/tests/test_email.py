@@ -11,13 +11,13 @@ from django.utils import timezone
 
 from root.utils import routes
 
-from samfundet.models.general import Gang, User
+from samfundet.models.general import User
 from samfundet.models.recruitment import (
     Recruitment,
-    Organization,
     RecruitmentPosition,
     RecruitmentApplication,
 )
+from samfundet.organization.models import Gang, Organization
 from samfundet.models.model_choices import RecruitmentStatusChoices
 
 
