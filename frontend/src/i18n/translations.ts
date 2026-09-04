@@ -45,6 +45,7 @@ export const nb = prepareTranslations({
   // Other common
   [KEY.common_connect]: 'Koble til',
   [KEY.common_content]: 'Innhold',
+  [KEY.common_color]: 'Farge',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Håndter',
   [KEY.common_yes]: 'Ja',
@@ -554,6 +555,8 @@ export const nb = prepareTranslations({
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_casedocument]: 'Saksdokument',
+  [KEY.admin_infobox]: 'Infoboks',
+  [KEY.admin_infoboxes_title]: 'Infobokser',
   [KEY.admin_images_title]: 'Bildearkiv',
   [KEY.admin_images_create]: 'Nytt bilde',
   [KEY.admin_images_confirm_delete]: 'Er du sikker på at du vil slette dette bildet? Dette kan ikke angres.',
@@ -835,6 +838,7 @@ export const en = prepareTranslations({
   // No category:
   [KEY.common_connect]: 'Connect',
   [KEY.common_content]: 'Content',
+  [KEY.common_color]: 'Color',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Manage',
   [KEY.common_yes]: 'Yes',
@@ -1390,6 +1394,8 @@ export const en = prepareTranslations({
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_casedocument]: 'Case document',
+  [KEY.admin_infobox]: 'Infobox',
+  [KEY.admin_infoboxes_title]: 'Infoboxes',
   [KEY.admin_images_title]: 'Image Archive',
   [KEY.admin_images_create]: 'New image',
   [KEY.admin_images_confirm_delete]: 'Are you sure you want to delete this image? This cannot be undone.',
