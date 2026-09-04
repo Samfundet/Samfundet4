@@ -1,5 +1,7 @@
 export { AboutPage } from './AboutPage';
 export { AccountPage } from './AccountPage';
+export { BilligPurchaseFailurePage } from './BilligPurchaseFailurePage';
+export { BilligPurchaseStatusPage } from './BilligPurchaseStatusPage';
 export { ComponentPage } from './ComponentPage';
 export { ContributorsPage } from './ContributorsPage';
 export { EventPage } from './EventPage';

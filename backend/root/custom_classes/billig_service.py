@@ -21,7 +21,6 @@ from samfundet.models.billig import (
 
 logger = logging.getLogger(__name__)
 
-
 class BilligService:
     @staticmethod
     def get_contact_fields(data: Mapping[str, Any]) -> tuple[str, str]:
