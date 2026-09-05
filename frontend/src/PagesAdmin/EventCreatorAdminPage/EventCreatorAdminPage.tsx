@@ -3,13 +3,13 @@ import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { getEvent, getVenues } from '~/api';
-import type { EventDto } from '~/dto';
+import { getEvent, getEventForCloning, getVenues } from '~/api';
+import type { EventCloneDto, EventDto } from '~/dto';
 import { usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { venueKeys } from '~/queryKeys';
@@ -49,9 +49,11 @@ import type { EventStatusOption } from './types';
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
-  const [event, setEvent] = useState<Partial<EventDto>>();
+  const [event, setEvent] = useState<Partial<EventDto> | EventCloneDto>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const templateId = id === undefined ? searchParams.get('template') : undefined;
   const { createEventMutation, editEventMutation } = useEventMutations();
 
   const { data: venues = [] } = useQuery({
@@ -87,6 +89,7 @@ export function EventCreatorAdminPage() {
     event,
     defaultCategory: eventCategoryOptions[0]?.value ?? EventCategory.ART,
     defaultLocation: locationOptions[0]?.value ?? '',
+    forTemplate: templateId !== undefined,
   });
 
   const stepComponentMap: Record<StepKey, ReactElement> = {
@@ -102,19 +105,25 @@ export function EventCreatorAdminPage() {
 
   // Fetch event data using the event ID
   useEffect(() => {
-    if (id) {
-      getEvent(id)
-        .then((eventData) => {
-          setEvent(eventData);
-          setShowSpinner(false);
-        })
-        .catch((error) => {
-          toast.error(t(KEY.common_something_went_wrong));
-        });
-    } else {
+    const eventId = id ?? templateId;
+    if (!eventId) {
       setShowSpinner(false);
+      return;
     }
-  }, [id, t]);
+
+    async function loadEvent(pk: string) {
+      try {
+        const eventData = templateId !== undefined ? await getEventForCloning(pk) : await getEvent(pk);
+        setEvent(eventData);
+      } catch {
+        toast.error(t(KEY.common_something_went_wrong));
+      } finally {
+        setShowSpinner(false);
+      }
+    }
+
+    loadEvent(eventId);
+  }, [id, templateId, t]);
 
   // ================================== //
   //          Creation Steps            //

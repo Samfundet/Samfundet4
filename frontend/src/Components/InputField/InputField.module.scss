@@ -82,9 +82,26 @@ $error-color: red;
   top: -2.4em;
   left: calc(100% - 2.5em);
   margin-right: 0.2em;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -1.5em;
+    height: 1.5em;
+    width: 3em;
+    background: linear-gradient(to right, transparent 0%, $white 50%);
+    pointer-events: none;
+
+    @include theme-dark {
+      background: linear-gradient(to right, transparent 0%, $theme-dark-input-bg 50%);
+    }
+  }
 }
 
 .field_icon {
+  position: relative;
+  z-index: 1;
   width: 1.5em;
   height: 1.5em;
   opacity: 0.4;

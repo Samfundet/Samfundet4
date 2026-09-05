@@ -5,7 +5,11 @@ import { KEY } from '~/i18n/constants';
 import styles from '../EventCreatorAdminPage.module.scss';
 import type { FormType } from '../hooks/useEventCreatorForm';
 
-export function TextStep({ form }: { form: UseFormReturn<FormType> }) {
+type Props = {
+  form: UseFormReturn<FormType>;
+};
+
+export function TextStep({ form }: Props) {
   const { t } = useTranslation();
 
   return (
