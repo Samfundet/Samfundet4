@@ -185,6 +185,11 @@ EOF
     fi
 fi
 
+if ! docker compose version >/dev/null 2>&1; then
+    echo "$BOT: Docker Compose is required, but its installation did not complete successfully."
+    exit 1
+fi
+
 ### colima ###
 # Replacement for docker-desktop. Only needed for MacOS.
 # https://github.com/abiosoft/colima
@@ -258,7 +263,10 @@ fi
 do_action "$SSH_KEY_PROMPT" "" "$X_INTERACTIVE"
 if [ "$?" == 0 ]; then
     get_var_with_confirm "EMAIL" "Email at github.com: "
-    ssh-keygen -t ed25519 -C "$EMAIL"
+    if ! ssh-keygen -t ed25519 -C "$EMAIL"; then
+        echo "$BOT: SSH key generation failed."
+        exit 1
+    fi
 fi
 
 echo ; echo ; echo ; echo "================================================================================================================"
@@ -275,10 +283,14 @@ do_action "$BOT: My public SSH key is registered with GitHub" "" "$X_INTERACTIVE
 
 # Clone project.
 echo ; echo ; echo ; echo "================================================================================================================"
-do_action "$BOT: Clone repo git@github.com:Samfundet/Samfundet4.git?" "git clone git@github.com:Samfundet/Samfundet4.git" "$X_INTERACTIVE"
+if ! do_action "$BOT: Clone repo git@github.com:Samfundet/Samfundet4.git?" "git clone git@github.com:Samfundet/Samfundet4.git" "$X_INTERACTIVE"; then
+    echo "$BOT: Repository cloning was skipped or failed."
+    echo "$BOT: Verify that your public SSH key is registered with GitHub and that you have access to the repository."
+    exit 1
+fi
 
 ### Setup project if cloned. ###
-if [ "$(ls Samfundet4/README.md)" ] ; then # Simple check if an arbitrary file exists.
+if [ -f Samfundet4/README.md ] ; then
     # Some extra steps.
     cd Samfundet4 || exit
     cp .env.example .env
@@ -321,11 +333,14 @@ if [ "$(ls Samfundet4/README.md)" ] ; then # Simple check if an arbitrary file e
     do_action "$BOT: Build project?" "" "$X_INTERACTIVE"
     if [ "$?" == 0 ]; then
         if [ $IS_LINUX == 0 ]; then
-            sudo docker compose build
+            sudo docker compose build || exit 1
         elif [ $IS_MAC == 0 ]; then
-            docker compose build # Mac doesn't need to use sudo.
+            docker compose build || exit 1 # Mac doesn't need to use sudo.
         fi
     fi
+else
+    echo "$BOT: The cloned repository is incomplete or missing Samfundet4/README.md."
+    exit 1
 fi
 
 

@@ -41,8 +41,8 @@ function do_action {
     fi
     # Run command if accepted.
     if [ "$do_action_ans" = "y" ]; then
-        eval $2
-        return 0 # OK
+        eval "$2"
+        return $? # Return the command's exit status.
     fi
     return 1 # Answered no.
 }
