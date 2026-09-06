@@ -73,16 +73,19 @@ export function ComponentPage() {
         ? {
             is_almost_sold_out: false,
             id: 0,
-            in_sale_period: '',
+            in_sale_period: false,
             is_sold_out: false,
             name: '',
+            payment_url: 'https://billettsalg.samfundet.no/pay',
             sale_from: '',
             sale_to: '',
+            ticket_fee: 20,
             ticket_groups: [
               {
                 id: 0,
                 is_almost_sold_out: false,
                 is_sold_out: false,
+                is_theater_ticket_group: false,
                 name: 'Billettgruppe 1',
                 price_groups: [
                   {
@@ -92,7 +95,6 @@ export function ComponentPage() {
                     name: 'Medlem',
                     netsale: false,
                     price: 50,
-                    ticket_fee: 20,
                   },
                   {
                     can_be_put_on_card: false,
@@ -101,7 +103,6 @@ export function ComponentPage() {
                     name: 'Ikke-medlem',
                     netsale: false,
                     price: 150,
-                    ticket_fee: 30,
                   },
                 ],
                 ticket_limit: 0,

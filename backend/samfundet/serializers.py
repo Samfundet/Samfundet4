@@ -13,6 +13,7 @@ from guardian.models import UserObjectPermission, GroupObjectPermission
 from rest_framework import serializers
 from rest_framework.utils.serializer_helpers import ReturnList
 
+from django.conf import settings
 from django.db.models import Q, QuerySet
 from django.core.files import File
 from django.contrib.auth import authenticate
@@ -217,13 +218,13 @@ class EventCustomTicketSerializer(CustomBaseSerializer):
         fields = '__all__'
 
 
-class BilligPriceGroupSerializer(CustomBaseSerializer):
+class BilligPriceGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = BilligPriceGroup
         fields = ['id', 'name', 'can_be_put_on_card', 'membership_needed', 'netsale', 'price']
 
 
-class BilligTicketGroupSerializer(CustomBaseSerializer):
+class BilligTicketGroupSerializer(serializers.ModelSerializer):
     # These fields are calculated based on percentages sold and should be public
     is_almost_sold_out = serializers.BooleanField(read_only=True)
     is_sold_out = serializers.BooleanField(read_only=True)
@@ -240,19 +241,26 @@ class BilligTicketGroupSerializer(CustomBaseSerializer):
             'name',
             'is_sold_out',
             'is_almost_sold_out',
+            'is_theater_ticket_group',
             'ticket_limit',
             'price_groups',
         ]
 
 
-class BilligEventSerializer(CustomBaseSerializer):
+class BilligEventSerializer(serializers.ModelSerializer):
     ticket_groups = BilligTicketGroupSerializer(many=True, read_only=True)
+    payment_url = serializers.SerializerMethodField()
+
+    def get_payment_url(self, _obj: BilligEvent) -> str:
+        return settings.BILLIG_PAYMENT_URL
 
     class Meta:
         model = BilligEvent
         fields = [
             'id',
             'name',
+            'payment_url',
+            'ticket_fee',
             'ticket_groups',
             'sale_from',
             'sale_to',
