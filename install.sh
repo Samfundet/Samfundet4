@@ -105,7 +105,7 @@ require "ssh"
 # Homebrew is only required on macOS. Linux uses its distribution's package manager.
 if [ $IS_MAC == 0 ]; then
     # Install brew if it doesn't exist.
-    if [ ! "$(which brew)" ]; then
+    if ! command -v brew >/dev/null 2>&1; then
         echo ; echo ; echo ; echo "================================================================================================================"
         echo "Homebrew is a package manager for macOS."
         do_action "$BOT: Install Homebrew (required)?" "" "$X_INTERACTIVE"
@@ -188,7 +188,7 @@ fi
 ### colima ###
 # Replacement for docker-desktop. Only needed for MacOS.
 # https://github.com/abiosoft/colima
-if [ ! "$(which colima)" ] && [ $IS_MAC == 0 ]; then
+if ! command -v colima >/dev/null 2>&1 && [ $IS_MAC == 0 ]; then
     echo ; echo ; echo ; echo "================================================================================================================"
     do_action "$BOT: Install colima (required unless you have docker-desktop)?" "brew install colima && colima start" "$X_INTERACTIVE"
 fi
@@ -200,7 +200,7 @@ fi
 
 
 ### jq ###
-if [ ! "$(which jq)" ]; then
+if ! command -v jq >/dev/null 2>&1; then
     echo ; echo ; echo ; echo "================================================================================================================"
     echo "Json parser."
     echo "Used to parse extensions.json for VSCode setup."
@@ -227,7 +227,7 @@ fi
 # and virtualenv: it manages the Python version (defined in backend/.python-version),
 # the virtual environment and the dependencies.
 # https://docs.astral.sh/uv/
-if [ ! "$(which uv)" ]; then
+if ! command -v uv >/dev/null 2>&1; then
     echo ; echo ; echo ; echo "================================================================================================================"
     if [ $IS_LINUX == 0 ]; then
         do_action "$BOT: Install uv (required)?" "curl -LsSf https://astral.sh/uv/install.sh | sh ; . ~/.bash_profile" "$X_INTERACTIVE"

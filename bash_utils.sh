@@ -50,7 +50,7 @@ function do_action {
 function require {
     # Exits if command is not found.
     # $1: command to check if exists
-    if [ ! `which $1` ]; then
+    if ! command -v "$1" >/dev/null 2>&1; then
         echo "Error: '$1' is required"
         exit 1
     fi
