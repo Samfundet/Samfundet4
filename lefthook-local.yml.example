@@ -1,7 +1,8 @@
-# Personal, untracked override for lefthook.yml. Copy this file to
-# `lefthook-local.yml` (already gitignored) to change what the shared
-# pre-commit hooks do on *your* machine only — the committed lefthook.yml
-# stays the same for everyone else.
+# Personal, untracked override for lefthook.yml. Only relevant once you've
+# opted in and installed the hook (see docs/development-tools.md#git-hooks-lefthook)
+# — copy this file to `lefthook-local.yml` (already gitignored) to change what
+# the shared pre-commit hooks do on *your* machine only, without touching the
+# committed lefthook.yml that everyone else uses.
 #
 # lefthook merges this file over lefthook.yml automatically; no extra
 # install step is needed once the file exists.

@@ -306,12 +306,13 @@ if [ "$(ls Samfundet4/README.md)" ] ; then # Simple check if an arbitrary file e
     echo ; echo ; echo ; echo "================================================================================================================"
     do_action "$BOT: Install virtual python environment (uv)?" "(cd backend && uv sync)" "$X_INTERACTIVE"
 
-    # Register shared git hooks (lefthook.yml). Uses the uv dev-dependency installed
-    # above, so this works regardless of whether frontend/ ever gets a `yarn install`.
-    # Answering "n" here, or later running `uv run lefthook uninstall`, opts out — see
-    # docs/development-tools.md#git-hooks-lefthook for other opt-out options.
+    # Register shared git hooks (lefthook.yml). Opt-in: uses the uv dev-dependency
+    # installed above, so this works regardless of whether frontend/ ever gets a
+    # `yarn install`. Always asks (third arg "y"), even when the rest of this script
+    # is running non-interactively, since it changes what happens on every future
+    # commit — see docs/development-tools.md#git-hooks-lefthook.
     echo ; echo ; echo ; echo "================================================================================================================"
-    do_action "$BOT: Register shared git hooks (lefthook)? (auto-fixes lint/format on commit, optional)" "(cd backend && uv run lefthook install)" "$X_INTERACTIVE"
+    do_action "$BOT: Register shared git hooks (lefthook)? (auto-fixes lint/format on commit, opt-in)" "(cd backend && uv run lefthook install)" "y"
 
     # Build project.
     echo ; echo ; echo ; echo "================================================================================================================"

@@ -82,5 +82,4 @@ alias uv-run-regenerate-image-variants='uv run python manage.py generate_image_v
 #        lefthook:       #
 ##########################
 # Registers the shared git hooks defined in the repo-root 'lefthook.yml'.
-# Only needed if you never run 'yarn install' in frontend/ (that installs the hooks too, via postinstall).
-alias uv-run-lefthook-install='uv run lefthook install' # One-time setup: register git hooks for this clone.
+alias uv-run-lefthook-install='uv run lefthook install' # One-time setup: register git hooks for this clone (opt-in).

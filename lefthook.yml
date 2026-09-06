@@ -1,17 +1,16 @@
 # Shared, version-controlled git hooks. https://lefthook.dev/configuration/
 #
-# Install (one-time per clone):
+# Opt-in — nothing runs until you register the hook for your own clone:
 #   backend-only:  uv run lefthook install   (or: uv-run-lefthook-install)
-#   frontend:      registered via `yarn install`'s postinstall (fresh installs only;
-#                  run `uv run lefthook install` if you already had node_modules)
+#   frontend:      yarn hooks:install
 #
 # These jobs auto-fix what they can and re-stage the result (stage_fixed), so a
 # commit only fails on issues that need a human (unfixable lint errors, etc.).
 # CI (.github/workflows/verify.yml) still runs the check-only versions of the
 # same tools as the actual gate.
 #
-# Don't want this running on your machine? See lefthook-local.yml.example and
-# docs/development-tools.md#git-hooks-lefthook for opt-out options.
+# Already installed it and want to change your mind? See lefthook-local.yml.example
+# and docs/development-tools.md#git-hooks-lefthook.
 
 pre-commit:
   parallel: true
