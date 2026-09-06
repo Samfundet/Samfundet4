@@ -29,6 +29,11 @@
   gap: 0.25rem;
 }
 
+.color_dropdown {
+  flex: 1;
+  min-width: 0;
+}
+
 .color_preview {
   // ish the same properties as text input field. Fuck css
   padding: 0.75em;
@@ -37,7 +42,6 @@
   aspect-ratio: 1;
   border: 1px solid #c9c9c9;
   border-radius: 0.5rem;
-  margin-top: 0.5em;
 }
 
 .action_row {
