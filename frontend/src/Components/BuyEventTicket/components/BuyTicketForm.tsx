@@ -156,6 +156,7 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
       ),
     [ticketGroups],
   );
+  const eventCanUseMembershipCard = ticketOptions.some((priceGroup) => priceGroup.can_be_put_on_card);
 
   const ticketQuantityDefaults = useMemo(
     () =>
@@ -177,7 +178,7 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
     [ticketGroups],
   );
 
-  const defaultValues = useMemo(
+  const defaultValues = useMemo<BuyTicketFormType>(
     () => ({
       ticketQuantities: {
         ...ticketQuantityDefaults,
@@ -187,11 +188,14 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
         ...seatSelectionDefaults,
         ...(initialValues?.seatSelections ?? {}),
       },
-      ticketType: initialValues?.ticketType ?? TICKET_TYPE_MEMBERSHIP,
+      ticketType:
+        eventCanUseMembershipCard && initialValues?.ticketType !== TICKET_TYPE_EMAIL
+          ? TICKET_TYPE_MEMBERSHIP
+          : TICKET_TYPE_EMAIL,
       email: initialValues?.email ?? '',
       membershipNumber: initialValues?.membershipNumber ?? '',
     }),
-    [initialValues, seatSelectionDefaults, ticketQuantityDefaults],
+    [eventCanUseMembershipCard, initialValues, seatSelectionDefaults, ticketQuantityDefaults],
   );
 
   const form = useForm<BuyTicketFormType>({
@@ -224,7 +228,8 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
     [ticketGroups, selectedTicketCountsByGroup],
   );
   const selectedTicketsCanBePutOnCard =
-    selectedPriceGroups.length === 0 || selectedPriceGroups.every((priceGroup) => priceGroup.can_be_put_on_card);
+    eventCanUseMembershipCard &&
+    (selectedPriceGroups.length === 0 || selectedPriceGroups.every((priceGroup) => priceGroup.can_be_put_on_card));
   const selectedTicketsRequireMembership = selectedPriceGroups.some((priceGroup) => priceGroup.membership_needed);
   const totalPrice = useMemo(
     () =>
@@ -401,7 +406,7 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
                 </div>
               </div>
 
-              {!selectedTicketsCanBePutOnCard && selectedPriceGroups.length > 0 && (
+              {!selectedTicketsCanBePutOnCard && ticketOptions.length > 0 && (
                 <p className={styles.validation_notice}>{t(KEY.ticket_card_unavailable_message)}</p>
               )}
               {ticketType === TICKET_TYPE_EMAIL && selectedTicketsRequireMembership && (
