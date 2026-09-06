@@ -7,7 +7,19 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
-import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Textarea } from '~/Components';
+import {
+  Button,
+  Dropdown,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  Textarea,
+} from '~/Components';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { getImage, getInfobox, postInfobox, putInfobox } from '~/api';
 import type { ImageDto, InfoboxDto } from '~/dto';
@@ -17,9 +29,31 @@ import { KEY } from '~/i18n/constants';
 import { infoboxKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { WEBSITE_URL } from '~/schema/url';
+import { COLORS, type ColorKey } from '~/types';
 import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './InfoboxFormAdminPage.module.scss';
+
+// A modest, curated selection of the CSS color constants that make sense as an infobox background.
+const INFOBOX_COLOR_KEYS = [
+  'red_samf',
+  'blue',
+  'blue_isfit',
+  'turquoise',
+  'green',
+  'sulten_orange',
+  'grey_5',
+] as const satisfies readonly ColorKey[];
+
+const INFOBOX_COLOR_LABEL_KEYS: Record<(typeof INFOBOX_COLOR_KEYS)[number], string> = {
+  red_samf: KEY.admin_infobox_color_red_samf,
+  blue: KEY.admin_infobox_color_blue,
+  blue_isfit: KEY.admin_infobox_color_blue_isfit,
+  turquoise: KEY.admin_infobox_color_turquoise,
+  green: KEY.admin_infobox_color_green,
+  sulten_orange: KEY.admin_infobox_color_orange,
+  grey_5: KEY.admin_infobox_color_grey,
+};
 
 const schema = z.object({
   title_nb: z.string().min(1),
@@ -51,6 +85,11 @@ export function InfoboxFormAdminPage() {
   const { id } = useParams();
   const infoboxId = id ? Number(id) : undefined;
 
+  const colorOptions: DropdownOption<string>[] = INFOBOX_COLOR_KEYS.map((key) => ({
+    value: COLORS[key],
+    label: t(INFOBOX_COLOR_LABEL_KEYS[key]),
+  }));
+
   const form = useForm<InfoboxFormType>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -58,7 +97,7 @@ export function InfoboxFormAdminPage() {
       text_nb: '',
       title_en: '',
       text_en: '',
-      color: '',
+      color: COLORS[INFOBOX_COLOR_KEYS[0]],
       url: '',
       image: undefined,
     },
@@ -239,7 +278,7 @@ export function InfoboxFormAdminPage() {
                           style={{ backgroundColor: field.value || 'transparent' }}
                           title={field.value || t(KEY.common_color)}
                         />
-                        <Input type="text" {...field} />
+                        <Dropdown className={styles.color_dropdown} options={colorOptions} {...field} />
                       </div>
                     </FormControl>
                     <FormMessage />
