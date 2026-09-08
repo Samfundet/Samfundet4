@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import os
 
+from django.core.exceptions import ImproperlyConfigured
+
 from root.constants import Environment
 
 from .base import *  # noqa: F403
@@ -107,5 +109,18 @@ LOGGING['loggers'][''] = {  # type: ignore[index]
 #         Email            #
 # ======================== #
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = './tmp/email/'
+if IS_DOCKER:
+    # Capture all email in MailHog (docker-compose service 'mailhog').
+    # Nothing is ever relayed to the outside world: dev settings never read
+    # the production-oriented EMAIL_* variables, and non-local hosts are rejected.
+    MAILHOG_HOST = os.environ.get('MAILHOG_HOST', 'mailhog')
+    MAILHOG_LOCAL_HOSTS = {'mailhog', 'localhost', '127.0.0.1', 'host.docker.internal'}
+    if MAILHOG_HOST not in MAILHOG_LOCAL_HOSTS:
+        raise ImproperlyConfigured(f'MAILHOG_HOST must be one of {sorted(MAILHOG_LOCAL_HOSTS)}, got {MAILHOG_HOST!r}. Refusing to send dev email elsewhere.')
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = MAILHOG_HOST
+    EMAIL_PORT = int(os.environ.get('MAILHOG_PORT', 1025))
+    EMAIL_USE_TLS = False
+else:
+    # Native development: print email to the console.
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
