@@ -140,8 +140,8 @@ max-complexity = 5
 [project]
 name = "samfundet4-backend"
 version = "0.0.0"
-# Exact interpreter is pinned by '.python-version' (3.11.2); this allows any 3.11.x for resolution.
-requires-python = "==3.11.*"
+# Exact interpreter is pinned by '.python-version' (3.13); this allows any 3.13.x for resolution.
+requires-python = "==3.13.*"
 dependencies = [
     "django==5.2.*",
     "django-extensions==4.*",
@@ -170,6 +170,7 @@ dev = [
     "pytest-django==4.*",
     "drf-spectacular==0.30.*",
     "freezegun>=1.5.5,<2",
+    "lefthook>=2.1.7,<3",
 ]
 
 [tool.uv]
