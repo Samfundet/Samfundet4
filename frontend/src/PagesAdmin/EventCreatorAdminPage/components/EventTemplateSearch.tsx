@@ -15,7 +15,7 @@ type EventTemplateSearchProp = {
 export function EventTemplateSearch({ events, onSelectEvent }: EventTemplateSearchProp) {
   const { t, i18n } = useTranslation();
   const [query, setQuery] = useState('');
-  const [selectedEvent, SetSelectedEvent] = useState<EventDto | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<EventDto | null>(null);
   const filteredEvents = useMemo(() => {
     const normalizedSearch = query.trim().toLowerCase();
     if (normalizedSearch === '') return [];
@@ -32,7 +32,7 @@ export function EventTemplateSearch({ events, onSelectEvent }: EventTemplateSear
 
     const selectedTitle = selectedEvent ? (dbT(selectedEvent, 'title', i18n.language) as string) ?? '' : '';
     if (value !== selectedTitle) {
-      SetSelectedEvent(null);
+      setSelectedEvent(null);
     }
   }
 
