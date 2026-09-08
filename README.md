@@ -45,10 +45,6 @@ Samfundet4 is the latest and greatest iteration of samfundet.no. It's built usin
 
 - [Pipeline (mypy, Biome, tsc, ...)](./docs/technical/pipeline.md)
 
-### Architecture
-
-- [Architecture Decision Records](./docs/technical/adr/README.md)
-
 ### Install
 
 - Linux: [Docker](./docs/install/linux-docker.md) – [Native](./docs/install/linux-native.md)

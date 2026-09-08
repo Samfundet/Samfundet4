@@ -119,7 +119,7 @@ if IS_DOCKER:
         raise ImproperlyConfigured(f'MAILHOG_HOST must be one of {sorted(MAILHOG_LOCAL_HOSTS)}, got {MAILHOG_HOST!r}. Refusing to send dev email elsewhere.')
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = MAILHOG_HOST
-    EMAIL_PORT = int(os.environ.get('MAILHOG_PORT', 1025))
+    EMAIL_PORT = int(os.environ.get('MAILHOG_PORT', '1025'))
     EMAIL_USE_TLS = False
 else:
     # Native development: print email to the console.
