@@ -117,7 +117,7 @@ function BilligSignedFailureForm({
       observer.disconnect();
       window.clearTimeout(timeoutId);
     };
-  }, [context, onParsedValues]);
+  }, [onParsedValues]);
 
   return (
     <>
@@ -140,7 +140,7 @@ function BilligSignedFailureForm({
                     <label key={priceGroup.id} className={styles.formRow}>
                       <span>{priceGroup.name}</span>
                       <select name={`price_${priceGroup.id}_count`} defaultValue="0" className={styles.select}>
-                        {Array.from({ length: maxCount + 1 }, (_, count) => (
+                        {[...Array(maxCount + 1).keys()].map((count) => (
                           <option key={count} value={count}>
                             {count}
                           </option>
