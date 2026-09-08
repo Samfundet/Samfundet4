@@ -78,7 +78,7 @@ export function EventsAdminPage() {
 
   // Fetch all events for the template search (create from existing event)
   const { data: templateEvents = [] } = useQuery({
-    queryKey: ['events'],
+    queryKey: eventKeys.all,
     queryFn: getEvents,
   });
 
