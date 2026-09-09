@@ -1,18 +1,18 @@
 import { Icon } from '@iconify/react';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
-import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
+import { type ReactElement, type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { getEvent, getVenues } from '~/api';
+import { getEvent, getEventForCloning, getVenues } from '~/api';
 import type { EventDto } from '~/dto';
 import { usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { venueKeys } from '~/queryKeys';
+import { eventCloneKeys, eventKeys, venueKeys } from '~/queryKeys';
 import {
   EventAgeRestriction,
   type EventAgeRestrictionValue,
@@ -49,10 +49,18 @@ import type { EventStatusOption } from './types';
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
-  const [event, setEvent] = useState<Partial<EventDto>>();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const templateId = id === undefined ? searchParams.get('template') : undefined;
+  const eventId = id ?? templateId;
+  const isCloning = templateId !== undefined;
   const { createEventMutation, editEventMutation } = useEventMutations();
+
+  const { data: event, isPending: isEventPending } = useQuery({
+    queryKey: !eventId ? ['events', 'no-id'] : isCloning ? eventCloneKeys.detail(eventId) : eventKeys.detail(eventId),
+    queryFn: () => (isCloning ? getEventForCloning(eventId as string) : getEvent(eventId as string)),
+    enabled: eventId !== undefined,
+  });
 
   const { data: venues = [] } = useQuery({
     queryKey: venueKeys.all,
@@ -87,6 +95,7 @@ export function EventCreatorAdminPage() {
     event,
     defaultCategory: eventCategoryOptions[0]?.value ?? EventCategory.ART,
     defaultLocation: locationOptions[0]?.value ?? '',
+    forTemplate: templateId !== undefined,
   });
 
   const stepComponentMap: Record<StepKey, ReactElement> = {
@@ -99,22 +108,6 @@ export function EventCreatorAdminPage() {
   };
 
   const hasSocialMediaErrors = SOCIAL_KEYS.some((name) => !!form.formState.errors[name]);
-
-  // Fetch event data using the event ID
-  useEffect(() => {
-    if (id) {
-      getEvent(id)
-        .then((eventData) => {
-          setEvent(eventData);
-          setShowSpinner(false);
-        })
-        .catch((error) => {
-          toast.error(t(KEY.common_something_went_wrong));
-        });
-    } else {
-      setShowSpinner(false);
-    }
-  }, [id, t]);
 
   // ================================== //
   //          Creation Steps            //
@@ -247,7 +240,7 @@ export function EventCreatorAdminPage() {
   useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true}>
+    <AdminPageLayout title={title} loading={eventId !== undefined && isEventPending} header={true}>
       <TabBar
         tabs={formTabs}
         selected={currentFormTab}
