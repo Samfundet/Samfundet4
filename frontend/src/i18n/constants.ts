@@ -217,6 +217,7 @@ export const KEY = {
   common_uploaded_by: 'common_uploaded_by',
   common_last_edited_by: 'common_last_edited_by',
   common_casedocuments: 'common_casedocuments',
+  common_ask_delete: 'common_ask_delete',
   common_positions: 'common_positions',
 
   common_membership_number: 'common_membership_number',

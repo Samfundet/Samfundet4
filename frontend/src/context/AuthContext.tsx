@@ -51,3 +51,38 @@ export function AuthContextProvider({ children, enabled = true }: AuthContextPro
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 }
+
+type MockAuthContextProviderProps = {
+  children: ReactNode;
+  is_staff?: boolean;
+  is_superuser?: boolean;
+  is_active?: boolean;
+};
+
+export function MockAuthContextProvider({
+  children,
+  is_staff = true,
+  is_superuser = true,
+  is_active = true,
+}: MockAuthContextProviderProps) {
+  const mockAdminUser: UserDto = {
+    id: 1,
+    username: 'MockUser',
+    first_name: 'Mocker',
+    last_name: 'Mockingssons',
+    email: 'mocker@mockers.com',
+    is_staff,
+    is_active,
+    is_superuser,
+    date_joined: new Date(),
+    last_login: null,
+    user_preference: { id: 1, theme: 'theme-light' },
+    groups: [],
+  };
+
+  return (
+    <AuthContext.Provider value={{ user: mockAdminUser, setUser: () => {}, loading: false }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
