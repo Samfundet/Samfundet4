@@ -20,6 +20,7 @@ export const KEY = {
   // ==================== //
 
   // Days:
+  common_day: 'common_day',
   common_day_monday: 'common_day_monday',
   common_day_tuesday: 'common_day_tuesday',
   common_day_wednesday: 'common_day_wednesday',
