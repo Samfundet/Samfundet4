@@ -1,0 +1,113 @@
+@use 'src/constants' as *;
+
+@use 'src/mixins' as *;
+
+$tile-overlay: linear-gradient(180deg, rgba(10, 12, 20, 0.08) 0%, rgba(10, 12, 20, 0.42) 45%, rgba(10, 12, 20, 0.88) 100%);
+
+.imageContainer {
+  position: relative;
+  @include rounded-heavy;
+  @include shadow-light;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  background-color: $grey-1;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    filter 180ms ease;
+  border: none;
+  isolation: isolate;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: $tile-overlay;
+    opacity: 0.9;
+    transition: opacity 180ms ease, background 180ms ease;
+    z-index: 0;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+.clickable {
+  appearance: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: inherit;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 4px rgba(51, 122, 183, 0.24),
+      0 18px 40px rgba(0, 0, 0, 0.16);
+  }
+}
+
+.selected {
+  box-shadow: 0 0 0 4px $blue-medium;
+  transform: translateY(-2px);
+
+  &::before {
+    background: linear-gradient(180deg, rgba(10, 12, 20, 0.02) 0%, rgba(10, 12, 20, 0.36) 45%, rgba(10, 12, 20, 0.9) 100%);
+  }
+}
+
+.imageTitle {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  width: 100%;
+  margin-top: auto;
+  padding: 1rem 1rem 0.95rem;
+  color: $white;
+  text-align: left;
+}
+
+.text {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag {
+  max-width: 100%;
+  overflow: hidden;
+  padding: 0.25rem 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.32);
+  color: $white-muted;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
