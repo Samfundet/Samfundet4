@@ -13,7 +13,9 @@ from django.contrib.auth.models import UserManager
 
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
-from .general import Gang, User, Campus, GangSection, Organization
+from samfundet.organization.models import Gang, GangSection, Organization
+
+from .general import User, Campus
 from .model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
 
 

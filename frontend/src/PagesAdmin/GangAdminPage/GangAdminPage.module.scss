@@ -1,0 +1,19 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo {
+  height: 32px;
+  width: 32px;
+  object-fit: cover;
+}
+
+.row {
+  td:first-child {
+    width: 48px;
+    padding-right: 4px;
+  }
+}

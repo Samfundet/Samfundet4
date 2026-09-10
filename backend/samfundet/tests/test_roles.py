@@ -5,9 +5,10 @@ import pytest
 from django.contrib.auth.models import Permission, AnonymousUser
 
 from samfundet.roles import get_owner_permission_map
-from samfundet.models import Gang, User, GangSection, Organization
+from samfundet.models import Gang, User, GangSection
 from samfundet.backend import RoleAuthBackend
 from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
+from samfundet.organization.models import Organization
 
 
 def test_has_perm_superuser(fixture_superuser: User, fixture_organization: Organization, fixture_org_permission: Permission):

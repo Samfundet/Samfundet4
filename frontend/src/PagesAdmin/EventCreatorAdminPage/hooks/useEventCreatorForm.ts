@@ -1,10 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
 import type { EventDto, EventWriteDto } from '~/dto';
-import type { EventCategoryValue } from '~/types';
+import { type EventCategoryValue, EventStatusChoice } from '~/types';
 import { utcTimestampToLocal } from '~/utils';
 import { eventSchema } from '../EventCreatorSchema';
 
@@ -56,6 +56,7 @@ export function useEventCreatorForm(params: {
       vimeo_link: '',
       general_link: '',
       image: undefined,
+      status: EventStatusChoice.PUBLIC,
       visibility_from_dt: '',
       visibility_to_dt: '',
     },
@@ -95,6 +96,7 @@ export function useEventCreatorForm(params: {
       vimeo_link: event.vimeo_link || '',
       general_link: event.general_link || '',
       image: event.image ?? undefined,
+      status: event.status || EventStatusChoice.PUBLIC,
       visibility_from_dt: event.visibility_from_dt ? utcTimestampToLocal(event.visibility_from_dt, false) : '',
       visibility_to_dt: event.visibility_to_dt ? utcTimestampToLocal(event.visibility_to_dt, false) : '',
     };
@@ -106,6 +108,21 @@ export function useEventCreatorForm(params: {
   }, [form, resetValues]);
 
   const watchedValues = form.watch();
+
+  const startDt = watchedValues.start_dt ?? '';
+  const visibilityFromDt = watchedValues.visibility_from_dt ?? '';
+  const previousStartDt = useRef(startDt);
+  const { trigger } = form;
+
+  useEffect(() => {
+    if (previousStartDt.current === startDt) return;
+
+    previousStartDt.current = startDt;
+
+    if (visibilityFromDt) {
+      void trigger('visibility_from_dt');
+    }
+  }, [startDt, visibilityFromDt, trigger]);
 
   function buildPayload(values: FormType): EventWriteDto {
     const start = values.start_dt ? new Date(values.start_dt) : null;

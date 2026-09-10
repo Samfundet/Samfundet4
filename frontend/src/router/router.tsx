@@ -45,8 +45,11 @@ import {
   CreateInterviewRoomPage,
   EventCreatorAdminPage,
   EventsAdminPage,
+  GangAdminPage,
+  GangFormAdminPage,
+  GangSectionAdminPage,
+  GangSectionFormAdminPage,
   GangsAdminPage,
-  GangsFormAdminPage,
   ImageAdminPage,
   ImageDetailAdminPage,
   InformationAdminPage,
@@ -91,11 +94,13 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import {
   type GangLoader,
+  type GangSectionLoader,
   type PositionLoader,
   type RecruitmentLoader,
   type RoleLoader,
   type SeparatePositionLoader,
   gangLoader,
+  gangSectionLoader,
   recruitmentGangLoader,
   recruitmentGangPositionLoader,
   recruitmentLoader,
@@ -116,7 +121,8 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.home} element={<HomePage />} />
           <Route path={ROUTES.frontend.about} element={<AboutPage />} />
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
-          <Route path={ROUTES.frontend.venues} element={<SiteFeatureGate feature="venues"><VenuePage /></SiteFeatureGate>}/>
+          <Route path={ROUTES.frontend.venues}
+                 element={<SiteFeatureGate feature="venues"><VenuePage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.health} element={<HealthPage />} />
           {import.meta.env.DEV && <Route path={ROUTES.frontend.components} element={<ComponentPage />} />}
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
@@ -136,26 +142,30 @@ export const router = createBrowserRouter(
             <Route path={ROUTES.frontend.signup} element={<SignUpPage />} />
           </Route>
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
-          <Route element={ <SiteFeatureGate feature="information"><Outlet /></SiteFeatureGate>}>
+          <Route element={<SiteFeatureGate feature="information"><Outlet /></SiteFeatureGate>}>
             <Route path={ROUTES.frontend.information_page_detail} element={<InformationPage />} />
           </Route>
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
-          <Route path={ROUTES.frontend.gangs} element={<SiteFeatureGate feature="gangs"><GangsPage /></SiteFeatureGate>} />
+          <Route path={ROUTES.frontend.gangs}
+                 element={<SiteFeatureGate feature="gangs"><GangsPage /></SiteFeatureGate>} />
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route element={<SiteFeatureGate feature="events"><Outlet /></SiteFeatureGate>}>
             <Route path={ROUTES.frontend.events} element={<EventsPage />} />
             <Route path={ROUTES.frontend.event} element={<EventPage />} />
           </Route>
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
-          <Route path={ROUTES.frontend.casedocuments} element={<SiteFeatureGate feature="documents"><CaseDocumentsPage /></SiteFeatureGate>} />
+          <Route path={ROUTES.frontend.casedocuments}
+                 element={<SiteFeatureGate feature="documents"><CaseDocumentsPage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.contributors} element={<ContributorsPage />} />
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
-          <Route path={ROUTES.frontend.membership} element={<SiteFeatureGate feature="membership"><MembershipPage /></SiteFeatureGate>} />
+          <Route path={ROUTES.frontend.membership}
+                 element={<SiteFeatureGate feature="membership"><MembershipPage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.contact} element={<div />} />
           <Route path={ROUTES.frontend.luka} element={<div />} />
           {/* Recruitment */}
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
-          <Route path={ROUTES.frontend.recruitment} element={<SiteFeatureGate feature="recruitment"><RecruitmentPage /></SiteFeatureGate> }/>
+          <Route path={ROUTES.frontend.recruitment}
+                 element={<SiteFeatureGate feature="recruitment"><RecruitmentPage /></SiteFeatureGate>} />
         </Route>
       </Route>
       {/* Specific recruitment */}
@@ -217,25 +227,107 @@ export const router = createBrowserRouter(
               element={
                 <PermissionRoute
                   required={[PERM.SAMFUNDET_ADD_GANG]}
-                  element={<GangsFormAdminPage />}
+                  element={<GangFormAdminPage />}
                   resolution="roles"
                 />
               }
             />
             <Route
-              path={ROUTES.frontend.admin_gangs_edit}
-              element={
-                <PermissionRoute
-                  required={[PERM.SAMFUNDET_CHANGE_GANG]}
-                  element={<GangsFormAdminPage />}
-                  resolution="roles"
-                />
-              }
+              id="admin-gang"
               loader={gangLoader}
               handle={{
-                crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link>,
+                crumb: (_: UIMatch, { gang }: GangLoader) => (
+                  <Link
+                    url={reverse({
+                      pattern: ROUTES.frontend.admin_gangs_view,
+                      urlParams: { gangId: gang?.id },
+                    })}
+                  >
+                    {dbT(gang, 'name')}
+                  </Link>
+                ),
               }}
-            />
+            >
+              <Route
+                path={ROUTES.frontend.admin_gangs_view}
+                element={
+                  <PermissionRoute
+                    required={[PERM.SAMFUNDET_VIEW_GANG]}
+                    element={<GangAdminPage />}
+                    resolution="roles"
+                  />
+                }
+              />
+              <Route
+                path={ROUTES.frontend.admin_gangs_edit}
+                element={
+                  <PermissionRoute
+                    required={[PERM.SAMFUNDET_CHANGE_GANG]}
+                    element={<GangFormAdminPage />}
+                    resolution="roles"
+                  />
+                }
+                loader={gangLoader}
+                handle={{
+                  crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link>,
+                }}
+              />
+              <Route
+                path={ROUTES.frontend.admin_gang_section_create}
+                handle={{
+                  crumb: ({ pathname }: UIMatch) => (
+                    <Link url={pathname}>{lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_section)}`)}</Link>
+                  ),
+                }}
+                element={
+                  <PermissionRoute
+                    required={[PERM.SAMFUNDET_ADD_GANGSECTION]}
+                    element={<GangSectionFormAdminPage />}
+                    resolution="roles"
+                  />
+                }
+              />
+              <Route
+                id="admin-gang-section"
+                loader={gangSectionLoader}
+                handle={{
+                  crumb: ({ params }: UIMatch, { section }: GangSectionLoader) => (
+                    <Link
+                      url={reverse({
+                        pattern: ROUTES.frontend.admin_gang_section_view,
+                        urlParams: params,
+                      })}
+                    >
+                      {dbT(section, 'name')}
+                    </Link>
+                  ),
+                }}
+              >
+                <Route
+                  path={ROUTES.frontend.admin_gang_section_view}
+                  element={
+                    <PermissionRoute
+                      required={[PERM.SAMFUNDET_VIEW_GANGSECTION]}
+                      element={<GangSectionAdminPage />}
+                      resolution="roles"
+                    />
+                  }
+                />
+                <Route
+                  path={ROUTES.frontend.admin_gang_section_edit}
+                  handle={{
+                    crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link>,
+                  }}
+                  element={
+                    <PermissionRoute
+                      required={[PERM.SAMFUNDET_CHANGE_GANGSECTION]}
+                      element={<GangSectionFormAdminPage />}
+                      resolution="roles"
+                    />
+                  }
+                />
+              </Route>
+            </Route>
           </Route>
           {/* Users */}
           <Route

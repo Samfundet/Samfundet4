@@ -1,106 +1,163 @@
-import { useEffect, useState } from 'react';
+import { Icon } from '@iconify/react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
-import { Button } from '~/Components';
+import { Button, H2, Link } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
-import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { Table } from '~/Components/Table';
-import { getOrganizedGangList } from '~/api';
-import type { GangTypeDto } from '~/dto';
+import { useAuthContext } from '~/context/AuthContext';
+import { useGetAdminGangs } from '~/domain/gangs/queries';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
+import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
-import { dbT } from '~/utils';
+import { dbT, hasPermissions } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import styles from './GangsAdminPage.module.scss';
 
 export function GangsAdminPage() {
   const navigate = useNavigate();
-  const [gangTypes, setGangs] = useState<GangTypeDto[]>([]);
-  const [currentGangTypeTab, setGangTypeTab] = useState<Tab<GangTypeDto> | undefined>(undefined);
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
-  useTitle(t(KEY.adminpage_gangs_title));
-
-  // Stuff to do on first render.
-  // TODO add permissions on render
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
-  useEffect(() => {
-    getOrganizedGangList()
-      .then((data) => {
-        setGangs(data);
-        setShowSpinner(false);
-        setGangTypeTab({
-          key: data[0].id,
-          label: dbT(data[0], 'title') ?? '?',
-          value: data[0],
-        });
-      })
-      .catch((error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
-      });
-  }, []);
-
-  const gangTypeTabs: Tab<GangTypeDto>[] = gangTypes.map((gangType) => {
-    return {
-      key: gangType.id,
-      label: dbT(gangType, 'title') ?? '?',
-      value: gangType,
-    };
-  });
-
-  const currentGangType = currentGangTypeTab?.value;
-
-  const tableData = currentGangType?.gangs.map((element2) => ({
-    cells: [
-      dbT(element2, 'name'),
-      element2.abbreviation,
-      element2.webpage,
-      {
-        content: (
-          <CrudButtons
-            onEdit={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.admin_gangs_edit,
-                  urlParams: { gangId: element2.id },
-                }),
-              );
-            }}
-          />
-        ),
-      },
-    ],
-  }));
+  const { user } = useAuthContext();
+  const { data, isLoading } = useGetAdminGangs();
 
   const title = t(KEY.adminpage_gangs_title);
-  // const backendUrl = ROUTES.backend.admin__samfundet_gang_changelist;
-  const backendUrl = undefined;
+
+  useTitle(title);
+
+  const canCreate = hasPermissions(user, [PERM.SAMFUNDET_ADD_GANG], undefined, true);
+  const canEdit = hasPermissions(user, [PERM.SAMFUNDET_ADD_GANG], undefined, true);
+
+  const orgTables = useMemo(() => {
+    if (!data) {
+      return <></>;
+    }
+
+    return (
+      <div>
+        {data.map((org) => {
+          const tableData = org.gangs.map((gang) => ({
+            cells: [
+              {
+                content: gang.logo && <img className={styles.logo} src={gang.logo} alt="" />,
+              },
+              {
+                content: (
+                  <Link
+                    url={reverse({
+                      pattern: ROUTES.frontend.admin_gangs_view,
+                      urlParams: { gangId: gang.id },
+                    })}
+                  >
+                    {dbT(gang, 'name')}
+                  </Link>
+                ),
+              },
+              gang.abbreviation,
+              gang.gang_type ? dbT(gang.gang_type, 'title') ?? t(KEY.common_unknown) : '',
+              gang.webpage
+                ? {
+                    content: (
+                      <Link url={gang.webpage} target="external">
+                        {gang.webpage}
+                      </Link>
+                    ),
+                  }
+                : '',
+              {
+                content: (
+                  <CrudButtons
+                    onEdit={
+                      canEdit &&
+                      reverse({
+                        pattern: ROUTES.frontend.admin_gangs_edit,
+                        urlParams: { gangId: gang.id },
+                      })
+                    }
+                  />
+                ),
+              },
+            ],
+          }));
+
+          return (
+            <div key={org.id} style={{ marginBottom: '1rem' }}>
+              <H2>{org.name}</H2>
+
+              <Table
+                columns={[
+                  '',
+                  t(KEY.common_gang) ?? '',
+                  t(KEY.admin_gangsadminpage_abbreviation) ?? '',
+                  t(KEY.common_gang_type) ?? '',
+                  t(KEY.admin_gangsadminpage_webpage) ?? '',
+                  '',
+                ]}
+                data={tableData ?? []}
+                bodyRowClassName={styles.row}
+              />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }, [data, canEdit, t]);
+
+  data?.flatMap((gangType) =>
+    gangType.gangs.map((gang) => ({
+      cells: [
+        {
+          content: gang.logo && <img className={styles.logo} src={gang.logo} alt="" />,
+        },
+        dbT(gang, 'name'),
+        gang.abbreviation,
+        gang.webpage
+          ? {
+              content: (
+                <Link url={gang.webpage} target="external">
+                  {gang.webpage}
+                </Link>
+              ),
+            }
+          : '',
+        dbT(gangType, 'title') ?? t(KEY.common_unknown),
+        {
+          content: (
+            <CrudButtons
+              onEdit={
+                canEdit &&
+                reverse({
+                  pattern: ROUTES.frontend.admin_gangs_edit,
+                  urlParams: { gangId: gang.id },
+                })
+              }
+            />
+          ),
+        },
+      ],
+    })),
+  );
+
   const header = (
-    <Button theme="success" rounded={true} onClick={() => navigate(ROUTES.frontend.admin_gangs_create)}>
-      {t(KEY.adminpage_gangs_create)}
-    </Button>
+    <>
+      {canCreate && (
+        <Button theme="primary" onClick={() => navigate(ROUTES.frontend.admin_gangs_create)}>
+          <Icon icon="lucide:plus" />
+          {t(KEY.adminpage_gangs_create)}
+        </Button>
+      )}
+    </>
   );
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
-      <TabBar tabs={gangTypeTabs} selected={currentGangTypeTab} onSetTab={setGangTypeTab} />
-      <br />
-      {currentGangType && (
-        <>
-          <Table
-            columns={[
-              t(KEY.common_gang) ?? '',
-              t(KEY.admin_gangsadminpage_abbreviation) ?? '',
-              t(KEY.admin_gangsadminpage_webpage) ?? '',
-              '',
-            ]}
-            data={tableData ?? []}
-          />
-        </>
-      )}
+    <AdminPageLayout
+      title={title}
+      backendUrl={ROUTES.backend.admin__samfundet_gang_changelist}
+      header={header}
+      loading={isLoading}
+    >
+      {orgTables}
     </AdminPageLayout>
   );
 }

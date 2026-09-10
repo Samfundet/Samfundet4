@@ -9,16 +9,14 @@ from __future__ import annotations
 # Such a module must refer back to samfundet.models by string label only ('samfundet.Gang'), since
 # importing it at runtime would cause circular import.
 from samfundet.infopages.models import InformationPage, InformationPageRevision
+from samfundet.organization.models import Gang, GangType, GangSection, Organization
 
 from .event import (
     Event,
 )
 from .general import (
-    Gang,
     User,
     Image,
-    GangSection,
-    Organization,
     UserPreference,
 )
 from .site_banner import SiteBanner
@@ -26,6 +24,7 @@ from .site_banner import SiteBanner
 __all__ = [
     'User',
     'Gang',
+    'GangType',
     'GangSection',
     'Organization',
     'Event',

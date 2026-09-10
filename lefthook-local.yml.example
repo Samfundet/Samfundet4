@@ -1,0 +1,19 @@
+# Personal, untracked override for lefthook.yml. Only relevant once you've
+# opted in and installed the hook (see docs/development-tools.md#git-hooks-lefthook)
+# — copy this file to `lefthook-local.yml` (already gitignored) to change what
+# the shared pre-commit hooks do on *your* machine only, without touching the
+# committed lefthook.yml that everyone else uses.
+#
+# lefthook merges this file over lefthook.yml automatically; no extra
+# install step is needed once the file exists.
+# Docs: https://lefthook.dev/configuration/#local-config
+
+# Opt out of the pre-commit hook entirely:
+# pre-commit:
+#   skip: true
+
+# Or opt out of a single job, e.g. stylelint:
+# pre-commit:
+#   jobs:
+#     - name: frontend:stylelint-fix
+#       skip: true

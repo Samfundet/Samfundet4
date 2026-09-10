@@ -17,9 +17,10 @@ from root.utils.permissions import (
     SAMFUNDET_DELETE_INFORMATIONPAGE,
 )
 
-from samfundet.models import Gang, User, GangSection, Organization
+from samfundet.models import Gang, User, GangSection
 from samfundet.models.role import Role
 from samfundet.infopages.models import InformationPage
+from samfundet.organization.models import Organization
 
 from .test_roles import grant
 

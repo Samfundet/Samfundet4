@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { RecruitmentWithoutInterviewTable } from '~/Components';
 import { Text } from '~/Components/Text/Text';
-import { getApplicantsWithoutInterviews, getGang, getRecruitment, getRecruitmentGangStats } from '~/api';
+import { getAdminGang, getApplicantsWithoutInterviews, getRecruitment, getRecruitmentGangStats } from '~/api';
 import type { GangDto, RecruitmentDto, RecruitmentUserDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
@@ -44,7 +44,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
   // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
     if (gangId) {
-      getGang(gangId)
+      getAdminGang(gangId)
         .then((gang) => {
           setGang(gang);
         })

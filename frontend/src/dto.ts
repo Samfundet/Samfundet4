@@ -12,8 +12,8 @@ export type BaseModelDto = {
   version?: number;
   created_at?: string;
   updated_at?: string;
-  created_by?: BasicUserDto | UserDto | null;
-  updated_by?: BasicUserDto | UserDto | null;
+  created_by?: BasicUserDto | UserDto | string | null;
+  updated_by?: BasicUserDto | UserDto | string | null;
 };
 
 // Models which are owned by an org/gang/section should extend this type.
@@ -225,6 +225,8 @@ export type EventDto = {
 };
 
 export type EventWriteDto = {
+  status?: EventStatus;
+
   title_nb: string;
   title_en: string;
   description_long_nb: string;
@@ -429,6 +431,17 @@ export type OrganizationDto = {
   name: string;
 };
 
+export type EditGangDto = {
+  name_nb: string;
+  name_en: string;
+  abbreviation?: string;
+  webpage?: string;
+  logo?: File;
+  organization?: number;
+  gang_type?: number | null;
+  info_page?: string | null;
+};
+
 export type GangDto = {
   id: number;
   name_nb: string;
@@ -438,10 +451,25 @@ export type GangDto = {
   logo?: string;
   gang_type?: number | null;
   info_page?: string | null;
+  organization?: number | null;
 };
 
 export type RecruitmentGangDto = GangDto & {
   recruitment_positions: number;
+};
+
+export type AdminGangTypeDto = {
+  id: number;
+  title_nb: string;
+  title_en: string;
+};
+
+export type AdminGangListGangDto = Omit<GangDto, 'gang_type'> & {
+  gang_type: GangTypeDto | null;
+};
+
+export type AdminGangListOrganizationDto = OrganizationDto & {
+  gangs: AdminGangListGangDto[];
 };
 
 export type GangTypeDto = {
@@ -451,7 +479,14 @@ export type GangTypeDto = {
   gangs: GangDto[];
 };
 
-export type GangSectionDto = {
+export type EditGangSectionDto = {
+  name_nb: string;
+  name_en: string;
+  logo?: File;
+  gang: number;
+};
+
+export type GangSectionDto = BaseModelDto & {
   id: number;
   name_nb: string;
   name_en: string;

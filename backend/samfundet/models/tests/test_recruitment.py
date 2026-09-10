@@ -5,15 +5,15 @@ import pytest
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from samfundet.models.general import Gang, User, Campus, GangSection
+from samfundet.models.general import User, Campus
 from samfundet.models.recruitment import (
     Interview,
     Recruitment,
-    Organization,
     RecruitmentPosition,
     RecruitmentApplication,
     RecruitmentPositionSharedInterviewGroup,
 )
+from samfundet.organization.models import Gang, GangSection, Organization
 from samfundet.models.model_choices import RecruitmentStatusChoices, RecruitmentApplicantStates, RecruitmentPriorityChoices
 
 datetime_fields_expecting_error = [
