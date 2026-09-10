@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import { z } from 'zod';
 import {
   Button,
-  Dropdown,
   Form,
   FormControl,
   FormField,
@@ -239,6 +238,7 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
       ),
     [ticketOptions, ticketQuantities],
   );
+  const totalTicketCount = Object.values(ticketQuantities ?? {}).reduce((total, quantity) => total + quantity, 0);
 
   function onSubmit(data: BuyTicketFormType): void {
     if (!event.billig?.payment_url) {
@@ -293,6 +293,7 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
     <div className={styles.container}>
       <Form {...form}>
         <form
+          className={styles.checkout_form}
           onSubmit={form.handleSubmit((data) => {
             try {
               onSubmit(data);
@@ -302,91 +303,121 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
             }
           })}
         >
-          {ticketGroups.map((ticketGroup) => {
-            const selectedCountInGroup = selectedTicketCountsByGroup[ticketGroup.id] ?? 0;
-            return (
-              <div key={ticketGroup.id} className={styles.ticket_group_section}>
-                {ticketGroups.length > 1 && <H3 className={styles.ticket_group_title}>{ticketGroup.name}</H3>}
-                {ticketGroup.priceGroups.map((priceGroup) => {
-                  const currentValue = ticketQuantities?.[String(priceGroup.id)] ?? 0;
-                  const maxSelectable = Math.min(
-                    ticketGroup.perPriceGroupLimit,
-                    currentValue + Math.max(ticketGroup.groupLimit - selectedCountInGroup, 0),
-                  );
+          <section className={styles.checkout_section}>
+            <div className={styles.section_heading}>
+              <span className={styles.step_number}>1</span>
+              <H3>{t(KEY.billig_callback_tickets_heading)}</H3>
+            </div>
 
-                  return (
-                    <div key={priceGroup.id} className={styles.ticket_select}>
-                      <div className={styles.select_info}>
-                        <p className={styles.select_label}>{priceGroup.name}</p>
-                        <p className={styles.price_label}>
-                          {priceGroup.price} {t(KEY.kr_per_ticket)}
-                        </p>
-                      </div>
-                      <FormField
-                        control={form.control}
-                        name={`ticketQuantities.${priceGroup.id}`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Dropdown
-                                options={[...Array(ticketGroup.perPriceGroupLimit + 1).keys()].map((num) => ({
-                                  label: `${num}`,
-                                  value: num.toString(),
-                                  disabled: num > maxSelectable,
-                                }))}
-                                value={field.value?.toString() ?? '0'}
-                                onChange={(value) => {
-                                  if (value) {
-                                    form.setValue(`ticketQuantities.${priceGroup.id}`, Number(value));
-                                  }
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+            <div className={styles.ticket_list}>
+              {ticketGroups.map((ticketGroup) => {
+                const selectedCountInGroup = selectedTicketCountsByGroup[ticketGroup.id] ?? 0;
+                return (
+                  <div key={ticketGroup.id} className={styles.ticket_group_section}>
+                    <div className={styles.ticket_group_heading}>
+                      <H3 className={styles.ticket_group_title}>{ticketGroup.name}</H3>
+                      <span className={styles.ticket_group_id}>
+                        {t(KEY.ticket_group_label, { id: ticketGroup.id })}
+                      </span>
                     </div>
-                  );
-                })}
+                    {ticketGroup.priceGroups.map((priceGroup) => {
+                      const currentValue = ticketQuantities?.[String(priceGroup.id)] ?? 0;
+                      const maxSelectable = Math.min(
+                        ticketGroup.perPriceGroupLimit,
+                        currentValue + Math.max(ticketGroup.groupLimit - selectedCountInGroup, 0),
+                      );
 
-                {ticketGroup.isTheaterTicketGroup && selectedCountInGroup > 0 && (
-                  <div className={styles.seat_selection_block}>
-                    <H3 className={styles.seat_selection_title}>{t(KEY.ticket_seat_selection_title)}</H3>
-                    <p className={styles.ticketless_description_p}>
-                      {t(KEY.ticket_seat_selection_hint, { count: selectedCountInGroup })}
-                    </p>
-                    <FormField
-                      control={form.control}
-                      name={`seatSelections.${ticketGroup.id}`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Input
-                              type="text"
-                              className={styles.input_field}
-                              placeholder={t(KEY.ticket_seat_selection_placeholder)}
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      return (
+                        <div key={priceGroup.id} className={styles.ticket_select}>
+                          <p className={styles.select_label}>{priceGroup.name}</p>
+                          <p className={styles.price_label}>{priceGroup.price} kr</p>
+                          <FormField
+                            control={form.control}
+                            name={`ticketQuantities.${priceGroup.id}`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <div className={styles.quantity_control}>
+                                    <button
+                                      type="button"
+                                      className={styles.quantity_button}
+                                      aria-label={`${priceGroup.name}: -1`}
+                                      disabled={currentValue === 0}
+                                      onClick={() => field.onChange(Math.max(currentValue - 1, 0))}
+                                    >
+                                      <span aria-hidden="true">−</span>
+                                    </button>
+                                    <output className={styles.quantity_value} aria-live="polite">
+                                      {currentValue}
+                                    </output>
+                                    <button
+                                      type="button"
+                                      className={styles.quantity_button}
+                                      aria-label={`${priceGroup.name}: +1`}
+                                      disabled={currentValue >= maxSelectable}
+                                      onClick={() => field.onChange(Math.min(currentValue + 1, maxSelectable))}
+                                    >
+                                      <span aria-hidden="true">+</span>
+                                    </button>
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      );
+                    })}
+
+                    {ticketGroup.isTheaterTicketGroup && selectedCountInGroup > 0 && (
+                      <div className={styles.seat_selection_block}>
+                        <H3 className={styles.seat_selection_title}>{t(KEY.ticket_seat_selection_title)}</H3>
+                        <p className={styles.help_text}>
+                          {t(KEY.ticket_seat_selection_hint, { count: selectedCountInGroup })}
+                        </p>
+                        <FormField
+                          control={form.control}
+                          name={`seatSelections.${ticketGroup.id}`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  type="text"
+                                  className={styles.input_field}
+                                  placeholder={t(KEY.ticket_seat_selection_placeholder)}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            );
-          })}
+                );
+              })}
+            </div>
 
-          <H3>
-            {t(KEY.common_total)}: {totalPrice} NOK{' '}
-          </H3>
+            <div className={styles.order_total} aria-live="polite">
+              <span>
+                {totalTicketCount} {t(KEY.billig_callback_tickets_heading).toLocaleLowerCase()}
+              </span>
+              <strong>
+                {t(KEY.common_total)}: {totalPrice} NOK
+              </strong>
+            </div>
+          </section>
 
-          <div className={styles.ticket_type}>
-            <div className={styles.ticket_type_fields}>
-              <div className={styles.ticket_type_field}>
-                <div className={styles.radio_box}>
+          <section className={styles.checkout_section}>
+            <div className={styles.section_heading}>
+              <span className={styles.step_number}>2</span>
+              <H3>{t(KEY.common_ticket_type)}</H3>
+            </div>
+
+            <div className={styles.ticket_type}>
+              <div className={styles.delivery_options}>
+                <div className={styles.delivery_option}>
                   <RadioButton
                     name="ticketType"
                     className={styles.radio_btn}
@@ -396,8 +427,11 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
                   >
                     {t(KEY.common_membership_number)}
                   </RadioButton>
+                </div>
+                <div className={styles.delivery_option}>
                   <RadioButton
                     name="ticketType"
+                    className={styles.radio_btn}
                     onChange={() => form.setValue('ticketType', TICKET_TYPE_EMAIL)}
                     checked={ticketType === TICKET_TYPE_EMAIL}
                   >
@@ -406,22 +440,30 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
                 </div>
               </div>
 
-              {!selectedTicketsCanBePutOnCard && ticketOptions.length > 0 && (
-                <p className={styles.validation_notice}>{t(KEY.ticket_card_unavailable_message)}</p>
-              )}
-              {ticketType === TICKET_TYPE_EMAIL && selectedTicketsRequireMembership && (
-                <p className={styles.info_notice}>{t(KEY.ticket_requires_membership_message)}</p>
-              )}
+              <div
+                className={`${styles.delivery_details} ${
+                  ticketType === TICKET_TYPE_MEMBERSHIP ? styles.after_membership : styles.after_email
+                }`}
+              >
+                {!selectedTicketsCanBePutOnCard && ticketOptions.length > 0 && (
+                  <p className={styles.validation_notice}>{t(KEY.ticket_card_unavailable_message)}</p>
+                )}
+                {ticketType === TICKET_TYPE_EMAIL && selectedTicketsRequireMembership && (
+                  <p className={styles.info_notice}>{t(KEY.ticket_requires_membership_message)}</p>
+                )}
 
-              {ticketType === TICKET_TYPE_MEMBERSHIP && (
-                <div className={styles.ticket_type_field}>
+                {ticketType === TICKET_TYPE_MEMBERSHIP ? (
                   <FormField
                     control={form.control}
                     name="membershipNumber"
                     render={({ field }) => (
                       <FormItem>
+                        <label className={styles.field_label} htmlFor="checkout-membership-number">
+                          {t(KEY.common_membership_number)}
+                        </label>
                         <FormControl>
                           <Input
+                            id="checkout-membership-number"
                             type="text"
                             className={styles.input_field}
                             placeholder={t(KEY.enter_membership_number)}
@@ -432,57 +474,64 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
                       </FormItem>
                     )}
                   />
-                </div>
-              )}
-            </div>
+                ) : (
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <label className={styles.field_label} htmlFor="checkout-email">
+                          {t(KEY.common_email)}
+                        </label>
+                        <FormControl>
+                          <Input
+                            id="checkout-email"
+                            type="email"
+                            className={styles.input_field}
+                            placeholder={t(KEY.enter_email)}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
-            {ticketType === TICKET_TYPE_EMAIL && (
-              <div className={styles.ticket_type_field}>
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          className={styles.input_field}
-                          placeholder={t(KEY.enter_email)}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                <div className={styles.delivery_description}>
+                  {ticketType === TICKET_TYPE_MEMBERSHIP ? (
+                    <>
+                      <p className={styles.description_line}>{t(KEY.ticketless_description)}</p>
+                      <p className={styles.description_line}>
+                        <Trans i18nKey={KEY.ticketless_description_note} components={{ strong: <strong /> }} />
+                      </p>
+                    </>
+                  ) : (
+                    <p className={styles.description_line}>{t(KEY.email_ticket_description)}</p>
                   )}
-                />
+                </div>
               </div>
-            )}
-            <div className={styles.ticket_type_field}>
-              {ticketType === TICKET_TYPE_MEMBERSHIP ? (
-                <>
-                  <p className={styles.ticketless_description_p}>{t(KEY.ticketless_description)}</p>
-                  <p className={styles.ticketless_description_p}>
-                    <Trans i18nKey={KEY.ticketless_description_note} components={{ strong: <strong /> }} />
-                  </p>
-                </>
-              ) : (
-                <p className={styles.ticketless_description_p}>{t(KEY.email_ticket_description)}</p>
-              )}
             </div>
-          </div>
+          </section>
 
-          <Button type="submit" className={styles.pay_button} disabled={form.formState.isSubmitting}>
-            {t(KEY.common_to_payment)}
-          </Button>
+          <div className={styles.checkout_footer}>
+            <div className={styles.purchase_notes}>
+              <p className={styles.purchase_note}>{t(KEY.pay_info)}</p>
+              <div className={styles.footer_links}>
+                <a href={ROUTES.other.stripe_info} target="_blank" className={styles.link} rel="noreferrer">
+                  {t(KEY.stripe_info)}
+                </a>
+                <Link url={INFORMATION_PAGES.informasjon_billetter} target="external" className={styles.terms_link}>
+                  {t(KEY.sales_conditions)}
+                </Link>
+              </div>
+            </div>
+            <Button type="submit" className={styles.pay_button} disabled={form.formState.isSubmitting}>
+              {t(KEY.common_to_payment)}
+            </Button>
+          </div>
         </form>
       </Form>
-      <p>{t(KEY.pay_info)}</p>
-      <a href={ROUTES.other.stripe_info} target="_blank" className={styles.link} rel="noreferrer">
-        {t(KEY.stripe_info)}
-      </a>
-      <Link url={INFORMATION_PAGES.informasjon_billetter} target="external" className={styles.terms_link}>
-        {t(KEY.sales_conditions)}
-      </Link>
     </div>
   );
 }
