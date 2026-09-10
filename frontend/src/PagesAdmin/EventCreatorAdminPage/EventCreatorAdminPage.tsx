@@ -111,7 +111,8 @@ export function EventCreatorAdminPage() {
     const valid = !custom && (step.key === 'socialmedia' ? !hasSocialMediaErrors : step.validate(watchedValues));
 
     const visited = visitedTabs[step.key] === true && !custom;
-    const error = !valid && visited && !custom;
+    const hasSummaryError = step.key === 'summary' && !!form.formState.errors.visibility_from_dt;
+    const error = hasSummaryError || (!valid && visited && !custom);
 
     const icon =
       step.customIcon ||
