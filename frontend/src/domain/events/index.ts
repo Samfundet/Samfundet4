@@ -1,37 +1,4 @@
 export {
-  caseDocumentKeys,
-  useCaseDocumentMutations,
-  useGetCaseDocumentCategories,
-  useGetCaseDocuments,
-  useGetCaseDocument,
-  FILE,
-  PUBLICATION_DATE,
-  CATEGORY,
-  TITLE_EN,
-  TITLE_NB,
-} from './casedocuments';
-export {
-  useImageMutations,
-  imageKeys,
-  IMAGE,
-  IMAGE_FILE,
-  OPTIONAL_IMAGE,
-  OPTIONAL_TAG,
-  TAG,
-  TAGS,
-  TITLE,
-} from './images';
-export {
-  infoPageKeys,
-  useInfoPageMutations,
-  useGetAdminInfoPages,
-  useGetAdminInfoPage,
-  useGetAdminInfoPageHistory,
-  useGetAdminInfoPageRevision,
-  useGetInfoPageOwnerOptions,
-} from './infopages';
-export { tagKeys } from './tags';
-export {
   getEventsPerDay,
   getEventsUpcoming,
   getEventsUpcomingPaginated,
@@ -42,9 +9,10 @@ export {
   getEvent,
   getEventGroups,
   getBilligEvents,
-  useCreateEvent,
-  useUpdateEvent,
-  useDeleteEvent,
+} from './api';
+export type { EventsUpcomingBackendResponse, EventsUpcomingResponse } from './api';
+export { useCreateEvent, useUpdateEvent, useDeleteEvent } from './mutations';
+export {
   useGetEventsPerDay,
   useGetEvents,
   useGetEventsUpcoming,
@@ -52,7 +20,10 @@ export {
   useGetEvent,
   useGetEventGroups,
   useGetBilligEvents,
-  eventKeys,
+} from './queries';
+export type { Filters } from './queries';
+export { eventKeys } from './queryKeys';
+export {
   EVENT_TITLE,
   EVENT_DESCRIPTION_LONG,
   EVENT_DESCRIPTION_SHORT,
@@ -83,6 +54,4 @@ export {
   EVENT_VISIBILITY_FROM_DT,
   EVENT_VISIBILITY_TO_DT,
   EVENT_PAID_OPTION,
-} from './events';
-export type { EventsUpcomingBackendResponse, EventsUpcomingResponse, Filters } from './events';
-export { gangKeys, useGetOrganizedGangs, useGangMutations } from './gangs';
+} from './schema';

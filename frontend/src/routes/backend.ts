@@ -390,7 +390,7 @@ export const ROUTES_BACKEND = {
   samfundet__users_search_paginated: '/api/users-search-paginated/',
   samfundet__impersonate: '/api/impersonate/',
   samfundet__eventsperday: '/api/events-per-day/',
-  samfundet__eventsupcomming: '/api/events-upcomming/',
+  samfundet__eventsupcoming: '/api/events-upcoming/',
   samfundet__isclosed: '/api/isclosed/',
   samfundet__home: '/api/home/',
   samfundet__assign_group: '/api/assign_group/',
