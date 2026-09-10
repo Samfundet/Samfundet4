@@ -308,6 +308,7 @@ export const nb = prepareTranslations({
   [KEY.event_must_be_valid_url]: 'Må være en gyldig URL',
   [KEY.event_must_be_valid_spotify_uri]: 'Må være en gyldig Spotify URI',
   [KEY.event_publication_date_required]: 'Publiseringsdato er påkrevd',
+  [KEY.event_publication_date_must_be_before_start]: 'Publiseringsdato må være før arrangementsstart',
 
   // Event categories
   [KEY.event_category_art]: 'Kunst',
@@ -1133,6 +1134,7 @@ export const en = prepareTranslations({
   [KEY.event_must_be_valid_url]: 'Must be a valid URL',
   [KEY.event_must_be_valid_spotify_uri]: 'Must be a valid Spotify URI',
   [KEY.event_publication_date_required]: 'Publication date is required',
+  [KEY.event_publication_date_must_be_before_start]: 'Publication date must be before the event starts',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',
