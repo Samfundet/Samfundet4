@@ -24,6 +24,7 @@ from django.shortcuts import get_object_or_404
 from root.constants import WebFeatures
 from root.custom_classes.permission_classes import FeatureEnabled, RoleProtectedOrAnonReadOnlyObjectPermissions
 
+from samfundet.utils import samfundet_date
 from samfundet.homepage import homepage
 from samfundet.pagination import CustomPageNumberPagination
 from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
@@ -156,7 +157,8 @@ class VenueView(ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def open_venues(self, request: Request) -> Response:
-        day_name = (timezone.now() - timedelta(hours=4)).strftime('%A').lower()
+
+        day_name = samfundet_date(timezone.now()).strftime('%A').lower()
 
         q = ~Q(
             **{
