@@ -62,6 +62,7 @@ from .models.recruitment import (
     RecruitmentInterviewAvailability,
     RecruitmentPositionSharedInterviewGroup,
 )
+from .models.site_banner import SiteBanner
 from .organization.models import Gang, Organization
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 from .infopages.serializers.fields import info_page_slug_field
@@ -367,6 +368,21 @@ class ClosedPeriodSerializer(CustomBaseSerializer):
     class Meta:
         model = ClosedPeriod
         fields = '__all__'
+
+
+class SiteBannerSerializer(CustomBaseSerializer):
+    class Meta:
+        model = SiteBanner
+        fields = [
+            'id',
+            'version',
+            'text_nb',
+            'text_en',
+            'url',
+            'new_tab',
+            'start_at',
+            'end_at',
+        ]
 
 
 class ChangePasswordSerializer(serializers.Serializer):
