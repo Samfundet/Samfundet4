@@ -1,0 +1,1 @@
+export { InfoboxAdminPage } from './InfoboxAdminPage';

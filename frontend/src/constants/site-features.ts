@@ -9,6 +9,7 @@ const SITE_FEATURES: Record<SiteFeature, boolean> = {
   roles: false,
   gangs: true,
   information: true,
+  infobox: true,
   documents: true,
   recruitment: false,
   sulten: false,

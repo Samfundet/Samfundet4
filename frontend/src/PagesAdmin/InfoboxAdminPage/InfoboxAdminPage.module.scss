@@ -1,0 +1,20 @@
+@use 'src/mixins' as *;
+
+.table_container {
+  margin-top: 1.5em;
+}
+
+.truncated_text {
+  display: block;
+  max-width: 28ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.color_preview {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid #c9c9c9;
+  border-radius: 0.25rem;
+}
