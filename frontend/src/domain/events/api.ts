@@ -8,6 +8,11 @@ import type { EventsPaginationType } from '~/types';
 import { buildPaginatedUrl } from '~/utils';
 import type { Filters } from './queries';
 
+/**
+ * Groups events by day.
+ *
+ * @returns A map from day (formatted "YYYY-MM-DD") to the events on that day.
+ */
 export async function getEventsPerDay(): Promise<Record<string, EventDto[]>> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsperday;
   const response = await axios.get<Record<string, EventDto[]>>(url, { withCredentials: true });
@@ -27,6 +32,13 @@ export type EventsUpcomingResponse = {
   locations: string[];
 };
 
+/**
+ * Get events for current day and forward.
+ *
+ * @param {Filters} params Filters for fetched events
+ *
+ * @returns All upcoming events that match given filters
+ */
 export async function getEventsUpcoming(params: Filters): Promise<EventsUpcomingResponse> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcoming;
 
@@ -50,6 +62,15 @@ export async function getEventsUpcoming(params: Filters): Promise<EventsUpcoming
   };
 }
 
+/**
+ * Get events for current day and forward, paginated
+ *
+ * @param {number} page What page to fetch (page 2 with a page size of 10 would return events 11-20)
+ * @param {number} pageSize How many events per page
+ * @param {Filters} params Filters for fetched events
+ *
+ * @returns Given page of size pageSize of upcoming events
+ * */
 export async function getEventsUpcomingPaginated(
   page: number,
   pageSize?: number,
@@ -62,6 +83,7 @@ export async function getEventsUpcomingPaginated(
     ...(params?.event_group ? { event_group: params.event_group } : {}),
     ...(params?.ticket_type ? { ticket_type: params.ticket_type } : {}),
   });
+
   const response = await axios.get<EventsPaginationType<EventDto>>(url, { withCredentials: true });
   return response.data;
 }
@@ -85,9 +107,9 @@ export async function putEvent(id: string | number, data: Partial<EventWriteDto>
   return response;
 }
 
-export async function deleteEvent(id: string | number): Promise<AxiosResponse> {
+export async function deleteEvent(id: string | number): Promise<AxiosResponse<void>> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
-  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
+  const response = await axios.delete<void>(url, { withCredentials: true });
   return response;
 }
 

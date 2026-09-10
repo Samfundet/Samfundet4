@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import type { EventWriteDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { onError } from '../utils';
 import { deleteEvent, postEvent, putEvent } from './api';
 import { eventKeys } from './queryKeys';
 
@@ -17,7 +16,6 @@ export function useCreateEvent() {
       toast.success(t(KEY.common_creation_successful));
       queryClient.invalidateQueries({ queryKey: eventKeys.all });
     },
-    onError,
   });
 }
 
@@ -31,7 +29,6 @@ export function useUpdateEvent() {
       toast.success(t(KEY.common_update_successful));
       queryClient.invalidateQueries({ queryKey: eventKeys.all });
     },
-    onError,
   });
 }
 
@@ -45,6 +42,5 @@ export function useDeleteEvent() {
       toast.success(t(KEY.common_delete_successful));
       queryClient.invalidateQueries({ queryKey: eventKeys.all });
     },
-    onError,
   });
 }
