@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from django.db import models, connections
+from django.utils import timezone
+from samfundet.models.general import User
 
 
 class MedlemsInfo(models.Model):
@@ -37,4 +39,28 @@ def sett_lim_utvidet_medlemsinfo(member_login: str, password: str) -> int | None
         row = cursor.fetchone()
         if row:
             return row[0]
-    return None
+    return None 
+
+def sync_medlemsinfo(user: User):
+    minute_threshold = 5 #How often to update the medlemsinfo from mdb (in minutes)
+    if user.mdb_medlem_id is None:
+        return None
+    if (user.mdb_last_updated is not None and (timezone.now() - user.mdb_last_updated).total_seconds() < minute_threshold * 60):
+        return None
+
+    with connections['mdb'].cursor() as cursor:
+        cursor.execute('SELECT brukernavn, fornavn, etternavn, telefon, mail FROM lim_medlemsinfo WHERE medlem_id = %s', (user.mdb_medlem_id,))
+        row = cursor.fetchone()
+
+        if not row:
+            return None
+
+        user.mdb_last_updated = timezone.now()
+        user.username = row[0]
+        user.first_name = row[1]
+        user.last_name = row[2]
+        user.phone_number = row[3]
+        user.email = row[4]
+        user.save()
+        
+
