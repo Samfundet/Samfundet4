@@ -351,6 +351,59 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'mg-web@samfundet.no'
 
+
+# ======================== #
+#      Notifications       #
+# ======================== #
+
+
+def _parse_admins(raw: str) -> list[str] | list[tuple[str, str]]:
+    """
+    Parse a comma-separated list of admin recipients into Django's ADMINS format.
+
+    Each entry may be a bare email address, or a name followed by an email in
+    angle brackets, e.g. 'Drifts <drift@samfundet.no>'. Empty entries are dropped.
+    """
+    admins: list[str] | list[tuple[str, str]] = []
+    for entry in raw.split(','):
+        entry = entry.strip()
+        if not entry:
+            continue
+        if '<' in entry and entry.endswith('>'):
+            name, email = entry.split('<', maxsplit=1)
+            admins.append((name.strip(), email.rstrip('>').strip()))
+        else:
+            admins.append(entry)
+    return admins
+
+
+def _admin_emails(admins: list[str] | list[tuple[str, str]]) -> list[str]:
+    """Reduce Django-format ADMINS to a flat list of email addresses."""
+    return [entry if isinstance(entry, str) else entry[1] for entry in admins]
+
+
+def _parse_emails(raw: str) -> list[str]:
+    """Parse a comma-separated list of email addresses, dropping empties."""
+    return [entry.strip() for entry in raw.split(',') if entry.strip()]
+
+
+# Who receives Django's automatic error mails (mail_admins / AdminEmailHandler).
+# https://docs.djangoproject.com/en/5.2/ref/settings/#admins
+ADMINS = _parse_admins(os.environ.get('DJANGO_ADMINS', 'mg-web@samfundet.no'))
+# From-address used for mails to ADMINS (ServerError mails etc.).
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+# Per-category recipients for operational notifications sent via root.notifications.notify().
+# Each category defaults to the ADMINS email addresses; env vars may override individual categories.
+ADMIN_EMAILS = _admin_emails(ADMINS)
+NOTIFICATION_RECIPIENTS: dict[str, list[str]] = {
+    'errors': _parse_emails(os.environ.get('DJANGO_NOTIFICATION_ERRORS', '')) or ADMIN_EMAILS,
+    'payments': _parse_emails(os.environ.get('DJANGO_NOTIFICATION_PAYMENTS', '')) or ADMIN_EMAILS,
+}
+
+# Window (seconds) within which repeated notifications with the same dedupe key are collapsed.
+NOTIFICATION_RATE_LIMIT_SECONDS = 3600
+
 # For enabled features in the control panel
 CP_ENABLED = {
     s.strip()
