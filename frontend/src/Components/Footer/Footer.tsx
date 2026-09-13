@@ -153,8 +153,7 @@ export function Footer() {
           </Link>
         </li>
         <li className={styles.footer_list_item}>
-          {/*TODO: Replace samf3 link with samf4 */}
-          <Link className={styles.footer_link} target="samf3" url={ROUTES_SAMF_THREE.information.openingHours}>
+          <Link className={styles.footer_link} url={ROUTES.frontend.weekly_opening_hours}>
             {t(KEY.common_opening_hours)}
           </Link>
         </li>
