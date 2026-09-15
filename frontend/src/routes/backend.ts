@@ -294,6 +294,7 @@ export const ROUTES_BACKEND = {
   samfundet__venues_list: '/api/venues/',
   samfundet__venues_open_venues: '/api/venues/open_venues/',
   samfundet__venues_detail: '/api/venues/:slug/',
+  samfundet__venues_opening_hours: '/api/venues/:slug/opening-hours/:weekday/',
   samfundet__closedperiods_list: '/api/closed/',
   samfundet__closedperiods_detail: '/api/closed/:pk/',
   samfundet__blog_list: '/api/blog/',

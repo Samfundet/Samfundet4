@@ -154,6 +154,14 @@ export type VenueDto = {
   opening_saturday?: string;
   opening_sunday?: string;
 
+  is_open_monday: boolean;
+  is_open_tuesday: boolean;
+  is_open_wednesday: boolean;
+  is_open_thursday: boolean;
+  is_open_friday: boolean;
+  is_open_saturday: boolean;
+  is_open_sunday: boolean;
+
   closing_monday?: string;
   closing_tuesday?: string;
   closing_wednesday?: string;

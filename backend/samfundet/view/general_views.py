@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from typing import Any
-from datetime import time, timedelta
+from datetime import timedelta
 from itertools import chain
 
 from rest_framework import status
@@ -18,7 +18,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 
 from django.utils import timezone
-from django.db.models import Q, Count, QuerySet, ProtectedError
+from django.db.models import Count, QuerySet, ProtectedError
 from django.shortcuts import get_object_or_404
 
 from root.constants import WebFeatures
@@ -43,6 +43,7 @@ from samfundet.serializers import (
     SaksdokumentSerializer,
     UserFeedbackSerializer,
     UserGangRoleSerializer,
+    VenueDayScheduleSerializer,
     UserGangSectionRoleSerializer,
 )
 from samfundet.models.general import (
@@ -157,16 +158,30 @@ class VenueView(ModelViewSet):
     @action(detail=False, methods=['get'])
     def open_venues(self, request: Request) -> Response:
         day_name = (timezone.now() - timedelta(hours=4)).strftime('%A').lower()
+        open_venues = Venue.objects.filter(**{f'is_open_{day_name}': True})
+        serializer = self.get_serializer(open_venues, many=True)
+        return Response(serializer.data)
 
-        q = ~Q(
-            **{
-                f'opening_{day_name}': time(0, 0, 0),
-                f'closing_{day_name}': time(0, 0, 0),
-            }
+    @action(
+        detail=True,
+        methods=['patch'],
+        url_path=r'opening-hours/(?P<weekday>[^/.]+)',
+        url_name='opening-hours',
+    )
+    def opening_hours(self, request: Request, weekday: str, **kwargs: Any) -> Response:
+        venue = self.get_object()
+        data = request.data.copy()
+        data['weekday'] = weekday
+        serializer = VenueDayScheduleSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        venue.set_schedule_for_weekday(
+            weekday,
+            is_open=serializer.validated_data['is_open'],
+            opening=serializer.validated_data['opening'],
+            closing=serializer.validated_data['closing'],
         )
 
-        open_venues = Venue.objects.filter(q)
-        serializer = self.get_serializer(open_venues, many=True)
         return Response(serializer.data)
 
 
