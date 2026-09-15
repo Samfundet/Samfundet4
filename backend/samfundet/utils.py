@@ -4,6 +4,7 @@ import datetime
 from operator import or_
 from functools import reduce
 from collections.abc import Callable
+from typing import TYPE_CHECKING
 
 from django.conf import settings
 from django.http import QueryDict
@@ -16,9 +17,11 @@ from django.db.models.query import QuerySet
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 
-from .models import User
-from .models.event import Event
-from .models.recruitment import Recruitment, OccupiedTimeslot, RecruitmentInterviewAvailability
+
+if TYPE_CHECKING:
+    from .models import User
+    from .models.event import Event
+    from .models.recruitment import Recruitment, OccupiedTimeslot, RecruitmentInterviewAvailability
 
 SEARCH_FIELDS = (
     'title_nb__icontains',
