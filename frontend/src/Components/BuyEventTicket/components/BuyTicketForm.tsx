@@ -207,7 +207,7 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
   }, [defaultValues, form]);
 
   const ticketQuantities = useWatch({ control: form.control, name: 'ticketQuantities' });
-  const ticketType = useWatch({ control: form.control, name: 'ticketType' }) ?? TICKET_TYPE_MEMBERSHIP;
+  const ticketType = useWatch({ control: form.control, name: 'ticketType' }) ?? defaultValues.ticketType;
   const selectedTicketCountsByGroup = useMemo(
     () =>
       Object.fromEntries(
@@ -229,6 +229,13 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
   const selectedTicketsCanBePutOnCard =
     eventCanUseMembershipCard &&
     (selectedPriceGroups.length === 0 || selectedPriceGroups.every((priceGroup) => priceGroup.can_be_put_on_card));
+
+  useEffect(() => {
+    if (!selectedTicketsCanBePutOnCard && ticketType === TICKET_TYPE_MEMBERSHIP) {
+      form.setValue('ticketType', TICKET_TYPE_EMAIL, { shouldValidate: true });
+    }
+  }, [form, selectedTicketsCanBePutOnCard, ticketType]);
+
   const selectedTicketsRequireMembership = selectedPriceGroups.some((priceGroup) => priceGroup.membership_needed);
   const totalPrice = useMemo(
     () =>
@@ -238,6 +245,14 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
       ),
     [ticketOptions, ticketQuantities],
   );
+  const totalTicketFee = useMemo(() => {
+    const ticketFee = Math.max(event.billig?.ticket_fee ?? 0, 0);
+    return ticketOptions.reduce(
+      (total, priceGroup) =>
+        total + (ticketQuantities?.[String(priceGroup.id)] ?? 0) * Math.min(priceGroup.price, ticketFee),
+      0,
+    );
+  }, [event.billig?.ticket_fee, ticketOptions, ticketQuantities]);
   const totalTicketCount = Object.values(ticketQuantities ?? {}).reduce((total, quantity) => total + quantity, 0);
 
   function onSubmit(data: BuyTicketFormType): void {
@@ -400,12 +415,17 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
             </div>
 
             <div className={styles.order_total} aria-live="polite">
-              <span>
+              <span className={styles.order_count}>
                 {totalTicketCount} {t(KEY.billig_callback_tickets_heading).toLocaleLowerCase()}
               </span>
-              <strong>
-                {t(KEY.common_total)}: {totalPrice} NOK
-              </strong>
+              <div className={styles.total_breakdown}>
+                <strong>
+                  {t(KEY.common_total)}: {totalPrice} NOK
+                </strong>
+                {totalTicketFee > 0 && (
+                  <span className={styles.ticket_fee_notice}>{t(KEY.ticket_fee_notice, { fee: totalTicketFee })}</span>
+                )}
+              </div>
             </div>
           </section>
 
@@ -445,9 +465,11 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
                   ticketType === TICKET_TYPE_MEMBERSHIP ? styles.after_membership : styles.after_email
                 }`}
               >
-                {!selectedTicketsCanBePutOnCard && ticketOptions.length > 0 && (
-                  <p className={styles.validation_notice}>{t(KEY.ticket_card_unavailable_message)}</p>
-                )}
+                {ticketType === TICKET_TYPE_MEMBERSHIP &&
+                  !selectedTicketsCanBePutOnCard &&
+                  ticketOptions.length > 0 && (
+                    <p className={styles.validation_notice}>{t(KEY.ticket_card_unavailable_message)}</p>
+                  )}
                 {ticketType === TICKET_TYPE_EMAIL && selectedTicketsRequireMembership && (
                   <p className={styles.info_notice}>{t(KEY.ticket_requires_membership_message)}</p>
                 )}

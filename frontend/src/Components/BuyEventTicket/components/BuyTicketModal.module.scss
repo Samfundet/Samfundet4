@@ -266,15 +266,29 @@
   padding: 1rem;
   background: var(--checkout-ink);
   color: var(--checkout-surface);
+}
 
-  span {
-    font-size: 0.82rem;
-    opacity: 0.75;
-  }
+.order_count {
+  font-size: 0.82rem;
+  opacity: 0.75;
+}
+
+.total_breakdown {
+  display: grid;
+  gap: 0.2rem;
+  justify-items: end;
+  text-align: right;
 
   strong {
     font-size: 1.08rem;
   }
+}
+
+.ticket_fee_notice {
+  max-width: 25rem;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  opacity: 0.75;
 }
 
 .ticket_type {
@@ -516,6 +530,16 @@
   .ticket_select {
     grid-template-columns: minmax(0, 1fr) auto auto;
     gap: 0.35rem;
+  }
+
+  .order_total {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .total_breakdown {
+    justify-items: start;
+    text-align: left;
   }
 
   .quantity_control {
