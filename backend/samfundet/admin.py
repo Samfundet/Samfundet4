@@ -22,17 +22,17 @@ from root.custom_classes.admin_classes import (
 )
 
 from samfundet.utils import register_if_feature_enabled
+from samfundet.infopages import admin as infopages_admin  # noqa: F401
 
 # Admin modules living in a domain subpackage must be imported here for their registrations to run.
 # Django's admin autodiscovery only imports '<app>.admin', so it never reaches them on its own.
 # Aliased because the plain name 'admin' is django.contrib.admin in this module.
-from samfundet.infopages import admin as infopages_admin  # noqa: F401
+from samfundet.organization import admin as gangs_admin  # noqa: F401
 
 from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .models.event import Event, EventGroup, EventRegistration, PurchaseFeedbackModel
 from .models.general import (
     Tag,
-    Gang,
     Menu,
     User,
     Image,
@@ -42,15 +42,12 @@ from .models.general import (
     Campus,
     Infobox,
     BlogPost,
-    GangType,
     KeyValue,
     MenuItem,
     TextItem,
-    GangSection,
     Reservation,
     ClosedPeriod,
     FoodCategory,
-    Organization,
     Saksdokument,
     FoodPreference,
     MerchVariation,
@@ -69,6 +66,7 @@ from .models.recruitment import (
     RecruitmentInterviewAvailability,
     RecruitmentPositionSharedInterviewGroup,
 )
+from .organization.models import Organization
 
 # Common fields:
 # ordering = []
@@ -397,48 +395,6 @@ class VenueAdmin(CustomBaseAdmin):
     list_display_links = ['slug', '__str__']
     # autocomplete_fields = []
     list_select_related = True
-
-
-# GANGS:
-@register_if_feature_enabled(WebFeatures.GANGS, Gang)
-class GangAdmin(CustomBaseAdmin):
-    # ordering = []
-    sortable_by = ['id', 'name_nb', 'abbreviation', 'gang_type', 'created_at', 'updated_at']
-    list_filter = ['gang_type', 'organization']
-    list_display = ['id', 'organization', 'name_nb', 'abbreviation', 'gang_type', 'created_at', 'updated_at']
-    search_fields = ['id', 'name_nb', 'abbreviation']
-    # filter_horizontal = []
-    list_display_links = ['id', 'name_nb']
-    autocomplete_fields = ['gang_type', 'organization']
-    list_select_related = True
-
-
-@register_if_feature_enabled(WebFeatures.GANGS, GangType)
-class GangTypeAdmin(CustomBaseAdmin):
-    # ordering = []
-    sortable_by = ['id', 'title_nb', 'created_at', 'updated_at']
-    # list_filter = []
-    list_display = ['id', '__str__', 'title_nb', 'created_at', 'updated_at']
-    search_fields = ['id', 'title_nb']
-    # filter_horizontal = []
-    list_display_links = ['id', '__str__']
-    # autocomplete_fields = []
-    list_select_related = True
-
-
-@register_if_feature_enabled(WebFeatures.GANGS, GangSection)
-class GangSectionAdmin(CustomBaseAdmin):
-    def gang_link(self, obj: GangSection) -> str:
-        link = reverse('admin:samfundet_gang_change', args=(obj.gang.id,))
-        return format_html('<a href="{}">{}</a>', link, obj.gang.name_nb)
-
-    sortable_by = ['id', 'name_nb', 'gang', 'created_at', 'updated_at']
-    list_filter = ['gang']
-    list_display = ['id', 'name_nb', 'gang', 'created_at', 'updated_at']
-    search_fields = ['id', 'name_nb']
-    list_display_links = ['id', 'name_nb']
-    list_select_related = True
-    related_links = ['gang']
 
 
 @register_if_feature_enabled(WebFeatures.BLOG, BlogPost)

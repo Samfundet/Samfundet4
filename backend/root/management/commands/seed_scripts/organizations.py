@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from samfundet.models.general import Organization
+from samfundet.organization.models import Organization
 
 ORGANIZATIONS = ['Samfundet', 'ISFiT', 'UKA']
 

@@ -37,3 +37,7 @@ venv
 
 ### AI tooling (personal per developer) ###
 .opencode/
+
+### Lefthook personal overrides (see lefthook-local.yml.example) ###
+lefthook-local.yml
+.lefthook-local/

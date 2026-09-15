@@ -21,8 +21,8 @@ from root.utils.permissions import SAMFUNDET_VIEW_RECRUITMENT
 from root.custom_classes.permission_classes import FeatureEnabled, RoleProtectedObjectPermissions, filter_queryset_by_permissions
 
 from samfundet.serializers import RecruitmentSerializer, RecruitmentGangSerializer, RecruitmentForRecruiterSerializer, RecruitmentApplicationForGangSerializer
-from samfundet.models.general import Gang
 from samfundet.models.recruitment import Recruitment, RecruitmentApplication
+from samfundet.organization.models import Gang
 
 # =============================== #
 #        Public views             #

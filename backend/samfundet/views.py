@@ -62,7 +62,6 @@ from .serializers import (
     RecruitmentPositionSharedInterviewGroupSerializer,
 )
 from .models.general import (
-    Gang,
     User,
 )
 from .models.recruitment import (
@@ -78,6 +77,7 @@ from .models.recruitment import (
     RecruitmentInterviewAvailability,
     RecruitmentPositionSharedInterviewGroup,
 )
+from .organization.models import Gang
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 

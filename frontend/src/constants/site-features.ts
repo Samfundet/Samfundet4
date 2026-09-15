@@ -7,7 +7,7 @@ const SITE_FEATURES: Record<SiteFeature, boolean> = {
   closedHours: true,
   users: true,
   roles: false,
-  gangs: false,
+  gangs: true,
   information: true,
   documents: true,
   recruitment: false,
