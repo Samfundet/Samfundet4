@@ -2,17 +2,16 @@ import { Icon } from '@iconify/react';
 import { type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
-import { Button, IconButton, InputField, Link, TimeDisplay } from '~/Components';
-import { eventQuery } from '~/Components/EventQuery/utils';
+import { Button, Dropdown, InputField, Link, TimeDisplay } from '~/Components';
+import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
 import type { EventDto } from '~/dto';
-import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { COLORS } from '~/types';
-import { dbT, imageUrl } from '~/utils';
+import type { EventCategoryValue, EventTicketTypeValue } from '~/types';
+import { dbT, getEventCategoryKey, getTicketTypeKey, imageUrl, lowerCapitalize } from '~/utils';
 import styles from './EventsList.module.scss';
 
 type EventsListProps = {
@@ -24,7 +23,9 @@ export function EventsList({ events }: EventsListProps) {
   const [tableView, setTableView] = useState(false);
   const [searchParam, setSearchParam] = useSearchParams();
   const [query, setQuery] = useState(searchParam.get('q') ?? '');
-  const isDesktop = useDesktop();
+  const [category, setCategory] = useState(searchParam.get('category') ?? '');
+  const [place, setPlace] = useState(searchParam.get('place') ?? '');
+  const [ticketType, setTicketType] = useState(searchParam.get('ticket_type') ?? '');
 
   const eventColumns = [
     { content: t(KEY.common_title), sortable: true },
@@ -37,16 +38,51 @@ export function EventsList({ events }: EventsListProps) {
     { content: t(KEY.common_buy), sortable: true },
   ];
 
-  // TODO debounce and move header/filtering stuff to a separate component
-  function filteredEvents() {
-    const allEvents = Object.keys(events).flatMap((k: string) => events[k]);
-    const normalizedSearch = query.trim().toLowerCase();
-    const keywords = normalizedSearch.split(' ');
+  const allEvents = Object.values(events).flat();
+  const venues = [...new Set(allEvents.map((event) => event.location).filter(Boolean))].sort((a, b) =>
+    a.localeCompare(b),
+  );
+  const categories = [...new Set(allEvents.map((event) => event.category))].sort();
+  const ticketTypes = [...new Set(allEvents.map((event) => event.ticket_type))].sort();
 
-    if (query === '') return eventQuery(allEvents, query);
+  const venueOptions: DropdownOption<string>[] = venues.map((venue) => ({ label: venue, value: venue }));
+  const categoryOptions: DropdownOption<EventCategoryValue>[] = categories.map((eventCategory) => ({
+    label: t(getEventCategoryKey(eventCategory)),
+    value: eventCategory,
+  }));
+  const ticketTypeOptions: DropdownOption<EventTicketTypeValue>[] = ticketTypes.map((eventTicketType) => ({
+    label: t(getTicketTypeKey(eventTicketType)),
+    value: eventTicketType,
+  }));
+
+  function filteredEvents() {
+    const normalizedCategory = category.trim().toLowerCase();
+    const normalizedPlace = place.trim().toLowerCase();
+    const normalizedTicketType = ticketType.trim().toLowerCase();
+    const normalizedSearch = query.trim().toLowerCase();
+    const keywords = normalizedSearch ? normalizedSearch.split(/\s+/) : [];
+
+    const matchesText = (event: EventDto) => {
+      const searchableText = [
+        dbT(event, 'title', i18n.language),
+        dbT(event, 'description_short', i18n.language),
+        dbT(event, 'description_long', i18n.language),
+        event.location,
+        event.host,
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+      return keywords.every((kw) => searchableText.includes(kw));
+    };
+
     return allEvents.filter((event) => {
-      const title = (dbT(event, 'title', i18n.language) as string)?.toLowerCase() ?? '';
-      return keywords.every((kw) => title.includes(kw));
+      const matchesCategory = !normalizedCategory || event.category.toLowerCase() === normalizedCategory;
+      const matchesPlace = !normalizedPlace || (event.location ?? '').toLowerCase().includes(normalizedPlace);
+      const matchesTicketType = !normalizedTicketType || event.ticket_type.toLowerCase() === normalizedTicketType;
+      const matchesQuery = matchesText(event);
+
+      return matchesCategory && matchesPlace && matchesTicketType && matchesQuery;
     });
   }
 
@@ -101,6 +137,13 @@ export function EventsList({ events }: EventsListProps) {
   }
 
   useEffect(() => {
+    setQuery(searchParam.get('q') ?? '');
+    setCategory(searchParam.get('category') ?? '');
+    setPlace(searchParam.get('place') ?? '');
+    setTicketType(searchParam.get('ticket_type') ?? '');
+  }, [searchParam]);
+
+  useEffect(() => {
     setSearchParam((prev) => {
       const next = new URLSearchParams(prev);
       if (query) {
@@ -108,9 +151,24 @@ export function EventsList({ events }: EventsListProps) {
       } else {
         next.delete('q');
       }
+      if (category) {
+        next.set('category', category);
+      } else {
+        next.delete('category');
+      }
+      if (place) {
+        next.set('place', place);
+      } else {
+        next.delete('place');
+      }
+      if (ticketType) {
+        next.set('ticket_type', ticketType);
+      } else {
+        next.delete('ticket_type');
+      }
       return next;
     });
-  }, [query, setSearchParam]);
+  }, [category, place, query, setSearchParam, ticketType]);
 
   function getButton(title: string, icon: string, func: () => void, chosen: boolean) {
     return (
@@ -135,22 +193,34 @@ export function EventsList({ events }: EventsListProps) {
             onChange={setQuery}
             value={query}
           />
-          {isDesktop && (
-            <span className={styles.filter_button}>
-              <IconButton
-                icon="fluent:options-24-filled"
-                title="Filter"
-                color={COLORS.black}
-                onClick={() => alert('TODO legg til tinius sitt filter')}
-              />
-            </span>
-          )}
-        </div>
-
-        {/* TODO translate */}
-        <div className={styles.button_row}>
-          {getButton(t(KEY.common_card), 'material-symbols:grid-view-rounded', () => setTableView(false), !tableView)}
-          {getButton(t(KEY.common_sheet), 'material-symbols:view-list', () => setTableView(true), tableView)}
+          <Dropdown
+            value={place || null}
+            options={venueOptions}
+            onChange={(value) => setPlace(value ?? '')}
+            className={styles.filter_select}
+            sortAlphabetic={true}
+            nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_venue)}`) }}
+          />
+          <Dropdown
+            value={(category || null) as EventCategoryValue | null}
+            options={categoryOptions}
+            onChange={(value) => setCategory(value ?? '')}
+            className={styles.filter_select}
+            sortAlphabetic={true}
+            nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.category)}`) }}
+          />
+          <Dropdown
+            value={(ticketType || null) as EventTicketTypeValue | null}
+            options={ticketTypeOptions}
+            onChange={(value) => setTicketType(value ?? '')}
+            className={styles.filter_select}
+            sortAlphabetic={true}
+            nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_ticket)}`) }}
+          />
+          <div className={styles.button_row}>
+            {getButton(t(KEY.common_card), 'material-symbols:grid-view-rounded', () => setTableView(false), !tableView)}
+            {getButton(t(KEY.common_sheet), 'material-symbols:view-list', () => setTableView(true), tableView)}
+          </div>
         </div>
       </div>
 
