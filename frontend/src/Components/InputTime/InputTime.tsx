@@ -1,79 +1,110 @@
 import classNames from 'classnames';
-import { type ChangeEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, type FocusEvent, useEffect, useRef, useState } from 'react';
 import styles from './InputTime.module.scss';
 
 type InputTimeProps = {
   className?: string;
   disabled?: boolean;
+  ariaLabel?: string;
+  hourAriaLabel?: string;
+  minuteAriaLabel?: string;
   onChange?: (value: string) => void;
   onBlur?: (value: string) => void;
   value?: string;
   error?: string;
 };
 
-export function InputTime({ onChange, onBlur, value, error }: InputTimeProps) {
-  const [hour, setHour] = useState('');
-  const [minute, setMinute] = useState('');
+function formatTime(hour: string, minute: string) {
+  return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
+}
+
+function normalizeTime(value?: string) {
+  const [hour = '', minute = ''] = value?.split(':') ?? [];
+  return formatTime(hour, minute);
+}
+
+export function InputTime({
+  className,
+  disabled,
+  ariaLabel,
+  hourAriaLabel,
+  minuteAriaLabel,
+  onChange,
+  onBlur,
+  value,
+  error,
+}: InputTimeProps) {
+  const [valueHour = '', valueMinute = ''] = value?.split(':') ?? [];
+  const [hour, setHour] = useState(valueHour);
+  const [minute, setMinute] = useState(valueMinute);
+  const hasUncommittedChanges = useRef(false);
 
   useEffect(() => {
-    if (value) {
-      const [parsedHour, parsedMinute] = value.split(':');
-      setHour(parsedHour);
-      setMinute(parsedMinute);
-    }
-  }, [value]);
+    // A server response must not overwrite what the user is still typing.
+    if (hasUncommittedChanges.current) return;
+    setHour(valueHour);
+    setMinute(valueMinute);
+  }, [valueHour, valueMinute]);
 
-  useEffect(() => {
-    const formattedTime = `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
-    onChange?.(formattedTime);
-  }, [hour, minute, onChange]);
-
-  function handleChange(e: ChangeEvent<HTMLInputElement>) {
-    const inputName = e.target.getAttribute('name');
-    let numericValue = e.target.value.replace(/[^0-9]/g, '').trim();
+  function handleChange(e: ChangeEvent<HTMLInputElement>, field: 'hour' | 'minute') {
+    hasUncommittedChanges.current = true;
+    let numericValue = e.target.value.replace(/[^0-9]/g, '');
     if (numericValue.length > 2) numericValue = numericValue.slice(1, 3);
-    const parsedValue = Number.parseInt(numericValue, 10);
-    if (inputName === 'hour') {
-      numericValue = parsedValue > 23 ? '23' : numericValue;
-      // Regex for 00-23, allowing for values without 0 padding
-      if (/^(2[0-3]|[0-1]?[0-9])$/.test(numericValue) || numericValue.length === 0) {
-        setHour(numericValue);
-        onChange?.(`${numericValue.padStart(2, '0')}:${minute.padStart(2, '0')}`);
-      }
-    } else if (inputName === 'minute') {
-      numericValue = parsedValue > 59 ? '59' : e.target.value;
-      // Regex for 00-59, allowing for values without 0 padding
-      if (/^([0-5]?[0-9])$/.test(numericValue) || numericValue.length === 0) {
-        setMinute(numericValue);
-        onChange?.(`${hour.padStart(2, '0')}:${numericValue.padStart(2, '0')}`);
-      }
+    const maximum = field === 'hour' ? 23 : 59;
+    if (Number(numericValue) > maximum) numericValue = String(maximum);
+    if (field === 'hour') {
+      setHour(numericValue);
+      onChange?.(formatTime(numericValue, minute));
+    } else {
+      setMinute(numericValue);
+      onChange?.(formatTime(hour, numericValue));
     }
   }
 
-  function handleBlur() {
-    const formattedTime = `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
-    onBlur?.(formattedTime);
+  function handleBlur(e: FocusEvent<HTMLDivElement>) {
+    if (e.relatedTarget && e.currentTarget.contains(e.relatedTarget as Node)) return;
+    hasUncommittedChanges.current = false;
+
+    const formattedTime = formatTime(hour, minute);
+    const [formattedHour, formattedMinute] = formattedTime.split(':');
+    setHour(formattedHour);
+    setMinute(formattedMinute);
+
+    if (formattedTime !== normalizeTime(value)) {
+      onBlur?.(formattedTime);
+    }
   }
 
   return (
-    <div className={styles.inputTime_wrap}>
+    <div
+      className={classNames(styles.inputTime_wrap, className)}
+      role="group"
+      aria-label={ariaLabel}
+      onBlur={handleBlur}
+    >
       <div className={classNames(styles.inputTime, error && styles.error)}>
         <input
           type="text"
+          inputMode="numeric"
           className={classNames(styles.number, error && styles.error)}
           name="hour"
           value={hour}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          disabled={disabled}
+          aria-label={hourAriaLabel}
+          aria-invalid={Boolean(error)}
+          onChange={(event) => handleChange(event, 'hour')}
         />
         <p>:</p>
         <input
           type="text"
+          inputMode="numeric"
           className={classNames(styles.number, error && styles.error)}
           name="minute"
           value={minute}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          disabled={disabled}
+          aria-label={minuteAriaLabel}
+          aria-invalid={Boolean(error)}
+          onChange={(event) => handleChange(event, 'minute')}
         />
       </div>
       {error && <div className={styles.errorMessage}> {error}</div>}
