@@ -448,6 +448,9 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
                     {t(KEY.common_membership_number)}
                   </RadioButton>
                 </div>
+                {!selectedTicketsCanBePutOnCard && ticketOptions.length > 0 && (
+                  <p className={styles.disabled_delivery_notice}>{t(KEY.ticket_card_unavailable_message)}</p>
+                )}
                 <div className={styles.delivery_option}>
                   <RadioButton
                     name="ticketType"
@@ -465,11 +468,6 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
                   ticketType === TICKET_TYPE_MEMBERSHIP ? styles.after_membership : styles.after_email
                 }`}
               >
-                {ticketType === TICKET_TYPE_MEMBERSHIP &&
-                  !selectedTicketsCanBePutOnCard &&
-                  ticketOptions.length > 0 && (
-                    <p className={styles.validation_notice}>{t(KEY.ticket_card_unavailable_message)}</p>
-                  )}
                 {ticketType === TICKET_TYPE_EMAIL && selectedTicketsRequireMembership && (
                   <p className={styles.info_notice}>{t(KEY.ticket_requires_membership_message)}</p>
                 )}

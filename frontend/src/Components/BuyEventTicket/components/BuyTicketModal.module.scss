@@ -375,6 +375,14 @@
   border-left: 4px solid var(--checkout-rule);
 }
 
+.disabled_delivery_notice {
+  order: 2;
+  margin: -0.35rem 0 0.5rem 3rem;
+  color: var(--checkout-muted);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
 .after_membership {
   order: 2;
 }
@@ -419,24 +427,14 @@
   margin: 0;
 }
 
-.validation_notice,
 .info_notice {
   margin: 0;
   padding: 0.75rem 0.9rem;
-  border-left: 4px solid;
+  border-left: 4px solid $blue;
   background: var(--checkout-surface);
+  color: var(--checkout-muted);
   font-size: 0.85rem;
   line-height: 1.4;
-}
-
-.validation_notice {
-  border-color: $red;
-  color: $red;
-}
-
-.info_notice {
-  border-color: $blue;
-  color: var(--checkout-muted);
 }
 
 .checkout_footer {
