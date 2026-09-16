@@ -153,15 +153,3 @@ def samfundet_date(dt: datetime.datetime) -> datetime.date:
     A date between 00:00-04:00 belongs to previous day.
     """
     return (dt - datetime.timedelta(hours=4)).date()
-
-
-def samfundet_day_bounds(dt: datetime.datetime) -> tuple[datetime.datetime, datetime.datetime]:
-    """
-    Returns the start and end datetimes for a Samfundet date.
-
-    E.g. a Samfundet day labeled '2026-09-09'
-    actually starts on '2026-09-09 04:00:00' and ends at '2026-09-10 04:00:00'
-    """
-    start_dt = make_aware(datetime.datetime.combine(dt, datetime.time(4, 0, 0)))
-    end_dt = make_aware(datetime.datetime.combine(dt + datetime.timedelta(days=1), datetime.time(4, 0, 0)))
-    return start_dt, end_dt
