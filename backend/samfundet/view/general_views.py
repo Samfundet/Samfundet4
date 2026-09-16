@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from typing import Any
-from datetime import time, timedelta
+from datetime import time
 from itertools import chain
 
 from rest_framework import status

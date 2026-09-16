@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import datetime
+from typing import TYPE_CHECKING
 from operator import or_
 from functools import reduce
 from collections.abc import Callable
-from typing import TYPE_CHECKING
 
 from django.conf import settings
 from django.http import QueryDict
@@ -16,7 +16,6 @@ from django.core.exceptions import ValidationError
 from django.db.models.query import QuerySet
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-
 
 if TYPE_CHECKING:
     from .models import User
@@ -148,26 +147,21 @@ def register_if_feature_enabled(feature: str, model: type[Model]) -> Callable[[t
     return decorator
 
 
-
-# TODO: SAMFUNDET_DAY_HOURS_OFFSET = 4
-
-def samfundet_date(dt: datetime) -> datetime.date:
+def samfundet_date(dt: datetime.datetime) -> datetime.date:
     """
     Returns logical date for Samfundet.
     A date between 00:00-04:00 belongs to previous day.
     """
-
     return (dt - datetime.timedelta(hours=4)).date()
 
 
-def samfundet_day_bounds(dt: datetime) -> tuple[datetime.datetime, datetime.datetime]:
+def samfundet_day_bounds(dt: datetime.datetime) -> tuple[datetime.datetime, datetime.datetime]:
     """
     Returns the start and end datetimes for a Samfundet date.
 
-    E.g. a Samfundet day labeled '2026-09-09' 
-    actually starts on '2026-09-09 04:00:00' and ends at '2026-09-10 03:59:59'
+    E.g. a Samfundet day labeled '2026-09-09'
+    actually starts on '2026-09-09 04:00:00' and ends at '2026-09-10 04:00:00'
     """
     start_dt = make_aware(datetime.datetime.combine(dt, datetime.time(4, 0, 0)))
     end_dt = make_aware(datetime.datetime.combine(dt + datetime.timedelta(days=1), datetime.time(4, 0, 0)))
-
     return start_dt, end_dt
