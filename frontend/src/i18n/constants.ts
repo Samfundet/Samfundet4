@@ -317,6 +317,7 @@ export const KEY = {
   event_must_be_valid_url: 'event_must_be_valid_url',
   event_must_be_valid_spotify_uri: 'event_must_be_valid_spotify_uri',
   event_publication_date_required: 'event_publication_date_required',
+  event_publication_date_must_be_before_start: 'event_publication_date_must_be_before_start',
 
   // Purchase Ticket Info:
   invalid_email_message: 'invalid_email_message',
