@@ -573,7 +573,7 @@ export const nb = prepareTranslations({
   [KEY.admin_steal_identity]: 'Stjel identitet',
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
-  [KEY.admin_closed_period_end_before_start]: 'Sluttdato må være etter start dato',
+  [KEY.admin_closed_period_end_before_start]: 'Sluttdato må være etter startdato',
   [KEY.admin_closed_period_end_before_today]: 'Sluttdato kan ikke være før dagens dato',
   [KEY.admin_closed_message]: 'Samfundet er stengt',
   [KEY.admin_casedocuments_title]: 'Administrer saksdokumenter',
