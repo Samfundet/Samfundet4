@@ -380,10 +380,3 @@ class TestImageApi:
         assert data['created_by'] == {'username': fixture_superuser.username, 'first_name': 'Super', 'last_name': 'User'}
         assert data['created_at']
         assert data['updated_at']
-
-        # Cleanup: Delete related objects before the image is cleaned up
-        blog_post.delete()
-        infobox.delete()
-        merch.delete()
-        fixture_gang_section.logo = None
-        fixture_gang_section.save()

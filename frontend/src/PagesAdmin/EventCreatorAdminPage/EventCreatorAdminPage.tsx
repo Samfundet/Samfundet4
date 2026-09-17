@@ -24,6 +24,7 @@ import { type EventCreatorStep, type StepKey, steps } from './steps/stepConfig';
 import type { FieldErrors } from 'react-hook-form';
 import { eventSchema } from './EventCreatorSchema';
 import { EventPreviewCard } from './components/EventPreviewCard';
+import { useEventMutations } from './hooks/useEventMutations';
 import { GraphicsStep } from './steps/GraphicsStep';
 import { InfoStep } from './steps/InfoStep';
 import { PaymentStep } from './steps/PaymentStep';
@@ -36,6 +37,7 @@ export function EventCreatorAdminPage() {
   const [event, setEvent] = useState<Partial<EventDto>>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
+  const { createEventMutation, editEventMutation } = useEventMutations();
 
   const { data: venues = [] } = useQuery({
     queryKey: venueKeys.all,

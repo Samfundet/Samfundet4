@@ -30,6 +30,7 @@ export function useEventMutations() {
   const editEventMutation = useMutation({
     mutationFn: (data: UpdateEventInput) => putEvent(data.id, data.payload),
     onSuccess: () => {
+      navigate({ url: ROUTES.frontend.admin_events });
       toast.success(t(KEY.common_save_successful));
     },
     onError: () => {
