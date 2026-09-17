@@ -6,7 +6,7 @@ from django.http import HttpRequest
 from django.urls import reverse
 from django.contrib import admin
 from django.db.models import QuerySet
-from django.utils.html import format_html
+from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group, Permission
 from django.contrib.admin.models import LogEntry
@@ -358,7 +358,27 @@ class ImageAdmin(CustomBaseAdmin):
     list_display_links = ['id']
     # autocomplete_fields = []
     list_select_related = True
-    readonly_fields = [*CustomBaseAdmin.readonly_fields, *(f'image_{name}' for name in Image.VARIANTS)]
+    readonly_fields = [*CustomBaseAdmin.readonly_fields, *(f'image_{name}' for name in Image.VARIANTS), 'image_references']
+
+    @admin.display(description='Elements using this image')
+    def image_references(self, image: Image) -> str:
+        references = [
+            *(('Event', f'/admin/samfundet/event/{event.pk}/change/', event.title_nb) for event in Event.objects.filter(image=image)),
+            *(('Infobox', f'/admin/samfundet/infobox/{infobox.pk}/change/', infobox) for infobox in Infobox.objects.filter(image=image)),
+            *(('Merch', f'/admin/samfundet/merch/{merch.pk}/change/', merch) for merch in Merch.objects.filter(image=image)),
+        ]
+
+        if not references:
+            return 'No references found.'
+
+        return format_html(
+            '<table><thead><tr><th>Type</th><th>Reference</th></tr></thead><tbody>{}</tbody></table>',
+            format_html_join(
+                '',
+                '<tr><td>{}</td><td><a href="{}">{}</a></td></tr>',
+                references,
+            ),
+        )
 
 
 @register_if_feature_enabled(WebFeatures.EVENTS, EventGroup)
