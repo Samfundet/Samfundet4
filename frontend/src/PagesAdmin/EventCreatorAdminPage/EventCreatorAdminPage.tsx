@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
@@ -18,7 +18,6 @@ import { dbT, getAgeRestrictionKey, getEventCategoryKey, lowerCapitalize } from 
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { type FormType, useEventCreatorForm } from './hooks/useEventCreatorForm';
-import { useEventMutations } from './hooks/useEventMutations';
 
 import { type EventCreatorStep, type StepKey, steps } from './steps/stepConfig';
 
@@ -37,9 +36,6 @@ export function EventCreatorAdminPage() {
   const [event, setEvent] = useState<Partial<EventDto>>();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
-  const location = useLocation();
-  const returnTo = location.state?.returnTo;
-  const { createEventMutation, editEventMutation } = useEventMutations(returnTo);
 
   const { data: venues = [] } = useQuery({
     queryKey: venueKeys.all,

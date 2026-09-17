@@ -12,7 +12,7 @@ type UpdateEventInput = {
   payload: Partial<EventWriteDto>;
 };
 
-export function useEventMutations(returnTo?: string) {
+export function useEventMutations() {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
 
@@ -30,9 +30,6 @@ export function useEventMutations(returnTo?: string) {
   const editEventMutation = useMutation({
     mutationFn: (data: UpdateEventInput) => putEvent(data.id, data.payload),
     onSuccess: () => {
-      navigate({
-        url: returnTo ?? ROUTES.frontend.admin_events,
-      });
       toast.success(t(KEY.common_save_successful));
     },
     onError: () => {

@@ -1,9 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
 import { z } from 'zod';
 import {
   Button,
@@ -18,14 +17,11 @@ import {
   TagChipInput,
 } from '~/Components';
 import { FormDescription } from '~/Components/Forms/Form';
-import type { LinkTarget } from '~/Components/Link/Link';
-import { Link } from '~/Components/Link/Link';
 import { useAuthContext } from '~/context/AuthContext';
 import { IMAGE_FILE, TAGS, TITLE, useImageMutations } from '~/domain';
-import type { ImageDto, ImageReferenceDto } from '~/dto';
+import type { ImageDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 import { handleServerFormErrors, hasPermissions, lowerCapitalize } from '~/utils';
@@ -44,58 +40,12 @@ type ImageFormProps = {
   onCreated?: (image: ImageDto) => void;
 };
 
-function imageReferenceToLink(reference: ImageReferenceDto): { label: string; url: string; target: LinkTarget } {
-  switch (reference.model) {
-    case 'event':
-      return {
-        label: `Event: ${reference.label}`,
-        url: reverse({
-          pattern: ROUTES.frontend.admin_events_edit,
-          urlParams: { id: reference.id },
-        }),
-        target: 'frontend',
-      };
-    case 'gang_section':
-      return {
-        label: `Gang section: ${reference.label}`,
-        url: reference.admin_url ?? `/admin/samfundet/gangsection/${reference.id}/change/`,
-        target: 'backend',
-      };
-    case 'blog_post':
-      return {
-        label: `Blog post: ${reference.label}`,
-        url: reference.admin_url ?? `/admin/samfundet/blogpost/${reference.id}/change/`,
-        target: 'backend',
-      };
-    case 'infobox':
-      return {
-        label: `Infobox: ${reference.label}`,
-        url: reference.admin_url ?? `/admin/samfundet/infobox/${reference.id}/change/`,
-        target: 'backend',
-      };
-    case 'merch':
-      return {
-        label: `Merch: ${reference.label}`,
-        url: reference.admin_url ?? `/admin/samfundet/merch/${reference.id}/change/`,
-        target: 'backend',
-      };
-    default:
-      return {
-        label: `Default: ${reference.model}: ${reference.label}`,
-        url: reference.admin_url ?? `/admin/samfundet/${reference.model}/${reference.id}/change/`,
-        target: 'backend',
-      };
-  }
-}
-
 export function ImageForm({ image, onCreated }: ImageFormProps) {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
   const { createImage, editImage, deleteImage } = useImageMutations();
-  const [flash, setFlash] = useState(false);
 
   const { user } = useAuthContext();
-  const location = useLocation();
 
   const canCreate = hasPermissions(user, [PERM.SAMFUNDET_ADD_IMAGE], undefined, true);
   const canChange = useMemo(() => {
@@ -152,14 +102,6 @@ export function ImageForm({ image, onCreated }: ImageFormProps) {
   }
 
   function handleDelete() {
-    const triggerFlash = () => {
-      setFlash(true);
-
-      setTimeout(() => {
-        setFlash(false);
-      }, 1200);
-    };
-
     if (image && window.confirm(t(KEY.admin_images_confirm_delete))) {
       deleteImage.mutate(image.id, {
         onSuccess: () => {
@@ -167,43 +109,11 @@ export function ImageForm({ image, onCreated }: ImageFormProps) {
         },
         onError: (error) => {
           if (error.response?.status === 409) {
-            triggerFlash();
+            // Add propper error handling for 409 conflict, e.g. show a toast message
           }
         },
       });
     }
-  }
-
-  function renderReferences() {
-    const references = image?.references ?? [];
-
-    return (
-      <div className={styles.references}>
-        {image && references.length !== 0 && (
-          <section className={styles.referencesSection}>
-            <label className={styles.referenceLabel}>{t(KEY.common_bound_by)}:</label>
-            <ul className={styles.referenceList}>
-              {references.map((reference) => {
-                const { label, url } = imageReferenceToLink(reference);
-                return (
-                  <li className={styles.referenceItem} key={`${reference.model}-${reference.id}`}>
-                    <Link
-                      url={url}
-                      state={{
-                        returnTo: `${location.pathname}${location.search}${location.hash}`,
-                      }}
-                      className={`${styles.referenceLink} ${flash ? styles.flash : ''}`}
-                    >
-                      {label}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        )}
-      </div>
-    );
   }
 
   const submitText = image ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_image)}`);
@@ -268,8 +178,6 @@ export function ImageForm({ image, onCreated }: ImageFormProps) {
             />
           </>
         )}
-
-        {renderReferences()}
 
         <div className={styles.action_row}>
           {image && canDelete && (
