@@ -1,0 +1,1 @@
+export { BilligPurchaseFailurePage } from './BilligPurchaseFailurePage';
