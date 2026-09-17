@@ -6,8 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
-import { Button, Form, FormField, FormItem, FormLabel, Input, Textarea } from '~/Components';
-import { FormControl, FormMessage } from '~/Components/Forms/Form';
+import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Textarea } from '~/Components';
 import { DATE, MESSAGE, useCreateClosedPeriod, useGetClosedPeriod, useUpdateClosedPeriod } from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -27,7 +26,7 @@ export function ClosedPeriodFormAdminPage() {
       start_dt: DATE,
       end_dt: DATE,
     })
-    .refine((data) => data.end_dt > data.start_dt, {
+    .refine((data) => data.end_dt >= data.start_dt, {
       message: t(KEY.admin_closed_period_end_before_start),
       path: ['end_dt'],
     })

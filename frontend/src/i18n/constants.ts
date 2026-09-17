@@ -92,8 +92,6 @@ export const KEY = {
   common_sections: 'common_sections',
   common_next: 'common_next',
   common_open: 'common_open',
-  common_closed: 'common_closed',
-  common_default: 'common_default',
   common_send: 'common_send',
   common_gangs: 'common_gangs',
   common_event: 'common_event',
