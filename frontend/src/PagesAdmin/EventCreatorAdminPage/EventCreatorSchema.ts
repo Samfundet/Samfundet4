@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { OPTIONAL_IMAGE } from '~/domain';
+import { KEY } from '~/i18n/constants';
 import {
   EVENT_AGE_RESTRICTION,
   EVENT_BILLIG_ID,
@@ -37,7 +38,7 @@ const event_custom_ticket = z.object({
   price: z.number().min(0),
 });
 
-export const eventSchema = z.object({
+const eventSchemaBase = z.object({
   // text and description
   title_nb: EVENT_TITLE,
   title_en: EVENT_TITLE,
@@ -77,5 +78,13 @@ export const eventSchema = z.object({
   visibility_from_dt: EVENT_VISIBILITY_FROM_DT,
   visibility_to_dt: EVENT_VISIBILITY_TO_DT,
 });
+
+export const eventSchema = eventSchemaBase.refine(
+  (data) => !data.visibility_from_dt || !data.start_dt || new Date(data.visibility_from_dt) < new Date(data.start_dt),
+  {
+    message: KEY.event_publication_date_must_be_before_start,
+    path: ['visibility_from_dt'],
+  },
+);
 
 export type EventFormType = z.infer<typeof eventSchema>;
