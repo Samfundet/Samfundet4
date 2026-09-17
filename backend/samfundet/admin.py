@@ -358,7 +358,7 @@ class ImageAdmin(CustomBaseAdmin):
     list_display_links = ['id']
     # autocomplete_fields = []
     list_select_related = True
-    readonly_fields = [*CustomBaseAdmin.readonly_fields, *(f'image_{name}' for name in Image.VARIANTS), 'image_references']
+    readonly_fields = ['image_references', *CustomBaseAdmin.readonly_fields, *(f'image_{name}' for name in Image.VARIANTS)]
 
     @admin.display(description='Elements using this image')
     def image_references(self, image: Image) -> str:

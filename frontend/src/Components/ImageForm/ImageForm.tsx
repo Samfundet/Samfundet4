@@ -107,11 +107,6 @@ export function ImageForm({ image, onCreated }: ImageFormProps) {
         onSuccess: () => {
           navigate({ url: ROUTES.frontend.admin_images });
         },
-        onError: (error) => {
-          if (error.response?.status === 409) {
-            // Add propper error handling for 409 conflict, e.g. show a toast message
-          }
-        },
       });
     }
   }
