@@ -22,9 +22,29 @@ export function LastUpdatedByHeader({ model }: Props) {
   // updated_at field always gets set, with a tiny ms delay. Formatted strings rounds this down
   const isEdited =
     !!model.updated_at &&
-    (createdAtString !== updatedAtString || model.updated_by?.username !== model.created_by?.username);
+    (createdAtString !== updatedAtString ||
+      (typeof model.updated_by === 'string' &&
+        typeof model.created_by === 'string' &&
+        model.updated_by !== model.created_by) ||
+      (typeof model.updated_by !== 'string' &&
+        typeof model.created_by !== 'string' &&
+        model.updated_by?.username !== model.created_by?.username));
+
+  const updatedByString =
+    typeof model.updated_by === 'string'
+      ? model.updated_by
+      : model.updated_by
+        ? getFullDisplayName(model.updated_by)
+        : `(${t(KEY.common_unknown).toLowerCase()})`;
+
+  const createdByString =
+    typeof model.created_by === 'string'
+      ? model.created_by
+      : model.created_by
+        ? getFullDisplayName(model.created_by)
+        : `(${t(KEY.common_unknown).toLowerCase()})`;
 
   return isEdited
-    ? `${t(KEY.common_last_edited_by)} ${model.updated_by ? getFullDisplayName(model.updated_by) : `(${t(KEY.common_unknown).toLowerCase()})`}${updatedAtString}`
-    : `${t(KEY.common_created_by)} ${model?.created_by ? getFullDisplayName(model.created_by) : `(${t(KEY.common_unknown).toLowerCase()})`}${createdAtString}`;
+    ? `${t(KEY.common_last_edited_by)} ${updatedByString}${updatedAtString}`
+    : `${t(KEY.common_created_by)} ${createdByString}${createdAtString}`;
 }

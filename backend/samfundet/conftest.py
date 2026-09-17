@@ -20,9 +20,8 @@ from root.settings import BASE_DIR
 from samfundet.constants import DEV_PASSWORD
 from samfundet.models.role import Role
 from samfundet.models.event import Event
-from samfundet.models.billig import BilligEvent
+from samfundet.models.billig import BilligEvent, BilligPriceGroup, BilligTicketCard, BilligTicketGroup
 from samfundet.models.general import (
-    Gang,
     User,
     Image,
     Merch,
@@ -31,14 +30,13 @@ from samfundet.models.general import (
     Campus,
     BlogPost,
     TextItem,
-    GangSection,
     Reservation,
-    Organization,
     MerchVariation,
 )
 from samfundet.infopages.models import InformationPage
 from samfundet.infopages.services import create_information_page
 from samfundet.models.recruitment import Recruitment, RecruitmentPosition, RecruitmentApplication
+from samfundet.organization.models import Gang, GangSection, Organization
 from samfundet.models.model_choices import EventTicketType, EventAgeRestriction, RecruitmentStatusChoices, RecruitmentPriorityChoices
 
 """
@@ -177,12 +175,51 @@ def fixture_billig_event() -> Iterator[BilligEvent]:
     event = BilligEvent.objects.create(
         id=69,
         name='Test Event',
-        sale_from=timezone.datetime.now(),
-        sale_to=timezone.datetime.now() + timezone.timedelta(days=1),
+        sale_from=timezone.now(),
+        sale_to=timezone.now() + timezone.timedelta(days=1),
         hidden=False,
     )
+    # Billig stores naive timestamps; reload to match production query values.
+    event.refresh_from_db()
     yield event
-    event.delete()
+
+
+@pytest.fixture
+def fixture_billig_ticket_group(fixture_billig_event: BilligEvent) -> Iterator[BilligTicketGroup]:
+    group = BilligTicketGroup.objects.create(
+        id=690,
+        event=fixture_billig_event,
+        name='Test Group',
+        num=50,
+        num_sold=10,
+        ticket_limit=None,
+        is_theater_ticket_group=False,
+    )
+    yield group
+
+
+@pytest.fixture
+def fixture_billig_price_group(fixture_billig_ticket_group: BilligTicketGroup) -> Iterator[BilligPriceGroup]:
+    price_group = BilligPriceGroup.objects.create(
+        id=6900,
+        ticket_group=fixture_billig_ticket_group,
+        name='Test PG',
+        price=100,
+        membership_needed=False,
+        can_be_put_on_card=True,
+        netsale=True,
+    )
+    yield price_group
+
+
+@pytest.fixture
+def fixture_billig_ticket_card() -> Iterator[BilligTicketCard]:
+    card = BilligTicketCard.objects.create(
+        card=100001,
+        owner_member_id=42,
+        membership_ends=timezone.now().date() + timezone.timedelta(days=365),
+    )
+    yield card
 
 
 @pytest.fixture

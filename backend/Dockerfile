@@ -13,7 +13,7 @@
 # Purpose: Install heavy build tools and compile Python packages
 # This stage contains tools we need to BUILD but not to RUN the application
 # =============================================================================
-FROM python:3.11.2-slim-bullseye AS dependencies
+FROM python:3.13-slim-trixie AS dependencies
 
 ##################################
 #       uv: package manager      #
@@ -84,7 +84,7 @@ RUN uv sync --frozen --no-install-project
 # Purpose: Create the runtime environment with only what's needed to RUN
 # This stage will be much smaller as it excludes build tools
 # =============================================================================
-FROM python:3.11.2-slim-bullseye AS final
+FROM python:3.13-slim-trixie AS final
 
 # Copy the uv binaries so `uv run ...` works at runtime (used by entrypoint/CMD/aliases).
 COPY --from=ghcr.io/astral-sh/uv:0.9.11 /uv /uvx /bin/
