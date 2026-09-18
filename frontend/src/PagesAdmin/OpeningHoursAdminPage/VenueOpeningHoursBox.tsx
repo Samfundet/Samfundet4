@@ -26,11 +26,11 @@ export function VenueOpeningHoursBox({ venue, onSaveDay }: VenueOpeningHoursBoxP
       </h2>
       <div className={styles.venue_content}>
         <div className={styles.day_row_header}>
-          <div className={styles.day_label}>{t(KEY.admin_opening_hours_day)}</div>
+          <div className={styles.day_label}>{t(KEY.common_day)}</div>
           <div className={styles.day_edit}>
             <span className={styles.time_label}>{t(KEY.common_from)}</span>
             <span className={styles.time_label}>{t(KEY.common_to)}</span>
-            <div className={styles.open_label}>{t(KEY.admin_opening_hours_open)}</div>
+            <div className={styles.open_label}>{t(KEY.common_is_open)}</div>
           </div>
         </div>
 
