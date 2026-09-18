@@ -3,7 +3,7 @@ import { BACKEND_DOMAIN } from '~/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import type { Day } from '~/types';
-import type { VenueDaySchedule, VenueDayScheduleDto } from './dto';
+import type { VenueDaySchedule, VenueDayScheduleDto } from './types';
 
 export async function patchVenueDaySchedule(
   slug: string,

@@ -1,6 +1,6 @@
 import type { VenueDto } from '~/dto';
 import type { Day } from '~/types';
-import type { VenueDaySchedule } from './dto';
+import type { VenueDaySchedule } from './types';
 
 export function getVenueDaySchedule(venue: VenueDto, weekday: Day): VenueDaySchedule {
   return {

@@ -7,7 +7,7 @@ import { KEY } from '~/i18n/constants';
 import { ALL_DAYS, type Day } from '~/types';
 import { getDayKey } from '~/utils';
 import styles from './OpeningHoursAdminPage.module.scss';
-import type { VenueDaySchedule } from './dto';
+import type { VenueDaySchedule } from './types';
 import { getVenueDaySchedule } from './utils';
 
 type VenueOpeningHoursBoxProps = {
