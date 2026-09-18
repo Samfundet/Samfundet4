@@ -37,17 +37,17 @@ export function InputTime({
   const [valueHour = '', valueMinute = ''] = value?.split(':') ?? [];
   const [hour, setHour] = useState(valueHour);
   const [minute, setMinute] = useState(valueMinute);
-  const hasUncommittedChanges = useRef(false);
+  const isEditing = useRef(false);
 
   useEffect(() => {
-    // A server response must not overwrite what the user is still typing.
-    if (hasUncommittedChanges.current) return;
+    // Keep the user's raw input visible while still updating the parent with a normalized value.
+    if (isEditing.current) return;
     setHour(valueHour);
     setMinute(valueMinute);
   }, [valueHour, valueMinute]);
 
   function handleChange(e: ChangeEvent<HTMLInputElement>, field: 'hour' | 'minute') {
-    hasUncommittedChanges.current = true;
+    isEditing.current = true;
     let numericValue = e.target.value.replace(/[^0-9]/g, '');
     if (numericValue.length > 2) numericValue = numericValue.slice(1, 3);
     const maximum = field === 'hour' ? 23 : 59;
@@ -63,16 +63,18 @@ export function InputTime({
 
   function handleBlur(e: FocusEvent<HTMLDivElement>) {
     if (e.relatedTarget && e.currentTarget.contains(e.relatedTarget as Node)) return;
-    hasUncommittedChanges.current = false;
+    isEditing.current = false;
 
     const formattedTime = formatTime(hour, minute);
     const [formattedHour, formattedMinute] = formattedTime.split(':');
     setHour(formattedHour);
     setMinute(formattedMinute);
 
+    // Ensure the parent receives the final normalized value even if it changed externally while editing.
     if (formattedTime !== normalizeTime(value)) {
-      onBlur?.(formattedTime);
+      onChange?.(formattedTime);
     }
+    onBlur?.(formattedTime);
   }
 
   return (
