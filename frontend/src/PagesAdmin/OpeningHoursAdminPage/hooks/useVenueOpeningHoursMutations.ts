@@ -6,7 +6,7 @@ import { KEY } from '~/i18n/constants';
 import { venueKeys } from '~/queryKeys';
 import type { Day } from '~/types';
 import { patchVenueDaySchedule } from '../api';
-import type { VenueDaySchedule } from '../dto';
+import type { VenueDaySchedule } from '../types';
 import { getVenueDaySchedule, normalizeVenueDaySchedule, updateVenueDaySchedule } from '../utils';
 
 type SaveVenueDayVariables = {
