@@ -342,6 +342,9 @@ export const KEY = {
   sales_conditions: 'sales_conditions',
   ticket_card_unavailable_message: 'ticket_card_unavailable_message',
   ticket_requires_membership_message: 'ticket_requires_membership_message',
+  ticket_checkout_load_error: 'ticket_checkout_load_error',
+  ticket_checkout_empty: 'ticket_checkout_empty',
+  ticket_checkout_retry: 'ticket_checkout_retry',
 
   event_external_host_message: 'event_external_host_message',
 
