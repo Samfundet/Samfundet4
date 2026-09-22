@@ -124,7 +124,9 @@ export function BilligPurchaseStatusPage() {
                 {ticketsToDisplay.map((ticket) => (
                   <article key={ticket.ticketno} className={styles.ticketRow}>
                     <div>
-                      <div className={styles.ticketRef}>{ticket.ticketno}</div>
+                      <div className={styles.ticketRef}>
+                        {t(KEY.billig_callback_ticket_reference)}: {ticket.ticketno}
+                      </div>
                       <div className={styles.ticketMeta}>
                         {[
                           ticket.event_name,

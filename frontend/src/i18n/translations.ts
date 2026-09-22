@@ -742,6 +742,7 @@ export const nb = prepareTranslations({
   [KEY.billig_callback_status_title]: 'Kjøp fullført',
   [KEY.billig_callback_status_lead]: 'Billettene er registrert. Du kan laste dem ned her eller vente på e-post.',
   [KEY.billig_callback_tickets_heading]: 'Billetter',
+  [KEY.billig_callback_ticket_reference]: 'Billettreferanse',
   [KEY.billig_callback_summary_heading]: 'Oversikt',
   [KEY.billig_callback_ticket_count]: 'Antall billetter',
   [KEY.billig_callback_total_price]: 'Totalpris',
@@ -1562,6 +1563,7 @@ export const en = prepareTranslations({
   [KEY.billig_callback_status_lead]:
     'The tickets are registered. You can download them here or wait for email delivery.',
   [KEY.billig_callback_tickets_heading]: 'Tickets',
+  [KEY.billig_callback_ticket_reference]: 'Ticket reference',
   [KEY.billig_callback_summary_heading]: 'Summary',
   [KEY.billig_callback_ticket_count]: 'Number of tickets',
   [KEY.billig_callback_total_price]: 'Total price',
