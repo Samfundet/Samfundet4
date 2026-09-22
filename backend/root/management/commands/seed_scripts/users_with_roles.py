@@ -8,7 +8,8 @@ from django.db import transaction  # type: ignore
 from django.contrib.auth.hashers import make_password
 
 from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
-from samfundet.models.general import Gang, User, Campus, GangSection, Organization
+from samfundet.models.general import User, Campus
+from samfundet.organization.models import Gang, GangSection, Organization
 
 from .roles import (
     RAADET,

@@ -12,8 +12,8 @@ export type BaseModelDto = {
   version?: number;
   created_at?: string;
   updated_at?: string;
-  created_by?: BasicUserDto | UserDto | null;
-  updated_by?: BasicUserDto | UserDto | null;
+  created_by?: BasicUserDto | UserDto | string | null;
+  updated_by?: BasicUserDto | UserDto | string | null;
 };
 
 // Models which are owned by an org/gang/section should extend this type.
@@ -224,7 +224,47 @@ export type EventDto = {
   general_link?: string;
 };
 
+export type EventCloneDto = {
+  id: number;
+  title_nb: string;
+  title_en: string;
+  description_long_nb: string;
+  description_long_en: string;
+  description_short_nb: string;
+  description_short_en: string;
+
+  start_dt: string;
+  end_dt: string;
+
+  category: EventCategoryValue;
+  host: string;
+  location: string;
+  capacity?: number;
+
+  age_restriction: EventAgeRestrictionValue;
+  ticket_type: EventTicketTypeValue;
+  custom_tickets: EventCustomTicketDto[];
+
+  spotify_uri?: string;
+  youtube_link?: string;
+  youtube_embed?: string;
+  facebook_link?: string;
+  soundcloud_link?: string;
+  instagram_link?: string;
+  x_link?: string;
+  lastfm_link?: string;
+  vimeo_link?: string;
+  general_link?: string;
+
+  image?: ImageDto;
+
+  visibility_from_dt: string;
+  visibility_to_dt: string;
+};
+
 export type EventWriteDto = {
+  status?: EventStatus;
+
   title_nb: string;
   title_en: string;
   description_long_nb: string;
@@ -429,6 +469,17 @@ export type OrganizationDto = {
   name: string;
 };
 
+export type EditGangDto = {
+  name_nb: string;
+  name_en: string;
+  abbreviation?: string;
+  webpage?: string;
+  logo?: File;
+  organization?: number;
+  gang_type?: number | null;
+  info_page?: string | null;
+};
+
 export type GangDto = {
   id: number;
   name_nb: string;
@@ -438,10 +489,25 @@ export type GangDto = {
   logo?: string;
   gang_type?: number | null;
   info_page?: string | null;
+  organization?: number | null;
 };
 
 export type RecruitmentGangDto = GangDto & {
   recruitment_positions: number;
+};
+
+export type AdminGangTypeDto = {
+  id: number;
+  title_nb: string;
+  title_en: string;
+};
+
+export type AdminGangListGangDto = Omit<GangDto, 'gang_type'> & {
+  gang_type: GangTypeDto | null;
+};
+
+export type AdminGangListOrganizationDto = OrganizationDto & {
+  gangs: AdminGangListGangDto[];
 };
 
 export type GangTypeDto = {
@@ -451,7 +517,14 @@ export type GangTypeDto = {
   gangs: GangDto[];
 };
 
-export type GangSectionDto = {
+export type EditGangSectionDto = {
+  name_nb: string;
+  name_en: string;
+  logo?: File;
+  gang: number;
+};
+
+export type GangSectionDto = BaseModelDto & {
   id: number;
   name_nb: string;
   name_en: string;
@@ -461,12 +534,10 @@ export type GangSectionDto = {
 
 export type ClosedPeriodDto = {
   id: number;
-  message_no: string;
-  description_no: string;
+  message_nb: string;
   message_en: string;
-  description_en: string;
-  start_dt: Date;
-  end_dt: Date;
+  start_dt: string;
+  end_dt: string;
 };
 
 export type TagDto = {
@@ -822,6 +893,17 @@ export type SultenReservationDayDto = {
   start_time: string;
   closing_time: string;
   tables: TableDto[];
+};
+
+export type SiteBannerDto = {
+  id: number;
+  version: number;
+  text_nb: string;
+  text_en: string;
+  url: string | null;
+  new_tab: boolean;
+  start_at: string;
+  end_at: string | null;
 };
 
 export type RegistrationDto = {

@@ -23,6 +23,7 @@ export { ExpandableHeader } from './ExpandableHeader';
 export { ExpandableList } from './ExpandableList';
 export { ExternalHostBox } from './ExternalHostBox';
 export { FileInput } from './FileInput';
+export { FormBox } from './FormBox/';
 export { Footer } from './Footer';
 export { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, useFormField } from './Forms';
 export { H1 } from './H1';

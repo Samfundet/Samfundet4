@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from dataclasses import field, dataclass
 
 from .models.role import UserOrgRole, UserGangRole, UserRoleBase, UserGangSectionRole
-from .models.general import Gang, GangSection
+from .organization.models import Gang, GangSection
 
 if TYPE_CHECKING:
     from collections.abc import Sequence

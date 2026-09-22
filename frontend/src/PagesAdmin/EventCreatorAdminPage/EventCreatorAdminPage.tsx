@@ -1,43 +1,66 @@
 import { Icon } from '@iconify/react';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
-import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
+import { type ReactElement, type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { getEvent, getVenues } from '~/api';
+import { getEvent, getEventForCloning, getVenues } from '~/api';
 import type { EventDto } from '~/dto';
 import { usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { venueKeys } from '~/queryKeys';
-import { EventAgeRestriction, type EventAgeRestrictionValue, EventCategory, type EventCategoryValue } from '~/types';
-import { dbT, getAgeRestrictionKey, getEventCategoryKey, lowerCapitalize } from '~/utils';
+import { eventCloneKeys, eventKeys, venueKeys } from '~/queryKeys';
+import {
+  EventAgeRestriction,
+  type EventAgeRestrictionValue,
+  EventCategory,
+  type EventCategoryValue,
+  type EventStatus,
+  EventStatusChoice,
+} from '~/types';
+import {
+  dbT,
+  getAgeRestrictionKey,
+  getEventCategoryKey,
+  getEventStatusDescriptionTranslationKey,
+  getEventStatusTranslationKey,
+  lowerCapitalize,
+} from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { type FormType, useEventCreatorForm } from './hooks/useEventCreatorForm';
-import { useEventMutations } from './hooks/useEventMutations';
 
 import { type EventCreatorStep, type StepKey, steps } from './steps/stepConfig';
 
 import type { FieldErrors } from 'react-hook-form';
 import { eventSchema } from './EventCreatorSchema';
 import { EventPreviewCard } from './components/EventPreviewCard';
+import { useEventMutations } from './hooks/useEventMutations';
 import { GraphicsStep } from './steps/GraphicsStep';
 import { InfoStep } from './steps/InfoStep';
 import { PaymentStep } from './steps/PaymentStep';
 import { SOCIAL_KEYS, SocialMediaStep } from './steps/SocialMediaStep';
 import { SummaryStep } from './steps/SummaryStep';
 import { TextStep } from './steps/TextStep';
+import type { EventStatusOption } from './types';
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
-  const [event, setEvent] = useState<Partial<EventDto>>();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const templateId = id === undefined ? searchParams.get('template') : undefined;
+  const eventId = id ?? templateId;
+  const isCloning = templateId !== undefined;
   const { createEventMutation, editEventMutation } = useEventMutations();
+
+  const { data: event, isPending: isEventPending } = useQuery({
+    queryKey: !eventId ? ['events', 'no-id'] : isCloning ? eventCloneKeys.detail(eventId) : eventKeys.detail(eventId),
+    queryFn: () => (isCloning ? getEventForCloning(eventId as string) : getEvent(eventId as string)),
+    enabled: eventId !== undefined,
+  });
 
   const { data: venues = [] } = useQuery({
     queryKey: venueKeys.all,
@@ -58,10 +81,21 @@ export function EventCreatorAdminPage() {
     label: t(getAgeRestrictionKey(age)),
   }));
 
+  const availableEventStatuses: EventStatus[] = id
+    ? Object.values(EventStatusChoice)
+    : [EventStatusChoice.PUBLIC, EventStatusChoice.PRIVATE];
+
+  const eventStatusOptions: EventStatusOption[] = availableEventStatuses.map((status) => ({
+    value: status,
+    label: t(getEventStatusTranslationKey(status)),
+    description: t(getEventStatusDescriptionTranslationKey(status)),
+  }));
+
   const { form, watchedValues, buildPayload } = useEventCreatorForm({
     event,
     defaultCategory: eventCategoryOptions[0]?.value ?? EventCategory.ART,
     defaultLocation: locationOptions[0]?.value ?? '',
+    forTemplate: templateId !== undefined,
   });
 
   const stepComponentMap: Record<StepKey, ReactElement> = {
@@ -70,26 +104,10 @@ export function EventCreatorAdminPage() {
     payment: <PaymentStep form={form} ageLimitOptions={ageLimitOptions} />,
     socialmedia: <SocialMediaStep form={form} />,
     graphics: <GraphicsStep form={form} />,
-    summary: <SummaryStep form={form} />,
+    summary: <SummaryStep form={form} eventStatusOptions={eventStatusOptions} />,
   };
 
   const hasSocialMediaErrors = SOCIAL_KEYS.some((name) => !!form.formState.errors[name]);
-
-  // Fetch event data using the event ID
-  useEffect(() => {
-    if (id) {
-      getEvent(id)
-        .then((eventData) => {
-          setEvent(eventData);
-          setShowSpinner(false);
-        })
-        .catch((error) => {
-          toast.error(t(KEY.common_something_went_wrong));
-        });
-    } else {
-      setShowSpinner(false);
-    }
-  }, [id, t]);
 
   // ================================== //
   //          Creation Steps            //
@@ -103,7 +121,8 @@ export function EventCreatorAdminPage() {
     const valid = !custom && (step.key === 'socialmedia' ? !hasSocialMediaErrors : step.validate(watchedValues));
 
     const visited = visitedTabs[step.key] === true && !custom;
-    const error = !valid && visited && !custom;
+    const hasSummaryError = step.key === 'summary' && !!form.formState.errors.visibility_from_dt;
+    const error = hasSummaryError || (!valid && visited && !custom);
 
     const icon =
       step.customIcon ||
@@ -222,7 +241,7 @@ export function EventCreatorAdminPage() {
   useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={showSpinner} header={true}>
+    <AdminPageLayout title={title} loading={eventId !== undefined && isEventPending} header={true}>
       <TabBar
         tabs={formTabs}
         selected={currentFormTab}

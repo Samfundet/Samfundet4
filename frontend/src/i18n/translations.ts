@@ -73,6 +73,7 @@ export const nb = prepareTranslations({
   [KEY.common_gang]: 'Gjeng',
   [KEY.common_gangs]: 'Gjenger',
   [KEY.common_section]: 'Seksjon',
+  [KEY.common_sections]: 'Seksjoner',
   [KEY.common_table]: 'Bord',
   [KEY.common_gang_type]: 'Gjengtype',
   [KEY.common_edit]: 'Rediger',
@@ -82,6 +83,7 @@ export const nb = prepareTranslations({
   [KEY.common_tags]: 'Merkelapper',
   [KEY.common_contributors]: 'Bidragsytere',
   [KEY.common_image]: 'Bilde',
+  [KEY.common_logo]: 'Logo',
   [KEY.common_file]: 'Fil',
   [KEY.common_venue]: 'Lokale',
   [KEY.common_title]: 'Tittel',
@@ -99,6 +101,7 @@ export const nb = prepareTranslations({
   [KEY.common_delete]: 'Slett',
   [KEY.common_logout]: 'Logg ut',
   [KEY.common_cancel]: 'Avbryt',
+  [KEY.common_close]: 'Lukk',
   [KEY.common_go_back]: 'Tilbake',
   [KEY.common_interval]: 'Intervall',
   [KEY.common_preview]: 'Forhåndsvisning',
@@ -202,6 +205,9 @@ export const nb = prepareTranslations({
   [KEY.common_last_edited_by]: 'Sist endret av',
   [KEY.common_publication_date]: 'Publiseringsdato',
   [KEY.common_casedocuments]: 'Saksdokumenter',
+  [KEY.common_positions]: 'Stillinger',
+
+  [KEY.organization]: 'Organisasjon',
 
   //About page
   [KEY.common_rent_services]: 'leie og tjenester',
@@ -302,6 +308,13 @@ export const nb = prepareTranslations({
   [KEY.event_must_be_valid_url]: 'Må være en gyldig URL',
   [KEY.event_must_be_valid_spotify_uri]: 'Må være en gyldig Spotify URI',
   [KEY.event_publication_date_required]: 'Publiseringsdato er påkrevd',
+  [KEY.event_create_from_existing_event]: 'Opprett fra eksisterende arrangement',
+  [KEY.event_copy_from_registered_event]: 'Kopier fra registrert arrangement',
+  [KEY.event_create_new_event]: 'Opprett nytt arrangement',
+  [KEY.event_search_for_an_existing_event]: 'Søk etter et arrangement',
+  [KEY.event_selected_existing_event]: 'Valgte eksisterende arrangement',
+  [KEY.event_no_results]: 'Ingen resultater',
+  [KEY.event_publication_date_must_be_before_start]: 'Publiseringsdato må være før arrangementsstart',
 
   // Event categories
   [KEY.event_category_art]: 'Kunst',
@@ -327,6 +340,23 @@ export const nb = prepareTranslations({
   [KEY.event_category_theme_party]: 'Temafest',
   [KEY.event_category_uka_event]: 'UKE-arrangement',
   [KEY.event_call_to_action_register]: 'Meld på',
+
+  // Event statuses
+  [KEY.event_status]: 'Status',
+  [KEY.event_status_public]: 'Offentlig',
+  [KEY.event_status_private]: 'Privat',
+  [KEY.event_status_archived]: 'Arkivert',
+  [KEY.event_status_cancelled]: 'Avlyst',
+  [KEY.event_status_deleted]: 'Slettet',
+  [KEY.event_status_help_title]: 'Hva betyr statusene?',
+  [KEY.event_status_help_intro]: 'Status styrer hvordan arrangementet vises og håndteres.',
+  [KEY.event_status_help_button_aria_label]: 'Vis forklaring av arrangementsstatus',
+  [KEY.event_status_help_public]: 'Arrangementet er synlig for alle.',
+  [KEY.event_status_help_private]:
+    'Arrangementet er skjult i alle oversikter, men kan kun nås via direkte lenke. Dette er nyttig for interne arrangementer.',
+  [KEY.event_status_help_archived]: 'Arrangementet er avsluttet og flyttet til historikk.',
+  [KEY.event_status_help_cancelled]: 'Arrangementet er avlyst og vises således.',
+  [KEY.event_status_help_deleted]: 'Arrangementet er markert som slettet og vises ikke i det hele tatt.',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Ugyldig e-postformat',
@@ -362,6 +392,8 @@ export const nb = prepareTranslations({
     'Kunne ikke koble til medlemsdatabasen. Vennligst sjekk at alle felter er skrevet riktig',
   [KEY.adminpage_connect_mdb_password_notice_1]: 'Passordet ditt til ',
   [KEY.adminpage_connect_mdb_password_notice_2]: 'medlemsdatabasen',
+
+  [KEY.admin_gang_has_no_sections]: 'Denne gjengen har ingen seksjoner.',
 
   // InformationPage
   [KEY.information_page]: 'Informasjonsside',
@@ -533,7 +565,7 @@ export const nb = prepareTranslations({
   [KEY.admin_images_create]: 'Nytt bilde',
   [KEY.admin_images_confirm_delete]: 'Er du sikker på at du vil slette dette bildet? Dette kan ikke angres.',
   [KEY.admin_images_add_tag]: 'Legg til merkelapp',
-  [KEY.admin_images_delete_in_use]: 'Bildet er i bruk og kan dermed ikke slettes.',
+  [KEY.admin_images_delete_in_use]: 'Bildet er i bruk og kan dermed ikke slettes. Kontakt MG::Web for å få hjelp.',
   [KEY.admin_image_form_tag_description]: 'Skriv inn merkelapp og tast Enter eller Komma for å legge den til i listen',
   [KEY.admin_no_image_selected]: 'Ingen bilde valgt',
   [KEY.admin_markdown_insert_image]: 'Sett inn bilde',
@@ -547,6 +579,9 @@ export const nb = prepareTranslations({
   [KEY.admin_steal_identity]: 'Stjel identitet',
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
+  [KEY.admin_closed_period_end_before_start]: 'Sluttdato må være etter startdato',
+  [KEY.admin_closed_period_end_before_today]: 'Sluttdato kan ikke være før dagens dato',
+  [KEY.admin_closed_message]: 'Samfundet er stengt',
   [KEY.admin_casedocuments_title]: 'Administrer saksdokumenter',
   [KEY.admin_sultenmenu_title]: 'Administrer Lyche meny',
   [KEY.admin_users_last_active]: 'Sist aktiv',
@@ -705,6 +740,7 @@ export const nb = prepareTranslations({
 
   // No category:
   [KEY.owner]: 'Eier',
+  [KEY.affiliation]: 'Tilhørighet',
   [KEY.end_time]: 'Sluttid',
   [KEY.category]: 'Kategori',
   [KEY.event_type]: 'Arrangementstype',
@@ -713,6 +749,7 @@ export const nb = prepareTranslations({
   [KEY.end_date]: 'Sluttdato',
   [KEY.last_updated]: 'Sist oppdatert',
   [KEY.form_confirm]: 'Er du sikker på at du vil',
+  [KEY.form_confirm_delete]: 'Er du sikker på at du vil slette',
   [KEY.we_use_cookies]: 'Vi bruker cookies for å gi deg en best mulig opplevelse på Samfundet.no. Les mer om cookies',
   [KEY.control_panel_faq]: 'Hjelp/spørsmål',
 
@@ -761,6 +798,7 @@ export const nb = prepareTranslations({
   [KEY.event_form_category_required]: 'Kategori er påkrevd',
   [KEY.event_form_age_restriction_required]: 'Aldersgrense er påkrevd',
   [KEY.event_form_ticket_type_required]: 'Billetttype er påkrevd',
+  [KEY.event_form_status_required]: 'Status er påkrevd',
 });
 
 export const en = prepareTranslations({
@@ -841,8 +879,10 @@ export const en = prepareTranslations({
   [KEY.common_gangs]: 'Gangs',
   [KEY.common_gang_type]: 'Gang type',
   [KEY.common_section]: 'Section',
+  [KEY.common_sections]: 'Sections',
   [KEY.common_max]: 'Max',
   [KEY.common_image]: 'Image',
+  [KEY.common_logo]: 'Logo',
   [KEY.common_file]: 'File',
   [KEY.common_venue]: 'Venue',
   [KEY.common_event]: 'Event',
@@ -853,6 +893,7 @@ export const en = prepareTranslations({
   [KEY.common_role]: 'Role',
   [KEY.common_active]: 'Active',
   [KEY.common_cancel]: 'Cancel',
+  [KEY.common_close]: 'Close',
   [KEY.common_venues]: 'Venues',
   [KEY.common_shortcuts]: 'Shortcuts',
   [KEY.common_events]: 'Events',
@@ -961,6 +1002,9 @@ export const en = prepareTranslations({
   [KEY.common_last_edited_by]: 'Last edited by',
   [KEY.common_publication_date]: 'Publication date',
   [KEY.common_casedocuments]: 'Case documents',
+  [KEY.common_positions]: 'Positions',
+
+  [KEY.organization]: 'Organization',
 
   //About page
   [KEY.common_rent_services]: 'Renting and other services',
@@ -1071,6 +1115,23 @@ export const en = prepareTranslations({
   [KEY.event_category_uka_event]: 'UKA event',
   [KEY.event_call_to_action_register]: 'Register here',
 
+  // Event statuses
+  [KEY.event_status]: 'Status',
+  [KEY.event_status_public]: 'Public',
+  [KEY.event_status_private]: 'Private',
+  [KEY.event_status_archived]: 'Archived',
+  [KEY.event_status_cancelled]: 'Cancelled',
+  [KEY.event_status_deleted]: 'Deleted',
+  [KEY.event_status_help_title]: 'What do the statuses mean?',
+  [KEY.event_status_help_intro]: 'Status controls how the event is shown and handled.',
+  [KEY.event_status_help_button_aria_label]: 'Show event status explanation',
+  [KEY.event_status_help_public]: 'The event is visible to everyone.',
+  [KEY.event_status_help_private]:
+    'The event is hidden in all overviews, but can only be reached through a direct link. This is useful for internal events.',
+  [KEY.event_status_help_archived]: 'The event is finished and moved to history.',
+  [KEY.event_status_help_cancelled]: 'The event is cancelled and shown as such.',
+  [KEY.event_status_help_deleted]: 'The event is marked as deleted and is not shown at all.',
+
   // EventPage:
   [KEY.event_registration_url]: 'Registration URL',
   [KEY.event_general_link]: 'General link',
@@ -1083,6 +1144,13 @@ export const en = prepareTranslations({
   [KEY.event_must_be_valid_url]: 'Must be a valid URL',
   [KEY.event_must_be_valid_spotify_uri]: 'Must be a valid Spotify URI',
   [KEY.event_publication_date_required]: 'Publication date is required',
+  [KEY.event_create_from_existing_event]: 'Create from an existing event',
+  [KEY.event_copy_from_registered_event]: 'Copy from a registered event',
+  [KEY.event_create_new_event]: 'Create a new event',
+  [KEY.event_search_for_an_existing_event]: 'Search for an event',
+  [KEY.event_selected_existing_event]: 'Selected existing event',
+  [KEY.event_no_results]: 'No results',
+  [KEY.event_publication_date_must_be_before_start]: 'Publication date must be before the event starts',
 
   //Purchase Ticket Info:
   [KEY.invalid_email_message]: 'Invalid email format',
@@ -1343,7 +1411,7 @@ export const en = prepareTranslations({
   [KEY.admin_images_create]: 'New image',
   [KEY.admin_images_confirm_delete]: 'Are you sure you want to delete this image? This cannot be undone.',
   [KEY.admin_images_add_tag]: 'Add tag',
-  [KEY.admin_images_delete_in_use]: 'The image cannot be deleted because it is in use.',
+  [KEY.admin_images_delete_in_use]: 'The image cannot be deleted because it is in use. Contact MG::Web for assistance.',
   [KEY.admin_image_form_tag_description]: 'Write a tag and hit Enter or Comma to add it to the list',
   [KEY.admin_no_image_selected]: 'No image selected',
   [KEY.admin_markdown_insert_image]: 'Insert image',
@@ -1360,6 +1428,8 @@ export const en = prepareTranslations({
   [KEY.admin_users_last_active]: 'Last active',
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
+  [KEY.admin_closed_period_end_before_start]: 'End date must be after start date',
+  [KEY.admin_closed_period_end_before_today]: 'End date cannot be before today',
   [KEY.admin_casedocuments_title]: 'Manage Documents',
   [KEY.admin_sultenmenu_title]: 'Manage Lyche menu',
   [KEY.admin_events_recently_edited]: 'Recently edited',
@@ -1367,6 +1437,7 @@ export const en = prepareTranslations({
   [KEY.admin_information_translations_difference]:
     "There is a big difference in the number of characters between the Norwegian and English texts. Are you sure you'd like to save?",
   [KEY.admin_information_manage_title]: 'Administrate pages',
+  [KEY.admin_closed_message]: 'Samfundet is closed',
   [KEY.admin_closed_period_new_period]: 'Add new closed period',
   [KEY.admin_closed_period_edit_period]: 'Edit closed period',
   [KEY.admin_information_confirm_delete]: 'Are you sure to delete this informationpage?',
@@ -1467,8 +1538,11 @@ export const en = prepareTranslations({
   [KEY.adminpage_connect_mdb_password_notice_1]: 'Your password to the',
   [KEY.adminpage_connect_mdb_password_notice_2]: 'membership database',
 
+  [KEY.admin_gang_has_no_sections]: 'This gang has no sections.',
+
   // No category:
   [KEY.owner]: 'Owner',
+  [KEY.affiliation]: 'Affiliation',
   [KEY.end_time]: 'End time',
   [KEY.category]: 'Category',
   [KEY.event_type]: 'Event type',
@@ -1478,6 +1552,7 @@ export const en = prepareTranslations({
   [KEY.last_updated]: 'Last updated',
 
   [KEY.form_confirm]: 'Are you sure you want do',
+  [KEY.form_confirm_delete]: 'Are you sure you want to delete',
   [KEY.we_use_cookies]: 'We use cookies to give you the best experience on Samfundet.no. Read more about cookies',
   [KEY.control_panel_faq]: 'Help/questions',
   [KEY.control_panel_title]: 'Control panel',
@@ -1514,4 +1589,5 @@ export const en = prepareTranslations({
   [KEY.event_form_category_required]: 'Category is required',
   [KEY.event_form_age_restriction_required]: 'Age restriction is required',
   [KEY.event_form_ticket_type_required]: 'Ticket type is required',
+  [KEY.event_form_status_required]: 'Status is required',
 });

@@ -10,12 +10,15 @@ from django.urls import path, include
 import samfundet.view.mdb_views
 import samfundet.view.user_views
 import samfundet.view.event_views
+import samfundet.view.site_banners
 import samfundet.view.sulten_views
 import samfundet.view.general_views
 from samfundet.view import billig_views
 
 from . import views
 from .view import recruitment_views
+from .infopages.urls import register as register_infopages
+from .organization.urls import register as register_gangs
 
 # End: imports -----------------------------------------------------------------
 #
@@ -29,8 +32,6 @@ router.register('events', samfundet.view.event_views.EventView, 'events')
 router.register('eventgroups', samfundet.view.event_views.EventGroupView, 'eventgroups')
 router.register('venues', samfundet.view.general_views.VenueView, 'venues')
 router.register('closed', samfundet.view.general_views.ClosedPeriodView, 'closedperiods')
-router.register('gangs', samfundet.view.general_views.GangView, 'gangs')
-router.register('gangsorganized', samfundet.view.general_views.GangTypeView, 'gangsorganized')
 router.register('blog', samfundet.view.general_views.BlogPostView, 'blog')
 router.register('user-preference', samfundet.view.user_views.UserPreferenceView, 'user_preference')
 router.register('saksdokument', samfundet.view.general_views.SaksdokumentView, 'saksdokument')
@@ -47,6 +48,7 @@ router.register('key-value', samfundet.view.general_views.KeyValueView, 'key_val
 router.register('organizations', samfundet.view.general_views.OrganizationView, 'organizations')
 router.register('merch', samfundet.view.general_views.MerchView, 'merch')
 router.register('role', samfundet.view.general_views.RoleView, 'role')
+router.register('site-banners', samfundet.view.site_banners.SiteBannerView, 'site_banners')
 
 ########## Recruitment ##########
 router.register('recruitment', recruitment_views.RecruitmentView, 'recruitment')
@@ -69,12 +71,19 @@ router.register('billig-ticket-group', billig_views.BilligTicketGroupReadOnlyMod
 ######## Lyche #########
 # Lyche routes go here
 
+########## Subpackages ##########
+admin_router = routers.DefaultRouter()
+admin_router.root_view_name = 'admin-api-root'
+
+register_infopages(router, admin_router)
+register_gangs(router, admin_router)
+
 app_name = 'samfundet'
 
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('', include('samfundet.infopages.urls')),
+    path('admin/', include(admin_router.urls)),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='samfundet:schema'), name='swagger_ui'),
     path('schema/redoc/', SpectacularRedocView.as_view(url_name='samfundet:schema'), name='redoc'),
@@ -90,11 +99,17 @@ urlpatterns = [
     path('impersonate/', samfundet.view.user_views.ImpersonateView.as_view(), name='impersonate'),
     path('events-per-day/', samfundet.view.event_views.EventPerDayView.as_view(), name='eventsperday'),
     path('events-upcomming/', samfundet.view.event_views.EventsUpcomingView.as_view(), name='eventsupcomming'),
+    path('events/<int:pk>/clone/', samfundet.view.event_views.EventCloneView.as_view(), name='event-clone'),
     path('isclosed/', samfundet.view.general_views.IsClosedView().as_view(), name='isclosed'),
     path('home/', samfundet.view.general_views.HomePageView().as_view(), name='home'),
     path('assign_group/', samfundet.view.user_views.AssignGroupView.as_view(), name='assign_group'),
     path('webhook/', views.WebhookView.as_view(), name='webhook'),
-    path('gangtypes/<int:organization>/', samfundet.view.general_views.GangTypeOrganizationView.as_view(), name='gangsorganized'),
+    ########## Billig ##########
+    path('billig/event/<int:event_id>/tickets/', billig_views.BilligEventTicketsView.as_view(), name='event_tickets'),
+    path('billig/callback/success/', billig_views.BilligPurchaseSuccessView.as_view(), name='purchase_success'),
+    path('billig/callback/failure/', billig_views.BilligPurchaseFailureView.as_view(), name='purchase_failure'),
+    path('billig/callback/failure-data/', billig_views.BilligPurchaseFailureDataView.as_view(), name='purchase_failure_data'),
+    path('billig/dev/pay/', billig_views.BilligDevPayView.as_view(), name='purchase_dev_pay'),
     ########## Lyche ##########
     path('check-reservation/', samfundet.view.sulten_views.ReservationCheckAvailabilityView.as_view(), name='check_reservation'),
     path('reservations/', samfundet.view.sulten_views.ReservationCreateView.as_view(), name='reservation-create'),
