@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { InputField, PagedPagination, Table } from '~/Components';
+import { Input, PagedPagination, Table } from '~/Components';
 import { formatDate } from '~/Components/OccupiedForm/utils';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getUsersSearchPaginated } from '~/api';
@@ -69,7 +69,7 @@ export function UsersAdminPage() {
 
   return (
     <AdminPageLayout title={title}>
-      <InputField icon="mdi:search" value={searchTerm} onChange={setSearchTerm} placeholder={t(KEY.common_search)} />
+      <Input type="text" onChange={(e) => setSearchTerm(e.target.value)} placeholder={t(KEY.common_search)} icon="mdi:search"/>
       <div className={styles.table_container}>
         <Table
           data={users.map((user) => ({ cells: userTableRow(user) }))}
