@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { type HTMLAttributes, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Link, TimeDisplay } from '~/Components';
+import { Button, EventCrudButtons, Link, TimeDisplay } from '~/Components';
 import { buttonThemes } from '~/Components/Button/utils';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
@@ -97,6 +97,9 @@ export function EventCard({ event, className, ...props }: Props) {
         <div className={styles.header}>
           {banners}
           <EventCardImage imageUrl={imageUrl(event.image, 'small')} />
+          <div className={styles.crud_buttons}>
+            <EventCrudButtons id={event.id} removeView={true} />
+          </div>
         </div>
       </Link>
 

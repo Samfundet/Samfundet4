@@ -16,6 +16,6 @@ export const Basic: Story = {
     function onClick() {
       alert('Hello!');
     }
-    return <CrudButtons {...args} onEdit={onClick} onDelete={onClick} />;
+    return <CrudButtons {...args} onEdit={onClick} onDelete={onClick} onManage={onClick} onView={onClick} />;
   },
 };

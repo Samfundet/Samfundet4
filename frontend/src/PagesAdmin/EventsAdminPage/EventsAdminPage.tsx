@@ -3,16 +3,13 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
-import { Button, EventQuery, TimeDisplay } from '~/Components';
-import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
+import { Button, EventCrudButtons, EventQuery, TimeDisplay } from '~/Components';
 import { PagedPagination } from '~/Components/Pagination';
 import { Table } from '~/Components/Table';
-import { deleteEvent, getEventsUpcommingPaginated } from '~/api';
+import { getEventsUpcommingPaginated } from '~/api';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { reverse } from '~/named-urls';
 import { eventKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import type { EventCategoryValue } from '~/types';
@@ -92,20 +89,6 @@ export function EventsAdminPage() {
     }
   }, [data]);
 
-  function deleteSelectedEvent(id: number) {
-    deleteEvent(id)
-      .then(() => {
-        // Refetch the current page
-        toast.success(t(KEY.eventsadminpage_successful_delete_toast));
-        // Force a refetch by triggering the query again
-        navigate(ROUTES.frontend.admin_events);
-      })
-      .catch((error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
-      });
-  }
-
   const tableColumns = [
     { content: t(KEY.common_title) },
     { content: t(KEY.start_time) },
@@ -125,32 +108,7 @@ export function EventsAdminPage() {
       event.location,
       t(getTicketTypeKey(event.ticket_type)),
       {
-        content: (
-          <CrudButtons
-            onView={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.event,
-                  urlParams: { id: event.id },
-                }),
-              );
-            }}
-            onEdit={() => {
-              navigate(
-                reverse({
-                  pattern: ROUTES.frontend.admin_events_edit,
-                  urlParams: { id: event.id },
-                }),
-              );
-            }}
-            onDelete={() => {
-              const msg = lowerCapitalize(`${t(KEY.form_confirm)} ${t(KEY.common_delete)}`);
-              if (window.confirm(`${msg} ${dbT(event, 'title')}`)) {
-                deleteSelectedEvent(event.id);
-              }
-            }}
-          />
-        ),
+        content: <EventCrudButtons id={event.id} />,
       },
     ],
   }));

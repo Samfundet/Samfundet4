@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import { type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
-import { Button, IconButton, InputField, Link, TimeDisplay } from '~/Components';
+import { Button, EventCrudButtons, IconButton, InputField, Link, TimeDisplay } from '~/Components';
 import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
@@ -35,6 +35,7 @@ export function EventsList({ events }: EventsListProps) {
     { content: t(KEY.category), sortable: true },
     { content: t(KEY.admin_organizer), sortable: true },
     { content: t(KEY.common_buy), sortable: true },
+    { content: t(KEY.common_edit), sortable: false },
   ];
 
   // TODO debounce and move header/filtering stuff to a separate component
@@ -75,6 +76,13 @@ export function EventsList({ events }: EventsListProps) {
         event.category,
         event.host,
         event.ticket_type,
+        {
+          content: (
+            <div style={{ display: 'flex', gap: 10 }}>
+              <EventCrudButtons id={event.id} height={20} />
+            </div>
+          ),
+        },
       ],
     }));
   }
@@ -87,11 +95,12 @@ export function EventsList({ events }: EventsListProps) {
           <ImageCard
             date={event.start_dt.toString()}
             imageUrl={imageUrl(event.image, 'small')}
+            id={event.id.toString()}
             title={dbT(event, 'title') ?? ''}
             subtitle={time_display}
             description={dbT(event, 'description_short') ?? ''}
             compact={true}
-            url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
+            url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id.toString() } })}
             ticket_type={event.ticket_type}
             host={event.host}
           />
