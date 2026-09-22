@@ -308,6 +308,12 @@ export const nb = prepareTranslations({
   [KEY.event_must_be_valid_url]: 'Må være en gyldig URL',
   [KEY.event_must_be_valid_spotify_uri]: 'Må være en gyldig Spotify URI',
   [KEY.event_publication_date_required]: 'Publiseringsdato er påkrevd',
+  [KEY.event_create_from_existing_event]: 'Opprett fra eksisterende arrangement',
+  [KEY.event_copy_from_registered_event]: 'Kopier fra registrert arrangement',
+  [KEY.event_create_new_event]: 'Opprett nytt arrangement',
+  [KEY.event_search_for_an_existing_event]: 'Søk etter et arrangement',
+  [KEY.event_selected_existing_event]: 'Valgte eksisterende arrangement',
+  [KEY.event_no_results]: 'Ingen resultater',
   [KEY.event_publication_date_must_be_before_start]: 'Publiseringsdato må være før arrangementsstart',
 
   // Event categories
@@ -1138,6 +1144,12 @@ export const en = prepareTranslations({
   [KEY.event_must_be_valid_url]: 'Must be a valid URL',
   [KEY.event_must_be_valid_spotify_uri]: 'Must be a valid Spotify URI',
   [KEY.event_publication_date_required]: 'Publication date is required',
+  [KEY.event_create_from_existing_event]: 'Create from an existing event',
+  [KEY.event_copy_from_registered_event]: 'Copy from a registered event',
+  [KEY.event_create_new_event]: 'Create a new event',
+  [KEY.event_search_for_an_existing_event]: 'Search for an event',
+  [KEY.event_selected_existing_event]: 'Selected existing event',
+  [KEY.event_no_results]: 'No results',
   [KEY.event_publication_date_must_be_before_start]: 'Publication date must be before the event starts',
 
   //Purchase Ticket Info:
