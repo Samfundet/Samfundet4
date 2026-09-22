@@ -85,4 +85,15 @@ export {
   EVENT_PAID_OPTION,
 } from './events';
 export type { EventsUpcomingBackendResponse, EventsUpcomingResponse, Filters } from './events';
+export {
+  closedPeriodKeys,
+  useCreateClosedPeriod,
+  useDeleteClosedPeriod,
+  useUpdateClosedPeriod,
+  useGetActiveClosedPeriods,
+  useGetClosedPeriod,
+  useGetClosedPeriods,
+  MESSAGE,
+  DATE,
+} from './closedPeriods';
 export { gangKeys, useGetOrganizedGangs, useGangMutations } from './gangs';
