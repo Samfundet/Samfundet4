@@ -19,7 +19,7 @@ import {
   RadioButton,
 } from '~/Components';
 import { validEmail } from '~/Forms/util';
-import { buildBilligFormData, submitBilligForm } from '~/apis/billig/billigApi';
+import { BILLIG_PURCHASE_CONTEXT_KEY, buildBilligFormData, submitBilligForm } from '~/apis/billig/billigApi';
 import type { BilligCheckoutTicketGroupDto } from '~/apis/billig/billigDtos';
 import type { EventDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
@@ -75,6 +75,7 @@ type BuyTicketFormType = z.infer<ReturnType<typeof createBuyTicketFormSchema>>;
 interface BuyTicketFormProps {
   event: EventDto;
   ticketGroups: BilligCheckoutTicketGroupDto[];
+  initialValues?: Partial<BuyTicketFormType>;
 }
 
 function getSelectedTicketCount(
@@ -87,7 +88,7 @@ function getSelectedTicketCount(
   );
 }
 
-export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
+export function BuyTicketForm({ event, ticketGroups, initialValues }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const submissionLocked = useRef(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -124,12 +125,16 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
     () => ({
       ticketQuantities: {
         ...ticketQuantityDefaults,
+        ...(initialValues?.ticketQuantities ?? {}),
       },
-      ticketType: eventCanUseMembershipCard ? TICKET_TYPE_MEMBERSHIP : TICKET_TYPE_EMAIL,
-      email: '',
-      membershipNumber: '',
+      ticketType:
+        eventCanUseMembershipCard && initialValues?.ticketType !== TICKET_TYPE_EMAIL
+          ? TICKET_TYPE_MEMBERSHIP
+          : TICKET_TYPE_EMAIL,
+      email: initialValues?.email ?? '',
+      membershipNumber: initialValues?.membershipNumber ?? '',
     }),
-    [eventCanUseMembershipCard, ticketQuantityDefaults],
+    [eventCanUseMembershipCard, initialValues, ticketQuantityDefaults],
   );
 
   const form = useForm<BuyTicketFormType>({
@@ -204,6 +209,14 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
       email: data.ticketType === TICKET_TYPE_EMAIL ? data.email : undefined,
       membercard: data.ticketType === TICKET_TYPE_MEMBERSHIP ? data.membershipNumber : undefined,
     });
+
+    sessionStorage.setItem(
+      BILLIG_PURCHASE_CONTEXT_KEY,
+      JSON.stringify({
+        event,
+        paymentUrl: event.billig.payment_url,
+      }),
+    );
 
     // Lock synchronously so repeated submissions are blocked before React renders.
     submissionLocked.current = true;
