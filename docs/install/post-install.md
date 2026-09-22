@@ -7,6 +7,17 @@ You've now (hopefully) successfully installed and started the Samfundet4 project
 We recommend spending some time ensuring your editor/IDE is properly configured. This is of course a very subjective
 topic, but we give some pointers in the [Editor configuration](../introduction.md#editor-configuration) section.
 
+## Email in development (MailHog)
+
+All email sent while developing is captured locally — nothing is ever relayed to the outside world:
+
+* **Docker:** outgoing mail is captured by [MailHog](https://github.com/mailhog/MailHog). Open
+  **http://localhost:8025** in your browser to inspect it.
+* **Native:** outgoing mail is printed to the console running the Django server.
+
+The MailHog connection can be tuned with the optional `MAILHOG_HOST`/`MAILHOG_PORT` variables in
+`backend/.docker.env` — but only local hosts are accepted, so email can never leave your machine.
+
 After you've set up your editor/IDE, we recommend diving in head-first and just picking
 an [issue](https://github.com/Samfundet/Samfundet4/issues) you'd like to solve. Be sure to have
 the [Documentation Overview](../README.md) open and ready for *when* you get stuck :-) If you find that some parts of
