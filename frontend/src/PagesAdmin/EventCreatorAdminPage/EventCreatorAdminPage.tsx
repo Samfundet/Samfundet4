@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { type ReactElement, type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
@@ -51,6 +51,11 @@ import type { EventStatusOption } from './types';
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const templateId = id === undefined ? searchParams.get('template') : undefined;
+  const isCloning = templateId !== undefined;
+
+  const { data: event, isLoading } = useGetEvent(id ?? '', isCloning);
 
   const { data: venues = [] } = useQuery({
     queryKey: venueKeys.all,
@@ -71,7 +76,6 @@ export function EventCreatorAdminPage() {
     label: t(getAgeRestrictionKey(age)),
   }));
 
-  const { data: event, isLoading } = useGetEvent(id ?? '');
   const availableEventStatuses: EventStatus[] = id
     ? Object.values(EventStatusChoice)
     : [EventStatusChoice.PUBLIC, EventStatusChoice.PRIVATE];
@@ -86,6 +90,7 @@ export function EventCreatorAdminPage() {
     event,
     defaultCategory: eventCategoryOptions[0]?.value ?? EventCategory.ART,
     defaultLocation: locationOptions[0]?.value ?? '',
+    forTemplate: templateId !== undefined,
   });
 
   const stepComponentMap: Record<StepKey, ReactElement> = {

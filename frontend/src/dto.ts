@@ -224,6 +224,11 @@ export type EventDto = {
   general_link?: string;
 };
 
+export type EventCloneDto = Omit<
+  EventDto,
+  'status' | 'event_group' | 'duration' | 'billig' | 'numberOfTickets' | 'registration_url' | 'doors_time'
+>;
+
 export type EventWriteDto = {
   status?: EventStatus;
 
@@ -857,6 +862,17 @@ export type SultenReservationDayDto = {
   start_time: string;
   closing_time: string;
   tables: TableDto[];
+};
+
+export type SiteBannerDto = {
+  id: number;
+  version: number;
+  text_nb: string;
+  text_en: string;
+  url: string | null;
+  new_tab: boolean;
+  start_at: string;
+  end_at: string | null;
 };
 
 export type RegistrationDto = {

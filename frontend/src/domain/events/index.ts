@@ -22,7 +22,7 @@ export {
   useGetBilligEvents,
 } from './queries';
 export type { Filters } from './queries';
-export { eventKeys } from './queryKeys';
+export { eventKeys, eventCloneKeys, billigKeys } from './queryKeys';
 export {
   EVENT_TITLE,
   EVENT_DESCRIPTION_LONG,
