@@ -47,7 +47,7 @@ export function Button({
 
   return (
     <>
-      {link ? (
+      {link && !disabled ? (
         <Link to={link} onClick={handleOnClick} className={classNames} {...props}>
           {children}
         </Link>
