@@ -16,8 +16,13 @@ export const resources = {
 
 const devSetting = import.meta.env.DEV;
 
+const storedLanguage = localStorage.getItem(LOCALSTORAGE_KEY);
+const supportedLanguages: string[] = [LANGUAGES.NB, LANGUAGES.EN];
+const initialLanguage =
+  storedLanguage !== null && supportedLanguages.includes(storedLanguage) ? storedLanguage : LANGUAGES.NB;
+
 use(initReactI18next).init({
-  lng: localStorage.getItem(LOCALSTORAGE_KEY) || LANGUAGES.NB,
+  lng: initialLanguage,
   fallbackLng: LANGUAGES.NB,
   resources: resources,
   defaultNS: defaultNS,

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Outlet } from 'react-router';
 import { Navbar } from '~/Components/NavbarSamfThree/Navbar';
+import { SiteBanner } from '~/Components/SiteBanner/SiteBanner';
 import { Footer } from '../Footer';
 import styles from './SamfOutlet.module.scss';
 
@@ -18,6 +19,7 @@ export function SamfLayout({ children }: { children: ReactNode }) {
       {/* TODO: Uncomment the following line when samf4 navbar is enabled */}
       {/* <Navbar /> */}
       {/* TODO: Remove the following line when samf4 navbar is enabled */}
+      <SiteBanner />
       <Navbar />
       <div className={styles.navbar_outlet}>{children}</div>
       <Footer />
