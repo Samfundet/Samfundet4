@@ -323,6 +323,7 @@ export const KEY = {
   event_search_for_an_existing_event: 'event_search_for_an_existing_event',
   event_selected_existing_event: 'event_selected_existing_event',
   event_no_results: 'event_no_results',
+  event_publication_date_must_be_before_start: 'event_publication_date_must_be_before_start',
 
   // Purchase Ticket Info:
   invalid_email_message: 'invalid_email_message',
