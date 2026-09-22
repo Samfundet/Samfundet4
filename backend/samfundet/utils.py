@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import datetime
-from typing import TYPE_CHECKING
 from operator import or_
 from functools import reduce
 from collections.abc import Callable
@@ -17,10 +16,9 @@ from django.db.models.query import QuerySet
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 
-if TYPE_CHECKING:
-    from .models import User
-    from .models.event import Event
-    from .models.recruitment import Recruitment, OccupiedTimeslot, RecruitmentInterviewAvailability
+from .models import User
+from .models.event import Event
+from .models.recruitment import Recruitment, OccupiedTimeslot, RecruitmentInterviewAvailability
 
 SEARCH_FIELDS = (
     'title_nb__icontains',
@@ -145,11 +143,3 @@ def register_if_feature_enabled(feature: str, model: type[Model]) -> Callable[[t
         return admin_class
 
     return decorator
-
-
-def samfundet_date(dt: datetime.datetime) -> datetime.date:
-    """
-    Returns logical date for Samfundet.
-    A date between 00:00-04:00 belongs to previous day.
-    """
-    return (dt - datetime.timedelta(hours=4)).date()

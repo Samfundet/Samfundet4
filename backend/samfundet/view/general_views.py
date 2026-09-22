@@ -24,8 +24,8 @@ from django.shortcuts import get_object_or_404
 from root.constants import WebFeatures
 from root.custom_classes.permission_classes import FeatureEnabled, RoleProtectedOrAnonReadOnlyObjectPermissions
 
-from samfundet.utils import samfundet_date
 from samfundet.homepage import homepage
+from samfundet.date_utils import samfundet_date
 from samfundet.pagination import CustomPageNumberPagination
 from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from samfundet.serializers import (

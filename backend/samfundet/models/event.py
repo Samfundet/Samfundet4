@@ -16,7 +16,7 @@ from django.db.models import Prefetch, QuerySet
 
 from root.utils.mixins import CustomBaseModel
 
-from samfundet.utils import samfundet_date
+from samfundet.date_utils import samfundet_date
 from samfundet.models.billig import BilligEvent, BilligTicketGroup
 from samfundet.models.general import User, Image
 from samfundet.organization.models import Gang, Organization
