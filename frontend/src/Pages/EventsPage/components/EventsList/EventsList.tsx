@@ -144,30 +144,33 @@ export function EventsList({ events }: EventsListProps) {
   }, [searchParam]);
 
   useEffect(() => {
-    setSearchParam((prev) => {
-      const next = new URLSearchParams(prev);
-      if (query) {
-        next.set('q', query);
-      } else {
-        next.delete('q');
-      }
-      if (category) {
-        next.set('category', category);
-      } else {
-        next.delete('category');
-      }
-      if (place) {
-        next.set('place', place);
-      } else {
-        next.delete('place');
-      }
-      if (ticketType) {
-        next.set('ticket_type', ticketType);
-      } else {
-        next.delete('ticket_type');
-      }
-      return next;
-    }, { replace: true });
+    setSearchParam(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (query) {
+          next.set('q', query);
+        } else {
+          next.delete('q');
+        }
+        if (category) {
+          next.set('category', category);
+        } else {
+          next.delete('category');
+        }
+        if (place) {
+          next.set('place', place);
+        } else {
+          next.delete('place');
+        }
+        if (ticketType) {
+          next.set('ticket_type', ticketType);
+        } else {
+          next.delete('ticket_type');
+        }
+        return next;
+      },
+      { replace: true },
+    );
   }, [category, place, query, setSearchParam, ticketType]);
 
   function getButton(title: string, icon: string, func: () => void, chosen: boolean) {
