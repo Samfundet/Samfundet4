@@ -86,3 +86,8 @@ export const venueKeys = {
   detail: (slug: string) => [...venueKeys.details(), slug] as const,
   open: () => [...venueKeys.list(['open'])] as const,
 };
+
+export const siteBannerKeys = {
+  all: ['siteBanners'] as const,
+  active: () => [...siteBannerKeys.all, 'active'] as const,
+};
