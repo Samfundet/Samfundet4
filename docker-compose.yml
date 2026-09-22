@@ -57,6 +57,8 @@ services:
         condition: service_healthy
       mdb_dev:
         condition: service_healthy
+      mailhog:
+        condition: service_started
     volumes:
       - ./backend:/app # Mount backend folder to docker image
       - /app/.venv/ # Ignore local virtual environment
@@ -71,8 +73,15 @@ services:
       - BILLIG_DEV_HOST=billig_dev_database
       - MDB_DEV_HOST=mdb_dev
     ports:
-      - '8000:8000' # Quotes are required. django
-      - '5678:5678' # Quotes are required. debugpy
+      - '8000:8000' # django
+      - '5678:5678' # debugpy
+
+  ### MailHog (capture outgoing email in dev) ###
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - '1025:1025' # SMTP
+      - '8025:8025' # Web UI
 
   ### Frontend React ###
   # Mount sync on OSX Docker VM is really slow on some systems. Perhaps run on host machine instead.
@@ -146,6 +155,7 @@ services:
       \e[34mBackend:    http://localhost:8000
       \e[34mFrontend:   http://localhost:3000
       \e[34mStorybook:  http://localhost:6006
+      \e[34mMailHog:    http://localhost:8025
 
       -------------------------------------------------------------------------------
       "'
