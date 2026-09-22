@@ -77,6 +77,8 @@ import {
   RoleFormAdminPage,
   RolesAdminPage,
   RoomAdminPage,
+  SiteBannerAdminPage,
+  SiteBannerFormAdminPage,
   SultenMenuAdminPage,
   SultenMenuItemFormAdminPage,
   SultenReservationAdminPage,
@@ -504,6 +506,46 @@ export const router = createBrowserRouter(
                 <PermissionRoute
                   required={[PERM.SAMFUNDET_CHANGE_CLOSEDPERIOD]}
                   element={<ClosedPeriodFormAdminPage />}
+                  resolution="roles"
+                />
+              }
+            />
+          </Route>
+          {/* Site banners */}
+          <Route
+            element={<Outlet />}
+            handle={{
+              crumb: () => <Link url={ROUTES.frontend.admin_site_banners}>{t(KEY.admin_site_banner_title)}</Link>,
+            }}
+          >
+            <Route
+              path={ROUTES.frontend.admin_site_banners}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_VIEW_SITEBANNER]}
+                  element={<SiteBannerAdminPage />}
+                  resolution="roles"
+                />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_site_banners_create}
+              handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_create)}</Link> }}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_ADD_SITEBANNER]}
+                  element={<SiteBannerFormAdminPage />}
+                  resolution="roles"
+                />
+              }
+            />
+            <Route
+              path={ROUTES.frontend.admin_site_banners_edit}
+              handle={{ crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.common_edit)}</Link> }}
+              element={
+                <PermissionRoute
+                  required={[PERM.SAMFUNDET_CHANGE_SITEBANNER]}
+                  element={<SiteBannerFormAdminPage />}
                   resolution="roles"
                 />
               }

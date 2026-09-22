@@ -82,6 +82,10 @@ export const SAMFUNDET_ADD_CLOSEDPERIOD = 'samfundet.add_closedperiod';
 export const SAMFUNDET_CHANGE_CLOSEDPERIOD = 'samfundet.change_closedperiod';
 export const SAMFUNDET_DELETE_CLOSEDPERIOD = 'samfundet.delete_closedperiod';
 export const SAMFUNDET_VIEW_CLOSEDPERIOD = 'samfundet.view_closedperiod';
+export const SAMFUNDET_ADD_SITEBANNER = 'samfundet.add_sitebanner';
+export const SAMFUNDET_CHANGE_SITEBANNER = 'samfundet.change_sitebanner';
+export const SAMFUNDET_DELETE_SITEBANNER = 'samfundet.delete_sitebanner';
+export const SAMFUNDET_VIEW_SITEBANNER = 'samfundet.view_sitebanner';
 
 export const SAMFUNDET_ADD_EVENT = 'samfundet.add_event';
 export const SAMFUNDET_CHANGE_EVENT = 'samfundet.change_event';

@@ -62,6 +62,7 @@ import type {
   RoleDto,
   RoleUsersDto,
   SiteBannerDto,
+  SiteBannerWriteDto,
   TagDto,
   TextItemDto,
   UserDto,
@@ -189,6 +190,38 @@ export async function getActiveSiteBanner(): Promise<SiteBannerDto | null> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__site_banners_active;
   const response = await axios.get<SiteBannerDto | null>(url, { withCredentials: true });
   return response.data;
+}
+
+export async function getSiteBanners(): Promise<SiteBannerDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__site_banners_list;
+  const response = await axios.get<SiteBannerDto[]>(url, { params: { all: true }, withCredentials: true });
+  return response.data;
+}
+
+export async function getSiteBanner(id: string | number): Promise<SiteBannerDto> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__site_banners_detail, urlParams: { pk: id } });
+  const response = await axios.get<SiteBannerDto>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function postSiteBanner(data: SiteBannerWriteDto): Promise<SiteBannerDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__site_banners_list;
+  const response = await axios.post<SiteBannerDto>(url, data, { withCredentials: true });
+  return response.data;
+}
+
+export async function putSiteBanner(id: string | number, data: SiteBannerWriteDto): Promise<SiteBannerDto> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__site_banners_detail, urlParams: { pk: id } });
+  const response = await axios.put<SiteBannerDto>(url, data, { withCredentials: true });
+  return response.data;
+}
+
+export async function deleteSiteBanner(id: string | number): Promise<AxiosResponse> {
+  const url =
+    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__site_banners_detail, urlParams: { pk: id } });
+  return await axios.delete(url, { withCredentials: true });
 }
 
 export async function putUserPreference(id: string | number, data: Partial<UserPreferenceDto>): Promise<unknown> {
