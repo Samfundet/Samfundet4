@@ -107,6 +107,7 @@ export const KEY = {
   common_events: 'common_events',
   common_repeat: 'common_repeat',
   common_venues: 'common_venues',
+  common_copy: 'common_copy',
   common_shortcuts: 'common_shortcuts',
   common_sulten: 'common_sulten',
   common_logout: 'common_logout',

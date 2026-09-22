@@ -7,7 +7,7 @@ import { Button, EventQuery, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { PagedPagination } from '~/Components/Pagination';
 import { Table } from '~/Components/Table';
-import { useDeleteEvent, useGetEventsUpcomingPaginated } from '~/domain';
+import { useDeleteEvent, useGetEvents, useGetEventsUpcomingPaginated } from '~/domain';
 import type { EventDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -67,10 +67,7 @@ export function EventsAdminPage() {
   const totalCount = data?.count ?? 0;
 
   // Fetch all events for the template search (create from existing event)
-  const { data: templateEvents = [] } = useQuery({
-    queryKey: eventKeys.all,
-    queryFn: getEvents,
-  });
+  const { data: templateEvents = [] } = useGetEvents();
 
   // Extract metadata from API response
   useEffect(() => {

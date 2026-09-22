@@ -55,7 +55,7 @@ export function EventCreatorAdminPage() {
   const templateId = id === undefined ? searchParams.get('template') : undefined;
   const isCloning = templateId !== undefined;
 
-  const { data: event, isLoading } = useGetEvent(id ?? '', isCloning);
+  const { data: event, isLoading } = useGetEvent(id ?? templateId ?? '', isCloning);
 
   const { data: venues = [] } = useQuery({
     queryKey: venueKeys.all,
