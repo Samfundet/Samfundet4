@@ -27,6 +27,7 @@
   - [🐳 Docker: Build project](#-docker-build-project)
   - [🐳 Docker: Start all containers](#-docker-start-all-containers)
   - [🐳 Docker: Start individual container](#-docker-start-individual-container)
+- [📧 MailHog](#-mailhog)
 - [🧶 Yarn](#-yarn)
   - [🧶 Npm: Install yarn](#-npm-install-yarn)
   - [🧶 Yarn: Install dependencies](#-yarn-install-dependencies)
@@ -281,6 +282,24 @@ docker compose up <container-name>
 ```bash
 # Example:
 docker compose up backend
+```
+
+<br>
+<hr>
+<br>
+
+## 📧 MailHog
+> Captures all email sent from the dev environment. Nothing is relayed to the outside world.
+
+### 📧 MailHog: Start
+```bash
+docker compose up mailhog
+```
+
+### 📧 MailHog: Inspect captured email
+> Open the web UI in your browser:
+```bash
+open http://localhost:8025
 ```
 
 <br>
