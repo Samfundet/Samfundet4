@@ -391,6 +391,7 @@ export const ROUTES_BACKEND = {
   samfundet__impersonate: '/api/impersonate/',
   samfundet__eventsperday: '/api/events-per-day/',
   samfundet__eventsupcomming: '/api/events-upcomming/',
+  samfundet__event_clone: '/api/events/:pk/clone/',
   samfundet__isclosed: '/api/isclosed/',
   samfundet__home: '/api/home/',
   samfundet__assign_group: '/api/assign_group/',
