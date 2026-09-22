@@ -733,6 +733,17 @@ export const nb = prepareTranslations({
   [KEY.feedback_helper_text]: 'Vi ønsker å vite hva du tenker om denne siden, og hva vi kan gjøre bedre.',
   [KEY.feedback_want_contact_text]:
     'Om du ønsker at vi kan kontakte deg om tilbakemeldingen, kan du skrive e-posten din her.',
+  [KEY.billig_callback_status_title]: 'Kjøp fullført',
+  [KEY.billig_callback_status_lead]: 'Billettene er registrert. Du kan laste dem ned her eller vente på e-post.',
+  [KEY.billig_callback_tickets_heading]: 'Billetter',
+  [KEY.billig_callback_ticket_reference]: 'Billettreferanse',
+  [KEY.billig_callback_summary_heading]: 'Oversikt',
+  [KEY.billig_callback_ticket_count]: 'Antall billetter',
+  [KEY.billig_callback_total_price]: 'Totalpris',
+  [KEY.billig_callback_download_pdf]: 'Last ned PDF',
+  [KEY.billig_callback_missing_ticket_details]: 'Fant ingen billettdetaljer for denne returen.',
+  [KEY.billig_callback_on_card]: 'På kort',
+  [KEY.billig_callback_email_delivery]: 'På e-post',
 
   // No category:
   [KEY.owner]: 'Eier',
@@ -1519,6 +1530,18 @@ export const en = prepareTranslations({
   [KEY.feedback_thank_you_for_feedback]: 'Thank you for your feedback',
   [KEY.feedback_helper_text]: 'We want to know what we can do better and what you think is good about this page.',
   [KEY.feedback_want_contact_text]: 'If you want us to contact you, you can write your email here.',
+  [KEY.billig_callback_status_title]: 'Purchase completed',
+  [KEY.billig_callback_status_lead]:
+    'The tickets are registered. You can download them here or wait for email delivery.',
+  [KEY.billig_callback_tickets_heading]: 'Tickets',
+  [KEY.billig_callback_ticket_reference]: 'Ticket reference',
+  [KEY.billig_callback_summary_heading]: 'Summary',
+  [KEY.billig_callback_ticket_count]: 'Number of tickets',
+  [KEY.billig_callback_total_price]: 'Total price',
+  [KEY.billig_callback_download_pdf]: 'Download PDF',
+  [KEY.billig_callback_missing_ticket_details]: 'No ticket details were found for this callback.',
+  [KEY.billig_callback_on_card]: 'On card',
+  [KEY.billig_callback_email_delivery]: 'By email',
 
   //MDB Connect AdminPage
   [KEY.adminpage_connect_mdb]: 'Connect to the membership database',

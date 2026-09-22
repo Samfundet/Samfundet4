@@ -710,6 +710,17 @@ export const KEY = {
   feedback_thank_you_for_feedback: 'feedback_thank_you_for_feedback',
   feedback_helper_text: 'feedback_helper_text',
   feedback_want_contact_text: 'feedback_want_contact_text',
+  billig_callback_status_title: 'billig_callback_status_title',
+  billig_callback_status_lead: 'billig_callback_status_lead',
+  billig_callback_tickets_heading: 'billig_callback_tickets_heading',
+  billig_callback_ticket_reference: 'billig_callback_ticket_reference',
+  billig_callback_summary_heading: 'billig_callback_summary_heading',
+  billig_callback_ticket_count: 'billig_callback_ticket_count',
+  billig_callback_total_price: 'billig_callback_total_price',
+  billig_callback_download_pdf: 'billig_callback_download_pdf',
+  billig_callback_missing_ticket_details: 'billig_callback_missing_ticket_details',
+  billig_callback_on_card: 'billig_callback_on_card',
+  billig_callback_email_delivery: 'billig_callback_email_delivery',
 
   // No category:
   owner: 'owner',
