@@ -64,10 +64,6 @@ class BilligService:
 
     @staticmethod
     def get_ticket_group_data(ticket_group: BilligTicketGroup) -> BilligCheckoutTicketGroupDto | None:
-        # Theater groups require seat selection before they can be offered in checkout.
-        if ticket_group.is_theater_ticket_group:
-            return None
-
         price_groups = [
             BilligCheckoutPriceGroupDto(
                 id=price_group.id,
@@ -92,6 +88,7 @@ class BilligService:
             name=ticket_group.name,
             is_sold_out=ticket_group.is_sold_out,
             is_almost_sold_out=ticket_group.is_almost_sold_out,
+            is_theater_ticket_group=ticket_group.is_theater_ticket_group,
             ticket_limit=ticket_group.ticket_limit,
             per_price_group_limit=per_price_group_limit,
             group_limit=group_limit,

@@ -401,6 +401,11 @@ export const nb = prepareTranslations({
   [KEY.ticket_checkout_sale_not_started]: 'Billettsalget har ikke startet ennå.',
   [KEY.ticket_checkout_sale_ended]: 'Billettsalget er avsluttet.',
   [KEY.ticket_checkout_sold_out]: 'Arrangementet er utsolgt.',
+  [KEY.ticket_invalid_seat_selection_message]: 'Oppgi gyldige setenummer separert med komma.',
+  [KEY.ticket_missing_seat_selection_message]: 'Oppgi ett setenummer per teaterbillett.',
+  [KEY.ticket_seat_selection_title]: 'Setevalg',
+  [KEY.ticket_seat_selection_hint]: 'Oppgi {{count}} setenummer separert med komma.',
+  [KEY.ticket_seat_selection_placeholder]: 'For eksempel 12, 13',
 
   // Venue Page:
   [KEY.venuepage_title]: 'Kart og lokaler',
@@ -1266,6 +1271,11 @@ export const en = prepareTranslations({
   [KEY.ticket_checkout_sale_not_started]: 'Ticket sales have not started yet.',
   [KEY.ticket_checkout_sale_ended]: 'Ticket sales have ended.',
   [KEY.ticket_checkout_sold_out]: 'This event is sold out.',
+  [KEY.ticket_invalid_seat_selection_message]: 'Enter valid seat numbers separated by commas.',
+  [KEY.ticket_missing_seat_selection_message]: 'Enter one seat number per theater ticket.',
+  [KEY.ticket_seat_selection_title]: 'Seat selection',
+  [KEY.ticket_seat_selection_hint]: 'Enter {{count}} seat number(s), separated by commas.',
+  [KEY.ticket_seat_selection_placeholder]: 'For example 12, 13',
 
   // VenuePage:
   [KEY.venuepage_title]: 'Map and Venues',

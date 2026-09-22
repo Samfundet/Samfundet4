@@ -363,6 +363,11 @@ export const KEY = {
   ticket_checkout_sale_not_started: 'ticket_checkout_sale_not_started',
   ticket_checkout_sale_ended: 'ticket_checkout_sale_ended',
   ticket_checkout_sold_out: 'ticket_checkout_sold_out',
+  ticket_invalid_seat_selection_message: 'ticket_invalid_seat_selection_message',
+  ticket_missing_seat_selection_message: 'ticket_missing_seat_selection_message',
+  ticket_seat_selection_title: 'ticket_seat_selection_title',
+  ticket_seat_selection_hint: 'ticket_seat_selection_hint',
+  ticket_seat_selection_placeholder: 'ticket_seat_selection_placeholder',
 
   event_external_host_message: 'event_external_host_message',
 

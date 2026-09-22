@@ -41,6 +41,7 @@ class BilligCheckoutTicketGroupDto:
     name: str
     is_sold_out: bool
     is_almost_sold_out: bool
+    is_theater_ticket_group: bool
     ticket_limit: int | None
     per_price_group_limit: int
     group_limit: int
