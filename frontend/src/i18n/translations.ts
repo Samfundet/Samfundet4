@@ -380,6 +380,9 @@ export const nb = prepareTranslations({
     'Valgte billetter kan ikke legges på medlemskort. Bruk e-postlevering i stedet.',
   [KEY.ticket_requires_membership_message]:
     'Valgte billetter krever medlemskap. Ved e-postlevering må du vise gyldig medlemskap i døra.',
+  [KEY.ticket_checkout_load_error]: 'Kunne ikke hente tilgjengelige billetter. Prøv igjen.',
+  [KEY.ticket_checkout_empty]: 'Ingen billetter er tilgjengelige for kjøp her akkurat nå.',
+  [KEY.ticket_checkout_retry]: 'Prøv igjen',
 
   // Venue Page:
   [KEY.venuepage_title]: 'Kart og lokaler',
@@ -1176,6 +1179,9 @@ export const en = prepareTranslations({
     'The selected tickets cannot be put on a membership card. Use email delivery instead.',
   [KEY.ticket_requires_membership_message]:
     'The selected tickets require membership. If you choose email delivery, you must show valid membership at the door.',
+  [KEY.ticket_checkout_load_error]: 'Could not load available tickets. Please try again.',
+  [KEY.ticket_checkout_empty]: 'No tickets are available to buy here right now.',
+  [KEY.ticket_checkout_retry]: 'Try again',
 
   // VenuePage:
   [KEY.venuepage_title]: 'Map and Venues',
