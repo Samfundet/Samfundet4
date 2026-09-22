@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
@@ -108,6 +108,21 @@ export function useEventCreatorForm(params: {
   }, [form, resetValues]);
 
   const watchedValues = form.watch();
+
+  const startDt = watchedValues.start_dt ?? '';
+  const visibilityFromDt = watchedValues.visibility_from_dt ?? '';
+  const previousStartDt = useRef(startDt);
+  const { trigger } = form;
+
+  useEffect(() => {
+    if (previousStartDt.current === startDt) return;
+
+    previousStartDt.current = startDt;
+
+    if (visibilityFromDt) {
+      void trigger('visibility_from_dt');
+    }
+  }, [startDt, visibilityFromDt, trigger]);
 
   function buildPayload(values: FormType): EventWriteDto {
     const start = values.start_dt ? new Date(values.start_dt) : null;

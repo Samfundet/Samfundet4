@@ -73,8 +73,15 @@ services:
       - BILLIG_DEV_HOST=billig_dev_database
       - MDB_DEV_HOST=mdb_dev
     ports:
-      - '8000:8000' # Quotes are required. django
-      - '5678:5678' # Quotes are required. debugpy
+      - '8000:8000' # django
+      - '5678:5678' # debugpy
+
+  ### MailHog (capture outgoing email in dev) ###
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - '1025:1025' # SMTP
+      - '8025:8025' # Web UI
 
   ### MailHog (capture outgoing email in dev) ###
   mailhog:
