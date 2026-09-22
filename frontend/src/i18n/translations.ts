@@ -383,6 +383,11 @@ export const nb = prepareTranslations({
   [KEY.ticket_checkout_load_error]: 'Kunne ikke hente tilgjengelige billetter. Prøv igjen.',
   [KEY.ticket_checkout_empty]: 'Ingen billetter er tilgjengelige for kjøp her akkurat nå.',
   [KEY.ticket_checkout_retry]: 'Prøv igjen',
+  [KEY.ticket_invalid_seat_selection_message]: 'Oppgi gyldige setenummer separert med komma.',
+  [KEY.ticket_missing_seat_selection_message]: 'Oppgi ett setenummer per teaterbillett.',
+  [KEY.ticket_seat_selection_title]: 'Setevalg',
+  [KEY.ticket_seat_selection_hint]: 'Oppgi {{count}} setenummer separert med komma.',
+  [KEY.ticket_seat_selection_placeholder]: 'For eksempel 12, 13',
 
   // Venue Page:
   [KEY.venuepage_title]: 'Kart og lokaler',
@@ -1213,6 +1218,11 @@ export const en = prepareTranslations({
   [KEY.ticket_checkout_load_error]: 'Could not load available tickets. Please try again.',
   [KEY.ticket_checkout_empty]: 'No tickets are available to buy here right now.',
   [KEY.ticket_checkout_retry]: 'Try again',
+  [KEY.ticket_invalid_seat_selection_message]: 'Enter valid seat numbers separated by commas.',
+  [KEY.ticket_missing_seat_selection_message]: 'Enter one seat number per theater ticket.',
+  [KEY.ticket_seat_selection_title]: 'Seat selection',
+  [KEY.ticket_seat_selection_hint]: 'Enter {{count}} seat number(s), separated by commas.',
+  [KEY.ticket_seat_selection_placeholder]: 'For example 12, 13',
 
   // VenuePage:
   [KEY.venuepage_title]: 'Map and Venues',

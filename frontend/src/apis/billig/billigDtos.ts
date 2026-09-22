@@ -22,6 +22,7 @@ export type BilligCheckoutTicketGroupDto = {
   name: string;
   is_sold_out: boolean;
   is_almost_sold_out: boolean;
+  is_theater_ticket_group: boolean;
   ticket_limit: number | null;
   per_price_group_limit: number;
   group_limit: number;
