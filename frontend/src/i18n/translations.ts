@@ -368,7 +368,12 @@ export const nb = prepareTranslations({
     'Billetten(e) blir sendt på epost, og må vises fram i døren når du kommer til Samfundet. Billettene kan vises på mobil eller tas med som utskrift.',
   [KEY.stripe_info]: 'Betalingen håndteres av Stripe.',
   [KEY.pay_info]: 'Alle priser er i norske kroner og er inkludert alle avgifter.',
+  [KEY.ticket_fee_notice]: 'Totalprisen inkluderer en ikke-refunderbar billettavgift på {{fee}} kr.',
   [KEY.sales_conditions]: 'Kjøp forutsetter at kunden godtar salgsbetingelsene.',
+  [KEY.ticket_card_unavailable_message]:
+    'Valgte billetter kan ikke legges på medlemskort. Bruk e-postlevering i stedet.',
+  [KEY.ticket_requires_membership_message]:
+    'Valgte billetter krever medlemskap. Ved e-postlevering må du vise gyldig medlemskap i døra.',
 
   // Venue Page:
   [KEY.venuepage_title]: 'Kart og lokaler',
@@ -1153,7 +1158,12 @@ export const en = prepareTranslations({
     'If you choose digital ticket, your ticket(s) will be sent to your email. The tickets barcode will be scanned when you enter Samfundet, either from your phone or a printed out copy.',
   [KEY.stripe_info]: 'The payment is processed by Stripe.',
   [KEY.pay_info]: 'All prices are in norwegian krone and includes all fees.',
+  [KEY.ticket_fee_notice]: 'The total includes a non-refundable ticket fee of {{fee}} kr.',
   [KEY.sales_conditions]: 'Purchase requires acceptance of sales terms.',
+  [KEY.ticket_card_unavailable_message]:
+    'The selected tickets cannot be put on a membership card. Use email delivery instead.',
+  [KEY.ticket_requires_membership_message]:
+    'The selected tickets require membership. If you choose email delivery, you must show valid membership at the door.',
 
   // VenuePage:
   [KEY.venuepage_title]: 'Map and Venues',

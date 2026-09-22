@@ -332,7 +332,10 @@ export const KEY = {
   email_ticket_description: 'email_ticket_description',
   stripe_info: 'stripe_info',
   pay_info: 'pay_info',
+  ticket_fee_notice: 'ticket_fee_notice',
   sales_conditions: 'sales_conditions',
+  ticket_card_unavailable_message: 'ticket_card_unavailable_message',
+  ticket_requires_membership_message: 'ticket_requires_membership_message',
 
   event_external_host_message: 'event_external_host_message',
 
