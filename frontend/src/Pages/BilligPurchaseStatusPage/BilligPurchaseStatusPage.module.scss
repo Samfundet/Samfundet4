@@ -1,0 +1,81 @@
+.page {
+  background: linear-gradient(180deg, #f3f4f6 0%, #ffffff 100%);
+  min-height: calc(100vh - 6rem);
+}
+
+.shell {
+  margin: 0 auto;
+  max-width: 52rem;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.lead {
+  color: #374151;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0.75rem 0 0;
+  max-width: 42rem;
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  margin-top: 1rem;
+  padding: 1.5rem;
+}
+
+.ticketList {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.ticketRow {
+  align-items: start;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding-top: 0.875rem;
+}
+
+.ticketRow:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.ticketRef {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.95rem;
+}
+
+.ticketMeta {
+  color: #4b5563;
+  font-size: 0.95rem;
+  margin-top: 0.35rem;
+}
+
+.ticketPrice {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.summaryRow {
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.875rem 0;
+}
+
+.summaryRow:first-of-type {
+  margin-top: 0.5rem;
+}
+
+.downloadLink {
+  display: inline-block;
+  font-weight: 600;
+  margin-top: 1rem;
+}
