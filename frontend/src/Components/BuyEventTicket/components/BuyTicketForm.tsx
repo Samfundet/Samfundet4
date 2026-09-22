@@ -31,9 +31,11 @@ const TICKET_TYPE_EMAIL = 'email';
 const TICKET_TYPE_MEMBERSHIP = 'membershipNumber';
 
 type TicketQuantityMap = Record<string, number>;
+type SeatSelectionMap = Record<string, string>;
 type BilligTicketGroupOption = {
   id: number;
   name: string;
+  isTheaterTicketGroup: boolean;
   priceGroups: BilligPriceGroupDto[];
   perPriceGroupLimit: number;
   groupLimit: number;
@@ -43,6 +45,7 @@ const createBuyTicketFormSchema = (t: (key: string) => string) =>
   z
     .object({
       ticketQuantities: z.record(z.string(), z.number().min(0)),
+      seatSelections: z.record(z.string(), z.string()).optional(),
       ticketType: z.enum([TICKET_TYPE_EMAIL, TICKET_TYPE_MEMBERSHIP]),
       email: z.string().optional(),
       membershipNumber: z.string().optional(),
@@ -87,7 +90,6 @@ interface BuyTicketFormProps {
 function toTicketGroups(event: EventDto): BilligTicketGroupOption[] {
   return (
     event.billig?.ticket_groups
-      .filter((ticketGroup) => !ticketGroup.is_theater_ticket_group)
       .map((ticketGroup: BilligTicketGroupDto) => {
         const priceGroups = ticketGroup.price_groups.filter((priceGroup) => priceGroup.netsale);
         if (priceGroups.length === 0) {
@@ -99,6 +101,7 @@ function toTicketGroups(event: EventDto): BilligTicketGroupOption[] {
         return {
           id: ticketGroup.id,
           name: ticketGroup.name,
+          isTheaterTicketGroup: ticketGroup.is_theater_ticket_group,
           priceGroups,
           perPriceGroupLimit,
           groupLimit,
@@ -116,6 +119,28 @@ function getSelectedTicketCount(
     (count, priceGroup) => count + (ticketQuantities?.[String(priceGroup.id)] ?? 0),
     0,
   );
+}
+
+function parseSeatSelection(rawSelection: string): number[] | null {
+  const normalized = rawSelection.trim();
+  if (normalized.length === 0) {
+    return [];
+  }
+
+  const seatIds = normalized
+    .split(/[\s,]+/)
+    .filter(Boolean)
+    .map((seatId) => Number(seatId));
+
+  if (seatIds.some((seatId) => Number.isNaN(seatId) || seatId <= 0)) {
+    return null;
+  }
+
+  if (new Set(seatIds).size !== seatIds.length) {
+    return null;
+  }
+
+  return seatIds;
 }
 
 export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
@@ -142,11 +167,26 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
     [ticketOptions],
   );
 
+  const seatSelectionDefaults = useMemo(
+    () =>
+      ticketGroups
+        .filter((ticketGroup) => ticketGroup.isTheaterTicketGroup)
+        .reduce((acc, ticketGroup) => {
+          acc[String(ticketGroup.id)] = '';
+          return acc;
+        }, {} as SeatSelectionMap),
+    [ticketGroups],
+  );
+
   const defaultValues = useMemo<BuyTicketFormType>(
     () => ({
       ticketQuantities: {
         ...ticketQuantityDefaults,
         ...(initialValues?.ticketQuantities ?? {}),
+      },
+      seatSelections: {
+        ...seatSelectionDefaults,
+        ...(initialValues?.seatSelections ?? {}),
       },
       ticketType:
         eventCanUseMembershipCard && initialValues?.ticketType !== TICKET_TYPE_EMAIL
@@ -155,7 +195,7 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
       email: initialValues?.email ?? '',
       membershipNumber: initialValues?.membershipNumber ?? '',
     }),
-    [eventCanUseMembershipCard, initialValues, ticketQuantityDefaults],
+    [eventCanUseMembershipCard, initialValues, seatSelectionDefaults, ticketQuantityDefaults],
   );
 
   const form = useForm<BuyTicketFormType>({
@@ -179,6 +219,13 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
   const selectedPriceGroups = useMemo(
     () => ticketOptions.filter((priceGroup) => (ticketQuantities?.[String(priceGroup.id)] ?? 0) > 0),
     [ticketOptions, ticketQuantities],
+  );
+  const selectedTheaterGroups = useMemo(
+    () =>
+      ticketGroups.filter(
+        (ticketGroup) => ticketGroup.isTheaterTicketGroup && (selectedTicketCountsByGroup[ticketGroup.id] ?? 0) > 0,
+      ),
+    [ticketGroups, selectedTicketCountsByGroup],
   );
   const selectedTicketsCanBePutOnCard =
     eventCanUseMembershipCard &&
@@ -219,21 +266,25 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
       return;
     }
 
-    if (
-      event.billig.ticket_groups.some(
-        (ticketGroup) =>
-          ticketGroup.is_theater_ticket_group &&
-          ticketGroup.price_groups.some((priceGroup) => (data.ticketQuantities[String(priceGroup.id)] ?? 0) > 0),
-      )
-    ) {
-      toast.error(t(KEY.common_something_went_wrong));
-      return;
+    const selectedSeats: Record<number, number[]> = {};
+    for (const ticketGroup of selectedTheaterGroups) {
+      const seatSelection = parseSeatSelection(data.seatSelections?.[String(ticketGroup.id)] ?? '');
+      if (seatSelection === null) {
+        toast.error(t(KEY.ticket_invalid_seat_selection_message));
+        return;
+      }
+      if (seatSelection.length !== (selectedTicketCountsByGroup[ticketGroup.id] ?? 0)) {
+        toast.error(t(KEY.ticket_missing_seat_selection_message));
+        return;
+      }
+      selectedSeats[ticketGroup.id] = seatSelection;
     }
 
     const formData = buildBilligFormData({
       ticketQuantities: Object.fromEntries(
         Object.entries(data.ticketQuantities).map(([priceGroupId, quantity]) => [Number(priceGroupId), quantity]),
       ),
+      selectedSeats: Object.keys(selectedSeats).length > 0 ? selectedSeats : undefined,
       email: data.ticketType === TICKET_TYPE_EMAIL ? data.email : undefined,
       membercard: data.ticketType === TICKET_TYPE_MEMBERSHIP ? data.membershipNumber : undefined,
     });
@@ -243,6 +294,7 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
       JSON.stringify({
         event,
         paymentUrl: event.billig.payment_url,
+        selectedSeats,
       }),
     );
 
@@ -312,6 +364,32 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
                     </div>
                   );
                 })}
+
+                {ticketGroup.isTheaterTicketGroup && selectedCountInGroup > 0 && (
+                  <div className={styles.seat_selection_block}>
+                    <H3 className={styles.seat_selection_title}>{t(KEY.ticket_seat_selection_title)}</H3>
+                    <p className={styles.ticketless_description_p}>
+                      {t(KEY.ticket_seat_selection_hint, { count: selectedCountInGroup })}
+                    </p>
+                    <FormField
+                      control={form.control}
+                      name={`seatSelections.${ticketGroup.id}`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              type="text"
+                              className={styles.input_field}
+                              placeholder={t(KEY.ticket_seat_selection_placeholder)}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
               </div>
             );
           })}

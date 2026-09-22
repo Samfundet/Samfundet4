@@ -13,6 +13,7 @@ import styles from './BilligPurchaseFailurePage.module.scss';
 type BilligPurchaseContext = {
   event: EventDto;
   paymentUrl: string;
+  selectedSeats?: Record<number, number[]>;
 };
 
 function loadBilligFormscript() {
@@ -43,6 +44,7 @@ function readStoredPurchaseContext(): BilligPurchaseContext | null {
 
 function toRetryInitialValues(form: HTMLFormElement) {
   const ticketQuantities: Record<string, number> = {};
+  const seatSelections: Record<string, string> = {};
   let email = '';
   let membershipNumber = '';
 
@@ -57,6 +59,14 @@ function toRetryInitialValues(form: HTMLFormElement) {
       continue;
     }
 
+    if (element instanceof HTMLInputElement && element.name.startsWith('seat_') && element.checked) {
+      const [, ticketGroupId, seatId] = element.name.split('_');
+      seatSelections[ticketGroupId] = seatSelections[ticketGroupId]
+        ? `${seatSelections[ticketGroupId]} ${seatId}`
+        : seatId;
+      continue;
+    }
+
     if (element.name === 'email') {
       email = element.value;
     }
@@ -67,6 +77,7 @@ function toRetryInitialValues(form: HTMLFormElement) {
 
   return {
     ticketQuantities,
+    seatSelections,
     ticketType: membershipNumber ? ('membershipNumber' as const) : ('email' as const),
     membershipNumber,
     email,
@@ -117,7 +128,7 @@ function BilligSignedFailureForm({
             <p className={styles.retryText}>{t(KEY.billig_callback_signed_retry_lead)}</p>
             {context.event.billig?.ticket_groups.map((ticketGroup) => {
               const priceGroups = ticketGroup.price_groups.filter((priceGroup) => priceGroup.netsale);
-              if (ticketGroup.is_theater_ticket_group || priceGroups.length === 0) {
+              if (priceGroups.length === 0) {
                 return null;
               }
 
@@ -150,6 +161,19 @@ function BilligSignedFailureForm({
               <span>{t(KEY.common_email)}</span>
               <input name="email" type="email" className={styles.input} defaultValue="" />
             </label>
+
+            {Object.entries(context.selectedSeats ?? {}).flatMap(([ticketGroupId, seatIds]) =>
+              seatIds.map((seatId) => (
+                <input
+                  key={`${ticketGroupId}-${seatId}`}
+                  name={`seat_${ticketGroupId}_${seatId}`}
+                  type="checkbox"
+                  value="1"
+                  defaultChecked
+                  hidden
+                />
+              )),
+            )}
 
             <button type="submit" className={styles.retryButton}>
               {t(KEY.common_to_payment)}

@@ -374,6 +374,11 @@ export const nb = prepareTranslations({
     'Valgte billetter kan ikke legges på medlemskort. Bruk e-postlevering i stedet.',
   [KEY.ticket_requires_membership_message]:
     'Valgte billetter krever medlemskap. Ved e-postlevering må du vise gyldig medlemskap i døra.',
+  [KEY.ticket_invalid_seat_selection_message]: 'Oppgi gyldige setenummer separert med komma.',
+  [KEY.ticket_missing_seat_selection_message]: 'Oppgi ett setenummer per teaterbillett.',
+  [KEY.ticket_seat_selection_title]: 'Setevalg',
+  [KEY.ticket_seat_selection_hint]: 'Oppgi {{count}} setenummer separert med komma.',
+  [KEY.ticket_seat_selection_placeholder]: 'For eksempel 12, 13',
 
   // Venue Page:
   [KEY.venuepage_title]: 'Kart og lokaler',
@@ -1192,6 +1197,11 @@ export const en = prepareTranslations({
     'The selected tickets cannot be put on a membership card. Use email delivery instead.',
   [KEY.ticket_requires_membership_message]:
     'The selected tickets require membership. If you choose email delivery, you must show valid membership at the door.',
+  [KEY.ticket_invalid_seat_selection_message]: 'Enter valid seat numbers separated by commas.',
+  [KEY.ticket_missing_seat_selection_message]: 'Enter one seat number per theater ticket.',
+  [KEY.ticket_seat_selection_title]: 'Seat selection',
+  [KEY.ticket_seat_selection_hint]: 'Enter {{count}} seat number(s), separated by commas.',
+  [KEY.ticket_seat_selection_placeholder]: 'For example 12, 13',
 
   // VenuePage:
   [KEY.venuepage_title]: 'Map and Venues',

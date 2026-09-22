@@ -7,12 +7,14 @@ export const BILLIG_PURCHASE_CONTEXT_KEY = 'billig-purchase-context';
 
 type BuildBilligFormDataArgs = {
   ticketQuantities: Record<number, number>;
+  selectedSeats?: Record<number, number[]>;
   email?: string;
   membercard?: string;
 };
 
 export function buildBilligFormData({
   ticketQuantities,
+  selectedSeats,
   email,
   membercard,
 }: BuildBilligFormDataArgs): Record<string, string | number> {
@@ -20,6 +22,12 @@ export function buildBilligFormData({
 
   for (const [priceGroupId, quantity] of Object.entries(ticketQuantities)) {
     formData[`price_${priceGroupId}_count`] = quantity;
+  }
+
+  for (const [ticketGroupId, seatIds] of Object.entries(selectedSeats ?? {})) {
+    for (const seatId of seatIds) {
+      formData[`seat_${ticketGroupId}_${seatId}`] = 1;
+    }
   }
 
   if (email) {
