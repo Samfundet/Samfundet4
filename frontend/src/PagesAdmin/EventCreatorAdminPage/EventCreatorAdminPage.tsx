@@ -37,7 +37,7 @@ import { type FormType, useEventCreatorForm } from './hooks/useEventCreatorForm'
 import { type EventCreatorStep, type StepKey, steps } from './steps/stepConfig';
 
 import type { FieldErrors } from 'react-hook-form';
-import { useCreateEvent, useGetEvent, useUpdateEvent } from '~/domain';
+import { useCreateEvent, useGetEvent, useGetEventForCloning, useUpdateEvent } from '~/domain';
 import { eventSchema } from './EventCreatorSchema';
 import { EventPreviewCard } from './components/EventPreviewCard';
 import { GraphicsStep } from './steps/GraphicsStep';
@@ -55,7 +55,11 @@ export function EventCreatorAdminPage() {
   const templateId = id === undefined ? searchParams.get('template') : undefined;
   const isCloning = templateId !== undefined;
 
-  const { data: event, isLoading } = useGetEvent(id ?? templateId ?? '', isCloning);
+  const { data: eventFetch, isLoading: eventFetchLoading } = useGetEvent(id ?? '');
+  const { data: eventCopy, isLoading: eventCopyLoading } = useGetEventForCloning(templateId ?? '');
+
+  const event = isCloning ? eventCopy : eventFetch;
+  const isLoading = eventFetchLoading || eventCopyLoading;
 
   const { data: venues = [] } = useQuery({
     queryKey: venueKeys.all,

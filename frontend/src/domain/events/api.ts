@@ -1,7 +1,7 @@
 import axios, { type AxiosResponse } from 'axios';
 import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from '~/constants';
-import type { EventCloneDto, EventDto, EventGroupDto, EventWriteDto } from '~/dto';
+import type { EventDto, EventGroupDto, EventWriteDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import type { EventsPaginationType } from '~/types';
@@ -133,9 +133,9 @@ export async function getBilligEvents(): Promise<BilligEventDto[]> {
   return response.data;
 }
 
-export async function getEventForCloning(pk: string | number): Promise<EventCloneDto> {
+export async function getEventForCloning(pk: string | number): Promise<Partial<EventDto>> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__event_clone, urlParams: { pk: pk } });
-  const response = await axios.get<EventCloneDto>(url, { withCredentials: true });
+  const response = await axios.get<Partial<EventDto>>(url, { withCredentials: true });
 
   return response.data;
 }

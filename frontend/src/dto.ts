@@ -224,11 +224,6 @@ export type EventDto = {
   general_link?: string;
 };
 
-export type EventCloneDto = Omit<
-  EventDto,
-  'status' | 'event_group' | 'duration' | 'billig' | 'numberOfTickets' | 'registration_url' | 'doors_time'
->;
-
 export type EventWriteDto = {
   status?: EventStatus;
 

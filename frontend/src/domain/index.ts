@@ -50,6 +50,7 @@ export {
   useGetEventsUpcoming,
   useGetEventsUpcomingPaginated,
   useGetEvent,
+  useGetEventForCloning,
   useGetEventGroups,
   useGetBilligEvents,
   eventKeys,

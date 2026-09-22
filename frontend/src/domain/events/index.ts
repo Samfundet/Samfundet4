@@ -18,6 +18,7 @@ export {
   useGetEventsUpcoming,
   useGetEventsUpcomingPaginated,
   useGetEvent,
+  useGetEventForCloning,
   useGetEventGroups,
   useGetBilligEvents,
 } from './queries';

@@ -1,6 +1,6 @@
 import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
 import type { BilligEventDto } from '~/apis/billig/billigDtos';
-import type { EventCloneDto, EventDto, EventGroupDto } from '~/dto';
+import type { EventDto, EventGroupDto } from '~/dto';
 import type { EventsPaginationType } from '~/types';
 import {
   type EventsUpcomingResponse,
@@ -33,7 +33,7 @@ export function useGetEventsPerDay(props?: Partial<UseQueryOptions<Record<string
 
 export function useGetEvents(props?: Partial<UseQueryOptions<EventDto[]>>) {
   return useQuery({
-    queryKey: eventKeys.list(),
+    queryKey: eventKeys.all,
     queryFn: getEvents,
     ...props,
   });
@@ -60,11 +60,20 @@ export function useGetEventsUpcomingPaginated(
   });
 }
 
-export function useGetEvent(id: string, cloning = false, props?: Partial<UseQueryOptions<EventDto | EventCloneDto>>) {
+export function useGetEvent(id: string, props?: Partial<UseQueryOptions<EventDto>>) {
   return useQuery({
-    queryKey: cloning ? eventCloneKeys.detail(id) : eventKeys.detail(id),
-    queryFn: () => (cloning ? getEventForCloning(id) : getEvent(id)),
-    enabled: id !== undefined,
+    queryKey: eventKeys.detail(id),
+    queryFn: () => getEvent(id),
+    enabled: !!id,
+    ...props,
+  });
+}
+
+export function useGetEventForCloning(id: string, props?: Partial<UseQueryOptions<Partial<EventDto>>>) {
+  return useQuery({
+    queryKey: eventCloneKeys.detail(id),
+    queryFn: () => getEventForCloning(id),
+    enabled: !!id,
     ...props,
   });
 }
