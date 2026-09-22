@@ -167,7 +167,7 @@ export function EventsList({ events }: EventsListProps) {
         next.delete('ticket_type');
       }
       return next;
-    });
+    }, { replace: true });
   }, [category, place, query, setSearchParam, ticketType]);
 
   function getButton(title: string, icon: string, func: () => void, chosen: boolean) {
