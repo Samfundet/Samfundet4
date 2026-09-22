@@ -18,7 +18,7 @@ import {
   RadioButton,
 } from '~/Components';
 import { validEmail } from '~/Forms/util';
-import { buildBilligFormData, submitBilligForm } from '~/apis/billig/billigApi';
+import { BILLIG_PURCHASE_CONTEXT_KEY, buildBilligFormData, submitBilligForm } from '~/apis/billig/billigApi';
 import type { BilligPriceGroupDto, BilligTicketGroupDto } from '~/apis/billig/billigDtos';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
@@ -81,6 +81,7 @@ type BuyTicketFormType = z.infer<ReturnType<typeof createBuyTicketFormSchema>>;
 
 interface BuyTicketFormProps {
   event: EventDto;
+  initialValues?: Partial<BuyTicketFormType>;
 }
 
 function toTicketGroups(event: EventDto): BilligTicketGroupOption[] {
@@ -117,7 +118,7 @@ function getSelectedTicketCount(
   );
 }
 
-export function BuyTicketForm({ event }: BuyTicketFormProps) {
+export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const ticketGroups = useMemo(() => toTicketGroups(event), [event]);
   const ticketOptions = useMemo(
@@ -145,12 +146,16 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
     () => ({
       ticketQuantities: {
         ...ticketQuantityDefaults,
+        ...(initialValues?.ticketQuantities ?? {}),
       },
-      ticketType: eventCanUseMembershipCard ? TICKET_TYPE_MEMBERSHIP : TICKET_TYPE_EMAIL,
-      email: '',
-      membershipNumber: '',
+      ticketType:
+        eventCanUseMembershipCard && initialValues?.ticketType !== TICKET_TYPE_EMAIL
+          ? TICKET_TYPE_MEMBERSHIP
+          : TICKET_TYPE_EMAIL,
+      email: initialValues?.email ?? '',
+      membershipNumber: initialValues?.membershipNumber ?? '',
     }),
-    [eventCanUseMembershipCard, ticketQuantityDefaults],
+    [eventCanUseMembershipCard, initialValues, ticketQuantityDefaults],
   );
 
   const form = useForm<BuyTicketFormType>({
@@ -232,6 +237,14 @@ export function BuyTicketForm({ event }: BuyTicketFormProps) {
       email: data.ticketType === TICKET_TYPE_EMAIL ? data.email : undefined,
       membercard: data.ticketType === TICKET_TYPE_MEMBERSHIP ? data.membershipNumber : undefined,
     });
+
+    sessionStorage.setItem(
+      BILLIG_PURCHASE_CONTEXT_KEY,
+      JSON.stringify({
+        event,
+        paymentUrl: event.billig.payment_url,
+      }),
+    );
 
     submitBilligForm({
       paymentUrl: event.billig.payment_url,

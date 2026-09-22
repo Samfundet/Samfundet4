@@ -744,6 +744,23 @@ export const nb = prepareTranslations({
   [KEY.billig_callback_missing_ticket_details]: 'Fant ingen billettdetaljer for denne returen.',
   [KEY.billig_callback_on_card]: 'På kort',
   [KEY.billig_callback_email_delivery]: 'På e-post',
+  [KEY.billig_callback_failure_title]: 'Betalingen ble ikke fullført',
+  [KEY.billig_callback_failure_lead]: 'Se feilen og prøv på nytt dersom ordren fortsatt kan gjenopprettes.',
+  [KEY.billig_callback_error_heading]: 'Feilmelding',
+  [KEY.billig_callback_retry_heading]: 'Prøv på nytt',
+  [KEY.billig_callback_retry_lead]: 'Handlekurven er fylt inn på nytt med det Billig lagret fra forrige forsøk.',
+  [KEY.billig_callback_signed_retry_lead]:
+    'Denne formen er Billig-kompatibel og brukes for signert JavaScript-feilhåndtering.',
+  [KEY.billig_callback_editable_retry_heading]: 'Redigerbar versjon',
+  [KEY.billig_callback_editable_retry_lead]:
+    'Denne formen speiler Billig-dataene og lar brukeren rette opp kjøpet uten å miste appens vanlige UI.',
+  [KEY.billig_callback_non_retryable_heading]: 'Kan ikke sendes på nytt',
+  [KEY.billig_callback_non_retryable_description]:
+    'Denne feilen kan ikke rettes ved å sende inn på nytt fra denne siden.',
+  [KEY.billig_callback_missing_error_session]: 'Fant ingen lagret feilinformasjon for denne sesjonen.',
+  [KEY.billig_callback_back_heading]: 'Tilbake',
+  [KEY.billig_callback_back_to_event]: 'Gå tilbake til arrangementet',
+  [KEY.billig_callback_back_to_events]: 'Se arrangementer',
 
   // No category:
   [KEY.owner]: 'Eier',
@@ -1542,6 +1559,23 @@ export const en = prepareTranslations({
   [KEY.billig_callback_missing_ticket_details]: 'No ticket details were found for this callback.',
   [KEY.billig_callback_on_card]: 'On card',
   [KEY.billig_callback_email_delivery]: 'By email',
+  [KEY.billig_callback_failure_title]: 'Payment was not completed',
+  [KEY.billig_callback_failure_lead]: 'See the error and try again if the order can still be restored.',
+  [KEY.billig_callback_error_heading]: 'Error message',
+  [KEY.billig_callback_retry_heading]: 'Try again',
+  [KEY.billig_callback_retry_lead]:
+    'The cart has been restored using the values Billig stored from the previous attempt.',
+  [KEY.billig_callback_signed_retry_lead]:
+    'This form is Billig-compatible and is used for signed JavaScript error handling.',
+  [KEY.billig_callback_editable_retry_heading]: 'Editable version',
+  [KEY.billig_callback_editable_retry_lead]:
+    'This form mirrors the Billig data and lets the user correct the purchase without losing the app UI.',
+  [KEY.billig_callback_non_retryable_heading]: 'Cannot be resubmitted',
+  [KEY.billig_callback_non_retryable_description]: 'This error cannot be fixed by submitting the page again.',
+  [KEY.billig_callback_missing_error_session]: 'No stored error information was found for this session.',
+  [KEY.billig_callback_back_heading]: 'Back',
+  [KEY.billig_callback_back_to_event]: 'Back to event',
+  [KEY.billig_callback_back_to_events]: 'View events',
 
   //MDB Connect AdminPage
   [KEY.adminpage_connect_mdb]: 'Connect to the membership database',
