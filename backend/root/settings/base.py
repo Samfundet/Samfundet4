@@ -278,7 +278,7 @@ LOGGING = {
         },
         'mail_admins': {
             'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
+            'class': 'root.custom_classes.notification_email_handler.NotificationEmailHandler',
             'filters': ['require_debug_false'],
         },
         'humio': {

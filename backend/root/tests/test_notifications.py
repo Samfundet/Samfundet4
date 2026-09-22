@@ -6,7 +6,7 @@ from unittest import mock
 from django.conf import settings
 from django.core import mail
 from django.http import HttpRequest, HttpResponse
-from django.test import TestCase, override_settings
+from django.test import Client, TestCase, override_settings
 from django.urls import path
 
 from root import notifications
@@ -114,13 +114,22 @@ class NotifyRateLimitTests(TestCase):
     DEBUG=False,
     ALLOWED_HOSTS=['testserver'],
     ADMINS=[('Ops', 'ops@example.com')],
+    NOTIFICATION_RECIPIENTS={'errors': ['ops@example.com']},
 )
 class ServerErrorEmailTests(TestCase):
     def test_unhandled_500_emails_admins(self) -> None:
-        response = self.client.get('/boom/', raise_request_exception=False)
+        client = Client(raise_request_exception=False)
+        response = client.get('/boom/')
 
         self.assertEqual(response.status_code, 500)
         self.assertEqual(len(mail.outbox), 1)
         email = mail.outbox[0]
         self.assertEqual(email.to, ['ops@example.com'])
         self.assertIn('boom', email.subject + email.body)
+
+    def test_repeated_500s_are_deduplicated(self) -> None:
+        client = Client(raise_request_exception=False)
+        client.get('/boom/')
+        client.get('/boom/')
+
+        self.assertEqual(len(mail.outbox), 1)

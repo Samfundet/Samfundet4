@@ -1,15 +1,13 @@
 from __future__ import annotations
 
+import time
 import hashlib
 import logging
-import time
-from typing import TYPE_CHECKING
 
 from django.conf import settings
 from django.core.mail import send_mail
 
-if TYPE_CHECKING:
-    from samfundet.models.general import KeyValue
+from samfundet.models.general import KeyValue
 
 LOG = logging.getLogger('root.notifications')
 
@@ -106,8 +104,6 @@ def _mark_sent(category: str, dedupe_key: str) -> None:
     the caller (the email has already been dispatched).
     """
     try:
-        from samfundet.models.general import KeyValue
-
         KeyValue.objects.update_or_create(key=_dedupe_key(category, dedupe_key), defaults={'value': str(time.time())})
     except Exception:
         LOG.warning('notification_dedupe_record_failed', extra={'category': category, 'dedupe_key': dedupe_key}, exc_info=True)
@@ -123,8 +119,6 @@ def _dedupe_key(category: str, dedupe_key: str) -> str:
 def _get_key_value(key: str) -> KeyValue | None:
     """Look up a KeyValue row, returning None when unavailable instead of raising."""
     try:
-        from samfundet.models.general import KeyValue
-
         return KeyValue.objects.filter(key=key).first()
     except Exception:
         LOG.warning('notification_dedupe_check_failed', exc_info=True)

@@ -83,13 +83,6 @@ services:
       - '1025:1025' # SMTP
       - '8025:8025' # Web UI
 
-  ### MailHog (capture outgoing email in dev) ###
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-      - '1025:1025' # SMTP. Quotes are required.
-      - '8025:8025' # Web UI. Quotes are required.
-
   ### Frontend React ###
   # Mount sync on OSX Docker VM is really slow on some systems. Perhaps run on host machine instead.
   frontend:
