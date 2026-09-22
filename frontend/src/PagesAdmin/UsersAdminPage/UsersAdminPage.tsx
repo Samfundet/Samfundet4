@@ -69,7 +69,12 @@ export function UsersAdminPage() {
 
   return (
     <AdminPageLayout title={title}>
-      <Input type="text" onChange={(e) => setSearchTerm(e.target.value)} placeholder={t(KEY.common_search)} icon="mdi:search"/>
+      <Input
+        type="text"
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder={t(KEY.common_search)}
+        icon="mdi:search"
+      />
       <div className={styles.table_container}>
         <Table
           data={users.map((user) => ({ cells: userTableRow(user) }))}
