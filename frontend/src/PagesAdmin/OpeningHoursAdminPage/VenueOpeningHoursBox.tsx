@@ -12,10 +12,10 @@ import { getVenueDaySchedule } from './utils';
 
 type VenueOpeningHoursBoxProps = {
   venue: VenueDto;
-  onSaveDay: (venue: VenueDto, weekday: Day, changes: Partial<VenueDaySchedule>) => void;
+  onChangeDay: (venueSlug: string, weekday: Day, changes: Partial<VenueDaySchedule>) => void;
 };
 
-export function VenueOpeningHoursBox({ venue, onSaveDay }: VenueOpeningHoursBoxProps) {
+export function VenueOpeningHoursBox({ venue, onChangeDay }: VenueOpeningHoursBoxProps) {
   const { t } = useTranslation();
   const headingId = `venue-opening-hours-${venue.slug}`;
 
@@ -51,7 +51,7 @@ export function VenueOpeningHoursBox({ venue, onSaveDay }: VenueOpeningHoursBoxP
                   ariaLabel={openingLabel}
                   hourAriaLabel={t(KEY.admin_opening_hours_hours_input, { field: openingLabel })}
                   minuteAriaLabel={t(KEY.admin_opening_hours_minutes_input, { field: openingLabel })}
-                  onBlur={(opening) => onSaveDay(venue, weekday, { opening })}
+                  onChange={(opening) => onChangeDay(venue.slug, weekday, { opening })}
                 />
                 <InputTime
                   className={styles.time_input}
@@ -60,13 +60,13 @@ export function VenueOpeningHoursBox({ venue, onSaveDay }: VenueOpeningHoursBoxP
                   ariaLabel={closingLabel}
                   hourAriaLabel={t(KEY.admin_opening_hours_hours_input, { field: closingLabel })}
                   minuteAriaLabel={t(KEY.admin_opening_hours_minutes_input, { field: closingLabel })}
-                  onBlur={(closing) => onSaveDay(venue, weekday, { closing })}
+                  onChange={(closing) => onChangeDay(venue.slug, weekday, { closing })}
                 />
                 <div className={styles.checkbox_wrapper}>
                   <Checkbox
                     aria-label={t(KEY.admin_opening_hours_day_is_open, { day: dayLabel })}
                     checked={schedule.is_open}
-                    onChange={(event) => onSaveDay(venue, weekday, { is_open: event.target.checked })}
+                    onChange={(event) => onChangeDay(venue.slug, weekday, { is_open: event.target.checked })}
                   />
                 </div>
               </div>
