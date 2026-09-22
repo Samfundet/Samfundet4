@@ -67,7 +67,7 @@ export function EventTemplateSearch({ events, onSelectEvent }: EventTemplateSear
                 className={styles.search_result_item}
                 onClick={() => {
                   onSelectEvent(e);
-                  SetSelectedEvent(e);
+                  setSelectedEvent(e);
                   setQuery((dbT(e, 'title', i18n.language) as string) ?? '');
                 }}
               >
