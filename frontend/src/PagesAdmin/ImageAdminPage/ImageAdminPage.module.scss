@@ -1,17 +1,32 @@
 @use '../../mixins' as m;
 
-@use '../../constants' as c;
+@use '../../constants' as *;
+
+.action_row {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.15rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 1.25rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 244, 244, 0.96));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+
+  @include m.theme-dark {
+    border-color: rgba(255, 255, 255, 0.08);
+    background: linear-gradient(180deg, rgba(34, 34, 34, 0.92), rgba(24, 24, 24, 0.96));
+  }
+
+  > :first-child {
+    width: 100%;
+  }
+}
 
 .imageContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 1em;
-  margin-top: 1em;
-  @include m.for-tablet-up {
-    flex-direction: row;
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+  align-items: stretch;
 }
 
 .tagRow {
@@ -19,15 +34,28 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+
+  @include m.theme-dark {
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+  }
 }
 
 .imageBox {
   overflow: hidden;
-  flex-basis: calc(25% - 1em);
-  min-height: 12em;
-  height: 12em;
-  box-sizing: inherit;
-  @include m.for-tablet-down {
-    flex-basis: calc(33.33% - 1em);
-  }
+  width: 100%;
+  min-height: 15rem;
+  aspect-ratio: 1 / 1.08;
+  box-sizing: border-box;
+}
+
+.pagination_wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
 }
