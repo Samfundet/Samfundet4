@@ -362,6 +362,15 @@ class VenueSerializer(CustomBaseSerializer):
     class Meta:
         model = Venue
         fields = '__all__'
+        extra_kwargs = {
+            field_name: {'format': '%H:%M'}
+            for field_name in (
+                'opening',
+                'closing',
+                *(f'opening_{weekday}' for weekday in VENUE_WEEKDAYS),
+                *(f'closing_{weekday}' for weekday in VENUE_WEEKDAYS),
+            )
+        }
 
 
 class VenueDayScheduleSerializer(serializers.Serializer):

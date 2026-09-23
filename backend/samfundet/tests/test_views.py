@@ -374,8 +374,8 @@ class TestVenueOpenViews:
             assert len(data) == 1
             assert data[0]['slug'] == open_slug
             # Check the returned times for the open venue
-            assert data[0][f'opening_{day_of_week}'] == open_time.strftime('%H:%M:%S')
-            assert data[0][f'closing_{day_of_week}'] == close_time.strftime('%H:%M:%S')
+            assert data[0][f'opening_{day_of_week}'] == open_time.strftime('%H:%M')
+            assert data[0][f'closing_{day_of_week}'] == close_time.strftime('%H:%M')
 
     def test_open_venues_no_venues(self, fixture_rest_client: APIClient):
         """Test with no venues in the database."""
@@ -425,8 +425,8 @@ class TestVenueOpenViews:
             assert data[0]['slug'] == slug
 
             # 4. Verify the opening times correspond to Saturday (not Sunday)
-            assert data[0]['opening_saturday'] == '08:00:00'
-            assert data[0]['closing_saturday'] == '01:00:00'
+            assert data[0]['opening_saturday'] == '08:00'
+            assert data[0]['closing_saturday'] == '01:00'
 
             assert data[0]['is_open_sunday'] is False
 

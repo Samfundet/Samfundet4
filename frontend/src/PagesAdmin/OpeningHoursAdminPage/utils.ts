@@ -19,14 +19,6 @@ export function updateVenueDaySchedule(venue: VenueDto, weekday: Day, schedule: 
   };
 }
 
-export function normalizeVenueDaySchedule(schedule: VenueDaySchedule): VenueDaySchedule {
-  return {
-    ...schedule,
-    opening: normalizeTime(schedule.opening),
-    closing: normalizeTime(schedule.closing),
-  };
-}
-
 export function getVenueOpeningHoursUpdates(venues: VenueDto[], draftVenues: VenueDto[]): VenueOpeningHoursUpdate[] {
   const draftVenuesBySlug = new Map(draftVenues.map((venue) => [venue.slug, venue]));
 
@@ -37,8 +29,8 @@ export function getVenueOpeningHoursUpdates(venues: VenueDto[], draftVenues: Ven
     const changes: VenueOpeningHoursPatch = {};
 
     for (const weekday of ALL_DAYS) {
-      const schedule = normalizeVenueDaySchedule(getVenueDaySchedule(venue, weekday));
-      const draftSchedule = normalizeVenueDaySchedule(getVenueDaySchedule(draftVenue, weekday));
+      const schedule = getVenueDaySchedule(venue, weekday);
+      const draftSchedule = getVenueDaySchedule(draftVenue, weekday);
 
       if (schedule.is_open !== draftSchedule.is_open) {
         changes[`is_open_${weekday}`] = draftSchedule.is_open;
@@ -53,9 +45,4 @@ export function getVenueOpeningHoursUpdates(venues: VenueDto[], draftVenues: Ven
 
     return Object.keys(changes).length > 0 ? [{ slug: venue.slug, changes }] : [];
   });
-}
-
-function normalizeTime(value: string): string {
-  const [hour = '', minute = ''] = value.split(':');
-  return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
 }
