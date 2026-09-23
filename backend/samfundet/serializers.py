@@ -30,6 +30,7 @@ from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
 from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
+    VENUE_WEEKDAYS,
     Tag,
     User,
     Image,
@@ -408,6 +409,13 @@ class VenueSerializer(CustomBaseSerializer):
     class Meta:
         model = Venue
         fields = '__all__'
+
+
+class VenueDayScheduleSerializer(serializers.Serializer):
+    weekday = serializers.ChoiceField(choices=VENUE_WEEKDAYS)
+    is_open = serializers.BooleanField()
+    opening = serializers.TimeField()
+    closing = serializers.TimeField()
 
 
 class ClosedPeriodSerializer(CustomBaseSerializer):
