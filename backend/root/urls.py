@@ -10,6 +10,7 @@ from django.views.static import serve as serve_static
 handler404 = 'samfundet.routing.views.react_404_view'
 
 urlpatterns = [
+    path('admin/logs/', include('django_admin_logs_viewer.urls')),
     path('admin/', admin.site.urls),
     path('rest_framework/', include('rest_framework.urls')),
     # Backend API routes, prefixed to avoid colliding with frontend routes

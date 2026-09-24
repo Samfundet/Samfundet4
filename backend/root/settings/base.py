@@ -95,6 +95,7 @@ SESSION_COOKIE_AGE = 24 * 60 * 60 * 7
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 INSTALLED_APPS = [
+    'django_admin_logs_viewer',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -141,6 +142,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django_admin_logs_viewer.context_processors.logs_url',
             ],
         },
     },
@@ -227,6 +229,13 @@ INSTALLED_APPS += [
 
 ### End: admin_auto_filters ###
 
+################## ADMIN LOG VIEWER ##################
+
+LOGS_DIRS = [
+    {
+        'path': BASE_DIR / 'logs',
+    },
+]
 
 ################## LOGGING ##################
 
