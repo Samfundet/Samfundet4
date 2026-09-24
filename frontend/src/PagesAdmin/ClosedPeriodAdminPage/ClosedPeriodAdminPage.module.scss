@@ -1,3 +1,9 @@
 @use 'src/mixins' as *;
 
 @use 'src/constants' as *;
+
+.edit_buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

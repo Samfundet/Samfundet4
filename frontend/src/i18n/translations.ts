@@ -308,6 +308,12 @@ export const nb = prepareTranslations({
   [KEY.event_must_be_valid_url]: 'Må være en gyldig URL',
   [KEY.event_must_be_valid_spotify_uri]: 'Må være en gyldig Spotify URI',
   [KEY.event_publication_date_required]: 'Publiseringsdato er påkrevd',
+  [KEY.event_create_from_existing_event]: 'Opprett fra eksisterende arrangement',
+  [KEY.event_copy_from_registered_event]: 'Kopier fra registrert arrangement',
+  [KEY.event_create_new_event]: 'Opprett nytt arrangement',
+  [KEY.event_search_for_an_existing_event]: 'Søk etter et arrangement',
+  [KEY.event_selected_existing_event]: 'Valgte eksisterende arrangement',
+  [KEY.event_no_results]: 'Ingen resultater',
   [KEY.event_publication_date_must_be_before_start]: 'Publiseringsdato må være før arrangementsstart',
 
   // Event categories
@@ -379,6 +385,9 @@ export const nb = prepareTranslations({
   [KEY.ticket_seat_selection_title]: 'Setevalg',
   [KEY.ticket_seat_selection_hint]: 'Oppgi {{count}} setenummer separert med komma.',
   [KEY.ticket_seat_selection_placeholder]: 'For eksempel 12, 13',
+  [KEY.ticket_checkout_load_error]: 'Kunne ikke hente tilgjengelige billetter. Prøv igjen.',
+  [KEY.ticket_checkout_empty]: 'Ingen billetter er tilgjengelige for kjøp her akkurat nå.',
+  [KEY.ticket_checkout_retry]: 'Prøv igjen',
 
   // Venue Page:
   [KEY.venuepage_title]: 'Kart og lokaler',
@@ -569,7 +578,7 @@ export const nb = prepareTranslations({
   [KEY.admin_images_create]: 'Nytt bilde',
   [KEY.admin_images_confirm_delete]: 'Er du sikker på at du vil slette dette bildet? Dette kan ikke angres.',
   [KEY.admin_images_add_tag]: 'Legg til merkelapp',
-  [KEY.admin_images_delete_in_use]: 'Bildet er i bruk og kan dermed ikke slettes.',
+  [KEY.admin_images_delete_in_use]: 'Bildet er i bruk og kan dermed ikke slettes. Kontakt MG::Web for å få hjelp.',
   [KEY.admin_image_form_tag_description]: 'Skriv inn merkelapp og tast Enter eller Komma for å legge den til i listen',
   [KEY.admin_no_image_selected]: 'Ingen bilde valgt',
   [KEY.admin_markdown_insert_image]: 'Sett inn bilde',
@@ -583,6 +592,9 @@ export const nb = prepareTranslations({
   [KEY.admin_steal_identity]: 'Stjel identitet',
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
+  [KEY.admin_closed_period_end_before_start]: 'Sluttdato må være etter startdato',
+  [KEY.admin_closed_period_end_before_today]: 'Sluttdato kan ikke være før dagens dato',
+  [KEY.admin_closed_message]: 'Samfundet er stengt',
   [KEY.admin_casedocuments_title]: 'Administrer saksdokumenter',
   [KEY.admin_sultenmenu_title]: 'Administrer Lyche meny',
   [KEY.admin_users_last_active]: 'Sist aktiv',
@@ -1173,6 +1185,12 @@ export const en = prepareTranslations({
   [KEY.event_must_be_valid_url]: 'Must be a valid URL',
   [KEY.event_must_be_valid_spotify_uri]: 'Must be a valid Spotify URI',
   [KEY.event_publication_date_required]: 'Publication date is required',
+  [KEY.event_create_from_existing_event]: 'Create from an existing event',
+  [KEY.event_copy_from_registered_event]: 'Copy from a registered event',
+  [KEY.event_create_new_event]: 'Create a new event',
+  [KEY.event_search_for_an_existing_event]: 'Search for an event',
+  [KEY.event_selected_existing_event]: 'Selected existing event',
+  [KEY.event_no_results]: 'No results',
   [KEY.event_publication_date_must_be_before_start]: 'Publication date must be before the event starts',
 
   //Purchase Ticket Info:
@@ -1202,6 +1220,9 @@ export const en = prepareTranslations({
   [KEY.ticket_seat_selection_title]: 'Seat selection',
   [KEY.ticket_seat_selection_hint]: 'Enter {{count}} seat number(s), separated by commas.',
   [KEY.ticket_seat_selection_placeholder]: 'For example 12, 13',
+  [KEY.ticket_checkout_load_error]: 'Could not load available tickets. Please try again.',
+  [KEY.ticket_checkout_empty]: 'No tickets are available to buy here right now.',
+  [KEY.ticket_checkout_retry]: 'Try again',
 
   // VenuePage:
   [KEY.venuepage_title]: 'Map and Venues',
@@ -1444,7 +1465,7 @@ export const en = prepareTranslations({
   [KEY.admin_images_create]: 'New image',
   [KEY.admin_images_confirm_delete]: 'Are you sure you want to delete this image? This cannot be undone.',
   [KEY.admin_images_add_tag]: 'Add tag',
-  [KEY.admin_images_delete_in_use]: 'The image cannot be deleted because it is in use.',
+  [KEY.admin_images_delete_in_use]: 'The image cannot be deleted because it is in use. Contact MG::Web for assistance.',
   [KEY.admin_image_form_tag_description]: 'Write a tag and hit Enter or Comma to add it to the list',
   [KEY.admin_no_image_selected]: 'No image selected',
   [KEY.admin_markdown_insert_image]: 'Insert image',
@@ -1461,6 +1482,8 @@ export const en = prepareTranslations({
   [KEY.admin_users_last_active]: 'Last active',
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
+  [KEY.admin_closed_period_end_before_start]: 'End date must be after start date',
+  [KEY.admin_closed_period_end_before_today]: 'End date cannot be before today',
   [KEY.admin_casedocuments_title]: 'Manage Documents',
   [KEY.admin_sultenmenu_title]: 'Manage Lyche menu',
   [KEY.admin_events_recently_edited]: 'Recently edited',
@@ -1468,6 +1491,7 @@ export const en = prepareTranslations({
   [KEY.admin_information_translations_difference]:
     "There is a big difference in the number of characters between the Norwegian and English texts. Are you sure you'd like to save?",
   [KEY.admin_information_manage_title]: 'Administrate pages',
+  [KEY.admin_closed_message]: 'Samfundet is closed',
   [KEY.admin_closed_period_new_period]: 'Add new closed period',
   [KEY.admin_closed_period_edit_period]: 'Edit closed period',
   [KEY.admin_information_confirm_delete]: 'Are you sure to delete this informationpage?',
