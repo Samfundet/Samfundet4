@@ -25,8 +25,9 @@ $event-header-bg-dark: rgba(31, 31, 31, 0.9);
   // Display
   position: fixed;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
   // Sizing
   width: 100%;
   min-height: $event-header-height;
@@ -47,8 +48,6 @@ $event-header-bg-dark: rgba(31, 31, 31, 0.9);
 
   @include for-mobile-only {
     position: absolute;
-    flex-direction: column;
-    align-items: stretch;
     gap: 1em;
   }
 
@@ -69,15 +68,25 @@ $event-header-bg-dark: rgba(31, 31, 31, 0.9);
 .filter_row {
   display: flex;
   flex-direction: row;
+  justify-content: flex-start;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1em;
 }
 
 .search_bar {
-  width: 25em;
+  width: 20em;
   @include for-tablet-down {
-    width: 15em;
+    width: 14em;
   }
+  @include for-mobile-only {
+    width: 100%;
+  }
+}
+
+.filter_select {
+  min-width: 10em;
+
   @include for-mobile-only {
     width: 100%;
   }
@@ -90,7 +99,10 @@ $event-header-bg-dark: rgba(31, 31, 31, 0.9);
 .button_row {
   display: flex;
   gap: 1em;
+  margin-left: auto;
+  flex-shrink: 0;
   @include for-mobile-only {
+    margin-left: 0;
     justify-content: center;
     padding-bottom: 0.3em;
   }
@@ -98,13 +110,14 @@ $event-header-bg-dark: rgba(31, 31, 31, 0.9);
 
 .event_view_container {
   margin: 0 auto;
-  padding-top: $event-header-height;
+  padding-top: 10em;
   margin-top: 3.5em;
   padding-bottom: 5em;
   max-width: $content-max-size;
 
   @include for-mobile-only {
     margin-top: 9em;
+    padding-top: 16em;
   }
 }
 
