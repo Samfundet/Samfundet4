@@ -22,7 +22,7 @@ All callback endpoints are public because Billig returns the user's browser to t
 
 ## Configuration
 
-The checkout modal fetches `/api/billig/event/<event_id>/tickets/` when opened. This endpoint excludes theater groups (which require seat selection), offline price groups, and empty groups. Each group retains `ticket_limit` and includes `per_price_group_limit` and `group_limit`. An explicit limit, including zero, applies to both; a null limit defaults to 9 per online price group and 9 times the number of online price groups for the whole group. The frontend uses these values directly while tracking the user's selected quantities locally. The general event response still supplies the payment URL and ticket fee.
+The checkout modal fetches `/api/billig/event/<event_id>/tickets/` when opened. This endpoint includes theater groups with `is_theater_ticket_group` so the checkout can request seats, and excludes offline price groups and empty groups. Each group retains `ticket_limit` and includes `per_price_group_limit` and `group_limit`. An explicit limit, including zero, applies to both; a null limit defaults to 9 per online price group and 9 times the number of online price groups for the whole group. The frontend uses these values directly while tracking the user's selected quantities locally. The general event response still supplies the payment URL and ticket fee.
 
 `BILLIG_PAYMENT_URL` is the URL to which the browser posts the purchase form:
 

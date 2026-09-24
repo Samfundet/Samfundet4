@@ -133,7 +133,7 @@ def test_event_tickets_returns_public_ticket_groups(
     assert response.json()[0]['group_limit'] == 9
 
 
-def test_event_tickets_returns_empty_checkout_for_theater_only_event(
+def test_event_tickets_returns_theater_group_for_seat_selection(
     fixture_rest_client: APIClient,
     fixture_billig_event: BilligEvent,
     fixture_billig_ticket_group: BilligTicketGroup,
@@ -145,7 +145,7 @@ def test_event_tickets_returns_empty_checkout_for_theater_only_event(
     response: Response = fixture_rest_client.get(reverse(routes.samfundet__event_tickets, args=[fixture_billig_event.id]))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.json() == []
+    assert response.json()[0]['is_theater_ticket_group'] is True
 
 
 def test_event_tickets_returns_exact_hidden_reason(fixture_rest_client: APIClient, fixture_billig_event: BilligEvent) -> None:

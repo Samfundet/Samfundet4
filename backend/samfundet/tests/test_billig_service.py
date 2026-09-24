@@ -122,7 +122,7 @@ def test_get_ticket_groups_for_unknown_event_returns_empty_list() -> None:
     assert BilligService.get_ticket_groups_for_event(999_999) == []
 
 
-def test_get_ticket_groups_excludes_offline_prices_empty_groups_and_theater(fixture_billig_event: BilligEvent) -> None:
+def test_get_ticket_groups_excludes_offline_prices_and_empty_groups(fixture_billig_event: BilligEvent) -> None:
     visible_group = create_ticket_group(group_id=700, event=fixture_billig_event)
     create_price_group(price_group_id=7000, ticket_group=visible_group)
     create_price_group(price_group_id=7001, ticket_group=visible_group, netsale=False)
@@ -136,8 +136,9 @@ def test_get_ticket_groups_excludes_offline_prices_empty_groups_and_theater(fixt
 
     result = BilligService.get_ticket_groups_for_event(fixture_billig_event.id)
 
-    assert [group['id'] for group in result] == [visible_group.id]
+    assert [group['id'] for group in result] == [visible_group.id, theater_group.id]
     assert [price_group['id'] for price_group in result[0]['price_groups']] == [7000]
+    assert result[1]['is_theater_ticket_group'] is True
 
 
 @pytest.mark.parametrize(
@@ -178,6 +179,7 @@ def test_get_ticket_groups_pins_frontend_contract(
         'name',
         'is_sold_out',
         'is_almost_sold_out',
+        'is_theater_ticket_group',
         'ticket_limit',
         'per_price_group_limit',
         'group_limit',
