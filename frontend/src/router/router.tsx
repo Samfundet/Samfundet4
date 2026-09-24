@@ -11,6 +11,7 @@ import {
 import {
   AboutPage,
   AccountPage,
+  BilligPurchaseStatusPage,
   CaseDocumentsPage,
   ComponentPage,
   ContributorsPage,
@@ -152,6 +153,7 @@ export const router = createBrowserRouter(
           <Route element={<SiteFeatureGate feature="events"><Outlet /></SiteFeatureGate>}>
             <Route path={ROUTES.frontend.events} element={<EventsPage />} />
             <Route path={ROUTES.frontend.event} element={<EventPage />} />
+            <Route path={ROUTES.frontend.billig_status} element={<BilligPurchaseStatusPage />} />
           </Route>
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.casedocuments}
