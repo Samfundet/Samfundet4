@@ -43,20 +43,11 @@ export function BuyTicketModal({ event, isOpen, onClose }: BuyTicketModalProps) 
     <>
       <Modal isOpen={isOpen} className={styles.modal}>
         <div className={styles.buy_ticket_modal_header}>
-          {
-            // TODO: add conditional for hiding Samfundet logo (issue #1865)
-            // something like:
-            // event.external_event_organizer && (
-            //   isDarkmode ?
-            //   <img src={logoWhite} className={styles.samf_logo} alt="LogoWhite" /> :
-            //   <img src={logoBlack} className={styles.samf_logo} alt="LogoBlack" />
-            // )
-            isDarkmode ? (
-              <img src={logoWhite} className={styles.samf_logo} alt="LogoWhite" />
-            ) : (
-              <img src={logoBlack} className={styles.samf_logo} alt="LogoBlack" />
-            )
-          }
+          {isDarkmode ? (
+            <img src={logoWhite} className={styles.samf_logo} alt="Studentersamfundet" />
+          ) : (
+            <img src={logoBlack} className={styles.samf_logo} alt="Studentersamfundet" />
+          )}
           <IconButton
             title="close"
             icon="mdi:close"
@@ -66,7 +57,9 @@ export function BuyTicketModal({ event, isOpen, onClose }: BuyTicketModalProps) 
             onClick={onClose}
           />
         </div>
-        <H2 className={styles.modal_title}>{dbT(event, 'title')}</H2>
+        <div className={styles.title_block}>
+          <H2 className={styles.modal_title}>{dbT(event, 'title')}</H2>
+        </div>
         {billigEventId === undefined || isError ? (
           <div className={styles.container}>
             <p role="alert">{t(KEY.ticket_checkout_load_error)}</p>
