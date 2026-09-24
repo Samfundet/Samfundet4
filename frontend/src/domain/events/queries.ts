@@ -25,7 +25,7 @@ export interface Filters {
 
 export function useGetEventsPerDay(props?: Partial<UseQueryOptions<Record<string, EventDto[]>>>) {
   return useQuery({
-    queryKey: eventKeys.all,
+    queryKey: eventKeys.perDay(),
     queryFn: getEventsPerDay,
     ...props,
   });
@@ -41,7 +41,7 @@ export function useGetEvents(props?: Partial<UseQueryOptions<EventDto[]>>) {
 
 export function useGetEventsUpcoming(filters: Filters, props?: Partial<UseQueryOptions<EventsUpcomingResponse>>) {
   return useQuery({
-    queryKey: eventKeys.list(filters),
+    queryKey: eventKeys.upcoming(filters),
     queryFn: () => getEventsUpcoming(filters),
     ...props,
   });
@@ -54,7 +54,7 @@ export function useGetEventsUpcomingPaginated(
   props?: Partial<UseQueryOptions<EventsPaginationType<EventDto>>>,
 ) {
   return useQuery({
-    queryKey: eventKeys.paginatedList(page, pageSize, filters),
+    queryKey: eventKeys.paginated(page, pageSize, filters),
     queryFn: () => getEventsUpcomingPaginated(page, pageSize, filters),
     ...props,
   });
