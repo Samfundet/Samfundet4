@@ -2,7 +2,9 @@ import axios from 'axios';
 import { BACKEND_DOMAIN } from '~/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import type { BilligCheckoutTicketGroupDto } from './billigDtos';
+import type { BilligCheckoutTicketGroupDto, BilligPurchaseFailureDto } from './billigDtos';
+
+export const BILLIG_PURCHASE_CONTEXT_KEY = 'billig-purchase-context';
 
 export async function getBilligCheckoutTickets(billigEventId: number): Promise<BilligCheckoutTicketGroupDto[]> {
   const url =
@@ -40,6 +42,12 @@ export function buildBilligFormData({
   }
 
   return formData;
+}
+
+export async function getBilligPurchaseFailure(bsession: string): Promise<BilligPurchaseFailureDto> {
+  const url = `${BACKEND_DOMAIN}${ROUTES.backend.samfundet__purchase_failure_data}?bsession=${encodeURIComponent(bsession)}`;
+  const response = await axios.get<BilligPurchaseFailureDto>(url, { withCredentials: true });
+  return response.data;
 }
 
 export function submitBilligForm({
