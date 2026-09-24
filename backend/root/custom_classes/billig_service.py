@@ -20,6 +20,7 @@ from samfundet.models.billig import (
 )
 
 logger = logging.getLogger(__name__)
+DEFAULT_PRICE_GROUP_LIMIT = 9
 
 
 class BilligService:
@@ -75,12 +76,19 @@ class BilligService:
         if not price_groups:
             return None
 
+        ticket_limit = ticket_group.ticket_limit
+        per_price_group_limit = ticket_limit if ticket_limit is not None else DEFAULT_PRICE_GROUP_LIMIT
+        group_limit = ticket_limit if ticket_limit is not None else DEFAULT_PRICE_GROUP_LIMIT * len(price_groups)
+
         return {
             'id': ticket_group.id,
             'name': ticket_group.name,
             'is_sold_out': ticket_group.is_sold_out,
             'is_almost_sold_out': ticket_group.is_almost_sold_out,
+            'is_theater_ticket_group': ticket_group.is_theater_ticket_group,
             'ticket_limit': ticket_group.ticket_limit,
+            'per_price_group_limit': per_price_group_limit,
+            'group_limit': group_limit,
             'price_groups': price_groups,
         }
 

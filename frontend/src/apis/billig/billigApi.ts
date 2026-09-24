@@ -1,9 +1,18 @@
 import axios from 'axios';
 import { BACKEND_DOMAIN } from '~/constants';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import type { BilligPurchaseFailureDto } from './billigDtos';
+import type { BilligCheckoutTicketGroupDto, BilligPurchaseFailureDto } from './billigDtos';
 
 export const BILLIG_PURCHASE_CONTEXT_KEY = 'billig-purchase-context';
+
+export async function getBilligCheckoutTickets(billigEventId: number): Promise<BilligCheckoutTicketGroupDto[]> {
+  const url =
+    BACKEND_DOMAIN +
+    reverse({ pattern: ROUTES.backend.samfundet__event_tickets, urlParams: { eventId: billigEventId } });
+  const response = await axios.get<BilligCheckoutTicketGroupDto[]>(url, { withCredentials: true });
+  return response.data;
+}
 
 type BuildBilligFormDataArgs = {
   ticketQuantities: Record<number, number>;

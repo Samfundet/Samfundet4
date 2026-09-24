@@ -62,6 +62,7 @@ from .models.recruitment import (
     RecruitmentInterviewAvailability,
     RecruitmentPositionSharedInterviewGroup,
 )
+from .models.site_banner import SiteBanner
 from .organization.models import Gang, Organization
 from .models.model_choices import RecruitmentStatusChoices, RecruitmentPriorityChoices
 from .infopages.serializers.fields import info_page_slug_field
@@ -351,6 +352,52 @@ class EventSerializer(CustomBaseSerializer):
         return event
 
 
+class EventCloneSerializer(CustomBaseSerializer):
+    """Read-only serializer exposing exactly the fields that can be cloned from an existing event."""
+
+    custom_tickets = EventCustomTicketSerializer(many=True, read_only=True)
+    image = serializers.SerializerMethodField(method_name='get_image', read_only=True)
+
+    class Meta:
+        model = Event
+        fields = [
+            'id',
+            'title_nb',
+            'title_en',
+            'description_long_nb',
+            'description_long_en',
+            'description_short_nb',
+            'description_short_en',
+            'start_dt',
+            'end_dt',
+            'category',
+            'host',
+            'location',
+            'capacity',
+            'age_restriction',
+            'ticket_type',
+            'custom_tickets',
+            'spotify_uri',
+            'youtube_link',
+            'youtube_embed',
+            'facebook_link',
+            'soundcloud_link',
+            'instagram_link',
+            'x_link',
+            'lastfm_link',
+            'vimeo_link',
+            'general_link',
+            'image',
+            'visibility_from_dt',
+            'visibility_to_dt',
+        ]
+        read_only_fields = fields
+
+    def get_image(self, obj: Event) -> dict:
+        img = obj.image
+        return {'id': img.id, 'urls': img.urls, 'title': img.title, 'tags': list(img.tags.values_list('id', flat=True))}
+
+
 class EventGroupSerializer(CustomBaseSerializer):
     class Meta:
         model = EventGroup
@@ -367,6 +414,21 @@ class ClosedPeriodSerializer(CustomBaseSerializer):
     class Meta:
         model = ClosedPeriod
         fields = '__all__'
+
+
+class SiteBannerSerializer(CustomBaseSerializer):
+    class Meta:
+        model = SiteBanner
+        fields = [
+            'id',
+            'version',
+            'text_nb',
+            'text_en',
+            'url',
+            'new_tab',
+            'start_at',
+            'end_at',
+        ]
 
 
 class ChangePasswordSerializer(serializers.Serializer):
