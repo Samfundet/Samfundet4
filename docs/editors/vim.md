@@ -6,55 +6,56 @@ This guide hasn't been written yet. Maybe you want to? :-)
 
 # Neovim setup
 
-Depending on you package manager and general setup this may differ. Just ensure pyright and ruff and vstls is installed via mason or your package manager of choice.
+The main issue is to get Pyright to recognize the project dependencies and disable all the annoying lsp and linting messages.
 
-You might have to add the following to the pyproject.toml file:
+## Prerequisites
+
+Ensure you have uv, npm and yarn installed on your machine.
+
+You will need Pyright, Ruff, DAP and neotest installed via your package manager (like mason for example).
+
+For the linters install mypy and stylelint.
+
+_Example_
 
 ```
-[tool.pyright]
-include = ["samfundet"]
+:MasonInstall mypy stylelint
+```
 
-exclude = [
-"**/**pycache**",
-"**/migrations",
-".venv",
-"venv",
-"node_modules",
-"dist",
-"build",
-"database",
-"logs",
-"diagrams",
-]
+Then restart your LSP:
 
-typeCheckingMode = "off" # Change to "strict" if you want stricter checks
+```
+:LspRestart
+```
 
-venvPath = "."
-venv = ".venv"
+## Configuration
 
-stubPath = "stubs"
+within the project root directory, create a pyrightconfig.json and paste the following lines:
 
-reportImplicitOverride = "none"
-reportGeneralTypeIssues = "none"
+```
+{
+  "extraPaths": ["backend"],
+  "venvPath": "backend",
+  "venv": ".venv",
+  "typeCheckingMode": "off",
+  "reportInvalidTypeForm": "none"
+}
+```
 
-useLibraryCodeForTypes = true
+Then, in the backend/ directory generate the virtual environment and install dependencies:
 
-reportMissingImports = false
-reportOptionalSubscript = false
-reportOptionalCall = false
+```
+uv sync
+```
 
-[tool.pyright.strict]
-"samfundet/management/commands/_" = true
-"samfundet/api/_" = true
-"samfundet/core/\*" = true
+Now go into the frontend/ directory and install the dependencies with yarn:
 
-[tool.pyright.report]
-reportUnnecessaryTypeIgnoreComment = "none"
-reportUnnecessaryCast = "none"
-reportUnnecessaryIsInstance = "none"
-reportUnusedImport = "warning"
-reportUnusedVariable = "warning"
-reportUntypedFunctionDecorator = "none"
-reportCallInDefaultInitializer = "none"
+```
+yarn install
+```
 
+You might have to install tanstack specifically as well:
+
+```
+yarn add @tanstack/react-query
 ```
