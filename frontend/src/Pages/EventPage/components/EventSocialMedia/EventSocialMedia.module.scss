@@ -1,0 +1,24 @@
+.container {
+  width: 100%;
+  max-width: 50em;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: inherit;
+  text-decoration: underline;
+}

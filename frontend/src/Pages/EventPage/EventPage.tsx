@@ -11,6 +11,7 @@ import { eventKeys } from '~/queryKeys';
 import { dbT, imageUrl } from '~/utils';
 import styles from './EventPage.module.scss';
 import { EventInformation } from './components/EventInformation/EventInformation';
+import { EventSocialMedia } from './components/EventSocialMedia/EventSocialMedia';
 import { EventTable } from './components/EventTable';
 
 export function EventPage() {
@@ -56,6 +57,7 @@ export function EventPage() {
               <SamfMarkdown markdown={dbT(event, 'description_long')} />
             </div>
           </div>
+          {event && <EventSocialMedia event={event} />}
           <ExpandableHeader label={t(KEY.common_details)} className={styles.expandable_header}>
             {/* Info table */}
             <div className={styles.info_list}>{event && <EventTable event={event} />}</div>

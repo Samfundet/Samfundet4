@@ -30,6 +30,7 @@ $track-padding: calc(($switch-height - $ball-size) / 2);
 }
 
 .track {
+  display: block;
   cursor: pointer;
   width: $switch-width;
   height: $switch-height;
