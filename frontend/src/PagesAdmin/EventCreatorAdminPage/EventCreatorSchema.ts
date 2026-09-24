@@ -30,6 +30,7 @@ import {
   EVENT_YOUTUBE_EMBED,
   EVENT_YOUTUBE_LINK,
 } from '~/schema/event';
+import { getYouTubeVideoId } from '~/utils/socialMedia';
 
 const event_custom_ticket = z.object({
   id: z.number(),
@@ -79,12 +80,17 @@ const eventSchemaBase = z.object({
   visibility_to_dt: EVENT_VISIBILITY_TO_DT,
 });
 
-export const eventSchema = eventSchemaBase.refine(
-  (data) => !data.visibility_from_dt || !data.start_dt || new Date(data.visibility_from_dt) < new Date(data.start_dt),
-  {
-    message: KEY.event_publication_date_must_be_before_start,
-    path: ['visibility_from_dt'],
-  },
-);
+export const eventSchema = eventSchemaBase
+  .refine(
+    (data) => !data.visibility_from_dt || !data.start_dt || new Date(data.visibility_from_dt) < new Date(data.start_dt),
+    {
+      message: KEY.event_publication_date_must_be_before_start,
+      path: ['visibility_from_dt'],
+    },
+  )
+  .refine((data) => !data.youtube_embed || !!getYouTubeVideoId(data.youtube_link), {
+    message: KEY.event_youtube_video_required,
+    path: ['youtube_link'],
+  });
 
 export type EventFormType = z.infer<typeof eventSchema>;
