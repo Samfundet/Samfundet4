@@ -317,6 +317,12 @@ export const KEY = {
   event_must_be_valid_url: 'event_must_be_valid_url',
   event_must_be_valid_spotify_uri: 'event_must_be_valid_spotify_uri',
   event_publication_date_required: 'event_publication_date_required',
+  event_create_from_existing_event: 'event_create_from_existing_event',
+  event_copy_from_registered_event: 'event_copy_from_registered_event',
+  event_create_new_event: 'event_create_new_event',
+  event_search_for_an_existing_event: 'event_search_for_an_existing_event',
+  event_selected_existing_event: 'event_selected_existing_event',
+  event_no_results: 'event_no_results',
   event_publication_date_must_be_before_start: 'event_publication_date_must_be_before_start',
 
   // Purchase Ticket Info:
@@ -336,6 +342,9 @@ export const KEY = {
   sales_conditions: 'sales_conditions',
   ticket_card_unavailable_message: 'ticket_card_unavailable_message',
   ticket_requires_membership_message: 'ticket_requires_membership_message',
+  ticket_checkout_load_error: 'ticket_checkout_load_error',
+  ticket_checkout_empty: 'ticket_checkout_empty',
+  ticket_checkout_retry: 'ticket_checkout_retry',
 
   event_external_host_message: 'event_external_host_message',
 
@@ -636,6 +645,9 @@ export const KEY = {
   adminpage_gangs_create: 'adminpage_gangs_create',
   admin_opening_hours_hint: 'admin_opening_hours_hint',
   admin_closed_period_title: 'admin_closed_period_title',
+  admin_closed_period_end_before_start: 'admin_closed_period_end_before_start',
+  admin_closed_period_end_before_today: 'admin_closed_period_end_before_today',
+  admin_closed_message: 'admin_closed_message',
   admin_casedocuments_title: 'admin_casedocuments_title',
   admin_sultenmenu_title: 'admin_sultenmenu_title',
   admin_gangsadminpage_webpage: 'admin_gangsadminpage_webpage',

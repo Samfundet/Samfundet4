@@ -19,25 +19,17 @@ import {
 } from '~/Components';
 import { validEmail } from '~/Forms/util';
 import { BILLIG_PURCHASE_CONTEXT_KEY, buildBilligFormData, submitBilligForm } from '~/apis/billig/billigApi';
-import type { BilligPriceGroupDto, BilligTicketGroupDto } from '~/apis/billig/billigDtos';
+import type { BilligCheckoutTicketGroupDto } from '~/apis/billig/billigDtos';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { INFORMATION_PAGES } from '~/routes/samf-three';
 import styles from './BuyTicketModal.module.scss';
 
-const DEFAULT_PRICE_GROUP_LIMIT = 9;
 const TICKET_TYPE_EMAIL = 'email';
 const TICKET_TYPE_MEMBERSHIP = 'membershipNumber';
 
 type TicketQuantityMap = Record<string, number>;
-type BilligTicketGroupOption = {
-  id: number;
-  name: string;
-  priceGroups: BilligPriceGroupDto[];
-  perPriceGroupLimit: number;
-  groupLimit: number;
-};
 
 const createBuyTicketFormSchema = (t: (key: string) => string) =>
   z
@@ -81,56 +73,23 @@ type BuyTicketFormType = z.infer<ReturnType<typeof createBuyTicketFormSchema>>;
 
 interface BuyTicketFormProps {
   event: EventDto;
+  ticketGroups: BilligCheckoutTicketGroupDto[];
   initialValues?: Partial<BuyTicketFormType>;
 }
 
-function toTicketGroups(event: EventDto): BilligTicketGroupOption[] {
-  return (
-    event.billig?.ticket_groups
-      .filter((ticketGroup) => !ticketGroup.is_theater_ticket_group)
-      .map((ticketGroup: BilligTicketGroupDto) => {
-        const priceGroups = ticketGroup.price_groups.filter((priceGroup) => priceGroup.netsale);
-        if (priceGroups.length === 0) {
-          return undefined;
-        }
-        const perPriceGroupLimit = ticketGroup.ticket_limit ?? DEFAULT_PRICE_GROUP_LIMIT;
-        const groupLimit = ticketGroup.ticket_limit ?? DEFAULT_PRICE_GROUP_LIMIT * priceGroups.length;
-
-        return {
-          id: ticketGroup.id,
-          name: ticketGroup.name,
-          priceGroups,
-          perPriceGroupLimit,
-          groupLimit,
-        };
-      })
-      .filter((ticketGroup): ticketGroup is BilligTicketGroupOption => ticketGroup !== undefined) ?? []
-  );
-}
-
 function getSelectedTicketCount(
-  ticketGroup: BilligTicketGroupOption,
+  ticketGroup: BilligCheckoutTicketGroupDto,
   ticketQuantities: TicketQuantityMap | undefined,
 ): number {
-  return ticketGroup.priceGroups.reduce(
+  return ticketGroup.price_groups.reduce(
     (count, priceGroup) => count + (ticketQuantities?.[String(priceGroup.id)] ?? 0),
     0,
   );
 }
 
-export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
+export function BuyTicketForm({ event, ticketGroups, initialValues }: BuyTicketFormProps) {
   const { t } = useTranslation();
-  const ticketGroups = useMemo(() => toTicketGroups(event), [event]);
-  const ticketOptions = useMemo(
-    () =>
-      ticketGroups.flatMap((ticketGroup) =>
-        ticketGroup.priceGroups.map((priceGroup) => ({
-          ...priceGroup,
-          ticketGroupId: ticketGroup.id,
-        })),
-      ),
-    [ticketGroups],
-  );
+  const ticketOptions = useMemo(() => ticketGroups.flatMap((ticketGroup) => ticketGroup.price_groups), [ticketGroups]);
   const eventCanUseMembershipCard = ticketOptions.some((priceGroup) => priceGroup.can_be_put_on_card);
 
   const ticketQuantityDefaults = useMemo(
@@ -146,7 +105,12 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
     () => ({
       ticketQuantities: {
         ...ticketQuantityDefaults,
-        ...(initialValues?.ticketQuantities ?? {}),
+        ...Object.fromEntries(
+          Object.keys(ticketQuantityDefaults).map((priceGroupId) => [
+            priceGroupId,
+            initialValues?.ticketQuantities?.[priceGroupId] ?? 0,
+          ]),
+        ),
       },
       ticketType:
         eventCanUseMembershipCard && initialValues?.ticketType !== TICKET_TYPE_EMAIL
@@ -219,17 +183,6 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
       return;
     }
 
-    if (
-      event.billig.ticket_groups.some(
-        (ticketGroup) =>
-          ticketGroup.is_theater_ticket_group &&
-          ticketGroup.price_groups.some((priceGroup) => (data.ticketQuantities[String(priceGroup.id)] ?? 0) > 0),
-      )
-    ) {
-      toast.error(t(KEY.common_something_went_wrong));
-      return;
-    }
-
     const formData = buildBilligFormData({
       ticketQuantities: Object.fromEntries(
         Object.entries(data.ticketQuantities).map(([priceGroupId, quantity]) => [Number(priceGroupId), quantity]),
@@ -270,11 +223,11 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
             return (
               <div key={ticketGroup.id} className={styles.ticket_group_section}>
                 {ticketGroups.length > 1 && <H3 className={styles.ticket_group_title}>{ticketGroup.name}</H3>}
-                {ticketGroup.priceGroups.map((priceGroup) => {
+                {ticketGroup.price_groups.map((priceGroup) => {
                   const currentValue = ticketQuantities?.[String(priceGroup.id)] ?? 0;
                   const maxSelectable = Math.min(
-                    ticketGroup.perPriceGroupLimit,
-                    currentValue + Math.max(ticketGroup.groupLimit - selectedCountInGroup, 0),
+                    ticketGroup.per_price_group_limit,
+                    currentValue + Math.max(ticketGroup.group_limit - selectedCountInGroup, 0),
                   );
 
                   return (
@@ -292,7 +245,7 @@ export function BuyTicketForm({ event, initialValues }: BuyTicketFormProps) {
                           <FormItem>
                             <FormControl>
                               <Dropdown
-                                options={[...Array(ticketGroup.perPriceGroupLimit + 1).keys()].map((num) => ({
+                                options={[...Array(ticketGroup.per_price_group_limit + 1).keys()].map((num) => ({
                                   label: `${num}`,
                                   value: num.toString(),
                                   disabled: num > maxSelectable,
