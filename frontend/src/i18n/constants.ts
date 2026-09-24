@@ -107,6 +107,7 @@ export const KEY = {
   common_events: 'common_events',
   common_repeat: 'common_repeat',
   common_venues: 'common_venues',
+  common_copy: 'common_copy',
   common_shortcuts: 'common_shortcuts',
   common_sulten: 'common_sulten',
   common_logout: 'common_logout',
@@ -739,7 +740,6 @@ export const KEY = {
   notfoundpage_title: 'notfoundpage_title',
   notfoundpage_contact_prompt: 'notfoundpage_contact_prompt',
   common_publication_date: 'common_publication_date',
-  eventsadminpage_successful_delete_toast: 'eventsadminpage_successful_delete_toast',
   promo_media_description: 'promo_media_description',
   promo_media_invalid: 'promo_media_invalid',
 
