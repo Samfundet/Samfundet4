@@ -1,0 +1,1 @@
+export { WeeklyOpeningPage } from './WeeklyOpeningPage';
