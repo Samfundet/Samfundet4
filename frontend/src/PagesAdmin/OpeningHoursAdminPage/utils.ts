@@ -10,12 +10,18 @@ export function getVenueDaySchedule(venue: VenueDto, weekday: Day): VenueDaySche
   };
 }
 
-export function updateVenueDaySchedule(venue: VenueDto, weekday: Day, schedule: VenueDaySchedule): VenueDto {
+export function applyVenueDayScheduleChanges(
+  venue: VenueDto,
+  weekday: Day,
+  changes: Partial<VenueDaySchedule>,
+): VenueDto {
+  const currentSchedule = getVenueDaySchedule(venue, weekday);
+
   return {
     ...venue,
-    [`is_open_${weekday}`]: schedule.is_open,
-    [`opening_${weekday}`]: schedule.opening,
-    [`closing_${weekday}`]: schedule.closing,
+    [`is_open_${weekday}`]: changes.is_open ?? currentSchedule.is_open,
+    [`opening_${weekday}`]: changes.opening ?? currentSchedule.opening,
+    [`closing_${weekday}`]: changes.closing ?? currentSchedule.closing,
   };
 }
 

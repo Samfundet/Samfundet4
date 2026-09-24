@@ -12,7 +12,7 @@ import { AdminPage } from '../AdminPageLayout';
 import styles from './OpeningHoursAdminPage.module.scss';
 import { VenueOpeningHoursBox } from './VenueOpeningHoursBox';
 import type { VenueDaySchedule } from './types';
-import { getVenueDaySchedule, updateVenueDaySchedule } from './utils';
+import { applyVenueDayScheduleChanges } from './utils';
 
 export function OpeningHoursAdminPage() {
   const { t } = useTranslation();
@@ -34,8 +34,7 @@ export function OpeningHoursAdminPage() {
       return currentVenues.map((venue) => {
         if (venue.slug !== venueSlug) return venue;
 
-        const currentSchedule = getVenueDaySchedule(venue, weekday);
-        return updateVenueDaySchedule(venue, weekday, { ...currentSchedule, ...changes });
+        return applyVenueDayScheduleChanges(venue, weekday, changes);
       });
     });
   }
