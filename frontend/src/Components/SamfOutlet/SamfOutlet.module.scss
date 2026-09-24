@@ -1,6 +1,6 @@
 @use 'src/constants' as *;
 
 .navbar_outlet {
-  padding-top: $navbar-height;
+  padding-top: calc($navbar-height + var(--site-banner-offset, 0px));
   flex: 1;
 }

@@ -31,4 +31,15 @@ export {
   useGetInfoPageOwnerOptions,
 } from './infopages';
 export { tagKeys } from './tags';
+export {
+  closedPeriodKeys,
+  useCreateClosedPeriod,
+  useDeleteClosedPeriod,
+  useUpdateClosedPeriod,
+  useGetActiveClosedPeriods,
+  useGetClosedPeriod,
+  useGetClosedPeriods,
+  MESSAGE,
+  DATE,
+} from './closedPeriods';
 export { gangKeys, useGetOrganizedGangs, useGangMutations } from './gangs';

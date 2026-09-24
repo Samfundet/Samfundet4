@@ -10,6 +10,7 @@ from django.urls import path, include
 import samfundet.view.mdb_views
 import samfundet.view.user_views
 import samfundet.view.event_views
+import samfundet.view.site_banners
 import samfundet.view.sulten_views
 import samfundet.view.general_views
 from samfundet.view import billig_views
@@ -47,6 +48,7 @@ router.register('key-value', samfundet.view.general_views.KeyValueView, 'key_val
 router.register('organizations', samfundet.view.general_views.OrganizationView, 'organizations')
 router.register('merch', samfundet.view.general_views.MerchView, 'merch')
 router.register('role', samfundet.view.general_views.RoleView, 'role')
+router.register('site-banners', samfundet.view.site_banners.SiteBannerView, 'site_banners')
 
 ########## Recruitment ##########
 router.register('recruitment', recruitment_views.RecruitmentView, 'recruitment')
@@ -97,6 +99,7 @@ urlpatterns = [
     path('impersonate/', samfundet.view.user_views.ImpersonateView.as_view(), name='impersonate'),
     path('events-per-day/', samfundet.view.event_views.EventPerDayView.as_view(), name='eventsperday'),
     path('events-upcomming/', samfundet.view.event_views.EventsUpcomingView.as_view(), name='eventsupcomming'),
+    path('events/<int:pk>/clone/', samfundet.view.event_views.EventCloneView.as_view(), name='event-clone'),
     path('isclosed/', samfundet.view.general_views.IsClosedView().as_view(), name='isclosed'),
     path('home/', samfundet.view.general_views.HomePageView().as_view(), name='home'),
     path('assign_group/', samfundet.view.user_views.AssignGroupView.as_view(), name='assign_group'),
