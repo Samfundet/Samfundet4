@@ -25,7 +25,7 @@ export function applyVenueDayScheduleChanges(
   };
 }
 
-export function getVenueOpeningHoursUpdates(venues: VenueDto[], draftVenues: VenueDto[]): VenueOpeningHoursUpdate[] {
+export function getVenueOpeningHoursChanges(venues: VenueDto[], draftVenues: VenueDto[]): VenueOpeningHoursUpdate[] {
   const draftVenuesBySlug = new Map(draftVenues.map((venue) => [venue.slug, venue]));
 
   return venues.flatMap((venue) => {
