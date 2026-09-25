@@ -256,6 +256,8 @@ export const KEY = {
   // Billig
 
   common_buy_ticket: 'common_buy_ticket',
+  common_share: 'common_share',
+  common_link_copied: 'common_link_copied',
   common_sold_out: 'common_sold_out',
   common_almost_sold_out: 'common_almost_sold_out',
 

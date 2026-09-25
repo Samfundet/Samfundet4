@@ -10,24 +10,27 @@ import { BuyTicketModal } from './components';
 type BuyButtonProps = {
   event: EventDto;
   ticketSaleState: Pick<BilligEventDto, 'is_sold_out' | 'is_almost_sold_out'>;
+  className?: string;
 };
 
-export function BuyEventTicket({ event, ticketSaleState }: BuyButtonProps) {
+export function BuyEventTicket({ event, ticketSaleState, className }: BuyButtonProps) {
   const { t } = useTranslation();
-  const [buttonText, setButtonText] = useState<string>(t(KEY.common_buy));
+  const [buttonText, setButtonText] = useState<string>(t(KEY.common_buy_ticket));
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (ticketSaleState.is_sold_out) {
       setButtonText(t(KEY.common_sold_out));
-    } else {
+    } else if (ticketSaleState.is_almost_sold_out) {
       setButtonText(t(KEY.common_almost_sold_out));
+    } else {
+      setButtonText(t(KEY.common_buy_ticket));
     }
   }, [ticketSaleState, t]);
 
   return (
     <>
-      <Button theme="primary" onClick={() => setShowModal(true)}>
+      <Button theme="primary" className={className} onClick={() => setShowModal(true)}>
         <Icon icon="ph:ticket-bold" />
         {buttonText}
       </Button>
