@@ -1,12 +1,12 @@
 import { Icon } from '@iconify/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '~/Components';
 import { BuyEventTicket } from '~/Components/BuyEventTicket/BuyEventTicket';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { EventTicketType } from '~/types';
-import { dbT, getEventCategoryKey, getTicketTypeKey } from '~/utils';
+import { dbT, getTicketTypeKey } from '~/utils';
 import { getEventAgeRestrictionKey } from '../AgeLimitRow/utils';
 import styles from './EventInformation.module.scss';
 
@@ -14,9 +14,11 @@ type EventInformationProps = {
   event: EventDto;
 };
 
+type ShareFeedback = 'copied' | 'shared' | 'unavailable';
+
 export function EventInformation({ event }: EventInformationProps) {
   const { t, i18n } = useTranslation();
-  const [copied, setCopied] = useState(false);
+  const [shareFeedback, setShareFeedback] = useState<{ kind: ShareFeedback; id: number } | null>(null);
   const date = new Date(event.start_dt);
   const locale = i18n.language === 'nb' ? 'nb-NO' : 'en-US';
   const fullDate = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }).format(date);
@@ -27,26 +29,48 @@ export function EventInformation({ event }: EventInformationProps) {
   const doorsTime = event.doors_time?.split(':').slice(0, 2).join(':');
   const ticketPrices = event.billig?.ticket_groups.flatMap((group) => group.price_groups) ?? [];
 
+  useEffect(() => {
+    if (!shareFeedback) return;
+    const timeout = window.setTimeout(() => setShareFeedback(null), 2000);
+    return () => window.clearTimeout(timeout);
+  }, [shareFeedback]);
+
+  function showShareFeedback(feedback: ShareFeedback) {
+    setShareFeedback((previous) => ({ kind: feedback, id: (previous?.id ?? 0) + 1 }));
+  }
+
   async function shareEvent() {
     const shareData = { title: dbT(event, 'title'), url: window.location.href };
     if (navigator.share) {
       try {
         await navigator.share(shareData);
+        showShareFeedback('shared');
       } catch {
         // The native share dialog may be dismissed without sharing.
       }
     } else if (navigator.clipboard) {
-      await navigator.clipboard.writeText(shareData.url);
-      setCopied(true);
+      try {
+        await navigator.clipboard.writeText(shareData.url);
+        showShareFeedback('copied');
+      } catch {
+        showShareFeedback('unavailable');
+      }
+    } else {
+      showShareFeedback('unavailable');
     }
   }
 
+  const shareLabel =
+    shareFeedback?.kind === 'copied'
+      ? t(KEY.common_link_copied)
+      : shareFeedback?.kind === 'shared'
+        ? t(KEY.common_shared)
+        : shareFeedback?.kind === 'unavailable'
+          ? t(KEY.common_share_unavailable)
+          : t(KEY.common_share);
+
   return (
     <section className={styles.information_card}>
-      <div className={styles.categories}>
-        <span className={styles.category}>{t(getEventCategoryKey(event.category))}</span>
-      </div>
-
       <div className={styles.details_grid}>
         <div className={styles.detail}>
           <div className={styles.detail_label}>
@@ -116,7 +140,13 @@ export function EventInformation({ event }: EventInformationProps) {
         )}
         <Button theme="secondary" className={styles.share_button} onClick={shareEvent}>
           <Icon icon="mdi:share-variant-outline" />
-          {copied ? t(KEY.common_link_copied) : t(KEY.common_share)}
+          <span
+            key={shareFeedback?.id ?? 0}
+            className={shareFeedback ? styles.share_feedback : undefined}
+            aria-live="polite"
+          >
+            {shareLabel}
+          </span>
         </Button>
       </div>
     </section>

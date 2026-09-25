@@ -43,7 +43,7 @@
 }
 
 .info_column {
-  order: 2;
+  order: 3;
 }
 
 .text_title {
@@ -56,8 +56,23 @@
   letter-spacing: -0.035em;
 }
 
+.categories {
+  display: flex;
+  order: 2;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+}
+
+.category {
+  border: 1px solid #d5d5d9;
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.9rem;
+}
+
 .description_section {
-  order: 3;
+  order: 4;
   margin-top: 2rem;
   padding-top: 2.25rem;
   border-top: 1px solid #dedee2;
@@ -69,7 +84,7 @@
 
 .description {
   max-width: 740px;
-  margin: 0 auto;
+  margin: 0;
   font-size: 1.05rem;
   line-height: 1.5;
 }
@@ -82,7 +97,7 @@
 @media (min-width: 1000px) {
   .content_panel {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(380px, 0.75fr);
+    grid-template-columns: minmax(0, 1.86fr) minmax(300px, 1fr);
     column-gap: 3rem;
     align-items: start;
   }
@@ -94,6 +109,10 @@
   }
 
   .text_title {
+    margin-bottom: 0.75rem;
+  }
+
+  .categories {
     margin-bottom: 1.5rem;
   }
 

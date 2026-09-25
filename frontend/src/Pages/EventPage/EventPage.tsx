@@ -7,7 +7,7 @@ import { getEvent } from '~/api';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { eventKeys } from '~/queryKeys';
-import { dbT, imageUrl } from '~/utils';
+import { dbT, getEventCategoryKey, imageUrl } from '~/utils';
 import styles from './EventPage.module.scss';
 import { EventInformation } from './components/EventInformation/EventInformation';
 
@@ -38,6 +38,9 @@ export function EventPage() {
           <main className={styles.content_panel}>
             <div className={styles.main_column}>
               <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>
+              <div className={styles.categories}>
+                <span className={styles.category}>{t(getEventCategoryKey(event.category))}</span>
+              </div>
               <div className={styles.description_section}>
                 <div className={styles.description}>
                   {dbT(event, 'description_short') && (

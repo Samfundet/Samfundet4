@@ -258,6 +258,8 @@ export const KEY = {
   common_buy_ticket: 'common_buy_ticket',
   common_share: 'common_share',
   common_link_copied: 'common_link_copied',
+  common_shared: 'common_shared',
+  common_share_unavailable: 'common_share_unavailable',
   common_sold_out: 'common_sold_out',
   common_almost_sold_out: 'common_almost_sold_out',
 

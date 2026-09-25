@@ -242,6 +242,8 @@ export const nb = prepareTranslations({
   [KEY.common_buy_ticket]: 'Kjøp billett',
   [KEY.common_share]: 'Del',
   [KEY.common_link_copied]: 'Lenke kopiert',
+  [KEY.common_shared]: 'Delt',
+  [KEY.common_share_unavailable]: 'Kunne ikke dele',
   [KEY.common_sold_out]: 'Utsolgt',
   [KEY.common_almost_sold_out]: 'Få billetter igjen',
 
@@ -1044,6 +1046,8 @@ export const en = prepareTranslations({
   [KEY.common_buy_ticket]: 'Buy ticket',
   [KEY.common_share]: 'Share',
   [KEY.common_link_copied]: 'Link copied',
+  [KEY.common_shared]: 'Shared',
+  [KEY.common_share_unavailable]: 'Could not share',
   [KEY.common_sold_out]: 'Sold out',
   [KEY.common_almost_sold_out]: 'Few tickets left',
 
