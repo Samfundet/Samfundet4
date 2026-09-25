@@ -25,6 +25,8 @@
 }
 
 .content_panel {
+  display: flex;
+  flex-direction: column;
   max-width: 1330px;
   min-height: 800px;
   margin: 1rem auto 0;
@@ -36,16 +38,26 @@
   }
 }
 
+.main_column {
+  display: contents;
+}
+
+.info_column {
+  order: 2;
+}
+
 .text_title {
+  order: 1;
   // margin: 0 0 1rem;
   padding: 0;
-  text-align: center;
+  text-align: left;
   font-size: clamp(2.25rem, 3.4vw, 3rem);
   line-height: 1.15;
   letter-spacing: -0.035em;
 }
 
 .description_section {
+  order: 3;
   margin-top: 2rem;
   padding-top: 2.25rem;
   border-top: 1px solid #dedee2;
@@ -67,6 +79,42 @@
   font-weight: 700;
 }
 
+@media (min-width: 1000px) {
+  .content_panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(380px, 0.75fr);
+    column-gap: 3rem;
+    align-items: start;
+  }
+
+  .main_column {
+    display: block;
+    grid-column: 1;
+    min-width: 0;
+  }
+
+  .text_title {
+    margin-bottom: 1.5rem;
+  }
+
+  .description_section {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .info_column {
+    grid-column: 2;
+    min-width: 0;
+    padding-left: 2.25rem;
+    border-left: 1px solid #dedee2;
+
+    @include theme-dark {
+      border-color: $grey-1;
+    }
+  }
+}
+
 @media (max-width: 850px) {
   .content_panel {
     margin: 0 1rem;
@@ -80,11 +128,23 @@
   }
 
   .content_panel {
-    margin: 0.75rem;
-    padding: 1rem 1rem 2.5rem;
+    min-height: 0;
+    margin: 0.75rem 1rem;
+    padding: 1.25rem 1.25rem 2rem;
   }
 
   .text_title {
     margin-bottom: 0.5rem;
+    font-size: 1.6rem;
+    line-height: 1.2;
+  }
+
+  .description_section {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+  }
+
+  .description {
+    font-size: 1rem;
   }
 }

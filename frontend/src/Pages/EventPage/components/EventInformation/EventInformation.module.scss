@@ -5,7 +5,7 @@
 .information_card {
   width: min(100%, 800px);
   margin: 0 auto;
-  padding: 0.5rem 3rem 2rem;
+  padding: 0.5rem 0 0;
   background: $white;
 
   @include theme-dark {
@@ -15,7 +15,7 @@
 
 .categories {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: 0.45rem;
   margin-bottom: 0.75rem;
@@ -30,7 +30,7 @@
 
 .details_grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: 2rem;
   row-gap: 2rem;
 }
@@ -98,19 +98,31 @@
   color: #66130f;
 }
 
-@media (max-width: 650px) {
-  .information_card {
-    padding: 0.5rem 1.5rem 1.5rem;
+@media (min-width: 1000px) {
+  .categories {
+    margin-bottom: 1.5rem;
   }
 
   .details_grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.5rem;
+    row-gap: 1.75rem;
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 650px) {
   .details_grid {
     grid-template-columns: 1fr;
     row-gap: 1.25rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .ticket_actions {
+    margin-top: 1.5rem;
+  }
+
+  .buy_button,
+  .registration_button {
+    min-height: 50px;
   }
 }

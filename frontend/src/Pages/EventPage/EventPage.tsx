@@ -36,16 +36,20 @@ export function EventPage() {
           </div>
 
           <main className={styles.content_panel}>
-            <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>
-            <EventInformation event={event} />
-            <div className={styles.description_section}>
-              <div className={styles.description}>
-                {dbT(event, 'description_short') && (
-                  <p className={styles.text_short}>{dbT(event, 'description_short')}</p>
-                )}
-                <SamfMarkdown markdown={dbT(event, 'description_long')} />
+            <div className={styles.main_column}>
+              <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>
+              <div className={styles.description_section}>
+                <div className={styles.description}>
+                  {dbT(event, 'description_short') && (
+                    <p className={styles.text_short}>{dbT(event, 'description_short')}</p>
+                  )}
+                  <SamfMarkdown markdown={dbT(event, 'description_long')} />
+                </div>
               </div>
             </div>
+            <aside className={styles.info_column}>
+              <EventInformation event={event} />
+            </aside>
           </main>
         </>
       )}
