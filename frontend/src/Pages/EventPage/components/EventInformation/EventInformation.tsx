@@ -6,7 +6,7 @@ import { BuyEventTicket } from '~/Components/BuyEventTicket/BuyEventTicket';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { EventTicketType } from '~/types';
-import { dbT, getTicketTypeKey } from '~/utils';
+import { dbT, getEventCategoryKey, getTicketTypeKey } from '~/utils';
 import { getEventAgeRestrictionKey } from '../AgeLimitRow/utils';
 import styles from './EventInformation.module.scss';
 
@@ -19,7 +19,6 @@ export function EventInformation({ event }: EventInformationProps) {
   const [copied, setCopied] = useState(false);
   const date = new Date(event.start_dt);
   const locale = i18n.language === 'nb' ? 'nb-NO' : 'en-US';
-  const month = new Intl.DateTimeFormat(locale, { month: 'short' }).format(date).replace('.', '');
   const fullDate = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }).format(date);
   const startTime = new Intl.DateTimeFormat('nb-NO', { hour: '2-digit', minute: '2-digit' }).format(date);
   const endTime = new Intl.DateTimeFormat('nb-NO', { hour: '2-digit', minute: '2-digit' }).format(
@@ -43,22 +42,72 @@ export function EventInformation({ event }: EventInformationProps) {
   }
 
   return (
-    <div className={styles.event_information_wrapper}>
-      <div className={styles.date_row}>
-        <div className={styles.date_tile} aria-hidden="true">
-          <span>{month}</span>
-          <strong>{date.getDate()}</strong>
+    <section className={styles.information_card}>
+      <div className={styles.categories}>
+        <span className={styles.category}>{t(getEventCategoryKey(event.category))}</span>
+      </div>
+
+      <div className={styles.details_grid}>
+        <div className={styles.detail}>
+          <div className={styles.detail_label}>
+            <Icon icon="mdi:calendar-blank-outline" />
+            {t(KEY.common_date)}
+          </div>
+          <span>{fullDate}</span>
         </div>
-        <div className={styles.date_details}>
-          <strong>{fullDate}</strong>
+        <div className={styles.detail}>
+          <div className={styles.detail_label}>
+            <Icon icon="mdi:clock-outline" />
+            {t(KEY.common_time)}
+          </div>
           <span>
             {startTime}–{endTime}
-            {doorsTime && ` · ${t(KEY.common_doors_date).toLowerCase()} ${doorsTime}`}
           </span>
+          {doorsTime && (
+            <span className={styles.muted}>
+              {t(KEY.common_doors_date)}: {doorsTime}
+            </span>
+          )}
+        </div>
+        <div className={styles.detail}>
+          <div className={styles.detail_label}>
+            <Icon icon="mdi:map-marker" />
+            {t(KEY.common_venue)}
+          </div>
+          <span>{event.location}</span>
+        </div>
+        <div className={styles.detail}>
+          <div className={styles.detail_label}>
+            <Icon icon="mdi:account-group" />
+            {t(KEY.admin_organizer)}
+          </div>
+          <span>{event.host}</span>
+        </div>
+        <div className={styles.detail}>
+          <div className={styles.detail_label}>
+            <Icon icon="mdi:ticket-outline" />
+            {t(KEY.common_ticket)}
+          </div>
+          {event.ticket_type === EventTicketType.CUSTOM && event.custom_tickets.length > 0 ? (
+            event.custom_tickets.map((ticket) => (
+              <span key={ticket.id}>{`${dbT(ticket, 'name')} · ${ticket.price} kr`}</span>
+            ))
+          ) : ticketPrices.length > 0 ? (
+            ticketPrices.map((price) => <span key={price.id}>{`${price.name} · ${price.price} kr`}</span>)
+          ) : (
+            <span>{t(getTicketTypeKey(event.ticket_type))}</span>
+          )}
+        </div>
+        <div className={styles.detail}>
+          <div className={styles.detail_label}>
+            <Icon icon="mdi:information-outline" />
+            {t(KEY.common_age_limit)}
+          </div>
+          <span>{t(getEventAgeRestrictionKey(event.age_restriction))}</span>
         </div>
       </div>
 
-      <div className={styles.ticket_action}>
+      <div className={styles.ticket_actions}>
         {event.billig && <BuyEventTicket event={event} ticketSaleState={event.billig} className={styles.buy_button} />}
         {!event.billig && event.registration_url && (
           <a className={styles.registration_button} href={event.registration_url} target="_blank" rel="noreferrer">
@@ -70,46 +119,6 @@ export function EventInformation({ event }: EventInformationProps) {
           {copied ? t(KEY.common_link_copied) : t(KEY.common_share)}
         </Button>
       </div>
-
-      <div className={styles.detail_row}>
-        <Icon icon="mdi:map-marker" className={styles.detail_icon} />
-        <div>
-          <span className={styles.detail_label}>{t(KEY.common_venue)}</span>
-          <span>{event.location}</span>
-        </div>
-      </div>
-
-      <div className={styles.detail_row}>
-        <Icon icon="mdi:ticket" className={styles.detail_icon} />
-        <div>
-          <span className={styles.detail_label}>{t(KEY.common_ticket)}</span>
-          {event.ticket_type === EventTicketType.CUSTOM && event.custom_tickets.length > 0 ? (
-            event.custom_tickets.map((ticket) => (
-              <span key={ticket.id}>{`${dbT(ticket, 'name')} · ${ticket.price} kr`}</span>
-            ))
-          ) : ticketPrices.length > 0 ? (
-            ticketPrices.map((price) => <span key={price.id}>{`${price.name} · ${price.price} kr`}</span>)
-          ) : (
-            <span>{t(getTicketTypeKey(event.ticket_type))}</span>
-          )}
-        </div>
-      </div>
-
-      <div className={styles.detail_row}>
-        <Icon icon="mdi:card-account-details" className={styles.detail_icon} />
-        <div>
-          <span className={styles.detail_label}>{t(KEY.common_age_limit)}</span>
-          <span>{t(getEventAgeRestrictionKey(event.age_restriction))}</span>
-        </div>
-      </div>
-
-      <div className={styles.detail_row}>
-        <Icon icon="mdi:account-group" className={styles.detail_icon} />
-        <div>
-          <span className={styles.detail_label}>{t(KEY.admin_organizer)}</span>
-          <span>{event.host}</span>
-        </div>
-      </div>
-    </div>
+    </section>
   );
 }

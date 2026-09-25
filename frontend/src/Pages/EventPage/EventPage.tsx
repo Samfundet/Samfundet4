@@ -7,7 +7,7 @@ import { getEvent } from '~/api';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { eventKeys } from '~/queryKeys';
-import { dbT, getEventCategoryKey, imageUrl } from '~/utils';
+import { dbT, imageUrl } from '~/utils';
 import styles from './EventPage.module.scss';
 import { EventInformation } from './components/EventInformation/EventInformation';
 
@@ -35,24 +35,16 @@ export function EventPage() {
             />
           </div>
 
-          <div className={styles.content_row}>
-            <main className={styles.text_container}>
-              <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>
-              <div className={styles.categories}>
-                <span className={styles.category}>{t(getEventCategoryKey(event.category))}</span>
-              </div>
-              <div className={styles.description}>
-                {dbT(event, 'description_short') && (
-                  <p className={styles.text_short}>{dbT(event, 'description_short')}</p>
-                )}
-                <SamfMarkdown markdown={dbT(event, 'description_long')} />
-              </div>
-            </main>
-
-            <aside className={styles.sidebar}>
-              <EventInformation event={event} />
-            </aside>
-          </div>
+          <main className={styles.content_panel}>
+            <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>
+            <EventInformation event={event} />
+            <div className={styles.description}>
+              {dbT(event, 'description_short') && (
+                <p className={styles.text_short}>{dbT(event, 'description_short')}</p>
+              )}
+              <SamfMarkdown markdown={dbT(event, 'description_long')} />
+            </div>
+          </main>
         </>
       )}
     </Page>
