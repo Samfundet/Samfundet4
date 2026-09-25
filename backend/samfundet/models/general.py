@@ -450,20 +450,6 @@ class Venue(CustomBaseModel):
         ]
         return fields[selected_date.weekday()]
 
-    def set_schedule_for_weekday(self, weekday: str, *, is_open: bool, opening: time, closing: time) -> None:
-        if weekday not in VENUE_WEEKDAYS:
-            raise ValueError(f'Invalid weekday: {weekday}')
-
-        fields = {
-            f'is_open_{weekday}': is_open,
-            f'opening_{weekday}': opening,
-            f'closing_{weekday}': closing,
-        }
-        for field, value in fields.items():
-            setattr(self, field, value)
-        # Keep the model's audit fields while limiting schedule writes to this weekday.
-        self.save(update_fields=(*fields, 'version', 'updated_at', 'updated_by', 'created_at', 'created_by'))
-
     def __str__(self) -> str:
         return f'{self.name}'
 

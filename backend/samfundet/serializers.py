@@ -373,13 +373,6 @@ class VenueSerializer(CustomBaseSerializer):
         }
 
 
-class VenueDayScheduleSerializer(serializers.Serializer):
-    weekday = serializers.ChoiceField(choices=VENUE_WEEKDAYS)
-    is_open = serializers.BooleanField()
-    opening = serializers.TimeField()
-    closing = serializers.TimeField()
-
-
 class ClosedPeriodSerializer(CustomBaseSerializer):
     class Meta:
         model = ClosedPeriod

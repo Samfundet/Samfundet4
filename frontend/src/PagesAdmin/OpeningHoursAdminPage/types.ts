@@ -7,8 +7,6 @@ export type VenueDaySchedule = {
   closing: string;
 };
 
-export type VenueDayScheduleDto = VenueDaySchedule & { weekday: Day };
-
 export type VenueOpeningHoursField = `is_open_${Day}` | `opening_${Day}` | `closing_${Day}`;
 
 export type VenueOpeningHoursPatch = Partial<Pick<VenueDto, VenueOpeningHoursField>>;

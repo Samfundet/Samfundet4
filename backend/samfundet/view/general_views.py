@@ -43,7 +43,6 @@ from samfundet.serializers import (
     SaksdokumentSerializer,
     UserFeedbackSerializer,
     UserGangRoleSerializer,
-    VenueDayScheduleSerializer,
     UserGangSectionRoleSerializer,
 )
 from samfundet.models.general import (
@@ -160,28 +159,6 @@ class VenueView(ModelViewSet):
         day_name = (timezone.now() - timedelta(hours=4)).strftime('%A').lower()
         open_venues = Venue.objects.filter(**{f'is_open_{day_name}': True})
         serializer = self.get_serializer(open_venues, many=True)
-        return Response(serializer.data)
-
-    @action(
-        detail=True,
-        methods=['patch'],
-        url_path=r'opening-hours/(?P<weekday>[^/.]+)',
-        url_name='opening-hours',
-    )
-    def opening_hours(self, request: Request, weekday: str, **kwargs: Any) -> Response:
-        venue = self.get_object()
-        data = request.data.copy()
-        data['weekday'] = weekday
-        serializer = VenueDayScheduleSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-
-        venue.set_schedule_for_weekday(
-            weekday,
-            is_open=serializer.validated_data['is_open'],
-            opening=serializer.validated_data['opening'],
-            closing=serializer.validated_data['closing'],
-        )
-
         return Response(serializer.data)
 
 
