@@ -12,10 +12,11 @@ import { getVenueDaySchedule } from './utils';
 
 type VenueOpeningHoursBoxProps = {
   venue: VenueDto;
+  disabled?: boolean;
   onChangeDay: (venueSlug: string, weekday: Day, changes: Partial<VenueDaySchedule>) => void;
 };
 
-export function VenueOpeningHoursBox({ venue, onChangeDay }: VenueOpeningHoursBoxProps) {
+export function VenueOpeningHoursBox({ venue, disabled, onChangeDay }: VenueOpeningHoursBoxProps) {
   const { t } = useTranslation();
   const headingId = `venue-opening-hours-${venue.slug}`;
 
@@ -47,7 +48,7 @@ export function VenueOpeningHoursBox({ venue, onChangeDay }: VenueOpeningHoursBo
                 <InputTime
                   className={styles.time_input}
                   value={schedule.opening}
-                  disabled={!schedule.is_open}
+                  disabled={disabled || !schedule.is_open}
                   ariaLabel={openingLabel}
                   hourAriaLabel={t(KEY.admin_opening_hours_hours_input, { field: openingLabel })}
                   minuteAriaLabel={t(KEY.admin_opening_hours_minutes_input, { field: openingLabel })}
@@ -56,7 +57,7 @@ export function VenueOpeningHoursBox({ venue, onChangeDay }: VenueOpeningHoursBo
                 <InputTime
                   className={styles.time_input}
                   value={schedule.closing}
-                  disabled={!schedule.is_open}
+                  disabled={disabled || !schedule.is_open}
                   ariaLabel={closingLabel}
                   hourAriaLabel={t(KEY.admin_opening_hours_hours_input, { field: closingLabel })}
                   minuteAriaLabel={t(KEY.admin_opening_hours_minutes_input, { field: closingLabel })}
@@ -66,6 +67,7 @@ export function VenueOpeningHoursBox({ venue, onChangeDay }: VenueOpeningHoursBo
                   <Checkbox
                     aria-label={t(KEY.admin_opening_hours_day_is_open, { day: dayLabel })}
                     checked={schedule.is_open}
+                    disabled={disabled}
                     onChange={(event) => onChangeDay(venue.slug, weekday, { is_open: event.target.checked })}
                   />
                 </div>
