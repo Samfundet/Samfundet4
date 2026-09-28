@@ -2,8 +2,10 @@
 
 @use 'src/constants' as *;
 
-$bg-dark: #272727;
-$row-border-dark: #353535;
+@use 'src/styles/colors' as col;
+
+$venue-background-dark: col.$gray-950;
+$venue-border-dark: col.$gray-800;
 
 .actions {
   @include flex-row;
@@ -26,8 +28,8 @@ $row-border-dark: #353535;
 
   @include theme-dark {
     color: $white;
-    background-color: $bg-dark;
-    border-color: $black;
+    background-color: $venue-background-dark;
+    border-color: $venue-border-dark;
   }
 }
 
@@ -52,7 +54,7 @@ $row-border-dark: #353535;
   border-bottom: 1px solid $grey-5;
 
   @include theme-dark {
-    border-bottom-color: $row-border-dark;
+    border-bottom-color: $venue-border-dark;
   }
 }
 
@@ -108,7 +110,6 @@ $row-border-dark: #353535;
 
 .open_label,
 .checkbox_wrapper {
-  width: 5rem;
   text-align: center;
 }
 
@@ -140,7 +141,7 @@ $row-border-dark: #353535;
 }
 
 .time_input {
-  width: 6rem;
+  width: 100%;
   padding: 0.4rem 0.8rem;
   font-size: 1rem;
   line-height: 1.5rem;
@@ -166,13 +167,7 @@ $row-border-dark: #353535;
     column-gap: 0.25rem;
   }
 
-  .open_label,
-  .checkbox_wrapper {
-    width: 2rem;
-  }
-
   .time_input {
-    width: 4.25rem;
     padding: 0.3rem 0.2rem;
     font-size: 0.875rem;
   }

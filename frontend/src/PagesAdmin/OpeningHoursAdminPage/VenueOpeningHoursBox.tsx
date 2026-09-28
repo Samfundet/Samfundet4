@@ -24,7 +24,7 @@ export function VenueOpeningHoursBox({ venue, disabled, onChangeDay }: VenueOpen
       <h2 id={headingId} className={styles.venue_header}>
         {venue.name}
       </h2>
-      <div className={styles.venue_content}>
+      <div>
         <div className={styles.day_row_header}>
           <div className={styles.day_label}>{t(KEY.common_day)}</div>
           <div className={styles.day_edit}>
