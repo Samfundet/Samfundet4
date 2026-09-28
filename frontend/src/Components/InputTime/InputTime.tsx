@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { type ChangeEvent, type FocusEvent, useEffect, useRef, useState } from 'react';
+import { type ChangeEvent, type ClipboardEvent, type FocusEvent, useEffect, useRef, useState } from 'react';
 import styles from './InputTime.module.scss';
 
 type InputTimeProps = {
@@ -16,11 +16,6 @@ type InputTimeProps = {
 
 function formatTime(hour: string, minute: string) {
   return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
-}
-
-function normalizeTime(value?: string) {
-  const [hour = '', minute = ''] = value?.split(':') ?? [];
-  return formatTime(hour, minute);
 }
 
 export function InputTime({
@@ -46,10 +41,18 @@ export function InputTime({
     setMinute(valueMinute);
   }, [valueHour, valueMinute]);
 
+  function setFormattedTime(hour: string, minute: string) {
+    const formattedTime = formatTime(hour, minute);
+    const [formattedHour, formattedMinute] = formattedTime.split(':');
+    setHour(formattedHour);
+    setMinute(formattedMinute);
+    return formattedTime;
+  }
+
   function handleChange(e: ChangeEvent<HTMLInputElement>, field: 'hour' | 'minute') {
+    let numericValue = e.target.value;
+    if (!/^\d{0,2}$/.test(numericValue)) return;
     isEditing.current = true;
-    let numericValue = e.target.value.replace(/[^0-9]/g, '');
-    if (numericValue.length > 2) numericValue = numericValue.slice(1, 3);
     const maximum = field === 'hour' ? 23 : 59;
     if (Number(numericValue) > maximum) numericValue = String(maximum);
     if (field === 'hour') {
@@ -61,17 +64,28 @@ export function InputTime({
     }
   }
 
+  function handlePaste(e: ClipboardEvent<HTMLInputElement>) {
+    const text = e.clipboardData.getData('text').trim();
+    if (/^\d+$/.test(text)) return;
+    e.preventDefault();
+
+    const match = /^(\d{1,2}):(\d{2})$/.exec(text);
+    if (!match) return;
+    const [, pastedHour, pastedMinute] = match;
+    if (Number(pastedHour) > 23 || Number(pastedMinute) > 59) return;
+
+    isEditing.current = true;
+    const formattedTime = setFormattedTime(pastedHour, pastedMinute);
+    onChange?.(formattedTime);
+  }
+
   function handleBlur(e: FocusEvent<HTMLDivElement>) {
     if (e.relatedTarget && e.currentTarget.contains(e.relatedTarget as Node)) return;
     isEditing.current = false;
 
-    const formattedTime = formatTime(hour, minute);
-    const [formattedHour, formattedMinute] = formattedTime.split(':');
-    setHour(formattedHour);
-    setMinute(formattedMinute);
+    const formattedTime = setFormattedTime(hour, minute);
 
-    // Ensure the parent receives the final normalized value even if it changed externally while editing.
-    if (formattedTime !== normalizeTime(value)) {
+    if (formattedTime !== value) {
       onChange?.(formattedTime);
     }
     onBlur?.(formattedTime);
@@ -95,6 +109,7 @@ export function InputTime({
           aria-label={hourAriaLabel}
           aria-invalid={Boolean(error)}
           onChange={(event) => handleChange(event, 'hour')}
+          onPaste={handlePaste}
         />
         <p>:</p>
         <input
@@ -107,6 +122,7 @@ export function InputTime({
           aria-label={minuteAriaLabel}
           aria-invalid={Boolean(error)}
           onChange={(event) => handleChange(event, 'minute')}
+          onPaste={handlePaste}
         />
       </div>
       {error && <div className={styles.errorMessage}> {error}</div>}
