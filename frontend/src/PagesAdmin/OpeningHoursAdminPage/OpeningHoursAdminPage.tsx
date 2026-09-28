@@ -4,6 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import { getVenues, patchVenue } from '~/api';
+import {
+  type VenueDaySchedule,
+  type VenueOpeningHoursUpdate,
+  applyVenueDayScheduleChanges,
+  getVenueOpeningHoursChanges,
+} from '~/domain/venues';
 import type { VenueDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -13,8 +19,6 @@ import { lowerCapitalize } from '~/utils';
 import { AdminPage } from '../AdminPageLayout';
 import styles from './OpeningHoursAdminPage.module.scss';
 import { VenueOpeningHoursBox } from './VenueOpeningHoursBox';
-import type { VenueDaySchedule, VenueOpeningHoursUpdate } from './types';
-import { applyVenueDayScheduleChanges, getVenueOpeningHoursChanges } from './utils';
 
 export function OpeningHoursAdminPage() {
   const { t } = useTranslation();

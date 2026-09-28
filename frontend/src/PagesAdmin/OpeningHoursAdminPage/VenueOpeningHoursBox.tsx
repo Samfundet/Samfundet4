@@ -2,13 +2,12 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { InputTime } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
+import { type VenueDaySchedule, getVenueDaySchedule } from '~/domain/venues';
 import type { VenueDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { ALL_DAYS, type Day } from '~/types';
 import { getDayKey } from '~/utils';
 import styles from './OpeningHoursAdminPage.module.scss';
-import type { VenueDaySchedule } from './types';
-import { getVenueDaySchedule } from './utils';
 
 type VenueOpeningHoursBoxProps = {
   venue: VenueDto;

@@ -32,3 +32,10 @@ export {
 } from './infopages';
 export { tagKeys } from './tags';
 export { gangKeys, useGetOrganizedGangs, useGangMutations } from './gangs';
+export { getVenueDaySchedule, applyVenueDayScheduleChanges, getVenueOpeningHoursChanges } from './venues';
+export type {
+  VenueDaySchedule,
+  VenueOpeningHoursField,
+  VenueOpeningHoursPatch,
+  VenueOpeningHoursUpdate,
+} from './venues';
