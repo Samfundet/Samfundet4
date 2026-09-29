@@ -125,7 +125,6 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.venues}
                  element={<SiteFeatureGate feature="venues"><VenuePage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.health} element={<HealthPage />} />
-          <Route path={ROUTES.frontend.components} element={<ComponentPage />} />
           <Route path={ROUTES.frontend.weekly_opening_hours} element={<WeeklyOpeningPage />} />
           {import.meta.env.DEV && <Route path={ROUTES.frontend.components} element={<ComponentPage />} />}
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
