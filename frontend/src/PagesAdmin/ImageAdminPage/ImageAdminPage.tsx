@@ -10,6 +10,7 @@ import { useAuthContext } from '~/context/AuthContext';
 import { imageKeys, tagKeys } from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 import { hasPermissions, lowerCapitalize } from '~/utils';
@@ -127,7 +128,12 @@ export function ImageAdminPage() {
       )}
       <div className={styles.imageContainer}>
         {images.map((element) => (
-          <ImageTile key={element.id} image={element} className={styles.imageBox} />
+          <ImageTile
+            key={element.id}
+            image={element}
+            className={styles.imageBox}
+            url={reverse({ pattern: ROUTES.frontend.admin_images_detail, urlParams: { id: element.id } })}
+          />
         ))}
       </div>
       <div className={styles.pagination_wrapper}>

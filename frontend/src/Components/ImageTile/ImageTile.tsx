@@ -1,12 +1,15 @@
 import classNames from 'classnames';
 import type { ImageDto } from '~/dto';
 import { backgroundImageFromUrl, imageUrl } from '~/utils';
+import { Link } from '../Link';
 import styles from './ImageTile.module.scss';
 
 type ImageTileProps = {
   image: ImageDto;
   className?: string;
   selected?: boolean;
+  /** Renders the tile as a link. Takes precedence over onClick. */
+  url?: string;
   onClick?(): void;
 };
 
@@ -27,15 +30,23 @@ function TileContent({ image }: Pick<ImageTileProps, 'image'>) {
   );
 }
 
-export function ImageTile({ image, className, selected = false, onClick }: ImageTileProps) {
+export function ImageTile({ image, className, selected = false, url, onClick }: ImageTileProps) {
   const tileClassName = classNames(
     styles.imageContainer,
     className,
     selected && styles.selected,
-    onClick && styles.clickable,
+    (url !== undefined || onClick !== undefined) && styles.clickable,
   );
 
   const bgUrl = imageUrl(image, 'small');
+
+  if (url !== undefined) {
+    return (
+      <Link url={url} plain={true} className={tileClassName} style={backgroundImageFromUrl(bgUrl)}>
+        <TileContent image={image} />
+      </Link>
+    );
+  }
 
   if (onClick !== undefined) {
     return (
