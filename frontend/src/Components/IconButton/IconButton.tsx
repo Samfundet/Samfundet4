@@ -14,7 +14,6 @@ type IconButtonProps = {
   border?: string;
   height?: string;
   avatarColor?: string;
-  disabled?: boolean;
 } & Pick<LinkProps, 'target'>;
 
 export function IconButton({
@@ -28,14 +27,13 @@ export function IconButton({
   target,
   height,
   avatarColor,
-  disabled = false,
 }: IconButtonProps) {
   function handleOnClick(e?: React.MouseEvent<HTMLElement>) {
     e?.preventDefault();
     onClick?.();
   }
 
-  if (url && !disabled) {
+  if (url) {
     return (
       <Link
         url={url}
@@ -56,7 +54,6 @@ export function IconButton({
       onClick={handleOnClick}
       title={title}
       aria-label={title}
-      disabled={disabled}
       className={classNames(styles.icon_button, className)}
       style={{ backgroundColor: color, border: border, height: height }}
     >

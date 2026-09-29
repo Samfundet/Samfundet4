@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import { useState } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +9,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  IconButton,
   Input,
   Modal,
   ToggleSwitch,
@@ -16,7 +16,6 @@ import {
 } from '~/Components';
 import { FormDescription } from '~/Components/Forms/Form';
 import { KEY } from '~/i18n/constants';
-import { COLORS } from '~/types';
 import { getYouTubeVideoId } from '~/utils/socialMedia';
 import styles from '../EventCreatorAdminPage.module.scss';
 import type { EventFormType } from '../EventCreatorSchema';
@@ -84,30 +83,33 @@ export function SocialMediaStep({ form }: Props) {
             render={({ field }) => (
               <FormItem className={styles.socialMediaItem}>
                 <FormLabel className={styles.socialMediaLabel}>{SOCIAL_LABELS[name]}</FormLabel>
-                <div className={styles.socialMediaInputRow}>
-                  <FormControl>
-                    <Input
-                      className={styles.socialMediaInput}
-                      type="text"
-                      {...field}
-                      placeholder={name === 'spotify_uri' ? 'spotify:...' : 'https://...'}
-                    />
-                  </FormControl>
-                  {name === 'youtube_link' && (
-                    <IconButton
-                      className={styles.youtubePreviewButton}
-                      color={COLORS.green}
-                      icon="ic:baseline-remove-red-eye"
-                      title={t(KEY.common_preview)}
-                      disabled={!videoId}
-                      onClick={() => setPreviewOpen(true)}
-                    />
-                  )}
-                </div>
+                <FormControl>
+                  <Input
+                    className={styles.socialMediaInput}
+                    type="text"
+                    {...field}
+                    placeholder={name === 'spotify_uri' ? 'spotify:...' : 'https://...'}
+                  />
+                </FormControl>
                 {SOCIAL_MEDIA_HELP[name] ? (
                   <FormDescription className={styles.socialMediaDescription}>{SOCIAL_MEDIA_HELP[name]}</FormDescription>
                 ) : null}
                 <FormMessage />
+                {name === 'youtube_link' && (
+                  <Button
+                    type="button"
+                    theme="success"
+                    rounded
+                    className={styles.youtubePreviewButton}
+                    disabled={!videoId}
+                    onClick={() => setPreviewOpen(true)}
+                  >
+                    {t(KEY.common_preview)}
+                    <span className={styles.youtubePreviewIcon} aria-hidden="true">
+                      <Icon icon="ic:baseline-remove-red-eye" />
+                    </span>
+                  </Button>
+                )}
                 {name === 'youtube_link' && (
                   <FormField
                     name="youtube_embed"
