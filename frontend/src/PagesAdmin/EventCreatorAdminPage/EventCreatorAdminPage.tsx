@@ -8,11 +8,12 @@ import { toast } from 'react-toastify';
 import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { getEvent, getEventForCloning, getVenues } from '~/api';
+import { getVenues } from '~/api';
 import type { EventDto } from '~/dto';
-import { usePrevious, useTitle } from '~/hooks';
+import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { eventCloneKeys, eventKeys, venueKeys } from '~/queryKeys';
+import { venueKeys } from '~/queryKeys';
+import { ROUTES } from '~/routes';
 import {
   EventAgeRestriction,
   type EventAgeRestrictionValue,
@@ -36,9 +37,9 @@ import { type FormType, useEventCreatorForm } from './hooks/useEventCreatorForm'
 import { type EventCreatorStep, type StepKey, steps } from './steps/stepConfig';
 
 import type { FieldErrors } from 'react-hook-form';
+import { useCreateEvent, useGetEvent, useGetEventForCloning, useUpdateEvent } from '~/domain';
 import { eventSchema } from './EventCreatorSchema';
 import { EventPreviewCard } from './components/EventPreviewCard';
-import { useEventMutations } from './hooks/useEventMutations';
 import { GraphicsStep } from './steps/GraphicsStep';
 import { InfoStep } from './steps/InfoStep';
 import { PaymentStep } from './steps/PaymentStep';
@@ -52,15 +53,13 @@ export function EventCreatorAdminPage() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const templateId = id === undefined ? searchParams.get('template') : undefined;
-  const eventId = id ?? templateId;
   const isCloning = templateId !== undefined;
-  const { createEventMutation, editEventMutation } = useEventMutations();
 
-  const { data: event, isPending: isEventPending } = useQuery({
-    queryKey: !eventId ? ['events', 'no-id'] : isCloning ? eventCloneKeys.detail(eventId) : eventKeys.detail(eventId),
-    queryFn: () => (isCloning ? getEventForCloning(eventId as string) : getEvent(eventId as string)),
-    enabled: eventId !== undefined,
-  });
+  const { data: eventFetch, isLoading: eventFetchLoading } = useGetEvent(id ?? '');
+  const { data: eventCopy, isLoading: eventCopyLoading } = useGetEventForCloning(templateId ?? '');
+
+  const event = isCloning ? eventCopy : eventFetch;
+  const isLoading = eventFetchLoading || eventCopyLoading;
 
   const { data: venues = [] } = useQuery({
     queryKey: venueKeys.all,
@@ -148,6 +147,12 @@ export function EventCreatorAdminPage() {
   //             Save Logic             //
   // ================================== //
 
+  const navigate = useCustomNavigate();
+  const goToEventsList = () => navigate({ url: ROUTES.frontend.admin_events });
+
+  const { mutate: updateEvent } = useUpdateEvent();
+  const { mutate: createEvent } = useCreateEvent();
+
   function onSubmit(values: FormType) {
     let payload: Partial<EventDto> = buildPayload(values);
 
@@ -157,9 +162,9 @@ export function EventCreatorAdminPage() {
     }
 
     if (id) {
-      editEventMutation.mutate({ id, payload });
+      updateEvent({ id, data: payload }, { onSuccess: goToEventsList });
     } else {
-      createEventMutation.mutate(payload);
+      createEvent(payload, { onSuccess: goToEventsList });
     }
   }
 
@@ -241,7 +246,7 @@ export function EventCreatorAdminPage() {
   useTitle(title);
 
   return (
-    <AdminPageLayout title={title} loading={eventId !== undefined && isEventPending} header={true}>
+    <AdminPageLayout title={title} loading={isLoading} header={true}>
       <TabBar
         tabs={formTabs}
         selected={currentFormTab}

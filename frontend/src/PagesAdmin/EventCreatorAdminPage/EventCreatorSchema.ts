@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { OPTIONAL_IMAGE } from '~/domain';
-import { KEY } from '~/i18n/constants';
 import {
   EVENT_AGE_RESTRICTION,
   EVENT_BILLIG_ID,
@@ -29,7 +28,8 @@ import {
   EVENT_X_LINK,
   EVENT_YOUTUBE_EMBED,
   EVENT_YOUTUBE_LINK,
-} from '~/schema/event';
+} from '~/domain';
+import { KEY } from '~/i18n/constants';
 
 const event_custom_ticket = z.object({
   id: z.number(),

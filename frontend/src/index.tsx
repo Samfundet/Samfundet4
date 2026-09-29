@@ -28,6 +28,12 @@ const queryClient = new QueryClient({
     },
   }),
   defaultOptions: {
+    mutations: {
+      onError: (error) => {
+        toast.error(t(KEY.common_something_went_wrong));
+        console.error(error);
+      },
+    },
     queries: {
       retry: (failureCount, error) => {
         // Don't retry on HTTP 404 responses
