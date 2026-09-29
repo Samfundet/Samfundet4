@@ -1,0 +1,228 @@
+{% extends "admin/base_site.html" %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Home</a>
+    {% for crumb in breadcrumbs %}
+        ›
+        {% if forloop.last %}
+            {{ crumb.name }}
+        {% else %}
+            <a href="{{ crumb.url }}">{{ crumb.name }}</a>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block content %}
+{% if mode.value == "rows_and_columns" and column_types %}
+<form method="get" style="display:flex; gap: 1rem; align-items:flex-end;">
+
+    <div style="display:flex; flex-direction:column;">
+        <label for="level_filter">Level</label>
+        <select id="level_filter" name="level_filter" onchange="this.form.submit()">
+            <option value="">All Levels</option>
+            <option value="debug" {% if level_filter == 'debug' %}selected{% endif %}>DEBUG</option>
+            <option value="info" {% if level_filter == 'info' %}selected{% endif %}>INFO</option>
+            <option value="warning" {% if level_filter == 'warning' %}selected{% endif %}>WARNING</option>
+            <option value="error" {% if level_filter == 'error' %}selected{% endif %}>ERROR</option>
+            <option value="critical" {% if level_filter == 'critical' %}selected{% endif %}>CRITICAL</option>
+        </select>
+    </div>
+
+    <div style="display:flex; flex-direction:column;">
+        <label for="time_from">Datetime from</label>
+        <input id="time_from" type="datetime-local" name="time_from" value="{{ request.GET.time_from }}" onchange="this.form.submit()">
+    </div>
+
+    <div style="display:flex; flex-direction:column;">
+        <label for="time_to">Datetime to</label>
+        <input id="time_to" type="datetime-local" name="time_to" value="{{ request.GET.time_to }}" onchange="this.form.submit()">
+    </div>
+
+    <div style="display:flex; flex-direction:column;">
+        <label for="search_query">Search</label>
+        <input id="search_query" type="text" name="search_query" placeholder="Search" value="{{ search_query }}">
+    </div>
+
+    <div style="display:flex; flex-direction:column;">
+        <label>&nbsp;</label>
+        <button type="submit" class="button">Search</button>
+    </div>
+
+    <input type="hidden" name="path" value="{{ current_path }}">
+</form>
+{% elif mode.value == "rows_and_columns" %}
+<form method="get" style="margin-bottom:1rem;">
+    <input type="hidden" name="path" value="{{ current_path }}">
+    <input type="text" name="search_query" placeholder="Search" value="{{ search_query }}">
+    <button type="submit" class="button">Search</button>
+</form>
+{% endif %}
+<div style="margin-top: 1rem; margin-bottom: 1rem">
+    <a href="?path={{ current_path }}&download=1" class="button">Download file</a>
+</div>
+
+
+{% if mode.value == "rows_and_columns" %}
+    <table>
+        <thead>
+            <tr>
+                {% for column_name in column_names %}
+                    <th>{{ column_name }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    {% for value in row %}
+                        {% if forloop.last and value and row|length != 1%}
+                            <td><button type="button" class="button" onclick="toggleTraceback(this)" id="show-traceback-button">Show Traceback</button></td>
+                        {% else %}
+                            <td>{{ value }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% if row|last %}
+                    <tr class="traceback-row">
+                        <td colspan="{{ row|length }}" style="padding: 5px; border: none;">
+                            <div class="traceback-wrapper" style="max-height: 0; overflow: hidden; transition: max-height 0.2s;">
+                                <pre>{{ row|last }}</pre>
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% elif mode.value == "raw_content" %}
+    <pre>{{ content }}</pre>
+{% endif %}
+
+{% if page_obj %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?path={{ current_path }}&page=1{% if search_query %}&search_query={{ search_query }}{% endif %}{% if level_filter %}&level_filter={{ level_filter }}{% endif %}">Start</a>
+        <a href="?path={{ current_path }}&page={{ page_obj.previous_page_number }}{% if search_query %}&search_query={{ search_query }}{% endif %}{% if level_filter %}&level_filter={{ level_filter }}{% endif %}">← Previous</a>
+    {% endif %}
+
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+    {% if page_obj.has_next %}
+        <a href="?path={{ current_path }}&page={{ page_obj.next_page_number }}{% if search_query %}&search_query={{ search_query }}{% endif %}{% if level_filter %}&level_filter={{ level_filter }}{% endif %}">Next →</a>
+        <a href="?path={{ current_path }}&page={{ page_obj.paginator.num_pages }}{% if search_query %}&search_query={{ search_query }}{% endif %}{% if level_filter %}&level_filter={{ level_filter }}{% endif %}">End</a>
+    {% endif %}
+</div>
+{% endif %}
+
+<style>
+thead {
+    position: sticky;
+    top: 0;
+}
+
+thead th {
+    text-transform: none;
+}
+
+input[type="datetime-local"] {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 5px 6px;
+    margin-top: 0;
+    color: var(--body-fg);
+    background-color: var(--body-bg);
+}
+
+.traceback-wrapper pre {
+    overflow-x: auto;
+}
+
+a.button,
+button.button,
+#show-traceback-button {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+}
+
+.pagination {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pagination a {
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 1px;
+}
+</style>
+
+<script>
+function toggleTraceback(button) {
+    const tr = button.closest("tr");
+    const wrapper = tr.nextElementSibling.querySelector(".traceback-wrapper");
+
+    if (wrapper.style.maxHeight && wrapper.style.maxHeight !== "0px") {
+        wrapper.style.maxHeight = "0";
+    } else {
+        wrapper.style.maxHeight = wrapper.scrollHeight + "px";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    if (!'{{ column_types|safe|escapejs }}') {
+        return;
+    }
+    const theme = document.documentElement.getAttribute("data-theme");
+    const isDarkMode = theme === "dark" || (theme === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    const levelColorsLight = {
+        debug: "#f3f4f6",
+        info: "#dbeafe",
+        warning: "#fef3c7",
+        error: "#fee2e2",
+        critical: "#fca5a5",
+    };
+
+    const levelColorsDark = {
+        debug: "#2b2b2b",
+        info: "#1e3a5f",
+        warning: "#5a4700",
+        error: "#5c1f26",
+        critical: "#450a0a",
+    };
+    const levelColors = theme === "dark" ? levelColorsDark : levelColorsLight;
+
+    const stringColumnTypes = '{{ column_types|safe|escapejs }}'.replaceAll("'", "\"")
+    let columnTypes = JSON.parse(stringColumnTypes);
+    columnTypes = columnTypes.map(e => e.toLowerCase());
+    levelColumnIndex = columnTypes.indexOf("level");
+
+    if (levelColumnIndex === -1) {
+        return;
+    }
+
+    document.querySelectorAll("table tbody tr").forEach(tr => {
+        const cells = tr.querySelectorAll("td");
+        if (!cells[levelColumnIndex]) {
+            return;
+        }
+        const text = cells[levelColumnIndex].innerText.trim().toLowerCase();
+        if (levelColors[text]) {
+            tr.style.backgroundColor = levelColors[text];
+            if (isDarkMode) {
+                tr.style.color = "#000";
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
