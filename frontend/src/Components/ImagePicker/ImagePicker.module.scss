@@ -2,6 +2,8 @@
 
 @use 'src/mixins' as *;
 
+@use 'src/styles/colors' as c;
+
 .container {
   display: flex;
   flex-direction: column;
@@ -10,7 +12,7 @@
   border-radius: 1.5rem;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 244, 244, 0.96)),
-    $grey-5;
+    c.$white-950;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
 
   @include theme-dark {
@@ -26,7 +28,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: $grey-2;
+  color: c.$gray-500;
 }
 
 .selected_container {
@@ -49,7 +51,7 @@
   align-self: flex-start;
   overflow: hidden;
   border-radius: 1.25rem;
-  background: $black-1;
+  background: c.$black-800;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
 }
 
@@ -77,14 +79,14 @@
   border: 1px dashed rgba(0, 0, 0, 0.1);
   border-radius: 1.5rem;
   background:
-    radial-gradient(circle at top, rgba(51, 122, 183, 0.1), transparent 45%),
+    radial-gradient(circle at top, rgba(c.$blue-600, 0.1), transparent 45%),
     rgba(255, 255, 255, 0.85);
   text-align: center;
 
   @include theme-dark {
     border-color: rgba(255, 255, 255, 0.12);
     background:
-      radial-gradient(circle at top, rgba(51, 122, 183, 0.18), transparent 45%),
+      radial-gradient(circle at top, rgba(c.$blue-600, 0.18), transparent 45%),
       rgba(255, 255, 255, 0.03);
   }
 }
@@ -94,8 +96,8 @@
   width: 4rem;
   height: 4rem;
   border-radius: 999px;
-  background: rgba(51, 122, 183, 0.12);
-  color: $blue;
+  background: rgba(c.$blue-600, 0.12);
+  color: c.$blue-600;
 }
 
 .selected_empty_title {
@@ -106,7 +108,7 @@
 
 .selected_empty_description {
   margin: 0;
-  color: $grey-2;
+  color: c.$gray-500;
   font-size: 0.9rem;
 }
 
@@ -146,7 +148,7 @@
   margin: 0;
   padding: 0.75rem 1rem;
   border-radius: 0.9rem;
-  background: rgba(220, 16, 16, 0.08);
-  color: $red;
+  background: rgba(c.$red-600, 0.08);
+  color: c.$red-600;
   font-weight: 600;
 }
