@@ -1,6 +1,6 @@
 @use '../../mixins' as m;
 
-@use '../../constants' as *;
+@use '../../constants' as c;
 
 .action_row {
   display: flex;
