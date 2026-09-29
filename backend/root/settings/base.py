@@ -231,9 +231,28 @@ INSTALLED_APPS += [
 
 ################## ADMIN LOG VIEWER ##################
 
+LOGS_PARSERS = {
+    'samfundet-json': {
+        'pattern': (
+            r'^(?=.*"time":\s*"((?:\\.|[^"\\])*)")'
+            r'(?=.*"level":\s*"((?:\\.|[^"\\])*)")'
+            r'(?=.*"logger_name":\s*"((?:\\.|[^"\\])*)")'
+            r'(?=.*"pathname":\s*"((?:\\.|[^"\\])*)")'
+            r'(?=.*"lineno":\s*(\d+))'
+            r'(?=.*"funcName":\s*"((?:\\.|[^"\\])*)")'
+            r'(?=.*"message":\s*"((?:\\.|[^"\\])*)")'
+            r'(?=(?:.*"exception":\s*"((?:\\.|[^"\\])*)"|.*$)).*$'
+        ),
+        'column_names': ['Time', 'Level', 'Logger', 'Path', 'Line', 'Function', 'Message', 'Exception'],
+        'column_types': ['TIME', 'LEVEL', 'OTHER', 'OTHER', 'OTHER', 'OTHER', 'OTHER', 'OTHER'],
+        'datetime_format': '%Y-%m-%dT%H:%M:%S.%f%z',
+    },
+}
+
 LOGS_DIRS = [
     {
         'path': BASE_DIR / 'logs',
+        'parser': 'samfundet-json',
     },
 ]
 
@@ -251,8 +270,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'json': {
-            # Need to be a callable in order to use init parameters.
-            '()': lambda: JsonFormatter(indent=4 if ENV == Environment.DEV else None),
+            '()': JsonFormatter,
         },
         'file': {
             'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
