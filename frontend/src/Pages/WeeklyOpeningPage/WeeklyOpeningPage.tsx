@@ -19,7 +19,7 @@ export function WeeklyOpeningPage() {
   const { data: venues = [], isLoading } = useQuery({
     queryKey: venueKeys.all,
     queryFn: getOpenVenues,
-    select: (data) => [...data].sort((venueA, venueB) => venueA.name.localeCompare(venueB.name)),
+    select: (data) => [...data].sort((venueA, venueB) => venueA.name.localeCompare(venueB.slug)),
   });
 
   const isNextDay = (dayA: Day, dayB: Day) => {
