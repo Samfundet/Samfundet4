@@ -8,6 +8,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  IconButton,
   Input,
   Modal,
   ToggleSwitch,
@@ -15,6 +16,7 @@ import {
 } from '~/Components';
 import { FormDescription } from '~/Components/Forms/Form';
 import { KEY } from '~/i18n/constants';
+import { COLORS } from '~/types';
 import { getYouTubeVideoId } from '~/utils/socialMedia';
 import styles from '../EventCreatorAdminPage.module.scss';
 import type { EventFormType } from '../EventCreatorSchema';
@@ -81,48 +83,59 @@ export function SocialMediaStep({ form }: Props) {
             control={form.control}
             render={({ field }) => (
               <FormItem className={styles.socialMediaItem}>
-                <FormLabel>{SOCIAL_LABELS[name]}</FormLabel>
-                <FormControl>
-                  <Input
-                    className={styles.socialMediaInput}
-                    type="text"
-                    {...field}
-                    placeholder={name === 'spotify_uri' ? 'spotify:...' : 'https://...'}
-                  />
-                </FormControl>
-                {SOCIAL_MEDIA_HELP[name] ? <FormDescription>{SOCIAL_MEDIA_HELP[name]}</FormDescription> : null}
+                <FormLabel className={styles.socialMediaLabel}>{SOCIAL_LABELS[name]}</FormLabel>
+                <div className={styles.socialMediaInputRow}>
+                  <FormControl>
+                    <Input
+                      className={styles.socialMediaInput}
+                      type="text"
+                      {...field}
+                      placeholder={name === 'spotify_uri' ? 'spotify:...' : 'https://...'}
+                    />
+                  </FormControl>
+                  {name === 'youtube_link' && (
+                    <IconButton
+                      className={styles.youtubePreviewButton}
+                      color={COLORS.green}
+                      icon="ic:baseline-remove-red-eye"
+                      title={t(KEY.common_preview)}
+                      disabled={!videoId}
+                      onClick={() => setPreviewOpen(true)}
+                    />
+                  )}
+                </div>
+                {SOCIAL_MEDIA_HELP[name] ? (
+                  <FormDescription className={styles.socialMediaDescription}>{SOCIAL_MEDIA_HELP[name]}</FormDescription>
+                ) : null}
                 <FormMessage />
                 {name === 'youtube_link' && (
-                  <>
-                    <FormField
-                      name="youtube_embed"
-                      control={form.control}
-                      render={({ field }) => (
-                        <FormItem className={styles.socialMediaItem}>
-                          <div className={styles.embedSwitchRow}>
-                            <FormLabel>{t(KEY.event_youtube_embed)}</FormLabel>
-                            <FormControl>
-                              <ToggleSwitch
-                                name={field.name}
-                                ref={field.ref}
-                                checked={field.value ?? false}
-                                onBlur={field.onBlur}
-                                onChange={(e) => {
-                                  field.onChange(e.target.checked);
-                                  void form.trigger('youtube_link');
-                                }}
-                              />
-                            </FormControl>
-                          </div>
-                          <FormDescription>{t(KEY.event_youtube_embed_help)}</FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Button type="button" disabled={!videoId} onClick={() => setPreviewOpen(true)}>
-                      {t(KEY.common_preview)}
-                    </Button>
-                  </>
+                  <FormField
+                    name="youtube_embed"
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className={styles.youtubeEmbedOptions}>
+                        <div className={styles.embedSwitchRow}>
+                          <FormLabel className={styles.socialMediaLabel}>{t(KEY.event_youtube_embed)}</FormLabel>
+                          <FormControl>
+                            <ToggleSwitch
+                              name={field.name}
+                              ref={field.ref}
+                              checked={field.value ?? false}
+                              onBlur={field.onBlur}
+                              onChange={(e) => {
+                                field.onChange(e.target.checked);
+                                void form.trigger('youtube_link');
+                              }}
+                            />
+                          </FormControl>
+                        </div>
+                        <FormDescription className={styles.socialMediaDescription}>
+                          {t(KEY.event_youtube_embed_help)}
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 )}
               </FormItem>
             )}

@@ -215,7 +215,46 @@
 .socialMediaItem {
   display: flex;
   flex-direction: column;
-  gap: 0.25em;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.socialMediaLabel {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.socialMediaDescription {
+  margin: 0;
+  line-height: 1.5;
+  color: c.$gray-600;
+
+  @include theme-dark {
+    color: c.$gray-400;
+  }
+}
+
+.socialMediaInputRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  & > label {
+    min-width: 0;
+  }
+}
+
+.youtubePreviewButton {
+  flex-shrink: 0;
+}
+
+.youtubeEmbedOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .socialMediaInput {

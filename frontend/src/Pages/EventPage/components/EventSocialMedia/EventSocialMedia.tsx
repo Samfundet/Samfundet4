@@ -15,7 +15,7 @@ export function EventSocialMedia({ event }: Props) {
   const videoId = event.youtube_embed ? getYouTubeVideoId(event.youtube_link) : undefined;
   const links = [
     { label: 'Spotify', icon: 'mdi:spotify', value: event.spotify_uri },
-    { label: 'YouTube', icon: 'mdi:youtube', value: event.youtube_link },
+    { label: 'YouTube', icon: 'mdi:youtube', value: videoId ? undefined : event.youtube_link },
     { label: 'Facebook', icon: 'mdi:facebook', value: event.facebook_link },
     { label: 'SoundCloud', icon: 'mdi:soundcloud', value: event.soundcloud_link },
     { label: 'Instagram', icon: 'mdi:instagram', value: event.instagram_link },

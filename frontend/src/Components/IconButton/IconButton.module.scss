@@ -12,7 +12,12 @@
   cursor: pointer;
   color: white;
 
-  &:hover {
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
     filter: brightness(105%);
     transform: scale(1.1);
   }
