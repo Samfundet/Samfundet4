@@ -36,19 +36,25 @@ export function EventPage() {
           </div>
 
           <main className={styles.content_panel}>
-            <EventInformation event={event} />
-            <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>
-            <div className={styles.categories}>
-              <span className={styles.category}>{t(getEventCategoryKey(event.category))}</span>
-            </div>
-            <div className={styles.description_section}>
-              <div className={styles.description}>
-                {dbT(event, 'description_short') && (
-                  <p className={styles.text_short}>{dbT(event, 'description_short')}</p>
-                )}
-                <SamfMarkdown markdown={dbT(event, 'description_long')} />
+            <div className={styles.left_content}>
+              <div className={styles.main_content}>
+                <H1 className={styles.text_title}>{dbT(event, 'title')}</H1>
+                <div className={styles.categories}>
+                  <span className={styles.category}>{t(getEventCategoryKey(event.category))}</span>
+                </div>
+              </div>
+              <div className={styles.description_section}>
+                <div className={styles.description}>
+                  {dbT(event, 'description_short') && (
+                    <p className={styles.text_short}>{dbT(event, 'description_short')}</p>
+                  )}
+                  <SamfMarkdown markdown={dbT(event, 'description_long')} />
+                </div>
               </div>
             </div>
+            <aside className={styles.sidebar} aria-label={t(KEY.common_event)}>
+              <EventInformation event={event} />
+            </aside>
           </main>
         </>
       )}

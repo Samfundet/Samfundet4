@@ -22,6 +22,7 @@ export function EventInformation({ event }: EventInformationProps) {
   const date = new Date(event.start_dt);
   const locale = i18n.language === 'nb' ? 'nb-NO' : 'en-US';
   const fullDate = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }).format(date);
+  const shortMonth = new Intl.DateTimeFormat(locale, { month: 'short' }).format(date).replace('.', '').toLowerCase();
   const startTime = new Intl.DateTimeFormat('nb-NO', { hour: '2-digit', minute: '2-digit' }).format(date);
   const endTime = new Intl.DateTimeFormat('nb-NO', { hour: '2-digit', minute: '2-digit' }).format(
     new Date(event.end_dt),
@@ -71,63 +72,66 @@ export function EventInformation({ event }: EventInformationProps) {
 
   return (
     <section className={styles.information_card}>
-      <div className={styles.details_grid}>
-        <div className={styles.detail}>
-          <div className={styles.detail_label}>
-            <Icon icon="mdi:calendar-blank-outline" />
-            {t(KEY.common_date)}
-          </div>
-          <span>{fullDate}</span>
+      <div className={styles.date_header}>
+        <div className={styles.date_badge} aria-hidden="true">
+          <span>{shortMonth}</span>
+          <strong>{date.getDate()}</strong>
         </div>
-        <div className={styles.detail}>
-          <div className={styles.detail_label}>
-            <Icon icon="mdi:clock-outline" />
-            {t(KEY.common_time)}
-          </div>
-          <span>
+        <div className={styles.date_summary}>
+          <time dateTime={event.start_dt} className={styles.full_date}>
+            {fullDate}
+          </time>
+          <span className={styles.time_summary}>
             {startTime}–{endTime}
+            {doorsTime && ` · ${t(KEY.common_doors_date)} ${doorsTime}`}
           </span>
-          {doorsTime && (
-            <span className={styles.muted}>
-              {t(KEY.common_doors_date)}: {doorsTime}
-            </span>
-          )}
         </div>
+      </div>
+
+      <div className={styles.details_list}>
         <div className={styles.detail}>
-          <div className={styles.detail_label}>
+          <div className={styles.detail_icon}>
             <Icon icon="mdi:map-marker" />
-            {t(KEY.common_venue)}
           </div>
-          <span>{event.location}</span>
+          <div className={styles.detail_content}>
+            <span className={styles.detail_label}>{t(KEY.common_venue)}</span>
+            <span>{event.location}</span>
+          </div>
         </div>
         <div className={styles.detail}>
-          <div className={styles.detail_label}>
-            <Icon icon="mdi:account-group" />
-            {t(KEY.admin_organizer)}
+          <div className={styles.detail_icon}>
+            <Icon icon="mdi:ticket" />
           </div>
-          <span>{event.host}</span>
+          <div className={styles.detail_content}>
+            <span className={styles.detail_label}>{t(KEY.common_ticket)}</span>
+            {event.ticket_type === EventTicketType.CUSTOM && event.custom_tickets.length > 0 ? (
+              event.custom_tickets.map((ticket) => (
+                <span key={ticket.id}>{`${dbT(ticket, 'name')} · ${ticket.price} kr`}</span>
+              ))
+            ) : ticketPrices.length > 0 ? (
+              ticketPrices.map((price) => <span key={price.id}>{`${price.name} · ${price.price} kr`}</span>)
+            ) : (
+              <span>{t(getTicketTypeKey(event.ticket_type))}</span>
+            )}
+          </div>
         </div>
         <div className={styles.detail}>
-          <div className={styles.detail_label}>
-            <Icon icon="mdi:ticket-outline" />
-            {t(KEY.common_ticket)}
+          <div className={styles.detail_icon}>
+            <Icon icon="mdi:calendar-blank-outline" />
           </div>
-          {event.ticket_type === EventTicketType.CUSTOM && event.custom_tickets.length > 0 ? (
-            event.custom_tickets.map((ticket) => (
-              <span key={ticket.id}>{`${dbT(ticket, 'name')} · ${ticket.price} kr`}</span>
-            ))
-          ) : ticketPrices.length > 0 ? (
-            ticketPrices.map((price) => <span key={price.id}>{`${price.name} · ${price.price} kr`}</span>)
-          ) : (
-            <span>{t(getTicketTypeKey(event.ticket_type))}</span>
-          )}
+          <div className={styles.detail_content}>
+            <span className={styles.detail_label}>{t(KEY.common_age_limit)}</span>
+            <span>{t(getEventAgeRestrictionKey(event.age_restriction))}</span>
+          </div>
         </div>
         <div className={styles.detail}>
-          <div className={styles.detail_label}>
-            <Icon icon="mdi:information-outline" />
-            {t(KEY.common_age_limit)}
+          <div className={styles.detail_icon}>
+            <Icon icon="mdi:account-group-outline" />
           </div>
-          <span>{t(getEventAgeRestrictionKey(event.age_restriction))}</span>
+          <div className={styles.detail_content}>
+            <span className={styles.detail_label}>{t(KEY.admin_organizer)}</span>
+            <span>{event.host}</span>
+          </div>
         </div>
       </div>
 
@@ -139,7 +143,7 @@ export function EventInformation({ event }: EventInformationProps) {
           </a>
         )}
         <Button theme="secondary" className={styles.share_button} onClick={shareEvent}>
-          <Icon icon="mdi:share-variant-outline" />
+          <Icon icon="mdi:arrow-top-right" />
           <span
             key={shareFeedback?.id ?? 0}
             className={shareFeedback ? styles.share_feedback : undefined}
