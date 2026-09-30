@@ -35,7 +35,13 @@ export const eventKeys = {
     filters?: { search?: string; venue?: string; category?: string; ticket_type?: string },
   ) => [...eventKeys.paginatedLists(), { page, pageSize, ...filters }] as const,
   details: () => [...eventKeys.all, 'detail'] as const,
-  detail: (id: number) => [...eventKeys.details(), id] as const,
+  detail: (id: string | number) => [...eventKeys.details(), id] as const,
+};
+
+export const eventCloneKeys = {
+  all: ['event-clone'] as const,
+  details: () => [...eventCloneKeys.all, 'detail'] as const,
+  detail: (id: string | number) => [...eventCloneKeys.details(), id] as const,
 };
 
 export const applicationKeys = {
@@ -79,4 +85,9 @@ export const venueKeys = {
   details: () => [...venueKeys.all, 'detail'] as const,
   detail: (slug: string) => [...venueKeys.details(), slug] as const,
   open: () => [...venueKeys.list(['open'])] as const,
+};
+
+export const siteBannerKeys = {
+  all: ['siteBanners'] as const,
+  active: () => [...siteBannerKeys.all, 'active'] as const,
 };
