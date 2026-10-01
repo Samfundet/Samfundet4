@@ -154,7 +154,8 @@ dependencies = [
     "gunicorn==26.*",
     "django-admin-autocomplete-filter==0.*",
     "psycopg[c]",
-    "whitenoise==6.12.0"
+    "whitenoise==6.12.0",
+    "django-admin-logs-viewer==1.*",
 ]
 
 [dependency-groups]

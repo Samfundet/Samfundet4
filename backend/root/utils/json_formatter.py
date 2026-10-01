@@ -185,7 +185,7 @@ class JsonFormatter(logging.Formatter):
         msg.update(self._get_record_items(record=record))
 
         try:
-            data = json.dumps(msg, indent=self.indent)
+            data = json.dumps(msg, indent=self.indent, ensure_ascii=False)
         except TypeError:
             # Fall back to default if serialization error.
             data = super().format(record=record)

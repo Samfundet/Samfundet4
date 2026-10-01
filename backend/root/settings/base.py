@@ -95,6 +95,7 @@ SESSION_COOKIE_AGE = 24 * 60 * 60 * 7
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 INSTALLED_APPS = [
+    'django_admin_logs_viewer',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -133,7 +134,7 @@ ROOT_URLCONF = 'root.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -141,6 +142,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django_admin_logs_viewer.context_processors.logs_url',
             ],
         },
     },
@@ -227,23 +229,49 @@ INSTALLED_APPS += [
 
 ### End: admin_auto_filters ###
 
-
 ################## LOGGING ##################
 
 from root.utils.json_formatter import JsonFormatter  # noqa: E402
 from root.custom_classes.request_context_filter import RequestContextFilter  # noqa: E402
 
+LOGS_PARSERS = {
+    'samfundet-json': {
+        'pattern': (
+            r'^(?=.*"time":\s*"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6})(?:Z|[+-]\d{2}:\d{2})")'
+            r'(?=.*"level":\s*"((?:\\.|[^"\\])*)")'
+            r'(?=.*"logger_name":\s*"((?:\\.|[^"\\])*)")'
+            r'(?=.*"pathname":\s*"((?:\\.|[^"\\])*)")'
+            r'(?=.*"lineno":\s*(\d+))'
+            r'(?=.*"funcName":\s*"((?:\\.|[^"\\])*)")'
+            r'(?=.*"message":\s*"((?:\\.|[^"\\])*)")'
+            r'(?=(?:.*"exception":\s*"((?:\\.|[^"\\])*)"|.*$)).*$'
+        ),
+        'column_names': ['Time (UTC)', 'Level', 'Logger', 'Path', 'Line', 'Function', 'Message', 'Exception'],
+        'column_types': ['TIME', 'LEVEL', 'OTHER', 'OTHER', 'OTHER', 'OTHER', 'OTHER', 'OTHER'],
+        'datetime_format': '%Y-%m-%dT%H:%M:%S.%f',
+    },
+}
+
 LOGFILENAME = BASE_DIR / 'logs' / '.log'
 SQL_LOG_FILE = BASE_DIR / 'logs' / 'sql.log'
 TEST_EMAIL_FILE = BASE_DIR / 'logs' / 'test_email.txt'
+
+LOGS_DIRS = [
+    {
+        'path': LOGFILENAME,
+        'parser': 'samfundet-json',
+    },
+    {
+        'path': SQL_LOG_FILE,
+    },
+]
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'json': {
-            # Need to be a callable in order to use init parameters.
-            '()': lambda: JsonFormatter(indent=4 if ENV == Environment.DEV else None),
+            '()': JsonFormatter,
         },
         'file': {
             'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
