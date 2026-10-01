@@ -60,7 +60,7 @@
 </form>
 {% endif %}
 <div style="margin-top: 1rem; margin-bottom: 1rem">
-    <a href="?path={{ current_path }}&download=1" class="button">Download file</a>
+    <a href="{% querystring path=current_path download=1 %}" class="button">Download file</a>
 </div>
 
 
@@ -114,15 +114,15 @@
 {% if page_obj %}
 <div class="pagination">
     {% if page_obj.has_previous %}
-        <a href="?path={{ current_path }}&page=1{% if search_query %}&search_query={{ search_query }}{% endif %}{% if level_filter %}&level_filter={{ level_filter }}{% endif %}">Start</a>
-        <a href="?path={{ current_path }}&page={{ page_obj.previous_page_number }}{% if search_query %}&search_query={{ search_query }}{% endif %}{% if level_filter %}&level_filter={{ level_filter }}{% endif %}">← Previous</a>
+        <a href="{% querystring page=1 %}">Start</a>
+        <a href="{% querystring page=page_obj.previous_page_number %}">← Previous</a>
     {% endif %}
 
     <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
 
     {% if page_obj.has_next %}
-        <a href="?path={{ current_path }}&page={{ page_obj.next_page_number }}{% if search_query %}&search_query={{ search_query }}{% endif %}{% if level_filter %}&level_filter={{ level_filter }}{% endif %}">Next →</a>
-        <a href="?path={{ current_path }}&page={{ page_obj.paginator.num_pages }}{% if search_query %}&search_query={{ search_query }}{% endif %}{% if level_filter %}&level_filter={{ level_filter }}{% endif %}">End</a>
+        <a href="{% querystring page=page_obj.next_page_number %}">Next →</a>
+        <a href="{% querystring page=page_obj.paginator.num_pages %}">End</a>
     {% endif %}
 </div>
 {% endif %}
