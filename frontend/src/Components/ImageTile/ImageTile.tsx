@@ -13,17 +13,31 @@ type ImageTileProps = {
   onClick?(): void;
 };
 
+// Keeps busy tags from covering the image; the rest collapse into a "+N" chip.
+const MAX_VISIBLE_TAGS = 3;
+
 function TileContent({ image }: Pick<ImageTileProps, 'image'>) {
+  const visibleTags = image.tags.slice(0, MAX_VISIBLE_TAGS);
+  const hiddenTags = image.tags.slice(MAX_VISIBLE_TAGS);
+
   return (
     <div className={styles.imageTitle}>
       <p className={styles.text}>{image.title}</p>
       {image.tags.length > 0 && (
         <div className={styles.tags}>
-          {image.tags.map((tag) => (
+          {visibleTags.map((tag) => (
             <span key={tag.id} className={styles.tag}>
               {tag.name}
             </span>
           ))}
+          {hiddenTags.length > 0 && (
+            <span
+              className={classNames(styles.tag, styles.tagOverflow)}
+              title={hiddenTags.map((tag) => tag.name).join(', ')}
+            >
+              +{hiddenTags.length}
+            </span>
+          )}
         </div>
       )}
     </div>

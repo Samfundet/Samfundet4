@@ -95,12 +95,13 @@ $tile-overlay: linear-gradient(180deg, rgba(10, 12, 20, 0.08) 0%, rgba(10, 12, 2
 
 .tags {
   display: flex;
-  flex-wrap: wrap;
   gap: 0.4rem;
+  overflow: hidden;
 }
 
 .tag {
-  max-width: 100%;
+  flex: 0 1 auto;
+  min-width: 0;
   overflow: hidden;
   padding: 0.25rem 0.65rem;
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -112,4 +113,8 @@ $tile-overlay: linear-gradient(180deg, rgba(10, 12, 20, 0.08) 0%, rgba(10, 12, 2
   line-height: 1.1;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.tagOverflow {
+  flex-shrink: 0;
 }
