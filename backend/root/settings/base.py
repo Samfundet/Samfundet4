@@ -229,12 +229,15 @@ INSTALLED_APPS += [
 
 ### End: admin_auto_filters ###
 
-################## ADMIN LOG VIEWER ##################
+################## LOGGING ##################
+
+from root.utils.json_formatter import JsonFormatter  # noqa: E402
+from root.custom_classes.request_context_filter import RequestContextFilter  # noqa: E402
 
 LOGS_PARSERS = {
     'samfundet-json': {
         'pattern': (
-            r'^(?=.*"time":\s*"((?:\\.|[^"\\])*)")'
+            r'^(?=.*"time":\s*"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6})(?:Z|[+-]\d{2}:\d{2})")'
             r'(?=.*"level":\s*"((?:\\.|[^"\\])*)")'
             r'(?=.*"logger_name":\s*"((?:\\.|[^"\\])*)")'
             r'(?=.*"pathname":\s*"((?:\\.|[^"\\])*)")'
@@ -245,25 +248,23 @@ LOGS_PARSERS = {
         ),
         'column_names': ['Time', 'Level', 'Logger', 'Path', 'Line', 'Function', 'Message', 'Exception'],
         'column_types': ['TIME', 'LEVEL', 'OTHER', 'OTHER', 'OTHER', 'OTHER', 'OTHER', 'OTHER'],
-        'datetime_format': '%Y-%m-%dT%H:%M:%S.%f%z',
+        'datetime_format': '%Y-%m-%dT%H:%M:%S.%f',
     },
 }
-
-LOGS_DIRS = [
-    {
-        'path': BASE_DIR / 'logs',
-        'parser': 'samfundet-json',
-    },
-]
-
-################## LOGGING ##################
-
-from root.utils.json_formatter import JsonFormatter  # noqa: E402
-from root.custom_classes.request_context_filter import RequestContextFilter  # noqa: E402
 
 LOGFILENAME = BASE_DIR / 'logs' / '.log'
 SQL_LOG_FILE = BASE_DIR / 'logs' / 'sql.log'
 TEST_EMAIL_FILE = BASE_DIR / 'logs' / 'test_email.txt'
+
+LOGS_DIRS = [
+    {
+        'path': LOGFILENAME,
+        'parser': 'samfundet-json',
+    },
+    {
+        'path': SQL_LOG_FILE,
+    },
+]
 
 LOGGING = {
     'version': 1,
