@@ -11,6 +11,7 @@ import {
 import {
   AboutPage,
   AccountPage,
+  BilligPurchaseFailurePage,
   BilligPurchaseStatusPage,
   CaseDocumentsPage,
   ComponentPage,
@@ -154,6 +155,7 @@ export const router = createBrowserRouter(
             <Route path={ROUTES.frontend.events} element={<EventsPage />} />
             <Route path={ROUTES.frontend.event} element={<EventPage />} />
             <Route path={ROUTES.frontend.billig_status} element={<BilligPurchaseStatusPage />} />
+            <Route path={ROUTES.frontend.billig_handlekurv} element={<BilligPurchaseFailurePage />} />
           </Route>
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.casedocuments}
