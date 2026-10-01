@@ -246,7 +246,7 @@ LOGS_PARSERS = {
             r'(?=.*"message":\s*"((?:\\.|[^"\\])*)")'
             r'(?=(?:.*"exception":\s*"((?:\\.|[^"\\])*)"|.*$)).*$'
         ),
-        'column_names': ['Time', 'Level', 'Logger', 'Path', 'Line', 'Function', 'Message', 'Exception'],
+        'column_names': ['Time (UTC)', 'Level', 'Logger', 'Path', 'Line', 'Function', 'Message', 'Exception'],
         'column_types': ['TIME', 'LEVEL', 'OTHER', 'OTHER', 'OTHER', 'OTHER', 'OTHER', 'OTHER'],
         'datetime_format': '%Y-%m-%dT%H:%M:%S.%f',
     },

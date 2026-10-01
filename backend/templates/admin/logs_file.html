@@ -31,12 +31,12 @@
     </div>
 
     <div style="display:flex; flex-direction:column;">
-        <label for="time_from">Datetime from</label>
+        <label for="time_from">Datetime from (UTC)</label>
         <input id="time_from" type="datetime-local" name="time_from" value="{{ request.GET.time_from }}" onchange="this.form.submit()">
     </div>
 
     <div style="display:flex; flex-direction:column;">
-        <label for="time_to">Datetime to</label>
+        <label for="time_to">Datetime to (UTC)</label>
         <input id="time_to" type="datetime-local" name="time_to" value="{{ request.GET.time_to }}" onchange="this.form.submit()">
     </div>
 
@@ -91,11 +91,11 @@
                                 </button>
                             </td>
                         {% else %}
-                            <td>{{ value }}</td>
+                            <td{% if row|length != 1 and not forloop.last %} class="json-value"{% endif %}>{{ value }}</td>
                         {% endif %}
                     {% endfor %}
                 </tr>
-                {% if row|last %}
+                {% if row|last and row|length != 1 %}
                     <tr class="traceback-row">
                         <td colspan="{{ row|length }}" style="padding: 5px; border: none;">
                             <div class="traceback-wrapper" style="max-height: 0; overflow: hidden; transition: max-height 0.2s;">
@@ -246,7 +246,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     darkModePreference.addEventListener("change", applyLevelColors);
 
-    document.querySelectorAll(".json-exception").forEach(element => {
+    document.querySelectorAll(".json-value, .json-exception").forEach(element => {
         element.textContent = JSON.parse(`"${element.textContent}"`);
     });
 });
