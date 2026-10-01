@@ -148,7 +148,7 @@ input[type="datetime-local"] {
 
 .traceback-wrapper pre,
 .json-exception {
-    color: #000;
+    color: var(--body-fg);
     overflow-x: auto;
 }
 
@@ -195,8 +195,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (!'{{ column_types|safe|escapejs }}') {
         return;
     }
-    const theme = document.documentElement.getAttribute("data-theme");
-    const isDarkMode = theme === "dark" || (theme === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
     const levelColorsLight = {
         debug: "#f3f4f6",
         info: "#dbeafe",
@@ -212,30 +211,40 @@ document.addEventListener("DOMContentLoaded", function() {
         error: "#5c1f26",
         critical: "#450a0a",
     };
-    const levelColors = theme === "dark" ? levelColorsDark : levelColorsLight;
-
     const stringColumnTypes = '{{ column_types|safe|escapejs }}'.replaceAll("'", "\"")
     let columnTypes = JSON.parse(stringColumnTypes);
     columnTypes = columnTypes.map(e => e.toLowerCase());
-    levelColumnIndex = columnTypes.indexOf("level");
+    const levelColumnIndex = columnTypes.indexOf("level");
 
     if (levelColumnIndex === -1) {
         return;
     }
 
-    document.querySelectorAll("table tbody tr").forEach(tr => {
-        const cells = tr.querySelectorAll("td");
-        if (!cells[levelColumnIndex]) {
-            return;
-        }
-        const text = cells[levelColumnIndex].innerText.trim().toLowerCase();
-        if (levelColors[text]) {
-            tr.style.backgroundColor = levelColors[text];
-            if (isDarkMode) {
-                tr.style.color = "#000";
+    function applyLevelColors() {
+        const theme = document.documentElement.getAttribute("data-theme");
+        const isDarkMode = theme === "dark" || (theme === "auto" && darkModePreference.matches);
+        const levelColors = isDarkMode ? levelColorsDark : levelColorsLight;
+        const levelTextColor = isDarkMode ? "#fff" : "#000";
+
+        document.querySelectorAll("table tbody tr").forEach(tr => {
+            const cells = tr.querySelectorAll("td");
+            if (!cells[levelColumnIndex]) {
+                return;
             }
-        }
+            const text = cells[levelColumnIndex].innerText.trim().toLowerCase();
+            if (levelColors[text]) {
+                tr.style.backgroundColor = levelColors[text];
+                tr.style.color = levelTextColor;
+            }
+        });
+    }
+
+    applyLevelColors();
+    new MutationObserver(applyLevelColors).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"],
     });
+    darkModePreference.addEventListener("change", applyLevelColors);
 
     document.querySelectorAll(".json-exception").forEach(element => {
         element.textContent = JSON.parse(`"${element.textContent}"`);
