@@ -444,11 +444,8 @@ class Venue(CustomBaseModel):
 
 
 class ClosedPeriod(CustomBaseModel):
-    message_nb = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)')
-    message_en = models.TextField(blank=True, null=True, verbose_name='Melding (engelsk)')
-
-    description_nb = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (norsk)')
-    description_en = models.TextField(blank=True, null=True, verbose_name='Beskrivelse (engelsk)')
+    message_nb = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)', max_length=200)
+    message_en = models.TextField(blank=True, null=True, verbose_name='Melding (engelsk)', max_length=200)
 
     start_dt = models.DateField(blank=True, null=False, verbose_name='Start dato')
     end_dt = models.DateField(blank=True, null=False, verbose_name='Slutt dato')

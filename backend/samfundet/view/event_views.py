@@ -9,7 +9,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.filters import SearchFilter
 from rest_framework.request import Request
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -23,6 +23,7 @@ from samfundet.utils import event_query
 from samfundet.pagination import CustomPageNumberPagination
 from samfundet.serializers import (
     EventSerializer,
+    EventCloneSerializer,
     EventGroupSerializer,
     PurchaseFeedbackSerializer,
 )
@@ -43,6 +44,16 @@ class EventView(ModelViewSet):
         FeatureEnabled,
     )
     serializer_class = EventSerializer
+    queryset = Event.objects.all()
+
+
+class EventCloneView(RetrieveAPIView):
+    feature_key = WebFeatures.EVENTS
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
+    serializer_class = EventCloneSerializer
     queryset = Event.objects.all()
 
 

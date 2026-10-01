@@ -1,10 +1,11 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { postEvent, putEvent } from '~/api';
 import type { EventWriteDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { eventCloneKeys, eventKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 
 type UpdateEventInput = {
@@ -15,10 +16,13 @@ type UpdateEventInput = {
 export function useEventMutations() {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
+  const queryClient = useQueryClient();
 
   const createEventMutation = useMutation({
     mutationFn: postEvent,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: eventKeys.all });
+      queryClient.invalidateQueries({ queryKey: eventCloneKeys.all });
       navigate({ url: ROUTES.frontend.admin_events });
       toast.success(t(KEY.common_creation_successful));
     },
@@ -30,6 +34,8 @@ export function useEventMutations() {
   const editEventMutation = useMutation({
     mutationFn: (data: UpdateEventInput) => putEvent(data.id, data.payload),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: eventKeys.all });
+      queryClient.invalidateQueries({ queryKey: eventCloneKeys.all });
       navigate({ url: ROUTES.frontend.admin_events });
       toast.success(t(KEY.common_save_successful));
     },
