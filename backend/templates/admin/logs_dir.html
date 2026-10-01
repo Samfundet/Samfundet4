@@ -1,0 +1,41 @@
+{% extends "admin/base_site.html" %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Home</a>
+    {% for crumb in breadcrumbs %}
+        ›
+        {% if forloop.last %}
+            {{ crumb.name }}
+        {% else %}
+            <a href="{{ crumb.url }}">{{ crumb.name }}</a>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block content %}
+<ul>
+{% for item in items %}
+    <li style="display: flex; align-items: center; gap: 0.5rem;">
+        {% if item.is_dir %}
+            📁 <a href="?path={{ item.path }}">{{ item.name }}</a>
+        {% else %}
+            📄 <a href="?path={{ item.path }}">{{ item.name }}</a>
+        {% endif %}
+        {% if item.errors_since_last_login %}
+            <span style="
+                background-color: #d9534f;
+                color: white;
+                border-radius: 12px;
+                padding: 0px 8px;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            ">
+                Errors/Criticals since last login: {{ item.errors_since_last_login }}
+            </span>
+        {% endif %}
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}
