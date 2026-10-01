@@ -40,7 +40,7 @@ export function mapEventToFormValues(params: {
     billig_id: 'billig' in event ? event.billig?.id : undefined,
     spotify_uri: event.spotify_uri || '',
     youtube_link: event.youtube_link || '',
-    youtube_embed: event.youtube_embed || '',
+    youtube_embed: event.youtube_embed ?? false,
     facebook_link: event.facebook_link || '',
     soundcloud_link: event.soundcloud_link || '',
     instagram_link: event.instagram_link || '',
