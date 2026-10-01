@@ -25,6 +25,8 @@ $tile-overlay: linear-gradient(180deg, rgba(10, 12, 20, 0.08) 0%, rgba(10, 12, 2
     filter 180ms ease;
   border: none;
   isolation: isolate;
+  color: inherit;
+  text-decoration: none;
 
   &::before {
     content: '';
@@ -43,8 +45,11 @@ $tile-overlay: linear-gradient(180deg, rgba(10, 12, 20, 0.08) 0%, rgba(10, 12, 2
   padding: 0;
   text-align: inherit;
 
+  // Beats the global a:hover underline when rendered as a link.
   &:hover {
-    transform: translateY(-4px);
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
   }
 
   &:hover::before {
@@ -52,16 +57,24 @@ $tile-overlay: linear-gradient(180deg, rgba(10, 12, 20, 0.08) 0%, rgba(10, 12, 2
   }
 
   &:focus-visible {
-    outline: none;
-    box-shadow:
-      0 0 0 4px rgba(c.$blue-600, 0.24),
-      0 18px 40px rgba(0, 0, 0, 0.16);
+    outline: 2px solid c.$blue-500;
+    outline-offset: 2px;
   }
 }
 
 .selected {
-  box-shadow: 0 0 0 4px c.$blue-300;
-  transform: translateY(-2px);
+  // Ring is drawn inside the tile so parents with overflow: hidden can't clip it.
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border: 2px solid c.$blue-500;
+    border-radius: inherit;
+    // Light inner edge so the ring still reads against dark images.
+    box-shadow: inset 0 0 0 1px rgba(c.$white-50, 0.7);
+    pointer-events: none;
+  }
 
   &::before {
     background: linear-gradient(180deg, rgba(10, 12, 20, 0.02) 0%, rgba(10, 12, 20, 0.36) 45%, rgba(10, 12, 20, 0.9) 100%);
@@ -79,6 +92,20 @@ $tile-overlay: linear-gradient(180deg, rgba(10, 12, 20, 0.08) 0%, rgba(10, 12, 2
   padding: 1rem 1rem 0.95rem;
   color: c.$white-50;
   text-align: left;
+}
+
+.selectedBadge {
+  @include flex-row-center;
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  z-index: 2;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: c.$blue-500;
+  color: c.$white-50;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .text {

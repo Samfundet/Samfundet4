@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import type { ImageDto } from '~/dto';
 import { backgroundImageFromUrl, imageUrl } from '~/utils';
@@ -16,31 +17,38 @@ type ImageTileProps = {
 // Keeps busy tags from covering the image; the rest collapse into a "+N" chip.
 const MAX_VISIBLE_TAGS = 3;
 
-function TileContent({ image }: Pick<ImageTileProps, 'image'>) {
+function TileContent({ image, selected }: Pick<ImageTileProps, 'image' | 'selected'>) {
   const visibleTags = image.tags.slice(0, MAX_VISIBLE_TAGS);
   const hiddenTags = image.tags.slice(MAX_VISIBLE_TAGS);
 
   return (
-    <div className={styles.imageTitle}>
-      <p className={styles.text}>{image.title}</p>
-      {image.tags.length > 0 && (
-        <div className={styles.tags}>
-          {visibleTags.map((tag) => (
-            <span key={tag.id} className={styles.tag}>
-              {tag.name}
-            </span>
-          ))}
-          {hiddenTags.length > 0 && (
-            <span
-              className={classNames(styles.tag, styles.tagOverflow)}
-              title={hiddenTags.map((tag) => tag.name).join(', ')}
-            >
-              +{hiddenTags.length}
-            </span>
-          )}
-        </div>
+    <>
+      {selected && (
+        <span className={styles.selectedBadge}>
+          <Icon icon="material-symbols:check-rounded" width={16} />
+        </span>
       )}
-    </div>
+      <div className={styles.imageTitle}>
+        <p className={styles.text}>{image.title}</p>
+        {image.tags.length > 0 && (
+          <div className={styles.tags}>
+            {visibleTags.map((tag) => (
+              <span key={tag.id} className={styles.tag}>
+                {tag.name}
+              </span>
+            ))}
+            {hiddenTags.length > 0 && (
+              <span
+                className={classNames(styles.tag, styles.tagOverflow)}
+                title={hiddenTags.map((tag) => tag.name).join(', ')}
+              >
+                +{hiddenTags.length}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+    </>
   );
 }
 
@@ -57,7 +65,7 @@ export function ImageTile({ image, className, selected = false, url, onClick }: 
   if (url !== undefined) {
     return (
       <Link url={url} plain={true} className={tileClassName} style={backgroundImageFromUrl(bgUrl)}>
-        <TileContent image={image} />
+        <TileContent image={image} selected={selected} />
       </Link>
     );
   }
@@ -71,14 +79,14 @@ export function ImageTile({ image, className, selected = false, url, onClick }: 
         style={backgroundImageFromUrl(bgUrl)}
         onClick={onClick}
       >
-        <TileContent image={image} />
+        <TileContent image={image} selected={selected} />
       </button>
     );
   }
 
   return (
     <div className={tileClassName} style={backgroundImageFromUrl(bgUrl)}>
-      <TileContent image={image} />
+      <TileContent image={image} selected={selected} />
     </div>
   );
 }
