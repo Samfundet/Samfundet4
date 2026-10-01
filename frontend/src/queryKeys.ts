@@ -78,15 +78,6 @@ export const recruitmentGangKeys = {
   detail: (id: number) => [...recruitmentGangKeys.details(), id] as const,
 };
 
-export const venueKeys = {
-  all: ['venues'] as const,
-  lists: () => [...venueKeys.all, 'list'] as const,
-  list: (filters: unknown[]) => [...venueKeys.lists(), { filters }] as const,
-  details: () => [...venueKeys.all, 'detail'] as const,
-  detail: (slug: string) => [...venueKeys.details(), slug] as const,
-  open: () => [...venueKeys.list(['open'])] as const,
-};
-
 export const siteBannerKeys = {
   all: ['siteBanners'] as const,
   active: () => [...siteBannerKeys.all, 'active'] as const,

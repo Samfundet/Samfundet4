@@ -9,11 +9,11 @@ import {
   type VenueOpeningHoursUpdate,
   applyVenueDayScheduleChanges,
   getVenueOpeningHoursChanges,
+  venueKeys,
 } from '~/domain/venues';
 import type { VenueDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { venueKeys } from '~/queryKeys';
 import type { Day } from '~/types';
 import { lowerCapitalize } from '~/utils';
 import { AdminPage } from '../AdminPageLayout';
