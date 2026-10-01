@@ -77,8 +77,19 @@
             {% for row in rows %}
                 <tr>
                     {% for value in row %}
-                        {% if forloop.last and value and row|length != 1%}
-                            <td><button type="button" class="button" onclick="toggleTraceback(this)" id="show-traceback-button">Show Traceback</button></td>
+                        {% if forloop.revcounter == 2 and value %}
+                            <td>
+                                <details>
+                                    <summary>Show exception</summary>
+                                    <pre class="json-exception">{{ value }}</pre>
+                                </details>
+                            </td>
+                        {% elif forloop.last and value and row|length != 1 %}
+                            <td>
+                                <button type="button" class="button" onclick="toggleTraceback(this)">
+                                    Show traceback
+                                </button>
+                            </td>
                         {% else %}
                             <td>{{ value }}</td>
                         {% endif %}
@@ -222,6 +233,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 tr.style.color = "#000";
             }
         }
+    });
+
+    document.querySelectorAll(".json-exception").forEach(element => {
+        element.textContent = JSON.parse(`"${element.textContent}"`);
     });
 });
 </script>
