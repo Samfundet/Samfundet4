@@ -17,7 +17,7 @@ import {
   RadioButton,
 } from '~/Components';
 import { validEmail } from '~/Forms/util';
-import type { EventDto } from '~/dto';
+import type { EventDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { INFORMATION_PAGES } from '~/routes/samf-three';

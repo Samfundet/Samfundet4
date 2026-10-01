@@ -3,15 +3,14 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
-import type { EventCloneDto, EventDto, EventWriteDto } from '~/dto';
-import { type EventCategoryValue, EventStatusChoice } from '~/types';
+import { type EventCategoryValue, type EventDto, EventStatusChoice, type EventWriteDto } from '~/domain';
 import { eventSchema } from '../EventCreatorSchema';
 import { mapEventToFormValues } from '../utils';
 
 export type FormType = z.infer<typeof eventSchema>;
 
 export function useEventCreatorForm(params: {
-  event?: Partial<EventDto> | EventCloneDto;
+  event?: Partial<EventDto>;
   defaultCategory: EventCategoryValue;
   defaultLocation: string;
   forTemplate?: boolean;
@@ -43,7 +42,7 @@ export function useEventCreatorForm(params: {
       billig_id: undefined,
       spotify_uri: '',
       youtube_link: '',
-      youtube_embed: '',
+      youtube_embed: false,
       soundcloud_link: '',
       instagram_link: '',
       facebook_link: '',
@@ -92,13 +91,12 @@ export function useEventCreatorForm(params: {
   }, [startDt, visibilityFromDt, trigger]);
 
   function buildPayload(values: FormType): EventWriteDto {
-    const start = values.start_dt ? new Date(values.start_dt) : null;
-    const computedEndDt = start ? new Date(start?.getTime() + (values.duration ?? 0) * 60_000) : null;
+    const endDt = values.end_dt ? new Date(values.end_dt) : null;
 
     return {
       ...values,
-      visibility_to_dt: computedEndDt ? computedEndDt.toISOString() : '',
-      end_dt: computedEndDt ? computedEndDt.toISOString() : '',
+      visibility_to_dt: endDt ? endDt.toISOString() : '',
+      end_dt: endDt ? endDt.toISOString() : '',
       image_id: values.image?.id,
     };
   }

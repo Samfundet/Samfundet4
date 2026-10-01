@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import type { EventCategoryValue } from '~/types';
+import type { EventCategoryValue } from '~/domain';
 import { EventQuery } from './EventQuery';
 
 // Local component config.
