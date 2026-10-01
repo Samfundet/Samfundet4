@@ -285,7 +285,6 @@ class TestUserViews:
 
 @pytest.mark.django_db
 class TestVenueOpenViews:
-    # Assuming the route is named like this based on other tests
     url = reverse(routes.samfundet__venues_open_venues)
 
     def _create_venue(self, slug: str, **kwargs: Any) -> Venue:
@@ -294,7 +293,6 @@ class TestVenueOpenViews:
         default_data = {
             'name': f'Venue {slug}',
             'slug': slug,
-            # Set all opening/closing to default (8:00/20:00) or 00:00/00:00 if closed
             'opening_monday': dt_time(8, 0),
             'closing_monday': dt_time(20, 0),
             'opening_tuesday': dt_time(8, 0),
@@ -308,7 +306,8 @@ class TestVenueOpenViews:
             'opening_saturday': dt_time(8, 0),
             'closing_saturday': dt_time(1, 0),
             'opening_sunday': zero_time,
-            'closing_sunday': zero_time,  # closed on Sunday
+            'closing_sunday': zero_time,
+            'is_open_sunday': False,
         }
         default_data.update(kwargs)
         return Venue.objects.create(**default_data)
@@ -329,11 +328,7 @@ class TestVenueOpenViews:
         closed_slug: str,
         test_date: str,
     ):
-        """
-        Test that only venues with non-00:00-00:00 opening/closing hours for the
-        current day are returned.
-        """
-        zero_time = dt_time(0, 0, 0)
+        """Test that the weekday boolean is the only value controlling filtering."""
         open_time = dt_time(10, 0, 0)
         close_time = dt_time(18, 0, 0)
 
@@ -342,25 +337,28 @@ class TestVenueOpenViews:
             'slug': open_slug,
             f'opening_{day_of_week}': open_time,
             f'closing_{day_of_week}': close_time,
+            f'is_open_{day_of_week}': True,
         }
         self._create_venue(**open_venue_kwargs)
 
-        # 2. Venue that is explicitly closed (00:00 - 00:00)
+        # Ordinary times are deliberately retained while the day is closed.
         closed_venue_kwargs = {
             'slug': closed_slug,
-            f'opening_{day_of_week}': zero_time,
-            f'closing_{day_of_week}': zero_time,
+            f'opening_{day_of_week}': open_time,
+            f'closing_{day_of_week}': close_time,
+            f'is_open_{day_of_week}': False,
         }
         self._create_venue(**closed_venue_kwargs)
 
-        # 3. Venue open on a different day (should be treated as closed on the test day if explicitly set to 0:00-0:00)
+        # A venue open on a different day is still closed on the selected day.
         other_slug = 'other_day'
         other_day_kwargs = {
             'slug': other_slug,
             'opening_tuesday': open_time,
             'closing_tuesday': close_time,
-            f'opening_{day_of_week}': zero_time,
-            f'closing_{day_of_week}': zero_time,
+            f'opening_{day_of_week}': open_time,
+            f'closing_{day_of_week}': close_time,
+            f'is_open_{day_of_week}': False,
         }
         self._create_venue(**other_day_kwargs)
 
@@ -373,12 +371,11 @@ class TestVenueOpenViews:
             assert status.is_success(code=response.status_code)
             data = response.json()
 
-            # We expect only the venue with non-zero opening hours to be included
             assert len(data) == 1
             assert data[0]['slug'] == open_slug
             # Check the returned times for the open venue
-            assert data[0][f'opening_{day_of_week}'] == open_time.strftime('%H:%M:%S')
-            assert data[0][f'closing_{day_of_week}'] == close_time.strftime('%H:%M:%S')
+            assert data[0][f'opening_{day_of_week}'] == open_time.strftime('%H:%M')
+            assert data[0][f'closing_{day_of_week}'] == close_time.strftime('%H:%M')
 
     def test_open_venues_no_venues(self, fixture_rest_client: APIClient):
         """Test with no venues in the database."""
@@ -390,18 +387,13 @@ class TestVenueOpenViews:
             assert status.is_success(code=response.status_code)
             assert len(response.data) == 0
 
-    def test_open_venues_not_excluded_when_one_time_is_non_zero(self, fixture_rest_client: APIClient):
-        """
-        Test that a venue is included if only one of the opening or closing times is 00:00:00.
-        The view logic excludes ONLY when opening_day=00:00:00 AND closing_day=00:00:00.
-        """
-        open_venue_slug = 'partial_zero'
-
-        # Create a venue where opening is 00:00:00 but closing is NOT 00:00:00
+    def test_open_venues_includes_open_venue_with_midnight_times(self, fixture_rest_client: APIClient):
+        open_venue_slug = 'midnight'
         self._create_venue(
             slug=open_venue_slug,
             opening_monday=dt_time(0, 0, 0),
-            closing_monday=dt_time(10, 0, 0),  # Non-zero closing time
+            closing_monday=dt_time(0, 0, 0),
+            is_open_monday=True,
         )
 
         with freezegun.freeze_time('2023-10-23 12:00:00'):  # Monday
@@ -412,7 +404,6 @@ class TestVenueOpenViews:
             assert status.is_success(code=response.status_code)
             data = response.json()
 
-            # Expected to be included
             assert len(data) == 1
             assert data[0]['slug'] == open_venue_slug
 
@@ -434,11 +425,10 @@ class TestVenueOpenViews:
             assert data[0]['slug'] == slug
 
             # 4. Verify the opening times correspond to Saturday (not Sunday)
-            assert data[0]['opening_saturday'] == '08:00:00'
-            assert data[0]['closing_saturday'] == '01:00:00'
+            assert data[0]['opening_saturday'] == '08:00'
+            assert data[0]['closing_saturday'] == '01:00'
 
-            # Verify Sunday is explicitly closed (00:00:00), confirming we didn't fetch Sunday logic
-            assert data[0]['opening_sunday'] == '00:00:00'
+            assert data[0]['is_open_sunday'] is False
 
 
 class TestMerchView:
