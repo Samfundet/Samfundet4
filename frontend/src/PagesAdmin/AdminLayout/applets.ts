@@ -40,6 +40,13 @@ export const appletCategories: AdminAppletCategory[] = [
         feature: 'openingHours',
       },
       {
+        title_nb: 'Sidelenker',
+        title_en: 'Site banners',
+        perm: PERM.SAMFUNDET_VIEW_SITEBANNER,
+        icon: 'mdi:bullhorn-outline',
+        url: ROUTES.frontend.admin_site_banners,
+      },
+      {
         title_nb: 'Bildearkiv',
         title_en: 'Images',
         perm: PERM.SAMFUNDET_ADD_IMAGE,

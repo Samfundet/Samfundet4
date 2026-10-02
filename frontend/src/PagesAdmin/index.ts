@@ -43,3 +43,4 @@ export { SultenMenuItemFormAdminPage } from './SultenMenuItemFormAdminPage';
 export { SultenReservationAdminPage } from './SultenReservationAdminPage';
 export { UsersAdminPage } from './UsersAdminPage';
 export { MDBConnectFormAdminPage } from './MDBConnectFormAdminPage';
+export { SiteBannerAdminPage, SiteBannerFormAdminPage } from './SiteBannerAdminPage';

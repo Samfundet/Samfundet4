@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { type MutableRefObject, type RefObject, useEffect, useRef, useState } from 'react';
+import { type MutableRefObject, type RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 import { getTextItem, putUserPreference } from '~/api';
@@ -345,33 +345,23 @@ export function useCustomNavigate(): CustomNavigateFn {
   const navigate = useNavigate();
   const { setIsMobileNavigation } = useGlobalContext();
 
-  function handleClick({ event, isMetaDown, url, replace = false, linkTarget = 'frontend' }: CustomNavigateProps) {
-    const finalUrl = linkTarget === 'backend' ? BACKEND_DOMAIN + url : url;
-    // Stop default <a> tag onClick handling. We want custom behaviour depending on the target.
-    event?.preventDefault();
+  const handleClick = useCallback(
+    ({ event, isMetaDown, url, replace = false, linkTarget = 'frontend' }: CustomNavigateProps) => {
+      const finalUrl = linkTarget === 'backend' ? BACKEND_DOMAIN + url : url;
+      event?.preventDefault();
+      event?.stopPropagation();
+      setIsMobileNavigation(false);
 
-    // Even though nested <a> tags are illegal, they might occur.
-    // To prevent multiple link clicks on overlaying elements, stop propagation upwards.
-    event?.stopPropagation();
-
-    // Close mobile menu if originates from there.
-    setIsMobileNavigation(false);
-
-    /** Detected desire to open the link in a new tab.
-     * True if ctrl or cmd click.
-     */
-    const isCmdClick = isMetaDown || (event && (event.ctrlKey || event.metaKey));
-    // React navigation.
-    if (linkTarget === 'frontend' && !isCmdClick) {
-      navigate(typeof url === 'number' ? url : finalUrl, { replace });
-    }
-    // Normal change of href to trigger reload.
-    else if (linkTarget === 'backend' && !isCmdClick) window.location.href = finalUrl;
-    else if (linkTarget === 'samf3' && !isCmdClick) window.location.href = finalUrl;
-    else if (linkTarget === 'email') window.location.href = finalUrl;
-    // Open in new tab.
-    else window.open(finalUrl, '_blank');
-  }
+      const isCmdClick = isMetaDown || (event && (event.ctrlKey || event.metaKey));
+      if (linkTarget === 'frontend' && !isCmdClick) {
+        navigate(typeof url === 'number' ? url : finalUrl, { replace });
+      } else if (linkTarget === 'backend' && !isCmdClick) window.location.href = finalUrl;
+      else if (linkTarget === 'samf3' && !isCmdClick) window.location.href = finalUrl;
+      else if (linkTarget === 'email') window.location.href = finalUrl;
+      else window.open(finalUrl, '_blank');
+    },
+    [navigate, setIsMobileNavigation],
+  );
 
   return handleClick;
 }

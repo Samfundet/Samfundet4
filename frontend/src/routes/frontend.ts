@@ -79,6 +79,10 @@ export const ROUTES_FRONTEND = {
   admin_closed: '/control-panel/closed/',
   admin_closed_create: '/control-panel/closed/create/',
   admin_closed_edit: '/control-panel/closed/edit/:id/',
+  // Site banners:
+  admin_site_banners: '/control-panel/site-banners/',
+  admin_site_banners_create: '/control-panel/site-banners/create/',
+  admin_site_banners_edit: '/control-panel/site-banners/edit/:id/',
   // Images:
   admin_images: '/control-panel/images/',
   admin_images_create: '/control-panel/images/create/',
