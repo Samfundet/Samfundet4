@@ -1,0 +1,55 @@
+@use 'src/mixins' as *;
+
+@use 'src/constants' as *;
+
+@use 'src/styles/_variables' as *;
+
+.page {
+  margin: 0 auto;
+  padding-top: 1em;
+  padding-bottom: 5em;
+}
+
+
+
+.venueBlockContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em 2em;
+  margin: 1em 1em 1em 1em;
+  align-items: stretch;
+
+  @include for-mobile-only {
+    grid-template-columns: 1fr; 
+  }
+}
+
+.venueBlock {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding-bottom: 2em;
+  border-bottom: 1px solid $grey-36;
+
+  &:nth-last-child(-n + 2) {
+    border-bottom: none;
+  }
+}
+
+.venueName {
+  margin: 0 0 2vh 0;
+}
+
+.timeDuration {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  margin: 0.5em 0 0 0; 
+}
+
+.today {
+  font-weight: $font-weight-bold;
+}
+
+.notToday {
+  color: $grey-2;
+}
