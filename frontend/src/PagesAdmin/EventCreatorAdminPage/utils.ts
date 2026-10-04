@@ -2,6 +2,11 @@ import { type EventCategoryValue, type EventDto, EventStatusChoice } from '~/dom
 import { utcTimestampToLocal } from '~/utils';
 import type { FormType } from './hooks/useEventCreatorForm';
 
+export function isValidEventId(value: unknown): value is number | string {
+  if (typeof value === 'number') return Number.isSafeInteger(value) && value > 0;
+  return typeof value === 'string' && /^[1-9]\d*$/.test(value) && Number.isSafeInteger(Number(value));
+}
+
 function computeDurationMinutes(startIso?: string, endIso?: string) {
   if (!startIso || !endIso) return 0;
   return Math.round((new Date(endIso).getTime() - new Date(startIso).getTime()) / 60000);
