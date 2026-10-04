@@ -9,8 +9,8 @@ export {
   getEvent,
   getEventGroups,
   getBilligEvents,
+  getEventForCloning,
 } from './api';
-export type { EventsUpcomingBackendResponse, EventsUpcomingResponse } from './api';
 export { useCreateEvent, useUpdateEvent, useDeleteEvent } from './mutations';
 export {
   useGetEventsPerDay,
@@ -22,8 +22,7 @@ export {
   useGetEventGroups,
   useGetBilligEvents,
 } from './queries';
-export type { Filters } from './queries';
-export { eventKeys, eventCloneKeys, billigKeys } from './queryKeys';
+export { eventKeys, billigKeys } from './queryKeys';
 export {
   EVENT_TITLE,
   EVENT_DESCRIPTION_LONG,
@@ -56,3 +55,26 @@ export {
   EVENT_VISIBILITY_TO_DT,
   EVENT_PAID_OPTION,
 } from './schema';
+export {
+  EventStatusChoice,
+  EventAgeRestriction,
+  EventTicketType,
+  ALL_TICKET_TYPES,
+  PAID_TICKET_TYPES,
+  EventCategory,
+} from './types';
+export type {
+  EventId,
+  Filters,
+  EventStatus,
+  EventAgeRestrictionValue,
+  EventTicketTypeValue,
+  EventCategoryValue,
+  EventCustomTicketDto,
+  EventDto,
+  EventWriteDto,
+  EventGroupDto,
+  EventsUpcomingBackendResponse,
+  EventsUpcomingResponse,
+  EventsPaginationType,
+} from './types';

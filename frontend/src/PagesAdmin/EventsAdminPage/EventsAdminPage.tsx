@@ -7,13 +7,17 @@ import { Button, EventQuery, TimeDisplay } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { PagedPagination } from '~/Components/Pagination';
 import { Table } from '~/Components/Table';
-import { useDeleteEvent, useGetEvents, useGetEventsUpcomingPaginated } from '~/domain';
-import type { EventDto } from '~/dto';
+import {
+  type EventCategoryValue,
+  type EventDto,
+  useDeleteEvent,
+  useGetEvents,
+  useGetEventsUpcomingPaginated,
+} from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import type { EventCategoryValue } from '~/types';
 import { dbT, getTicketTypeKey, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import { EventTemplateSearch } from '../EventCreatorAdminPage/components/EventTemplateSearch';

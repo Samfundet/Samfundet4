@@ -6,7 +6,7 @@ import { Button, IconButton, InputField, Link, TimeDisplay } from '~/Components'
 import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
-import type { EventDto } from '~/dto';
+import type { EventDto } from '~/domain';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';

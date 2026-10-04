@@ -1,5 +1,4 @@
-import type { EventDto } from '~/dto';
-import { type EventCategoryValue, EventStatusChoice } from '~/types';
+import { type EventCategoryValue, type EventDto, EventStatusChoice } from '~/domain';
 import { utcTimestampToLocal } from '~/utils';
 import type { FormType } from './hooks/useEventCreatorForm';
 

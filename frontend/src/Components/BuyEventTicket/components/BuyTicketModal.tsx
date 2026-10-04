@@ -1,6 +1,6 @@
 import { H2 } from '~/Components/H2';
 import { logoBlack, logoWhite } from '~/assets';
-import type { EventDto } from '~/dto';
+import type { EventDto } from '~/domain';
 import { useIsDarkTheme } from '~/hooks';
 import { COLORS } from '~/types';
 import { dbT } from '~/utils';

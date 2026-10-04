@@ -42,6 +42,7 @@ export {
   getEvent,
   getEventGroups,
   getBilligEvents,
+  getEventForCloning,
   useCreateEvent,
   useUpdateEvent,
   useDeleteEvent,
@@ -54,6 +55,7 @@ export {
   useGetEventGroups,
   useGetBilligEvents,
   eventKeys,
+  billigKeys,
   EVENT_TITLE,
   EVENT_DESCRIPTION_LONG,
   EVENT_DESCRIPTION_SHORT,
@@ -85,7 +87,29 @@ export {
   EVENT_VISIBILITY_TO_DT,
   EVENT_PAID_OPTION,
 } from './events';
-export type { EventsUpcomingBackendResponse, EventsUpcomingResponse, Filters } from './events';
+export {
+  EventStatusChoice,
+  EventAgeRestriction,
+  EventTicketType,
+  ALL_TICKET_TYPES,
+  PAID_TICKET_TYPES,
+  EventCategory,
+} from './events';
+export type {
+  EventId,
+  Filters,
+  EventStatus,
+  EventAgeRestrictionValue,
+  EventTicketTypeValue,
+  EventCategoryValue,
+  EventCustomTicketDto,
+  EventDto,
+  EventWriteDto,
+  EventGroupDto,
+  EventsUpcomingBackendResponse,
+  EventsUpcomingResponse,
+  EventsPaginationType,
+} from './events';
 export {
   closedPeriodKeys,
   useCreateClosedPeriod,
@@ -98,3 +122,5 @@ export {
   DATE,
 } from './closedPeriods';
 export { gangKeys, useGetOrganizedGangs, useGangMutations } from './gangs';
+export { zodEnum } from './utils';
+export { queryClient } from './queryClient';

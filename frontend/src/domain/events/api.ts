@@ -1,12 +1,18 @@
 import axios, { type AxiosResponse } from 'axios';
 import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from '~/constants';
-import type { EventDto, EventGroupDto, EventWriteDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import type { EventsPaginationType } from '~/types';
 import { buildPaginatedUrl } from '~/utils';
-import type { Filters } from './queries';
+import type {
+  EventDto,
+  EventGroupDto,
+  EventWriteDto,
+  EventsPaginationType,
+  EventsUpcomingBackendResponse,
+  EventsUpcomingResponse,
+  Filters,
+} from './types';
 
 /**
  * Groups events by day.
@@ -19,18 +25,6 @@ export async function getEventsPerDay(): Promise<Record<string, EventDto[]>> {
 
   return response.data;
 }
-
-export type EventsUpcomingBackendResponse = {
-  events: EventDto[];
-  categories: [string, string][];
-  locations: string[];
-};
-
-export type EventsUpcomingResponse = {
-  events: EventDto[];
-  categories: string[];
-  locations: string[];
-};
 
 /**
  * Get upcoming events from today and onwards.
@@ -89,9 +83,9 @@ export async function getEventsUpcomingPaginated(
 }
 
 /**
- * Get all events in database
+ * Get all events - previous and upcoming
  *
- * @returns Array of EventDto
+ * @returns Array of `EventDto`
  * */
 export async function getEvents(): Promise<EventDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_list;

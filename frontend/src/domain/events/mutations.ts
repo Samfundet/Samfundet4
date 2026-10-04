@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import type { EventWriteDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { deleteEvent, postEvent, putEvent } from './api';
 import { eventKeys } from './queryKeys';
+import type { EventWriteDto } from './types';
 
 export function useCreateEvent() {
   const queryClient = useQueryClient();

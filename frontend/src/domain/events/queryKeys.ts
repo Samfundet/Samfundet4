@@ -1,22 +1,23 @@
-import type { Filters } from './queries';
+import type { EventId, Filters } from './types';
 
-// to invalidate upcoming and paginated, pass the key without any filters
 export const eventKeys = {
   all: ['events'] as const,
   details: () => [...eventKeys.all, 'detail'] as const,
-  detail: (id: number | string) => [...eventKeys.details(), id] as const,
-  upcoming: (filters?: Filters) => [...eventKeys.all, 'upcoming', { filters }] as const,
-  perDay: () => [...eventKeys.upcoming(), 'per-day'] as const,
-  paginated: (page: number, pageSize?: number, filters?: Filters) =>
-    [...eventKeys.upcoming(filters), 'paginated', { page, pageSize }] as const,
-  groups: () => [...eventKeys.all, 'group'] as const,
-  group: (id: number | string) => [...eventKeys.groups(), id] as const,
-};
+  detail: (id: EventId) => [...eventKeys.details(), id] as const,
 
-export const eventCloneKeys = {
-  all: ['event-clone'] as const,
-  details: () => [...eventCloneKeys.all, 'detail'] as const,
-  detail: (id: string | number) => [...eventCloneKeys.details(), id] as const,
+  upcomings: () => [...eventKeys.all, 'upcoming'] as const,
+  upcoming: (filters?: Filters) => [...eventKeys.upcomings(), { filters }] as const,
+  perDay: () => [...eventKeys.upcomings(), 'per-day'] as const,
+  paginateds: (filters?: Filters) =>
+    [...(filters ? eventKeys.upcoming(filters) : eventKeys.upcomings()), 'paginated'] as const,
+  paginated: (page: number, pageSize?: number, filters?: Filters) =>
+    [...eventKeys.paginateds(filters), { page, pageSize }] as const,
+
+  groups: () => [...eventKeys.all, 'group'] as const,
+  group: (id: EventId) => [...eventKeys.groups(), id] as const,
+
+  clones: () => [...eventKeys.all, 'clone'] as const,
+  clone: (id: EventId) => [...eventKeys.clones(), id] as const,
 };
 
 export const billigKeys = {

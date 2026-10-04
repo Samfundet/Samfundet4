@@ -9,19 +9,10 @@ import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getVenues } from '~/api';
-import type { EventDto } from '~/dto';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { venueKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
-import {
-  EventAgeRestriction,
-  type EventAgeRestrictionValue,
-  EventCategory,
-  type EventCategoryValue,
-  type EventStatus,
-  EventStatusChoice,
-} from '~/types';
 import {
   dbT,
   getAgeRestrictionKey,
@@ -37,7 +28,19 @@ import { type FormType, useEventCreatorForm } from './hooks/useEventCreatorForm'
 import { type EventCreatorStep, type StepKey, steps } from './steps/stepConfig';
 
 import type { FieldErrors } from 'react-hook-form';
-import { useCreateEvent, useGetEvent, useGetEventForCloning, useUpdateEvent } from '~/domain';
+import {
+  EventAgeRestriction,
+  type EventAgeRestrictionValue,
+  EventCategory,
+  type EventCategoryValue,
+  type EventDto,
+  type EventStatus,
+  EventStatusChoice,
+  useCreateEvent,
+  useGetEvent,
+  useGetEventForCloning,
+  useUpdateEvent,
+} from '~/domain';
 import { eventSchema } from './EventCreatorSchema';
 import { EventPreviewCard } from './components/EventPreviewCard';
 import { GraphicsStep } from './steps/GraphicsStep';

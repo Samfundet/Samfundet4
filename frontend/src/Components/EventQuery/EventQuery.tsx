@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Input } from '~/Components';
+import type { EventCategoryValue, EventTicketTypeValue } from '~/domain';
 import { KEY } from '~/i18n/constants';
-import type { EventCategoryValue, EventTicketTypeValue, SetState } from '~/types';
+import type { SetState } from '~/types';
 import { getEventCategoryKey, getTicketTypeKey, lowerCapitalize } from '~/utils';
 import { Dropdown } from '../Dropdown';
 import type { DropdownOption } from '../Dropdown/Dropdown';

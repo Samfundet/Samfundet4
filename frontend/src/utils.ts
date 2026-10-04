@@ -6,10 +6,18 @@ import type { UseFormReturn } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import type { z } from 'zod';
 import { BACKEND_DOMAIN, THEME_KEY, type ThemeValue } from '~/constants';
+import {
+  EventAgeRestriction,
+  type EventAgeRestrictionValue,
+  type EventCategoryValue,
+  type EventDto,
+  type EventStatus,
+  EventTicketType,
+  type EventTicketTypeValue,
+} from '~/domain/events/types';
 import type {
   BaseOwnedModelDto,
   BasicUserDto,
-  EventDto,
   GangDto,
   GangSectionDto,
   ImageDto,
@@ -19,15 +27,7 @@ import type {
 } from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
-import {
-  type Day,
-  EventAgeRestriction,
-  type EventAgeRestrictionValue,
-  type EventCategoryValue,
-  type EventStatus,
-  EventTicketType,
-  type EventTicketTypeValue,
-} from './types';
+import type { Day } from './types';
 
 export type hasPerm = {
   user: UserDto | undefined;

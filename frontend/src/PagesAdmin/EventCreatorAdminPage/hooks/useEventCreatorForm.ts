@@ -3,8 +3,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
-import type { EventDto, EventWriteDto } from '~/dto';
-import { type EventCategoryValue, EventStatusChoice } from '~/types';
+import { type EventCategoryValue, type EventDto, EventStatusChoice, type EventWriteDto } from '~/domain';
 import { eventSchema } from '../EventCreatorSchema';
 import { mapEventToFormValues } from '../utils';
 

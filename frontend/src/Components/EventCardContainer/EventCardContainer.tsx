@@ -1,5 +1,5 @@
 import { EventCard, H4, Skeleton } from '~/Components';
-import type { EventDto } from '~/dto';
+import type { EventDto } from '~/domain';
 import styles from './EventCardContainer.module.scss';
 
 type Props = {
