@@ -16,7 +16,7 @@ const validSpotifyUri = z
     message: KEY.event_must_be_valid_spotify_uri,
   });
 
-// text and description
+// Text and description
 export const EVENT_TITLE = z.string().min(1, { message: KEY.event_form_title_required });
 export const EVENT_DESCRIPTION_LONG = z.string().min(1, { message: KEY.event_form_description_long_required });
 export const EVENT_DESCRIPTION_SHORT = z.string().min(1, { message: KEY.event_form_description_short_required });

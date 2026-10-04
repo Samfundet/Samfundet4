@@ -1,4 +1,4 @@
-import axios, { type AxiosResponse } from 'axios';
+import axios from 'axios';
 import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { BACKEND_DOMAIN } from '~/constants';
 import { reverse } from '~/named-urls';
@@ -7,6 +7,7 @@ import { buildPaginatedUrl } from '~/utils';
 import type {
   EventDto,
   EventGroupDto,
+  EventId,
   EventWriteDto,
   EventsPaginationType,
   EventsUpcomingBackendResponse,
@@ -94,26 +95,25 @@ export async function getEvents(): Promise<EventDto[]> {
   return response.data;
 }
 
-export async function postEvent(data: Partial<EventWriteDto>): Promise<AxiosResponse<EventDto>> {
+export async function postEvent(data: Partial<EventWriteDto>): Promise<EventDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_list;
   const response = await axios.post<EventDto>(url, data, { withCredentials: true });
-  return response;
+  return response.data;
 }
 
-export async function putEvent(id: string | number, data: Partial<EventWriteDto>): Promise<AxiosResponse<EventDto>> {
+export async function putEvent(id: EventId, data: Partial<EventWriteDto>): Promise<EventDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
   const response = await axios.put<EventDto>(url, data, { withCredentials: true });
-  return response;
+  return response.data;
 }
 
-export async function deleteEvent(id: string | number): Promise<AxiosResponse<void>> {
+export async function deleteEvent(id: EventId): Promise<void> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
-  const response = await axios.delete<void>(url, { withCredentials: true });
-  return response;
+  await axios.delete(url, { withCredentials: true });
 }
 
-export async function getEvent(pk: string | number): Promise<EventDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: pk } });
+export async function getEvent(id: EventId): Promise<EventDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
   const response = await axios.get<EventDto>(url, { withCredentials: true });
 
   return response.data;
@@ -141,12 +141,12 @@ export async function getBilligEvents(): Promise<BilligEventDto[]> {
 /**
  * Get a copy of an event without unique properties, used as a starting point when cloning.
  *
- * @param {string | number} pk Id of the event to copy
+ * @param {EventId} id Id of the event to copy
  *
  * @returns Copy of the event
  * */
-export async function getEventForCloning(pk: string | number): Promise<Partial<EventDto>> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__event_clone, urlParams: { pk: pk } });
+export async function getEventForCloning(id: EventId): Promise<Partial<EventDto>> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__event_clone, urlParams: { pk: id } });
   const response = await axios.get<Partial<EventDto>>(url, { withCredentials: true });
 
   return response.data;
