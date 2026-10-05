@@ -20,8 +20,8 @@ class Migration(migrations.Migration):
     atomic = False
 
     dependencies = [
-        ('samfundet', '0019_remove_closedperiod_description_en_and_more'),
-    ]
+    ('samfundet', '0020_infobox_require_title_nb_text_nb'),
+]
 
     operations = [
         migrations.AddField(

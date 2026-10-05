@@ -9,8 +9,8 @@ from django.db.migrations.executor import MigrationExecutor
 @pytest.mark.django_db(transaction=True, databases=['default', 'billig'])
 @pytest.mark.parametrize('already_boolean', [False, True])
 def test_youtube_embed_migration_preserves_links_and_choices(fixture_event, *, already_boolean: bool):
-    before = [('samfundet', '0019_remove_closedperiod_description_en_and_more')]
-    after = [('samfundet', '0020_event_youtube_embedding')]
+    before = [('samfundet', '0020_infobox_require_title_nb_text_nb')]
+    after = [('samfundet', '0021_alter_event_youtube_embed')]
     executor = MigrationExecutor(connection)
     executor.migrate(before)
     created_ids = []
