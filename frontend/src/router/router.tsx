@@ -77,6 +77,7 @@ import {
   RoleFormAdminPage,
   RolesAdminPage,
   RoomAdminPage,
+  SiteBannerAdminPage,
   SultenMenuAdminPage,
   SultenMenuItemFormAdminPage,
   SultenReservationAdminPage,
@@ -201,6 +202,19 @@ export const router = createBrowserRouter(
             path={ROUTES.frontend.account}
             element={<ProtectedRoute authState={true} element={<AccountPage />} />}
             handle={{ crumb: () => <Link url={ROUTES.frontend.account}>{t(KEY.common_account)}</Link> }}
+          />
+          <Route
+            path={ROUTES.frontend.admin_site_banners}
+            handle={{
+              crumb: ({ pathname }: UIMatch) => <Link url={pathname}>{t(KEY.admin_site_banner_title)}</Link>,
+            }}
+            element={
+              <PermissionRoute
+                required={[PERM.SAMFUNDET_ADD_SITEBANNER]}
+                element={<SiteBannerAdminPage />}
+                resolution="roles"
+              />
+            }
           />
           {/* Gangs */}
           <Route
