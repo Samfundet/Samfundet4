@@ -1,5 +1,4 @@
 import axios, { type AxiosResponse } from 'axios';
-import type { VenueDto } from '~/domain';
 import type {
   AdminGangListOrganizationDto,
   AdminGangTypeDto,
@@ -199,32 +198,6 @@ export async function putUserPreference(id: string | number, data: Partial<UserP
     });
   const response = await axios.put<UserPreferenceDto>(url, data, { withCredentials: true });
 
-  return response.data;
-}
-
-export async function getVenues(): Promise<VenueDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__venues_list;
-  const response = await axios.get<VenueDto[]>(url, { withCredentials: true });
-
-  return response.data;
-}
-
-export async function getVenue(id: string | number): Promise<VenueDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { pk: id } });
-  const response = await axios.get<VenueDto>(url, { withCredentials: true });
-
-  return response.data;
-}
-
-export async function patchVenue(slug: string, changes: Partial<VenueDto>): Promise<VenueDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { slug } });
-  const response = await axios.patch<VenueDto>(url, changes, { withCredentials: true });
-  return response.data;
-}
-
-export async function getOpenVenues(): Promise<VenueDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__venues_open_venues;
-  const response = await axios.get<VenueDto[]>(url, { withCredentials: true });
   return response.data;
 }
 

@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getOpenVenues } from '~/api';
-import { type VenueDto, venueKeys } from '~/domain';
+import { type VenueDto, getOpenVenues, venueKeys } from '~/domain';
 import { OpeningHours } from './OpeningHours';
 
 export function OpeningHoursContainer() {

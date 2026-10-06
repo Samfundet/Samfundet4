@@ -3,13 +3,14 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components';
-import { getVenues, patchVenue } from '~/api';
 import {
   type VenueDaySchedule,
   type VenueDto,
   type VenueOpeningHoursUpdate,
   applyVenueDayScheduleChanges,
   getVenueOpeningHoursChanges,
+  getVenues,
+  patchVenue,
   venueKeys,
 } from '~/domain';
 

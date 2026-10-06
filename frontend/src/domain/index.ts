@@ -1,3 +1,4 @@
+export { getVenues, getVenue, getOpenVenues, patchVenue } from './venues';
 export {
   caseDocumentKeys,
   useCaseDocumentMutations,
