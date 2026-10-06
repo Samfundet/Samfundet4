@@ -4,7 +4,7 @@ import type { PageNumberPaginationType } from '~/types';
 
 export type EventId = string | number;
 
-export interface Filters {
+export interface EventFilters {
   search?: string;
   event_group?: string;
   ticket_type?: string;
@@ -165,6 +165,11 @@ export type EventWriteDto = {
   capacity?: number;
   billig_id?: number;
 };
+
+export type EventCloneDto = Omit<
+  EventDto,
+  'status' | 'event_group' | 'billig' | 'numberOfTickets' | 'registration_url' | 'doors_time' | 'duration'
+>;
 
 export type EventGroupDto = {
   id: number;

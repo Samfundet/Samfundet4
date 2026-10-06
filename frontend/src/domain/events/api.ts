@@ -4,7 +4,15 @@ import { BACKEND_DOMAIN } from '~/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { buildPaginatedUrl } from '~/utils';
-import type { EventDto, EventGroupDto, EventId, EventWriteDto, EventsPaginationType, Filters } from './types';
+import type {
+  EventCloneDto,
+  EventDto,
+  EventFilters,
+  EventGroupDto,
+  EventId,
+  EventWriteDto,
+  EventsPaginationType,
+} from './types';
 
 /**
  * Groups events by day.
@@ -23,14 +31,14 @@ export async function getEventsPerDay(): Promise<Record<string, EventDto[]>> {
  *
  * @param {number} page What page to fetch (page 2 with a page size of 10 would return events 11-20)
  * @param {number} pageSize How many events per page (backend defaults to 10, max 50)
- * @param {Filters} filters Filters for fetched events
+ * @param {EventFilters} filters Filters for fetched events
  *
  * @returns The given page of upcoming events, with up to pageSize events
  * */
 export async function getEventsUpcomingPaginated(
   page: number,
   pageSize?: number,
-  filters?: Filters,
+  filters?: EventFilters,
 ): Promise<EventsPaginationType<EventDto>> {
   const url = buildPaginatedUrl(BACKEND_DOMAIN + ROUTES.backend.samfundet__events_upcoming_paginated, page, pageSize, {
     ...(filters?.search ? { search: filters.search } : {}),
@@ -106,9 +114,9 @@ export async function getBilligEvents(): Promise<BilligEventDto[]> {
  *
  * @returns Copy of the event
  * */
-export async function getEventForCloning(id: EventId): Promise<Partial<EventDto>> {
+export async function getEventForCloning(id: EventId): Promise<EventCloneDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__event_clone, urlParams: { pk: id } });
-  const response = await axios.get<Partial<EventDto>>(url, { withCredentials: true });
+  const response = await axios.get<EventCloneDto>(url, { withCredentials: true });
 
   return response.data;
 }

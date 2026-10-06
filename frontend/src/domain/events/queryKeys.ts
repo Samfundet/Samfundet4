@@ -1,4 +1,4 @@
-import type { EventId, Filters } from './types';
+import type { EventFilters, EventId } from './types';
 
 export const eventKeys = {
   all: ['events'] as const,
@@ -8,7 +8,7 @@ export const eventKeys = {
   upcomings: () => [...eventKeys.all, 'upcoming'] as const,
   perDay: () => [...eventKeys.upcomings(), 'per-day'] as const,
   upcomingPaginateds: () => [...eventKeys.upcomings(), 'paginated'] as const,
-  upcomingPaginated: (page: number, pageSize?: number, filters?: Filters) =>
+  upcomingPaginated: (page: number, pageSize?: number, filters?: EventFilters) =>
     [...eventKeys.upcomingPaginateds(), { page, pageSize, filters }] as const,
 
   groups: () => [...eventKeys.all, 'group'] as const,

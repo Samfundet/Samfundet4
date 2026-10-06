@@ -10,7 +10,7 @@ import {
   getEventsUpcomingPaginated,
 } from './api';
 import { billigKeys, eventKeys } from './queryKeys';
-import type { EventDto, EventGroupDto, EventId, EventsPaginationType, Filters } from './types';
+import type { EventCloneDto, EventDto, EventFilters, EventGroupDto, EventId, EventsPaginationType } from './types';
 
 export function useGetEventsPerDay(props?: Partial<UseQueryOptions<Record<string, EventDto[]>>>) {
   return useQuery({
@@ -31,7 +31,7 @@ export function useGetEvents(props?: Partial<UseQueryOptions<EventDto[]>>) {
 export function useGetEventsUpcomingPaginated(
   page: number,
   pageSize?: number,
-  filters: Filters = {},
+  filters: EventFilters = {},
   props?: Partial<UseQueryOptions<EventsPaginationType<EventDto>>>,
 ) {
   return useQuery({
@@ -50,7 +50,7 @@ export function useGetEvent(id: EventId, props?: Partial<UseQueryOptions<EventDt
   });
 }
 
-export function useGetEventForCloning(id: EventId, props?: Partial<UseQueryOptions<Partial<EventDto>>>) {
+export function useGetEventForCloning(id: EventId, props?: Partial<UseQueryOptions<EventCloneDto>>) {
   return useQuery({
     queryKey: eventKeys.clone(id),
     queryFn: () => getEventForCloning(id),

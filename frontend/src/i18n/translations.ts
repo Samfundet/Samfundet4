@@ -1551,7 +1551,7 @@ export const en = prepareTranslations({
   [KEY.end_date]: 'End date',
   [KEY.last_updated]: 'Last updated',
 
-  [KEY.form_confirm]: 'Are you sure you want do',
+  [KEY.form_confirm]: 'Are you sure you want to',
   [KEY.form_confirm_delete]: 'Are you sure you want to delete',
   [KEY.we_use_cookies]: 'We use cookies to give you the best experience on Samfundet.no. Read more about cookies',
   [KEY.control_panel_faq]: 'Help/questions',

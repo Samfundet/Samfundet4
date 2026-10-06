@@ -63,13 +63,14 @@ export {
 } from './types';
 export type {
   EventId,
-  Filters,
+  EventFilters,
   EventStatus,
   EventAgeRestrictionValue,
   EventTicketTypeValue,
   EventCategoryValue,
   EventCustomTicketDto,
   EventDto,
+  EventCloneDto,
   EventWriteDto,
   EventGroupDto,
   EventsPaginationType,

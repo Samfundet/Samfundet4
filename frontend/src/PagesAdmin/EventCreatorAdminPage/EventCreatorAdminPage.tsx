@@ -58,7 +58,6 @@ export function EventCreatorAdminPage() {
   const [searchParams] = useSearchParams();
   const requestedTemplateId = id === undefined ? searchParams.get('template') : null;
   const templateId = isValidEventId(requestedTemplateId) ? requestedTemplateId : undefined;
-  const eventId = id ?? templateId;
   const isCloning = templateId !== undefined;
 
   const { data: eventFetch, isLoading: eventFetchLoading } = useGetEvent(id ?? '');
