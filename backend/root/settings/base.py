@@ -357,14 +357,15 @@ DEFAULT_FROM_EMAIL = 'mg-web@samfundet.no'
 # ======================== #
 
 
-def _parse_admins(raw: str) -> list[str] | list[tuple[str, str]]:
+def _parse_admins(raw: str) -> list[tuple[str, str]]:
     """
     Parse a comma-separated list of admin recipients into Django's ADMINS format.
 
-    Each entry may be a bare email address, or a name followed by an email in
-    angle brackets, e.g. 'Drifts <drift@samfundet.no>'. Empty entries are dropped.
+    Each entry may be a bare email address (mapped to an empty name), or a name
+    followed by an email in angle brackets, e.g. 'Drifts <drift@samfundet.no>'.
+    Empty entries are dropped.
     """
-    admins: list[str] | list[tuple[str, str]] = []
+    admins: list[tuple[str, str]] = []
     for entry in raw.split(','):
         entry = entry.strip()
         if not entry:
@@ -373,13 +374,13 @@ def _parse_admins(raw: str) -> list[str] | list[tuple[str, str]]:
             name, email = entry.split('<', maxsplit=1)
             admins.append((name.strip(), email.rstrip('>').strip()))
         else:
-            admins.append(entry)
+            admins.append(('', entry))
     return admins
 
 
-def _admin_emails(admins: list[str] | list[tuple[str, str]]) -> list[str]:
+def _admin_emails(admins: list[tuple[str, str]]) -> list[str]:
     """Reduce Django-format ADMINS to a flat list of email addresses."""
-    return [entry if isinstance(entry, str) else entry[1] for entry in admins]
+    return [email for _, email in admins]
 
 
 def _parse_emails(raw: str) -> list[str]:
@@ -394,15 +395,21 @@ ADMINS = _parse_admins(os.environ.get('DJANGO_ADMINS', 'mg-web@samfundet.no'))
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # Per-category recipients for operational notifications sent via root.notifications.notify().
-# Each category defaults to the ADMINS email addresses; env vars may override individual categories.
+# A category defaults to the ADMINS email addresses when its env var is unset; setting
+# the var to an empty value disables the category (no recipients).
 ADMIN_EMAILS = _admin_emails(ADMINS)
+_errors_recipients = os.environ.get('DJANGO_NOTIFICATION_ERRORS')
+# TODO(payments): add a 'payments' category here when Billig payment notifications are implemented.
 NOTIFICATION_RECIPIENTS: dict[str, list[str]] = {
-    'errors': _parse_emails(os.environ.get('DJANGO_NOTIFICATION_ERRORS', '')) or ADMIN_EMAILS,
-    'payments': _parse_emails(os.environ.get('DJANGO_NOTIFICATION_PAYMENTS', '')) or ADMIN_EMAILS,
+    'errors': _parse_emails(_errors_recipients) if _errors_recipients is not None else ADMIN_EMAILS,
 }
 
 # Window (seconds) within which repeated notifications with the same dedupe key are collapsed.
 NOTIFICATION_RATE_LIMIT_SECONDS = 3600
+# Maximum number of emails sent per category within an hour (best-effort flood guard).
+NOTIFICATION_MAX_PER_CATEGORY_PER_HOUR = 20
+# How long dedupe/budget state is kept before it is considered stale and purged.
+NOTIFICATION_RETENTION_SECONDS = 172800
 
 # For enabled features in the control panel
 CP_ENABLED = {

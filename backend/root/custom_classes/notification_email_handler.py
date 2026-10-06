@@ -23,17 +23,29 @@ class NotificationEmailHandler(logging.Handler):
 
             notify(
                 'errors',
-                f'{record.levelname}: {record.getMessage()}',
+                self._render_subject(record),
                 self._render_body(record),
                 dedupe_key=self._dedupe_key(record),
             )
         except Exception:
             LOG.exception('notification_email_handler_emit_failed')
 
+    def _render_subject(self, record: logging.LogRecord) -> str:
+        # Keep the raw message out of the subject: it can contain PII or newlines.
+        request = getattr(record, 'request', None)
+        path = getattr(request, 'path', '')
+        method = getattr(request, 'method', '')
+        return f'[Django] {record.levelname} {method} {path}'.strip()
+
     def _render_body(self, record: logging.LogRecord) -> str:
+        parts = [f'{record.levelname}: {record.getMessage()}']
+        request = getattr(record, 'request', None)
+        if request is not None:
+            parts.append(f'Method: {getattr(request, "method", "")}')
+            parts.append(f'Path: {getattr(request, "path", "")}')
         if record.exc_info and record.exc_info[0] is not None:
-            return ''.join(traceback.format_exception(*record.exc_info))
-        return record.getMessage()
+            parts.append(''.join(traceback.format_exception(*record.exc_info)))
+        return '\n'.join(parts)
 
     def _dedupe_key(self, record: logging.LogRecord) -> str | None:
         if not (record.exc_info and record.exc_info[0] is not None):
