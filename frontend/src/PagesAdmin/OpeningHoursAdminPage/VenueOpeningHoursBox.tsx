@@ -40,13 +40,13 @@ export function VenueOpeningHoursBox({ venue, disabled, onChangeDay }: VenueOpen
           const closingLabel = t(KEY.admin_opening_hours_closing_time, { day: dayLabel });
 
           return (
-            <div key={weekday} className={classNames(styles.day_row, !schedule.is_open && styles.row_disabled)}>
+            <div key={weekday} className={classNames(styles.day_row, !schedule.is_open && styles.row_closed)}>
               <div className={styles.day_label}>{dayLabel}</div>
               <div className={styles.day_edit}>
                 <InputTime
                   className={styles.time_input}
                   value={schedule.opening}
-                  disabled={disabled || !schedule.is_open}
+                  disabled={disabled}
                   ariaLabel={openingLabel}
                   hourAriaLabel={t(KEY.admin_opening_hours_hours_input, { field: openingLabel })}
                   minuteAriaLabel={t(KEY.admin_opening_hours_minutes_input, { field: openingLabel })}
@@ -55,7 +55,7 @@ export function VenueOpeningHoursBox({ venue, disabled, onChangeDay }: VenueOpen
                 <InputTime
                   className={styles.time_input}
                   value={schedule.closing}
-                  disabled={disabled || !schedule.is_open}
+                  disabled={disabled}
                   ariaLabel={closingLabel}
                   hourAriaLabel={t(KEY.admin_opening_hours_hours_input, { field: closingLabel })}
                   minuteAriaLabel={t(KEY.admin_opening_hours_minutes_input, { field: closingLabel })}
