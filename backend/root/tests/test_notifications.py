@@ -15,7 +15,9 @@ from root import notifications
 from root.settings.base import _parse_admins
 from root.custom_classes.notification_email_handler import NotificationEmailHandler
 
-from samfundet.models.general import KeyValue
+from samfundet.models.role import Role, UserGangSectionRole
+from samfundet.models.general import User, KeyValue
+from samfundet.organization.models import Gang, GangSection, Organization
 
 NOTIFICATION_RECIPIENTS = {
     'errors': ['errors@example.com'],
@@ -44,12 +46,11 @@ class NotifyTests(TestCase):
         self.assertEqual(email.from_email, settings.DEFAULT_FROM_EMAIL)
 
     @override_settings(NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS, ADMINS=[('Ops', 'ops@example.com')])
-    def test_notify_unknown_category_falls_back_to_admins(self) -> None:
+    def test_notify_unconfigured_category_is_disabled(self) -> None:
         sent = notifications.notify('unknown-category', 'Subject', 'Body')
 
-        self.assertTrue(sent)
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].to, ['ops@example.com'])
+        self.assertFalse(sent)
+        self.assertEqual(len(mail.outbox), 0)
 
     @override_settings(NOTIFICATION_RECIPIENTS={}, ADMINS=[])
     def test_notify_without_recipients_returns_false(self) -> None:
@@ -171,6 +172,77 @@ class NotifySweepTests(TestCase):
 
         self.assertGreaterEqual(removed, 1)
         self.assertFalse(KeyValue.objects.filter(key=key).exists())
+
+
+class WebRecipientsTests(TestCase):
+    def setUp(self) -> None:
+        self.organization = Organization.objects.create(name='Samfundet')
+        self.gang = Gang.objects.create(
+            name_nb='Markedsføringsgjengen',
+            name_en='Markedsføringsgjengen',
+            abbreviation='MG',
+            organization=self.organization,
+        )
+        self.web_section = GangSection.objects.create(name_nb='Web', name_en='Web', gang=self.gang)
+        self.role = Role.objects.create(name='gang_member')
+
+    def _make_member(self, email: str, *, active: bool = True) -> None:
+        user = User.objects.create_user(username=email.split('@', maxsplit=1)[0], email=email, password='test123', is_active=active)
+        UserGangSectionRole.objects.create(user=user, role=self.role, obj=self.web_section)
+
+    @override_settings(NOTIFICATION_RECIPIENTS={})
+    def test_web_section_members_receive_errors(self) -> None:
+        self._make_member('webdev@samfundet.no')
+
+        sent = notifications.notify('errors', 'Subject', 'Body')
+
+        self.assertTrue(sent)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ['webdev@samfundet.no'])
+
+    @override_settings(NOTIFICATION_RECIPIENTS={'errors': ['ops@example.com']})
+    def test_explicit_override_wins_over_web_members(self) -> None:
+        self._make_member('webdev@samfundet.no')
+
+        sent = notifications.notify('errors', 'Subject', 'Body')
+
+        self.assertTrue(sent)
+        self.assertEqual(mail.outbox[0].to, ['ops@example.com'])
+
+    @override_settings(NOTIFICATION_RECIPIENTS={}, ADMINS=[('Ops', 'ops@example.com')])
+    def test_falls_back_to_admins_without_web_members(self) -> None:
+        sent = notifications.notify('errors', 'Subject', 'Body')
+
+        self.assertTrue(sent)
+        self.assertEqual(mail.outbox[0].to, ['ops@example.com'])
+
+    @override_settings(NOTIFICATION_RECIPIENTS={}, ADMINS=[])
+    def test_inactive_web_member_is_excluded(self) -> None:
+        self._make_member('webdev@samfundet.no', active=False)
+
+        sent = notifications.notify('errors', 'Subject', 'Body')
+
+        self.assertFalse(sent)
+        self.assertEqual(len(mail.outbox), 0)
+
+    @override_settings(NOTIFICATION_RECIPIENTS={}, ADMINS=[('Ops', 'ops@example.com')])
+    def test_non_web_category_does_not_use_web_members(self) -> None:
+        self._make_member('webdev@samfundet.no')
+
+        sent = notifications.notify('payments', 'Subject', 'Body')
+
+        self.assertFalse(sent)
+        self.assertEqual(len(mail.outbox), 0)
+
+    @override_settings(NOTIFICATION_RECIPIENTS={}, ADMINS=[('Ops', 'ops@example.com')])
+    def test_web_lookup_failure_falls_back_to_admins(self) -> None:
+        self._make_member('webdev@samfundet.no')
+        with mock.patch.object(UserGangSectionRole, 'objects') as manager:
+            manager.filter.side_effect = RuntimeError('db down')
+            sent = notifications.notify('errors', 'Subject', 'Body')
+
+        self.assertTrue(sent)
+        self.assertEqual(mail.outbox[0].to, ['ops@example.com'])
 
 
 class ParseAdminsTests(TestCase):

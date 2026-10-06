@@ -8,6 +8,7 @@ from django.db import transaction
 from django.conf import settings
 from django.core.mail import send_mail
 
+from samfundet.models.role import UserGangSectionRole
 from samfundet.models.general import KeyValue
 
 LOG = logging.getLogger('root.notifications')
@@ -29,9 +30,11 @@ def notify(
     mail backend, False when it was skipped (no recipients, a duplicate within the
     rate-limit window, the category budget is exhausted) or could not be sent.
 
-    Recipients come from settings.NOTIFICATION_RECIPIENTS, falling back to
-    settings.ADMINS for unknown categories. A category configured with an empty list
-    is disabled and never falls back.
+    Recipients are resolved per category: an explicit override in
+    settings.NOTIFICATION_RECIPIENTS (if present, including an empty list to disable
+    the category) wins. Otherwise, categories in settings.NOTIFICATION_WEB_CATEGORIES
+    default to the members of the MG::Web section (falling back to settings.ADMINS);
+    all other categories are disabled (no recipients).
 
     When dedupe_key is given, repeated notifications with the same key within
     'rate_limit_seconds' (default settings.NOTIFICATION_RATE_LIMIT_SECONDS) collapse
@@ -58,16 +61,51 @@ def notify(
 
 
 def _recipients_for_category(category: str) -> list[str]:
-    """Resolve recipients for a category, falling back to ADMINS only when absent."""
+    """Resolve recipients for a category.
+
+    Order of precedence:
+    1. An explicit override in settings.NOTIFICATION_RECIPIENTS (an empty list
+       disables the category and never falls back).
+    2. For categories in settings.NOTIFICATION_WEB_CATEGORIES, the members of the
+       MG::Web section, falling back to settings.ADMINS.
+    3. Any other category is disabled (no recipients).
+    """
     recipients = settings.NOTIFICATION_RECIPIENTS.get(category)
     if recipients is not None:
         return list(recipients)
-    return _admin_emails()
+    if category in settings.NOTIFICATION_WEB_CATEGORIES:
+        web_recipients = _web_section_recipients()
+        return web_recipients or _admin_emails()
+    return []
 
 
 def _admin_emails() -> list[str]:
     """Flat list of email addresses from settings.ADMINS."""
     return [email for _, email in settings.ADMINS]
+
+
+def _web_section_recipients() -> list[str]:
+    """Email addresses of active users with a role on the Web section of MG in Samfundet.
+
+    Best-effort and fail-safe: any failure to query the role system returns an empty
+    list so the caller falls back to ADMINS.
+    """
+    try:
+        emails = (
+            UserGangSectionRole.objects.filter(
+                user__is_active=True,
+                user__email__isnull=False,
+                obj__name_nb__iexact='Web',
+                obj__gang__abbreviation__iexact='MG',
+                obj__gang__organization__name__iexact='Samfundet',
+            )
+            .values_list('user__email', flat=True)
+            .distinct()
+        )
+        return [email for email in emails if email]
+    except Exception:
+        LOG.warning('notification_web_recipients_lookup_failed', exc_info=True)
+        return []
 
 
 def _rate_limit_window(rate_limit_seconds: int | None) -> int:

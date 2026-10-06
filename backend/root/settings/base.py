@@ -378,11 +378,6 @@ def _parse_admins(raw: str) -> list[tuple[str, str]]:
     return admins
 
 
-def _admin_emails(admins: list[tuple[str, str]]) -> list[str]:
-    """Reduce Django-format ADMINS to a flat list of email addresses."""
-    return [email for _, email in admins]
-
-
 def _parse_emails(raw: str) -> list[str]:
     """Parse a comma-separated list of email addresses, dropping empties."""
     return [entry.strip() for entry in raw.split(',') if entry.strip()]
@@ -395,14 +390,19 @@ ADMINS = _parse_admins(os.environ.get('DJANGO_ADMINS', 'mg-web@samfundet.no'))
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # Per-category recipients for operational notifications sent via root.notifications.notify().
-# A category defaults to the ADMINS email addresses when its env var is unset; setting
-# the var to an empty value disables the category (no recipients).
-ADMIN_EMAILS = _admin_emails(ADMINS)
+# Only explicit env overrides are registered here. A category listed in
+# NOTIFICATION_WEB_CATEGORIES (below) defaults to the MG::Web members when unset, falling
+# back to ADMINS; any other category without an override is disabled (no recipients).
+# Setting the var to an empty value disables the category (no recipients).
 _errors_recipients = os.environ.get('DJANGO_NOTIFICATION_ERRORS')
 # TODO(payments): add a 'payments' category here when Billig payment notifications are implemented.
-NOTIFICATION_RECIPIENTS: dict[str, list[str]] = {
-    'errors': _parse_emails(_errors_recipients) if _errors_recipients is not None else ADMIN_EMAILS,
-}
+NOTIFICATION_RECIPIENTS: dict[str, list[str]] = {}
+if _errors_recipients is not None:
+    NOTIFICATION_RECIPIENTS['errors'] = _parse_emails(_errors_recipients)
+
+# Categories whose default recipients (absent an explicit override) are the MG::Web
+# members. Other categories without an explicit override are disabled.
+NOTIFICATION_WEB_CATEGORIES = {c.strip() for c in os.environ.get('DJANGO_NOTIFICATION_WEB_CATEGORIES', 'errors').split(',') if c.strip()}
 
 # Window (seconds) within which repeated notifications with the same dedupe key are collapsed.
 NOTIFICATION_RATE_LIMIT_SECONDS = 3600
