@@ -143,3 +143,4 @@ export type {
 } from './venues';
 export { zodEnum } from './utils';
 export { queryClient } from './queryClient';
+export { FOOD_CATEGORY, FOOD_PREFERENCES, MENU_ITEM_DESCRIPTION, MENU_ITEM_NAME, MENU_ITEM_PRICE } from './menuitems';
