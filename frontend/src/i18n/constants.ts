@@ -345,6 +345,11 @@ export const KEY = {
   ticket_checkout_load_error: 'ticket_checkout_load_error',
   ticket_checkout_empty: 'ticket_checkout_empty',
   ticket_checkout_retry: 'ticket_checkout_retry',
+  ticket_invalid_seat_selection_message: 'ticket_invalid_seat_selection_message',
+  ticket_missing_seat_selection_message: 'ticket_missing_seat_selection_message',
+  ticket_seat_selection_title: 'ticket_seat_selection_title',
+  ticket_seat_selection_hint: 'ticket_seat_selection_hint',
+  ticket_seat_selection_placeholder: 'ticket_seat_selection_placeholder',
 
   event_external_host_message: 'event_external_host_message',
 
