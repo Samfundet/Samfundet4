@@ -9,7 +9,7 @@ import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getEvent, getEventForCloning, getVenues } from '~/api';
-import { venueKeys } from '~/domain/venues';
+import { venueKeys } from '~/domain';
 import type { EventDto } from '~/dto';
 import { usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';

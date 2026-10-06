@@ -7,7 +7,7 @@ import { Dropdown, FormControl, FormField, FormItem, FormLabel, FormMessage, Inp
 import { useQuery } from '@tanstack/react-query';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { getVenues } from '~/api';
-import { venueKeys } from '~/domain/venues';
+import { venueKeys } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import type { EventCategoryValue } from '~/types';
 import styles from '../EventCreatorAdminPage.module.scss';

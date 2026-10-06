@@ -1,6 +1,5 @@
-import type { VenueDto } from '~/dto';
 import { ALL_DAYS, type Day } from '~/types';
-import type { VenueDaySchedule, VenueOpeningHoursPatch, VenueOpeningHoursUpdate } from './types';
+import type { VenueDaySchedule, VenueDto, VenueOpeningHoursPatch, VenueOpeningHoursUpdate } from './types';
 
 export function getVenueDaySchedule(venue: VenueDto, weekday: Day): VenueDaySchedule {
   return {

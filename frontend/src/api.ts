@@ -1,4 +1,5 @@
 import axios, { type AxiosResponse } from 'axios';
+import type { VenueDto } from '~/domain';
 import type {
   AdminGangListOrganizationDto,
   AdminGangTypeDto,
@@ -66,7 +67,6 @@ import type {
   UserDto,
   UserPreferenceDto,
   UserPriorityDto,
-  VenueDto,
 } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';

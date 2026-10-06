@@ -6,12 +6,13 @@ import { Button } from '~/Components';
 import { getVenues, patchVenue } from '~/api';
 import {
   type VenueDaySchedule,
+  type VenueDto,
   type VenueOpeningHoursUpdate,
   applyVenueDayScheduleChanges,
   getVenueOpeningHoursChanges,
   venueKeys,
-} from '~/domain/venues';
-import type { VenueDto } from '~/dto';
+} from '~/domain';
+
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import type { Day } from '~/types';
