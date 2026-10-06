@@ -237,8 +237,7 @@ class WebRecipientsTests(TestCase):
     @override_settings(NOTIFICATION_RECIPIENTS={}, ADMINS=[('Ops', 'ops@example.com')])
     def test_web_lookup_failure_falls_back_to_admins(self) -> None:
         self._make_member('webdev@samfundet.no')
-        with mock.patch.object(UserGangSectionRole, 'objects') as manager:
-            manager.filter.side_effect = RuntimeError('db down')
+        with mock.patch('root.notifications.web_members', side_effect=RuntimeError('db down')):
             sent = notifications.notify('errors', 'Subject', 'Body')
 
         self.assertTrue(sent)

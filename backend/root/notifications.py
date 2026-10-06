@@ -8,8 +8,8 @@ from django.db import transaction
 from django.conf import settings
 from django.core.mail import send_mail
 
-from samfundet.models.role import UserGangSectionRole
 from samfundet.models.general import KeyValue
+from samfundet.organization.selectors import web_members
 
 LOG = logging.getLogger('root.notifications')
 
@@ -85,24 +85,13 @@ def _admin_emails() -> list[str]:
 
 
 def _web_section_recipients() -> list[str]:
-    """Email addresses of active users with a role on the Web section of MG in Samfundet.
+    """Email addresses of the MG::Web members (single source of truth: web_members()).
 
     Best-effort and fail-safe: any failure to query the role system returns an empty
     list so the caller falls back to ADMINS.
     """
     try:
-        emails = (
-            UserGangSectionRole.objects.filter(
-                user__is_active=True,
-                user__email__isnull=False,
-                obj__name_nb__iexact='Web',
-                obj__gang__abbreviation__iexact='MG',
-                obj__gang__organization__name__iexact='Samfundet',
-            )
-            .values_list('user__email', flat=True)
-            .distinct()
-        )
-        return [email for email in emails if email]
+        return [member.email for member in web_members() if member.email]
     except Exception:
         LOG.warning('notification_web_recipients_lookup_failed', exc_info=True)
         return []
