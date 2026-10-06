@@ -4,16 +4,7 @@ import { BACKEND_DOMAIN } from '~/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { buildPaginatedUrl } from '~/utils';
-import type {
-  EventDto,
-  EventGroupDto,
-  EventId,
-  EventWriteDto,
-  EventsPaginationType,
-  EventsUpcomingBackendResponse,
-  EventsUpcomingResponse,
-  Filters,
-} from './types';
+import type { EventDto, EventGroupDto, EventId, EventWriteDto, EventsPaginationType, Filters } from './types';
 
 /**
  * Groups events by day.
@@ -21,40 +12,10 @@ import type {
  * @returns A Record of upcoming events grouped by the day they happen, eg: '2026-09-25': [eventDto, eventDto].
  */
 export async function getEventsPerDay(): Promise<Record<string, EventDto[]>> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsperday;
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_per_day;
   const response = await axios.get<Record<string, EventDto[]>>(url, { withCredentials: true });
 
   return response.data;
-}
-
-/**
- * Get upcoming events from today and onwards.
- *
- * @param {Filters} filters Filters for fetched events
- *
- * @returns All upcoming events that match given filters
- */
-export async function getEventsUpcoming(filters: Filters): Promise<EventsUpcomingResponse> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcoming;
-
-  const response = await axios.get<EventsUpcomingBackendResponse>(url, {
-    withCredentials: true,
-    params: {
-      ...(filters.search ? { search: filters.search } : {}),
-      ...(filters.event_group ? { event_group: filters.event_group } : {}),
-      ...(filters.venue ? { venue: filters.venue } : {}),
-      ...(filters.ticket_type ? { ticket_type: filters.ticket_type } : {}),
-      ...(filters.category ? { category: filters.category } : {}),
-    },
-  });
-
-  const categories = response.data.categories.map((category: [string, string]) => category[0]);
-
-  return {
-    events: response.data.events,
-    categories,
-    locations: response.data.locations,
-  };
 }
 
 /**
@@ -71,7 +32,7 @@ export async function getEventsUpcomingPaginated(
   pageSize?: number,
   filters?: Filters,
 ): Promise<EventsPaginationType<EventDto>> {
-  const url = buildPaginatedUrl(BACKEND_DOMAIN + ROUTES.backend.samfundet__eventsupcoming, page, pageSize, {
+  const url = buildPaginatedUrl(BACKEND_DOMAIN + ROUTES.backend.samfundet__events_upcoming_paginated, page, pageSize, {
     ...(filters?.search ? { search: filters.search } : {}),
     ...(filters?.venue ? { venue: filters.venue } : {}),
     ...(filters?.category ? { category: filters.category } : {}),
@@ -126,7 +87,7 @@ export async function getEvent(id: EventId): Promise<EventDto> {
  * @returns Array of all upcoming event groups
  * */
 export async function getEventGroups(): Promise<EventGroupDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__eventgroups_list;
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__event_groups_list;
   const response = await axios.get<EventGroupDto[]>(url, { withCredentials: true });
 
   return response.data;

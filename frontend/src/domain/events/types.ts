@@ -171,18 +171,6 @@ export type EventGroupDto = {
   name: string;
 };
 
-export type EventsUpcomingBackendResponse = {
-  events: EventDto[];
-  categories: [string, string][];
-  locations: string[];
-};
-
-export type EventsUpcomingResponse = {
-  events: EventDto[];
-  categories: string[];
-  locations: string[];
-};
-
 export interface EventsPaginationType<T> extends PageNumberPaginationType<T> {
   categories?: Array<[string, string]> | string[];
   locations?: string[];

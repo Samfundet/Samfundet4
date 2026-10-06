@@ -33,7 +33,6 @@ export {
 export { tagKeys } from './tags';
 export {
   getEventsPerDay,
-  getEventsUpcoming,
   getEventsUpcomingPaginated,
   getEvents,
   postEvent,
@@ -48,7 +47,6 @@ export {
   useDeleteEvent,
   useGetEventsPerDay,
   useGetEvents,
-  useGetEventsUpcoming,
   useGetEventsUpcomingPaginated,
   useGetEvent,
   useGetEventForCloning,
@@ -106,8 +104,6 @@ export type {
   EventDto,
   EventWriteDto,
   EventGroupDto,
-  EventsUpcomingBackendResponse,
-  EventsUpcomingResponse,
   EventsPaginationType,
 } from './events';
 export {

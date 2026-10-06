@@ -1,6 +1,5 @@
 export {
   getEventsPerDay,
-  getEventsUpcoming,
   getEventsUpcomingPaginated,
   getEvents,
   postEvent,
@@ -15,7 +14,6 @@ export { useCreateEvent, useUpdateEvent, useDeleteEvent } from './mutations';
 export {
   useGetEventsPerDay,
   useGetEvents,
-  useGetEventsUpcoming,
   useGetEventsUpcomingPaginated,
   useGetEvent,
   useGetEventForCloning,
@@ -74,7 +72,5 @@ export type {
   EventDto,
   EventWriteDto,
   EventGroupDto,
-  EventsUpcomingBackendResponse,
-  EventsUpcomingResponse,
   EventsPaginationType,
 } from './types';

@@ -7,11 +7,10 @@ import {
   getEventGroups,
   getEvents,
   getEventsPerDay,
-  getEventsUpcoming,
   getEventsUpcomingPaginated,
 } from './api';
 import { billigKeys, eventKeys } from './queryKeys';
-import type { EventDto, EventGroupDto, EventId, EventsPaginationType, EventsUpcomingResponse, Filters } from './types';
+import type { EventDto, EventGroupDto, EventId, EventsPaginationType, Filters } from './types';
 
 export function useGetEventsPerDay(props?: Partial<UseQueryOptions<Record<string, EventDto[]>>>) {
   return useQuery({
@@ -29,14 +28,6 @@ export function useGetEvents(props?: Partial<UseQueryOptions<EventDto[]>>) {
   });
 }
 
-export function useGetEventsUpcoming(filters: Filters, props?: Partial<UseQueryOptions<EventsUpcomingResponse>>) {
-  return useQuery({
-    queryKey: eventKeys.upcoming(filters),
-    queryFn: () => getEventsUpcoming(filters),
-    ...props,
-  });
-}
-
 export function useGetEventsUpcomingPaginated(
   page: number,
   pageSize?: number,
@@ -44,7 +35,7 @@ export function useGetEventsUpcomingPaginated(
   props?: Partial<UseQueryOptions<EventsPaginationType<EventDto>>>,
 ) {
   return useQuery({
-    queryKey: eventKeys.paginated(page, pageSize, filters),
+    queryKey: eventKeys.upcomingPaginated(page, pageSize, filters),
     queryFn: () => getEventsUpcomingPaginated(page, pageSize, filters),
     ...props,
   });
