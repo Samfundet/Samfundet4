@@ -1,6 +1,8 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import type { ImageDto } from '~/dto';
+import { KEY } from '~/i18n/constants';
 import { backgroundImageFromUrl, imageUrl } from '~/utils';
 import { Link } from '../Link';
 import styles from './ImageTile.module.scss';
@@ -53,6 +55,7 @@ function TileContent({ image, selected }: Pick<ImageTileProps, 'image' | 'select
 }
 
 export function ImageTile({ image, className, selected = false, url, onClick }: ImageTileProps) {
+  const { t } = useTranslation();
   const tileClassName = classNames(
     styles.imageContainer,
     className,
@@ -74,7 +77,7 @@ export function ImageTile({ image, className, selected = false, url, onClick }: 
     return (
       <button
         type="button"
-        aria-label={`Select ${image.title}`}
+        aria-label={`${t(KEY.common_choose)} ${image.title}`}
         className={tileClassName}
         style={backgroundImageFromUrl(bgUrl)}
         onClick={onClick}
