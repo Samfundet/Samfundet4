@@ -20,16 +20,12 @@ type Props = {
   locationOptions: DropdownOption<string>[];
 };
 
-// Adds `minutes` to a datetime-local value (e.g. '2025-02-20T18:00') and returns a new
-// datetime-local value. Returns '' if `dtLocal` isn't a parseable date.
 function addMinutesToLocalDt(dtLocal: string, minutes: number): string {
   const start = new Date(dtLocal);
   if (Number.isNaN(start.getTime())) return '';
   return utcTimestampToLocal(new Date(start.getTime() + minutes * 60_000).toISOString(), false);
 }
 
-// Returns the whole-minute difference between two datetime-local values, clamped to >= 0.
-// Returns undefined if either value isn't a parseable date.
 function diffMinutes(startLocal: string, endLocal: string): number | undefined {
   const start = new Date(startLocal);
   const end = new Date(endLocal);
@@ -45,9 +41,6 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
     queryKey: venueKeys.all,
     queryFn: getVenues,
   });
-
-  // start_dt, end_dt and duration are all shown at once, so editing any one of them needs to
-  // keep the other two consistent.
 
   function handleStartDtChange(value: string) {
     form.setValue('start_dt', value, { shouldValidate: true, shouldDirty: true, shouldTouch: true });

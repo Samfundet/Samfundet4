@@ -92,8 +92,6 @@ export function useEventCreatorForm(params: {
   }, [startDt, visibilityFromDt, trigger]);
 
   function buildPayload(values: FormType): EventWriteDto {
-    // end_dt is kept in sync with start_dt/duration by InfoStep's change handlers, so it's
-    // already authoritative here - no need to re-derive it from duration.
     const endDt = values.end_dt ? new Date(values.end_dt) : null;
 
     return {
