@@ -11,8 +11,8 @@ export async function getVenues(): Promise<VenueDto[]> {
   return response.data;
 }
 
-export async function getVenue(id: string | number): Promise<VenueDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { pk: id } });
+export async function getVenue(slug: string): Promise<VenueDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { slug } });
   const response = await axios.get<VenueDto>(url, { withCredentials: true });
 
   return response.data;
