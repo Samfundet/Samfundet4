@@ -142,3 +142,24 @@ $event-header-bg-dark: rgba(31, 31, 31, 0.9);
   padding: 0.5em;
   border-radius: 0.5em 0.5em 0 0;
 }
+
+.table_container {
+  width: 100%;
+  box-sizing: border-box;
+
+  @include for-mobile-only {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 0.5em;
+    font-size: 0.85em;
+
+    table {
+      width: 100%;
+    }
+
+    th,
+    td {
+      padding: 0.5em 0.4em;
+    }
+  }
+}

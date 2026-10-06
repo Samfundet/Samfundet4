@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from typing import Any
-from datetime import time, timedelta
+from datetime import time
 from itertools import chain
 
 from rest_framework import status
@@ -25,6 +25,7 @@ from root.constants import WebFeatures
 from root.custom_classes.permission_classes import FeatureEnabled, RoleProtectedOrAnonReadOnlyObjectPermissions
 
 from samfundet.homepage import homepage
+from samfundet.date_utils import samfundet_date
 from samfundet.pagination import CustomPageNumberPagination
 from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from samfundet.serializers import (
@@ -156,7 +157,8 @@ class VenueView(ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def open_venues(self, request: Request) -> Response:
-        day_name = (timezone.now() - timedelta(hours=4)).strftime('%A').lower()
+
+        day_name = samfundet_date(timezone.now()).strftime('%A').lower()
 
         q = ~Q(
             **{
