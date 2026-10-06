@@ -87,7 +87,7 @@
     "autoprefixer": "^10.4.21",
     "cypress": "^15.21.1",
     "cypress-vite": "^1.4.2",
-    "knip": "^6.17.1",
+    "knip": "^6.39.0",
     "lefthook": "^2.1.7",
     "postcss-scss": "^4.0.9",
     "react-i18next": "^13.3.0",
