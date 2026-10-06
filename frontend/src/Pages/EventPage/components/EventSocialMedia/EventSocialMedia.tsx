@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
-import { Video } from '~/Components';
+import { Link, Video } from '~/Components';
 import type { EventDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { getSocialMediaUrl, getYouTubeVideoId } from '~/utils/socialMedia';
@@ -33,14 +33,16 @@ export function EventSocialMedia({ event }: Props) {
     <div className={styles.container}>
       {links.length > 0 && (
         <ul className={styles.links}>
-          {links.map(({ label, icon, url }) => (
-            <li key={label}>
-              <a href={url} target="_blank" rel="noopener noreferrer" className={styles.link}>
-                <Icon icon={icon} aria-hidden="true" />
-                {label}
-              </a>
-            </li>
-          ))}
+          {links.map(({ label, icon, url }) =>
+            url ? (
+              <li key={label}>
+                <Link url={url} target="external" plain className={styles.link}>
+                  <Icon icon={icon} aria-hidden="true" />
+                  {label}
+                </Link>
+              </li>
+            ) : null,
+          )}
         </ul>
       )}
       {videoId && <Video embedId={videoId} title={t(KEY.event_youtube_video)} />}
