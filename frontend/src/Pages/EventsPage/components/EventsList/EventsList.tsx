@@ -15,6 +15,9 @@ import { COLORS } from '~/types';
 import { dbT, imageUrl } from '~/utils';
 import styles from './EventsList.module.scss';
 
+// On mobile, only show the most important columns so the table fits the screen.
+const MOBILE_COLUMN_INDEXES = [0, 1, 4];
+
 type EventsListProps = {
   events: Record<string, EventDto[]>;
 };
@@ -37,6 +40,8 @@ export function EventsList({ events }: EventsListProps) {
     { content: t(KEY.common_buy), sortable: true },
   ];
 
+  const visibleColumns = isDesktop ? eventColumns : eventColumns.filter((_, i) => MOBILE_COLUMN_INDEXES.includes(i));
+
   // TODO debounce and move header/filtering stuff to a separate component
   function filteredEvents() {
     const allEvents = Object.keys(events).flatMap((k: string) => events[k]);
@@ -52,7 +57,7 @@ export function EventsList({ events }: EventsListProps) {
 
   // TODO improve table view for events
   function getEventRows(): TableRow[] {
-    return filteredEvents().map((event) => ({
+    const rows: TableRow[] = filteredEvents().map((event) => ({
       cells: [
         {
           content: (
@@ -76,6 +81,13 @@ export function EventsList({ events }: EventsListProps) {
         event.host,
         event.ticket_type,
       ],
+    }));
+
+    if (isDesktop) return rows;
+
+    return rows.map((row) => ({
+      ...row,
+      cells: row.cells.filter((_, i) => MOBILE_COLUMN_INDEXES.includes(i)),
     }));
   }
 
@@ -156,7 +168,11 @@ export function EventsList({ events }: EventsListProps) {
 
       <div className={styles.event_view_container}>
         {/* Table view */}
-        {tableView && <Table columns={eventColumns} data={getEventRows()} />}
+        {tableView && (
+          <div className={styles.table_container}>
+            <Table columns={visibleColumns} data={getEventRows()} />
+          </div>
+        )}
 
         {/* Grid view */}
         {!tableView && <div className={styles.event_grid}>{getEventCards()}</div>}
