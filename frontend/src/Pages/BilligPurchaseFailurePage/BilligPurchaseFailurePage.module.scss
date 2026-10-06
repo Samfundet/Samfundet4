@@ -1,0 +1,103 @@
+.page {
+  background: linear-gradient(180deg, #f3f4f6 0%, #ffffff 100%);
+  min-height: calc(100vh - 6rem);
+}
+
+.shell {
+  margin: 0 auto;
+  max-width: 56rem;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.subheading {
+  margin-top: 0.5rem;
+}
+
+.lead {
+  color: #374151;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0.75rem 0 0;
+  max-width: 42rem;
+}
+
+.panel,
+.errorPanel {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  margin-top: 1rem;
+  padding: 1.5rem;
+}
+
+.errorPanel {
+  border-left: 6px solid #b91c1c;
+}
+
+.errorMessage {
+  color: #7f1d1d;
+  display: block;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-top: 0.75rem;
+}
+
+.retryText {
+  color: #4b5563;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.billigForm {
+  margin-top: 1rem;
+}
+
+.dynamicError {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #7f1d1d;
+  line-height: 1.6;
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+}
+
+.groupSection {
+  border-top: 1px solid #e5e7eb;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.groupTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+}
+
+.formRow {
+  align-items: center;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) 7rem;
+  margin-bottom: 0.75rem;
+}
+
+.select,
+.input {
+  border: 1px solid #9ca3af;
+  border-radius: 0;
+  padding: 0.65rem 0.75rem;
+  width: 100%;
+}
+
+.retryButton {
+  background: #111827;
+  border: 0;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font: inherit;
+  margin-top: 0.75rem;
+  padding: 0.85rem 1.25rem;
+}
