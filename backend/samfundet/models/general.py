@@ -601,6 +601,8 @@ class Reservation(FullCleanSaveMixin):
 
         # Fetch venue with the given id
         venue = Venue.objects.get(slug=slug)
+        if not getattr(venue, f'is_open_{VENUE_WEEKDAYS[date.weekday()]}'):
+            return []
         # Fetch tables that fits size criteria
         tables = Table.objects.filter(venue=venue.slug, seating__gte=seating)
         # fetch all reservations for those tables for that date
