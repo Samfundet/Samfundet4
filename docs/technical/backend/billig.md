@@ -14,13 +14,15 @@ All callback endpoints are public because Billig returns the user's browser to t
 
 | Path | Method | Authentication | Purpose |
 | --- | --- | --- | --- |
-| `/api/billig/event/<event_id>/tickets/` | `GET` | Public (`AllowAny`) | Returns the event's ticket groups and price groups that are available for online sale. |
+| `/api/billig/event/<event_id>/tickets/` | `GET` | Public (`AllowAny`) | Returns checkout ticket groups for a Billig event ID, with online price groups and calculated quantity limits. |
 | `/api/billig/callback/success/` | `GET` | Public (`AllowAny`) | Receives the `tickets` parameter after a successful purchase and redirects the browser to `/arrangement/billetter/status/<tickets>/`. |
 | `/api/billig/callback/failure/` | `GET` | Public (`AllowAny`) | Preserves Billig's query parameters, including `bsession`, and redirects the browser to `/arrangement/billetter/handlekurv/`. |
 | `/api/billig/callback/failure-data/` | `GET` | Public (`AllowAny`) | Looks up `bsession` in Billig's `payment_error` tables and returns the error and retryable cart data. |
 | `/api/billig/dev/pay/` | `POST` | Public (`AllowAny`), development only | Simulates Billig locally by creating fake purchases or payment errors in the development Billig database. |
 
 ## Configuration
+
+The checkout modal fetches `/api/billig/event/<event_id>/tickets/` when opened. This endpoint excludes theater groups (which require seat selection), offline price groups, and empty groups. Each group retains `ticket_limit` and includes `per_price_group_limit` and `group_limit`. An explicit limit, including zero, applies to both; a null limit defaults to 9 per online price group and 9 times the number of online price groups for the whole group. The frontend uses these values directly while tracking the user's selected quantities locally. The general event response still supplies the payment URL and ticket fee.
 
 `BILLIG_PAYMENT_URL` is the URL to which the browser posts the purchase form:
 
