@@ -92,13 +92,12 @@ export function useEventCreatorForm(params: {
   }, [startDt, visibilityFromDt, trigger]);
 
   function buildPayload(values: FormType): EventWriteDto {
-    const start = values.start_dt ? new Date(values.start_dt) : null;
-    const computedEndDt = start ? new Date(start?.getTime() + (values.duration ?? 0) * 60_000) : null;
+    const endDt = values.end_dt ? new Date(values.end_dt) : null;
 
     return {
       ...values,
-      visibility_to_dt: computedEndDt ? computedEndDt.toISOString() : '',
-      end_dt: computedEndDt ? computedEndDt.toISOString() : '',
+      visibility_to_dt: endDt ? endDt.toISOString() : '',
+      end_dt: endDt ? endDt.toISOString() : '',
       image_id: values.image?.id,
     };
   }
