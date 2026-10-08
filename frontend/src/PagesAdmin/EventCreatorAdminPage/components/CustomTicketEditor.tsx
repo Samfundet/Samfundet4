@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, IconButton, InputField } from '~/Components';
+import { Button, IconButton, Input } from '~/Components';
 import { Table, type TableRow } from '~/Components/Table';
 import type { EventCustomTicketDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
@@ -70,32 +70,31 @@ export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: P
       cells: [
         {
           content: (
-            <InputField<string>
-              inputClassName={styles.custom_ticket_input}
-              labelClassName={styles.custom_ticket_input_label}
-              value={custom_ticket.name_nb}
-              onChange={(name) => updateTicket(custom_ticket.id, { name_nb: name })}
+            <Input
+              type="text"
+              className={styles.custom_ticket_input}
+              onChange={(e) => updateTicket(custom_ticket.id, { name_nb: e.target.value })}
+              value={custom_ticket.name_nb ?? ''}
             />
           ),
         },
         {
           content: (
-            <InputField<string>
-              inputClassName={styles.custom_ticket_input}
-              labelClassName={styles.custom_ticket_input_label}
-              value={custom_ticket.name_en}
-              onChange={(name) => updateTicket(custom_ticket.id, { name_en: name })}
+            <Input
+              type="text"
+              className={styles.custom_ticket_input}
+              onChange={(e) => updateTicket(custom_ticket.id, { name_en: e.target.value })}
+              value={custom_ticket.name_en ?? ''}
             />
           ),
         },
         {
           content: (
-            <InputField<number>
-              inputClassName={styles.custom_ticket_input}
-              labelClassName={styles.custom_ticket_input_label}
-              value={custom_ticket.price?.toString()}
+            <Input
               type="number"
-              onChange={(price) => updateTicket(custom_ticket.id, { price: price })}
+              className={styles.custom_ticket_input}
+              onChange={(e) => updateTicket(custom_ticket.id, { price: e.target.value })}
+              value={custom_ticket.price?.toString()}
             />
           ),
         },
