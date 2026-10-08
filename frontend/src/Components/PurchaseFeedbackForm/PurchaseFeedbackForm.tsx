@@ -1,10 +1,12 @@
 import { t } from 'i18next';
+import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
-import { SamfForm } from '~/Forms/SamfForm';
-import { SamfFormField } from '~/Forms/SamfFormField';
+import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
+import { KEY } from '~/i18n/constants';
+
 import { postPurchaseFeedback } from '~/api';
 import type { PurchaseFeedbackDto } from '~/dto';
-import { KEY } from '~/i18n/constants';
+
 import styles from './PurchaseFeedbackForm.module.scss';
 
 type PurchaseFeedbackFormProps = {
@@ -13,55 +15,96 @@ type PurchaseFeedbackFormProps = {
   questions: string[];
 };
 
+type PurchaseFeedbackFormData = Record<string, string | boolean>;
+
 export function PurchaseFeedbackForm({ title, questions, alternatives }: PurchaseFeedbackFormProps) {
   const { eventId } = useParams();
 
-  function handleSubmit(formData: Record<string, string>) {
+  const form = useForm<PurchaseFeedbackFormData>();
+
+  function onSubmit(values: PurchaseFeedbackFormData) {
     const questionResponses: Record<string, string> = {};
     const alternativesSelected: Record<string, string> = {};
 
-    for (const question in formData) {
-      if (questions.includes(question)) {
-        questionResponses[question] = formData[question];
+    for (const question of questions) {
+      const value = values[question];
+
+      if (typeof value === 'string') {
+        questionResponses[question] = value;
       }
     }
 
-    for (const alternative in formData) {
-      if (alternatives.includes(formData[alternative])) {
-        alternativesSelected[alternative] = formData[alternative];
+    for (const alternative of alternatives) {
+      if (values[alternative] === true) {
+        alternativesSelected[alternative] = alternative;
       }
     }
 
     const feedback: PurchaseFeedbackDto = {
       eventId: Number(eventId),
-      title: title,
+      title,
       alternatives: alternativesSelected,
       responses: questionResponses,
     };
+
     postPurchaseFeedback(feedback);
   }
+
   return (
-    <div>
-      <SamfForm onSubmit={handleSubmit} submitText={t(KEY.common_save)}>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <h1 className={styles.title}>{title}</h1>
+
         <div className={styles.buttonContainer}>
-          {alternatives.map((alternatives, index) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
-            <div key={index} className={styles.checkboxContainer}>
-              <div className={styles.checkbox}>
-                <SamfFormField required={false} field={alternatives} type="checkbox" />
-              </div>
-              <p>{alternatives}</p>
-            </div>
+          {alternatives.map((alternative, index) => (
+            <FormField
+              // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
+              key={index}
+              control={form.control}
+              name={alternative}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <input
+                      type="checkbox"
+                      checked={field.value === true}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      ref={field.ref}
+                    />
+                  </FormControl>
+
+                  <FormLabel>{alternative}</FormLabel>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           ))}
         </div>
-        {questions.map((questions, index) => (
-          // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
-          <div key={index} className={styles.questionContainer}>
-            <SamfFormField required={true} field={questions} type="text" label={questions} />
-          </div>
+
+        {questions.map((question, index) => (
+          <FormField
+            // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
+            key={index}
+            control={form.control}
+            name={question}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{question}</FormLabel>
+
+                <FormControl>
+                  <Input type="text" {...field} value={typeof field.value === 'string' ? field.value : ''} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         ))}
-      </SamfForm>
-    </div>
+
+        <Button type="submit">{t(KEY.common_save)}</Button>
+      </form>
+    </Form>
   );
 }
