@@ -1,20 +1,21 @@
 from __future__ import annotations
 
-from rest_framework import decorators
+from rest_framework import mixins, decorators
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.permissions import AllowAny
 
 from django.db import models
 from django.http import JsonResponse
+
+from root.custom_classes.permission_classes import RoleProtectedOrAnonReadOnlyObjectPermissions
 
 from samfundet.serializers import SiteBannerSerializer
 from samfundet.models.site_banner import SiteBanner
 
 
-class SiteBannerView(ReadOnlyModelViewSet):
-    permission_classes = [AllowAny]
+class SiteBannerView(mixins.CreateModelMixin, ReadOnlyModelViewSet):
+    permission_classes = [RoleProtectedOrAnonReadOnlyObjectPermissions]
     serializer_class = SiteBannerSerializer
 
     def get_queryset(self) -> models.QuerySet:
