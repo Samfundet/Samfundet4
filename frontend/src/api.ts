@@ -18,6 +18,7 @@ import type {
   ImageDto,
   ImagePatchDto,
   ImagePostDto,
+  InfoboxDto,
   InformationPageDto,
   InformationPageOwnerOptionDto,
   InformationPageRevisionDetailDto,
@@ -319,6 +320,35 @@ export async function putInformationPage(slug: string, page: EditInformationPage
   return await axios.put<InformationPageDto>(url, page, { withCredentials: true });
 }
 
+export async function getInfoboxes(): Promise<InfoboxDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__infobox_list;
+  const response = await axios.get<InfoboxDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function getInfobox(id: string | number): Promise<InfoboxDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__infobox_detail, urlParams: { pk: id } });
+  const response = await axios.get<InfoboxDto>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function postInfobox(data: Partial<InfoboxDto>): Promise<InfoboxDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__infobox_list;
+  const response = await axios.post<InfoboxDto>(url, data, { withCredentials: true });
+  return response.data;
+}
+
+export async function putInfobox(id: string | number, data: Partial<InfoboxDto>): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__infobox_detail, urlParams: { pk: id } });
+  const response = await axios.put<InfoboxDto>(url, data, { withCredentials: true });
+  return response;
+}
+
+export async function deleteInfobox(id: string | number): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__infobox_detail, urlParams: { pk: id } });
+  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
+  return response;
+}
 export async function getMenus(): Promise<MenuDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__menu_list;
   const response = await axios.get<MenuDto[]>(url, { withCredentials: true });
