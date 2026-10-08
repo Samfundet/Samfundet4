@@ -32,13 +32,13 @@ import {
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './EventCreatorAdminPage.module.scss';
 import { type FormType, useEventCreatorForm } from './hooks/useEventCreatorForm';
-import { useEventMutations } from './hooks/useEventMutations';
 
 import { type EventCreatorStep, type StepKey, steps } from './steps/stepConfig';
 
 import type { FieldErrors } from 'react-hook-form';
 import { eventSchema } from './EventCreatorSchema';
 import { EventPreviewCard } from './components/EventPreviewCard';
+import { useEventMutations } from './hooks/useEventMutations';
 import { GraphicsStep } from './steps/GraphicsStep';
 import { InfoStep } from './steps/InfoStep';
 import { PaymentStep } from './steps/PaymentStep';
@@ -46,12 +46,14 @@ import { SOCIAL_KEYS, SocialMediaStep } from './steps/SocialMediaStep';
 import { SummaryStep } from './steps/SummaryStep';
 import { TextStep } from './steps/TextStep';
 import type { EventStatusOption } from './types';
+import { isValidEventId } from './utils';
 
 export function EventCreatorAdminPage() {
   const { t } = useTranslation();
   const { id } = useParams();
   const [searchParams] = useSearchParams();
-  const templateId = id === undefined ? searchParams.get('template') : undefined;
+  const requestedTemplateId = id === undefined ? searchParams.get('template') : null;
+  const templateId = isValidEventId(requestedTemplateId) ? requestedTemplateId : undefined;
   const eventId = id ?? templateId;
   const isCloning = templateId !== undefined;
   const { createEventMutation, editEventMutation } = useEventMutations();

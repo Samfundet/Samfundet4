@@ -214,7 +214,7 @@ export type EventDto = {
 
   spotify_uri?: string;
   youtube_link?: string;
-  youtube_embed?: string;
+  youtube_embed?: boolean;
   facebook_link?: string;
   soundcloud_link?: string;
   instagram_link?: string;
@@ -247,7 +247,7 @@ export type EventCloneDto = {
 
   spotify_uri?: string;
   youtube_link?: string;
-  youtube_embed?: string;
+  youtube_embed?: boolean;
   facebook_link?: string;
   soundcloud_link?: string;
   instagram_link?: string;
@@ -290,6 +290,9 @@ export type EventWriteDto = {
   image_id?: number;
   capacity?: number;
   billig_id?: number;
+
+  youtube_link?: string;
+  youtube_embed?: boolean;
 };
 
 export type EventGroupDto = {
@@ -354,6 +357,17 @@ export type InformationPageOwnerOptionDto = {
   can_create: boolean;
   can_change: boolean;
   can_delete: boolean;
+};
+
+export type InfoboxDto = {
+  id: number;
+  title_nb?: string;
+  text_nb?: string;
+  title_en: string;
+  text_en: string;
+  color: string;
+  url?: string | null;
+  image?: number | null;
 };
 
 export type ReservationTableDto = {
@@ -534,12 +548,10 @@ export type GangSectionDto = BaseModelDto & {
 
 export type ClosedPeriodDto = {
   id: number;
-  message_no: string;
-  description_no: string;
+  message_nb: string;
   message_en: string;
-  description_en: string;
-  start_dt: Date;
-  end_dt: Date;
+  start_dt: string;
+  end_dt: string;
 };
 
 export type TagDto = {
@@ -895,6 +907,17 @@ export type SultenReservationDayDto = {
   start_time: string;
   closing_time: string;
   tables: TableDto[];
+};
+
+export type SiteBannerDto = {
+  id: number;
+  version: number;
+  text_nb: string;
+  text_en: string;
+  url: string | null;
+  new_tab: boolean;
+  start_at: string;
+  end_at: string | null;
 };
 
 export type RegistrationDto = {

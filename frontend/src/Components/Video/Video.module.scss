@@ -4,11 +4,12 @@
   display: flex;
   justify-content: center;
   overflow: hidden;
+  border-radius: 0.5rem;
   width: 100%;
 }
 
-.frame {
+.video {
   aspect-ratio: 16 / 9;
   width: 100%;
-  position: absolute;
+  border: 0;
 }

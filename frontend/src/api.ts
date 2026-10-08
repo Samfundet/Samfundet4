@@ -5,7 +5,6 @@ import type {
   CaseDocumentCategoryDto,
   CaseDocumentDto,
   CaseDocumentPostDto,
-  ClosedPeriodDto,
   EditGangDto,
   EditGangSectionDto,
   EditInformationPageDto,
@@ -23,6 +22,7 @@ import type {
   ImageDto,
   ImagePatchDto,
   ImagePostDto,
+  InfoboxDto,
   InformationPageDto,
   InformationPageOwnerOptionDto,
   InformationPageRevisionDetailDto,
@@ -61,6 +61,7 @@ import type {
   RegistrationDto,
   RoleDto,
   RoleUsersDto,
+  SiteBannerDto,
   TagDto,
   TextItemDto,
   UserDto,
@@ -181,6 +182,12 @@ export async function getHomeData(): Promise<HomePageDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__home;
   const response = await axios.get<HomePageDto>(url, { withCredentials: true });
 
+  return response.data;
+}
+
+export async function getActiveSiteBanner(): Promise<SiteBannerDto | null> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__site_banners_active;
+  const response = await axios.get<SiteBannerDto | null>(url, { withCredentials: true });
   return response.data;
 }
 
@@ -316,6 +323,36 @@ export async function putInformationPage(slug: string, page: EditInformationPage
       urlParams: { slugField: slug },
     });
   return await axios.put<InformationPageDto>(url, page, { withCredentials: true });
+}
+
+export async function getInfoboxes(): Promise<InfoboxDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__infobox_list;
+  const response = await axios.get<InfoboxDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function getInfobox(id: string | number): Promise<InfoboxDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__infobox_detail, urlParams: { pk: id } });
+  const response = await axios.get<InfoboxDto>(url, { withCredentials: true });
+  return response.data;
+}
+
+export async function postInfobox(data: Partial<InfoboxDto>): Promise<InfoboxDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__infobox_list;
+  const response = await axios.post<InfoboxDto>(url, data, { withCredentials: true });
+  return response.data;
+}
+
+export async function putInfobox(id: string | number, data: Partial<InfoboxDto>): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__infobox_detail, urlParams: { pk: id } });
+  const response = await axios.put<InfoboxDto>(url, data, { withCredentials: true });
+  return response;
+}
+
+export async function deleteInfobox(id: string | number): Promise<AxiosResponse> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__infobox_detail, urlParams: { pk: id } });
+  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
+  return response;
 }
 
 export async function getEventsPerDay(): Promise<EventDto[]> {
@@ -703,39 +740,6 @@ export async function deleteGangSection(id: string | number): Promise<AxiosRespo
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__admin_gangsections_detail, urlParams: { pk: id } });
   return await axios.delete(url, { withCredentials: true });
-}
-
-export async function getClosedPeriods(): Promise<ClosedPeriodDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__closedperiods_list;
-  const response = await axios.get<ClosedPeriodDto[]>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function getClosedPeriod(id: string | number): Promise<ClosedPeriodDto> {
-  const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
-  const response = await axios.get<ClosedPeriodDto>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function putClosedPeriod(id: string | number, data: Partial<ClosedPeriodDto>): Promise<AxiosResponse> {
-  const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
-  const response = await axios.put<ClosedPeriodDto>(url, data, { withCredentials: true });
-  return response;
-}
-
-export async function postClosedPeriod(data: ClosedPeriodDto): Promise<ClosedPeriodDto> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__closedperiods_list;
-  const response = await axios.post<ClosedPeriodDto>(url, data, { withCredentials: true });
-  return response.data;
-}
-
-export async function deleteClosedPeriod(id: string | number): Promise<AxiosResponse> {
-  const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__closedperiods_detail, urlParams: { pk: id } });
-  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
-  return response;
 }
 
 export async function getImagesPaginated(

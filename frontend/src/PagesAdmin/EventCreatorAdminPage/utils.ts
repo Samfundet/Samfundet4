@@ -3,6 +3,11 @@ import { type EventCategoryValue, EventStatusChoice } from '~/types';
 import { utcTimestampToLocal } from '~/utils';
 import type { FormType } from './hooks/useEventCreatorForm';
 
+export function isValidEventId(value: unknown): value is number | string {
+  if (typeof value === 'number') return Number.isSafeInteger(value) && value > 0;
+  return typeof value === 'string' && /^[1-9]\d*$/.test(value) && Number.isSafeInteger(Number(value));
+}
+
 function computeDurationMinutes(startIso?: string, endIso?: string) {
   if (!startIso || !endIso) return 0;
   return Math.round((new Date(endIso).getTime() - new Date(startIso).getTime()) / 60000);
@@ -40,7 +45,7 @@ export function mapEventToFormValues(params: {
     billig_id: 'billig' in event ? event.billig?.id : undefined,
     spotify_uri: event.spotify_uri || '',
     youtube_link: event.youtube_link || '',
-    youtube_embed: event.youtube_embed || '',
+    youtube_embed: event.youtube_embed ?? false,
     facebook_link: event.facebook_link || '',
     soundcloud_link: event.soundcloud_link || '',
     instagram_link: event.instagram_link || '',
