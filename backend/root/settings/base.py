@@ -299,7 +299,7 @@ LOGGING = {
         },
         'file': {
             'level': 'INFO',
-            # Log retention is set to store the last 14 days, might want to 
+            # Log retention is set to store the last 14 days, might want to
             # consider a more comprehensive log retention policy.
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'when': 'midnight',
