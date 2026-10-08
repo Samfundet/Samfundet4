@@ -301,7 +301,7 @@ LOGGING = {
             'level': 'INFO',
             # Log retention is set to store the last 14 days, might want to 
             # consider a more comprehensive log retention policy.
-            'class': 'logging.TimedRotatingFileHandler',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
             'when': 'midnight',
             'backupCount': 14,
             'utc': True,
