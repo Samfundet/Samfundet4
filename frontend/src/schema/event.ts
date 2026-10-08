@@ -42,7 +42,7 @@ export const EVENT_BILLIG_ID = z.number().optional();
 // Social media links
 export const EVENT_SPOTIFY_URI = validSpotifyUri;
 export const EVENT_YOUTUBE_LINK = validUrl;
-export const EVENT_YOUTUBE_EMBED = validUrl;
+export const EVENT_YOUTUBE_EMBED = z.boolean();
 export const EVENT_FACEBOOK_LINK = validUrl;
 export const EVENT_SOUNDCLOUD_LINK = validUrl;
 export const EVENT_INSTAGRAM_LINK = validUrl;
