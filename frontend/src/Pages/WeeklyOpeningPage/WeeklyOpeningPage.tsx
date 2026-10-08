@@ -7,8 +7,8 @@ import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { venueKeys } from '~/queryKeys';
 import { ROUTES_SAMF_THREE } from '~/routes/samf-three';
-import { ALL_DAYS, type Day } from '~/types';
-import { getShortDayKey } from '~/utils';
+import { ALL_DAYS, type OpeningHourGroup } from '~/types';
+import { getShortDayKey, getVenueOpeningHoursFromDTO } from '~/utils';
 import styles from './WeeklyOpeningPage.module.scss';
 
 export function WeeklyOpeningPage() {
@@ -22,78 +22,31 @@ export function WeeklyOpeningPage() {
     select: (data) => [...data].sort((venueA, venueB) => venueA.name.localeCompare(venueB.slug)),
   });
 
-  const isNextDay = (dayA: Day, dayB: Day) => {
-    return ALL_DAYS.indexOf(dayB) - ALL_DAYS.indexOf(dayA) === 1;
-  };
-
-  function sortDayArrays(days: Day[][]) {
-    return days.sort((dayArrayA, dayArrayB) => {
-      const firstDayA = dayArrayA[0];
-      const firstDayB = dayArrayB[0];
-
-      return ALL_DAYS.indexOf(firstDayA) - ALL_DAYS.indexOf(firstDayB);
-    });
-  }
-
-  function buildTimeDuration(venue: VenueDto, dayPeriod: Day[]) {
+  function buildTimeDuration({ days, opening, closing }: OpeningHourGroup) {
     const dummyDate = '1970-01-01'; //Time duration component needs a date to work, but we only care about the time
 
-    const firstDay = dayPeriod[0];
-
-    const openingTime = venue[`opening_${firstDay}` as keyof VenueDto] as string;
-    const closingTime = venue[`closing_${firstDay}` as keyof VenueDto] as string;
+    const firstDate = days[0];
+    const lastDate = days[days.length - 1];
 
     return (
       <div className={styles.timeDuration}>
-        <p className={dayPeriod.includes(today) ? styles.today : styles.notToday}>
-          {t(getShortDayKey(firstDay))}
-          {dayPeriod.length > 1 ? `-${t(getShortDayKey(dayPeriod[dayPeriod.length - 1]))}` : ''}
+        <p className={days.includes(today) ? styles.today : styles.notToday}>
+          {t(getShortDayKey(firstDate))}
+          {days.length > 1 ? `-${t(getShortDayKey(lastDate))}` : ''}
         </p>
-        <TimeDuration
-          className={dayPeriod.includes(today) ? styles.today : styles.notToday}
-          start={`${dummyDate}T${openingTime}`}
-          end={`${dummyDate}T${closingTime}`}
-        />
+        <TimeDuration start={`${dummyDate}T${opening}`} end={`${dummyDate}T${closing}`} />
       </div>
     );
   }
 
-  function buildGroupedTimePeriods(venue: VenueDto) {
-    const seenPeriods = new Map<string, Day[]>();
-    const NonContinuousPeriods = new Array<Day[]>();
-    for (const day of ALL_DAYS) {
-      const openingTime = venue[`opening_${day}` as keyof VenueDto] as string;
-      const closingTime = venue[`closing_${day}` as keyof VenueDto] as string;
-      const period = `${openingTime}-${closingTime}`;
-
-      const ContinuousPeriod = seenPeriods.get(period);
-      if (ContinuousPeriod) {
-        if (isNextDay(ContinuousPeriod[ContinuousPeriod.length - 1], day)) {
-          ContinuousPeriod.push(day);
-        } else {
-          NonContinuousPeriods.push([day]);
-        }
-      } else {
-        seenPeriods.set(period, [day]);
-      }
-    }
-
-    return (
-      <>
-        {sortDayArrays([...NonContinuousPeriods, ...seenPeriods.values()]).map((dayPeriod) => (
-          <div key={dayPeriod.join(',')}>{buildTimeDuration(venue, dayPeriod)}</div>
-        ))}
-      </>
-    );
-  }
-
   function buildVenueBlock(venue: VenueDto) {
+    const openingHourGroups = getVenueOpeningHoursFromDTO(venue);
     return (
       <div key={venue.name} className={styles.venueBlock}>
-        <Link target="samf3" url={`${ROUTES_SAMF_THREE.information.general}/${venue.name}`}>
+        <Link target="samf3" url={`${ROUTES_SAMF_THREE.information.general}/${venue.slug}`}>
           <p className={styles.venueName}>{venue.name}</p>
         </Link>
-        {buildGroupedTimePeriods(venue)}
+        {openingHourGroups.map((group) => buildTimeDuration(group))}
       </div>
     );
   }
