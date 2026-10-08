@@ -9,10 +9,17 @@ function isValidDate(value: string): boolean {
   return Number.isFinite(new Date(value).getTime());
 }
 
+const textField = z.string().trim().min(1, KEY.common_required).max(MAX_TEXT_LENGTH, KEY.admin_site_banner_text_hint);
+
+const dateField = z
+  .string()
+  .min(1, KEY.common_required)
+  .refine((value) => !value || isValidDate(value), KEY.admin_site_banner_validation_date);
+
 export const siteBannerSchema = z
   .object({
-    text_nb: z.string().trim().min(1, KEY.common_required).max(MAX_TEXT_LENGTH, KEY.admin_site_banner_text_hint),
-    text_en: z.string().trim().min(1, KEY.common_required).max(MAX_TEXT_LENGTH, KEY.admin_site_banner_text_hint),
+    text_nb: textField,
+    text_en: textField,
     url: z
       .string()
       .trim()
@@ -21,14 +28,8 @@ export const siteBannerSchema = z
       .optional()
       .default(''),
     new_tab: z.boolean().default(false),
-    start_at: z
-      .string()
-      .min(1, KEY.common_required)
-      .refine((value) => !value || isValidDate(value), KEY.admin_site_banner_validation_date),
-    end_at: z
-      .string()
-      .min(1, KEY.common_required)
-      .refine((value) => !value || isValidDate(value), KEY.admin_site_banner_validation_date),
+    start_at: dateField,
+    end_at: dateField,
   })
   .superRefine((values, context) => {
     if (!isValidDate(values.start_at) || !isValidDate(values.end_at)) return;
