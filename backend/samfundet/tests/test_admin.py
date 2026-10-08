@@ -99,7 +99,7 @@ def test_admin_logs_view_rejects_bulk_and_directory_downloads(
     settings: Any,
     tmp_path: Path,
 ):
-    first_log = tmp_path / 'app.log'
+    first_log = tmp_path / 'samfundet.log'
     second_log = tmp_path / 'sql.log'
     first_log.write_text('', encoding='utf-8')
     second_log.write_text('', encoding='utf-8')
@@ -124,7 +124,7 @@ def test_admin_logs_view_allows_file_download(
     monkeypatch: Any,
     tmp_path: Path,
 ):
-    log_file = tmp_path / 'app.log'
+    log_file = tmp_path / 'samfundet.log'
     log_file.write_text('log entry', encoding='utf-8')
     package_logs_view = Mock(return_value=HttpResponse('log entry'))
     monkeypatch.setattr(root_views, 'package_logs_view', package_logs_view)
