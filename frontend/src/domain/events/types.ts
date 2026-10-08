@@ -126,7 +126,7 @@ export type EventDto = {
 
   spotify_uri?: string;
   youtube_link?: string;
-  youtube_embed?: string;
+  youtube_embed?: boolean;
   facebook_link?: string;
   soundcloud_link?: string;
   instagram_link?: string;
@@ -164,6 +164,9 @@ export type EventWriteDto = {
   image_id?: number;
   capacity?: number;
   billig_id?: number;
+
+  youtube_link?: string;
+  youtube_embed?: boolean;
 };
 
 export type EventCloneDto = Omit<
