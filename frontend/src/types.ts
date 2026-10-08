@@ -303,3 +303,9 @@ export type HandleWithCrumb = {
 export interface MatchWithCrumb extends UIMatch {
   handle: HandleWithCrumb;
 }
+
+export type OpeningHourGroup = {
+  days: Day[];
+  opening: string;
+  closing: string;
+};

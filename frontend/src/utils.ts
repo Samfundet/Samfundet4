@@ -16,10 +16,12 @@ import type {
   ImageSize,
   OrganizationDto,
   UserDto,
+  VenueDto,
 } from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
 import {
+  ALL_DAYS,
   type Day,
   EventAgeRestriction,
   type EventAgeRestrictionValue,
@@ -27,6 +29,7 @@ import {
   type EventStatus,
   EventTicketType,
   type EventTicketTypeValue,
+  type OpeningHourGroup,
 } from './types';
 
 export type hasPerm = {
@@ -344,6 +347,54 @@ export function getDayKey(day: Day): TranslationKeys {
     case 'sunday':
       return KEY.common_day_sunday;
   }
+}
+
+/**
+ * Gets the shorthand translation key for a given day
+ */
+export function getShortDayKey(day: Day): TranslationKeys {
+  switch (day) {
+    case 'monday':
+      return KEY.common_day_monday_short;
+    case 'tuesday':
+      return KEY.common_day_tuesday_short;
+    case 'wednesday':
+      return KEY.common_day_wednesday_short;
+    case 'thursday':
+      return KEY.common_day_thursday_short;
+    case 'friday':
+      return KEY.common_day_friday_short;
+    case 'saturday':
+      return KEY.common_day_saturday_short;
+    case 'sunday':
+      return KEY.common_day_sunday_short;
+  }
+}
+/*
+ * Gets the opening-hour groups from a venueDTO
+ */
+export function getVenueOpeningHoursFromDTO(venue: VenueDto): OpeningHourGroup[] {
+  const groups: OpeningHourGroup[] = [];
+  let currentGroup: OpeningHourGroup | null = null;
+
+  for (const day of ALL_DAYS) {
+    const opening = venue[`opening_${day}` as keyof VenueDto] as string | undefined;
+    const closing = venue[`closing_${day}` as keyof VenueDto] as string | undefined;
+
+    //Opening and closing info in the venueDTO are optional, but we can't group unless both are set
+    if (!opening || !closing) {
+      currentGroup = null;
+      continue;
+    }
+
+    if (currentGroup && currentGroup.opening === opening && currentGroup.closing === closing) {
+      currentGroup.days.push(day);
+    } else {
+      currentGroup = { days: [day], opening, closing };
+      groups.push(currentGroup);
+    }
+  }
+  return groups;
 }
 
 export const SHORT_DAY_I18N_KEYS = [
