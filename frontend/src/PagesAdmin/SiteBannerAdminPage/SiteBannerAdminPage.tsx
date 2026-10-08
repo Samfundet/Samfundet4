@@ -2,13 +2,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import classNames from 'classnames';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { z } from 'zod';
 import { Button, Checkbox, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
 import { FormDescription } from '~/Components/Forms/Form';
+import { SiteBannerContent } from '~/Components/SiteBanner/SiteBannerContent';
+import { isValidBannerUrl, normalizeBannerUrl } from '~/Components/SiteBanner/utils';
 import { postSiteBanner } from '~/api';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -17,48 +17,7 @@ import { ROUTES } from '~/routes';
 import { utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './SiteBannerAdminPage.module.scss';
-
-const MAX_TEXT_LENGTH = 128;
-const MAX_URL_LENGTH = 500;
-
-function isValidBannerUrl(value: string): boolean {
-  if (value === '') return true;
-  if (value.startsWith('/') && !value.startsWith('//') && !value.startsWith('/\\')) return true;
-
-  try {
-    const url = new URL(value);
-    return url.protocol === 'http:' || url.protocol === 'https:';
-  } catch {
-    return false;
-  }
-}
-
-const siteBannerSchema = z
-  .object({
-    text_nb: z.string().trim().min(1, KEY.common_required).max(MAX_TEXT_LENGTH, KEY.admin_site_banner_text_hint),
-    text_en: z.string().trim().min(1, KEY.common_required).max(MAX_TEXT_LENGTH, KEY.admin_site_banner_text_hint),
-    url: z
-      .string()
-      .trim()
-      .max(MAX_URL_LENGTH)
-      .refine(isValidBannerUrl, KEY.admin_site_banner_validation_url)
-      .optional()
-      .default(''),
-    new_tab: z.boolean().default(false),
-    start_at: z.string().min(1, KEY.common_required),
-    end_at: z.string().min(1, KEY.common_required),
-  })
-  .superRefine((values, context) => {
-    if (new Date(values.end_at) <= new Date(values.start_at)) {
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: KEY.admin_site_banner_validation_end,
-        path: ['end_at'],
-      });
-    }
-  });
-
-type SiteBannerFormValues = z.infer<typeof siteBannerSchema>;
+import { MAX_TEXT_LENGTH, MAX_URL_LENGTH, type SiteBannerFormValues, siteBannerSchema } from './schema';
 
 function getDefaultValues(): SiteBannerFormValues {
   return {
@@ -77,13 +36,24 @@ export function SiteBannerAdminPage() {
   const form = useForm<SiteBannerFormValues>({
     resolver: zodResolver(siteBannerSchema),
     defaultValues: getDefaultValues(),
+    mode: 'onBlur',
   });
   const values = form.watch();
 
   useTitle(t(KEY.admin_site_banner_title));
 
   const createSiteBanner = useMutation({
-    mutationFn: postSiteBanner,
+    mutationFn: (data: SiteBannerFormValues) => {
+      const url = normalizeBannerUrl(data.url);
+      return postSiteBanner({
+        text_nb: data.text_nb,
+        text_en: data.text_en,
+        url: url || null,
+        new_tab: Boolean(url) && data.new_tab,
+        start_at: new Date(data.start_at).toISOString(),
+        end_at: new Date(data.end_at).toISOString(),
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: siteBannerKeys.all });
       toast.success(t(KEY.common_creation_successful));
@@ -109,27 +79,16 @@ export function SiteBannerAdminPage() {
     },
   });
 
-  function onSubmit(data: SiteBannerFormValues) {
-    const url = data.url.trim();
-    createSiteBanner.mutate({
-      text_nb: data.text_nb,
-      text_en: data.text_en,
-      url: url || null,
-      new_tab: Boolean(url) && data.new_tab,
-      start_at: new Date(data.start_at).toISOString(),
-      end_at: new Date(data.end_at).toISOString(),
-    });
-  }
-
-  const hasLink = Boolean(values.url.trim());
+  const isPending = createSiteBanner.isPending;
+  const previewUrl = isValidBannerUrl(values.url) ? normalizeBannerUrl(values.url) : '';
   const previews = [
     {
       language: t(KEY.common_norwegian),
-      text: values.text_nb,
+      text: values.text_nb.trim(),
     },
     {
       language: t(KEY.common_english),
-      text: values.text_en,
+      text: values.text_en.trim(),
     },
   ];
 
@@ -141,16 +100,18 @@ export function SiteBannerAdminPage() {
     >
       <div className={styles.container}>
         <Form {...form} schema={siteBannerSchema}>
-          <form className={styles.form} onSubmit={form.handleSubmit(onSubmit)}>
+          <form className={styles.form} onSubmit={form.handleSubmit((data) => createSiteBanner.mutate(data))}>
             <div className={styles.field_grid}>
               <FormField
                 control={form.control}
                 name="text_nb"
-                disabled={createSiteBanner.isPending}
+                disabled={isPending}
                 render={({ field }) => (
                   <FormItem className={styles.form_item}>
                     <FormLabel>{t(KEY.common_norwegian)}</FormLabel>
-                    <FormDescription>{t(KEY.admin_site_banner_text_hint)}</FormDescription>
+                    {values.text_nb.length >= MAX_TEXT_LENGTH && (
+                      <FormDescription>{t(KEY.admin_site_banner_text_hint)}</FormDescription>
+                    )}
                     <FormControl>
                       <Input type="text" maxLength={MAX_TEXT_LENGTH} {...field} />
                     </FormControl>
@@ -161,11 +122,13 @@ export function SiteBannerAdminPage() {
               <FormField
                 control={form.control}
                 name="text_en"
-                disabled={createSiteBanner.isPending}
+                disabled={isPending}
                 render={({ field }) => (
                   <FormItem className={styles.form_item}>
                     <FormLabel>{t(KEY.common_english)}</FormLabel>
-                    <FormDescription>{t(KEY.admin_site_banner_text_hint)}</FormDescription>
+                    {values.text_en.length >= MAX_TEXT_LENGTH && (
+                      <FormDescription>{t(KEY.admin_site_banner_text_hint)}</FormDescription>
+                    )}
                     <FormControl>
                       <Input type="text" maxLength={MAX_TEXT_LENGTH} {...field} />
                     </FormControl>
@@ -181,20 +144,11 @@ export function SiteBannerAdminPage() {
                 {previews.map((preview) => (
                   <div key={preview.language} className={styles.preview_item}>
                     <span className={styles.language}>{preview.language}</span>
-                    <div className={styles.banner}>
-                      <span
-                        className={classNames(
-                          styles.preview_text,
-                          hasLink && styles.preview_link,
-                          !preview.text && styles.placeholder,
-                        )}
-                      >
-                        {preview.text || t(KEY.admin_site_banner_preview_placeholder)}
-                      </span>
-                      {hasLink && values.new_tab && (
-                        <Icon icon="lucide:external-link" className={styles.external_icon} />
-                      )}
-                    </div>
+                    <SiteBannerContent
+                      text={preview.text || t(KEY.admin_site_banner_preview_placeholder)}
+                      url={previewUrl}
+                      newTab={values.new_tab}
+                    />
                   </div>
                 ))}
               </div>
@@ -203,13 +157,18 @@ export function SiteBannerAdminPage() {
             <FormField
               control={form.control}
               name="url"
-              disabled={createSiteBanner.isPending}
+              disabled={isPending}
               render={({ field }) => (
                 <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.admin_site_banner_url)}</FormLabel>
-                  <FormDescription>{t(KEY.admin_site_banner_url_hint)}</FormDescription>
                   <FormControl>
-                    <Input type="text" inputMode="url" maxLength={MAX_URL_LENGTH} placeholder="/events/" {...field} />
+                    <Input
+                      type="text"
+                      inputMode="url"
+                      maxLength={MAX_URL_LENGTH}
+                      placeholder="samfundet.no/events/"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -219,7 +178,7 @@ export function SiteBannerAdminPage() {
             <FormField
               control={form.control}
               name="new_tab"
-              disabled={createSiteBanner.isPending}
+              disabled={isPending || !previewUrl}
               render={({ field }) => (
                 <FormItem className={styles.checkbox_item}>
                   <FormControl>
@@ -229,12 +188,12 @@ export function SiteBannerAdminPage() {
                       onBlur={field.onBlur}
                       checked={field.value}
                       onChange={(event) => field.onChange(event.currentTarget.checked)}
-                      disabled={createSiteBanner.isPending}
+                      disabled={isPending || !previewUrl}
                     />
                   </FormControl>
                   <div className={styles.checkbox_copy}>
                     <FormLabel className={styles.checkbox_label}>{t(KEY.admin_site_banner_new_tab)}</FormLabel>
-                    <FormDescription>{t(KEY.admin_site_banner_new_tab_hint)}</FormDescription>
+                    {!previewUrl && <FormDescription>{t(KEY.admin_site_banner_new_tab_hint)}</FormDescription>}
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -245,11 +204,10 @@ export function SiteBannerAdminPage() {
               <FormField
                 control={form.control}
                 name="start_at"
-                disabled={createSiteBanner.isPending}
+                disabled={isPending}
                 render={({ field }) => (
                   <FormItem className={styles.form_item}>
                     <FormLabel>{t(KEY.admin_site_banner_start_at)}</FormLabel>
-                    <FormDescription>{t(KEY.admin_site_banner_start_at_hint)}</FormDescription>
                     <FormControl>
                       <Input type="datetime-local" {...field} />
                     </FormControl>
@@ -260,11 +218,10 @@ export function SiteBannerAdminPage() {
               <FormField
                 control={form.control}
                 name="end_at"
-                disabled={createSiteBanner.isPending}
+                disabled={isPending}
                 render={({ field }) => (
                   <FormItem className={styles.form_item}>
                     <FormLabel>{t(KEY.admin_site_banner_end_at)}</FormLabel>
-                    <FormDescription>{t(KEY.admin_site_banner_end_at_hint)}</FormDescription>
                     <FormControl>
                       <Input type="datetime-local" {...field} />
                     </FormControl>
@@ -275,8 +232,8 @@ export function SiteBannerAdminPage() {
             </div>
 
             <div className={styles.action_row}>
-              <Button type="submit" theme="primary" disabled={createSiteBanner.isPending}>
-                <Icon icon={createSiteBanner.isPending ? 'svg-spinners:ring-resize' : 'lucide:plus'} />
+              <Button type="submit" theme="primary" disabled={isPending}>
+                <Icon icon={isPending ? 'svg-spinners:ring-resize' : 'lucide:plus'} />
                 {t(KEY.common_create)}
               </Button>
             </div>

@@ -7,6 +7,7 @@ import { useScrollY } from '~/hooks';
 import { siteBannerKeys } from '~/queryKeys';
 import { dbT } from '~/utils';
 import styles from './SiteBanner.module.scss';
+import { SiteBannerContent } from './SiteBannerContent';
 
 const NAVBAR_COVER_THRESHOLD_PX = 1000;
 
@@ -57,24 +58,13 @@ export function SiteBanner(): JSX.Element | null {
 
   if (!visibleBanner) return null;
 
-  const content = <span className={styles.text}>{dbT(visibleBanner, 'text', i18n.language)}</span>;
-
   return (
     <div ref={ref} className={styles.banner} role="status" aria-live="polite">
-      <div className={styles.content}>
-        {visibleBanner.url ? (
-          <a
-            className={styles.link}
-            href={visibleBanner.url}
-            target={visibleBanner.new_tab ? '_blank' : undefined}
-            rel={visibleBanner.new_tab ? 'noopener noreferrer' : undefined}
-          >
-            {content}
-          </a>
-        ) : (
-          content
-        )}
-      </div>
+      <SiteBannerContent
+        text={dbT(visibleBanner, 'text', i18n.language) ?? ''}
+        url={visibleBanner.url}
+        newTab={visibleBanner.new_tab}
+      />
     </div>
   );
 }

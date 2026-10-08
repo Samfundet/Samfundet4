@@ -116,37 +116,3 @@
     color: c.$gray-400;
   }
 }
-
-.banner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: s.$spacing-sm;
-  min-height: 3.5rem;
-  padding: s.$spacing-sm s.$spacing-md;
-  border-radius: v.$border-radius-md;
-  background: c.$samf-red-primary;
-  color: c.$white-50;
-  text-align: center;
-}
-
-.preview_text {
-  overflow-wrap: anywhere;
-  font-weight: v.$font-weight-semibold;
-}
-
-.preview_link {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
-.placeholder {
-  opacity: 0.62;
-  font-weight: v.$font-weight-normal;
-}
-
-.external_icon {
-  flex: 0 0 auto;
-  width: 1rem;
-  height: 1rem;
-}
