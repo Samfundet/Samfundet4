@@ -14,7 +14,7 @@ import { ROUTES } from '~/routes';
 import { COLORS } from '~/types';
 import { dbT, imageUrl } from '~/utils';
 import styles from './EventsList.module.scss';
-
+// :)
 // On mobile, only show the most important columns so the table fits the screen.
 const MOBILE_COLUMN_INDEXES = [0, 1, 4];
 
