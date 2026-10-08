@@ -252,7 +252,7 @@ LOGS_PARSERS = {
     },
 }
 
-LOGFILENAME = BASE_DIR / 'logs' / '.log'
+LOGFILENAME = BASE_DIR / 'logs' / 'samfundet.log'
 SQL_LOG_FILE = BASE_DIR / 'logs' / 'sql.log'
 TEST_EMAIL_FILE = BASE_DIR / 'logs' / 'test_email.txt'
 
@@ -299,7 +299,13 @@ LOGGING = {
         },
         'file': {
             'level': 'INFO',
-            'class': 'logging.FileHandler',
+            # Log retention is set to store the last 14 days, might want to 
+            # consider a more comprehensive log retention policy.
+            'class': 'logging.TimedRotatingFileHandler',
+            'when': 'midnight',
+            'backupCount': 14,
+            'utc': True,
+
             'formatter': 'json',
             'filename': LOGFILENAME,
             'filters': ['request_context_filter'],
