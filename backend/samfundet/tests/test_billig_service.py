@@ -122,17 +122,47 @@ def test_get_ticket_groups_for_unknown_event_returns_empty_list() -> None:
     assert BilligService.get_ticket_groups_for_event(999_999) == []
 
 
-def test_get_ticket_groups_excludes_offline_prices_and_empty_groups(fixture_billig_event: BilligEvent) -> None:
+def test_get_ticket_groups_excludes_offline_prices_empty_groups_and_theater(fixture_billig_event: BilligEvent) -> None:
     visible_group = create_ticket_group(group_id=700, event=fixture_billig_event)
     create_price_group(price_group_id=7000, ticket_group=visible_group)
     create_price_group(price_group_id=7001, ticket_group=visible_group, netsale=False)
     hidden_group = create_ticket_group(group_id=701, event=fixture_billig_event)
     create_price_group(price_group_id=7010, ticket_group=hidden_group, netsale=False)
+    create_ticket_group(group_id=702, event=fixture_billig_event)
+    theater_group = create_ticket_group(group_id=703, event=fixture_billig_event)
+    theater_group.is_theater_ticket_group = True
+    theater_group.save(update_fields=['is_theater_ticket_group'])
+    create_price_group(price_group_id=7030, ticket_group=theater_group)
 
     result = BilligService.get_ticket_groups_for_event(fixture_billig_event.id)
 
     assert [group['id'] for group in result] == [visible_group.id]
     assert [price_group['id'] for price_group in result[0]['price_groups']] == [7000]
+
+
+@pytest.mark.parametrize(
+    ('ticket_limit', 'expected_per_price_group_limit', 'expected_group_limit'),
+    [(None, 9, 18), (5, 5, 5), (0, 0, 0)],
+)
+def test_checkout_limits_use_only_online_prices_and_preserve_zero(
+    fixture_billig_event: BilligEvent,
+    fixture_billig_ticket_group: BilligTicketGroup,
+    fixture_billig_price_group: BilligPriceGroup,
+    ticket_limit: int | None,
+    expected_per_price_group_limit: int,
+    expected_group_limit: int,
+) -> None:
+    fixture_billig_ticket_group.ticket_limit = ticket_limit
+    fixture_billig_ticket_group.save(update_fields=['ticket_limit'])
+    create_price_group(price_group_id=6901, ticket_group=fixture_billig_ticket_group)
+    create_price_group(price_group_id=6902, ticket_group=fixture_billig_ticket_group, netsale=False)
+
+    group = BilligService.get_ticket_groups_for_event(fixture_billig_event.id)[0]
+
+    assert len(group['price_groups']) == 2
+    assert group['ticket_limit'] == ticket_limit
+    assert group['per_price_group_limit'] == expected_per_price_group_limit
+    assert group['group_limit'] == expected_group_limit
 
 
 def test_get_ticket_groups_pins_frontend_contract(
@@ -143,7 +173,16 @@ def test_get_ticket_groups_pins_frontend_contract(
     result = BilligService.get_ticket_groups_for_event(fixture_billig_event.id)
 
     assert len(result) == 1
-    assert set(result[0]) == {'id', 'name', 'is_sold_out', 'is_almost_sold_out', 'ticket_limit', 'price_groups'}
+    assert set(result[0]) == {
+        'id',
+        'name',
+        'is_sold_out',
+        'is_almost_sold_out',
+        'ticket_limit',
+        'per_price_group_limit',
+        'group_limit',
+        'price_groups',
+    }
     assert result[0]['ticket_limit'] is None
 
 
