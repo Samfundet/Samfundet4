@@ -43,7 +43,7 @@ export function useEventCreatorForm(params: {
       billig_id: undefined,
       spotify_uri: '',
       youtube_link: '',
-      youtube_embed: '',
+      youtube_embed: false,
       soundcloud_link: '',
       instagram_link: '',
       facebook_link: '',
