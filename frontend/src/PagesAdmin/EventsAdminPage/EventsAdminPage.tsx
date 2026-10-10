@@ -3,17 +3,10 @@ import { keepPreviousData } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { Button, EventQuery, TimeDisplay, EventCrudButtons } from '~/Components';
-import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
+import { Button, EventCrudButtons, EventQuery, TimeDisplay } from '~/Components';
 import { PagedPagination } from '~/Components/Pagination';
 import { Table } from '~/Components/Table';
-import {
-  type EventCategoryValue,
-  type EventDto,
-  useDeleteEvent,
-  useGetEvents,
-  useGetEventsUpcomingPaginated,
-} from '~/domain';
+import { type EventCategoryValue, type EventDto, useGetEvents, useGetEventsUpcomingPaginated } from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -89,8 +82,6 @@ export function EventsAdminPage() {
       }
     }
   }, [data]);
-
-  const { mutate: deleteSelectedEvent } = useDeleteEvent();
 
   const tableColumns = [
     { content: t(KEY.common_title) },

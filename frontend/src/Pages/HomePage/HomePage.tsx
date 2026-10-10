@@ -1,34 +1,22 @@
-import { type ReactNode, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { useQuery } from '@tanstack/react-query';
+import type { ReactNode } from 'react';
 import { EventCardContainer } from '~/Components';
 import { LargeCard } from '~/Pages/HomePage/components';
 import { getHomeData } from '~/api';
-import type { HomePageDto, HomePageElementDto } from '~/dto';
+import { eventKeys } from '~/domain';
+import type { HomePageElementDto } from '~/dto';
 import { useTitle } from '~/hooks';
-import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from './HomePage.module.scss';
 import { Splash } from './components/Splash/Splash';
 
 export function HomePage() {
-  const [homePage, setHomePage] = useState<HomePageDto>();
-  const { t } = useTranslation();
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: homePage, isLoading } = useQuery({
+    queryKey: eventKeys.home(),
+    queryFn: getHomeData,
+  });
 
   useTitle('');
-
-  useEffect(() => {
-    getHomeData()
-      .then((page: HomePageDto) => {
-        setHomePage(page);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
-      });
-  }, [t]);
 
   function renderElement(key: number, element: HomePageElementDto): ReactNode {
     switch (element.variation) {

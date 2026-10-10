@@ -4,12 +4,11 @@ import { ExpandableHeader, ExternalHostBox, H1, Image, Page } from '~/Components
 import { EventCrudButtons } from '~/Components';
 import { BuyEventTicket } from '~/Components/BuyEventTicket/BuyEventTicket';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
-import { useGetEvent } from '~/domain';
 import { useAuthContext } from '~/context/AuthContext';
+import { useGetEvent } from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { PERM } from '~/permissions';
-import { eventKeys } from '~/queryKeys';
 import { dbT, hasPerm, imageUrl } from '~/utils';
 import styles from './EventPage.module.scss';
 import { EventInformation } from './components/EventInformation/EventInformation';

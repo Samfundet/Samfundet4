@@ -1,8 +1,6 @@
-import { useMutation } from '@tanstack/react-query';
 import { t } from 'i18next';
-import { toast } from 'react-toastify';
-import { deleteEvent } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
+import { useDeleteEvent } from '~/domain';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -21,7 +19,6 @@ type EventCrudButtons = {
 export function EventCrudButtons({ id, removeView = false, height, deleteRedirect = false }: EventCrudButtons) {
   const { user } = useAuthContext();
   const nav = useCustomNavigate();
-  //const queryClient = useQueryClient();
   const isStaff = user?.is_staff;
   const canChangeEvent = hasPerm({ user: user, permission: PERM.SAMFUNDET_CHANGE_EVENT, obj: id });
 
@@ -32,20 +29,7 @@ export function EventCrudButtons({ id, removeView = false, height, deleteRedirec
     urlParams: { objectId: id },
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: deleteEvent,
-    onSuccess: () => {
-      toast.success(t(KEY.common_delete_successful));
-      // when useQuery and queryKeys are better implemented this function can be used to reload the event page and load only valid events (non deleted ones)
-      // queryClient.invalidateQueries({ queryKey: eventKeys.all });
-
-      // temp solution is just reload of page
-      window.location.reload();
-    },
-    onError: () => {
-      toast.error(t(KEY.common_something_went_wrong));
-    },
-  });
+  const deleteMutation = useDeleteEvent();
 
   return (
     <CrudButtons
