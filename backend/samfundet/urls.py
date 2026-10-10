@@ -10,6 +10,7 @@ from django.urls import path, include
 import samfundet.view.mdb_views
 import samfundet.view.user_views
 import samfundet.view.event_views
+import samfundet.view.site_banners
 import samfundet.view.sulten_views
 import samfundet.view.general_views
 from samfundet.view import billig_views
@@ -28,7 +29,7 @@ router = routers.DefaultRouter()
 router.register('images', samfundet.view.general_views.ImageView, 'images')
 router.register('tags', samfundet.view.general_views.TagView, 'tags')
 router.register('events', samfundet.view.event_views.EventView, 'events')
-router.register('eventgroups', samfundet.view.event_views.EventGroupView, 'eventgroups')
+router.register('event-groups', samfundet.view.event_views.EventGroupView, 'event-groups')
 router.register('venues', samfundet.view.general_views.VenueView, 'venues')
 router.register('closed', samfundet.view.general_views.ClosedPeriodView, 'closedperiods')
 router.register('blog', samfundet.view.general_views.BlogPostView, 'blog')
@@ -47,6 +48,7 @@ router.register('key-value', samfundet.view.general_views.KeyValueView, 'key_val
 router.register('organizations', samfundet.view.general_views.OrganizationView, 'organizations')
 router.register('merch', samfundet.view.general_views.MerchView, 'merch')
 router.register('role', samfundet.view.general_views.RoleView, 'role')
+router.register('site-banners', samfundet.view.site_banners.SiteBannerView, 'site_banners')
 
 ########## Recruitment ##########
 router.register('recruitment', recruitment_views.RecruitmentView, 'recruitment')
@@ -95,8 +97,9 @@ urlpatterns = [
     path('users/', samfundet.view.user_views.AllUsersView.as_view(), name='users'),
     path('users-search-paginated/', samfundet.view.user_views.PaginatedSearchUsersView.as_view(), name='users_search_paginated'),
     path('impersonate/', samfundet.view.user_views.ImpersonateView.as_view(), name='impersonate'),
-    path('events-per-day/', samfundet.view.event_views.EventPerDayView.as_view(), name='eventsperday'),
-    path('events-upcomming/', samfundet.view.event_views.EventsUpcomingView.as_view(), name='eventsupcomming'),
+    path('events-per-day/', samfundet.view.event_views.EventPerDayView.as_view(), name='events-per-day'),
+    path('events-upcoming-paginated/', samfundet.view.event_views.EventsUpcomingPaginatedView.as_view(), name='events-upcoming-paginated'),
+    path('events/<int:pk>/clone/', samfundet.view.event_views.EventCloneView.as_view(), name='event-clone'),
     path('isclosed/', samfundet.view.general_views.IsClosedView().as_view(), name='isclosed'),
     path('home/', samfundet.view.general_views.HomePageView().as_view(), name='home'),
     path('assign_group/', samfundet.view.user_views.AssignGroupView.as_view(), name='assign_group'),

@@ -7,6 +7,14 @@ export const roleKeys = {
   users: (id: number) => [...roleKeys.detail(id), 'users'] as const,
 };
 
+export const infoboxKeys = {
+  all: ['infoboxes'] as const,
+  lists: () => [...infoboxKeys.all, 'list'] as const,
+  list: (filters: unknown[]) => [...infoboxKeys.lists(), { filters }] as const,
+  details: () => [...infoboxKeys.all, 'detail'] as const,
+  detail: (id: number) => [...infoboxKeys.details(), id] as const,
+};
+
 export const permissionKeys = {
   all: ['permissions'] as const,
   lists: () => [...permissionKeys.all, 'list'] as const,
@@ -22,20 +30,6 @@ export const recruitmentKeys = {
   details: () => [...recruitmentKeys.all, 'detail'] as const,
   detail: (id: number) => [...recruitmentKeys.details(), id] as const,
   availability: (id: number) => [...recruitmentKeys.detail(id), 'availability'] as const,
-};
-
-export const eventKeys = {
-  all: ['events'] as const,
-  lists: () => [...eventKeys.all, 'list'] as const,
-  list: (filters: unknown[]) => [...eventKeys.lists(), { filters }] as const,
-  paginatedLists: () => [...eventKeys.all, 'paginated'] as const,
-  paginatedList: (
-    page: number,
-    pageSize: number,
-    filters?: { search?: string; venue?: string; category?: string; ticket_type?: string },
-  ) => [...eventKeys.paginatedLists(), { page, pageSize, ...filters }] as const,
-  details: () => [...eventKeys.all, 'detail'] as const,
-  detail: (id: number) => [...eventKeys.details(), id] as const,
 };
 
 export const applicationKeys = {
@@ -79,4 +73,9 @@ export const venueKeys = {
   details: () => [...venueKeys.all, 'detail'] as const,
   detail: (slug: string) => [...venueKeys.details(), slug] as const,
   open: () => [...venueKeys.list(['open'])] as const,
+};
+
+export const siteBannerKeys = {
+  all: ['siteBanners'] as const,
+  active: () => [...siteBannerKeys.all, 'active'] as const,
 };

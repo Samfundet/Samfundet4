@@ -2,11 +2,11 @@ import { Icon } from '@iconify/react';
 import { type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
-import { Button, EventCrudButtons, IconButton, InputField, Link, TimeDisplay } from '~/Components';
+import { Button, EventCrudButtons, IconButton, Input, InputField, Link, TimeDisplay } from '~/Components';
 import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
-import type { EventDto } from '~/dto';
+import type { EventDto } from '~/domain';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -14,6 +14,9 @@ import { ROUTES } from '~/routes';
 import { COLORS } from '~/types';
 import { dbT, imageUrl } from '~/utils';
 import styles from './EventsList.module.scss';
+// :)
+// On mobile, only show the most important columns so the table fits the screen.
+const MOBILE_COLUMN_INDEXES = [0, 1, 4];
 
 type EventsListProps = {
   events: Record<string, EventDto[]>;
@@ -38,6 +41,8 @@ export function EventsList({ events }: EventsListProps) {
     { content: t(KEY.common_edit), sortable: false },
   ];
 
+  const visibleColumns = isDesktop ? eventColumns : eventColumns.filter((_, i) => MOBILE_COLUMN_INDEXES.includes(i));
+
   // TODO debounce and move header/filtering stuff to a separate component
   function filteredEvents() {
     const allEvents = Object.keys(events).flatMap((k: string) => events[k]);
@@ -53,7 +58,7 @@ export function EventsList({ events }: EventsListProps) {
 
   // TODO improve table view for events
   function getEventRows(): TableRow[] {
-    return filteredEvents().map((event) => ({
+    const rows: TableRow[] = filteredEvents().map((event) => ({
       cells: [
         {
           content: (
@@ -84,6 +89,13 @@ export function EventsList({ events }: EventsListProps) {
           ),
         },
       ],
+    }));
+
+    if (isDesktop) return rows;
+
+    return rows.map((row) => ({
+      ...row,
+      cells: row.cells.filter((_, i) => MOBILE_COLUMN_INDEXES.includes(i)),
     }));
   }
 
@@ -137,12 +149,12 @@ export function EventsList({ events }: EventsListProps) {
 
         {/* Search bar */}
         <div className={styles.filter_row}>
-          <InputField
+          <Input
+            type="text"
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t(KEY.common_search)}
             icon="mdi:search"
-            labelClassName={styles.search_bar}
-            inputClassName={styles.search_bar_field}
-            onChange={setQuery}
-            value={query}
+            className={styles.search_bar}
           />
           {isDesktop && (
             <span className={styles.filter_button}>
@@ -165,7 +177,11 @@ export function EventsList({ events }: EventsListProps) {
 
       <div className={styles.event_view_container}>
         {/* Table view */}
-        {tableView && <Table columns={eventColumns} data={getEventRows()} />}
+        {tableView && (
+          <div className={styles.table_container}>
+            <Table columns={visibleColumns} data={getEventRows()} />
+          </div>
+        )}
 
         {/* Grid view */}
         {!tableView && <div className={styles.event_grid}>{getEventCards()}</div>}

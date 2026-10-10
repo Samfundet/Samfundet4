@@ -1,12 +1,6 @@
 import type { ThemeValue } from '~/constants';
-import type { BilligEventDto } from './apis/billig/billigDtos';
-import type {
-  EventAgeRestrictionValue,
-  EventCategoryValue,
-  EventStatus,
-  EventTicketTypeValue,
-  HomePageElementVariation,
-} from './types';
+import type { EventDto } from '~/domain/events/types';
+import type { HomePageElementVariation } from './types';
 
 export type BaseModelDto = {
   version?: number;
@@ -165,100 +159,6 @@ export type VenueDto = {
 
 export type OpenVenuesDto = VenueDto[];
 
-// ==================== //
-//        Event         //
-// ==================== //
-
-// Custom ticket type
-export type EventCustomTicketDto = {
-  id: number;
-  name_nb: string;
-  name_en: string;
-  price: number;
-};
-
-export type EventDto = {
-  id: number;
-  status: EventStatus;
-  event_group: EventGroupDto;
-
-  title_nb: string;
-  title_en: string;
-  description_long_nb: string;
-  description_long_en: string;
-  description_short_nb: string;
-  description_short_en: string;
-
-  age_restriction: EventAgeRestrictionValue;
-  location: string;
-  category: EventCategoryValue;
-  host: string;
-
-  billig?: BilligEventDto;
-  numberOfTickets?: number;
-  registration_url?: string;
-
-  start_dt: string;
-  end_dt: string;
-  visibility_from_dt: string;
-  visibility_to_dt: string;
-  doors_time?: string;
-  duration: number;
-
-  ticket_type: EventTicketTypeValue;
-  custom_tickets: EventCustomTicketDto[];
-
-  image?: ImageDto;
-
-  capacity?: number;
-
-  spotify_uri?: string;
-  youtube_link?: string;
-  youtube_embed?: string;
-  facebook_link?: string;
-  soundcloud_link?: string;
-  instagram_link?: string;
-  x_link?: string;
-  lastfm_link?: string;
-  vimeo_link?: string;
-  general_link?: string;
-};
-
-export type EventWriteDto = {
-  status?: EventStatus;
-
-  title_nb: string;
-  title_en: string;
-  description_long_nb: string;
-  description_long_en: string;
-  description_short_nb: string;
-  description_short_en: string;
-
-  age_restriction: EventAgeRestrictionValue;
-  location: string;
-  category: EventCategoryValue;
-  host: string;
-
-  registration_url?: string;
-
-  start_dt: string;
-  end_dt: string;
-  visibility_from_dt: string;
-  visibility_to_dt: string;
-
-  ticket_type: EventTicketTypeValue;
-  custom_tickets?: EventCustomTicketDto[];
-
-  image_id?: number;
-  capacity?: number;
-  billig_id?: number;
-};
-
-export type EventGroupDto = {
-  id: number;
-  name: string;
-};
-
 export type UserPreferenceDto = {
   id: number;
   theme: ThemeValue;
@@ -316,6 +216,17 @@ export type InformationPageOwnerOptionDto = {
   can_create: boolean;
   can_change: boolean;
   can_delete: boolean;
+};
+
+export type InfoboxDto = {
+  id: number;
+  title_nb?: string;
+  text_nb?: string;
+  title_en: string;
+  text_en: string;
+  color: string;
+  url?: string | null;
+  image?: number | null;
 };
 
 export type ReservationTableDto = {
@@ -496,12 +407,10 @@ export type GangSectionDto = BaseModelDto & {
 
 export type ClosedPeriodDto = {
   id: number;
-  message_no: string;
-  description_no: string;
+  message_nb: string;
   message_en: string;
-  description_en: string;
-  start_dt: Date;
-  end_dt: Date;
+  start_dt: string;
+  end_dt: string;
 };
 
 export type TagDto = {
@@ -857,6 +766,17 @@ export type SultenReservationDayDto = {
   start_time: string;
   closing_time: string;
   tables: TableDto[];
+};
+
+export type SiteBannerDto = {
+  id: number;
+  version: number;
+  text_nb: string;
+  text_en: string;
+  url: string | null;
+  new_tab: boolean;
+  start_at: string;
+  end_at: string | null;
 };
 
 export type RegistrationDto = {

@@ -57,6 +57,7 @@ class WebFeatures:
     ROLES = 'roles'
     GANGS = 'gangs'
     INFORMATION = 'information'
+    INFOBOX = 'infobox'
     DOCUMENTS = 'documents'
     RECRUITMENT = 'recruitment'
     SULTEN = 'sulten'
@@ -77,6 +78,7 @@ CP_FEATURES_ALL = {
     WebFeatures.ROLES,
     WebFeatures.GANGS,
     WebFeatures.INFORMATION,
+    WebFeatures.INFOBOX,
     WebFeatures.DOCUMENTS,
     WebFeatures.RECRUITMENT,
     WebFeatures.SULTEN,

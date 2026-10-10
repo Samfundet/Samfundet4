@@ -1,5 +1,6 @@
 import { Carousel, EventCard, ImageCard } from '~/Components';
-import type { EventDto, HomePageElementDto } from '~/dto';
+import type { EventDto } from '~/domain';
+import type { HomePageElementDto } from '~/dto';
 import styles from './EventCarousel.module.scss';
 
 type EventCarouselProps = {

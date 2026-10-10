@@ -4,6 +4,8 @@
 
 @use 'src/constants' as *;
 
+@use 'src/styles/colors' as c;
+
 .header {
   font-size: 2em;
   font-weight: 700;
@@ -88,21 +90,198 @@
   gap: 0.5em;
 }
 
+.template_search_wrapper {
+  flex: 0 0 50%;
+  width: 50%;
+
+  @include for-tablet-down {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+}
+
+.create_from_existing_event {
+  position: relative;
+}
+
+.search_results {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  width: 100%;
+  z-index: 20;
+  border: 1px solid c.$gray-200;
+  border-radius: 6px;
+  background: white;
+  max-height: 220px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
+
+  @include theme-dark {
+    background: $theme-dark-input-bg;
+    border-color: c.$gray-800;
+  }
+}
+
+.search_result_item {
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+
+  @include theme-dark {
+    background: $theme-dark-input-bg;
+  }
+}
+
+.search_result_item:not(:last-child) {
+  border-bottom: 1px solid c.$gray-100;
+
+  @include theme-dark {
+    border-bottom-color: c.$gray-800;
+  }
+}
+
+.search_result_item:hover {
+  background: c.$white-950;
+
+  @include theme-dark {
+    background: c.$gray-800;
+  }
+}
+
+.search_result_title {
+  font-weight: 600;
+
+  @include theme-dark {
+    color: c.$white-50;
+  }
+}
+
+.search_result_meta {
+  font-size: 0.9rem;
+  color: c.$gray-600;
+
+  @include theme-dark {
+    color: c.$gray-400;
+  }
+}
+
+.selected_event_info {
+  margin-top: 0.4rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid c.$green-100;
+  border-radius: 6px;
+  background: c.$green-200;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+
+  @include theme-dark {
+    background: c.$green-950;
+    border-color: c.$green-800;
+  }
+}
+
+.selected_event_text {
+  font-size: 0.9rem;
+  color: c.$gray-950;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @include theme-dark {
+    color: c.$green-100;
+  }
+}
+
+.selected_event_icon {
+  color: $green;
+  flex-shrink: 0;
+}
+
 .socialMediaGrid {
   display: grid;
-  gap: 2em;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  width: 100%;
+  max-width: 40rem;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
 }
 
 .socialMediaItem {
   display: flex;
   flex-direction: column;
-  gap: 0.25em;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.socialMediaLabel {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.socialMediaDescription {
+  margin: 0;
+  line-height: 1.5;
+  color: c.$gray-600;
+
+  @include theme-dark {
+    color: c.$gray-400;
+  }
+}
+
+.youtubePreviewButton {
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.3rem 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.youtubePreviewIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  color: c.$white-50;
+  font-size: 0.9rem;
+}
+
+.youtubeEmbedOptions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .socialMediaInput {
   height: 2.25em;
+}
+
+.embedSwitchRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.youtubePreviewModal {
+  width: min(50rem, calc(100vw - 2rem));
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .status_label_row {

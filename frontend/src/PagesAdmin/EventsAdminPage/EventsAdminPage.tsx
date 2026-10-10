@@ -1,20 +1,26 @@
 import { Icon } from '@iconify/react';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { Button, EventCrudButtons, EventQuery, TimeDisplay } from '~/Components';
+import { Button, EventQuery, TimeDisplay, EventCrudButtons } from '~/Components';
+import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { PagedPagination } from '~/Components/Pagination';
 import { Table } from '~/Components/Table';
-import { getEventsUpcommingPaginated } from '~/api';
-import type { EventDto } from '~/dto';
+import {
+  type EventCategoryValue,
+  type EventDto,
+  useDeleteEvent,
+  useGetEvents,
+  useGetEventsUpcomingPaginated,
+} from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { eventKeys } from '~/queryKeys';
+import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import type { EventCategoryValue } from '~/types';
 import { dbT, getTicketTypeKey, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
+import { EventTemplateSearch } from '../EventCreatorAdminPage/components/EventTemplateSearch';
 import styles from './EventsAdminPage.module.scss';
 
 const PAGE_SIZE = 20;
@@ -51,26 +57,21 @@ export function EventsAdminPage() {
     setCurrentPage(1);
   }, [debouncedSearch, selectedVenue, selectedCategory, selectedTicketType]);
 
-  // Fetch paginated events
-  const { data, isLoading } = useQuery({
-    queryKey: eventKeys.paginatedList(currentPage, PAGE_SIZE, {
-      search: debouncedSearch || undefined,
-      venue: selectedVenue || undefined,
-      category: selectedCategory || undefined,
-      ticket_type: selectedTicketType || undefined,
-    }),
-    queryFn: () =>
-      getEventsUpcommingPaginated(currentPage, PAGE_SIZE, {
-        search: debouncedSearch || undefined,
-        venue: selectedVenue || undefined,
-        category: selectedCategory || undefined,
-        ticket_type: selectedTicketType || undefined,
-      }),
+  const filters = {
+    search: debouncedSearch || undefined,
+    venue: selectedVenue || undefined,
+    category: selectedCategory || undefined,
+    ticket_type: selectedTicketType || undefined,
+  };
+
+  const { data, isLoading } = useGetEventsUpcomingPaginated(currentPage, PAGE_SIZE, filters, {
     placeholderData: keepPreviousData,
   });
-
   const events = data?.results ?? [];
   const totalCount = data?.count ?? 0;
+
+  // Fetch all events for the template search (create from existing event)
+  const { data: templateEvents = [] } = useGetEvents();
 
   // Extract metadata from API response
   useEffect(() => {
@@ -88,6 +89,8 @@ export function EventsAdminPage() {
       }
     }
   }, [data]);
+
+  const { mutate: deleteSelectedEvent } = useDeleteEvent();
 
   const tableColumns = [
     { content: t(KEY.common_title) },
@@ -117,10 +120,31 @@ export function EventsAdminPage() {
   const backendUrl = ROUTES.backend.admin__samfundet_event_changelist;
   const header = (
     <>
-      <Button theme="primary" onClick={() => navigate(ROUTES.frontend.admin_events_create)}>
-        <Icon icon="lucide:plus" />
-        {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`)}
-      </Button>
+      <div className={styles.template_search_container}>
+        <label className={styles.template_search_label}>{t(KEY.event_create_new_event)}</label>
+        <Button
+          theme="primary"
+          className={styles.header_button}
+          onClick={() => navigate(ROUTES.frontend.admin_events_create)}
+        >
+          <Icon icon="lucide:plus" />
+          {lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.common_event)}`)}
+        </Button>
+      </div>
+      <div className={styles.template_search_container}>
+        <label className={styles.template_search_label}>{t(KEY.event_copy_from_registered_event)}</label>
+        <EventTemplateSearch
+          events={templateEvents}
+          onSelectEvent={(event) =>
+            navigate(
+              reverse({
+                pattern: ROUTES.frontend.admin_events_create,
+                queryParams: { template: event.id },
+              }),
+            )
+          }
+        />
+      </div>
     </>
   );
 
