@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import { type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
-import { Button, IconButton, InputField, Link, TimeDisplay } from '~/Components';
+import { Button, IconButton, Input, Link, TimeDisplay } from '~/Components';
 import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
@@ -14,7 +14,7 @@ import { ROUTES } from '~/routes';
 import { COLORS } from '~/types';
 import { dbT, imageUrl } from '~/utils';
 import styles from './EventsList.module.scss';
-
+// :)
 // On mobile, only show the most important columns so the table fits the screen.
 const MOBILE_COLUMN_INDEXES = [0, 1, 4];
 
@@ -140,12 +140,12 @@ export function EventsList({ events }: EventsListProps) {
 
         {/* Search bar */}
         <div className={styles.filter_row}>
-          <InputField
+          <Input
+            type="text"
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t(KEY.common_search)}
             icon="mdi:search"
-            labelClassName={styles.search_bar}
-            inputClassName={styles.search_bar_field}
-            onChange={setQuery}
-            value={query}
+            className={styles.search_bar}
           />
           {isDesktop && (
             <span className={styles.filter_button}>
