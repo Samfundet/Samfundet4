@@ -108,6 +108,7 @@ export const nb = prepareTranslations({
   [KEY.common_preview]: 'Forhåndsvisning',
   [KEY.common_version]: 'Versjon',
   [KEY.common_search]: 'Søk',
+  [KEY.common_copy]: 'Kopier',
   [KEY.common_choose]: 'Velg',
   [KEY.common_visible]: 'Synlig',
   [KEY.common_sulten]: 'Lyche',
@@ -779,7 +780,6 @@ export const nb = prepareTranslations({
   [KEY.admin_casedocuments_title_used_as_filename]: 'Dette vil bli brukt som det synlige filnavnet.',
   [KEY.admin_casedocuments_confirm_delete]:
     'Er du sikker på at du vil slette dette saksdokumentet? Dette kan ikke angres.',
-  [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
 
   [KEY.promo_media_description]: 'Lenke eller ID til en YouTube-video',
   [KEY.promo_media_invalid]: 'Må være en gyldig lenke til en YouTube-video',
@@ -909,6 +909,7 @@ export const en = prepareTranslations({
   [KEY.common_cancel]: 'Cancel',
   [KEY.common_close]: 'Close',
   [KEY.common_venues]: 'Venues',
+  [KEY.common_copy]: 'Copy',
   [KEY.common_shortcuts]: 'Shortcuts',
   [KEY.common_events]: 'Events',
   [KEY.common_repeat]: 'Repeat',
@@ -1356,7 +1357,7 @@ export const en = prepareTranslations({
   [KEY.error_recruitment_form_3]: 'Reprioritization deadline cannot be before the actual deadline',
   [KEY.error_recruitment_form_4]: 'Group reprioritization deadline cannot be before the reprioritization deadline',
   [KEY.recruitment_dashboard_description]:
-    'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcomming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
+    'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcoming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
   [KEY.recruitment_create_room]: 'Create room',
   [KEY.recruitment_separate_recruitment]: 'Seperate recruitment',
 
@@ -1479,7 +1480,6 @@ export const en = prepareTranslations({
   [KEY.admin_casedocuments_title_used_as_filename]: 'This will be used as the visible file name.',
   [KEY.admin_casedocuments_confirm_delete]:
     'Are you sure you want to delete this case document? This cannot be undone.',
-  [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
 
   [KEY.promo_media_description]: 'Link or ID of a YouTube video',
   [KEY.promo_media_invalid]: 'Must be a valid link to a YouTube video',
@@ -1577,7 +1577,7 @@ export const en = prepareTranslations({
   [KEY.end_date]: 'End date',
   [KEY.last_updated]: 'Last updated',
 
-  [KEY.form_confirm]: 'Are you sure you want do',
+  [KEY.form_confirm]: 'Are you sure you want to',
   [KEY.form_confirm_delete]: 'Are you sure you want to delete',
   [KEY.we_use_cookies]: 'We use cookies to give you the best experience on Samfundet.no. Read more about cookies',
   [KEY.control_panel_faq]: 'Help/questions',

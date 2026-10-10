@@ -1,0 +1,122 @@
+import axios from 'axios';
+import type { BilligEventDto } from '~/apis/billig/billigDtos';
+import { BACKEND_DOMAIN } from '~/constants';
+import { reverse } from '~/named-urls';
+import { ROUTES } from '~/routes';
+import { buildPaginatedUrl } from '~/utils';
+import type {
+  EventCloneDto,
+  EventDto,
+  EventFilters,
+  EventGroupDto,
+  EventId,
+  EventWriteDto,
+  EventsPaginationType,
+} from './types';
+
+/**
+ * Groups events by day.
+ *
+ * @returns A Record of upcoming events grouped by the day they happen, eg: '2026-09-25': [eventDto, eventDto].
+ */
+export async function getEventsPerDay(): Promise<Record<string, EventDto[]>> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_per_day;
+  const response = await axios.get<Record<string, EventDto[]>>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+/**
+ * Get upcoming events from today and onwards, paginated.
+ *
+ * @param {number} page What page to fetch (page 2 with a page size of 10 would return events 11-20)
+ * @param {number} pageSize How many events per page (backend defaults to 10, max 50)
+ * @param {EventFilters} filters Filters for fetched events
+ *
+ * @returns The given page of upcoming events, with up to pageSize events
+ * */
+export async function getEventsUpcomingPaginated(
+  page: number,
+  pageSize?: number,
+  filters?: EventFilters,
+): Promise<EventsPaginationType<EventDto>> {
+  const url = buildPaginatedUrl(BACKEND_DOMAIN + ROUTES.backend.samfundet__events_upcoming_paginated, page, pageSize, {
+    ...(filters?.search ? { search: filters.search } : {}),
+    ...(filters?.venue ? { venue: filters.venue } : {}),
+    ...(filters?.category ? { category: filters.category } : {}),
+    ...(filters?.event_group ? { event_group: filters.event_group } : {}),
+    ...(filters?.ticket_type ? { ticket_type: filters.ticket_type } : {}),
+  });
+
+  const response = await axios.get<EventsPaginationType<EventDto>>(url, { withCredentials: true });
+  return response.data;
+}
+
+/**
+ * Get all events - previous and upcoming
+ *
+ * @returns Array of `EventDto`
+ * */
+export async function getEvents(): Promise<EventDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_list;
+  const response = await axios.get<EventDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function postEvent(data: Partial<EventWriteDto>): Promise<EventDto> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__events_list;
+  const response = await axios.post<EventDto>(url, data, { withCredentials: true });
+  return response.data;
+}
+
+export async function putEvent(id: EventId, data: Partial<EventWriteDto>): Promise<EventDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
+  const response = await axios.put<EventDto>(url, data, { withCredentials: true });
+  return response.data;
+}
+
+export async function deleteEvent(id: EventId): Promise<void> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
+  await axios.delete(url, { withCredentials: true });
+}
+
+export async function getEvent(id: EventId): Promise<EventDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__events_detail, urlParams: { pk: id } });
+  const response = await axios.get<EventDto>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+/**
+ * Returns all event groups. An event group is an event that spans more than one day,
+ * requiring multiple events to be created in the database. Those events are then put into an event group.
+ *
+ * @returns Array of all upcoming event groups
+ * */
+export async function getEventGroups(): Promise<EventGroupDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__event_groups_list;
+  const response = await axios.get<EventGroupDto[]>(url, { withCredentials: true });
+
+  return response.data;
+}
+
+export async function getBilligEvents(): Promise<BilligEventDto[]> {
+  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__billig_event_list;
+  const response = await axios.get<BilligEventDto[]>(url, { withCredentials: true });
+  return response.data;
+}
+
+/**
+ * Get a copy of an event without unique properties, used as a starting point when cloning.
+ *
+ * @param {EventId} id Id of the event to copy
+ *
+ * @returns Copy of the event
+ * */
+export async function getEventForCloning(id: EventId): Promise<EventCloneDto> {
+  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__event_clone, urlParams: { pk: id } });
+  const response = await axios.get<EventCloneDto>(url, { withCredentials: true });
+
+  return response.data;
+}

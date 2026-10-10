@@ -1,7 +1,8 @@
 import { z } from 'zod';
 import { KEY } from '~/i18n/constants';
-import { EventAgeRestriction, EventCategory, EventStatusChoice, EventTicketType } from '~/types';
-import { optionalNumber, zodEnum } from './utils';
+import { optionalNumber } from '~/schema/utils';
+import { zodEnum } from '../utils';
+import { EventAgeRestriction, EventCategory, EventStatusChoice, EventTicketType } from './types';
 
 const validUrl = z
   .string()
@@ -15,10 +16,11 @@ const validSpotifyUri = z
     message: KEY.event_must_be_valid_spotify_uri,
   });
 
-// text and description
+// Text and description
 export const EVENT_TITLE = z.string().min(1, { message: KEY.event_form_title_required });
 export const EVENT_DESCRIPTION_LONG = z.string().min(1, { message: KEY.event_form_description_long_required });
 export const EVENT_DESCRIPTION_SHORT = z.string().min(1, { message: KEY.event_form_description_short_required });
+
 // Date and information
 export const EVENT_START_DT = z.string().min(1, { message: KEY.event_form_start_dt_required });
 export const EVENT_DURATION = z.number().min(1, { message: KEY.event_form_duration_min }).optional();
@@ -39,6 +41,7 @@ export const EVENT_CUSTOM_TICKET = z.object({
 export const EVENT_REGISTRATION_URL = z.string().url().optional();
 export const EVENT_HOST_LINK = z.string().url().optional();
 export const EVENT_BILLIG_ID = z.number().optional();
+
 // Social media links
 export const EVENT_SPOTIFY_URI = validSpotifyUri;
 export const EVENT_YOUTUBE_LINK = validUrl;
@@ -50,6 +53,7 @@ export const EVENT_X_LINK = validUrl;
 export const EVENT_LASTFM_LINK = validUrl;
 export const EVENT_VIMEO_LINK = validUrl;
 export const EVENT_GENERAL_LINK = validUrl;
+
 // Summary/Publication date
 export const EVENT_VISIBILITY_FROM_DT = z.string().min(1, { message: KEY.event_publication_date_required });
 export const EVENT_VISIBILITY_TO_DT = z.string().optional();

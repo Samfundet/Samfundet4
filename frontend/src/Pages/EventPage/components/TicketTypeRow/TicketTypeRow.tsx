@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import type { EventDto } from '~/dto';
+import { type EventDto, EventTicketType } from '~/domain';
 import { KEY } from '~/i18n/constants';
-import { EventTicketType } from '~/types';
 import { dbT, getTicketTypeKey } from '~/utils';
 import styles from './TicketTypeRow.module.scss';
 

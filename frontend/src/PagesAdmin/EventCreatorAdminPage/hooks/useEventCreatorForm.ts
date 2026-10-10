@@ -3,15 +3,14 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
-import type { EventCloneDto, EventDto, EventWriteDto } from '~/dto';
-import { type EventCategoryValue, EventStatusChoice } from '~/types';
+import { type EventCategoryValue, type EventDto, EventStatusChoice, type EventWriteDto } from '~/domain';
 import { eventSchema } from '../EventCreatorSchema';
 import { mapEventToFormValues } from '../utils';
 
 export type FormType = z.infer<typeof eventSchema>;
 
 export function useEventCreatorForm(params: {
-  event?: Partial<EventDto> | EventCloneDto;
+  event?: Partial<EventDto>;
   defaultCategory: EventCategoryValue;
   defaultLocation: string;
   forTemplate?: boolean;
