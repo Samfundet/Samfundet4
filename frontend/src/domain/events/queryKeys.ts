@@ -16,9 +16,6 @@ export const eventKeys = {
 
   clones: () => [...eventKeys.all, 'clone'] as const,
   clone: (id: EventId) => [...eventKeys.clones(), id] as const,
-
-  // The home page is built from events, so it is invalidated together with them
-  home: () => [...eventKeys.all, 'home'] as const,
 };
 
 export const billigKeys = {

@@ -1,20 +1,14 @@
-import { useQuery } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 import { EventCardContainer } from '~/Components';
 import { LargeCard } from '~/Pages/HomePage/components';
-import { getHomeData } from '~/api';
-import { eventKeys } from '~/domain';
-import type { HomePageElementDto } from '~/dto';
+import { type HomePageElementDto, useGetHomeData } from '~/domain';
 import { useTitle } from '~/hooks';
 import { dbT } from '~/utils';
 import styles from './HomePage.module.scss';
 import { Splash } from './components/Splash/Splash';
 
 export function HomePage() {
-  const { data: homePage, isLoading } = useQuery({
-    queryKey: eventKeys.home(),
-    queryFn: getHomeData,
-  });
+  const { data: homePage, isLoading } = useGetHomeData();
 
   useTitle('');
 

@@ -29,6 +29,5 @@ export const Default: Story = {
     id: '123',
     size: 'md',
     removeView: false,
-    deleteRedirect: false,
   },
 };

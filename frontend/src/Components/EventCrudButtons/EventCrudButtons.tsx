@@ -14,10 +14,10 @@ type EventCrudButtonsProps = {
   id?: EventId;
   removeView?: boolean;
   size?: IconButtonSize;
-  deleteRedirect?: boolean;
+  deleteRedirect?: string | number;
 };
 
-export function EventCrudButtons({ id, removeView = false, size, deleteRedirect = false }: EventCrudButtonsProps) {
+export function EventCrudButtons({ id, removeView = false, size, deleteRedirect }: EventCrudButtonsProps) {
   const { t } = useTranslation();
   const { user } = useAuthContext();
   const nav = useCustomNavigate();
@@ -32,7 +32,7 @@ export function EventCrudButtons({ id, removeView = false, size, deleteRedirect 
 
   function handleDelete() {
     if (id && window.confirm(t(KEY.common_ask_delete))) {
-      deleteEvent(id, { onSuccess: () => deleteRedirect && nav({ url: -1 }) });
+      deleteEvent(id, { onSuccess: () => deleteRedirect !== undefined && nav({ url: deleteRedirect }) });
     }
   }
 

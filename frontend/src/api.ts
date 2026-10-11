@@ -14,7 +14,6 @@ import type {
   GangDto,
   GangSectionDto,
   GangTypeDto,
-  HomePageDto,
   ImageDto,
   ImagePatchDto,
   ImagePostDto,
@@ -171,13 +170,6 @@ export async function assignUserToGroup(username: string, group_name: string): P
   const response = await axios.post(url, payload, { withCredentials: true });
 
   return response;
-}
-
-export async function getHomeData(): Promise<HomePageDto> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__home;
-  const response = await axios.get<HomePageDto>(url, { withCredentials: true });
-
-  return response.data;
 }
 
 export async function getActiveSiteBanner(): Promise<SiteBannerDto | null> {

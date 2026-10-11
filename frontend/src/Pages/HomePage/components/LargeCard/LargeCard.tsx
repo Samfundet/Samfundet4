@@ -1,5 +1,5 @@
 import { ContentCard, EventCrudButtons } from '~/Components';
-import type { HomePageElementDto } from '~/dto';
+import type { HomePageElementDto } from '~/domain';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, imageUrl } from '~/utils';
