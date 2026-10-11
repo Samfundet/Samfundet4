@@ -198,7 +198,6 @@ export const nb = prepareTranslations({
   [KEY.common_comment]: 'Kommentar',
   [KEY.common_capacity]: 'Kapasitet',
   [KEY.common_link]: 'Lenke',
-  [KEY.common_ask_delete]: 'Vil du slette?',
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
@@ -320,6 +319,7 @@ export const nb = prepareTranslations({
   [KEY.event_search_for_an_existing_event]: 'Søk etter et arrangement',
   [KEY.event_selected_existing_event]: 'Valgte eksisterende arrangement',
   [KEY.event_no_results]: 'Ingen resultater',
+  [KEY.event_confirm_delete]: 'Er du sikker på at du vil slette dette arrangementet?',
   [KEY.event_publication_date_must_be_before_start]: 'Publiseringsdato må være før arrangementsstart',
 
   // Event categories
@@ -1018,7 +1018,6 @@ export const en = prepareTranslations({
   [KEY.common_last_edited_by]: 'Last edited by',
   [KEY.common_publication_date]: 'Publication date',
   [KEY.common_casedocuments]: 'Case documents',
-  [KEY.common_ask_delete]: 'Do you want to delete?',
   [KEY.common_positions]: 'Positions',
 
   [KEY.organization]: 'Organization',
@@ -1170,6 +1169,7 @@ export const en = prepareTranslations({
   [KEY.event_search_for_an_existing_event]: 'Search for an event',
   [KEY.event_selected_existing_event]: 'Selected existing event',
   [KEY.event_no_results]: 'No results',
+  [KEY.event_confirm_delete]: 'Are you sure you want to delete this event?',
   [KEY.event_publication_date_must_be_before_start]: 'Publication date must be before the event starts',
 
   //Purchase Ticket Info:

@@ -31,7 +31,7 @@ export function EventCrudButtons({ id, removeView = false, size, deleteRedirect 
   const djangoUrl = reverse({ pattern: ROUTES.backend.admin__samfundet_event_change, urlParams: { objectId: id } });
 
   function handleDelete() {
-    if (id && window.confirm(t(KEY.common_ask_delete))) {
+    if (id && window.confirm(t(KEY.event_confirm_delete))) {
       deleteEvent(id, { onSuccess: () => deleteRedirect !== undefined && nav({ url: deleteRedirect }) });
     }
   }
