@@ -1,34 +1,67 @@
 import { useTranslation } from 'react-i18next';
 import { IconButton } from '~/Components';
+import type { IconButtonSize } from '~/Components/IconButton';
 import { KEY } from '~/i18n/constants';
 import { COLORS } from '~/types';
 import styles from './CrudButtons.module.scss';
 
-type CrudButtonsProps = {
-  onView?: (() => void) | string | false;
-  onManage?: (() => void) | string | false;
-  onEdit?: (() => void) | string | false;
-  onDelete?: (() => void) | string | false;
-  height?: string | number;
+type Action = (() => void) | string | false;
+type ActionKey = 'onView' | 'onEdit' | 'onManage' | 'onCopy' | 'onDelete';
+type ButtonConfig = { title: string; color: string; icon: string };
+
+type CrudButtonsProps = Partial<Record<ActionKey, Action>> & {
+  size?: IconButtonSize;
 };
 
-export function CrudButtons({ onView, onEdit, onManage, onDelete, height = 25 }: CrudButtonsProps) {
+export function CrudButtons({ size = 'md', ...actions }: CrudButtonsProps) {
   const { t } = useTranslation();
 
-  function createButton(title: string, color: string, icon: string, action?: (() => void) | string | false) {
-    if (!action) {
-      return null;
-    }
-    const props = typeof action === 'string' ? { url: action } : { onClick: action };
-    return <IconButton {...props} color={color} title={title} icon={icon} height={height} />;
-  }
+  const BUTTONS: Record<ActionKey, ButtonConfig> = {
+    onView: {
+      title: t(KEY.common_show),
+      color: COLORS.green,
+      icon: 'ic:baseline-remove-red-eye',
+    },
+    onEdit: {
+      title: t(KEY.common_edit),
+      color: COLORS.blue,
+      icon: 'mdi:pencil',
+    },
+    onManage: {
+      title: t(KEY.common_manage),
+      color: COLORS.turquoise,
+      icon: 'ic:baseline-dashboard',
+    },
+    onCopy: {
+      title: t(KEY.common_copy),
+      color: COLORS.grey_3,
+      icon: 'mdi:content-copy',
+    },
+    onDelete: {
+      title: t(KEY.common_delete),
+      color: COLORS.red,
+      icon: 'mdi:bin',
+    },
+  };
 
   return (
     <div className={styles.row}>
-      {createButton(t(KEY.common_show), COLORS.green, 'ic:baseline-remove-red-eye', onView)}
-      {createButton(t(KEY.common_edit), COLORS.blue, 'mdi:pencil', onEdit)}
-      {createButton(t(KEY.common_manage), COLORS.turquoise, 'ic:baseline-dashboard', onManage)}
-      {createButton(t(KEY.common_delete), COLORS.red, 'mdi:bin', onDelete)}
+      {(Object.entries(BUTTONS) as [ActionKey, ButtonConfig][]).map(([key, values]) => {
+        const action = actions[key];
+
+        if (!action) {
+          return null;
+        }
+
+        return (
+          <IconButton
+            {...(typeof action === 'string' ? { url: action } : { onClick: action })}
+            {...values}
+            key={key}
+            size={size}
+          />
+        );
+      })}
     </div>
   );
 }

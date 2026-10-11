@@ -27,7 +27,7 @@ type Story = StoryObj<typeof EventCrudButtons>;
 export const Default: Story = {
   args: {
     id: '123',
-    height: 25,
+    size: 'md',
     removeView: false,
     deleteRedirect: false,
   },

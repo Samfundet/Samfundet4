@@ -51,7 +51,7 @@ export function ImageCard({
   const [displayTicketType, setTicketType] = useState('');
   const [showTicket, setShowTicket] = useState(false);
 
-  const height = compact ? 20 : 25;
+  const size = compact ? 'sm' : 'md';
 
   useEffect(() => {
     if (ticket_type === EventTicketType.FREE || ticket_type === EventTicketType.REGISTRATION) {
@@ -73,7 +73,7 @@ export function ImageCard({
 
   return (
     <div className={containerStyle}>
-      <div className={styles.edit_bar}>{id && <EventCrudButtons removeView={true} id={id} height={height} />}</div>
+      <div className={styles.edit_bar}>{id && <EventCrudButtons removeView={true} id={id} size={size} />}</div>
       <Link url={url} className={classNames(cardStyle, styles.image)} style={backgroundImageFromUrl(imageUrl)}>
         <div className={styles.card_inner}>
           <div className={styles.badges}>

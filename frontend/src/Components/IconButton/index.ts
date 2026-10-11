@@ -1,1 +1,1 @@
-export { IconButton } from './IconButton';
+export { IconButton, type IconButtonSize } from './IconButton';

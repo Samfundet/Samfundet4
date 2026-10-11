@@ -32,7 +32,7 @@ export function EventPage() {
 
       {canChangeEvent && (
         <div className={styles.admin_panel}>
-          <EventCrudButtons id={id} height={25} removeView={true} deleteRedirect={true} />
+          <EventCrudButtons id={id} size="md" removeView={true} deleteRedirect={true} />
         </div>
       )}
 
