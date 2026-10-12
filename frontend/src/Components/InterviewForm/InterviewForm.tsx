@@ -6,14 +6,17 @@ import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
 import { setRecruitmentApplicationInterview } from '~/api';
-import type { RecruitmentApplicationDto } from '~/dto';
+import type { RecruitmentApplicationDto, RecruitmentPositionDto, UserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import { Text } from '../Text/Text';
 import styles from './InterviewForm.module.scss';
 
 type InterviewFormProps = {
-  application: RecruitmentApplicationDto;
+  application: Pick<RecruitmentApplicationDto, 'id' | 'interview'> & {
+    user: Pick<UserDto, 'first_name' | 'last_name'>;
+    recruitment_position: Pick<RecruitmentPositionDto, 'name_nb' | 'name_en'>;
+  };
 };
 
 const interviewFormSchema = z.object({
