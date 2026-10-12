@@ -1,6 +1,15 @@
 import { ALL_DAYS, type Day } from '~/types';
 import type { VenueDaySchedule, VenueDto, VenueOpeningHoursPatch, VenueOpeningHoursUpdate } from './types';
 
+export function isVenueDayScheduleValid({ is_open, opening, closing }: VenueDaySchedule): boolean {
+  if (!is_open) return true;
+
+  const timePattern = /^([01]\d|2[0-3]):[0-5]\d$/;
+  if (!timePattern.test(opening) || !timePattern.test(closing)) return false;
+
+  return closing > opening || (opening > '04:00' && closing <= '04:00');
+}
+
 export function getVenueDaySchedule(venue: VenueDto, weekday: Day): VenueDaySchedule {
   return {
     is_open: venue[`is_open_${weekday}`],

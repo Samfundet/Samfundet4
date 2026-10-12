@@ -8,8 +8,10 @@ import {
   type VenueDto,
   type VenueOpeningHoursUpdate,
   applyVenueDayScheduleChanges,
+  getVenueDaySchedule,
   getVenueOpeningHoursChanges,
   getVenues,
+  isVenueDayScheduleValid,
   patchVenue,
   venueKeys,
 } from '~/domain';
@@ -33,10 +35,13 @@ export function OpeningHoursAdminPage() {
     select: (data) => [...data].sort((venueA, venueB) => venueA.name.localeCompare(venueB.name)),
   });
 
-  const [draftVenues, setDraftVenues] = useState<VenueDto[] | null>(null);
+  const [{ draftVenues, invalidDays }, setFormState] = useState<{
+    draftVenues: VenueDto[] | null;
+    invalidDays: Set<string>;
+  }>({ draftVenues: null, invalidDays: new Set() });
+
   const displayedVenues = draftVenues ?? venues;
   const updates = draftVenues ? getVenueOpeningHoursChanges(venues, draftVenues) : [];
-  const hasChanges = updates.length > 0;
 
   const saveMutation = useMutation({
     mutationFn: (updates: VenueOpeningHoursUpdate[]) =>
@@ -52,7 +57,7 @@ export function OpeningHoursAdminPage() {
       }
 
       await queryClient.invalidateQueries({ queryKey: venueKeys.all });
-      setDraftVenues(null);
+      resetDraft();
 
       if (failedSlugs.length > 0) {
         toast.error(t(KEY.admin_opening_hours_partial_save_failure, { venues: failedSlugs.join(', ') }));
@@ -62,42 +67,83 @@ export function OpeningHoursAdminPage() {
     },
   });
 
-  function handleChangeDay(venueSlug: string, weekday: Day, changes: Partial<VenueDaySchedule>) {
+  function commitDayChange(venueSlug: string, weekday: Day, changes: Partial<VenueDaySchedule>) {
     if (saveMutation.isPending) return;
-    setDraftVenues((currentDraft) => {
-      const currentVenues = currentDraft ?? venues;
 
-      return currentVenues.map((venue) => {
-        if (venue.slug !== venueSlug) return venue;
+    setFormState((current) => {
+      const currentVenues = current.draftVenues ?? venues;
+      const venue = currentVenues.find((venue) => venue.slug === venueSlug);
+      if (!venue) return current;
 
-        return applyVenueDayScheduleChanges(venue, weekday, changes);
-      });
+      const updatedVenue = applyVenueDayScheduleChanges(venue, weekday, changes);
+      const nextInvalidDays = new Set(current.invalidDays);
+      const dayKey = `${venueSlug}:${weekday}`;
+
+      if (isVenueDayScheduleValid(getVenueDaySchedule(updatedVenue, weekday))) {
+        nextInvalidDays.delete(dayKey);
+      } else {
+        nextInvalidDays.add(dayKey);
+      }
+
+      return {
+        draftVenues: currentVenues.map((venue) => (venue.slug === venueSlug ? updatedVenue : venue)),
+        invalidDays: nextInvalidDays,
+      };
     });
+  }
+
+  function resetDraft() {
+    setFormState({ draftVenues: null, invalidDays: new Set() });
+  }
+
+  function handleSave() {
+    if (invalidDays.size > 0 || updates.length === 0 || saveMutation.isPending) return;
+    saveMutation.mutate(updates);
   }
 
   const header = (
     <div className={styles.actions}>
-      <Button theme="secondary" disabled={!hasChanges || saveMutation.isPending} onClick={() => setDraftVenues(null)}>
+      <Button theme="secondary" disabled={saveMutation.isPending || updates.length === 0} onClick={resetDraft}>
         {t(KEY.admin_opening_hours_revert)}
       </Button>
-      <Button disabled={!hasChanges || saveMutation.isPending} onClick={() => saveMutation.mutate(updates)}>
+      <Button type="submit" disabled={saveMutation.isPending || updates.length === 0 || invalidDays.size > 0}>
         {t(KEY.common_save)}
       </Button>
+      <div className={styles.validation_errors}>
+        {invalidDays.size > 0 && (
+          <>
+            <strong>{t(KEY.admin_opening_hours_invalid)}</strong>
+            <ul>
+              {[...invalidDays].map((dayKey) => (
+                <li key={dayKey}>{dayKey}</li>
+              ))}
+            </ul>
+            <p>{t(KEY.admin_opening_hours_validation_hint)}</p>
+          </>
+        )}
+      </div>
     </div>
   );
 
   return (
-    <AdminPage title={t(KEY.common_opening_hours)} header={header} loading={isLoading}>
-      <div className={styles.venue_container}>
-        {displayedVenues.map((venue) => (
-          <VenueOpeningHoursBox
-            key={venue.slug}
-            venue={venue}
-            disabled={saveMutation.isPending}
-            onChangeDay={handleChangeDay}
-          />
-        ))}
-      </div>
-    </AdminPage>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        handleSave();
+      }}
+    >
+      <AdminPage title={t(KEY.common_opening_hours)} header={header} loading={isLoading}>
+        <div className={styles.venue_container}>
+          {displayedVenues.map((venue) => (
+            <VenueOpeningHoursBox
+              key={venue.slug}
+              venue={venue}
+              disabled={saveMutation.isPending}
+              onCommitDay={commitDayChange}
+            />
+          ))}
+        </div>
+      </AdminPage>
+    </form>
   );
 }

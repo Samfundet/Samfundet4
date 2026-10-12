@@ -44,7 +44,13 @@ export {
   DATE,
 } from './closedPeriods';
 export { gangKeys, useGetOrganizedGangs, useGangMutations } from './gangs';
-export { getVenueDaySchedule, applyVenueDayScheduleChanges, getVenueOpeningHoursChanges, venueKeys } from './venues';
+export {
+  getVenueDaySchedule,
+  applyVenueDayScheduleChanges,
+  getVenueOpeningHoursChanges,
+  isVenueDayScheduleValid,
+  venueKeys,
+} from './venues';
 export type {
   OpenVenuesDto,
   VenueDto,

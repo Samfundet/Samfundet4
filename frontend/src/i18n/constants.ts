@@ -642,6 +642,8 @@ export const KEY = {
   adminpage_gangs_create: 'adminpage_gangs_create',
   admin_opening_hours_hint: 'admin_opening_hours_hint',
   admin_opening_hours_revert: 'admin_opening_hours_revert',
+  admin_opening_hours_invalid: 'admin_opening_hours_invalid',
+  admin_opening_hours_validation_hint: 'admin_opening_hours_validation_hint',
   admin_opening_hours_partial_save_failure: 'admin_opening_hours_partial_save_failure',
   admin_opening_hours_opening_time: 'admin_opening_hours_opening_time',
   admin_opening_hours_closing_time: 'admin_opening_hours_closing_time',

@@ -10,6 +10,18 @@ $venue-border-dark: col.$gray-800;
 .actions {
   @include flex-row;
   gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.validation_errors {
+  color: col.$red-600;
+  font-size: 0.875rem;
+  max-width: 32rem;
+
+  ul {
+    margin: 0.25rem 0;
+    padding-left: 1.25rem;
+  }
 }
 
 .venue_container {

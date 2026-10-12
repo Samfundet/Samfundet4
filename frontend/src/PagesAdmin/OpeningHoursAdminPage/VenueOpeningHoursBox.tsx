@@ -11,10 +11,10 @@ import styles from './OpeningHoursAdminPage.module.scss';
 type VenueOpeningHoursBoxProps = {
   venue: VenueDto;
   disabled?: boolean;
-  onChangeDay: (venueSlug: string, weekday: Day, changes: Partial<VenueDaySchedule>) => void;
+  onCommitDay: (venueSlug: string, weekday: Day, changes: Partial<VenueDaySchedule>) => void;
 };
 
-export function VenueOpeningHoursBox({ venue, disabled, onChangeDay }: VenueOpeningHoursBoxProps) {
+export function VenueOpeningHoursBox({ venue, disabled, onCommitDay }: VenueOpeningHoursBoxProps) {
   const { t } = useTranslation();
   const headingId = `venue-opening-hours-${venue.slug}`;
 
@@ -50,7 +50,7 @@ export function VenueOpeningHoursBox({ venue, disabled, onChangeDay }: VenueOpen
                   ariaLabel={openingLabel}
                   hourAriaLabel={t(KEY.admin_opening_hours_hours_input, { field: openingLabel })}
                   minuteAriaLabel={t(KEY.admin_opening_hours_minutes_input, { field: openingLabel })}
-                  onChange={(opening) => onChangeDay(venue.slug, weekday, { opening })}
+                  onChange={(opening) => onCommitDay(venue.slug, weekday, { opening })}
                 />
                 <InputTime
                   className={styles.time_input}
@@ -59,14 +59,14 @@ export function VenueOpeningHoursBox({ venue, disabled, onChangeDay }: VenueOpen
                   ariaLabel={closingLabel}
                   hourAriaLabel={t(KEY.admin_opening_hours_hours_input, { field: closingLabel })}
                   minuteAriaLabel={t(KEY.admin_opening_hours_minutes_input, { field: closingLabel })}
-                  onChange={(closing) => onChangeDay(venue.slug, weekday, { closing })}
+                  onChange={(closing) => onCommitDay(venue.slug, weekday, { closing })}
                 />
                 <div className={styles.checkbox_wrapper}>
                   <Checkbox
                     aria-label={t(KEY.admin_opening_hours_day_is_open, { day: dayLabel })}
                     checked={schedule.is_open}
                     disabled={disabled}
-                    onChange={(event) => onChangeDay(venue.slug, weekday, { is_open: event.target.checked })}
+                    onChange={(event) => onCommitDay(venue.slug, weekday, { is_open: event.target.checked })}
                   />
                 </div>
               </div>
