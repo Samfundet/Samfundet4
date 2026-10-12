@@ -5,6 +5,7 @@ export {
   getVenueOpeningHoursChanges,
   isVenueDayScheduleValid,
 } from './openingHours';
+export { useGetVenues, useGetOpenVenues } from './queries';
 export { venueKeys } from './queryKeys';
 export type {
   OpenVenuesDto,

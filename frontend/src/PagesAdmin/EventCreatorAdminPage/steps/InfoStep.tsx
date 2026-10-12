@@ -4,9 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Dropdown, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
 
-import { useQuery } from '@tanstack/react-query';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
-import { getVenues, venueKeys } from '~/domain';
+import { useGetVenues } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import type { EventCategoryValue } from '~/types';
 import styles from '../EventCreatorAdminPage.module.scss';
@@ -22,10 +21,7 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
   const { t } = useTranslation();
 
   const venueOptions = useMemo(() => locationOptions, [locationOptions]);
-  const { data: venues = [] } = useQuery({
-    queryKey: venueKeys.all,
-    queryFn: getVenues,
-  });
+  const { data: venues = [] } = useGetVenues();
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -10,9 +10,9 @@ import {
   applyVenueDayScheduleChanges,
   getVenueDaySchedule,
   getVenueOpeningHoursChanges,
-  getVenues,
   isVenueDayScheduleValid,
   patchVenue,
+  useGetVenues,
   venueKeys,
 } from '~/domain';
 
@@ -29,9 +29,7 @@ export function OpeningHoursAdminPage() {
   const queryClient = useQueryClient();
   useTitle(lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_opening_hours)}`));
 
-  const { data: venues = [], isLoading } = useQuery({
-    queryKey: venueKeys.all,
-    queryFn: getVenues,
+  const { data: venues = [], isLoading } = useGetVenues({
     select: (data) => [...data].sort((venueA, venueB) => venueA.name.localeCompare(venueB.name)),
   });
 

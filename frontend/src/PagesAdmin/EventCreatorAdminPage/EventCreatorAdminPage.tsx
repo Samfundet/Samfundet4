@@ -9,7 +9,7 @@ import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
 import { getEvent, getEventForCloning } from '~/api';
-import { getVenues, venueKeys } from '~/domain';
+import { useGetVenues } from '~/domain';
 import type { EventDto } from '~/dto';
 import { usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -63,10 +63,7 @@ export function EventCreatorAdminPage() {
     enabled: eventId !== undefined,
   });
 
-  const { data: venues = [] } = useQuery({
-    queryKey: venueKeys.all,
-    queryFn: getVenues,
-  });
+  const { data: venues = [] } = useGetVenues();
 
   const locationOptions: DropdownOption<string>[] = [
     ...venues.map((venue) => ({ value: venue.name, label: venue.name })),
