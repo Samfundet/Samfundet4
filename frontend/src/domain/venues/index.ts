@@ -1,10 +1,10 @@
 export { getVenues, getVenue, getOpenVenues, patchVenue } from './api';
 export {
-  getVenueDaySchedule,
+  extractVenueDaySchedule,
   applyVenueDayScheduleChanges,
-  getVenueOpeningHoursChanges,
+  diffVenueOpeningHours,
   isVenueDayScheduleValid,
-} from './openingHours';
+} from './utils';
 export { useUpdateVenueOpeningHours } from './mutations';
 export { useGetVenues, useGetOpenVenues } from './queries';
 export { venueKeys } from './queryKeys';

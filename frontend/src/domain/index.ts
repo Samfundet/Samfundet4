@@ -45,9 +45,9 @@ export {
 } from './closedPeriods';
 export { gangKeys, useGetOrganizedGangs, useGangMutations } from './gangs';
 export {
-  getVenueDaySchedule,
+  extractVenueDaySchedule,
   applyVenueDayScheduleChanges,
-  getVenueOpeningHoursChanges,
+  diffVenueOpeningHours,
   isVenueDayScheduleValid,
   venueKeys,
   useGetVenues,

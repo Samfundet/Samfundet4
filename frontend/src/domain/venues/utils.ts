@@ -10,7 +10,7 @@ export function isVenueDayScheduleValid({ is_open, opening, closing }: VenueDayS
   return closing > opening || (opening > '04:00' && closing <= '04:00');
 }
 
-export function getVenueDaySchedule(venue: VenueDto, weekday: Day): VenueDaySchedule {
+export function extractVenueDaySchedule(venue: VenueDto, weekday: Day): VenueDaySchedule {
   return {
     is_open: venue[`is_open_${weekday}`],
     opening: venue[`opening_${weekday}`] ?? '',
@@ -32,7 +32,7 @@ export function applyVenueDayScheduleChanges(
   return updatedVenue;
 }
 
-export function getVenueOpeningHoursChanges(venues: VenueDto[], draftVenues: VenueDto[]): VenueOpeningHoursUpdate[] {
+export function diffVenueOpeningHours(venues: VenueDto[], draftVenues: VenueDto[]): VenueOpeningHoursUpdate[] {
   const draftVenuesBySlug = new Map(draftVenues.map((venue) => [venue.slug, venue]));
 
   return venues.flatMap((venue) => {
@@ -42,8 +42,8 @@ export function getVenueOpeningHoursChanges(venues: VenueDto[], draftVenues: Ven
     const changes: VenueOpeningHoursPatch = {};
 
     for (const weekday of ALL_DAYS) {
-      const schedule = getVenueDaySchedule(venue, weekday);
-      const draftSchedule = getVenueDaySchedule(draftVenue, weekday);
+      const schedule = extractVenueDaySchedule(venue, weekday);
+      const draftSchedule = extractVenueDaySchedule(draftVenue, weekday);
 
       if (schedule.is_open !== draftSchedule.is_open) {
         changes[`is_open_${weekday}`] = draftSchedule.is_open;

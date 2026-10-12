@@ -6,8 +6,8 @@ import {
   type VenueDaySchedule,
   type VenueDto,
   applyVenueDayScheduleChanges,
-  getVenueDaySchedule,
-  getVenueOpeningHoursChanges,
+  diffVenueOpeningHours,
+  extractVenueDaySchedule,
   isVenueDayScheduleValid,
   useGetVenues,
   useUpdateVenueOpeningHours,
@@ -37,10 +37,10 @@ export function OpeningHoursAdminPage() {
   const displayedVenues = draftVenues ?? venues;
   const invalidDays = displayedVenues.flatMap((venue) =>
     ALL_DAYS.filter(
-      (day) => touchedDays.has(`${venue.slug}:${day}`) && !isVenueDayScheduleValid(getVenueDaySchedule(venue, day)),
+      (day) => touchedDays.has(`${venue.slug}:${day}`) && !isVenueDayScheduleValid(extractVenueDaySchedule(venue, day)),
     ).map((day) => `${venue.slug}:${day}`),
   );
-  const updates = draftVenues ? getVenueOpeningHoursChanges(venues, draftVenues) : [];
+  const updates = draftVenues ? diffVenueOpeningHours(venues, draftVenues) : [];
 
   const saveMutation = useUpdateVenueOpeningHours();
 

@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { InputTime } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
-import { type VenueDaySchedule, type VenueDto, getVenueDaySchedule } from '~/domain';
+import { type VenueDaySchedule, type VenueDto, extractVenueDaySchedule } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { ALL_DAYS, type Day } from '~/types';
 import { getDayKey } from '~/utils';
@@ -35,7 +35,7 @@ export function VenueOpeningHoursBox({ venue, disabled, onCommitDay }: VenueOpen
 
         {ALL_DAYS.map((weekday) => {
           const dayLabel = t(getDayKey(weekday));
-          const schedule = getVenueDaySchedule(venue, weekday);
+          const schedule = extractVenueDaySchedule(venue, weekday);
           const openingLabel = t(KEY.admin_opening_hours_opening_time, { day: dayLabel });
           const closingLabel = t(KEY.admin_opening_hours_closing_time, { day: dayLabel });
 
