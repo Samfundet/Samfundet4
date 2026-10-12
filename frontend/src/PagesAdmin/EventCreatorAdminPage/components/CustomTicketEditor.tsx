@@ -93,7 +93,7 @@ export function CustomTicketEditor({ customTickets = [], onSetCustomTickets }: P
             <Input
               type="number"
               className={styles.custom_ticket_input}
-              onChange={(e) => updateTicket(custom_ticket.id, { price: e.target.value })}
+              onChange={(e) => updateTicket(custom_ticket.id, { price: Number(e.target.value) })}
               value={custom_ticket.price?.toString()}
             />
           ),
