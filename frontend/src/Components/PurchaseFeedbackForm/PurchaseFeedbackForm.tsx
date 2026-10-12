@@ -26,17 +26,16 @@ export function PurchaseFeedbackForm({ title, questions, alternatives }: Purchas
     const questionResponses: Record<string, string> = {};
     const alternativesSelected: Record<string, string> = {};
 
-    for (const question of questions) {
-      const value = values[question];
-
-      if (typeof value === 'string') {
-        questionResponses[question] = value;
+    for (const [index, alternative] of alternatives.entries()) {
+      if (values[`alt_${index}`] === true) {
+        alternativesSelected[alternative] = alternative;
       }
     }
 
-    for (const alternative of alternatives) {
-      if (values[alternative] === true) {
-        alternativesSelected[alternative] = alternative;
+    for (const [index, question] of questions.entries()) {
+      const value = values[`q_${index}`];
+      if (typeof value === 'string') {
+        questionResponses[question] = value;
       }
     }
 
@@ -61,7 +60,7 @@ export function PurchaseFeedbackForm({ title, questions, alternatives }: Purchas
               // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
               key={index}
               control={form.control}
-              name={alternative}
+              name={`alt_${index}`}
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -88,7 +87,7 @@ export function PurchaseFeedbackForm({ title, questions, alternatives }: Purchas
             // biome-ignore lint/suspicious/noArrayIndexKey: no other unique value available
             key={index}
             control={form.control}
-            name={question}
+            name={`q_${index}`}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{question}</FormLabel>
