@@ -27,7 +27,9 @@ export function TextStep({ form }: Props) {
               <FormControl>
                 <Input type="text" {...field} />
               </FormControl>
-              <FormMessage />
+              <div className={styles.form_message_slot}>
+                <FormMessage/>
+              </div>
             </FormItem>
           )}
         />
@@ -43,7 +45,9 @@ export function TextStep({ form }: Props) {
               <FormControl>
                 <Input type="text" {...field} />
               </FormControl>
-              <FormMessage />
+              <div className={styles.form_message_slot}>
+                <FormMessage/>
+              </div>
             </FormItem>
           )}
         />
@@ -61,7 +65,9 @@ export function TextStep({ form }: Props) {
               <FormControl>
                 <Input type="text" {...field} />
               </FormControl>
-              <FormMessage />
+              <div className={styles.form_message_slot}>
+                <FormMessage/>
+              </div>
             </FormItem>
           )}
         />
@@ -77,7 +83,9 @@ export function TextStep({ form }: Props) {
               <FormControl>
                 <Input type="text" {...field} />
               </FormControl>
-              <FormMessage />
+              <div className={styles.form_message_slot}>
+                <FormMessage/>
+              </div>
             </FormItem>
           )}
         />
@@ -95,7 +103,9 @@ export function TextStep({ form }: Props) {
               <FormControl>
                 <Textarea className="textarea" {...field} rows={8} />
               </FormControl>
-              <FormMessage />
+              <div className={styles.form_message_slot}>
+                <FormMessage/>
+              </div>
             </FormItem>
           )}
         />
@@ -111,7 +121,9 @@ export function TextStep({ form }: Props) {
               <FormControl>
                 <Textarea className="textarea" {...field} rows={8} />
               </FormControl>
-              <FormMessage />
+              <div className={styles.form_message_slot}>
+                <FormMessage/>
+              </div>
             </FormItem>
           )}
         />

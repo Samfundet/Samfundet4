@@ -30,6 +30,17 @@
   width: 100%;
 }
 
+.form_item{
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding-bottom: 0.1rem;
+}
+
+.form_message_slot {
+  min-height: 1.45rem;
+}
+
 .tab_label {
   @include flex-row;
   flex: 1;
@@ -62,6 +73,7 @@
   & > * {
     flex: 1;
   }
+  align-items: flex-start;
 }
 
 .half {
