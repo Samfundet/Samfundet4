@@ -28,12 +28,31 @@ export function EventCrudButtons({ id, size, deleteRedirect, ...removals }: Even
   const nav = useCustomNavigate();
   const { mutate: deleteEvent } = useDeleteEvent();
 
-  const isStaff = user?.is_staff;
-  const canEdit = isStaff || hasPerm({ user, permission: PERM.SAMFUNDET_CHANGE_EVENT, obj: id });
+  const isSuper = user?.is_superuser;
+  const canView = isSuper || hasPerm({ user, permission: PERM.SAMFUNDET_VIEW_EVENT, obj: id });
+  const canEdit = isSuper || hasPerm({ user, permission: PERM.SAMFUNDET_CHANGE_EVENT, obj: id });
+  const canDelete = isSuper || hasPerm({ user, permission: PERM.SAMFUNDET_DELETE_EVENT, obj: id });
+  const canManage = isSuper;
 
-  const viewUrl = reverse({ pattern: ROUTES.frontend.event, urlParams: { id } });
-  const editUrl = reverse({ pattern: ROUTES.frontend.admin_events_edit, urlParams: { id } });
-  const djangoUrl = reverse({ pattern: ROUTES.backend.admin__samfundet_event_change, urlParams: { objectId: id } });
+  const viewUrl = reverse({
+    pattern: ROUTES.frontend.event,
+    urlParams: { id },
+  });
+
+  const editUrl = reverse({
+    pattern: ROUTES.frontend.admin_events_edit,
+    urlParams: { id },
+  });
+
+  const djangoUrl = reverse({
+    pattern: ROUTES.backend.admin__samfundet_event_change,
+    urlParams: { objectId: id },
+  });
+
+  const copyUrl = reverse({
+    pattern: ROUTES.frontend.admin_events_create,
+    queryParams: { template: id },
+  });
 
   function handleDelete() {
     if (id && window.confirm(t(KEY.event_confirm_delete))) {
@@ -41,22 +60,13 @@ export function EventCrudButtons({ id, size, deleteRedirect, ...removals }: Even
     }
   }
 
-  function handleCopy() {
-    nav({
-      url: reverse({
-        pattern: ROUTES.frontend.admin_events_create,
-        queryParams: { template: id },
-      }),
-    });
-  }
-
   return (
     <CrudButtons
-      onView={!removals.removeView && (() => nav({ url: viewUrl }))}
+      onView={!removals.removeView && canView && (() => nav({ url: viewUrl }))}
       onEdit={!removals.removeEdit && canEdit && (() => nav({ url: editUrl }))}
-      onCopy={!removals.removeCopy && canEdit && handleCopy}
-      onManage={!removals.removeManage && isStaff && (() => nav({ linkTarget: 'backend', url: djangoUrl }))}
-      onDelete={!removals.removeDelete && canEdit && handleDelete}
+      onCopy={!removals.removeCopy && canEdit && (() => nav({ url: copyUrl }))}
+      onManage={!removals.removeManage && canManage && (() => nav({ linkTarget: 'backend', url: djangoUrl }))}
+      onDelete={!removals.removeDelete && canDelete && handleDelete}
       size={size}
     />
   );

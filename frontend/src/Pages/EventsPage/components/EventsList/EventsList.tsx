@@ -6,6 +6,7 @@ import { Button, EventCrudButtons, IconButton, Input, Link, TimeDisplay } from '
 import { eventQuery } from '~/Components/EventQuery/utils';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
+import { useAuthContext } from '~/context/AuthContext';
 import type { EventDto } from '~/domain';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -28,6 +29,7 @@ export function EventsList({ events }: EventsListProps) {
   const [searchParam, setSearchParam] = useSearchParams();
   const [query, setQuery] = useState(searchParam.get('q') ?? '');
   const isDesktop = useDesktop();
+  const { user } = useAuthContext();
 
   const eventColumns = [
     { content: t(KEY.common_title), sortable: true },
@@ -38,7 +40,7 @@ export function EventsList({ events }: EventsListProps) {
     { content: t(KEY.category), sortable: true },
     { content: t(KEY.admin_organizer), sortable: true },
     { content: t(KEY.common_buy), sortable: true },
-    { content: t(KEY.common_edit), sortable: false },
+    user?.is_staff && { content: t(KEY.common_edit), sortable: false },
   ];
 
   const visibleColumns = isDesktop ? eventColumns : eventColumns.filter((_, i) => MOBILE_COLUMN_INDEXES.includes(i));
@@ -81,7 +83,7 @@ export function EventsList({ events }: EventsListProps) {
         event.category,
         event.host,
         event.ticket_type,
-        {
+        user?.is_staff && {
           content: (
             <div style={{ display: 'flex', gap: 10 }}>
               <EventCrudButtons id={event.id} size="sm" />
