@@ -6,7 +6,7 @@ import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';
-import { InputField } from '../InputField';
+import { Input } from '../Input';
 import { Link } from '../Link';
 import styles from './RecruitmentWithoutInterviewTable.module.scss';
 import { WithoutInterviewModal } from './components';
@@ -88,7 +88,12 @@ export function RecruitmentWithoutInterviewTable({ applicants }: RecruitmentWith
 
   return (
     <div>
-      <InputField icon="mdi:search" onChange={setSearchQuery} placeholder={t(KEY.common_search)} />
+      <Input
+        type="text"
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder={t(KEY.common_search)}
+        icon="mdi:search"
+      />
       <div className={styles.table_container}>
         <Table columns={tableColumns} data={filterUsers().map((user) => ({ cells: userToTableRow(user) }))} />
       </div>

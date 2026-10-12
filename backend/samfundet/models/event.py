@@ -16,6 +16,7 @@ from django.db.models import Prefetch, QuerySet
 
 from root.utils.mixins import CustomBaseModel
 
+from samfundet.date_utils import samfundet_date
 from samfundet.models.billig import BilligEvent, BilligTicketGroup
 from samfundet.models.general import User, Image
 from samfundet.organization.models import Gang, Organization
@@ -173,7 +174,7 @@ class Event(CustomBaseModel):
 
     spotify_uri = models.CharField(max_length=200, blank=True, null=True)
     youtube_link = models.URLField(max_length=200, blank=True, null=True)
-    youtube_embed = models.URLField(max_length=200, blank=True, null=True)
+    youtube_embed = models.BooleanField(default=False)
     facebook_link = models.URLField(max_length=200, blank=True, null=True)
     soundcloud_link = models.URLField(max_length=200, blank=True, null=True)
     instagram_link = models.URLField(max_length=200, blank=True, null=True)
@@ -233,6 +234,11 @@ class Event(CustomBaseModel):
     @property
     def is_ongoing(self) -> bool:
         return self.start_dt <= timezone.now() <= self.end_dt
+
+    @property
+    def is_multi_day(self) -> bool:
+        """Returns True if the event spans across multiple logical Samfundet days."""
+        return samfundet_date(self.start_dt) != samfundet_date(self.end_dt)
 
     @property
     def billig(self) -> BilligEvent | None:
