@@ -40,7 +40,7 @@ export function EventsList({ events }: EventsListProps) {
     { content: t(KEY.category), sortable: true },
     { content: t(KEY.admin_organizer), sortable: true },
     { content: t(KEY.common_buy), sortable: true },
-    user?.is_staff && { content: t(KEY.common_edit), sortable: false },
+    ...(user?.is_staff ? [{ content: t(KEY.common_edit), sortable: false }] : []),
   ];
 
   const visibleColumns = isDesktop ? eventColumns : eventColumns.filter((_, i) => MOBILE_COLUMN_INDEXES.includes(i));
@@ -83,13 +83,17 @@ export function EventsList({ events }: EventsListProps) {
         event.category,
         event.host,
         event.ticket_type,
-        user?.is_staff && {
-          content: (
-            <div style={{ display: 'flex', gap: 10 }}>
-              <EventCrudButtons id={event.id} size="sm" />
-            </div>
-          ),
-        },
+        ...(user?.is_staff
+          ? [
+              {
+                content: (
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    <EventCrudButtons id={event.id} size="sm" />
+                  </div>
+                ),
+              },
+            ]
+          : []),
       ],
     }));
 
