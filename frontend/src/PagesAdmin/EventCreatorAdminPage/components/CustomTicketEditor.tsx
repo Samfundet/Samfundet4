@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, IconButton, InputField } from '~/Components';
 import { Table, type TableRow } from '~/Components/Table';
-import type { EventCustomTicketDto } from '~/dto';
+import type { EventCustomTicketDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { COLORS } from '~/types';
 import styles from './CustomTicketEditor.module.scss';

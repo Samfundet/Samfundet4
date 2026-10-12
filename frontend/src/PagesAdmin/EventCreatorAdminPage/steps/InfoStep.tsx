@@ -5,9 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { Dropdown, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
 
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
-import { useGetVenues } from '~/domain';
+import { type EventCategoryValue, useGetVenues } from '~/domain';
 import { KEY } from '~/i18n/constants';
-import type { EventCategoryValue } from '~/types';
 import styles from '../EventCreatorAdminPage.module.scss';
 import type { FormType } from '../hooks/useEventCreatorForm';
 

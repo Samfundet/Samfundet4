@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { TimeDisplay, TimeDuration } from '~/Components';
-import type { EventDto } from '~/dto';
+import type { EventDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { AgeLimitRow } from '../AgeLimitRow';
 import { TicketTypeRow } from '../TicketTypeRow';

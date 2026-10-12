@@ -2,10 +2,11 @@ import { Icon } from '@iconify/react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputField } from '~/Components/InputField/InputField';
-import type { EventDto } from '~/dto';
+import type { EventDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from '../EventCreatorAdminPage.module.scss';
+import { isValidEventId } from '../utils';
 
 type EventTemplateSearchProp = {
   events: EventDto[];
@@ -21,6 +22,7 @@ export function EventTemplateSearch({ events, onSelectEvent }: EventTemplateSear
     if (normalizedSearch === '') return [];
     const keywords = normalizedSearch.split(/\s+/);
     return events.filter((event) => {
+      if (!isValidEventId(event.id)) return false;
       const title = (dbT(event, 'title', i18n.language) as string)?.toLowerCase() ?? '';
       return keywords.every((kw) => title.includes(kw));
     });

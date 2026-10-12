@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 from typing import Any
-from datetime import timedelta
 from itertools import chain
 
 from rest_framework import status
@@ -25,6 +24,7 @@ from root.constants import WebFeatures
 from root.custom_classes.permission_classes import FeatureEnabled, RoleProtectedOrAnonReadOnlyObjectPermissions
 
 from samfundet.homepage import homepage
+from samfundet.date_utils import samfundet_date
 from samfundet.pagination import CustomPageNumberPagination
 from samfundet.models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from samfundet.serializers import (
@@ -156,7 +156,7 @@ class VenueView(ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def open_venues(self, request: Request) -> Response:
-        day_name = (timezone.now() - timedelta(hours=4)).strftime('%A').lower()
+        day_name = samfundet_date(timezone.now()).strftime('%A').lower()
         open_venues = Venue.objects.filter(**{f'is_open_{day_name}': True})
         serializer = self.get_serializer(open_venues, many=True)
         return Response(serializer.data)
@@ -216,7 +216,11 @@ class OrganizationView(ModelViewSet):
 
 
 class InfoboxView(ModelViewSet):
-    permission_classes = (RoleProtectedOrAnonReadOnlyObjectPermissions,)
+    feature_key = WebFeatures.INFOBOX
+    permission_classes = (
+        RoleProtectedOrAnonReadOnlyObjectPermissions,
+        FeatureEnabled,
+    )
     serializer_class = InfoboxSerializer
     queryset = Infobox.objects.all()
 
