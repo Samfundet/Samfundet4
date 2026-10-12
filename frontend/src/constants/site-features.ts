@@ -13,6 +13,7 @@ const SITE_FEATURES: Record<SiteFeature, boolean> = {
   recruitment: false,
   sulten: false,
   faq: false,
+  dashboard: true,
   venues: false,
   membership: false,
 };

@@ -89,6 +89,7 @@ import { t } from 'i18next';
 import { App } from '~/App';
 import { DynamicOrgOutlet } from '~/Components/DynamicOrgOutlet/DynamicOrgOutlet';
 import { AdminHomePage } from '~/Pages/AdminHomePage';
+import { DashboardAdminPage } from '~/PagesAdmin/DashboardAdminPage/DashboardAdminPage';
 import { RecruitmentRecruiterDashboardPage } from '~/PagesAdmin/RecruitmentRecruiterDashboardPage/RecruitmentRecruiterDashboardPage';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -122,7 +123,7 @@ export const router = createBrowserRouter(
           <Route path={ROUTES.frontend.about} element={<AboutPage />} />
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.venues}
-                 element={<SiteFeatureGate feature="venues"><VenuePage /></SiteFeatureGate>} />
+            element={<SiteFeatureGate feature="venues"><VenuePage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.health} element={<HealthPage />} />
           {import.meta.env.DEV && <Route path={ROUTES.frontend.components} element={<ComponentPage />} />}
           <Route element={<ProtectedRoute authState={false} element={<Outlet />} />}>
@@ -147,7 +148,7 @@ export const router = createBrowserRouter(
           </Route>
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.gangs}
-                 element={<SiteFeatureGate feature="gangs"><GangsPage /></SiteFeatureGate>} />
+            element={<SiteFeatureGate feature="gangs"><GangsPage /></SiteFeatureGate>} />
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route element={<SiteFeatureGate feature="events"><Outlet /></SiteFeatureGate>}>
             <Route path={ROUTES.frontend.events} element={<EventsPage />} />
@@ -155,17 +156,17 @@ export const router = createBrowserRouter(
           </Route>
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.casedocuments}
-                 element={<SiteFeatureGate feature="documents"><CaseDocumentsPage /></SiteFeatureGate>} />
+            element={<SiteFeatureGate feature="documents"><CaseDocumentsPage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.contributors} element={<ContributorsPage />} />
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.membership}
-                 element={<SiteFeatureGate feature="membership"><MembershipPage /></SiteFeatureGate>} />
+            element={<SiteFeatureGate feature="membership"><MembershipPage /></SiteFeatureGate>} />
           <Route path={ROUTES.frontend.contact} element={<div />} />
           <Route path={ROUTES.frontend.luka} element={<div />} />
           {/* Recruitment */}
           {/* biome-ignore format: don't format site feature gate wrapper for readability's sake */}
           <Route path={ROUTES.frontend.recruitment}
-                 element={<SiteFeatureGate feature="recruitment"><RecruitmentPage /></SiteFeatureGate>} />
+            element={<SiteFeatureGate feature="recruitment"><RecruitmentPage /></SiteFeatureGate>} />
         </Route>
       </Route>
       {/* Specific recruitment */}
@@ -342,6 +343,10 @@ export const router = createBrowserRouter(
               path={ROUTES.frontend.admin_users}
               element={<PermissionRoute required={[PERM.SAMFUNDET_VIEW_USER]} element={<UsersAdminPage />} />}
             />
+          </Route>
+          {/* Dashboard */}
+          <Route handle={{ crumb: () => <Link url={ROUTES.frontend.admin_dashboard}>{t(KEY.common_dashboard)}</Link> }}>
+            <Route path={ROUTES.frontend.admin_dashboard} element={<DashboardAdminPage />} />
           </Route>
           {/* Roles */}
           <Route

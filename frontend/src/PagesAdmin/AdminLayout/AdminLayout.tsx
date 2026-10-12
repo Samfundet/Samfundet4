@@ -82,8 +82,24 @@ export function AdminLayout() {
   );
 
   const userAppletsRaw: AdminApplet[] = [
-    { url: ROUTES_FRONTEND.admin, icon: 'mdi:house', title_nb: 'Hjem', title_en: 'Home' },
-    { url: ROUTES_FRONTEND.account, icon: 'mdi:person', title_nb: 'Konto', title_en: 'Account' },
+    {
+      url: ROUTES_FRONTEND.admin,
+      icon: 'mdi:house',
+      title_nb: 'Hjem',
+      title_en: 'Home',
+    },
+    {
+      url: ROUTES_FRONTEND.account,
+      icon: 'mdi:person',
+      title_nb: 'Konto',
+      title_en: 'Account',
+    },
+    {
+      title_nb: 'Dashbord',
+      title_en: 'Dashboard',
+      icon: 'mdi:view-dashboard-outline',
+      url: ROUTES.frontend.admin_dashboard,
+    },
   ];
 
   const userApplets = userAppletsRaw.filter((a) => !a.feature || isSiteFeatureEnabled(a.feature));

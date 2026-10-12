@@ -197,6 +197,7 @@ export type SiteFeature =
   | 'recruitment'
   | 'sulten'
   | 'faq'
+  | 'dashboard'
   // Frontend-exclusive features
   | 'venues'
   | 'membership';
