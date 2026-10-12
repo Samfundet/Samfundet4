@@ -1,9 +1,12 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { SamfForm } from '~/Forms/SamfForm';
-import { SamfFormField } from '~/Forms/SamfFormField';
+import { z } from 'zod';
+import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
 import { setRecruitmentApplicationInterview } from '~/api';
-import type { InterviewDto, RecruitmentApplicationDto } from '~/dto';
+import type { RecruitmentApplicationDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import { Text } from '../Text/Text';
@@ -13,15 +16,34 @@ type InterviewFormProps = {
   application: RecruitmentApplicationDto;
 };
 
-type FormType = {
-  interview_time: string;
-  interview_location: string;
-};
+const interviewFormSchema = z.object({
+  interview_time: z.string().min(1),
+  interview_location: z.string().min(1),
+});
+
+type InterviewFormType = z.infer<typeof interviewFormSchema>;
+
+/** Formats an ISO datetime string for use in a datetime-local input. */
+function toDatetimeLocalValue(isoString: string | undefined): string {
+  if (!isoString) {
+    return '';
+  }
+  const date = new Date(isoString);
+  return Number.isNaN(date.getTime()) ? '' : format(date, "yyyy-MM-dd'T'HH:mm");
+}
 
 export function InterviewForm({ application }: InterviewFormProps) {
   const { t } = useTranslation();
 
-  function handleOnSubmit(data: InterviewDto) {
+  const form = useForm<InterviewFormType>({
+    resolver: zodResolver(interviewFormSchema),
+    defaultValues: {
+      interview_time: toDatetimeLocalValue(application?.interview?.interview_time),
+      interview_location: application?.interview?.interview_location ?? '',
+    },
+  });
+
+  function handleOnSubmit(data: InterviewFormType) {
     setRecruitmentApplicationInterview(application.id, data)
       .then(() => {
         toast.success(t(KEY.common_update_successful));
@@ -31,11 +53,6 @@ export function InterviewForm({ application }: InterviewFormProps) {
         console.error(error);
       });
   }
-
-  const initialData: Partial<InterviewDto> = {
-    interview_location: application?.interview?.interview_location,
-    interview_time: application?.interview?.interview_time,
-  };
 
   return (
     <div className={styles.container}>
@@ -48,14 +65,41 @@ export function InterviewForm({ application }: InterviewFormProps) {
       <Text>
         {t(KEY.recruitment_position)}: {dbT(application.recruitment_position, 'name')}
       </Text>
-      <SamfForm<FormType> onSubmit={handleOnSubmit} initialData={initialData}>
-        <div className={styles.row}>
-          <SamfFormField field="interview_time" type="date_time" label={t(KEY.recruitment_interview_time)} />
-        </div>
-        <div className={styles.row}>
-          <SamfFormField field="interview_location" type="text" label={t(KEY.recruitment_interview_location)} />
-        </div>
-      </SamfForm>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleOnSubmit)}>
+          <div className={styles.row}>
+            <FormField
+              control={form.control}
+              name="interview_time"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.recruitment_interview_time)}</FormLabel>
+                  <FormControl>
+                    <Input type="datetime-local" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className={styles.row}>
+            <FormField
+              control={form.control}
+              name="interview_location"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t(KEY.recruitment_interview_location)}</FormLabel>
+                  <FormControl>
+                    <Input type="text" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <Button type="submit">{t(KEY.common_send)}</Button>
+        </form>
+      </Form>
     </div>
   );
 }
