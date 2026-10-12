@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -6,14 +5,12 @@ import { Button } from '~/Components';
 import {
   type VenueDaySchedule,
   type VenueDto,
-  type VenueOpeningHoursUpdate,
   applyVenueDayScheduleChanges,
   getVenueDaySchedule,
   getVenueOpeningHoursChanges,
   isVenueDayScheduleValid,
-  patchVenue,
   useGetVenues,
-  venueKeys,
+  useUpdateVenueOpeningHours,
 } from '~/domain';
 
 import { useTitle } from '~/hooks';
@@ -26,7 +23,6 @@ import { VenueOpeningHoursBox } from './VenueOpeningHoursBox';
 
 export function OpeningHoursAdminPage() {
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
   useTitle(lowerCapitalize(`${t(KEY.common_edit)} ${t(KEY.common_opening_hours)}`));
 
   const { data: venues = [], isLoading } = useGetVenues({
@@ -46,29 +42,7 @@ export function OpeningHoursAdminPage() {
   );
   const updates = draftVenues ? getVenueOpeningHoursChanges(venues, draftVenues) : [];
 
-  const saveMutation = useMutation({
-    mutationFn: (updates: VenueOpeningHoursUpdate[]) =>
-      Promise.allSettled(updates.map(({ slug, changes }) => patchVenue(slug, changes))),
-    onSuccess: async (results, updates) => {
-      const failedSlugs: string[] = [];
-
-      for (const [index, result] of results.entries()) {
-        if (result.status === 'rejected') {
-          failedSlugs.push(updates[index].slug);
-          console.error(`Error updating venue ${updates[index].slug}:`, result.reason);
-        }
-      }
-
-      await queryClient.invalidateQueries({ queryKey: venueKeys.all });
-      resetDraft();
-
-      if (failedSlugs.length > 0) {
-        toast.error(t(KEY.admin_opening_hours_partial_save_failure, { venues: failedSlugs.join(', ') }));
-      } else {
-        toast.success(t(KEY.common_save_successful));
-      }
-    },
-  });
+  const saveMutation = useUpdateVenueOpeningHours();
 
   function commitDayChange(venueSlug: string, weekday: Day, changes: Partial<VenueDaySchedule>) {
     if (saveMutation.isPending) return;
@@ -87,7 +61,17 @@ export function OpeningHoursAdminPage() {
 
   function handleSave() {
     if (invalidDays.length > 0 || updates.length === 0 || saveMutation.isPending) return;
-    saveMutation.mutate(updates);
+    saveMutation.mutate(updates, {
+      onSuccess: ({ failedSlugs }) => {
+        resetDraft();
+
+        if (failedSlugs.length > 0) {
+          toast.error(t(KEY.admin_opening_hours_partial_save_failure, { venues: failedSlugs.join(', ') }));
+        } else {
+          toast.success(t(KEY.common_save_successful));
+        }
+      },
+    });
   }
 
   const header = (

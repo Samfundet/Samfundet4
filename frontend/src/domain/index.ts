@@ -52,6 +52,7 @@ export {
   venueKeys,
   useGetVenues,
   useGetOpenVenues,
+  useUpdateVenueOpeningHours,
 } from './venues';
 export type {
   OpenVenuesDto,
