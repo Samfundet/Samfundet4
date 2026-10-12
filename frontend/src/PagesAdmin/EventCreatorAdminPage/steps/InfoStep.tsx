@@ -44,7 +44,7 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                 <Input type="datetime-local" {...field} />
               </FormControl>
               <div className={styles.form_message_slot}>
-                <FormMessage/>
+                <FormMessage />
               </div>
             </FormItem>
           )}
@@ -69,7 +69,7 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                 />
               </FormControl>
               <div className={styles.form_message_slot}>
-                <FormMessage/>
+                <FormMessage />
               </div>
             </FormItem>
           )}
@@ -92,7 +92,7 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                 />
               </FormControl>
               <div className={styles.form_message_slot}>
-                <FormMessage/>
+                <FormMessage />
               </div>
             </FormItem>
           )}
@@ -108,7 +108,7 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                 <Input type="text" {...field} />
               </FormControl>
               <div className={styles.form_message_slot}>
-                <FormMessage/>
+                <FormMessage />
               </div>
             </FormItem>
           )}
@@ -132,9 +132,9 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                     {...field}
                   />
                 </FormControl>
-               <div className={styles.form_message_slot}>
-                <FormMessage/>
-              </div>
+                <div className={styles.form_message_slot}>
+                  <FormMessage />
+                </div>
               </FormItem>
             );
           }}
@@ -161,7 +161,7 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                 />
               </FormControl>
               <div className={styles.form_message_slot}>
-                <FormMessage/>
+                <FormMessage />
               </div>
             </FormItem>
           )}

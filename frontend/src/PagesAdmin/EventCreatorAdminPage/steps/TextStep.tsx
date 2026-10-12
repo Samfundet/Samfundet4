@@ -28,7 +28,7 @@ export function TextStep({ form }: Props) {
                 <Input type="text" {...field} />
               </FormControl>
               <div className={styles.form_message_slot}>
-                <FormMessage/>
+                <FormMessage />
               </div>
             </FormItem>
           )}
@@ -46,7 +46,7 @@ export function TextStep({ form }: Props) {
                 <Input type="text" {...field} />
               </FormControl>
               <div className={styles.form_message_slot}>
-                <FormMessage/>
+                <FormMessage />
               </div>
             </FormItem>
           )}
@@ -66,7 +66,7 @@ export function TextStep({ form }: Props) {
                 <Input type="text" {...field} />
               </FormControl>
               <div className={styles.form_message_slot}>
-                <FormMessage/>
+                <FormMessage />
               </div>
             </FormItem>
           )}
@@ -84,7 +84,7 @@ export function TextStep({ form }: Props) {
                 <Input type="text" {...field} />
               </FormControl>
               <div className={styles.form_message_slot}>
-                <FormMessage/>
+                <FormMessage />
               </div>
             </FormItem>
           )}
@@ -104,7 +104,7 @@ export function TextStep({ form }: Props) {
                 <Textarea className="textarea" {...field} rows={8} />
               </FormControl>
               <div className={styles.form_message_slot}>
-                <FormMessage/>
+                <FormMessage />
               </div>
             </FormItem>
           )}
@@ -122,7 +122,7 @@ export function TextStep({ form }: Props) {
                 <Textarea className="textarea" {...field} rows={8} />
               </FormControl>
               <div className={styles.form_message_slot}>
-                <FormMessage/>
+                <FormMessage />
               </div>
             </FormItem>
           )}
