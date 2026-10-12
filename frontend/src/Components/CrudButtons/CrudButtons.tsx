@@ -5,8 +5,10 @@ import { KEY } from '~/i18n/constants';
 import { COLORS } from '~/types';
 import styles from './CrudButtons.module.scss';
 
+const ACTION_KEYS = ['onView', 'onEdit', 'onCopy', 'onManage', 'onDelete'] as const;
+
 type Action = (() => void) | string | false;
-type ActionKey = 'onView' | 'onEdit' | 'onManage' | 'onCopy' | 'onDelete';
+type ActionKey = (typeof ACTION_KEYS)[number];
 type ButtonConfig = { title: string; color: string; icon: string };
 
 type CrudButtonsProps = Partial<Record<ActionKey, Action>> & {
@@ -34,7 +36,7 @@ export function CrudButtons({ size = 'md', ...actions }: CrudButtonsProps) {
     },
     onCopy: {
       title: t(KEY.common_copy),
-      color: COLORS.grey_3,
+      color: COLORS.grey_1,
       icon: 'mdi:content-copy',
     },
     onDelete: {
@@ -46,7 +48,7 @@ export function CrudButtons({ size = 'md', ...actions }: CrudButtonsProps) {
 
   return (
     <div className={styles.row}>
-      {(Object.entries(BUTTONS) as [ActionKey, ButtonConfig][]).map(([key, values]) => {
+      {ACTION_KEYS.map((key) => {
         const action = actions[key];
 
         if (!action) {
@@ -56,7 +58,7 @@ export function CrudButtons({ size = 'md', ...actions }: CrudButtonsProps) {
         return (
           <IconButton
             {...(typeof action === 'string' ? { url: action } : { onClick: action })}
-            {...values}
+            {...BUTTONS[key]}
             key={key}
             size={size}
           />

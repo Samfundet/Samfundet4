@@ -12,12 +12,17 @@ import type { IconButtonSize } from '../IconButton';
 
 type EventCrudButtonsProps = {
   id?: EventId;
-  removeView?: boolean;
   size?: IconButtonSize;
   deleteRedirect?: string | number;
+
+  removeView?: boolean;
+  removeManage?: boolean;
+  removeEdit?: boolean;
+  removeDelete?: boolean;
+  removeCopy?: boolean;
 };
 
-export function EventCrudButtons({ id, removeView = false, size, deleteRedirect }: EventCrudButtonsProps) {
+export function EventCrudButtons({ id, size, deleteRedirect, ...removals }: EventCrudButtonsProps) {
   const { t } = useTranslation();
   const { user } = useAuthContext();
   const nav = useCustomNavigate();
@@ -36,12 +41,22 @@ export function EventCrudButtons({ id, removeView = false, size, deleteRedirect 
     }
   }
 
+  function handleCopy() {
+    nav({
+      url: reverse({
+        pattern: ROUTES.frontend.admin_events_create,
+        queryParams: { template: id },
+      }),
+    });
+  }
+
   return (
     <CrudButtons
-      onView={!removeView && (() => nav({ url: viewUrl }))}
-      onEdit={canEdit && (() => nav({ url: editUrl }))}
-      onManage={isStaff && (() => nav({ linkTarget: 'backend', url: djangoUrl }))}
-      onDelete={canEdit && handleDelete}
+      onView={!removals.removeView && (() => nav({ url: viewUrl }))}
+      onEdit={!removals.removeEdit && canEdit && (() => nav({ url: editUrl }))}
+      onCopy={!removals.removeCopy && canEdit && handleCopy}
+      onManage={!removals.removeManage && isStaff && (() => nav({ linkTarget: 'backend', url: djangoUrl }))}
+      onDelete={!removals.removeDelete && canEdit && handleDelete}
       size={size}
     />
   );
