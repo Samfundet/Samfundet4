@@ -304,7 +304,6 @@ samfundet__event_groups_detail = 'samfundet:event-groups-detail'
 samfundet__venues_list = 'samfundet:venues-list'
 samfundet__venues_open_venues = 'samfundet:venues-open-venues'
 samfundet__venues_detail = 'samfundet:venues-detail'
-
 samfundet__closedperiods_list = 'samfundet:closedperiods-list'
 samfundet__closedperiods_detail = 'samfundet:closedperiods-detail'
 samfundet__blog_list = 'samfundet:blog-list'
