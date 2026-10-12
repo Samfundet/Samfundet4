@@ -23,14 +23,13 @@ export function applyVenueDayScheduleChanges(
   weekday: Day,
   changes: Partial<VenueDaySchedule>,
 ): VenueDto {
-  const currentSchedule = getVenueDaySchedule(venue, weekday);
+  const updatedVenue = { ...venue };
 
-  return {
-    ...venue,
-    [`is_open_${weekday}`]: changes.is_open ?? currentSchedule.is_open,
-    [`opening_${weekday}`]: changes.opening ?? currentSchedule.opening,
-    [`closing_${weekday}`]: changes.closing ?? currentSchedule.closing,
-  };
+  if (changes.is_open !== undefined) updatedVenue[`is_open_${weekday}`] = changes.is_open;
+  if (changes.opening !== undefined) updatedVenue[`opening_${weekday}`] = changes.opening;
+  if (changes.closing !== undefined) updatedVenue[`closing_${weekday}`] = changes.closing;
+
+  return updatedVenue;
 }
 
 export function getVenueOpeningHoursChanges(venues: VenueDto[], draftVenues: VenueDto[]): VenueOpeningHoursUpdate[] {

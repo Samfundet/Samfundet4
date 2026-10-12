@@ -18,7 +18,7 @@ import {
 
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import type { Day } from '~/types';
+import { ALL_DAYS, type Day } from '~/types';
 import { lowerCapitalize } from '~/utils';
 import { AdminPage } from '../AdminPageLayout';
 import styles from './OpeningHoursAdminPage.module.scss';
@@ -35,12 +35,17 @@ export function OpeningHoursAdminPage() {
     select: (data) => [...data].sort((venueA, venueB) => venueA.name.localeCompare(venueB.name)),
   });
 
-  const [{ draftVenues, invalidDays }, setFormState] = useState<{
+  const [{ draftVenues, touchedDays }, setFormState] = useState<{
     draftVenues: VenueDto[] | null;
-    invalidDays: Set<string>;
-  }>({ draftVenues: null, invalidDays: new Set() });
+    touchedDays: Set<string>;
+  }>({ draftVenues: null, touchedDays: new Set() });
 
   const displayedVenues = draftVenues ?? venues;
+  const invalidDays = displayedVenues.flatMap((venue) =>
+    ALL_DAYS.filter(
+      (day) => touchedDays.has(`${venue.slug}:${day}`) && !isVenueDayScheduleValid(getVenueDaySchedule(venue, day)),
+    ).map((day) => `${venue.slug}:${day}`),
+  );
   const updates = draftVenues ? getVenueOpeningHoursChanges(venues, draftVenues) : [];
 
   const saveMutation = useMutation({
@@ -70,34 +75,20 @@ export function OpeningHoursAdminPage() {
   function commitDayChange(venueSlug: string, weekday: Day, changes: Partial<VenueDaySchedule>) {
     if (saveMutation.isPending) return;
 
-    setFormState((current) => {
-      const currentVenues = current.draftVenues ?? venues;
-      const venue = currentVenues.find((venue) => venue.slug === venueSlug);
-      if (!venue) return current;
-
-      const updatedVenue = applyVenueDayScheduleChanges(venue, weekday, changes);
-      const nextInvalidDays = new Set(current.invalidDays);
-      const dayKey = `${venueSlug}:${weekday}`;
-
-      if (isVenueDayScheduleValid(getVenueDaySchedule(updatedVenue, weekday))) {
-        nextInvalidDays.delete(dayKey);
-      } else {
-        nextInvalidDays.add(dayKey);
-      }
-
-      return {
-        draftVenues: currentVenues.map((venue) => (venue.slug === venueSlug ? updatedVenue : venue)),
-        invalidDays: nextInvalidDays,
-      };
-    });
+    setFormState((current) => ({
+      draftVenues: (current.draftVenues ?? venues).map((venue) =>
+        venue.slug === venueSlug ? applyVenueDayScheduleChanges(venue, weekday, changes) : venue,
+      ),
+      touchedDays: new Set(current.touchedDays).add(`${venueSlug}:${weekday}`),
+    }));
   }
 
   function resetDraft() {
-    setFormState({ draftVenues: null, invalidDays: new Set() });
+    setFormState({ draftVenues: null, touchedDays: new Set() });
   }
 
   function handleSave() {
-    if (invalidDays.size > 0 || updates.length === 0 || saveMutation.isPending) return;
+    if (invalidDays.length > 0 || updates.length === 0 || saveMutation.isPending) return;
     saveMutation.mutate(updates);
   }
 
@@ -106,15 +97,15 @@ export function OpeningHoursAdminPage() {
       <Button theme="secondary" disabled={saveMutation.isPending || updates.length === 0} onClick={resetDraft}>
         {t(KEY.admin_opening_hours_revert)}
       </Button>
-      <Button type="submit" disabled={saveMutation.isPending || updates.length === 0 || invalidDays.size > 0}>
+      <Button type="submit" disabled={saveMutation.isPending || updates.length === 0 || invalidDays.length > 0}>
         {t(KEY.common_save)}
       </Button>
       <div className={styles.validation_errors}>
-        {invalidDays.size > 0 && (
+        {invalidDays.length > 0 && (
           <>
             <strong>{t(KEY.admin_opening_hours_invalid)}</strong>
             <ul>
-              {[...invalidDays].map((dayKey) => (
+              {invalidDays.map((dayKey) => (
                 <li key={dayKey}>{dayKey}</li>
               ))}
             </ul>
