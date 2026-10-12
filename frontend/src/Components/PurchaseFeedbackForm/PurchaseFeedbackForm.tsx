@@ -42,7 +42,7 @@ export function PurchaseFeedbackForm({ title, questions, alternatives }: Purchas
 
     const feedback: PurchaseFeedbackDto = {
       eventId: Number(eventId),
-      title,
+      title: title,
       alternatives: alternativesSelected,
       responses: questionResponses,
     };
