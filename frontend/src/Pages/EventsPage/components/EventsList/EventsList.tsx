@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { type ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { Button, Dropdown, InputField, Link, TimeDisplay } from '~/Components';
@@ -22,10 +22,10 @@ export function EventsList({ events }: EventsListProps) {
   const { t, i18n } = useTranslation();
   const [tableView, setTableView] = useState(false);
   const [searchParam, setSearchParam] = useSearchParams();
-  const [query, setQuery] = useState(searchParam.get('q') ?? '');
-  const [category, setCategory] = useState(searchParam.get('category') ?? '');
-  const [place, setPlace] = useState(searchParam.get('place') ?? '');
-  const [ticketType, setTicketType] = useState(searchParam.get('ticket_type') ?? '');
+  const query = searchParam.get('q') ?? '';
+  const category = searchParam.get('category') ?? '';
+  const place = searchParam.get('place') ?? '';
+  const ticketType = searchParam.get('ticket_type') ?? '';
 
   const eventColumns = [
     { content: t(KEY.common_title), sortable: true },
@@ -136,42 +136,20 @@ export function EventsList({ events }: EventsListProps) {
     });
   }
 
-  useEffect(() => {
-    setQuery(searchParam.get('q') ?? '');
-    setCategory(searchParam.get('category') ?? '');
-    setPlace(searchParam.get('place') ?? '');
-    setTicketType(searchParam.get('ticket_type') ?? '');
-  }, [searchParam]);
-
-  useEffect(() => {
+  function updateFilter(key: 'q' | 'category' | 'place' | 'ticket_type', value: string) {
     setSearchParam(
       (prev) => {
         const next = new URLSearchParams(prev);
-        if (query) {
-          next.set('q', query);
+        if (value) {
+          next.set(key, value);
         } else {
-          next.delete('q');
-        }
-        if (category) {
-          next.set('category', category);
-        } else {
-          next.delete('category');
-        }
-        if (place) {
-          next.set('place', place);
-        } else {
-          next.delete('place');
-        }
-        if (ticketType) {
-          next.set('ticket_type', ticketType);
-        } else {
-          next.delete('ticket_type');
+          next.delete(key);
         }
         return next;
       },
       { replace: true },
     );
-  }, [category, place, query, setSearchParam, ticketType]);
+  }
 
   function getButton(title: string, icon: string, func: () => void, chosen: boolean) {
     return (
@@ -193,13 +171,13 @@ export function EventsList({ events }: EventsListProps) {
             icon="mdi:search"
             labelClassName={styles.search_bar}
             inputClassName={styles.search_bar_field}
-            onChange={setQuery}
+            onChange={(value: string) => updateFilter('q', value)}
             value={query}
           />
           <Dropdown
             value={place || null}
             options={venueOptions}
-            onChange={(value) => setPlace(value ?? '')}
+            onChange={(value: string | null) => updateFilter('place', value ?? '')}
             className={styles.filter_select}
             sortAlphabetic={true}
             nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_venue)}`) }}
@@ -207,7 +185,7 @@ export function EventsList({ events }: EventsListProps) {
           <Dropdown
             value={(category || null) as EventCategoryValue | null}
             options={categoryOptions}
-            onChange={(value) => setCategory(value ?? '')}
+            onChange={(value: EventCategoryValue | null) => updateFilter('category', value ?? '')}
             className={styles.filter_select}
             sortAlphabetic={true}
             nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.category)}`) }}
@@ -215,7 +193,7 @@ export function EventsList({ events }: EventsListProps) {
           <Dropdown
             value={(ticketType || null) as EventTicketTypeValue | null}
             options={ticketTypeOptions}
-            onChange={(value) => setTicketType(value ?? '')}
+            onChange={(value: EventTicketTypeValue | null) => updateFilter('ticket_type', value ?? '')}
             className={styles.filter_select}
             sortAlphabetic={true}
             nullOption={{ label: lowerCapitalize(`${t(KEY.common_choose)} ${t(KEY.common_ticket)}`) }}
