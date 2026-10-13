@@ -63,6 +63,7 @@ services:
       - ./backend:/app # Mount backend folder to docker image
       - /app/.venv/ # Ignore local virtual environment
       - ./frontend/src/routes:/frontend/src/routes
+      - ./frontend/src/permissions:/frontend/src/permissions
     env_file:
       - ./backend/.docker.env # Environment for backend docker
     environment:

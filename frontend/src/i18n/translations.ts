@@ -45,6 +45,7 @@ export const nb = prepareTranslations({
   // Other common
   [KEY.common_connect]: 'Koble til',
   [KEY.common_content]: 'Innhold',
+  [KEY.common_color]: 'Farge',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Håndter',
   [KEY.common_yes]: 'Ja',
@@ -107,6 +108,7 @@ export const nb = prepareTranslations({
   [KEY.common_preview]: 'Forhåndsvisning',
   [KEY.common_version]: 'Versjon',
   [KEY.common_search]: 'Søk',
+  [KEY.common_copy]: 'Kopier',
   [KEY.common_choose]: 'Velg',
   [KEY.common_visible]: 'Synlig',
   [KEY.common_sulten]: 'Lyche',
@@ -302,7 +304,10 @@ export const nb = prepareTranslations({
   [KEY.event_spotify_uri_help]:
     'Legg til Spotify URI-en til en spilleliste, og en widget med denne listen vil dukke opp på arrangementsiden.',
   [KEY.event_youtube_link_help]: 'Legg til YouTube-video som skal linkes til',
-  [KEY.event_youtube_embed_help]: 'Legg til YouTube-video som skal embeddes, så vil den vises på arrangementsiden.',
+  [KEY.event_youtube_embed_help]: 'Vis videoen fra YouTube-lenken direkte på arrangementsiden.',
+  [KEY.event_youtube_embed]: 'Bygg inn YouTube-video',
+  [KEY.event_youtube_video]: 'YouTube-video',
+  [KEY.event_youtube_video_required]: 'Legg til en gyldig YouTube-videolenke for å bygge inn videoen.',
   [KEY.event_add_ticket]: 'Legg til billett',
   [KEY.event_invalid_form_error]: 'Skjemaet inneholder valideringsfeil. Vennligst sjekk de uthevede feltene.',
   [KEY.event_must_be_valid_url]: 'Må være en gyldig URL',
@@ -561,6 +566,15 @@ export const nb = prepareTranslations({
   // Admin:
   [KEY.admin_organizer]: 'Arrangør',
   [KEY.admin_casedocument]: 'Saksdokument',
+  [KEY.admin_infobox]: 'Infoboks',
+  [KEY.admin_infoboxes_title]: 'Infobokser',
+  [KEY.admin_infobox_color_red_samf]: 'Samfundet-rød',
+  [KEY.admin_infobox_color_blue]: 'Blå',
+  [KEY.admin_infobox_color_blue_isfit]: 'ISFiT-blå',
+  [KEY.admin_infobox_color_turquoise]: 'Turkis',
+  [KEY.admin_infobox_color_green]: 'Grønn',
+  [KEY.admin_infobox_color_orange]: 'Oransje',
+  [KEY.admin_infobox_color_grey]: 'Grå',
   [KEY.admin_images_title]: 'Bildearkiv',
   [KEY.admin_images_create]: 'Nytt bilde',
   [KEY.admin_images_confirm_delete]: 'Er du sikker på at du vil slette dette bildet? Dette kan ikke angres.',
@@ -766,7 +780,6 @@ export const nb = prepareTranslations({
   [KEY.admin_casedocuments_title_used_as_filename]: 'Dette vil bli brukt som det synlige filnavnet.',
   [KEY.admin_casedocuments_confirm_delete]:
     'Er du sikker på at du vil slette dette saksdokumentet? Dette kan ikke angres.',
-  [KEY.eventsadminpage_successful_delete_toast]: 'Slettingen av arrangementet var vellykket.',
 
   [KEY.promo_media_description]: 'Lenke eller ID til en YouTube-video',
   [KEY.promo_media_invalid]: 'Må være en gyldig lenke til en YouTube-video',
@@ -845,6 +858,7 @@ export const en = prepareTranslations({
   // No category:
   [KEY.common_connect]: 'Connect',
   [KEY.common_content]: 'Content',
+  [KEY.common_color]: 'Color',
   [KEY.common_url]: 'URL',
   [KEY.common_manage]: 'Manage',
   [KEY.common_yes]: 'Yes',
@@ -895,6 +909,7 @@ export const en = prepareTranslations({
   [KEY.common_cancel]: 'Cancel',
   [KEY.common_close]: 'Close',
   [KEY.common_venues]: 'Venues',
+  [KEY.common_copy]: 'Copy',
   [KEY.common_shortcuts]: 'Shortcuts',
   [KEY.common_events]: 'Events',
   [KEY.common_repeat]: 'Repeat',
@@ -1138,7 +1153,10 @@ export const en = prepareTranslations({
   [KEY.event_spotify_uri_help]:
     'Add the Spotify URI of a playlist, and a widget will appear on the event page with the chosen playlist.',
   [KEY.event_youtube_link_help]: 'Add a link to a YouTube video',
-  [KEY.event_youtube_embed_help]: 'Add a link to a YouTube video to be embedded, and it will appear on the event page.',
+  [KEY.event_youtube_embed_help]: 'Display the video from the YouTube link directly on the event page.',
+  [KEY.event_youtube_embed]: 'Embed YouTube video',
+  [KEY.event_youtube_video]: 'YouTube video',
+  [KEY.event_youtube_video_required]: 'Add a valid YouTube video link to embed the video.',
   [KEY.event_add_ticket]: 'Add ticket',
   [KEY.event_invalid_form_error]: 'Form contains validation errors. Please check highlighted fields.',
   [KEY.event_must_be_valid_url]: 'Must be a valid URL',
@@ -1339,7 +1357,7 @@ export const en = prepareTranslations({
   [KEY.error_recruitment_form_3]: 'Reprioritization deadline cannot be before the actual deadline',
   [KEY.error_recruitment_form_4]: 'Group reprioritization deadline cannot be before the reprioritization deadline',
   [KEY.recruitment_dashboard_description]:
-    'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcomming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
+    'Here you have an overview of your job as a recruiter for the recruitment, here you can see your upcoming interviews, the positions you have a responsibility for, and setting the time you are available to host an interview',
   [KEY.recruitment_create_room]: 'Create room',
   [KEY.recruitment_separate_recruitment]: 'Seperate recruitment',
 
@@ -1407,6 +1425,15 @@ export const en = prepareTranslations({
   // Admin:
   [KEY.admin_organizer]: 'Organizer',
   [KEY.admin_casedocument]: 'Case document',
+  [KEY.admin_infobox]: 'Infobox',
+  [KEY.admin_infoboxes_title]: 'Infoboxes',
+  [KEY.admin_infobox_color_red_samf]: 'Samfundet red',
+  [KEY.admin_infobox_color_blue]: 'Blue',
+  [KEY.admin_infobox_color_blue_isfit]: 'ISFiT blue',
+  [KEY.admin_infobox_color_turquoise]: 'Turquoise',
+  [KEY.admin_infobox_color_green]: 'Green',
+  [KEY.admin_infobox_color_orange]: 'Orange',
+  [KEY.admin_infobox_color_grey]: 'Grey',
   [KEY.admin_images_title]: 'Image Archive',
   [KEY.admin_images_create]: 'New image',
   [KEY.admin_images_confirm_delete]: 'Are you sure you want to delete this image? This cannot be undone.',
@@ -1453,7 +1480,6 @@ export const en = prepareTranslations({
   [KEY.admin_casedocuments_title_used_as_filename]: 'This will be used as the visible file name.',
   [KEY.admin_casedocuments_confirm_delete]:
     'Are you sure you want to delete this case document? This cannot be undone.',
-  [KEY.eventsadminpage_successful_delete_toast]: 'Succsessfully deleted event.',
 
   [KEY.promo_media_description]: 'Link or ID of a YouTube video',
   [KEY.promo_media_invalid]: 'Must be a valid link to a YouTube video',
@@ -1551,7 +1577,7 @@ export const en = prepareTranslations({
   [KEY.end_date]: 'End date',
   [KEY.last_updated]: 'Last updated',
 
-  [KEY.form_confirm]: 'Are you sure you want do',
+  [KEY.form_confirm]: 'Are you sure you want to',
   [KEY.form_confirm_delete]: 'Are you sure you want to delete',
   [KEY.we_use_cookies]: 'We use cookies to give you the best experience on Samfundet.no. Read more about cookies',
   [KEY.control_panel_faq]: 'Help/questions',

@@ -2,17 +2,21 @@ import { Icon } from '@iconify/react';
 import { type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
-import { Button, Dropdown, InputField, Link, TimeDisplay } from '~/Components';
+import { Button, Dropdown, Input, Link, TimeDisplay } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
-import type { EventDto } from '~/dto';
+import type { EventDto } from '~/domain';
+import type { EventCategoryValue, EventTicketTypeValue } from '~/domain';
+import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import type { EventCategoryValue, EventTicketTypeValue } from '~/types';
 import { dbT, getEventCategoryKey, getTicketTypeKey, imageUrl, lowerCapitalize } from '~/utils';
 import styles from './EventsList.module.scss';
+
+// On mobile, only show the most important columns so the table fits the screen.
+const MOBILE_COLUMN_INDEXES = [0, 1, 4];
 
 type EventsListProps = {
   events: Record<string, EventDto[]>;
@@ -21,6 +25,7 @@ type EventsListProps = {
 export function EventsList({ events }: EventsListProps) {
   const { t, i18n } = useTranslation();
   const [tableView, setTableView] = useState(false);
+  const isDesktop = useDesktop();
   const [searchParam, setSearchParam] = useSearchParams();
   const query = searchParam.get('q') ?? '';
   const category = searchParam.get('category') ?? '';
@@ -38,6 +43,7 @@ export function EventsList({ events }: EventsListProps) {
     { content: t(KEY.common_buy), sortable: true },
   ];
 
+  const visibleColumns = isDesktop ? eventColumns : eventColumns.filter((_, i) => MOBILE_COLUMN_INDEXES.includes(i));
   const allEvents = Object.values(events).flat();
   const venues = [...new Set(allEvents.map((event) => event.location).filter(Boolean))].sort((a, b) =>
     a.localeCompare(b),
@@ -88,7 +94,7 @@ export function EventsList({ events }: EventsListProps) {
 
   // TODO improve table view for events
   function getEventRows(): TableRow[] {
-    return filteredEvents().map((event) => ({
+    const rows: TableRow[] = filteredEvents().map((event) => ({
       cells: [
         {
           content: (
@@ -112,6 +118,13 @@ export function EventsList({ events }: EventsListProps) {
         event.host,
         event.ticket_type,
       ],
+    }));
+
+    if (isDesktop) return rows;
+
+    return rows.map((row) => ({
+      ...row,
+      cells: row.cells.filter((_, i) => MOBILE_COLUMN_INDEXES.includes(i)),
     }));
   }
 
@@ -167,11 +180,12 @@ export function EventsList({ events }: EventsListProps) {
 
         {/* Search bar */}
         <div className={styles.filter_row}>
-          <InputField
+          <Input
+            type="text"
+            placeholder={t(KEY.common_search)}
             icon="mdi:search"
-            labelClassName={styles.search_bar}
-            inputClassName={styles.search_bar_field}
-            onChange={(value: string) => updateFilter('q', value)}
+            className={styles.search_bar}
+            onChange={(event) => updateFilter('q', event.target.value)}
             value={query}
           />
           <Dropdown
@@ -207,7 +221,11 @@ export function EventsList({ events }: EventsListProps) {
 
       <div className={styles.event_view_container}>
         {/* Table view */}
-        {tableView && <Table columns={eventColumns} data={getEventRows()} />}
+        {tableView && (
+          <div className={styles.table_container}>
+            <Table columns={visibleColumns} data={getEventRows()} />
+          </div>
+        )}
 
         {/* Grid view */}
         {!tableView && <div className={styles.event_grid}>{getEventCards()}</div>}
