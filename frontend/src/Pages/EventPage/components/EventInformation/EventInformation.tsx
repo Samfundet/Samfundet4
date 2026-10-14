@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { TimeDisplay, TimeDuration } from '~/Components';
-import type { EventDto } from '~/dto';
+import type { EventDto } from '~/domain';
 import { getEventAgeRestrictionKey } from '../AgeLimitRow/utils';
 import { EventInfoWidget } from '../EventInfoWidget';
 import styles from './EventInformation.module.scss';
