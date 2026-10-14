@@ -1,5 +1,4 @@
-import type { EventDto } from '~/domain';
-import type { VenueDto } from '~/dto';
+import type { EventDto, VenueDto } from '~/domain';
 import { queryDtoCustom } from '~/utils';
 
 // Converts event to a searchable string representation

@@ -1,5 +1,4 @@
 import { Icon } from '@iconify/react';
-import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { type ReactElement, type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,10 +7,8 @@ import { toast } from 'react-toastify';
 import { Button, Form } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import { getVenues } from '~/api';
 import { useCustomNavigate, usePrevious, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { venueKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import {
   dbT,
@@ -39,6 +36,7 @@ import {
   useCreateEvent,
   useGetEvent,
   useGetEventForCloning,
+  useGetVenues,
   useUpdateEvent,
 } from '~/domain';
 import { eventSchema } from './EventCreatorSchema';
@@ -66,10 +64,7 @@ export function EventCreatorAdminPage() {
   const event = isCloning ? eventCopy : eventFetch;
   const isLoading = eventFetchLoading || eventCopyLoading;
 
-  const { data: venues = [] } = useQuery({
-    queryKey: venueKeys.all,
-    queryFn: getVenues,
-  });
+  const { data: venues = [] } = useGetVenues();
 
   const locationOptions: DropdownOption<string>[] = [
     ...venues.map((venue) => ({ value: venue.name, label: venue.name })),
