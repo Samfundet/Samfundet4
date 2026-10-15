@@ -1,12 +1,18 @@
 from __future__ import annotations
 
+from typing import Any
+from pathlib import Path
+from unittest.mock import Mock
+
 from guardian.shortcuts import assign_perm
 
-from rest_framework.status import HTTP_403_FORBIDDEN, is_success, is_redirect
+from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_400_BAD_REQUEST, is_success, is_redirect
 
+from django.http import HttpResponse
 from django.urls import reverse
 from django.test.client import Client
 
+from root import views as root_views
 from root.utils import routes, permissions
 
 from samfundet.models.general import User
@@ -85,6 +91,50 @@ def test_normal_user_cannot_access_admin_panel(fixture_django_client: Client, fi
 
     # Should be redirected to login.
     assert is_redirect(code=response.status_code)
+
+
+def test_admin_logs_view_rejects_bulk_and_directory_downloads(
+    fixture_django_client: Client,
+    fixture_staff: User,
+    settings: Any,
+    tmp_path: Path,
+):
+    first_log = tmp_path / 'samfundet.log'
+    second_log = tmp_path / 'sql.log'
+    first_log.write_text('', encoding='utf-8')
+    second_log.write_text('', encoding='utf-8')
+    settings.LOGS_DIRS = [{'path': first_log}, {'path': second_log}]
+    fixture_django_client.force_login(user=fixture_staff)
+    url = reverse('logs_view')
+
+    response = fixture_django_client.get(path=url)
+    assert is_success(code=response.status_code)
+    assert b'Download directory' not in response.content
+
+    response = fixture_django_client.get(path=url, data={'download': '1'})
+    assert response.status_code == HTTP_400_BAD_REQUEST
+
+    response = fixture_django_client.get(path=url, data={'path': tmp_path, 'download': '1'})
+    assert response.status_code == HTTP_400_BAD_REQUEST
+
+
+def test_admin_logs_view_allows_file_download(
+    fixture_django_client: Client,
+    fixture_staff: User,
+    monkeypatch: Any,
+    tmp_path: Path,
+):
+    log_file = tmp_path / 'samfundet.log'
+    log_file.write_text('log entry', encoding='utf-8')
+    package_logs_view = Mock(return_value=HttpResponse('log entry'))
+    monkeypatch.setattr(root_views, 'package_logs_view', package_logs_view)
+    fixture_django_client.force_login(user=fixture_staff)
+
+    response = fixture_django_client.get(path=reverse('logs_view'), data={'path': log_file, 'download': '1'})
+
+    assert is_success(code=response.status_code)
+    assert response.content == b'log entry'
+    package_logs_view.assert_called_once()
 
 
 def test_staff_permission_admin_panel(fixture_django_client: Client, fixture_staff: User):
