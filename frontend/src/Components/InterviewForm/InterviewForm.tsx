@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -8,7 +7,7 @@ import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
 import { setRecruitmentApplicationInterview } from '~/api';
 import type { RecruitmentApplicationDto, RecruitmentPositionDto, UserDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { dbT } from '~/utils';
+import { dbT, utcTimestampToLocal } from '~/utils';
 import { Text } from '../Text/Text';
 import styles from './InterviewForm.module.scss';
 
@@ -26,22 +25,13 @@ const interviewFormSchema = z.object({
 
 type InterviewFormType = z.infer<typeof interviewFormSchema>;
 
-/** Formats an ISO datetime string for use in a datetime-local input. */
-function toDatetimeLocalValue(isoString: string | undefined): string {
-  if (!isoString) {
-    return '';
-  }
-  const date = new Date(isoString);
-  return Number.isNaN(date.getTime()) ? '' : format(date, "yyyy-MM-dd'T'HH:mm");
-}
-
 export function InterviewForm({ application }: InterviewFormProps) {
   const { t } = useTranslation();
 
   const form = useForm<InterviewFormType>({
     resolver: zodResolver(interviewFormSchema),
     defaultValues: {
-      interview_time: toDatetimeLocalValue(application?.interview?.interview_time),
+      interview_time: utcTimestampToLocal(application?.interview?.interview_time, false),
       interview_location: application?.interview?.interview_location ?? '',
     },
   });
