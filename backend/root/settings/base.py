@@ -278,7 +278,7 @@ LOGGING = {
         },
         'mail_admins': {
             'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
+            'class': 'root.custom_classes.notification_email_handler.NotificationEmailHandler',
             'filters': ['require_debug_false'],
         },
         'humio': {
@@ -350,6 +350,66 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'mg-web@samfundet.no'
+
+
+# ======================== #
+#      Notifications       #
+# ======================== #
+
+
+def _parse_admins(raw: str) -> list[tuple[str, str]]:
+    """
+    Parse a comma-separated list of admin recipients into Django's ADMINS format.
+
+    Each entry may be a bare email address (mapped to an empty name), or a name
+    followed by an email in angle brackets, e.g. 'Drifts <drift@samfundet.no>'.
+    Empty entries are dropped.
+    """
+    admins: list[tuple[str, str]] = []
+    for entry in raw.split(','):
+        entry = entry.strip()
+        if not entry:
+            continue
+        if '<' in entry and entry.endswith('>'):
+            name, email = entry.split('<', maxsplit=1)
+            admins.append((name.strip(), email.rstrip('>').strip()))
+        else:
+            admins.append(('', entry))
+    return admins
+
+
+def _parse_emails(raw: str) -> list[str]:
+    """Parse a comma-separated list of email addresses, dropping empties."""
+    return [entry.strip() for entry in raw.split(',') if entry.strip()]
+
+
+# Who receives Django's automatic error mails (mail_admins / AdminEmailHandler).
+# https://docs.djangoproject.com/en/5.2/ref/settings/#admins
+ADMINS = _parse_admins(os.environ.get('DJANGO_ADMINS', 'mg-web@samfundet.no'))
+# From-address used for mails to ADMINS (ServerError mails etc.).
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+# Per-category recipients for operational notifications sent via root.notifications.notify().
+# Only explicit env overrides are registered here. A category listed in
+# NOTIFICATION_WEB_CATEGORIES (below) defaults to the MG::Web members when unset, falling
+# back to ADMINS; any other category without an override is disabled (no recipients).
+# Setting the var to an empty value disables the category (no recipients).
+_errors_recipients = os.environ.get('DJANGO_NOTIFICATION_ERRORS')
+# TODO(payments): add a 'payments' category here when Billig payment notifications are implemented.
+NOTIFICATION_RECIPIENTS: dict[str, list[str]] = {}
+if _errors_recipients is not None:
+    NOTIFICATION_RECIPIENTS['errors'] = _parse_emails(_errors_recipients)
+
+# Categories whose default recipients (absent an explicit override) are the MG::Web
+# members. Other categories without an explicit override are disabled.
+NOTIFICATION_WEB_CATEGORIES = {c.strip() for c in os.environ.get('DJANGO_NOTIFICATION_WEB_CATEGORIES', 'errors').split(',') if c.strip()}
+
+# Window (seconds) within which repeated notifications with the same dedupe key are collapsed.
+NOTIFICATION_RATE_LIMIT_SECONDS = 3600
+# Maximum number of emails sent per category within an hour (best-effort flood guard).
+NOTIFICATION_MAX_PER_CATEGORY_PER_HOUR = 20
+# How long dedupe/budget state is kept before it is considered stale and purged.
+NOTIFICATION_RETENTION_SECONDS = 172800
 
 # For enabled features in the control panel
 CP_ENABLED = {
