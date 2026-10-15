@@ -283,6 +283,11 @@ export const SAMFUNDET_CHANGE_SAKSDOKUMENT = 'samfundet.change_saksdokument';
 export const SAMFUNDET_DELETE_SAKSDOKUMENT = 'samfundet.delete_saksdokument';
 export const SAMFUNDET_VIEW_SAKSDOKUMENT = 'samfundet.view_saksdokument';
 
+export const SAMFUNDET_ADD_SITEBANNER = 'samfundet.add_sitebanner';
+export const SAMFUNDET_CHANGE_SITEBANNER = 'samfundet.change_sitebanner';
+export const SAMFUNDET_DELETE_SITEBANNER = 'samfundet.delete_sitebanner';
+export const SAMFUNDET_VIEW_SITEBANNER = 'samfundet.view_sitebanner';
+
 export const SAMFUNDET_ADD_TABLE = 'samfundet.add_table';
 export const SAMFUNDET_CHANGE_TABLE = 'samfundet.change_table';
 export const SAMFUNDET_DELETE_TABLE = 'samfundet.delete_table';
