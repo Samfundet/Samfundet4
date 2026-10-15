@@ -30,4 +30,6 @@ export const WISEWORDS = [
   'Jeg husker enda da jeg var rogn.',
   'Reker er flinke til å skrive!',
   'Reker er sjøens influencere.',
+  'Reker lever i havet',
+  'Ikke vær en hval!',
 ];

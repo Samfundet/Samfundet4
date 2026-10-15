@@ -142,6 +142,7 @@ export const KEY = {
   common_out_of: 'common_out_of',
   common_roles: 'common_roles',
   common_role: 'common_role',
+  common_dashboard: 'common_dashboard',
   common_guests: 'common_guests',
   common_occasion: 'common_occasion',
   common_phonenumber: 'common_phonenumber',

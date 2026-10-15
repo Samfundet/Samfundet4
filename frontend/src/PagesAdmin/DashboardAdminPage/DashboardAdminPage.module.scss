@@ -1,0 +1,10 @@
+@use 'src/mixins' as *;
+
+@use 'src/constants' as *;
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: fit-content;
+}
