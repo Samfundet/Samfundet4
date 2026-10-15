@@ -76,27 +76,23 @@ Django expects, run the `build_to_backend.sh` script.
 
 ## Setting metadata
 
-Look at the `backend/samfundet/routing/metadata.py` file.
+Metadata for a page is produced by a small, pure builder function which takes the domain
+object and returns a `Metadata` (`backend/samfundet/routing/metadata.py` holds the type,
+`canonical_url` helper and the HTML injection). Builders live with their domain: e.g.
+`information_page_metadata` in `backend/samfundet/infopages/metadata.py` and
+`event_metadata` in `backend/samfundet/view/event_views.py`.
 
-Example:
+The routing view then only resolves the object, decides the HTTP status and injects:
 
 ```python
 def react_event_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
     try:
         event = Event.objects.get(id=kwargs['id'])
     except Event.DoesNotExist:
-        # ...
+        # Let React display that the event wasn't found
+        return HttpResponse(get_frontend_html(), status=404)
 
-    title = f'{event.title_nb} - Samfundet'
-    description = event.description_short_nb
-
-    metadata = Metadata(title=title, description=description)
-
-    # Add custom metadata items
-    metadata.items.append(MetadataItem('name', 'og:custom', 'Lorem ipsum'))
-
-    html = get_frontend_html()
-    return HttpResponse(inject_metadata(html, metadata))
+    return HttpResponse(inject_metadata(get_frontend_html(), event_metadata(event)))
 ```
 
 Then register the view in `ROUTE_VIEW_OVERRIDES`
@@ -107,3 +103,11 @@ ROUTE_VIEW_OVERRIDES: dict[str, Callable[..., HttpResponse]] = {
     'EVENT': react_event_view,
 }
 ```
+
+Information pages follow the same pattern: `INFORMATION_PAGE_DETAIL` is served by
+`react_infopage_view`, which looks the page up by slug (respecting `visible`) and hands it to
+`information_page_metadata`, which builds `title`, `description` (a plain-text summary of the
+current revision's Markdown, via `samfundet.markdown.plain_text`) and a `canonical_url`. Hidden
+and unknown slugs return HTTP 404. `INFORMATION_PAGE_LIST` gets a static title via
+`information_page_list_metadata`. Canonical URLs are built from the `SITE_URL` setting
+(`https://{DOMAIN}` in production).
