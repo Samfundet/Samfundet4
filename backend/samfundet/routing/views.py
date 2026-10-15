@@ -7,9 +7,10 @@ from django.conf import settings
 from django.http import HttpRequest, HttpResponse
 
 from samfundet.models import Event, InformationPage
-from samfundet.markdown import plain_text
+from samfundet.view.event_views import event_metadata
+from samfundet.infopages.metadata import information_page_metadata, information_page_list_metadata
 
-from .metadata import Metadata, MetadataItem, inject_metadata
+from .metadata import inject_metadata
 
 
 def get_frontend_html() -> str:
@@ -71,19 +72,7 @@ def react_event_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
         # Let React handle displaying that the event wasn't found
         return HttpResponse(get_frontend_html(), status=404)
 
-    title = f'{event.title_nb} - Samfundet'
-    description = event.description_short_nb
-
-    metadata = Metadata(title=title, description=description)
-    metadata.items.append(MetadataItem('name', 'og:custom', 'Lorem ipsum'))  # TODO:
-
-    html = get_frontend_html()
-    return HttpResponse(inject_metadata(html, metadata))
-
-
-def _canonical_url(path: str) -> str:
-    """Absolute canonical URL for a frontend path, e.g. '/information/foo/'."""
-    return f'{settings.SITE_URL.rstrip("/")}{path}'
+    return HttpResponse(inject_metadata(get_frontend_html(), event_metadata(event)))
 
 
 def react_infopage_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
@@ -93,17 +82,8 @@ def react_infopage_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
         # Unknown and hidden pages alike: show the React not-found page with HTTP 404
         return HttpResponse(get_frontend_html(), status=404)
 
-    revision = page.current_revision
-    title = f'{revision.title_nb} - Samfundet' if revision and revision.title_nb else f'{page.slug_field} - Samfundet'
-    description = plain_text(revision.text_nb) if revision else ''
-
-    metadata = Metadata(title=title, description=description or None, canonical_url=_canonical_url(f'/information/{page.slug_field}/'))
-
-    return HttpResponse(inject_metadata(get_frontend_html(), metadata))
+    return HttpResponse(inject_metadata(get_frontend_html(), information_page_metadata(page)))
 
 
 def react_infopage_list_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
-    """The information page index has no object to read metadata from, so it gets a static title."""
-    metadata = Metadata(title='Informasjon - Samfundet', canonical_url=_canonical_url('/information/'))
-
-    return HttpResponse(inject_metadata(get_frontend_html(), metadata))
+    return HttpResponse(inject_metadata(get_frontend_html(), information_page_list_metadata()))
