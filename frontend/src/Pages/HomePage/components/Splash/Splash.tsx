@@ -3,11 +3,11 @@ import classNames from 'classnames';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, IconButton } from '~/Components';
-import type { EventDto } from '~/dto';
+import { type EventDto, PAID_TICKET_TYPES } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import { COLORS, PAID_TICKET_TYPES } from '~/types';
+import { COLORS } from '~/types';
 import { dbT, lowerCapitalize, imageUrl as resolveImageUrl } from '~/utils';
 import styles from '../../HomePage.module.scss';
 

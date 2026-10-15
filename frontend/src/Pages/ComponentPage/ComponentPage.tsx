@@ -33,8 +33,7 @@ import { ExampleForm } from '~/Pages/ComponentPage/ExampleForm';
 import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import { norwegianFlag } from '~/assets';
 import { HOUR_MILLIS } from '~/constants';
-import type { EventDto } from '~/dto';
-import { EventCategory, EventStatusChoice, EventTicketType } from '~/types';
+import { EventCategory, type EventDto, EventStatusChoice, EventTicketType } from '~/domain';
 import styles from './ComponentPage.module.scss';
 
 /**

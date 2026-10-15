@@ -1,5 +1,4 @@
-import type { EventCloneDto, EventDto } from '~/dto';
-import { type EventCategoryValue, EventStatusChoice } from '~/types';
+import { type EventCategoryValue, type EventDto, EventStatusChoice } from '~/domain';
 import { utcTimestampToLocal } from '~/utils';
 import type { FormType } from './hooks/useEventCreatorForm';
 
@@ -14,7 +13,7 @@ function computeDurationMinutes(startIso?: string, endIso?: string) {
 }
 
 export function mapEventToFormValues(params: {
-  event: Partial<EventDto> | EventCloneDto;
+  event: Partial<EventDto>;
   defaultCategory: EventCategoryValue;
   defaultLocation: string;
   forTemplate?: boolean;
@@ -42,7 +41,7 @@ export function mapEventToFormValues(params: {
     age_restriction: event.age_restriction || 'none',
     ticket_type: event.ticket_type || 'free',
     custom_tickets: event.custom_tickets || [],
-    billig_id: 'billig' in event ? event.billig?.id : undefined,
+    billig_id: event.billig?.id,
     spotify_uri: event.spotify_uri || '',
     youtube_link: event.youtube_link || '',
     youtube_embed: event.youtube_embed ?? false,
@@ -54,7 +53,7 @@ export function mapEventToFormValues(params: {
     vimeo_link: event.vimeo_link || '',
     general_link: event.general_link || '',
     image: event.image ?? undefined,
-    status: 'status' in event ? event.status ?? EventStatusChoice.PUBLIC : EventStatusChoice.PUBLIC,
+    status: event.status ?? EventStatusChoice.PUBLIC,
 
     visibility_from_dt: forTemplate
       ? ''

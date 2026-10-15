@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
 import { Link, Video } from '~/Components';
-import type { EventDto } from '~/dto';
+import type { EventDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { getSocialMediaUrl, getYouTubeVideoId } from '~/utils/socialMedia';
 import styles from './EventSocialMedia.module.scss';
