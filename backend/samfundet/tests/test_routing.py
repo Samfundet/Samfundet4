@@ -6,7 +6,7 @@ from django.test import Client
 
 from root.constants import WebFeatures
 
-from samfundet.models import Gang
+from samfundet.models import Gang, Event
 from samfundet.infopages.models import InformationPage
 from samfundet.infopages.services import create_information_page
 
@@ -99,3 +99,35 @@ class TestInformationPageListMetadata:
         assert response.status_code == 200
         assert '<title>Informasjon - Samfundet</title>' in body
         assert '<link rel="canonical" href="https://samfundet.no/information/">' in body
+
+
+class TestStaticServing:
+    """Routes without a metadata override, and unknown routes, must be served as the untouched index.html."""
+
+    def test_known_route_is_served_unchanged(self, fixture_django_client: Client) -> None:
+        response = fixture_django_client.get('/about/')
+
+        assert response.status_code == 200
+        assert response.content.decode() == INDEX_HTML
+
+    def test_unknown_route_is_served_unchanged_with_404(self, fixture_django_client: Client) -> None:
+        response = fixture_django_client.get('/this-route-does-not-exist/')
+
+        assert response.status_code == 404
+        assert response.content.decode() == INDEX_HTML
+
+
+class TestEventMetadata:
+    def test_event_page_injects_title_and_custom_item(self, fixture_django_client: Client, fixture_event: Event) -> None:
+        response = fixture_django_client.get(f'/events/{fixture_event.id}/')
+        body = response.content.decode()
+
+        assert response.status_code == 200
+        assert '<title>Test Event - Samfundet</title>' in body
+        assert 'og:custom' in body
+
+    def test_unknown_event_returns_404_without_metadata(self, fixture_django_client: Client) -> None:
+        response = fixture_django_client.get('/events/999999/')
+
+        assert response.status_code == 404
+        assert response.content.decode() == INDEX_HTML
