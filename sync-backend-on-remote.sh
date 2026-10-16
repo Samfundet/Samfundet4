@@ -9,7 +9,7 @@ umask 002
 
 git pull
 cd backend
-source venv/bin/activate
-poetry install --sync --only main
-python manage.py migrate
+uv sync --frozen --no-dev
+uv run python manage.py migrate
+uv run python manage.py collectstatic --noinput
 touch reload

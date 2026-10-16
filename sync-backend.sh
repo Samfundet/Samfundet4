@@ -10,7 +10,7 @@
 # på cirkus. Dette bør være forskjellig fra prod
 # og staging.
 
-# Sørg for at update-backend-on-remote.sh er
+# Sørg for at sync-backend-on-remote.sh er
 # executable av gruppa (lim-web) og at det har
 # setuid samfundet-httpd (eller tilsvarende)
-ssh cirkus "${REMOTE_PATH}/update-backend-on-remote.sh"
+ssh cirkus "${REMOTE_PATH}/sync-backend-on-remote.sh"

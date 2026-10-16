@@ -18,4 +18,4 @@ yarn build
 rsync -avz --no-o --delete \
     --chown=:lim-web \
     --chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r \
-    dist/ "cirkus:${REMOTE_PATH}/dist/"
+    dist/ "cirkus:${REMOTE_PATH}/frontend/dist/"
