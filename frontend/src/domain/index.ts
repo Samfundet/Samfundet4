@@ -118,6 +118,8 @@ export {
   MESSAGE,
   DATE,
 } from './closedPeriods';
+export { getHomeData, useGetHomeData, homeKeys } from './home';
+export type { HomePageElementVariation, HomePageElementDto, HomePageDto } from './home';
 export { gangKeys, useGetOrganizedGangs, useGangMutations } from './gangs';
 export { zodEnum } from './utils';
 export { queryClient } from './queryClient';

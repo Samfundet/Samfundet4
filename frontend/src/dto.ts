@@ -1,6 +1,4 @@
 import type { ThemeValue } from '~/constants';
-import type { EventDto } from '~/domain/events/types';
-import type { HomePageElementVariation } from './types';
 
 export type BaseModelDto = {
   version?: number;
@@ -95,22 +93,6 @@ export type RecruitmentUserDto = {
   applications: RecruitmentApplicationDto[];
   applications_without_interview: RecruitmentApplicationDto[];
   top_application: RecruitmentApplicationDto;
-};
-
-export type HomePageDto = {
-  // Array of events used for splash
-  splash: EventDto[];
-  // Home page elements (carousel, cards etc.)
-  elements: HomePageElementDto[];
-};
-
-export type HomePageElementDto = {
-  variation: HomePageElementVariation;
-  title_nb: string;
-  title_en: string;
-  description_nb?: string;
-  description_no?: string;
-  events: EventDto[];
 };
 
 export type GroupDto = {
