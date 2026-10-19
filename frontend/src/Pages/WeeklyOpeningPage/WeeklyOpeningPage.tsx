@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link, Page, TimeDuration } from '~/Components';
-import { getOpenVenues } from '~/api';
+import { getVenues } from '~/api';
 import type { VenueDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
@@ -18,23 +18,28 @@ export function WeeklyOpeningPage() {
 
   const { data: venues = [], isLoading } = useQuery({
     queryKey: venueKeys.all,
-    queryFn: getOpenVenues,
+    queryFn: getVenues,
     select: (data) => [...data].sort((venueA, venueB) => venueA.name.localeCompare(venueB.slug)),
   });
 
   function buildTimeDuration({ days, opening, closing }: OpeningHourGroup) {
     const dummyDate = '1970-01-01'; //Time duration component needs a date to work, but we only care about the time
+    const isUndefined = opening === undefined || closing === undefined;
 
     const firstDate = days[0];
     const lastDate = days[days.length - 1];
 
     return (
-      <div className={styles.timeDuration}>
+      <div key={`${firstDate}-${lastDate}`} className={styles.timeDuration}>
         <p className={days.includes(today) ? styles.today : styles.notToday}>
           {t(getShortDayKey(firstDate))}
           {days.length > 1 ? `-${t(getShortDayKey(lastDate))}` : ''}
         </p>
-        <TimeDuration start={`${dummyDate}T${opening}`} end={`${dummyDate}T${closing}`} />
+        {isUndefined ? (
+          <p>{t(KEY.common_closed)}</p>
+        ) : (
+          <TimeDuration start={`${dummyDate}T${opening}`} end={`${dummyDate}T${closing}`} />
+        )}
       </div>
     );
   }

@@ -305,6 +305,6 @@ export interface MatchWithCrumb extends UIMatch {
 
 export type OpeningHourGroup = {
   days: Day[];
-  opening: string;
-  closing: string;
+  opening?: string;
+  closing?: string;
 };
