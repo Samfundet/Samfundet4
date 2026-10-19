@@ -82,19 +82,6 @@ export function OpeningHoursAdminPage() {
       <Button type="submit" disabled={saveMutation.isPending || updates.length === 0 || invalidDays.length > 0}>
         {t(KEY.common_save)}
       </Button>
-      <div className={styles.validation_errors}>
-        {invalidDays.length > 0 && (
-          <>
-            <strong>{t(KEY.admin_opening_hours_invalid)}</strong>
-            <ul>
-              {invalidDays.map((dayKey) => (
-                <li key={dayKey}>{dayKey}</li>
-              ))}
-            </ul>
-            <p>{t(KEY.admin_opening_hours_validation_hint)}</p>
-          </>
-        )}
-      </div>
     </div>
   );
 
@@ -111,6 +98,7 @@ export function OpeningHoursAdminPage() {
             <VenueOpeningHoursBox
               key={venue.slug}
               venue={venue}
+              invalidDays={invalidDays}
               disabled={saveMutation.isPending}
               onCommitDay={commitDayChange}
             />

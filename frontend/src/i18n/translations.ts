@@ -597,8 +597,7 @@ export const nb = prepareTranslations({
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
   [KEY.admin_opening_hours_revert]: 'Tilbakestill',
   [KEY.admin_opening_hours_invalid]: 'Ugyldige åpningstider:',
-  [KEY.admin_opening_hours_validation_hint]:
-    'Fyll ut begge tider. Stenging må være etter åpning samme dag, eller senest kl. 04:00 neste dag hvis åpningen er etter kl. 04:00.',
+  [KEY.admin_opening_hours_validation_hint]: 'Stengetiden må være etter åpningstiden',
   [KEY.admin_opening_hours_partial_save_failure]: 'Kunne ikke lagre: {{venues}}. Endringene for disse er tilbakestilt.',
   [KEY.admin_opening_hours_opening_time]: '{{day}}, åpningstid',
   [KEY.admin_opening_hours_closing_time]: '{{day}}, stengetid',
@@ -1472,8 +1471,7 @@ export const en = prepareTranslations({
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
   [KEY.admin_opening_hours_revert]: 'Revert changes',
   [KEY.admin_opening_hours_invalid]: 'Invalid opening hours:',
-  [KEY.admin_opening_hours_validation_hint]:
-    'Enter both times. Closing must be after opening on the same day, or by 04:00 the next day if opening is after 04:00.',
+  [KEY.admin_opening_hours_validation_hint]: 'Closing time must be after opening time',
   [KEY.admin_opening_hours_partial_save_failure]: 'Could not save: {{venues}}. Their changes were reverted.',
   [KEY.admin_opening_hours_opening_time]: '{{day}}, opening time',
   [KEY.admin_opening_hours_closing_time]: '{{day}}, closing time',

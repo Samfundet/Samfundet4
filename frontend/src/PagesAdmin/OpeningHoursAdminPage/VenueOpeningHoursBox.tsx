@@ -10,11 +10,12 @@ import styles from './OpeningHoursAdminPage.module.scss';
 
 type VenueOpeningHoursBoxProps = {
   venue: VenueDto;
+  invalidDays: string[];
   disabled?: boolean;
   onCommitDay: (venueSlug: string, weekday: Day, changes: Partial<VenueDaySchedule>) => void;
 };
 
-export function VenueOpeningHoursBox({ venue, disabled, onCommitDay }: VenueOpeningHoursBoxProps) {
+export function VenueOpeningHoursBox({ venue, invalidDays, disabled, onCommitDay }: VenueOpeningHoursBoxProps) {
   const { t } = useTranslation();
   const headingId = `venue-opening-hours-${venue.slug}`;
 
@@ -40,36 +41,43 @@ export function VenueOpeningHoursBox({ venue, disabled, onCommitDay }: VenueOpen
           const closingLabel = t(KEY.admin_opening_hours_closing_time, { day: dayLabel });
 
           return (
-            <div key={weekday} className={classNames(styles.day_row, !schedule.is_open && styles.row_closed)}>
-              <div className={styles.day_label}>{dayLabel}</div>
-              <div className={styles.day_edit}>
-                <InputTime
-                  className={styles.time_input}
-                  value={schedule.opening}
-                  disabled={disabled}
-                  ariaLabel={openingLabel}
-                  hourAriaLabel={t(KEY.admin_opening_hours_hours_input, { field: openingLabel })}
-                  minuteAriaLabel={t(KEY.admin_opening_hours_minutes_input, { field: openingLabel })}
-                  onChange={(opening) => onCommitDay(venue.slug, weekday, { opening })}
-                />
-                <InputTime
-                  className={styles.time_input}
-                  value={schedule.closing}
-                  disabled={disabled}
-                  ariaLabel={closingLabel}
-                  hourAriaLabel={t(KEY.admin_opening_hours_hours_input, { field: closingLabel })}
-                  minuteAriaLabel={t(KEY.admin_opening_hours_minutes_input, { field: closingLabel })}
-                  onChange={(closing) => onCommitDay(venue.slug, weekday, { closing })}
-                />
-                <div className={styles.checkbox_wrapper}>
-                  <Checkbox
-                    aria-label={t(KEY.admin_opening_hours_day_is_open, { day: dayLabel })}
-                    checked={schedule.is_open}
+            <div key={weekday}>
+              <div className={classNames(styles.day_row, !schedule.is_open && styles.row_closed)}>
+                <div className={styles.day_label}>{dayLabel}</div>
+                <div className={styles.day_edit}>
+                  <InputTime
+                    className={styles.time_input}
+                    value={schedule.opening}
                     disabled={disabled}
-                    onChange={(event) => onCommitDay(venue.slug, weekday, { is_open: event.target.checked })}
+                    ariaLabel={openingLabel}
+                    hourAriaLabel={t(KEY.admin_opening_hours_hours_input, { field: openingLabel })}
+                    minuteAriaLabel={t(KEY.admin_opening_hours_minutes_input, { field: openingLabel })}
+                    onChange={(opening) => onCommitDay(venue.slug, weekday, { opening })}
                   />
+                  <InputTime
+                    className={styles.time_input}
+                    value={schedule.closing}
+                    disabled={disabled}
+                    ariaLabel={closingLabel}
+                    hourAriaLabel={t(KEY.admin_opening_hours_hours_input, { field: closingLabel })}
+                    minuteAriaLabel={t(KEY.admin_opening_hours_minutes_input, { field: closingLabel })}
+                    onChange={(closing) => onCommitDay(venue.slug, weekday, { closing })}
+                  />
+                  <div className={styles.checkbox_wrapper}>
+                    <Checkbox
+                      aria-label={t(KEY.admin_opening_hours_day_is_open, { day: dayLabel })}
+                      checked={schedule.is_open}
+                      disabled={disabled}
+                      onChange={(event) => onCommitDay(venue.slug, weekday, { is_open: event.target.checked })}
+                    />
+                  </div>
                 </div>
               </div>
+              {invalidDays.includes(`${venue.slug}:${weekday}`) && (
+                <p className={styles.validation_errors} role="alert">
+                  {t(KEY.admin_opening_hours_validation_hint)}
+                </p>
+              )}
             </div>
           );
         })}
