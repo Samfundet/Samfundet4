@@ -93,7 +93,7 @@ export const eventSchema = eventSchemaBase
     path: ['youtube_link'],
   })
   .refine((data) => !data.start_dt || !data.end_dt || new Date(data.end_dt) >= new Date(data.start_dt), {
-    message: KEY.event_form_end_dt_before_start_dt,
+    message: KEY.common_end_time_before_start_time,
     path: ['end_dt'],
   });
 

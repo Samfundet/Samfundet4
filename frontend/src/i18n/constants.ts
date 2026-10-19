@@ -54,6 +54,8 @@ export const KEY = {
   // Date related:
   common_today: 'common_today',
   common_tomorrow: 'common_tomorrow',
+  common_end_date_before_start_date: 'common_end_date_before_start_date',
+  common_end_time_before_start_time: 'common_end_time_before_start_time',
   pick_a_date: 'pick_a_date',
 
   // No category:
@@ -653,7 +655,6 @@ export const KEY = {
   adminpage_gangs_create: 'adminpage_gangs_create',
   admin_opening_hours_hint: 'admin_opening_hours_hint',
   admin_closed_period_title: 'admin_closed_period_title',
-  admin_closed_period_end_before_start: 'admin_closed_period_end_before_start',
   admin_closed_period_end_before_today: 'admin_closed_period_end_before_today',
   admin_closed_message: 'admin_closed_message',
   admin_casedocuments_title: 'admin_casedocuments_title',
@@ -774,7 +775,6 @@ export const KEY = {
   event_form_description_short_required: 'event_form_description_short_required',
   event_form_start_dt_required: 'event_form_start_dt_required',
   event_form_duration_min: 'event_form_duration_min',
-  event_form_end_dt_before_start_dt: 'event_form_end_dt_before_start_dt',
   event_form_host_required: 'event_form_host_required',
   event_form_location_required: 'event_form_location_required',
   event_form_capacity_min: 'event_form_capacity_min',

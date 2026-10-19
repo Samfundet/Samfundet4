@@ -27,7 +27,7 @@ export function ClosedPeriodFormAdminPage() {
       end_dt: DATE,
     })
     .refine((data) => data.end_dt >= data.start_dt, {
-      message: t(KEY.admin_closed_period_end_before_start),
+      message: t(KEY.common_end_date_before_start_date),
       path: ['end_dt'],
     })
     .refine((data) => data.end_dt >= format(new Date(), 'yyyy-MM-dd'), {
