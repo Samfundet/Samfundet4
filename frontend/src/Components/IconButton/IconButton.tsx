@@ -53,6 +53,7 @@ export function IconButton({
       type="button"
       onClick={handleOnClick}
       title={title}
+      aria-label={title}
       className={classNames(styles.icon_button, className)}
       style={{ backgroundColor: color, border: border, height: height }}
     >

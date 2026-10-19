@@ -1,14 +1,13 @@
 import { Icon } from '@iconify/react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import classNames from 'classnames';
 import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Input } from '~/Components';
+import { ImageTile, Input } from '~/Components';
 import { getImagesPaginated } from '~/api';
 import { imageKeys } from '~/domain';
 import type { ImageDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { backgroundImageFromUrl, imageUrl } from '~/utils';
+import { imageUrl } from '~/utils';
 import { PagedPagination } from '../Pagination';
 import styles from './ImagePicker.module.scss';
 
@@ -61,12 +60,12 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
   function renderImage(image: ImageDto): ReactNode {
     const isSelected = selected?.id === image.id;
     return (
-      <button
-        type="button"
+      <ImageTile
         key={image.id}
-        className={classNames(styles.image, isSelected && styles.selected_image)}
+        image={image}
+        className={styles.image_box}
+        selected={isSelected}
         onClick={() => select(image)}
-        style={backgroundImageFromUrl(imageUrl(image, 'small'))}
       />
     );
   }
@@ -78,15 +77,19 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
   return (
     <div className={styles.container}>
       <div className={styles.selected_container}>
-        {selected && <h1 className={styles.image_title}>{selected.title}</h1>}
-        <div className={styles.selected} style={backgroundImageFromUrl(imageUrl(selected, 'small'))}>
-          {selected === undefined && (
-            <>
-              <Icon icon="ic:outline-image" width={24} />
-              <p>{t(KEY.admin_no_image_selected)}</p>
-            </>
-          )}
-        </div>
+        {selected ? (
+          <div className={styles.selected_preview_frame}>
+            <img className={styles.selected_preview} src={imageUrl(selected, 'large')} alt={selected.title} />
+          </div>
+        ) : (
+          <div className={styles.selected_empty}>
+            <div className={styles.selected_empty_icon}>
+              <Icon icon="ic:outline-image" width={28} />
+            </div>
+            <p className={styles.selected_empty_title}>{t(KEY.admin_no_image_selected)}</p>
+            <p className={styles.selected_empty_description}>{t(KEY.common_search)}</p>
+          </div>
+        )}
         {isError && <p className={styles.error}>{t(KEY.common_something_went_wrong)}</p>}
       </div>
       <div className={styles.search_wrapper}>

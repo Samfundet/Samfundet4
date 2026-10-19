@@ -3,19 +3,19 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { Button, Input, TagChip } from '~/Components';
+import { Button, ImageTile, Input, TagChip } from '~/Components';
 import { PagedPagination } from '~/Components/Pagination';
 import { getImagesPaginated, getPopularTags } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
 import { imageKeys, tagKeys } from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
+import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
 import { ROUTES } from '~/routes';
 import { hasPermissions, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './ImageAdminPage.module.scss';
-import { AdminImage } from './components';
 
 const PAGE_SIZE = 20;
 
@@ -128,10 +128,15 @@ export function ImageAdminPage() {
       )}
       <div className={styles.imageContainer}>
         {images.map((element) => (
-          <AdminImage key={element.id} image={element} className={styles.imageBox} />
+          <ImageTile
+            key={element.id}
+            image={element}
+            className={styles.imageBox}
+            url={reverse({ pattern: ROUTES.frontend.admin_images_detail, urlParams: { id: element.id } })}
+          />
         ))}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+      <div className={styles.pagination_wrapper}>
         <PagedPagination
           currentPage={currentPage}
           totalItems={totalCount}
