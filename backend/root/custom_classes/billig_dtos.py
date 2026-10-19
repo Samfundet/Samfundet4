@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from typing import TypedDict
+from dataclasses import dataclass
 
 
-class BilligCheckoutPriceGroupDto(TypedDict):
+@dataclass(frozen=True, kw_only=True)
+class BilligCheckoutPriceGroupDto:
     """Online price group offered in checkout; price is in whole NOK."""
 
     id: int
@@ -13,7 +14,8 @@ class BilligCheckoutPriceGroupDto(TypedDict):
     can_be_put_on_card: bool
 
 
-class BilligCheckoutTicketGroupDto(TypedDict):
+@dataclass(frozen=True, kw_only=True)
+class BilligCheckoutTicketGroupDto:
     """Ticket group and purchase limits offered in checkout."""
 
     id: int
