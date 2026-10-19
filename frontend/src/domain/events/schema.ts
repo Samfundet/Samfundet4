@@ -23,7 +23,7 @@ export const EVENT_DESCRIPTION_SHORT = z.string().min(1, { message: KEY.event_fo
 
 // Date and information
 export const EVENT_START_DT = z.string().min(1, { message: KEY.event_form_start_dt_required });
-export const EVENT_DURATION = z.number().min(1, { message: KEY.event_form_duration_min }).optional();
+export const EVENT_DURATION = optionalNumber({ min: 1, message: KEY.event_form_duration_min });
 export const EVENT_END_DT = z.string().optional();
 export const EVENT_CATEGORY = zodEnum(EventCategory, KEY.event_form_category_required);
 export const EVENT_HOST = z.string().min(1, { message: KEY.event_form_host_required });
