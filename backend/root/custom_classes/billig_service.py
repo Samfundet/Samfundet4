@@ -83,8 +83,9 @@ class BilligService:
             return None
 
         ticket_limit = ticket_group.ticket_limit
-        per_price_group_limit = ticket_limit if ticket_limit is not None else DEFAULT_PRICE_GROUP_LIMIT
-        group_limit = ticket_limit if ticket_limit is not None else DEFAULT_PRICE_GROUP_LIMIT * len(price_groups)
+        remaining = max(ticket_group.num - ticket_group.num_sold, 0)
+        per_price_group_limit = min(ticket_limit if ticket_limit is not None else DEFAULT_PRICE_GROUP_LIMIT, remaining)
+        group_limit = min(ticket_limit if ticket_limit is not None else DEFAULT_PRICE_GROUP_LIMIT * len(price_groups), remaining)
 
         return BilligCheckoutTicketGroupDto(
             id=ticket_group.id,
