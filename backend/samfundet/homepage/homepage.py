@@ -2,18 +2,20 @@ from __future__ import annotations
 
 import contextlib
 from typing import Any
-from dataclasses import dataclass
+from dataclasses import field, dataclass
 
 from django.utils import timezone
 
-from samfundet.serializers import EventSerializer
+from samfundet.serializers import EventSerializer, InfoboxSerializer
 from samfundet.models.event import Event
+from samfundet.models.general import Infobox
 from samfundet.models.model_choices import EventStatus, EventCategory
 
 
 class ElementType:
     CAROUSEL = 'carousel'
     LARGE_CARD = 'large-card'
+    INFOBOX = 'infobox'
 
 
 @dataclass
@@ -21,7 +23,8 @@ class HomePageElement:
     variation: str
     title_nb: str
     title_en: str
-    events: list[Event]
+    events: list[Event] = field(default_factory=list)  # Optional
+    infoboxes: list[Infobox] = field(default_factory=list)  # Optional
     description_nb: str | None = None
     description_en: str | None = None
 
@@ -31,9 +34,23 @@ class HomePageElement:
             'title_nb': self.title_nb,
             'title_en': self.title_en,
             'events': EventSerializer(self.events, many=True).data,
+            'infoboxes': InfoboxSerializer(self.infoboxes, many=True).data,
             'description_nb': self.description_nb,
             'description_en': self.description_en,
         }
+
+
+def infoboxes(title_nb: str, title_en: str) -> HomePageElement | None:
+    boxes = list(Infobox.objects.select_related('image').all())  # Join on Image
+
+    if not boxes:
+        return None
+    return HomePageElement(
+        variation=ElementType.INFOBOX,
+        title_nb=title_nb,
+        title_en=title_en,
+        infoboxes=boxes,
+    )
 
 
 def large_card(event: Event) -> HomePageElement:
@@ -89,7 +106,9 @@ def generate() -> dict[str, Any]:
             )
         )
 
-    # TODO: fetch info boxes
+    # Infoboxes
+    if (element := infoboxes(title_nb='Informasjon', title_en='Information')) is not None:
+        elements.append(element)
 
     # Another highlight
     # TODO we should make a datamodel for this
