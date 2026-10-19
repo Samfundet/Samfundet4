@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 from datetime import UTC
+from dataclasses import asdict
 
 import pytest
 from freezegun import freeze_time
@@ -136,8 +137,8 @@ def test_get_ticket_groups_excludes_offline_prices_empty_groups_and_theater(fixt
 
     result = BilligService.get_ticket_groups_for_event(fixture_billig_event.id)
 
-    assert [group['id'] for group in result] == [visible_group.id]
-    assert [price_group['id'] for price_group in result[0]['price_groups']] == [7000]
+    assert [group.id for group in result] == [visible_group.id]
+    assert [price_group.id for price_group in result[0].price_groups] == [7000]
 
 
 @pytest.mark.parametrize(
@@ -159,10 +160,10 @@ def test_checkout_limits_use_only_online_prices_and_preserve_zero(
 
     group = BilligService.get_ticket_groups_for_event(fixture_billig_event.id)[0]
 
-    assert len(group['price_groups']) == 2
-    assert group['ticket_limit'] == ticket_limit
-    assert group['per_price_group_limit'] == expected_per_price_group_limit
-    assert group['group_limit'] == expected_group_limit
+    assert len(group.price_groups) == 2
+    assert group.ticket_limit == ticket_limit
+    assert group.per_price_group_limit == expected_per_price_group_limit
+    assert group.group_limit == expected_group_limit
 
 
 def test_get_ticket_groups_pins_frontend_contract(
@@ -173,7 +174,7 @@ def test_get_ticket_groups_pins_frontend_contract(
     result = BilligService.get_ticket_groups_for_event(fixture_billig_event.id)
 
     assert len(result) == 1
-    assert set(result[0]) == {
+    assert set(asdict(result[0])) == {
         'id',
         'name',
         'is_sold_out',
@@ -183,7 +184,7 @@ def test_get_ticket_groups_pins_frontend_contract(
         'group_limit',
         'price_groups',
     }
-    assert result[0]['ticket_limit'] is None
+    assert result[0].ticket_limit is None
 
 
 def test_create_fake_purchase_with_known_membercard(
