@@ -142,19 +142,33 @@ def test_get_ticket_groups_excludes_offline_prices_empty_groups_and_theater(fixt
 
 
 @pytest.mark.parametrize(
-    ('ticket_limit', 'expected_per_price_group_limit', 'expected_group_limit'),
-    [(None, 9, 18), (5, 5, 5), (0, 0, 0)],
+    ('ticket_limit', 'num_sold', 'expected_per_price_group_limit', 'expected_group_limit'),
+    [
+        (None, 10, 9, 18),
+        (5, 10, 5, 5),
+        (0, 10, 0, 0),
+        (9, 46, 4, 4),
+        (None, 46, 4, 4),
+        (None, 38, 9, 12),
+        (3, 46, 3, 3),
+        (0, 46, 0, 0),
+        (9, 50, 0, 0),
+        (None, 51, 0, 0),
+    ],
 )
 def test_checkout_limits_use_only_online_prices_and_preserve_zero(
     fixture_billig_event: BilligEvent,
     fixture_billig_ticket_group: BilligTicketGroup,
     fixture_billig_price_group: BilligPriceGroup,
     ticket_limit: int | None,
+    num_sold: int,
     expected_per_price_group_limit: int,
     expected_group_limit: int,
 ) -> None:
     fixture_billig_ticket_group.ticket_limit = ticket_limit
-    fixture_billig_ticket_group.save(update_fields=['ticket_limit'])
+    fixture_billig_ticket_group.num = 50
+    fixture_billig_ticket_group.num_sold = num_sold
+    fixture_billig_ticket_group.save(update_fields=['ticket_limit', 'num', 'num_sold'])
     create_price_group(price_group_id=6901, ticket_group=fixture_billig_ticket_group)
     create_price_group(price_group_id=6902, ticket_group=fixture_billig_ticket_group, netsale=False)
 
