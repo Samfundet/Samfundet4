@@ -8,6 +8,8 @@ from django.db import transaction
 from django.conf import settings
 from django.core.mail import send_mail
 
+from root.utils.parsing import parse_int, parse_float
+
 from samfundet.models.general import KeyValue
 from samfundet.organization.selectors import web_members
 
@@ -147,7 +149,7 @@ def _claim_row(key: str, window: int) -> bool:
         return True
     if created:
         return True
-    if now - _parse_timestamp(entry.value) < window:
+    if now - parse_float(entry.value) < window:
         return False
     # Compare-and-swap: only the caller that flips the old value wins the expired slot.
     return KeyValue.objects.filter(key=key, value=entry.value).update(value=str(now)) > 0
@@ -184,7 +186,7 @@ def _consume_budget(category: str) -> bool:
 def _increment_budget(key: str) -> int:
     with transaction.atomic():
         entry, _ = KeyValue.objects.select_for_update().get_or_create(key=key, defaults={'value': '0'})
-        count = _parse_int(entry.value) + 1
+        count = parse_int(entry.value) + 1
         entry.value = str(count)
         entry.save()
         return count
@@ -200,20 +202,6 @@ def _dedupe_key(category: str, dedupe_key: str) -> str:
     # dedupe key is not security-sensitive.
     digest = hashlib.sha256(f'{category}:{dedupe_key}'.encode()).hexdigest()[:40]
     return f'notify:{digest}'
-
-
-def _parse_timestamp(value: str) -> float:
-    try:
-        return float(value)
-    except ValueError:
-        return 0.0
-
-
-def _parse_int(value: str) -> int:
-    try:
-        return int(value)
-    except ValueError:
-        return 0
 
 
 def sweep_notification_state(max_age_seconds: int | None = None) -> int:
@@ -238,7 +226,7 @@ def sweep_notification_state(max_age_seconds: int | None = None) -> int:
 def _is_stale(entry: KeyValue, now: float, age: int, cutoff_hour: int) -> bool:
     if entry.key.startswith('notify:budget:'):
         return _budget_hour(entry.key) < cutoff_hour
-    return now - _parse_timestamp(entry.value) > age
+    return now - parse_float(entry.value) > age
 
 
 def _budget_hour(key: str) -> int:
