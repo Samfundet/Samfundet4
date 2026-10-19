@@ -370,6 +370,12 @@ class NotificationEmailHandlerTests(TestCase):
         handler = NotificationEmailHandler()
         self.assertIsNone(handler._dedupe_key(record))
 
+    @override_settings(DEBUG=True, NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS)
+    def test_error_log_emails_when_debug_true(self) -> None:
+        logging.getLogger('django.request').error('boom', exc_info=RuntimeError('boom'))
+
+        self.assertEqual(len(mail.outbox), 1)
+
 
 @override_settings(
     ROOT_URLCONF='root.tests.test_notifications',
