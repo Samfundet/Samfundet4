@@ -42,10 +42,10 @@ export function OpeningHoursAdminPage() {
   );
   const updates = draftVenues ? diffVenueOpeningHours(venues, draftVenues) : [];
 
-  const saveMutation = useUpdateVenueOpeningHours();
+  const { mutate: saveOpeningHours, isPending } = useUpdateVenueOpeningHours();
 
   function commitDayChange(venueSlug: string, weekday: Day, changes: Partial<VenueDaySchedule>) {
-    if (saveMutation.isPending) return;
+    if (isPending) return;
 
     setFormState((current) => ({
       draftVenues: (current.draftVenues ?? venues).map((venue) =>
@@ -60,8 +60,8 @@ export function OpeningHoursAdminPage() {
   }
 
   function handleSave() {
-    if (invalidDays.length > 0 || updates.length === 0 || saveMutation.isPending) return;
-    saveMutation.mutate(updates, {
+    if (invalidDays.length > 0 || updates.length === 0 || isPending) return;
+    saveOpeningHours(updates, {
       onSuccess: ({ failedSlugs }) => {
         resetDraft();
 
@@ -76,10 +76,10 @@ export function OpeningHoursAdminPage() {
 
   const header = (
     <div className={styles.actions}>
-      <Button theme="secondary" disabled={saveMutation.isPending || updates.length === 0} onClick={resetDraft}>
+      <Button theme="secondary" disabled={isPending || updates.length === 0} onClick={resetDraft}>
         {t(KEY.admin_opening_hours_revert)}
       </Button>
-      <Button type="submit" disabled={saveMutation.isPending || updates.length === 0 || invalidDays.length > 0}>
+      <Button type="submit" disabled={isPending || updates.length === 0 || invalidDays.length > 0}>
         {t(KEY.common_save)}
       </Button>
     </div>
@@ -99,7 +99,7 @@ export function OpeningHoursAdminPage() {
               key={venue.slug}
               venue={venue}
               invalidDays={invalidDays}
-              disabled={saveMutation.isPending}
+              disabled={isPending}
               onCommitDay={commitDayChange}
             />
           ))}
