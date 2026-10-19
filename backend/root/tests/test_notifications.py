@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import sys
-import time
 import logging
+from datetime import timedelta
 from unittest import mock
 
 from django.conf import settings
@@ -10,11 +10,13 @@ from django.core import mail
 from django.http import HttpRequest, HttpResponse
 from django.test import Client, TestCase, override_settings
 from django.urls import path
+from django.utils import timezone
 
 from root import notifications
 from root.settings.base import _parse_admins
 from root.custom_classes.notification_email_handler import NotificationEmailHandler
 
+from samfundet.models import NotificationState
 from samfundet.models.role import Role, UserGangSectionRole
 from samfundet.models.general import User, KeyValue
 from samfundet.organization.models import Gang, GangSection, Organization
@@ -94,6 +96,15 @@ class NotifyTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
 
 
+class NotifyStateTests(TestCase):
+    @override_settings(NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS)
+    def test_notify_uses_notification_state_not_keyvalue(self) -> None:
+        notifications.notify('errors', 'Subject', 'Body', dedupe_key='x')
+
+        self.assertTrue(NotificationState.objects.exists())
+        self.assertFalse(KeyValue.objects.exists())
+
+
 class NotifyRateLimitTests(TestCase):
     @override_settings(NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS)
     def test_notify_collapses_identical_duplicates_within_window(self) -> None:
@@ -115,8 +126,8 @@ class NotifyRateLimitTests(TestCase):
     def test_notify_expired_dedupe_sends_again(self) -> None:
         notifications.notify('errors', 'Subject', 'Body', dedupe_key='recurring-error')
 
-        entry = KeyValue.objects.get(key=notifications._dedupe_key('errors', 'recurring-error'))
-        entry.value = str(time.time() - 7200)
+        entry = NotificationState.objects.get(key=notifications._dedupe_key('errors', 'recurring-error'))
+        entry.expires_at = timezone.now() - timedelta(seconds=7200)
         entry.save()
 
         sent = notifications.notify('errors', 'Subject', 'Body', dedupe_key='recurring-error')
@@ -133,7 +144,7 @@ class NotifyRateLimitTests(TestCase):
 
     @override_settings(NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS)
     def test_notify_dedupe_check_failure_sends_anyway(self) -> None:
-        with mock.patch.object(KeyValue.objects, 'get_or_create', side_effect=RuntimeError('db down')):
+        with mock.patch.object(NotificationState.objects, 'get_or_create', side_effect=RuntimeError('db down')):
             sent = notifications.notify('errors', 'Subject', 'Body', dedupe_key='x')
 
         self.assertTrue(sent)
@@ -142,15 +153,15 @@ class NotifyRateLimitTests(TestCase):
     @override_settings(NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS)
     def test_notify_dedupe_cas_failure_sends_anyway(self) -> None:
         key = notifications._dedupe_key('errors', 'x')
-        KeyValue.objects.create(key=key, value=str(time.time() - 7200))
-        real_filter = notifications.KeyValue.objects.filter
+        NotificationState.objects.create(key=key, expires_at=timezone.now() - timedelta(seconds=7200))
+        real_filter = NotificationState.objects.filter
 
         def filter_side_effect(*args, **kwargs) -> object:
-            if 'value' in kwargs:
+            if 'expires_at' in kwargs:
                 raise RuntimeError('db down')
             return real_filter(*args, **kwargs)
 
-        with mock.patch.object(notifications.KeyValue.objects, 'filter', side_effect=filter_side_effect):
+        with mock.patch.object(NotificationState.objects, 'filter', side_effect=filter_side_effect):
             sent = notifications.notify('errors', 'Subject', 'Body', dedupe_key='x')
 
         self.assertTrue(sent)
@@ -213,31 +224,41 @@ class NotifySweepTests(TestCase):
         notifications.notify('errors', 'Subject', 'Body', dedupe_key='stale')
 
         key = notifications._dedupe_key('errors', 'stale')
-        entry = KeyValue.objects.get(key=key)
-        entry.value = str(time.time() - 7200)
+        entry = NotificationState.objects.get(key=key)
+        entry.expires_at = timezone.now() - timedelta(seconds=7200)
         entry.save()
 
-        removed = notifications.sweep_notification_state(max_age_seconds=3600)
+        removed = notifications.sweep_notification_state()
 
         self.assertGreaterEqual(removed, 1)
-        self.assertFalse(KeyValue.objects.filter(key=key).exists())
+        self.assertFalse(NotificationState.objects.filter(key=key).exists())
+
+    @override_settings(NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS)
+    def test_sweep_keeps_unexpired_state(self) -> None:
+        notifications.notify('errors', 'Subject', 'Body', dedupe_key='active')
+
+        key = notifications._dedupe_key('errors', 'active')
+        removed = notifications.sweep_notification_state()
+
+        self.assertEqual(removed, 0)
+        self.assertTrue(NotificationState.objects.filter(key=key).exists())
 
     @override_settings(NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS)
     def test_sweep_delete_failure_is_swallowed(self) -> None:
         notifications.notify('errors', 'Subject', 'Body', dedupe_key='stale')
         key = notifications._dedupe_key('errors', 'stale')
-        entry = KeyValue.objects.get(key=key)
-        entry.value = str(time.time() - 7200)
+        entry = NotificationState.objects.get(key=key)
+        entry.expires_at = timezone.now() - timedelta(seconds=7200)
         entry.save()
-        real_filter = notifications.KeyValue.objects.filter
+        real_filter = NotificationState.objects.filter
 
         def filter_side_effect(*args, **kwargs) -> object:
-            if 'key__in' in kwargs:
+            if 'expires_at__lt' in kwargs:
                 raise RuntimeError('db down')
             return real_filter(*args, **kwargs)
 
-        with mock.patch.object(notifications.KeyValue.objects, 'filter', side_effect=filter_side_effect):
-            removed = notifications.sweep_notification_state(max_age_seconds=3600)
+        with mock.patch.object(NotificationState.objects, 'filter', side_effect=filter_side_effect):
+            removed = notifications.sweep_notification_state()
 
         self.assertEqual(removed, 0)
 

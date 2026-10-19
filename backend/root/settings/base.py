@@ -408,8 +408,6 @@ NOTIFICATION_WEB_CATEGORIES = {c.strip() for c in os.environ.get('DJANGO_NOTIFIC
 NOTIFICATION_RATE_LIMIT_SECONDS = 3600
 # Maximum number of emails sent per category within an hour (best-effort flood guard).
 NOTIFICATION_MAX_PER_CATEGORY_PER_HOUR = 20
-# How long dedupe/budget state is kept before it is considered stale and purged.
-NOTIFICATION_RETENTION_SECONDS = 172800
 
 # For enabled features in the control panel
 CP_ENABLED = {

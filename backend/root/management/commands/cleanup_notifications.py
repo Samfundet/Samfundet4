@@ -6,16 +6,8 @@ from root import notifications
 
 
 class Command(BaseCommand):
-    help = 'Delete stale notification dedupe/budget state older than the retention window.'
-
-    def add_arguments(self, parser):
-        parser.add_argument(
-            '--max-age',
-            type=int,
-            default=None,
-            help='Override NOTIFICATION_RETENTION_SECONDS (in seconds).',
-        )
+    help = 'Delete expired notification dedupe/budget state.'
 
     def handle(self, *args, **options):
-        removed = notifications.sweep_notification_state(max_age_seconds=options['max_age'])
-        self.stdout.write(self.style.SUCCESS(f'Removed {removed} stale notification state rows.'))
+        removed = notifications.sweep_notification_state()
+        self.stdout.write(self.style.SUCCESS(f'Removed {removed} expired notification state rows.'))

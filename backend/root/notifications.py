@@ -4,14 +4,16 @@ import time
 import hashlib
 import logging
 import threading
+from datetime import UTC, datetime, timedelta
 
 from django.db import transaction
 from django.conf import settings
+from django.utils import timezone
 from django.core.mail import send_mail
 
-from root.utils.parsing import parse_int, parse_float
+from root.utils.parsing import parse_int
 
-from samfundet.models.general import KeyValue
+from samfundet.models import NotificationState
 from samfundet.organization.selectors import web_members
 
 LOG = logging.getLogger('root.notifications')
@@ -61,6 +63,9 @@ def notify(
     A per-category budget bounds the number of send attempts per hour. A slot is
     reserved before each attempt and is deliberately not refunded when delivery
     fails, so a broken mail backend cannot be retried indefinitely within the hour.
+
+    Dedupe and budget state lives in NotificationState and expires automatically;
+    it is internal runtime state, not configuration.
     """
     recipients = _recipients_for_category(category)
     if not recipients:
@@ -164,20 +169,21 @@ def _claim(category: str, dedupe_key: str | None, window: int) -> bool:
 
 
 def _claim_row(key: str, window: int) -> bool:
-    now = time.time()
+    now = timezone.now()
+    expires_at = now + timedelta(seconds=window)
     try:
-        entry, created = KeyValue.objects.get_or_create(key=key, defaults={'value': str(now)})
+        entry, created = NotificationState.objects.get_or_create(key=key, defaults={'expires_at': expires_at})
     except Exception:
         # Fail-open: if dedupe state can't be read (e.g. database down), send anyway.
         LOG.warning('notification_dedupe_check_failed', exc_info=True)
         return True
     if created:
         return True
-    if now - parse_float(entry.value) < window:
+    if entry.expires_at > now:
         return False
-    # Compare-and-swap: only the caller that flips the old value wins the expired slot.
+    # Compare-and-swap: only the caller that flips the expired row wins the slot.
     try:
-        return KeyValue.objects.filter(key=key, value=entry.value).update(value=str(now)) > 0
+        return NotificationState.objects.filter(key=key, expires_at=entry.expires_at).update(expires_at=expires_at) > 0
     except Exception:
         # Fail-open, same as above: a broken CAS must not stop the notification.
         LOG.warning('notification_dedupe_check_failed', exc_info=True)
@@ -189,7 +195,7 @@ def _release(category: str, dedupe_key: str | None) -> None:
     if dedupe_key is None:
         return
     try:
-        KeyValue.objects.filter(key=_dedupe_key(category, dedupe_key)).delete()
+        NotificationState.objects.filter(key=_dedupe_key(category, dedupe_key)).delete()
     except Exception:
         LOG.warning('notification_release_failed', extra={'category': category}, exc_info=True)
 
@@ -238,11 +244,19 @@ def _prune_local_budget(now: float) -> None:
 
 def _increment_budget(key: str) -> int:
     with transaction.atomic():
-        entry, _ = KeyValue.objects.select_for_update().get_or_create(key=key, defaults={'value': '0'})
+        entry, _ = NotificationState.objects.select_for_update().get_or_create(
+            key=key,
+            defaults={'value': '0', 'expires_at': _budget_expires_at(key)},
+        )
         count = parse_int(entry.value) + 1
         entry.value = str(count)
-        entry.save()
+        entry.save(update_fields=['value'])
         return count
+
+
+def _budget_expires_at(key: str) -> datetime:
+    """Expiry is the end of the epoch hour encoded in the budget key."""
+    return datetime.fromtimestamp((_budget_hour(key) + 1) * 3600, tz=UTC)
 
 
 def _budget_key(category: str) -> str:
@@ -251,39 +265,23 @@ def _budget_key(category: str) -> str:
 
 
 def _dedupe_key(category: str, dedupe_key: str) -> str:
-    # Truncated to keep the key within KeyValue's 60-char limit; uniqueness of a
-    # dedupe key is not security-sensitive.
+    # Truncated to keep the key within NotificationState's 60-char limit; uniqueness
+    # of a dedupe key is not security-sensitive.
     digest = hashlib.sha256(f'{category}:{dedupe_key}'.encode()).hexdigest()[:40]
     return f'notify:{digest}'
 
 
-def sweep_notification_state(max_age_seconds: int | None = None) -> int:
-    """Delete notification state (dedupe/budget rows) older than the retention window.
+def sweep_notification_state() -> int:
+    """Delete expired notification state.
 
     Returns the number of rows removed. Best-effort: any failure is logged, not raised.
     """
-    age = max_age_seconds if max_age_seconds is not None else int(settings.NOTIFICATION_RETENTION_SECONDS)
-    now = time.time()
-    cutoff_hour = int((now - age) // 3600)
     try:
-        stale_keys = [entry.key for entry in KeyValue.objects.filter(key__startswith='notify:') if _is_stale(entry, now, age, cutoff_hour)]
+        deleted, _ = NotificationState.objects.filter(expires_at__lt=timezone.now()).delete()
     except Exception:
         LOG.warning('notification_sweep_failed', exc_info=True)
         return 0
-    if not stale_keys:
-        return 0
-    try:
-        KeyValue.objects.filter(key__in=stale_keys).delete()
-    except Exception:
-        LOG.warning('notification_sweep_failed', exc_info=True)
-        return 0
-    return len(stale_keys)
-
-
-def _is_stale(entry: KeyValue, now: float, age: int, cutoff_hour: int) -> bool:
-    if entry.key.startswith('notify:budget:'):
-        return _budget_hour(entry.key) < cutoff_hour
-    return now - parse_float(entry.value) > age
+    return deleted
 
 
 def _budget_hour(key: str) -> int:
