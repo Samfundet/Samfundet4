@@ -35,7 +35,6 @@ export function InputTime({
   const isEditing = useRef(false);
 
   useEffect(() => {
-    // Keep the user's raw input visible while still updating the parent with a normalized value.
     if (isEditing.current) return;
     setHour(valueHour);
     setMinute(valueMinute);
