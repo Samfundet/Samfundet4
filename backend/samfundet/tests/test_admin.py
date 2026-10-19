@@ -104,8 +104,12 @@ def test_admin_logs_view_rejects_bulk_and_directory_downloads(
     first_log.write_text('', encoding='utf-8')
     second_log.write_text('', encoding='utf-8')
     settings.LOGS_DIRS = [{'path': first_log}, {'path': second_log}]
+    assign_perm(root_views.VIEW_LOGS_PERMISSION, fixture_staff)
     fixture_django_client.force_login(user=fixture_staff)
     url = reverse('logs_view')
+
+    admin_response = fixture_django_client.get(path=reverse(routes.admin__index))
+    assert b'View logs' in admin_response.content
 
     response = fixture_django_client.get(path=url)
     assert is_success(code=response.status_code)
@@ -128,6 +132,7 @@ def test_admin_logs_view_allows_file_download(
     log_file.write_text('log entry', encoding='utf-8')
     package_logs_view = Mock(return_value=HttpResponse('log entry'))
     monkeypatch.setattr(root_views, 'package_logs_view', package_logs_view)
+    assign_perm(root_views.VIEW_LOGS_PERMISSION, fixture_staff)
     fixture_django_client.force_login(user=fixture_staff)
 
     response = fixture_django_client.get(path=reverse('logs_view'), data={'path': log_file, 'download': '1'})
@@ -144,6 +149,7 @@ def test_staff_permission_admin_panel(fixture_django_client: Client, fixture_sta
     url = reverse(routes.admin__index)
     response = fixture_django_client.get(path=url)
     assert is_success(code=response.status_code)
+    assert b'View logs' not in response.content
 
     # Should not be able to see any model information.
     url = reverse(routes.admin__samfundet_user_changelist)
