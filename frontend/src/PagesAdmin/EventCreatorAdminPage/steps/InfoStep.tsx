@@ -37,7 +37,9 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
               <FormControl>
                 <Input type="datetime-local" {...field} />
               </FormControl>
-              <FormMessage />
+              <div className={styles.form_message_slot}>
+                <FormMessage />
+              </div>
             </FormItem>
           )}
         />
@@ -60,7 +62,9 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                   }}
                 />
               </FormControl>
-              <FormMessage />
+              <div className={styles.form_message_slot}>
+                <FormMessage />
+              </div>
             </FormItem>
           )}
         />
@@ -81,7 +85,9 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <div className={styles.form_message_slot}>
+                <FormMessage />
+              </div>
             </FormItem>
           )}
         />
@@ -95,7 +101,9 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
               <FormControl>
                 <Input type="text" {...field} />
               </FormControl>
-              <FormMessage />
+              <div className={styles.form_message_slot}>
+                <FormMessage />
+              </div>
             </FormItem>
           )}
         />
@@ -118,7 +126,9 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <div className={styles.form_message_slot}>
+                  <FormMessage />
+                </div>
               </FormItem>
             );
           }}
@@ -144,7 +154,9 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                   }}
                 />
               </FormControl>
-              <FormMessage />
+              <div className={styles.form_message_slot}>
+                <FormMessage />
+              </div>
             </FormItem>
           )}
         />
