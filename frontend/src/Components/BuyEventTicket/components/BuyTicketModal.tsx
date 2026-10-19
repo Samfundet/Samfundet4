@@ -4,7 +4,7 @@ import { Button } from '~/Components/Button';
 import { H2 } from '~/Components/H2';
 import { getBilligCheckoutTickets } from '~/apis/billig/billigApi';
 import { logoBlack, logoWhite } from '~/assets';
-import type { EventDto } from '~/dto';
+import type { EventDto } from '~/domain';
 import { useIsDarkTheme } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { COLORS } from '~/types';

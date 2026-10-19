@@ -35,7 +35,7 @@ const CONTRIBUTORS: Contributor[] = [
   { name: 'Eirik Hoem', github: 'eiriksho', from: 'H22', to: 'V23' },
   { name: 'Simen Seeberg-Rommetveit', github: 'simensee', from: 'H22', to: 'V25' },
   // V23
-  { name: 'Robin Espinosa Jelle', github: 'robines', from: 'V23', picture: robines, websjef: { from: 'H23', to: 'V24' } },
+  { name: 'Robin Espinosa Jelle', github: 'robines', from: 'V23', to: 'H26', picture: robines, websjef: { from: 'H23', to: 'V24' } },
   { name: 'Johanne Grønlien Gjedrem', github: 'johannegg', from: 'V23', to: 'V25' },
   { name: 'Tinius Presterud', github: 'tiniuspre', from: 'V23', to: 'V24' },
   // H23

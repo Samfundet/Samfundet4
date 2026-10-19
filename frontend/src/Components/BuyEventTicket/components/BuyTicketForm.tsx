@@ -20,7 +20,7 @@ import {
 import { validEmail } from '~/Forms/util';
 import { buildBilligFormData, submitBilligForm } from '~/apis/billig/billigApi';
 import type { BilligCheckoutTicketGroupDto } from '~/apis/billig/billigDtos';
-import type { EventDto } from '~/dto';
+import type { EventDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
 import { INFORMATION_PAGES } from '~/routes/samf-three';
