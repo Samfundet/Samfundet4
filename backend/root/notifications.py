@@ -42,7 +42,9 @@ def notify(
     'rate_limit_seconds' (default settings.NOTIFICATION_RATE_LIMIT_SECONDS) collapse
     into a single email. The dedupe claim is made atomically before sending and
     released again if sending fails, so a transient failure never suppresses retries.
-    A per-category budget bounds the number of emails sent per hour.
+    A per-category budget bounds the number of send attempts per hour. A slot is
+    reserved before each attempt and is deliberately not refunded when delivery
+    fails, so a broken mail backend cannot be retried indefinitely within the hour.
     """
     recipients = _recipients_for_category(category)
     if not recipients:
@@ -106,6 +108,12 @@ def _rate_limit_window(rate_limit_seconds: int | None) -> int:
 
 
 def _deliver(category: str, subject: str, body: str, recipients: list[str]) -> bool:
+    """Reserve one budget slot, then attempt delivery.
+
+    The slot is not refunded when delivery fails: the budget guards against floods
+    and retry storms, so failed attempts count towards it. The dedupe claim is
+    released separately in notify(), so a failure still permits a later retry.
+    """
     if not _consume_budget(category):
         LOG.info('notification_rate_limited', extra={'category': category})
         return False

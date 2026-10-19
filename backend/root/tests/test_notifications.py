@@ -150,6 +150,15 @@ class NotifyBudgetTests(TestCase):
         self.assertFalse(second)
         self.assertEqual(len(mail.outbox), 1)
 
+    @override_settings(NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS, NOTIFICATION_MAX_PER_CATEGORY_PER_HOUR=1)
+    def test_notify_failed_send_consumes_budget(self) -> None:
+        with mock.patch.object(notifications, 'send_mail', return_value=0):
+            first = notifications.notify('errors', 'Subject', 'Body', dedupe_key='a')
+            second = notifications.notify('errors', 'Subject', 'Body', dedupe_key='b')
+
+        self.assertFalse(first)
+        self.assertFalse(second)
+
     @override_settings(NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS, NOTIFICATION_MAX_PER_CATEGORY_PER_HOUR=0)
     def test_notify_budget_disabled_sends_every_time(self) -> None:
         notifications.notify('errors', 'Subject', 'Body', dedupe_key='a')
