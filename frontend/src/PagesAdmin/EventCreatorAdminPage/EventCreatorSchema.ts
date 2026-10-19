@@ -91,6 +91,10 @@ export const eventSchema = eventSchemaBase
   .refine((data) => !data.youtube_embed || !!getYouTubeVideoId(data.youtube_link), {
     message: KEY.event_youtube_video_required,
     path: ['youtube_link'],
+  })
+  .refine((data) => !data.start_dt || !data.end_dt || new Date(data.end_dt) >= new Date(data.start_dt), {
+    message: KEY.common_end_time_before_start_time,
+    path: ['end_dt'],
   });
 
 export type EventFormType = z.infer<typeof eventSchema>;
