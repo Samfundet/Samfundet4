@@ -36,14 +36,12 @@ def test_web_members_returns_section_members(web_tree: tuple[Organization, Gang,
     assert members == [WebMember(username='webdev', email='webdev@samfundet.no')]
 
 
-def test_web_members_includes_gang_level_roles(web_tree: tuple[Organization, Gang, GangSection, Role]) -> None:
+def test_web_members_excludes_gang_level_roles(web_tree: tuple[Organization, Gang, GangSection, Role]) -> None:
     _, gang, _, role = web_tree
     user = _make_user('mgleader', 'mgleader@samfundet.no')
     UserGangRole.objects.create(user=user, role=role, obj=gang)
 
-    members = web_members()
-
-    assert [m.username for m in members] == ['mgleader']
+    assert web_members() == []
 
 
 def test_web_members_excludes_other_sections(web_tree: tuple[Organization, Gang, GangSection, Role]) -> None:
@@ -83,11 +81,12 @@ def test_web_members_excludes_inactive_users(web_tree: tuple[Organization, Gang,
     assert web_members() == []
 
 
-def test_web_members_dedupes_section_and_gang_roles(web_tree: tuple[Organization, Gang, GangSection, Role]) -> None:
-    _, gang, section, role = web_tree
+def test_web_members_dedupes_multiple_section_roles(web_tree: tuple[Organization, Gang, GangSection, Role]) -> None:
+    _, _, section, role = web_tree
+    other_role = Role.objects.create(name='gang_admin')
     user = _make_user('webdev', 'webdev@samfundet.no')
     UserGangSectionRole.objects.create(user=user, role=role, obj=section)
-    UserGangRole.objects.create(user=user, role=role, obj=gang)
+    UserGangSectionRole.objects.create(user=user, role=other_role, obj=section)
 
     members = web_members()
 

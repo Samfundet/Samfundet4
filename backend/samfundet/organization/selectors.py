@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from root.utils.permissions import SAMFUNDET_VIEW_GANG
 
 from samfundet.roles import get_owner_permission_map
-from samfundet.models.role import UserGangRole, UserGangSectionRole
+from samfundet.models.role import UserGangSectionRole
 from samfundet.organization.models import Gang, Organization
 
 if TYPE_CHECKING:
@@ -30,21 +30,21 @@ class OrganizationGangs:
 
 
 def web_members() -> list[WebMember]:
-    """Active users with a role on the MG gang or its Web section (single source of truth)."""
+    """Active users with a role on the Web section under MG (single source of truth).
+
+    Requires MG::Web to actually be assigned gang section roles (UserGangSectionRole); if that
+    mechanism is not used for the web team, this returns no members and notification recipients
+    fall back to ADMINS. Gang-level roles on MG are deliberately excluded.
+    """
     section_roles = UserGangSectionRole.objects.filter(
         user__is_active=True,
         obj__name_nb__iexact=WEB_SECTION_NAME,
         obj__gang__abbreviation__iexact=WEB_GANG_ABBREVIATION,
         obj__gang__organization__name__iexact=WEB_ORGANIZATION_NAME,
     ).select_related('user')
-    gang_roles = UserGangRole.objects.filter(
-        user__is_active=True,
-        obj__abbreviation__iexact=WEB_GANG_ABBREVIATION,
-        obj__organization__name__iexact=WEB_ORGANIZATION_NAME,
-    ).select_related('user')
 
     members: dict[int, WebMember] = {}
-    for role in (*section_roles, *gang_roles):
+    for role in section_roles:
         members.setdefault(role.user_id, WebMember(username=role.user.username, email=role.user.email))
     return list(members.values())
 
