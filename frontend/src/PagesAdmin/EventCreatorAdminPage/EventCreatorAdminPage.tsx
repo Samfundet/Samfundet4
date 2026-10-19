@@ -62,9 +62,8 @@ export function EventCreatorAdminPage() {
   const { data: eventCopy, isLoading: eventCopyLoading } = useGetEventForCloning(templateId ?? '');
 
   const event = isCloning ? eventCopy : eventFetch;
-  const isLoading = eventFetchLoading || eventCopyLoading;
-
-  const { data: venues = [] } = useGetVenues();
+  const { data: venues = [], isLoading: isVenuesLoading } = useGetVenues();
+  const isLoading = eventFetchLoading || eventCopyLoading || isVenuesLoading;
 
   const locationOptions: DropdownOption<string>[] = [
     ...venues.map((venue) => ({ value: venue.name, label: venue.name })),
