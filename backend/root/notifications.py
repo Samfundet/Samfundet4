@@ -3,6 +3,7 @@ from __future__ import annotations
 import time
 import hashlib
 import logging
+import threading
 
 from django.db import transaction
 from django.conf import settings
@@ -14,6 +15,21 @@ from samfundet.models.general import KeyValue
 from samfundet.organization.selectors import web_members
 
 LOG = logging.getLogger('root.notifications')
+
+# In-process budget fallback, used only while the database is unavailable. Without
+# it, a database outage disables the flood guard exactly when it is needed most (a
+# 500 storm caused by the outage itself). It is a degraded mode, not a replacement:
+# the state is per process, so with N workers the effective cap is N times the
+# configured one, and it is lost on restart.
+_LOCAL_BUDGET_MAX_ENTRIES = 1024
+_LOCAL_BUDGET: dict[str, tuple[float, int]] = {}
+_LOCAL_BUDGET_LOCK = threading.Lock()
+
+
+def _reset_local_state() -> None:
+    """Clear the in-process fallback state (used by tests)."""
+    with _LOCAL_BUDGET_LOCK:
+        _LOCAL_BUDGET.clear()
 
 
 def notify(
@@ -160,7 +176,12 @@ def _claim_row(key: str, window: int) -> bool:
     if now - parse_float(entry.value) < window:
         return False
     # Compare-and-swap: only the caller that flips the old value wins the expired slot.
-    return KeyValue.objects.filter(key=key, value=entry.value).update(value=str(now)) > 0
+    try:
+        return KeyValue.objects.filter(key=key, value=entry.value).update(value=str(now)) > 0
+    except Exception:
+        # Fail-open, same as above: a broken CAS must not stop the notification.
+        LOG.warning('notification_dedupe_check_failed', exc_info=True)
+        return True
 
 
 def _release(category: str, dedupe_key: str | None) -> None:
@@ -183,12 +204,36 @@ def _consume_budget(category: str) -> bool:
     cap = int(settings.NOTIFICATION_MAX_PER_CATEGORY_PER_HOUR)
     if cap <= 0:
         return True
+    key = _budget_key(category)
     try:
-        return _increment_budget(_budget_key(category)) <= cap
+        return _increment_budget(key) <= cap
     except Exception:
-        # Fail-open: if the budget can't be tracked, don't block the notification.
+        # Degrade to the in-process counter instead of disabling the flood guard
+        # during exactly the outage it protects against.
         LOG.warning('notification_budget_check_failed', extra={'category': category}, exc_info=True)
-        return True
+        return _increment_local_budget(key) <= cap
+
+
+def _increment_local_budget(key: str) -> int:
+    """Increment the in-process budget counter for key, pruning stale entries.
+
+    The key carries its hour bucket, so entries expire at the end of that hour.
+    """
+    now = time.time()
+    expires_at = (_budget_hour(key) + 1) * 3600
+    with _LOCAL_BUDGET_LOCK:
+        _prune_local_budget(now)
+        count = _LOCAL_BUDGET.get(key, (expires_at, 0))[1] + 1
+        _LOCAL_BUDGET[key] = (expires_at, count)
+        return count
+
+
+def _prune_local_budget(now: float) -> None:
+    """Drop expired entries, then the oldest ones if the store is still too big."""
+    for key in [key for key, (expires_at, _) in _LOCAL_BUDGET.items() if expires_at <= now]:
+        del _LOCAL_BUDGET[key]
+    while len(_LOCAL_BUDGET) > _LOCAL_BUDGET_MAX_ENTRIES:
+        del _LOCAL_BUDGET[next(iter(_LOCAL_BUDGET))]
 
 
 def _increment_budget(key: str) -> int:
@@ -227,7 +272,11 @@ def sweep_notification_state(max_age_seconds: int | None = None) -> int:
         return 0
     if not stale_keys:
         return 0
-    KeyValue.objects.filter(key__in=stale_keys).delete()
+    try:
+        KeyValue.objects.filter(key__in=stale_keys).delete()
+    except Exception:
+        LOG.warning('notification_sweep_failed', exc_info=True)
+        return 0
     return len(stale_keys)
 
 

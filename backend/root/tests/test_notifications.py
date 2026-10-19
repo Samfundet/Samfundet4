@@ -139,6 +139,23 @@ class NotifyRateLimitTests(TestCase):
         self.assertTrue(sent)
         self.assertEqual(len(mail.outbox), 1)
 
+    @override_settings(NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS)
+    def test_notify_dedupe_cas_failure_sends_anyway(self) -> None:
+        key = notifications._dedupe_key('errors', 'x')
+        KeyValue.objects.create(key=key, value=str(time.time() - 7200))
+        real_filter = notifications.KeyValue.objects.filter
+
+        def filter_side_effect(*args, **kwargs) -> object:
+            if 'value' in kwargs:
+                raise RuntimeError('db down')
+            return real_filter(*args, **kwargs)
+
+        with mock.patch.object(notifications.KeyValue.objects, 'filter', side_effect=filter_side_effect):
+            sent = notifications.notify('errors', 'Subject', 'Body', dedupe_key='x')
+
+        self.assertTrue(sent)
+        self.assertEqual(len(mail.outbox), 1)
+
 
 class NotifyBudgetTests(TestCase):
     @override_settings(NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS, NOTIFICATION_MAX_PER_CATEGORY_PER_HOUR=1)
@@ -166,6 +183,29 @@ class NotifyBudgetTests(TestCase):
 
         self.assertEqual(len(mail.outbox), 2)
 
+    @override_settings(NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS, NOTIFICATION_MAX_PER_CATEGORY_PER_HOUR=1)
+    def test_notify_budget_falls_back_to_in_memory_when_db_unavailable(self) -> None:
+        notifications._reset_local_state()
+        with mock.patch.object(notifications, '_increment_budget', side_effect=RuntimeError('db down')):
+            first = notifications.notify('errors', 'Subject', 'Body', dedupe_key='a')
+            second = notifications.notify('errors', 'Subject', 'Body', dedupe_key='b')
+
+        self.assertTrue(first)
+        self.assertFalse(second)
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_local_budget_expires_with_hour_bucket(self) -> None:
+        notifications._reset_local_state()
+        with mock.patch.object(notifications.time, 'time', return_value=1000.0):
+            key = notifications._budget_key('errors')
+            self.assertEqual(notifications._increment_local_budget(key), 1)
+            self.assertEqual(notifications._increment_local_budget(key), 2)
+        with mock.patch.object(notifications.time, 'time', return_value=1000.0 + 3600):
+            next_key = notifications._budget_key('errors')
+            self.assertNotEqual(next_key, key)
+            self.assertEqual(notifications._increment_local_budget(next_key), 1)
+            self.assertNotIn(key, notifications._LOCAL_BUDGET)
+
 
 class NotifySweepTests(TestCase):
     @override_settings(NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS)
@@ -181,6 +221,25 @@ class NotifySweepTests(TestCase):
 
         self.assertGreaterEqual(removed, 1)
         self.assertFalse(KeyValue.objects.filter(key=key).exists())
+
+    @override_settings(NOTIFICATION_RECIPIENTS=NOTIFICATION_RECIPIENTS)
+    def test_sweep_delete_failure_is_swallowed(self) -> None:
+        notifications.notify('errors', 'Subject', 'Body', dedupe_key='stale')
+        key = notifications._dedupe_key('errors', 'stale')
+        entry = KeyValue.objects.get(key=key)
+        entry.value = str(time.time() - 7200)
+        entry.save()
+        real_filter = notifications.KeyValue.objects.filter
+
+        def filter_side_effect(*args, **kwargs) -> object:
+            if 'key__in' in kwargs:
+                raise RuntimeError('db down')
+            return real_filter(*args, **kwargs)
+
+        with mock.patch.object(notifications.KeyValue.objects, 'filter', side_effect=filter_side_effect):
+            removed = notifications.sweep_notification_state(max_age_seconds=3600)
+
+        self.assertEqual(removed, 0)
 
 
 class WebRecipientsTests(TestCase):
