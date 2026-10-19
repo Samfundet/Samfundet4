@@ -45,10 +45,10 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
   function handleStartDtChange(value: string) {
     form.setValue('start_dt', value, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
     const { duration, end_dt } = form.getValues();
-    if (value && duration) {
-      form.setValue('end_dt', addMinutesToLocalDt(value, duration), { shouldValidate: true, shouldDirty: true });
-    } else if (value && end_dt) {
+    if (value && end_dt) {
       form.setValue('duration', diffMinutes(value, end_dt), { shouldValidate: true, shouldDirty: true });
+    } else if (value && duration) {
+      form.setValue('end_dt', addMinutesToLocalDt(value, duration), { shouldValidate: true, shouldDirty: true });
     }
   }
 
