@@ -21,7 +21,7 @@ import {
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
-import { getImage, getInfobox, postInfobox, putInfobox } from '~/api';
+import { getInfobox, postInfobox, putInfobox } from '~/api';
 import type { ImageDto, InfoboxDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
@@ -115,10 +115,8 @@ export function InfoboxFormAdminPage() {
       if (infoboxId === undefined) {
         return undefined;
       }
-
       const infobox = await getInfobox(infoboxId);
-      const image = infobox.image ? await getImage(infobox.image).catch(() => undefined) : undefined;
-      return { infobox, image };
+      return { infobox, image: infobox.image ?? undefined };
     },
   });
 
@@ -192,7 +190,7 @@ export function InfoboxFormAdminPage() {
 
     // Only send the image when it was changed, so a failed image fetch on load doesn't unlink the stored image.
     if (infoboxId === undefined || imageId !== (editData?.image?.id ?? null)) {
-      payload.image = imageId;
+      payload.image_id = imageId;
     }
 
     if (infoboxId !== undefined) {

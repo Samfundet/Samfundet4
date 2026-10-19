@@ -111,6 +111,7 @@ export type HomePageElementDto = {
   description_nb?: string;
   description_no?: string;
   events: EventDto[];
+  infoboxes: InfoboxDto[];
 };
 
 export type GroupDto = {
@@ -226,7 +227,8 @@ export type InfoboxDto = {
   text_en: string;
   color: string;
   url?: string | null;
-  image?: number | null;
+  image?: ImageDto | null;
+  image_id?: number | null;
 };
 
 export type ReservationTableDto = {
