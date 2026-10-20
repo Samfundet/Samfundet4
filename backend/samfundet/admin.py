@@ -138,9 +138,21 @@ class UserAdmin(CustomGuardedUserAdmin):
         n: int = obj.groups.all().count()
         return n
 
+    readonly_fields = (
+    *CustomGuardedUserAdmin.readonly_fields,
+    *(f for f in User.MDB_FIELDS if f != 'mdb_medlem_id'), #we can change the medlem_id e.g if it is set wrong, but not the other fields, since they are synced from MDB
+)
+
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'phone_number', 'campus', 'date_of_birth')}),
+        (
+            _('MDB'),
+            {
+                'fields': User.MDB_FIELDS,
+                'classes': ('collapse',),
+            },
+        ),
         (
             _('Permissions'),
             {
