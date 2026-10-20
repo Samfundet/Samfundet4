@@ -305,7 +305,6 @@ LOGGING = {
             'when': 'midnight',
             'backupCount': 14,
             'utc': True,
-
             'formatter': 'json',
             'filename': LOGFILENAME,
             'filters': ['request_context_filter'],
