@@ -41,6 +41,7 @@ def sett_lim_utvidet_medlemsinfo(member_login: str, password: str) -> int | None
             return row[0]
     return None
 
+
 def populate_user_from_mdb(user: User) -> bool:
     """
     Copies the member's data from MDB (lim_medlemsinfo) onto the user's mdb_* fields.

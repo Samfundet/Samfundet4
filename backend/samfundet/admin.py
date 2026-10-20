@@ -139,9 +139,11 @@ class UserAdmin(CustomGuardedUserAdmin):
         return n
 
     readonly_fields = (
-    *CustomGuardedUserAdmin.readonly_fields,
-    *(f for f in User.MDB_FIELDS if f != 'mdb_medlem_id'), #we can change the medlem_id e.g if it is set wrong, but not the other fields, since they are synced from MDB
-)
+        *CustomGuardedUserAdmin.readonly_fields,
+        *(
+            f for f in User.MDB_FIELDS if f != 'mdb_medlem_id'
+        ),  # we can change the medlem_id e.g if it is set wrong, but not the other fields, since they are synced from MDB
+    )
 
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
