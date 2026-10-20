@@ -617,6 +617,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         exclude = ['password', 'user_permissions']
+        read_only_fields = User.MDB_FIELDS
 
     def get_permissions(self, user: User) -> list[str]:
         return list(user.get_all_permissions())
