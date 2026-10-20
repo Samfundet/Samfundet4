@@ -37,7 +37,9 @@
 }
 
 .venueName {
-  margin: 0 0 2vh 0;
+  font-size: $font-size-2xl;
+  font-family: $primary-font-family;
+  font-weight: $font-weight-semibold;
 }
 
 .timeDuration {
@@ -47,7 +49,7 @@
 }
 
 .today {
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semibold;
 }
 
 .notToday {
