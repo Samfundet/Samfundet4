@@ -30,9 +30,9 @@ export function EventPage() {
         {event && <Image src={imageUrl(event.image, 'large') ?? ''} className={styles.event_image} />}
       </div>
 
-      {canChangeEvent && (
+      {event && canChangeEvent && (
         <div className={styles.admin_panel}>
-          <EventCrudButtons id={id} size="md" removeView={true} deleteRedirect={-1} />
+          <EventCrudButtons id={event.id} size="md" removeView={true} deleteRedirect={-1} />
         </div>
       )}
 

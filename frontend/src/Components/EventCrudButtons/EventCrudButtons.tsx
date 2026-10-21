@@ -11,7 +11,7 @@ import { CrudButtons } from '../CrudButtons';
 import type { IconButtonSize } from '../IconButton';
 
 type EventCrudButtonsProps = {
-  id?: EventId;
+  id: EventId;
   size?: IconButtonSize;
   deleteRedirect?: string | number;
 
