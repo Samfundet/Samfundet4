@@ -1,7 +1,13 @@
+import { skipToken, useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
+import { Button } from '~/Components/Button';
 import { H2 } from '~/Components/H2';
+import { getBilligCheckoutErrorCode, getBilligCheckoutTickets } from '~/apis/billig/billigApi';
+import type { BilligCheckoutErrorCode } from '~/apis/billig/billigDtos';
 import { logoBlack, logoWhite } from '~/assets';
 import type { EventDto } from '~/domain';
 import { useIsDarkTheme } from '~/hooks';
+import { KEY } from '~/i18n/constants';
 import { COLORS } from '~/types';
 import { dbT } from '~/utils';
 import { IconButton } from '../../IconButton';
@@ -15,8 +21,34 @@ type BuyTicketModalProps = {
   onClose: () => void;
 };
 
+const checkoutErrorMessages: Record<BilligCheckoutErrorCode, string> = {
+  event_not_found: KEY.ticket_checkout_event_not_found,
+  event_hidden: KEY.ticket_checkout_event_hidden,
+  sale_not_started: KEY.ticket_checkout_sale_not_started,
+  sale_ended: KEY.ticket_checkout_sale_ended,
+  sold_out: KEY.ticket_checkout_sold_out,
+};
+
 export function BuyTicketModal({ event, isOpen, onClose }: BuyTicketModalProps) {
   const isDarkmode = useIsDarkTheme();
+  const { t } = useTranslation();
+  const billigEventId = event.billig?.id;
+  const {
+    data: ticketGroups,
+    isPending,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ['billig-checkout-tickets', billigEventId],
+    queryFn: billigEventId === undefined ? skipToken : () => getBilligCheckoutTickets(billigEventId),
+    enabled: isOpen,
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+  const checkoutErrorCode = getBilligCheckoutErrorCode(error);
 
   return (
     <>
@@ -46,7 +78,34 @@ export function BuyTicketModal({ event, isOpen, onClose }: BuyTicketModalProps) 
           />
         </div>
         <H2 className={styles.modal_title}>{dbT(event, 'title')}</H2>
-        <BuyTicketForm event={event} />
+        {billigEventId === undefined || isError ? (
+          <div className={styles.container}>
+            <p role="alert">
+              {t(checkoutErrorCode ? checkoutErrorMessages[checkoutErrorCode] : KEY.ticket_checkout_load_error)}
+            </p>
+            {billigEventId !== undefined && !checkoutErrorCode && (
+              <Button onClick={() => refetch()}>{t(KEY.ticket_checkout_retry)}</Button>
+            )}
+          </div>
+        ) : isPending || isFetching ? (
+          <p className={styles.container} role="status">
+            {t(KEY.common_loading)}
+          </p>
+        ) : ticketGroups.length === 0 ? (
+          <p className={styles.container} role="status">
+            {t(KEY.ticket_checkout_empty)}
+          </p>
+        ) : !ticketGroups.some((group) => !group.is_sold_out && group.group_limit > 0) ? (
+          <p className={styles.container} role="status">
+            {t(
+              ticketGroups.every((group) => group.is_sold_out)
+                ? KEY.ticket_checkout_sold_out
+                : KEY.ticket_checkout_unavailable,
+            )}
+          </p>
+        ) : (
+          <BuyTicketForm event={event} ticketGroups={ticketGroups} />
+        )}
       </Modal>
     </>
   );
