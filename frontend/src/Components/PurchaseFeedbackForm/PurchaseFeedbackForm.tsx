@@ -1,7 +1,7 @@
 import { t } from 'i18next';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
-import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
+import { Button, Checkbox, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
 import { KEY } from '~/i18n/constants';
 
 import { postPurchaseFeedback } from '~/api';
@@ -64,13 +64,12 @@ export function PurchaseFeedbackForm({ title, questions, alternatives }: Purchas
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <input
-                      type="checkbox"
+                    <Checkbox
                       checked={field.value === true}
                       onChange={(e) => field.onChange(e.target.checked)}
+                      ref={field.ref}
                       onBlur={field.onBlur}
                       name={field.name}
-                      ref={field.ref}
                     />
                   </FormControl>
 
