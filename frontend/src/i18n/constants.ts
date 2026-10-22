@@ -357,6 +357,11 @@ export const KEY = {
   ticket_checkout_load_error: 'ticket_checkout_load_error',
   ticket_checkout_empty: 'ticket_checkout_empty',
   ticket_checkout_retry: 'ticket_checkout_retry',
+  ticket_checkout_event_not_found: 'ticket_checkout_event_not_found',
+  ticket_checkout_event_hidden: 'ticket_checkout_event_hidden',
+  ticket_checkout_sale_not_started: 'ticket_checkout_sale_not_started',
+  ticket_checkout_sale_ended: 'ticket_checkout_sale_ended',
+  ticket_checkout_sold_out: 'ticket_checkout_sold_out',
 
   event_external_host_message: 'event_external_host_message',
 

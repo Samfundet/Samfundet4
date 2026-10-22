@@ -94,9 +94,9 @@ class BilligEventTicketsView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request: Request, event_id: int) -> Response:
-        can_purchase, reason = BilligService.can_purchase_tickets(event_id)
-        if not can_purchase:
-            return Response({'error': reason}, status=status.HTTP_400_BAD_REQUEST)
+        _, reason = BilligService.can_purchase_tickets(event_id)
+        if reason is not None:
+            return Response({'code': reason.value, 'error': reason.label}, status=status.HTTP_400_BAD_REQUEST)
 
         ticket_groups = BilligService.get_ticket_groups_for_event(event_id)
         return Response([asdict(ticket_group) for ticket_group in ticket_groups])

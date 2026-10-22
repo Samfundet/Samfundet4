@@ -38,6 +38,8 @@ Both variables can be overridden through the backend process environment. For lo
 
 ## Purchase callback sequence
 
+Opening checkout can return HTTP 400 with an `error` message and a stable `code`: `event_not_found`, `event_hidden`, `sale_not_started`, `sale_ended`, or `sold_out`. The modal translates these codes into availability messages without offering retry. Network errors, server errors, and unrecognized responses show a generic loading error with retry. These availability checks run before payment and are separate from the purchase callbacks below.
+
 1. The browser posts the purchase form directly to `BILLIG_PAYMENT_URL`. The Samfundet backend does not proxy or process the real payment.
 2. In production, Billig validates the order, reserves the tickets, processes payment, and sends email as appropriate.
 3. Billig returns the browser to `/api/billig/callback/success/` with ticket references, or `/api/billig/callback/failure/` with an error session in `bsession`.

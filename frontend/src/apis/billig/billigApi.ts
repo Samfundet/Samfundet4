@@ -1,8 +1,23 @@
 import axios from 'axios';
+import { z } from 'zod';
 import { BACKEND_DOMAIN } from '~/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import type { BilligCheckoutTicketGroupDto } from './billigDtos';
+import {
+  BILLIG_CHECKOUT_ERROR_CODES,
+  type BilligCheckoutErrorCode,
+  type BilligCheckoutTicketGroupDto,
+} from './billigDtos';
+
+const checkoutErrorSchema = z.object({ code: z.enum(BILLIG_CHECKOUT_ERROR_CODES) });
+
+export function getBilligCheckoutErrorCode(error: unknown): BilligCheckoutErrorCode | undefined {
+  if (!axios.isAxiosError(error) || error.response?.status !== 400) {
+    return undefined;
+  }
+  const result = checkoutErrorSchema.safeParse(error.response.data);
+  return result.success ? result.data.code : undefined;
+}
 
 export async function getBilligCheckoutTickets(billigEventId: number): Promise<BilligCheckoutTicketGroupDto[]> {
   const url =

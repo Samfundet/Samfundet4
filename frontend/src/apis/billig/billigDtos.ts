@@ -1,3 +1,13 @@
+export const BILLIG_CHECKOUT_ERROR_CODES = [
+  'event_not_found',
+  'event_hidden',
+  'sale_not_started',
+  'sale_ended',
+  'sold_out',
+] as const;
+
+export type BilligCheckoutErrorCode = (typeof BILLIG_CHECKOUT_ERROR_CODES)[number];
+
 export type BilligPriceGroupDto = {
   id: number;
   name: string;
