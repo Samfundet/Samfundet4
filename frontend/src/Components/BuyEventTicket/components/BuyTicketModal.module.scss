@@ -59,6 +59,19 @@
   margin-bottom: 1rem;
 }
 
+.unavailable_group {
+  color: $grey-2;
+
+  @include theme-dark {
+    color: $grey-3;
+  }
+}
+
+.availability_label {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
 .ticket_group_title {
   margin-bottom: 0.5rem;
   font-size: 1.125rem;
