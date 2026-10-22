@@ -1,6 +1,5 @@
 import type { ThemeValue } from '~/constants';
 import type { EventDto } from '~/domain/events/types';
-import type { HomePageElementVariation } from './types';
 
 export type BaseModelDto = {
   version?: number;
@@ -104,15 +103,29 @@ export type HomePageDto = {
   elements: HomePageElementDto[];
 };
 
-export type HomePageElementDto = {
-  variation: HomePageElementVariation;
+export type HomePageElementBaseDto = {
   title_nb: string;
   title_en: string;
   description_nb?: string;
-  description_no?: string;
+  description_en?: string;
+};
+
+export type CarouselElementDto = HomePageElementBaseDto & {
+  variation: 'carousel';
   events: EventDto[];
+};
+
+export type LargeCardElementDto = HomePageElementBaseDto & {
+  variation: 'large-card';
+  events: EventDto[];
+};
+
+export type InfoboxRowElementDto = HomePageElementBaseDto & {
+  variation: 'infobox';
   infoboxes: InfoboxDto[];
 };
+
+export type HomePageElementDto = CarouselElementDto | LargeCardElementDto | InfoboxRowElementDto;
 
 export type GroupDto = {
   id: number;

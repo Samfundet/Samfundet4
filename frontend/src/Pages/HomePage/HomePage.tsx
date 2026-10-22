@@ -58,8 +58,10 @@ export function HomePage() {
       }
       case 'large-card':
         return <LargeCard key={key} element={element} />;
+      default:
+        console.error('Unknown home page element kind', element);
+        return null;
     }
-    console.error(`Unknown home page element kind '${element.variation}'`);
   }
 
   const skeleton = (

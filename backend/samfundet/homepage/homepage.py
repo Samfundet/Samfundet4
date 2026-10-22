@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-import contextlib
+from abc import ABC, abstractmethod
+from enum import StrEnum
 from typing import Any
 from dataclasses import field, dataclass
 
@@ -12,65 +13,73 @@ from samfundet.models.general import Infobox
 from samfundet.models.model_choices import EventStatus, EventCategory
 
 
-class ElementType:
+class ElementType(StrEnum):
     CAROUSEL = 'carousel'
     LARGE_CARD = 'large-card'
     INFOBOX = 'infobox'
 
 
-@dataclass
-class HomePageElement:
-    variation: str
+@dataclass(frozen=True)
+class HomePageElement(ABC):
+    variation: ElementType
     title_nb: str
     title_en: str
-    events: list[Event] = field(default_factory=list)  # Optional
-    infoboxes: list[Infobox] = field(default_factory=list)  # Optional
     description_nb: str | None = None
     description_en: str | None = None
 
-    def to_dict(self) -> dict:
+    def common_dict(self) -> dict:
         return {
             'variation': self.variation,
             'title_nb': self.title_nb,
             'title_en': self.title_en,
-            'events': EventSerializer(self.events, many=True).data,
-            'infoboxes': InfoboxSerializer(self.infoboxes, many=True).data,
             'description_nb': self.description_nb,
             'description_en': self.description_en,
         }
 
-
-def infoboxes(title_nb: str, title_en: str) -> HomePageElement | None:
-    boxes = list(Infobox.objects.select_related('image').all())  # Join on Image
-
-    if not boxes:
-        return None
-    return HomePageElement(
-        variation=ElementType.INFOBOX,
-        title_nb=title_nb,
-        title_en=title_en,
-        infoboxes=boxes,
-    )
+    @abstractmethod
+    def to_dict(self) -> dict: ...
 
 
-def large_card(event: Event) -> HomePageElement:
-    return HomePageElement(
-        variation=ElementType.LARGE_CARD,
-        title_nb=event.title_nb,
-        title_en=event.title_en,
-        description_nb=event.description_short_nb,
-        description_en=event.description_short_en,
-        events=[event],
-    )
+@dataclass(frozen=True, kw_only=True)
+class EventElement(HomePageElement):
+    """Base for elements backed by a list of events."""
+
+    events: list[Event] = field(default_factory=list, compare=False)
+
+    def to_dict(self) -> dict:
+        return {
+            **self.common_dict(),
+            'events': EventSerializer(list(self.events), many=True).data,
+        }
 
 
-def carousel(*, title_nb: str, title_en: str, events: list[Event]) -> HomePageElement:
-    return HomePageElement(
-        variation=ElementType.CAROUSEL,
-        title_nb=title_nb,
-        title_en=title_en,
-        events=events,
-    )
+@dataclass(frozen=True, kw_only=True)
+class Carousel(EventElement):
+    variation: ElementType = ElementType.CAROUSEL
+
+
+@dataclass(frozen=True, kw_only=True)
+class LargeCard(EventElement):
+    variation: ElementType = ElementType.LARGE_CARD
+
+
+@dataclass(frozen=True, kw_only=True)
+class InfoboxRow(HomePageElement):
+    variation: ElementType = ElementType.INFOBOX
+    infoboxes: list[Infobox] = field(default_factory=list)
+
+    @classmethod
+    def from_db(cls, *, title_nb: str, title_en: str) -> InfoboxRow | None:
+        boxes = list(Infobox.objects.select_related('image').all())  # Join on Image
+        if not boxes:
+            return None
+        return cls(title_nb=title_nb, title_en=title_en, infoboxes=boxes)
+
+    def to_dict(self) -> dict:
+        return {
+            **self.common_dict(),
+            'infoboxes': InfoboxSerializer(self.infoboxes, many=True).data,
+        }
 
 
 def generate() -> dict[str, Any]:
@@ -89,44 +98,30 @@ def generate() -> dict[str, Any]:
 
     # Splash events
     # TODO we should make a datamodel for this
-    try:
-        splash_events = list(upcoming_events[0 : min(3, len(upcoming_events))])
-        splash = EventSerializer(splash_events, many=True).data
-    except IndexError:
-        splash = []
-        pass
+    splash = EventSerializer(list(upcoming_events[:3]), many=True).data
 
-    # Upcoming events
-    with contextlib.suppress(IndexError):
+    # Another highlight
+    # TODO we should make a datamodel for this
+    if splash_event2 := upcoming_events.last():
         elements.append(
-            carousel(
-                title_nb='Kommende arrangementer',
-                title_en='Upcoming events',
-                events=list(upcoming_events[:9]),
+            LargeCard(
+                title_nb=splash_event2.title_nb,
+                title_en=splash_event2.title_en,
+                description_nb=splash_event2.description_short_nb,
+                description_en=splash_event2.description_short_en,
+                events=[splash_event2],
             )
         )
 
     # Infoboxes
-    if (element := infoboxes(title_nb='Informasjon', title_en='Information')) is not None:
-        elements.append(element)
+    if (infobox := InfoboxRow.from_db(title_nb='Informasjon', title_en='Information')) is not None:
+        elements.append(infobox)
 
-    # Another highlight
-    # TODO we should make a datamodel for this
-    try:
-        splash_event2: Event = upcoming_events.last()
-        if splash_event2:
-            elements.append(large_card(splash_event2))
-    except IndexError:
-        pass
+    # debates / upcoming carousels:
+    if events := list(upcoming_events[:9]):
+        elements.append(Carousel(title_nb='Kommende arrangementer', title_en='Upcoming events', events=events))
 
-    # Debates
-    with contextlib.suppress(IndexError):
-        elements.append(
-            carousel(
-                title_nb='Debatter',
-                title_en='Debates',
-                events=list(upcoming_events.filter(category=EventCategory.DEBATE)[:10]),
-            )
-        )
+    if events := list(upcoming_events.filter(category=EventCategory.DEBATE)[:10]):
+        elements.append(Carousel(title_nb='Debatter', title_en='Debates', events=events))
 
     return {'splash': splash, 'elements': [el.to_dict() for el in elements]}
