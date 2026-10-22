@@ -73,16 +73,16 @@ def create_price_group(
 
 
 def test_can_purchase_tickets_returns_not_found() -> None:
-    assert BilligService.can_purchase_tickets(999_999) == (False, 'Event not found')
+    assert BilligService.can_purchase_tickets(999_999) == (False, 'event_not_found')
 
 
 @pytest.mark.parametrize(
     ('hidden', 'sale_from', 'sale_to', 'num', 'num_sold', 'expected'),
     [
-        (True, '2026-01-01 12:00:00', '2026-01-01 14:00:00', 10, 0, (False, 'Event is hidden')),
-        (False, '2026-01-01 13:00:01', '2026-01-01 14:00:00', 10, 0, (False, 'Ticket sale has not started yet')),
-        (False, '2026-01-01 12:00:00', '2026-01-01 12:59:59', 10, 0, (False, 'Ticket sale has ended')),
-        (False, '2026-01-01 12:00:00', '2026-01-01 14:00:00', 10, 10, (False, 'Event is sold out')),
+        (True, '2026-01-01 12:00:00', '2026-01-01 14:00:00', 10, 0, (False, 'event_hidden')),
+        (False, '2026-01-01 13:00:01', '2026-01-01 14:00:00', 10, 0, (False, 'sale_not_started')),
+        (False, '2026-01-01 12:00:00', '2026-01-01 12:59:59', 10, 0, (False, 'sale_ended')),
+        (False, '2026-01-01 12:00:00', '2026-01-01 14:00:00', 10, 10, (False, 'sold_out')),
         (False, '2026-01-01 13:00:00', '2026-01-01 13:00:00', 10, 0, (True, None)),
     ],
 )

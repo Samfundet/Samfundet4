@@ -9,7 +9,7 @@ from django.db import connections, transaction
 from django.utils import timezone
 from django.db.models import F, Max
 
-from root.custom_classes.billig_dtos import BilligCheckoutPriceGroupDto, BilligCheckoutTicketGroupDto
+from root.custom_classes.billig_dtos import BilligCheckoutError, BilligCheckoutPriceGroupDto, BilligCheckoutTicketGroupDto
 
 from samfundet.models.billig import (
     BilligEvent,
@@ -41,20 +41,20 @@ class BilligService:
             return None
 
     @staticmethod
-    def can_purchase_tickets(event_id: int) -> tuple[bool, str | None]:
+    def can_purchase_tickets(event_id: int) -> tuple[bool, BilligCheckoutError | None]:
         event = BilligService.get_event_with_tickets(event_id)
         if not event:
-            return False, 'Event not found'
+            return False, BilligCheckoutError.EVENT_NOT_FOUND
 
         now = timezone.make_naive(timezone.now())
         reason = next(
             (
                 reason
                 for condition, reason in (
-                    (event.hidden, 'Event is hidden'),
-                    (now < event.sale_from, 'Ticket sale has not started yet'),
-                    (now > event.sale_to, 'Ticket sale has ended'),
-                    (event.is_sold_out, 'Event is sold out'),
+                    (event.hidden, BilligCheckoutError.EVENT_HIDDEN),
+                    (now < event.sale_from, BilligCheckoutError.SALE_NOT_STARTED),
+                    (now > event.sale_to, BilligCheckoutError.SALE_ENDED),
+                    (event.is_sold_out, BilligCheckoutError.SOLD_OUT),
                 )
                 if condition
             ),
