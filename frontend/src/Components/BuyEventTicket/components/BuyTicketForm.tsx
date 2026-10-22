@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import classNames from 'classnames';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
@@ -229,19 +230,13 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
           })}
         >
           {ticketGroups.map((ticketGroup) => {
-            if (ticketGroup.is_sold_out || ticketGroup.group_limit === 0) {
-              return (
-                <div key={ticketGroup.id} className={styles.ticket_group_section}>
-                  {ticketGroups.length > 1 && <H3 className={styles.ticket_group_title}>{ticketGroup.name}</H3>}
-                  <p role="status">
-                    {t(ticketGroup.is_sold_out ? KEY.common_sold_out : KEY.ticket_checkout_unavailable)}
-                  </p>
-                </div>
-              );
-            }
+            const isUnavailable = ticketGroup.is_sold_out || ticketGroup.group_limit === 0;
             const selectedCountInGroup = selectedTicketCountsByGroup[ticketGroup.id] ?? 0;
             return (
-              <div key={ticketGroup.id} className={styles.ticket_group_section}>
+              <div
+                key={ticketGroup.id}
+                className={classNames(styles.ticket_group_section, isUnavailable && styles.unavailable_group)}
+              >
                 {ticketGroups.length > 1 && <H3 className={styles.ticket_group_title}>{ticketGroup.name}</H3>}
                 {ticketGroup.price_groups.map((priceGroup) => {
                   const currentValue = ticketQuantities?.[String(priceGroup.id)] ?? 0;
@@ -265,6 +260,7 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
                           <FormItem>
                             <FormControl>
                               <Dropdown
+                                disabled={isUnavailable}
                                 options={[...Array(ticketGroup.per_price_group_limit + 1).keys()].map((num) => ({
                                   label: `${num}`,
                                   value: num.toString(),
@@ -285,6 +281,11 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
                     </div>
                   );
                 })}
+                {isUnavailable && (
+                  <p className={styles.availability_label} role="status">
+                    {t(ticketGroup.is_sold_out ? KEY.common_sold_out : KEY.ticket_checkout_unavailable)}
+                  </p>
+                )}
               </div>
             );
           })}
