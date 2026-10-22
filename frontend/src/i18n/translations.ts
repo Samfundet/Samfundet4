@@ -40,6 +40,8 @@ export const nb = prepareTranslations({
   // Date related
   [KEY.common_today]: 'I dag',
   [KEY.common_tomorrow]: 'I morgen',
+  [KEY.common_end_date_before_start_date]: 'Sluttdato kan ikke være før startdato',
+  [KEY.common_end_time_before_start_time]: 'Sluttidspunkt kan ikke være før starttidspunkt',
   [KEY.pick_a_date]: 'Velg en dato',
 
   // Other common
@@ -198,6 +200,7 @@ export const nb = prepareTranslations({
   [KEY.common_comment]: 'Kommentar',
   [KEY.common_capacity]: 'Kapasitet',
   [KEY.common_link]: 'Lenke',
+  [KEY.common_closed]: 'Stengt',
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
@@ -593,7 +596,6 @@ export const nb = prepareTranslations({
   [KEY.admin_steal_identity]: 'Stjel identitet',
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
-  [KEY.admin_closed_period_end_before_start]: 'Sluttdato må være etter startdato',
   [KEY.admin_closed_period_end_before_today]: 'Sluttdato kan ikke være før dagens dato',
   [KEY.admin_closed_message]: 'Samfundet er stengt',
   [KEY.admin_casedocuments_title]: 'Administrer saksdokumenter',
@@ -853,6 +855,8 @@ export const en = prepareTranslations({
   // Date related
   [KEY.common_today]: 'Today',
   [KEY.common_tomorrow]: 'Tomorrow',
+  [KEY.common_end_date_before_start_date]: 'End date cannot be before start date',
+  [KEY.common_end_time_before_start_time]: 'End time cannot be before start time',
   [KEY.pick_a_date]: 'Pick a date',
 
   // No category:
@@ -1018,6 +1022,7 @@ export const en = prepareTranslations({
   [KEY.common_publication_date]: 'Publication date',
   [KEY.common_casedocuments]: 'Case documents',
   [KEY.common_positions]: 'Positions',
+  [KEY.common_closed]: 'Closed',
 
   [KEY.organization]: 'Organization',
 
@@ -1455,7 +1460,6 @@ export const en = prepareTranslations({
   [KEY.admin_users_last_active]: 'Last active',
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
-  [KEY.admin_closed_period_end_before_start]: 'End date must be after start date',
   [KEY.admin_closed_period_end_before_today]: 'End date cannot be before today',
   [KEY.admin_casedocuments_title]: 'Manage Documents',
   [KEY.admin_sultenmenu_title]: 'Manage Lyche menu',
