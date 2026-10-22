@@ -125,6 +125,16 @@ export function SultenMenuItemFormAdminPage() {
       getMenuItem(id)
         .then((data) => {
           setMenuItem(data);
+          form.reset({
+            name_nb: data.name_nb ?? '',
+            name_en: data.name_en ?? '',
+            description_nb: data.description_nb ?? '',
+            description_en: data.description_en ?? '',
+            price: data.price ?? 0,
+            price_member: data.price_member ?? 0,
+            food_preferences: [],
+            food_category: (data.food_category as FoodCategoryDto)?.id,
+          });
           setShowSpinner(false);
         })
         .catch((data) => {
