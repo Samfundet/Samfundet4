@@ -101,7 +101,13 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
     return () => window.removeEventListener('pageshow', resetSubmission);
   }, []);
 
-  const ticketOptions = useMemo(() => ticketGroups.flatMap((ticketGroup) => ticketGroup.price_groups), [ticketGroups]);
+  const ticketOptions = useMemo(
+    () =>
+      ticketGroups
+        .filter((group) => !group.is_sold_out && group.group_limit > 0)
+        .flatMap((group) => group.price_groups),
+    [ticketGroups],
+  );
   const eventCanUseMembershipCard = ticketOptions.some((priceGroup) => priceGroup.can_be_put_on_card);
 
   const ticketQuantityDefaults = useMemo(
@@ -223,6 +229,16 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
           })}
         >
           {ticketGroups.map((ticketGroup) => {
+            if (ticketGroup.is_sold_out || ticketGroup.group_limit === 0) {
+              return (
+                <div key={ticketGroup.id} className={styles.ticket_group_section}>
+                  {ticketGroups.length > 1 && <H3 className={styles.ticket_group_title}>{ticketGroup.name}</H3>}
+                  <p role="status">
+                    {t(ticketGroup.is_sold_out ? KEY.common_sold_out : KEY.ticket_checkout_unavailable)}
+                  </p>
+                </div>
+              );
+            }
             const selectedCountInGroup = selectedTicketCountsByGroup[ticketGroup.id] ?? 0;
             return (
               <div key={ticketGroup.id} className={styles.ticket_group_section}>
