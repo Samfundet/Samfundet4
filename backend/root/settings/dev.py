@@ -100,7 +100,7 @@ DATABASES = {
 
 # Clean console logging in development (pretty stack trace)
 LOGGING['loggers'][''] = {  # type: ignore[index]
-    'handlers': ['console'],
+    'handlers': ['console', 'file'],
     'level': 'DEBUG',
     'propagate': True,
 }
