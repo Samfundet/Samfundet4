@@ -200,6 +200,7 @@ export const nb = prepareTranslations({
   [KEY.common_comment]: 'Kommentar',
   [KEY.common_capacity]: 'Kapasitet',
   [KEY.common_link]: 'Lenke',
+  [KEY.common_closed]: 'Stengt',
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
@@ -1021,6 +1022,7 @@ export const en = prepareTranslations({
   [KEY.common_publication_date]: 'Publication date',
   [KEY.common_casedocuments]: 'Case documents',
   [KEY.common_positions]: 'Positions',
+  [KEY.common_closed]: 'Closed',
 
   [KEY.organization]: 'Organization',
 

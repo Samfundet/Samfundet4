@@ -222,6 +222,7 @@ export const KEY = {
   common_last_edited_by: 'common_last_edited_by',
   common_casedocuments: 'common_casedocuments',
   common_positions: 'common_positions',
+  common_closed: 'common_closed',
 
   common_membership_number: 'common_membership_number',
   common_to_payment: 'common_to_payment',
