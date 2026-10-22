@@ -1,16 +1,25 @@
 from __future__ import annotations
 
+from enum import StrEnum
 from dataclasses import dataclass
 
-from django.db.models import TextChoices
 
+class BilligCheckoutError(StrEnum):
+    EVENT_NOT_FOUND = 'event_not_found'
+    EVENT_HIDDEN = 'event_hidden'
+    SALE_NOT_STARTED = 'sale_not_started'
+    SALE_ENDED = 'sale_ended'
+    SOLD_OUT = 'sold_out'
 
-class BilligCheckoutError(TextChoices):
-    EVENT_NOT_FOUND = 'event_not_found', 'Event not found'
-    EVENT_HIDDEN = 'event_hidden', 'Event is hidden'
-    SALE_NOT_STARTED = 'sale_not_started', 'Ticket sale has not started yet'
-    SALE_ENDED = 'sale_ended', 'Ticket sale has ended'
-    SOLD_OUT = 'sold_out', 'Event is sold out'
+    @property
+    def label(self) -> str:
+        return {
+            self.EVENT_NOT_FOUND: 'Event not found',
+            self.EVENT_HIDDEN: 'Event is hidden',
+            self.SALE_NOT_STARTED: 'Ticket sale has not started yet',
+            self.SALE_ENDED: 'Ticket sale has ended',
+            self.SOLD_OUT: 'Event is sold out',
+        }[self]
 
 
 @dataclass(frozen=True, kw_only=True)
