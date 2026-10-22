@@ -95,6 +95,14 @@ export function BuyTicketModal({ event, isOpen, onClose }: BuyTicketModalProps) 
           <p className={styles.container} role="status">
             {t(KEY.ticket_checkout_empty)}
           </p>
+        ) : !ticketGroups.some((group) => !group.is_sold_out && group.group_limit > 0) ? (
+          <p className={styles.container} role="status">
+            {t(
+              ticketGroups.every((group) => group.is_sold_out)
+                ? KEY.ticket_checkout_sold_out
+                : KEY.ticket_checkout_unavailable,
+            )}
+          </p>
         ) : (
           <BuyTicketForm event={event} ticketGroups={ticketGroups} />
         )}
