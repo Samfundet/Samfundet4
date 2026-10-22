@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -88,6 +88,19 @@ function getSelectedTicketCount(
 
 export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
   const { t } = useTranslation();
+  const submissionLocked = useRef(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
+
+  useEffect(() => {
+    // A page restored by Back can retain the lock from its previous submission.
+    const resetSubmission = () => {
+      submissionLocked.current = false;
+      setIsRedirecting(false);
+    };
+    window.addEventListener('pageshow', resetSubmission);
+    return () => window.removeEventListener('pageshow', resetSubmission);
+  }, []);
+
   const ticketOptions = useMemo(() => ticketGroups.flatMap((ticketGroup) => ticketGroup.price_groups), [ticketGroups]);
   const eventCanUseMembershipCard = ticketOptions.some((priceGroup) => priceGroup.can_be_put_on_card);
 
@@ -163,6 +176,10 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
   }, [event.billig?.ticket_fee, ticketOptions, ticketQuantities]);
 
   function onSubmit(data: BuyTicketFormType): void {
+    if (submissionLocked.current) {
+      return;
+    }
+
     if (!event.billig?.payment_url) {
       toast.error(t(KEY.common_something_went_wrong));
       return;
@@ -181,6 +198,9 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
       membercard: data.ticketType === TICKET_TYPE_MEMBERSHIP ? data.membershipNumber : undefined,
     });
 
+    // Lock synchronously so repeated submissions are blocked before React renders.
+    submissionLocked.current = true;
+    setIsRedirecting(true);
     submitBilligForm({
       paymentUrl: event.billig.payment_url,
       formData,
@@ -195,6 +215,8 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
             try {
               onSubmit(data);
             } catch (error) {
+              submissionLocked.current = false;
+              setIsRedirecting(false);
               console.error(error);
               toast.error(t(KEY.common_something_went_wrong));
             }
@@ -344,7 +366,7 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
             </div>
           </div>
 
-          <Button type="submit" className={styles.pay_button} disabled={form.formState.isSubmitting}>
+          <Button type="submit" className={styles.pay_button} disabled={form.formState.isSubmitting || isRedirecting}>
             {t(KEY.common_to_payment)}
           </Button>
         </form>
