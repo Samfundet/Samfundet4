@@ -253,31 +253,34 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
                           {priceGroup.price} {t(KEY.kr_per_ticket)}
                         </p>
                       </div>
-                      <FormField
-                        control={form.control}
-                        name={`ticketQuantities.${priceGroup.id}`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Dropdown
-                                disabled={isUnavailable}
-                                options={[...Array(ticketGroup.per_price_group_limit + 1).keys()].map((num) => ({
-                                  label: `${num}`,
-                                  value: num.toString(),
-                                  disabled: num > maxSelectable,
-                                }))}
-                                value={field.value?.toString() ?? '0'}
-                                onChange={(value) => {
-                                  if (value) {
-                                    form.setValue(`ticketQuantities.${priceGroup.id}`, Number(value));
-                                  }
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      {isUnavailable ? (
+                        <Dropdown disabled value="0" options={[{ label: '0', value: '0' }]} />
+                      ) : (
+                        <FormField
+                          control={form.control}
+                          name={`ticketQuantities.${priceGroup.id}`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Dropdown
+                                  options={[...Array(ticketGroup.per_price_group_limit + 1).keys()].map((num) => ({
+                                    label: `${num}`,
+                                    value: num.toString(),
+                                    disabled: num > maxSelectable,
+                                  }))}
+                                  value={field.value?.toString() ?? '0'}
+                                  onChange={(value) => {
+                                    if (value) {
+                                      form.setValue(`ticketQuantities.${priceGroup.id}`, Number(value));
+                                    }
+                                  }}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      )}
                     </div>
                   );
                 })}
