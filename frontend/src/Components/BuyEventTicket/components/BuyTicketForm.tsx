@@ -251,7 +251,7 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
             );
           })}
 
-          <H3>
+          <H3 className={styles.total_price}>
             {t(KEY.common_total)}: {totalPrice} NOK
           </H3>
           {totalTicketFee > 0 && <p>{t(KEY.ticket_fee_notice, { fee: totalTicketFee })}</p>}
