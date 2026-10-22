@@ -22,6 +22,20 @@ ID_SHORTHAND = re.compile(r'#(?P<id>[\w-]+)')
 
 IMAGE_VARIANT = 'large'
 
+# Used to flatten authored Markdown into a meta description. Kept deliberately shallow: the goal is
+# readable prose, not a faithful Markdown renderer.
+SUMMARY_LENGTH = 160
+
+_FENCED_CODE = re.compile(r'^[ \t]{0,3}(?:```|~~~).*?^[ \t]{0,3}(?:```|~~~)[ \t]*$', re.DOTALL | re.MULTILINE)
+_MARKDOWN_IMAGE = re.compile(r'!\[(?P<alt>[^\]]*)\]\([^)]*\)')
+_MARKDOWN_LINK = re.compile(r'\[(?P<text>[^\]]*)\]\([^)]*\)')
+_HORIZONTAL_RULE = re.compile(r'^[ \t]{0,3}(?:[-*_][ \t]*){3,}$', re.MULTILINE)
+_TABLE_SEPARATOR = re.compile(r'^[ \t]{0,3}\|(?:[ \t]*:?-+:?[ \t]*\|)+[ \t]*$', re.MULTILINE)
+_BLOCK_PREFIX = re.compile(r'^[ \t]{0,3}(?:#{1,6}[ \t]+|>[ \t]?|(?:[-*+]|\d+[.)])[ \t]+)', re.MULTILINE)
+_INLINE_MARKS = re.compile(r'[*_~`]+')
+_TABLE_PIPE = re.compile(r'\|')
+_WHITESPACE = re.compile(r'\s+')
+
 
 def render_image_directives(*texts: str | None) -> list[str | None]:
     """
@@ -87,3 +101,34 @@ def _image_id(match: re.Match[str]) -> int | None:
 
 def _escape_alt(alt: str) -> str:
     return alt.replace('\\', '\\\\').replace('[', '\\[').replace(']', '\\]')
+
+
+def plain_text(text: str | None, limit: int = SUMMARY_LENGTH) -> str:
+    """
+    Flattens authored Markdown into a single-line summary, suitable for a meta description.
+
+    Image directives are dropped rather than rendered: a description should not leak an internal
+    image id or require a database lookup. Returns '' for empty input.
+    """
+    if not text:
+        return ''
+
+    stripped = DIRECTIVE.sub('', text)
+    stripped = _FENCED_CODE.sub(' ', stripped)
+    stripped = _MARKDOWN_IMAGE.sub(lambda match: match.group('alt'), stripped)
+    stripped = _MARKDOWN_LINK.sub(lambda match: match.group('text'), stripped)
+    stripped = _HORIZONTAL_RULE.sub(' ', stripped)
+    stripped = _TABLE_SEPARATOR.sub(' ', stripped)
+    stripped = _BLOCK_PREFIX.sub('', stripped)
+    stripped = _TABLE_PIPE.sub(' ', stripped)
+    stripped = _INLINE_MARKS.sub('', stripped)
+
+    collapsed = _WHITESPACE.sub(' ', stripped).strip()
+    return _truncate(collapsed, limit)
+
+
+def _truncate(text: str, limit: int) -> str:
+    if len(text) <= limit:
+        return text
+    clipped = text[:limit].rsplit(' ', 1)[0].rstrip(' ,.;:')
+    return f'{clipped}…'
