@@ -7,6 +7,7 @@ import { Dropdown, FormControl, FormField, FormItem, FormLabel, FormMessage, Inp
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { type EventCategoryValue, useGetVenues } from '~/domain';
 import { KEY } from '~/i18n/constants';
+import { utcTimestampToLocal } from '~/utils';
 import styles from '../EventCreatorAdminPage.module.scss';
 import type { FormType } from '../hooks/useEventCreatorForm';
 
@@ -16,11 +17,49 @@ type Props = {
   locationOptions: DropdownOption<string>[];
 };
 
+function addMinutesToLocalDt(dtLocal: string, minutes: number): string {
+  const start = new Date(dtLocal);
+  if (Number.isNaN(start.getTime())) return '';
+  return utcTimestampToLocal(new Date(start.getTime() + minutes * 60_000).toISOString(), false);
+}
+
+function diffMinutes(startLocal: string, endLocal: string): number | undefined {
+  const start = new Date(startLocal);
+  const end = new Date(endLocal);
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return undefined;
+  return Math.max(0, Math.round((end.getTime() - start.getTime()) / 60_000));
+}
+
 export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props) {
   const { t } = useTranslation();
 
   const venueOptions = useMemo(() => locationOptions, [locationOptions]);
   const { data: venues = [] } = useGetVenues();
+
+  function handleStartDtChange(value: string) {
+    form.setValue('start_dt', value, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+    const { duration, end_dt } = form.getValues();
+    if (value && end_dt) {
+      form.setValue('duration', diffMinutes(value, end_dt), { shouldValidate: true, shouldDirty: true });
+    } else if (value && duration) {
+      form.setValue('end_dt', addMinutesToLocalDt(value, duration), { shouldValidate: true, shouldDirty: true });
+    }
+  }
+
+  function handleEndDtChange(value: string) {
+    form.setValue('end_dt', value, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+    const startDt = form.getValues('start_dt');
+    if (startDt && value) {
+      form.setValue('duration', diffMinutes(startDt, value), { shouldValidate: true, shouldDirty: true });
+    }
+  }
+
+  function handleDurationChange(minutes: number | undefined) {
+    const startDt = form.getValues('start_dt');
+    if (startDt && minutes !== undefined) {
+      form.setValue('end_dt', addMinutesToLocalDt(startDt, minutes), { shouldValidate: true, shouldDirty: true });
+    }
+  }
 
   return (
     <>
@@ -35,7 +74,21 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                 {t(KEY.common_date)} & {t(KEY.common_time)}
               </FormLabel>
               <FormControl>
-                <Input type="datetime-local" {...field} />
+                <Input type="datetime-local" {...field} onChange={(e) => handleStartDtChange(e.target.value)} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="end_dt"
+          key={'end_dt'}
+          render={({ field }) => (
+            <FormItem className={styles.form_item}>
+              <FormLabel>{t(KEY.end_time)}</FormLabel>
+              <FormControl>
+                <Input type="datetime-local" {...field} onChange={(e) => handleEndDtChange(e.target.value)} />
               </FormControl>
               <div className={styles.form_message_slot}>
                 <FormMessage />
@@ -58,7 +111,11 @@ export function InfoStep({ form, eventCategoryOptions, locationOptions }: Props)
                   {...field}
                   onChange={(e) => {
                     const v = e.target.value;
-                    field.onChange(v === '' ? '' : Number.parseInt(v));
+                    const minutes = v === '' ? undefined : Number.parseInt(v);
+                    // Store '' rather than undefined: react-hook-form falls back to the field's
+                    // mount-time value when it is undefined, which made the input snap back.
+                    field.onChange(minutes ?? '');
+                    handleDurationChange(minutes);
                   }}
                 />
               </FormControl>

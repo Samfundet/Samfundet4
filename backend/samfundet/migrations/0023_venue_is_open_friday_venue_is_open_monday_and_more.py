@@ -19,7 +19,7 @@ def preserve_closed_days(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('samfundet', '0021_alter_event_youtube_embed'),
+        ('samfundet', '0022_alter_user_options'),
     ]
 
     operations = [

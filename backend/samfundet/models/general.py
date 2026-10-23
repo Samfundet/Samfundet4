@@ -346,6 +346,7 @@ class User(AbstractUser):
         permissions = [
             ('debug', 'Can view debug mode'),
             ('impersonate', 'Can impersonate users'),
+            ('view_logs', 'can view admin logs'),
         ]
 
     def has_perm(self, perm: str, obj: Model | None = None) -> bool:

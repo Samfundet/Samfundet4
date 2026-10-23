@@ -54,6 +54,8 @@ export const KEY = {
   // Date related:
   common_today: 'common_today',
   common_tomorrow: 'common_tomorrow',
+  common_end_date_before_start_date: 'common_end_date_before_start_date',
+  common_end_time_before_start_time: 'common_end_time_before_start_time',
   pick_a_date: 'pick_a_date',
 
   // No category:
@@ -96,7 +98,6 @@ export const KEY = {
   common_next: 'common_next',
   common_open: 'common_open',
   common_is_open: 'common_is_open',
-  common_closed: 'common_closed',
   common_send: 'common_send',
   common_gangs: 'common_gangs',
   common_event: 'common_event',
@@ -224,6 +225,7 @@ export const KEY = {
   common_last_edited_by: 'common_last_edited_by',
   common_casedocuments: 'common_casedocuments',
   common_positions: 'common_positions',
+  common_closed: 'common_closed',
 
   common_membership_number: 'common_membership_number',
   common_to_payment: 'common_to_payment',
@@ -666,7 +668,6 @@ export const KEY = {
   admin_opening_hours_hours_input: 'admin_opening_hours_hours_input',
   admin_opening_hours_minutes_input: 'admin_opening_hours_minutes_input',
   admin_closed_period_title: 'admin_closed_period_title',
-  admin_closed_period_end_before_start: 'admin_closed_period_end_before_start',
   admin_closed_period_end_before_today: 'admin_closed_period_end_before_today',
   admin_closed_message: 'admin_closed_message',
   admin_casedocuments_title: 'admin_casedocuments_title',
