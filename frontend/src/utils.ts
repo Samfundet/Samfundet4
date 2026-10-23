@@ -6,6 +6,7 @@ import type { UseFormReturn } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import type { z } from 'zod';
 import { BACKEND_DOMAIN, THEME_KEY, type ThemeValue } from '~/constants';
+import type { VenueDto } from '~/domain';
 import {
   EventAgeRestriction,
   type EventAgeRestrictionValue,
@@ -24,7 +25,6 @@ import type {
   ImageSize,
   OrganizationDto,
   UserDto,
-  VenueDto,
 } from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
