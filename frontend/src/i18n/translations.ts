@@ -599,7 +599,8 @@ export const nb = prepareTranslations({
   [KEY.admin_opening_hours_revert]: 'Tilbakestill',
   [KEY.admin_opening_hours_invalid]: 'Ugyldige åpningstider:',
   [KEY.admin_opening_hours_validation_hint]: 'Stengetiden må være etter åpningstiden',
-  [KEY.admin_opening_hours_partial_save_failure]: 'Kunne ikke lagre: {{venues}}. Endringene for disse er tilbakestilt.',
+  [KEY.admin_opening_hours_partial_save_failure]:
+    'Kunne ikke lagre: {{venues}}. Endringene for disse lokalene er tilbakestilt.',
   [KEY.admin_opening_hours_opening_time]: '{{day}}, åpningstid',
   [KEY.admin_opening_hours_closing_time]: '{{day}}, stengetid',
   [KEY.admin_opening_hours_day_is_open]: '{{day}} er åpen',
@@ -1474,7 +1475,8 @@ export const en = prepareTranslations({
   [KEY.admin_opening_hours_revert]: 'Revert changes',
   [KEY.admin_opening_hours_invalid]: 'Invalid opening hours:',
   [KEY.admin_opening_hours_validation_hint]: 'Closing time must be after opening time',
-  [KEY.admin_opening_hours_partial_save_failure]: 'Could not save: {{venues}}. Their changes were reverted.',
+  [KEY.admin_opening_hours_partial_save_failure]:
+    'Could not save: {{venues}}. Changes for these venues have been reverted.',
   [KEY.admin_opening_hours_opening_time]: '{{day}}, opening time',
   [KEY.admin_opening_hours_closing_time]: '{{day}}, closing time',
   [KEY.admin_opening_hours_day_is_open]: '{{day}} is open',
