@@ -376,13 +376,11 @@ export function getVenueOpeningHoursFromDTO(venue: VenueDto): OpeningHourGroup[]
   let currentGroup: OpeningHourGroup | null = null;
 
   for (const day of ALL_DAYS) {
-    const rawOpening = venue[`opening_${day}` as keyof VenueDto] as string | undefined;
-    const rawClosing = venue[`closing_${day}` as keyof VenueDto] as string | undefined;
-
-    //Opening and closing info in the venueDTO are optional, but we can't group unless both are set
-    const isDefined = rawOpening && rawClosing;
-    const opening = isDefined ? rawOpening : undefined;
-    const closing = isDefined ? rawClosing : undefined;
+    const rawOpening = venue[`opening_${day}`];
+    const rawClosing = venue[`closing_${day}`];
+    const showHours = venue[`is_open_${day}`] && rawOpening && rawClosing;
+    const opening = showHours ? rawOpening : undefined;
+    const closing = showHours ? rawClosing : undefined;
 
     if (currentGroup && currentGroup.opening === opening && currentGroup.closing === closing) {
       currentGroup.days.push(day);
