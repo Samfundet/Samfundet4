@@ -1,5 +1,8 @@
 import classNames from 'classnames';
 import { type ChangeEvent, type ClipboardEvent, type FocusEvent, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { KEY } from '~/i18n/constants';
 import styles from './InputTime.module.scss';
 
 type InputTimeProps = {
@@ -29,6 +32,7 @@ export function InputTime({
   value,
   error,
 }: InputTimeProps) {
+  const { t } = useTranslation();
   const [valueHour = '', valueMinute = ''] = value?.split(':') ?? [];
   const [hour, setHour] = useState(valueHour);
   const [minute, setMinute] = useState(valueMinute);
@@ -69,9 +73,11 @@ export function InputTime({
     e.preventDefault();
 
     const match = /^(\d{1,2}):(\d{2})$/.exec(text);
-    if (!match) return;
+    if (!match || Number(match[1]) > 23 || Number(match[2]) > 59) {
+      toast.error(t(KEY.common_paste_failed));
+      return;
+    }
     const [, pastedHour, pastedMinute] = match;
-    if (Number(pastedHour) > 23 || Number(pastedMinute) > 59) return;
 
     isEditing.current = true;
     const formattedTime = setFormattedTime(pastedHour, pastedMinute);

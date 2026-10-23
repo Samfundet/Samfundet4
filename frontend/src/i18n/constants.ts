@@ -74,6 +74,7 @@ export const KEY = {
   common_not: 'common_not',
   common_now: 'common_now',
   common_time: 'common_time',
+  common_paste_failed: 'common_paste_failed',
   common_day: 'common_day',
   common_minutes: 'common_minutes',
   common_here: 'common_here',
