@@ -4,6 +4,8 @@ import { Link } from '~/Components';
 import type { LinkProps } from '~/Components/Link/Link';
 import styles from './IconButton.module.scss';
 
+export type IconButtonSize = 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl';
+
 type IconButtonProps = {
   onClick?: () => void;
   url?: string;
@@ -12,7 +14,7 @@ type IconButtonProps = {
   icon: string;
   className?: string;
   border?: string;
-  height?: string;
+  size?: IconButtonSize;
   avatarColor?: string;
 } & Pick<LinkProps, 'target'>;
 
@@ -25,11 +27,12 @@ export function IconButton({
   border,
   url,
   target,
-  height,
+  size = 'lg',
   avatarColor,
 }: IconButtonProps) {
   function handleOnClick(e?: React.MouseEvent<HTMLElement>) {
     e?.preventDefault();
+    e?.stopPropagation();
     onClick?.();
   }
 
@@ -40,10 +43,10 @@ export function IconButton({
         plain
         title={title}
         target={target}
-        className={classNames(styles.icon_button, className)}
-        style={{ backgroundColor: color, border: border, height: height }}
+        className={classNames(styles.icon_button, className, styles[size])}
+        style={{ backgroundColor: color, border: border }}
       >
-        <Icon icon={icon} height={height} color={avatarColor} />
+        <Icon icon={icon} color={avatarColor} />
       </Link>
     );
   }
@@ -54,10 +57,10 @@ export function IconButton({
       onClick={handleOnClick}
       title={title}
       aria-label={title}
-      className={classNames(styles.icon_button, className)}
-      style={{ backgroundColor: color, border: border, height: height }}
+      className={classNames(styles.icon_button, className, styles[size])}
+      style={{ backgroundColor: color, border: border }}
     >
-      <Icon icon={icon} height={height} color={avatarColor} />
+      <Icon icon={icon} color={avatarColor} />
     </button>
   );
 }
