@@ -6,7 +6,7 @@ import type { KV } from '~/constants';
 /** Module for global generic types. */
 
 /** Type for home page element. */
-export type HomePageElementVariation = 'carousel' | 'large-card';
+export type HomePageElementVariation = 'carousel' | 'large-card' | 'infobox';
 
 /** Type for html button types. */
 export type ButtonType = 'submit' | 'reset' | 'button';

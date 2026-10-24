@@ -1,12 +1,12 @@
 import { ContentCard } from '~/Components';
-import type { HomePageElementDto } from '~/dto';
+import type { LargeCardElementDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, imageUrl } from '~/utils';
 import styles from './LargeCard.module.scss';
 
 type LargeCardProps = {
-  element?: HomePageElementDto;
+  element?: LargeCardElementDto;
 };
 
 export function LargeCard({ element }: LargeCardProps) {
