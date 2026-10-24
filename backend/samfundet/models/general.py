@@ -346,6 +346,7 @@ class User(AbstractUser):
         permissions = [
             ('debug', 'Can view debug mode'),
             ('impersonate', 'Can impersonate users'),
+            ('view_logs', 'can view admin logs'),
         ]
 
     def has_perm(self, perm: str, obj: Model | None = None) -> bool:
@@ -388,6 +389,9 @@ class UserPreference(FullCleanSaveMixin):
         return f'UserPreference ({self.user})'
 
 
+VENUE_WEEKDAYS = ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday')
+
+
 class Venue(CustomBaseModel):
     slug = models.SlugField(
         max_length=64,
@@ -421,6 +425,14 @@ class Venue(CustomBaseModel):
     closing_friday = models.TimeField(default=time(hour=20), blank=True, null=True)
     closing_saturday = models.TimeField(default=time(hour=20), blank=True, null=True)
     closing_sunday = models.TimeField(default=time(hour=20), blank=True, null=True)
+
+    is_open_monday = models.BooleanField(default=True)
+    is_open_tuesday = models.BooleanField(default=True)
+    is_open_wednesday = models.BooleanField(default=True)
+    is_open_thursday = models.BooleanField(default=True)
+    is_open_friday = models.BooleanField(default=True)
+    is_open_saturday = models.BooleanField(default=True)
+    is_open_sunday = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Venue'
@@ -590,6 +602,8 @@ class Reservation(FullCleanSaveMixin):
 
         # Fetch venue with the given id
         venue = Venue.objects.get(slug=slug)
+        if not getattr(venue, f'is_open_{VENUE_WEEKDAYS[date.weekday()]}'):
+            return []
         # Fetch tables that fits size criteria
         tables = Table.objects.filter(venue=venue.slug, seating__gte=seating)
         # fetch all reservations for those tables for that date

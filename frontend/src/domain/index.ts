@@ -1,3 +1,4 @@
+export { getVenues, getVenue, getOpenVenues, patchVenue } from './venues';
 export {
   caseDocumentKeys,
   useCaseDocumentMutations,
@@ -121,5 +122,24 @@ export {
 export { getHomeData, useGetHomeData, homeKeys } from './home';
 export type { HomePageElementVariation, HomePageElementDto, HomePageDto } from './home';
 export { gangKeys, useGetOrganizedGangs, useGangMutations } from './gangs';
+
+export {
+  extractVenueDaySchedule,
+  applyVenueDayScheduleChanges,
+  diffVenueOpeningHours,
+  isVenueDayScheduleValid,
+  venueKeys,
+  useGetVenues,
+  useGetOpenVenues,
+  useUpdateVenueOpeningHours,
+} from './venues';
+export type {
+  OpenVenuesDto,
+  VenueDto,
+  VenueDaySchedule,
+  VenueOpeningHoursField,
+  VenueOpeningHoursPatch,
+  VenueOpeningHoursUpdate,
+} from './venues';
 export { zodEnum } from './utils';
 export { queryClient } from './queryClient';
