@@ -88,6 +88,28 @@ function getSelectedTicketCount(
   );
 }
 
+function reconcileTicketQuantities(
+  ticketGroups: BilligCheckoutTicketGroupDto[],
+  savedQuantities: TicketQuantityMap = {},
+): TicketQuantityMap {
+  const quantities: TicketQuantityMap = {};
+  for (const group of ticketGroups) {
+    if (group.is_sold_out || group.group_limit <= 0) {
+      continue;
+    }
+
+    let remaining = group.group_limit;
+    for (const priceGroup of group.price_groups) {
+      const saved = savedQuantities[String(priceGroup.id)] ?? 0;
+      const requested = Number.isFinite(saved) ? Math.max(0, Math.floor(saved)) : 0;
+      const quantity = Math.min(requested, group.per_price_group_limit, remaining);
+      quantities[String(priceGroup.id)] = quantity;
+      remaining -= quantity;
+    }
+  }
+  return quantities;
+}
+
 export function BuyTicketForm({ event, ticketGroups, initialValues }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const submissionLocked = useRef(false);
@@ -112,21 +134,9 @@ export function BuyTicketForm({ event, ticketGroups, initialValues }: BuyTicketF
   );
   const eventCanUseMembershipCard = ticketOptions.some((priceGroup) => priceGroup.can_be_put_on_card);
 
-  const ticketQuantityDefaults = useMemo(
-    () =>
-      ticketOptions.reduce((acc, priceGroup) => {
-        acc[String(priceGroup.id)] = 0;
-        return acc;
-      }, {} as TicketQuantityMap),
-    [ticketOptions],
-  );
-
   const defaultValues = useMemo<BuyTicketFormType>(
     () => ({
-      ticketQuantities: {
-        ...ticketQuantityDefaults,
-        ...(initialValues?.ticketQuantities ?? {}),
-      },
+      ticketQuantities: reconcileTicketQuantities(ticketGroups, initialValues?.ticketQuantities),
       ticketType:
         eventCanUseMembershipCard && initialValues?.ticketType !== TICKET_TYPE_EMAIL
           ? TICKET_TYPE_MEMBERSHIP
@@ -134,7 +144,7 @@ export function BuyTicketForm({ event, ticketGroups, initialValues }: BuyTicketF
       email: initialValues?.email ?? '',
       membershipNumber: initialValues?.membershipNumber ?? '',
     }),
-    [eventCanUseMembershipCard, initialValues, ticketQuantityDefaults],
+    [eventCanUseMembershipCard, initialValues, ticketGroups],
   );
 
   const form = useForm<BuyTicketFormType>({
