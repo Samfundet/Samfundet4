@@ -6,7 +6,7 @@ import { Button, H2, Link } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { useAuthContext } from '~/context/AuthContext';
-import { useGetAdminGangs } from '~/domain/gangs/queries';
+import { useGetAdminGangs } from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';

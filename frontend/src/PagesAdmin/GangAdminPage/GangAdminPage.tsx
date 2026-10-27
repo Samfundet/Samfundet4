@@ -7,10 +7,7 @@ import { buttonThemes } from '~/Components/Button/utils';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { BACKEND_DOMAIN } from '~/constants';
 import { useAuthContext } from '~/context/AuthContext';
-import { useGangMutations } from '~/domain';
-import { useGetAdminGangSections } from '~/domain/gangs/queries';
-import { useGangSectionMutations } from '~/domain/gangsection/mutations';
-import type { GangDto } from '~/dto';
+import { type GangDto, useDeleteGang, useDeleteGangSection, useGetAdminGangSections } from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -37,8 +34,8 @@ export function GangAdminPage() {
     enabled: !!gang,
   });
 
-  const { deleteGang } = useGangMutations();
-  const { deleteGangSection } = useGangSectionMutations();
+  const deleteGang = useDeleteGang();
+  const deleteGangSection = useDeleteGangSection();
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
   const tableData = useMemo(() => {

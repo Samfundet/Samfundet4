@@ -21,8 +21,9 @@ import {
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
-import { getImage, getInfobox, postInfobox, putInfobox } from '~/api';
-import type { ImageDto, InfoboxDto } from '~/dto';
+import { getInfobox, postInfobox, putInfobox } from '~/api';
+import { type ImageDto, getImage } from '~/domain';
+import type { InfoboxDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';

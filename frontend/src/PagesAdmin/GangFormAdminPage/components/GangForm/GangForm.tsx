@@ -18,10 +18,20 @@ import {
   Input,
 } from '~/Components';
 import { useAuthContext } from '~/context/AuthContext';
-import { useGangMutations, useGetAdminInfoPages } from '~/domain';
-import { useGetAdminGangTypes, useGetAdminGangs } from '~/domain/gangs/queries';
-import { ABBREVIATION, GANG_INFO_PAGE, GANG_TYPE, LOGO_FILE, NAME } from '~/domain/gangs/schema';
-import type { GangDto } from '~/dto';
+import {
+  GANG_ABBREVIATION,
+  GANG_INFO_PAGE,
+  GANG_LOGO_FILE,
+  GANG_NAME,
+  GANG_TYPE,
+  type GangDto,
+  useCreateGang,
+  useDeleteGang,
+  useGetAdminGangTypes,
+  useGetAdminGangs,
+  useGetAdminInfoPages,
+  useUpdateGang,
+} from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { PERM } from '~/permissions';
 import { WEBSITE_URL } from '~/schema/url';
@@ -29,14 +39,14 @@ import { dbT, hasPermissions, lowerCapitalize } from '~/utils';
 import styles from './GangForm.module.scss';
 
 const schema = z.object({
-  name_nb: NAME.min(1),
-  name_en: NAME.min(1),
-  abbreviation: ABBREVIATION.optional().or(z.literal('')),
+  name_nb: GANG_NAME.min(1),
+  name_en: GANG_NAME.min(1),
+  abbreviation: GANG_ABBREVIATION.optional().or(z.literal('')),
   website: WEBSITE_URL.or(z.literal('')),
   info_page: GANG_INFO_PAGE.nullish().or(z.literal('')),
   organization: z.number(),
   gang_type: GANG_TYPE.nullish(),
-  logo: LOGO_FILE.optional(),
+  logo: GANG_LOGO_FILE.optional(),
 });
 
 type SchemaType = z.infer<typeof schema>;
@@ -67,7 +77,9 @@ export function GangForm({ gang, onSuccess, onError }: Props) {
     return gangs?.map((org) => ({ id: org.id, name: org.name })) ?? [];
   }, [gangs]);
 
-  const { createGang, editGang, deleteGang } = useGangMutations();
+  const createGang = useCreateGang();
+  const editGang = useUpdateGang();
+  const deleteGang = useDeleteGang();
 
   const isSubmitting = createGang.isPending || editGang.isPending || deleteGang.isPending;
 

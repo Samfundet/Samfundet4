@@ -1,5 +1,6 @@
 import { ExpandableHeader, Link } from '~/Components';
-import type { GangTypeDto, RecruitmentPositionDto } from '~/dto';
+import type { GangTypeDto } from '~/domain';
+import type { RecruitmentPositionDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT } from '~/utils';

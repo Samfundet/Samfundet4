@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import type { CaseDocumentCategoryDto, CaseDocumentDto } from '~/dto';
+import type { CaseDocumentCategoryDto, CaseDocumentDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
 
 export function monthValueToString(month: number | '' | undefined) {

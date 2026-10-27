@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import type { ClosedPeriodDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
-import { defaultOnError } from '../utils';
 import { deleteClosedPeriod, postClosedPeriod, putClosedPeriod } from './api';
 import { closedPeriodKeys } from './queryKeys';
+import type { ClosedPeriodDto } from './types';
 
 export function useUpdateClosedPeriod() {
   const queryClient = useQueryClient();
@@ -17,7 +16,6 @@ export function useUpdateClosedPeriod() {
       queryClient.invalidateQueries({ queryKey: closedPeriodKeys.all });
       toast.success(t(KEY.common_update_successful));
     },
-    onError: defaultOnError,
   });
 }
 
@@ -31,7 +29,6 @@ export function useCreateClosedPeriod() {
       queryClient.invalidateQueries({ queryKey: closedPeriodKeys.all });
       toast.success(t(KEY.common_creation_successful));
     },
-    onError: defaultOnError,
   });
 }
 
@@ -45,6 +42,5 @@ export function useDeleteClosedPeriod() {
       queryClient.invalidateQueries({ queryKey: closedPeriodKeys.all });
       toast.success(t(KEY.common_delete_successful));
     },
-    onError: defaultOnError,
   });
 }

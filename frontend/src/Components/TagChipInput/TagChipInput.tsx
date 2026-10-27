@@ -1,9 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Input, TagChip } from '~/Components';
-import { getTags } from '~/api';
-import { tagKeys } from '~/domain';
+import { useGetTags } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import styles from './TagChipInput.module.scss';
 
@@ -42,7 +40,7 @@ export const TagChipInput = React.forwardRef<HTMLInputElement, TagChipInputProps
       [tagNames],
     );
 
-    const { data: allTags } = useQuery({ queryKey: tagKeys.list(), queryFn: getTags });
+    const { data: allTags } = useGetTags();
 
     // Reuse known tags for chip colors, fall back to a colorless chip for new names
     const tagForName = useCallback(

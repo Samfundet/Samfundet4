@@ -1,18 +1,14 @@
 import { z } from 'zod';
 
-export const TITLE = z.string().min(1).max(140);
+export const IMAGE_TITLE = z.string().min(1).max(140);
 
-export const TAGS = z.array(z.any()).default([]);
-
-export const TAG = z.object({ name: z.string(), color: z.string(), id: z.number() });
-
-export const OPTIONAL_TAG = TAG.optional();
+export const IMAGE_TAGS = z.array(z.any()).default([]);
 
 export const IMAGE = z
   .object({
     urls: z.object({ original: z.string(), large: z.string(), medium: z.string(), small: z.string() }),
     id: z.number(),
-    title: TITLE,
+    title: IMAGE_TITLE,
     tags: z.array(z.any()).default([]),
   })
   .passthrough();

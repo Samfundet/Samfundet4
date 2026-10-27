@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MarkdownEditor } from '~/Components';
 import { type Tab, TabBar } from '~/Components/TabBar/TabBar';
-import type { InformationPageRevisionDetailDto } from '~/dto';
+import type { InformationPageRevisionDetailDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import styles from './RevisionContent.module.scss';
 

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { BACKEND_DOMAIN } from '~/constants';
-import type { ClosedPeriodDto } from '~/dto';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import type { ClosedPeriodDto } from './types';
 
 export async function getClosedPeriods(): Promise<ClosedPeriodDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__closedperiods_list;

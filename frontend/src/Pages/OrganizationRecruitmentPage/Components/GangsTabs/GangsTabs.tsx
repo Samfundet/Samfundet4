@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { type Tab, TabBar, Text } from '~/Components';
 import { PositionsTable } from '~/Pages/OrganizationRecruitmentPage/Components/PositionsTable/PositionsTable';
-import type { GangDto, GangTypeDto } from '~/dto';
+import type { GangDto, GangTypeDto } from '~/domain';
 import { useDesktop } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';

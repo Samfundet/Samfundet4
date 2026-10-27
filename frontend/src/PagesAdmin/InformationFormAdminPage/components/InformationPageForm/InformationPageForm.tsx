@@ -22,9 +22,16 @@ import {
 import { buttonThemes } from '~/Components/Button/utils';
 import { type Owner, OwnerField } from '~/PagesAdmin/InformationFormAdminPage/components';
 import { useAuthContext } from '~/context/AuthContext';
-import { useInfoPageMutations } from '~/domain';
-import { INFO_PAGE_SLUG, TEXT, TITLE } from '~/domain/infopages/schema';
-import type { EditInformationPageDto, InformationPageDto } from '~/dto';
+import {
+  type EditInformationPageDto,
+  INFO_PAGE_SLUG,
+  INFO_PAGE_TEXT,
+  INFO_PAGE_TITLE,
+  type InformationPageDto,
+  useCreateInfoPage,
+  useDeleteInfoPage,
+  useUpdateInfoPage,
+} from '~/domain';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -35,10 +42,10 @@ import { hasPermissions, lowerCapitalize } from '~/utils';
 import styles from './InformationPageForm.module.scss';
 
 const schema = z.object({
-  title_nb: TITLE,
-  title_en: TITLE,
-  text_nb: TEXT,
-  text_en: TEXT,
+  title_nb: INFO_PAGE_TITLE,
+  title_en: INFO_PAGE_TITLE,
+  text_nb: INFO_PAGE_TEXT,
+  text_en: INFO_PAGE_TEXT,
   slug: INFO_PAGE_SLUG,
   owner: z.object({ type: z.enum(['gang', 'section']), id: z.number() }),
   visible: z.boolean(),
@@ -74,7 +81,9 @@ export function InformationPageForm({ infoPage, onSuccess }: Props) {
 
   const [langTab, setLangTab] = useState('nb');
 
-  const { createInfoPage, editInfoPage, deleteInfoPage } = useInfoPageMutations();
+  const createInfoPage = useCreateInfoPage();
+  const editInfoPage = useUpdateInfoPage();
+  const deleteInfoPage = useDeleteInfoPage();
 
   const isSubmitting = createInfoPage.isPending || editInfoPage.isPending || deleteInfoPage.isPending;
 

@@ -1,12 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, ImageForm, Input, type Tab, TabBar } from '~/Components';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
-import { getImage } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
-import { imageKeys } from '~/domain';
-import type { ImageDto } from '~/dto';
+import { type ImageDto, useGetImage } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { PERM } from '~/permissions';
 import { hasPermissions } from '~/utils';
@@ -31,11 +28,7 @@ export function SamfImageDialog({ imageId, alt: initialAlt = '', onSubmit, onCan
 
   const canUpload = hasPermissions(user, [PERM.SAMFUNDET_ADD_IMAGE], undefined, true);
 
-  const { data: preselected } = useQuery({
-    queryKey: imageKeys.detail(imageId as number),
-    queryFn: () => getImage(imageId as number),
-    enabled: imageId !== undefined,
-  });
+  const { data: preselected } = useGetImage(imageId as number, { enabled: imageId !== undefined });
 
   const tabs: Tab<TabKey>[] = useMemo(() => {
     const existing: Tab<TabKey> = {

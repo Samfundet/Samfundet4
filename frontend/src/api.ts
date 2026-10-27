@@ -1,27 +1,9 @@
 import axios, { type AxiosResponse } from 'axios';
 import type {
-  AdminGangListOrganizationDto,
-  AdminGangTypeDto,
-  CaseDocumentCategoryDto,
-  CaseDocumentDto,
-  CaseDocumentPostDto,
-  EditGangDto,
-  EditGangSectionDto,
-  EditInformationPageDto,
   FeedbackDto,
   FoodCategoryDto,
   FoodPreferenceDto,
-  GangDto,
-  GangSectionDto,
-  GangTypeDto,
-  ImageDto,
-  ImagePatchDto,
-  ImagePostDto,
   InfoboxDto,
-  InformationPageDto,
-  InformationPageOwnerOptionDto,
-  InformationPageRevisionDetailDto,
-  InformationPageRevisionDto,
   InterviewDto,
   InterviewRoomDto,
   InterviewerAvailabilityDto,
@@ -57,7 +39,6 @@ import type {
   RoleDto,
   RoleUsersDto,
   SiteBannerDto,
-  TagDto,
   TextItemDto,
   UserDto,
   UserPreferenceDto,
@@ -67,7 +48,6 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { BACKEND_DOMAIN } from './constants';
 import type { PageNumberPaginationType } from './types';
-import { buildPaginatedUrl } from './utils';
 
 export async function getCsrfToken(): Promise<string> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__csrf;
@@ -196,95 +176,6 @@ export async function getPermissions(): Promise<PermissionDto[]> {
   return response.data;
 }
 
-export async function getInformationPage(slug_field: string): Promise<InformationPageDto> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({ pattern: ROUTES.backend.samfundet__information_pages_detail, urlParams: { slugField: slug_field } });
-  const response = await axios.get<InformationPageDto>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function getAdminInformationPages(): Promise<InformationPageDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__admin_information_pages_list;
-  const response = await axios.get<InformationPageDto[]>(url, { withCredentials: true });
-
-  return response.data;
-}
-
-export async function getAdminInformationPage(slug_field: string): Promise<InformationPageDto> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.samfundet__admin_information_pages_detail,
-      urlParams: { slugField: slug_field },
-    });
-  const response = await axios.get<InformationPageDto>(url, { withCredentials: true });
-
-  return response.data;
-}
-
-export async function getAdminInformationPageHistory(slug_field: string): Promise<InformationPageRevisionDto[]> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.samfundet__admin_information_pages_history,
-      urlParams: { slugField: slug_field },
-    });
-  const response = await axios.get<InformationPageRevisionDto[]>(url, { withCredentials: true });
-
-  return response.data;
-}
-
-export async function getAdminInformationPageRevision(
-  slug_field: string,
-  version: number,
-): Promise<InformationPageRevisionDetailDto> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.samfundet__admin_information_pages_history_detail,
-      urlParams: { slugField: slug_field, version: version },
-    });
-  const response = await axios.get<InformationPageRevisionDetailDto>(url, { withCredentials: true });
-
-  return response.data;
-}
-
-export async function deleteInformationPage(slug_field: string): Promise<AxiosResponse> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.samfundet__admin_information_pages_detail,
-      urlParams: { slugField: slug_field },
-    });
-  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
-
-  return response.data;
-}
-
-export async function getInformationPageOwnerOptions(): Promise<InformationPageOwnerOptionDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__admin_information_pages_owner_options;
-  const response = await axios.get<InformationPageOwnerOptionDto[]>(url, { withCredentials: true });
-
-  return response.data;
-}
-
-export async function postInformationPage(data: EditInformationPageDto): Promise<InformationPageDto> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__admin_information_pages_list;
-  const response = await axios.post<InformationPageDto>(url, data, { withCredentials: true });
-  return response.data;
-}
-
-export async function putInformationPage(slug: string, page: EditInformationPageDto): Promise<AxiosResponse> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.samfundet__admin_information_pages_detail,
-      urlParams: { slugField: slug },
-    });
-  return await axios.put<InformationPageDto>(url, page, { withCredentials: true });
-}
-
 export async function getInfoboxes(): Promise<InfoboxDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__infobox_list;
   const response = await axios.get<InfoboxDto[]>(url, { withCredentials: true });
@@ -392,50 +283,6 @@ export async function getTextItem(pk: string): Promise<TextItemDto> {
   return response.data;
 }
 
-export async function getCaseDocuments(): Promise<CaseDocumentDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__saksdokument_list;
-  const response = await axios.get<CaseDocumentDto[]>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function getCaseDocumentCategories(): Promise<CaseDocumentCategoryDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__saksdokument_categories;
-  const response = await axios.get<CaseDocumentCategoryDto[]>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function getCaseDocument(id: number): Promise<CaseDocumentDto> {
-  const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_detail, urlParams: { pk: id } });
-  const response = await axios.get<CaseDocumentDto>(url, { withCredentials: true });
-
-  return response.data;
-}
-
-export async function postCaseDocument(data: CaseDocumentPostDto): Promise<CaseDocumentDto> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__saksdokument_list;
-  const response = await axios.postForm<CaseDocumentDto>(url, data, {
-    withCredentials: true,
-  });
-  return response.data;
-}
-
-export async function putCaseDocument(id: string | number, data: Partial<CaseDocumentDto>): Promise<AxiosResponse> {
-  const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__saksdokument_detail, urlParams: { pk: id } });
-  return await axios.put<CaseDocumentDto>(url, data, { withCredentials: true });
-}
-
-export async function deleteCaseDocument(id: number): Promise<AxiosResponse> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.samfundet__saksdokument_detail,
-      urlParams: { pk: id },
-    });
-  return await axios.delete<CaseDocumentDto>(url, { withCredentials: true });
-}
-
 export async function getOrganizations(): Promise<OrganizationDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__organizations_list;
   const response = await axios.get<OrganizationDto[]>(url, { withCredentials: true });
@@ -447,60 +294,6 @@ export async function getOrganization(id: number | undefined): Promise<Organizat
   const url =
     BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__organizations_detail, urlParams: { pk: id } });
   const response = await axios.get<OrganizationDto>(url, { withCredentials: true });
-
-  return response.data;
-}
-
-export async function getAdminGangs(): Promise<AdminGangListOrganizationDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__admin_gangs_list;
-  const response = await axios.get<AdminGangListOrganizationDto[]>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function getAdminGangSections(gangId: number): Promise<GangSectionDto[]> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.samfundet__admin_gangs_gangsections_for_gang,
-      urlParams: { pk: gangId },
-    });
-  const response = await axios.get<GangSectionDto[]>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function getAdminGangSection(id: string | number): Promise<GangSectionDto> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.samfundet__admin_gangsections_detail,
-      urlParams: { pk: id },
-    });
-  const response = await axios.get<GangSectionDto>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function getAdminGangTypes(organizationId: number): Promise<AdminGangTypeDto[]> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.samfundet__admin_gangs_types_for_organization,
-      urlParams: { organization: organizationId },
-    });
-  const response = await axios.get<AdminGangTypeDto[]>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function getOrganizedGangList(): Promise<GangTypeDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__gangs_organized_list;
-  const response = await axios.get<GangTypeDto[]>(url, { withCredentials: true });
-
-  return response.data;
-}
-
-export async function getAdminGang(id: string | number): Promise<GangDto> {
-  const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__admin_gangs_detail, urlParams: { pk: id } });
-  const response = await axios.get<GangDto>(url, { withCredentials: true });
 
   return response.data;
 }
@@ -537,104 +330,6 @@ export async function getRecruitmentGangs(recruitmentId: string | number): Promi
     BACKEND_DOMAIN +
     reverse({ pattern: ROUTES.backend.samfundet__recruitment_gangs, urlParams: { pk: recruitmentId } });
   const response = await axios.get<RecruitmentGangDto[]>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function getGangsByOrganization(id: string | number): Promise<GangDto[]> {
-  const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__organizations_gangs, urlParams: { pk: id } });
-  const response = await axios.get<GangDto[]>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function postGang(data: EditGangDto): Promise<GangDto> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__admin_gangs_list;
-  const response = await axios.postForm<GangDto>(url, data, { withCredentials: true });
-  return response.data;
-}
-
-export async function putGang(id: string | number, data: EditGangDto): Promise<AxiosResponse> {
-  const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__admin_gangs_detail, urlParams: { pk: id } });
-  return await axios.putForm<GangDto>(url, data, { withCredentials: true });
-}
-
-export async function deleteGang(id: string | number): Promise<AxiosResponse> {
-  const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__admin_gangs_detail, urlParams: { pk: id } });
-  return await axios.delete(url, { withCredentials: true });
-}
-
-export async function putGangSection(id: string | number, data: EditGangSectionDto): Promise<AxiosResponse> {
-  const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__admin_gangsections_detail, urlParams: { pk: id } });
-  return await axios.putForm<GangSectionDto>(url, data, { withCredentials: true });
-}
-
-export async function postGangSection(data: EditGangSectionDto): Promise<GangSectionDto> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__admin_gangsections_list;
-  const response = await axios.postForm<GangSectionDto>(url, data, { withCredentials: true });
-  return response.data;
-}
-
-export async function deleteGangSection(id: string | number): Promise<AxiosResponse> {
-  const url =
-    BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__admin_gangsections_detail, urlParams: { pk: id } });
-  return await axios.delete(url, { withCredentials: true });
-}
-
-export async function getImagesPaginated(
-  page: number,
-  pageSize?: number,
-  search?: string,
-  tag?: string,
-): Promise<PageNumberPaginationType<ImageDto>> {
-  const url = buildPaginatedUrl(BACKEND_DOMAIN + ROUTES.backend.samfundet__images_list, page, pageSize, {
-    search: search || undefined,
-    tag: tag || undefined,
-  });
-  const response = await axios.get<PageNumberPaginationType<ImageDto>>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function getImage(id: string | number): Promise<ImageDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
-  const response = await axios.get<ImageDto>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function postImage(data: ImagePostDto): Promise<ImageDto> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__images_list;
-  const response = await axios.postForm<ImageDto>(url, data, { withCredentials: true });
-  return response.data;
-}
-
-export async function patchImage(id: number, data: ImagePatchDto): Promise<ImageDto> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
-  const response = await axios.patchForm<ImageDto>(url, data, { withCredentials: true });
-  return response.data;
-}
-
-export async function deleteImage(id: number): Promise<AxiosResponse> {
-  const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
-  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
-  return response;
-}
-
-export async function getTags(): Promise<TagDto[]> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__tags_list;
-  const response = await axios.get<TagDto[]>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function getPopularTags(): Promise<TagDto[]> {
-  const url =
-    BACKEND_DOMAIN +
-    reverse({
-      pattern: ROUTES.backend.samfundet__tags_list,
-      queryParams: { popular: 'true' },
-    });
-  const response = await axios.get<TagDto[]>(url, { withCredentials: true });
   return response.data;
 }
 

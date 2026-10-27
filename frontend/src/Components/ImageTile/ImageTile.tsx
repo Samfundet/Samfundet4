@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import type { ImageDto } from '~/dto';
+import type { ImageDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { backgroundImageFromUrl, imageUrl } from '~/utils';
 import { Link } from '../Link';

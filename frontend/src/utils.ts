@@ -6,7 +6,7 @@ import type { UseFormReturn } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import type { z } from 'zod';
 import { BACKEND_DOMAIN, THEME_KEY, type ThemeValue } from '~/constants';
-import type { VenueDto } from '~/domain';
+import type { GangDto, GangSectionDto, ImageDto, ImageSize, VenueDto } from '~/domain';
 import {
   EventAgeRestriction,
   type EventAgeRestrictionValue,
@@ -16,16 +16,7 @@ import {
   EventTicketType,
   type EventTicketTypeValue,
 } from '~/domain/events/types';
-import type {
-  BaseOwnedModelDto,
-  BasicUserDto,
-  GangDto,
-  GangSectionDto,
-  ImageDto,
-  ImageSize,
-  OrganizationDto,
-  UserDto,
-} from '~/dto';
+import type { BaseOwnedModelDto, BasicUserDto, OrganizationDto, UserDto } from '~/dto';
 import { KEY } from './i18n/constants';
 import type { TranslationKeys } from './i18n/types';
 import { ALL_DAYS, type Day, type OpeningHourGroup } from './types';

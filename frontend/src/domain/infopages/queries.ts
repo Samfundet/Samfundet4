@@ -5,8 +5,8 @@ import {
   getAdminInformationPageRevision,
   getAdminInformationPages,
   getInformationPageOwnerOptions,
-} from '~/api';
-import { infoPageKeys } from '~/domain';
+} from './api';
+import { infoPageKeys } from './queryKeys';
 
 export function useGetAdminInfoPages() {
   return useQuery({

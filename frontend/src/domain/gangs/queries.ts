@@ -1,34 +1,28 @@
 import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { getAdminGangSections, getAdminGangTypes, getAdminGangs, getOrganizedGangList } from '~/api';
-import { adminGangKeys, gangKeys } from '~/domain/gangs/queryKeys';
-import type { AdminGangTypeDto, GangSectionDto } from '~/dto';
+import { getAdminGangTypes, getAdminGangs, getOrganizedGangList } from './api';
+import { gangKeys } from './queryKeys';
+import type { AdminGangListOrganizationDto, AdminGangTypeDto, GangTypeDto } from './types';
 
-export function useGetOrganizedGangs() {
+export function useGetOrganizedGangs(props?: Partial<UseQueryOptions<GangTypeDto[]>>) {
   return useQuery({
     queryKey: gangKeys.organized(),
     queryFn: getOrganizedGangList,
+    ...props,
   });
 }
 
-export function useGetAdminGangs() {
+export function useGetAdminGangs(props?: Partial<UseQueryOptions<AdminGangListOrganizationDto[]>>) {
   return useQuery({
-    queryKey: adminGangKeys.all,
+    queryKey: gangKeys.admin(),
     queryFn: getAdminGangs,
+    ...props,
   });
 }
 
 export function useGetAdminGangTypes(organizationId: number, props?: Partial<UseQueryOptions<AdminGangTypeDto[]>>) {
   return useQuery({
-    queryKey: adminGangKeys.types(organizationId),
+    queryKey: gangKeys.adminTypes(organizationId),
     queryFn: () => getAdminGangTypes(organizationId),
-    ...props,
-  });
-}
-
-export function useGetAdminGangSections(gangId: number, props?: Partial<UseQueryOptions<GangSectionDto[]>>) {
-  return useQuery({
-    queryKey: adminGangKeys.sections(gangId),
-    queryFn: () => getAdminGangSections(gangId),
     ...props,
   });
 }

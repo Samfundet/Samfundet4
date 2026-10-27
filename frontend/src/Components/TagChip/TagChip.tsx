@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import classNames from 'classnames';
-import type { TagDto } from '~/dto';
+import type { TagDto } from '~/domain';
 import styles from './TagChip.module.scss';
 
 type TagChipProps = {

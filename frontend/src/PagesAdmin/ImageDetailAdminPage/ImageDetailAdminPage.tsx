@@ -1,12 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { ImageForm, LastUpdatedByHeader, TagChip } from '~/Components';
-import { getImage } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
-import { imageKeys } from '~/domain';
+import { useGetImage } from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -22,15 +20,7 @@ export function ImageDetailAdminPage() {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
 
-  const {
-    data: image,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: imageKeys.detail(Number(id)),
-    queryFn: () => getImage(id as string),
-    enabled: id !== undefined,
-  });
+  const { data: image, isLoading, error } = useGetImage(Number(id));
 
   useEffect(() => {
     if (error) {
