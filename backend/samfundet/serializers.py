@@ -840,7 +840,7 @@ class TextItemSerializer(serializers.ModelSerializer):
 
 class InfoboxSerializer(CustomBaseSerializer):
     image = serializers.SerializerMethodField(read_only=True)
-    image_id = serializers.IntegerField(write_only=True, required=False, allow_null=True)
+    image_id = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), source='image', write_only=True, required=False, allow_null=True)
 
     class Meta:
         model = Infobox
@@ -851,15 +851,6 @@ class InfoboxSerializer(CustomBaseSerializer):
         if img is None:
             return None
         return {'id': img.id, 'urls': img.urls, 'title': img.title, 'tags': list(img.tags.values_list('id', flat=True))}
-
-    def update(self, instance: Infobox, validated_data: dict[str, Any]) -> Infobox:
-        if 'image_id' in validated_data:
-            image_id = validated_data.pop('image_id')
-            instance.image = Image.objects.get(pk=image_id) if image_id is not None else None
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
-        return instance
 
 
 class KeyValueSerializer(serializers.ModelSerializer):
