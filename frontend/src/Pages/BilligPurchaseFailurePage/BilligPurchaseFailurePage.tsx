@@ -9,7 +9,7 @@ import {
   getBilligCheckoutTickets,
   getBilligPurchaseFailure,
 } from '~/apis/billig/billigApi';
-import { type EventDto, getEvent } from '~/domain';
+import { type EventDto, getEvents } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import styles from './BilligPurchaseFailurePage.module.scss';
 
@@ -203,14 +203,17 @@ export function BilligPurchaseFailurePage() {
     [failureData],
   );
 
+  const failureEventId = failureData?.event_id;
+  const matchingStoredEvent =
+    failureEventId != null && storedContext?.event?.billig?.id === failureEventId ? storedContext.event : undefined;
   const { data: dbRetryEvent } = useQuery({
-    queryKey: ['billig-purchase-failure-event', failureData?.event_id],
-    queryFn: () => getEvent(failureData?.event_id as number),
-    enabled: Boolean(!storedContext?.event && failureData?.retry_possible && failureData?.event_id),
+    queryKey: ['billig-purchase-failure-event', failureEventId],
+    queryFn: async () => (await getEvents()).find((event) => event.billig?.id === failureEventId) ?? null,
+    enabled: Boolean(!matchingStoredEvent && failureData?.retry_possible && failureEventId != null),
   });
 
-  const shouldUseSignedMode = Boolean(window.location.hash) && Boolean(storedContext?.event?.billig);
-  const retryEvent = storedContext?.event ?? dbRetryEvent;
+  const shouldUseSignedMode = !bsession && Boolean(window.location.hash) && Boolean(storedContext?.event?.billig);
+  const retryEvent = shouldUseSignedMode ? storedContext?.event : matchingStoredEvent ?? dbRetryEvent;
   const billigEventId = retryEvent?.billig?.id;
   const {
     data: ticketGroups,
