@@ -190,7 +190,7 @@ export function BilligPurchaseFailurePage() {
 
   const dbRetryInitialValues = useMemo(
     () =>
-      failureData
+      failureData?.found
         ? {
             ticketQuantities: Object.fromEntries(
               failureData.cart_rows.map((row) => [String(row.price_group), row.number_of_tickets]),
@@ -203,7 +203,7 @@ export function BilligPurchaseFailurePage() {
     [failureData],
   );
 
-  const failureEventId = failureData?.event_id;
+  const failureEventId = failureData?.found ? failureData.event_id : undefined;
   const matchingStoredEvent =
     failureEventId != null && storedContext?.event?.billig?.id === failureEventId ? storedContext.event : undefined;
   const { data: dbRetryEvent } = useQuery({

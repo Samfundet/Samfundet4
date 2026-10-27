@@ -56,12 +56,18 @@ export type BilligPaymentErrorRowDto = {
   number_of_tickets: number;
 };
 
-export type BilligPurchaseFailureDto = {
-  found: boolean;
-  retry_possible: boolean;
-  message: string;
-  owner_cardno: string | null;
-  owner_email: string | null;
-  cart_rows: BilligPaymentErrorRowDto[];
-  event_id: number | null;
-};
+export type BilligPurchaseFailureDto =
+  | {
+      found: false;
+      retry_possible: false;
+      message: string;
+    }
+  | {
+      found: true;
+      retry_possible: boolean;
+      message: string;
+      owner_cardno: string | null;
+      owner_email: string | null;
+      cart_rows: BilligPaymentErrorRowDto[];
+      event_id: number | null;
+    };
