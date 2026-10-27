@@ -2,32 +2,43 @@
 
 @use 'src/mixins' as *;
 
+.inputTime_wrap {
+  border-radius: 0.375rem;
+  border: 1px solid $grey-35;
+  box-shadow: 0 1px 2px 0 $black-t10;
+
+  @include theme-dark {
+    border-color: $grey-2;
+  }
+}
+
+.inputTime_wrap:focus-within {
+  border-color: $grey-1;
+  box-shadow: 0 0 0 1px $grey-1;
+  outline: none;
+
+  @include theme-dark {
+    border-color: $grey-35;
+    box-shadow: 0 0 0 1px $grey-35;
+  }
+}
+
 .inputTime {
   display: flex;
-  align-items: left;
+  align-items: center;
 }
 
 .number {
   width: 2em;
   height: 1.5em;
   box-sizing: border-box;
-  padding: auto 5px;
   text-align: center;
-  border: 2px solid $grey-4;
+  border: none;
+  background-color: transparent;
+
   @include theme-dark {
-    border-color: $grey-2;
+    color: $white;
   }
-}
-
-/* Chrome, Safari, Edge, Opera */
-.number::-webkit-outer-spin-button,
-.number::-webkit-inner-spin-button {
-  appearance: none;
-}
-
-/* Firefox */
-.number[type='number'] {
-  -moz-appearance: textfield;
 }
 
 .inputTime,
@@ -37,8 +48,12 @@
 }
 
 .number:focus {
-  outline: 3px hidden var(--active);
-  box-shadow: 0 0 2px 2px #999999;
+  outline: none;
+}
+
+.number:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .error {

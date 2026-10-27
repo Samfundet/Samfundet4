@@ -54,6 +54,8 @@ export const KEY = {
   // Date related:
   common_today: 'common_today',
   common_tomorrow: 'common_tomorrow',
+  common_end_date_before_start_date: 'common_end_date_before_start_date',
+  common_end_time_before_start_time: 'common_end_time_before_start_time',
   pick_a_date: 'pick_a_date',
 
   // No category:
@@ -74,6 +76,8 @@ export const KEY = {
   common_not: 'common_not',
   common_now: 'common_now',
   common_time: 'common_time',
+  common_paste_failed: 'common_paste_failed',
+  common_day: 'common_day',
   common_minutes: 'common_minutes',
   common_here: 'common_here',
   common_name: 'common_name',
@@ -93,6 +97,7 @@ export const KEY = {
   common_sections: 'common_sections',
   common_next: 'common_next',
   common_open: 'common_open',
+  common_is_open: 'common_is_open',
   common_send: 'common_send',
   common_gangs: 'common_gangs',
   common_event: 'common_event',
@@ -220,6 +225,7 @@ export const KEY = {
   common_last_edited_by: 'common_last_edited_by',
   common_casedocuments: 'common_casedocuments',
   common_positions: 'common_positions',
+  common_closed: 'common_closed',
 
   common_membership_number: 'common_membership_number',
   common_to_payment: 'common_to_payment',
@@ -328,6 +334,7 @@ export const KEY = {
   event_search_for_an_existing_event: 'event_search_for_an_existing_event',
   event_selected_existing_event: 'event_selected_existing_event',
   event_no_results: 'event_no_results',
+  event_confirm_delete: 'event_confirm_delete',
   event_publication_date_must_be_before_start: 'event_publication_date_must_be_before_start',
 
   // Purchase Ticket Info:
@@ -652,8 +659,16 @@ export const KEY = {
   adminpage_gangs_title: 'adminpage_gangs_title',
   adminpage_gangs_create: 'adminpage_gangs_create',
   admin_opening_hours_hint: 'admin_opening_hours_hint',
+  admin_opening_hours_revert: 'admin_opening_hours_revert',
+  admin_opening_hours_invalid: 'admin_opening_hours_invalid',
+  admin_opening_hours_validation_hint: 'admin_opening_hours_validation_hint',
+  admin_opening_hours_partial_save_failure: 'admin_opening_hours_partial_save_failure',
+  admin_opening_hours_opening_time: 'admin_opening_hours_opening_time',
+  admin_opening_hours_closing_time: 'admin_opening_hours_closing_time',
+  admin_opening_hours_day_is_open: 'admin_opening_hours_day_is_open',
+  admin_opening_hours_hours_input: 'admin_opening_hours_hours_input',
+  admin_opening_hours_minutes_input: 'admin_opening_hours_minutes_input',
   admin_closed_period_title: 'admin_closed_period_title',
-  admin_closed_period_end_before_start: 'admin_closed_period_end_before_start',
   admin_closed_period_end_before_today: 'admin_closed_period_end_before_today',
   admin_closed_message: 'admin_closed_message',
   admin_casedocuments_title: 'admin_casedocuments_title',

@@ -5,9 +5,6 @@ import type { LinkTarget } from '~/Components/Link';
 import type { KV } from '~/constants';
 /** Module for global generic types. */
 
-/** Type for home page element. */
-export type HomePageElementVariation = 'carousel' | 'large-card';
-
 /** Type for html button types. */
 export type ButtonType = 'submit' | 'reset' | 'button';
 
@@ -227,3 +224,9 @@ export type HandleWithCrumb = {
 export interface MatchWithCrumb extends UIMatch {
   handle: HandleWithCrumb;
 }
+
+export type OpeningHourGroup = {
+  days: Day[];
+  opening?: string;
+  closing?: string;
+};

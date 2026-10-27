@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { TimeDuration } from '~/Components';
 import { Link } from '~/Components/Link/Link';
 import { Text } from '~/Components/Text/Text';
-import type { VenueDto } from '~/dto';
+import type { VenueDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import styles from './OpeningHours.module.scss';
 

@@ -40,6 +40,8 @@ export const nb = prepareTranslations({
   // Date related
   [KEY.common_today]: 'I dag',
   [KEY.common_tomorrow]: 'I morgen',
+  [KEY.common_end_date_before_start_date]: 'Sluttdato kan ikke være før startdato',
+  [KEY.common_end_time_before_start_time]: 'Sluttidspunkt kan ikke være før starttidspunkt',
   [KEY.pick_a_date]: 'Velg en dato',
 
   // Other common
@@ -60,6 +62,8 @@ export const nb = prepareTranslations({
   [KEY.common_not]: 'Ikke',
   [KEY.common_now]: 'Nå',
   [KEY.common_time]: 'Tid',
+  [KEY.common_paste_failed]: 'Kunne ikke lime inn',
+  [KEY.common_day]: 'Dag',
   [KEY.common_minutes]: 'minutter',
   [KEY.common_from]: 'Fra',
   [KEY.common_here]: 'her',
@@ -67,6 +71,7 @@ export const nb = prepareTranslations({
   [KEY.common_date]: 'Dato',
   [KEY.common_send]: 'Send',
   [KEY.common_open]: 'Åpne',
+  [KEY.common_is_open]: 'Åpen',
   [KEY.common_menu]: 'Meny',
   [KEY.common_name]: 'Navn',
   [KEY.common_next]: 'Neste',
@@ -198,6 +203,7 @@ export const nb = prepareTranslations({
   [KEY.common_comment]: 'Kommentar',
   [KEY.common_capacity]: 'Kapasitet',
   [KEY.common_link]: 'Lenke',
+  [KEY.common_closed]: 'Stengt',
 
   [KEY.common_membership_number]: 'Medlemsnummer',
   [KEY.common_to_payment]: 'Til betaling',
@@ -319,6 +325,7 @@ export const nb = prepareTranslations({
   [KEY.event_search_for_an_existing_event]: 'Søk etter et arrangement',
   [KEY.event_selected_existing_event]: 'Valgte eksisterende arrangement',
   [KEY.event_no_results]: 'Ingen resultater',
+  [KEY.event_confirm_delete]: 'Er du sikker på at du vil slette dette arrangementet?',
   [KEY.event_publication_date_must_be_before_start]: 'Publiseringsdato må være før arrangementsstart',
 
   // Event categories
@@ -592,8 +599,17 @@ export const nb = prepareTranslations({
   [KEY.admin_markdown_image_not_found]: 'Bildet finnes ikke',
   [KEY.admin_steal_identity]: 'Stjel identitet',
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
+  [KEY.admin_opening_hours_revert]: 'Tilbakestill',
+  [KEY.admin_opening_hours_invalid]: 'Ugyldige åpningstider:',
+  [KEY.admin_opening_hours_validation_hint]: 'Stengetiden må være etter åpningstiden',
+  [KEY.admin_opening_hours_partial_save_failure]:
+    'Kunne ikke lagre: {{venues}}. Endringene for disse lokalene er tilbakestilt.',
+  [KEY.admin_opening_hours_opening_time]: '{{day}}, åpningstid',
+  [KEY.admin_opening_hours_closing_time]: '{{day}}, stengetid',
+  [KEY.admin_opening_hours_day_is_open]: '{{day}} er åpen',
+  [KEY.admin_opening_hours_hours_input]: '{{field}}, timer',
+  [KEY.admin_opening_hours_minutes_input]: '{{field}}, minutter',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
-  [KEY.admin_closed_period_end_before_start]: 'Sluttdato må være etter startdato',
   [KEY.admin_closed_period_end_before_today]: 'Sluttdato kan ikke være før dagens dato',
   [KEY.admin_closed_message]: 'Samfundet er stengt',
   [KEY.admin_casedocuments_title]: 'Administrer saksdokumenter',
@@ -853,6 +869,8 @@ export const en = prepareTranslations({
   // Date related
   [KEY.common_today]: 'Today',
   [KEY.common_tomorrow]: 'Tomorrow',
+  [KEY.common_end_date_before_start_date]: 'End date cannot be before start date',
+  [KEY.common_end_time_before_start_time]: 'End time cannot be before start time',
   [KEY.pick_a_date]: 'Pick a date',
 
   // No category:
@@ -873,6 +891,8 @@ export const en = prepareTranslations({
   [KEY.common_not]: 'Not',
   [KEY.common_now]: 'Now',
   [KEY.common_time]: 'Time',
+  [KEY.common_paste_failed]: 'Could not paste',
+  [KEY.common_day]: 'Day',
   [KEY.common_minutes]: 'minutes',
   [KEY.common_here]: 'here',
   [KEY.common_save]: 'Save',
@@ -880,6 +900,7 @@ export const en = prepareTranslations({
   [KEY.common_date]: 'Date',
   [KEY.common_send]: 'Send',
   [KEY.common_open]: 'Open',
+  [KEY.common_is_open]: 'Open',
   [KEY.common_edit]: 'Edit',
   [KEY.common_show]: 'Show',
   [KEY.common_table]: 'Table',
@@ -1018,6 +1039,7 @@ export const en = prepareTranslations({
   [KEY.common_publication_date]: 'Publication date',
   [KEY.common_casedocuments]: 'Case documents',
   [KEY.common_positions]: 'Positions',
+  [KEY.common_closed]: 'Closed',
 
   [KEY.organization]: 'Organization',
 
@@ -1168,6 +1190,7 @@ export const en = prepareTranslations({
   [KEY.event_search_for_an_existing_event]: 'Search for an event',
   [KEY.event_selected_existing_event]: 'Selected existing event',
   [KEY.event_no_results]: 'No results',
+  [KEY.event_confirm_delete]: 'Are you sure you want to delete this event?',
   [KEY.event_publication_date_must_be_before_start]: 'Publication date must be before the event starts',
 
   //Purchase Ticket Info:
@@ -1454,8 +1477,17 @@ export const en = prepareTranslations({
   [KEY.adminpage_gangs_create]: 'Create group',
   [KEY.admin_users_last_active]: 'Last active',
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
+  [KEY.admin_opening_hours_revert]: 'Revert changes',
+  [KEY.admin_opening_hours_invalid]: 'Invalid opening hours:',
+  [KEY.admin_opening_hours_validation_hint]: 'Closing time must be after opening time',
+  [KEY.admin_opening_hours_partial_save_failure]:
+    'Could not save: {{venues}}. Changes for these venues have been reverted.',
+  [KEY.admin_opening_hours_opening_time]: '{{day}}, opening time',
+  [KEY.admin_opening_hours_closing_time]: '{{day}}, closing time',
+  [KEY.admin_opening_hours_day_is_open]: '{{day}} is open',
+  [KEY.admin_opening_hours_hours_input]: '{{field}}, hours',
+  [KEY.admin_opening_hours_minutes_input]: '{{field}}, minutes',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
-  [KEY.admin_closed_period_end_before_start]: 'End date must be after start date',
   [KEY.admin_closed_period_end_before_today]: 'End date cannot be before today',
   [KEY.admin_casedocuments_title]: 'Manage Documents',
   [KEY.admin_sultenmenu_title]: 'Manage Lyche menu',
