@@ -766,6 +766,7 @@ export const KEY = {
   billig_callback_total_price: 'billig_callback_total_price',
   billig_callback_download_pdf: 'billig_callback_download_pdf',
   billig_callback_missing_ticket_details: 'billig_callback_missing_ticket_details',
+  billig_callback_load_failed: 'billig_callback_load_failed',
   billig_callback_on_card: 'billig_callback_on_card',
   billig_callback_email_delivery: 'billig_callback_email_delivery',
 

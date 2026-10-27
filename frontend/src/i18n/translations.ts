@@ -790,6 +790,8 @@ export const nb = prepareTranslations({
   [KEY.billig_callback_total_price]: 'Totalpris',
   [KEY.billig_callback_download_pdf]: 'Last ned PDF',
   [KEY.billig_callback_missing_ticket_details]: 'Fant ingen billettdetaljer for denne returen.',
+  [KEY.billig_callback_load_failed]:
+    'Kunne ikke hente billettdetaljene. Prøv igjen, eller vent på billettene på e-post. Du trenger ikke å kjøpe på nytt.',
   [KEY.billig_callback_on_card]: 'På kort',
   [KEY.billig_callback_email_delivery]: 'På e-post',
 
@@ -1634,6 +1636,8 @@ export const en = prepareTranslations({
   [KEY.billig_callback_total_price]: 'Total price',
   [KEY.billig_callback_download_pdf]: 'Download PDF',
   [KEY.billig_callback_missing_ticket_details]: 'No ticket details were found for this callback.',
+  [KEY.billig_callback_load_failed]:
+    'Could not load ticket details. Try again, or wait for your tickets by email. You do not need to purchase again.',
   [KEY.billig_callback_on_card]: 'On card',
   [KEY.billig_callback_email_delivery]: 'By email',
 

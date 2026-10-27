@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { H1, H2, Link, Page } from '~/Components';
+import { Button, H1, H2, Link, Page } from '~/Components';
 import { KEY } from '~/i18n/constants';
 import styles from './BilligPurchaseStatusPage.module.scss';
 
@@ -38,11 +38,14 @@ function buildPdfUrl(ticketRefs: string[]): string | null {
   return `https://billig.samfundet.no/pdf?${query}`;
 }
 
-function loadBilligFormscript() {
+const CALLBACK_TIMEOUT_MS = 15_000;
+
+function loadBilligFormscript(onError: () => void) {
   const script = document.createElement('script');
   script.src = 'https://billettsalg.samfundet.no/formscript';
   script.async = true;
   script.dataset.billigFormscript = 'true';
+  script.onerror = onError;
   document.body.appendChild(script);
   return script;
 }
@@ -52,6 +55,7 @@ export function BilligPurchaseStatusPage() {
   const { tickets = '' } = useParams();
   const normalizedTickets = useMemo(() => tickets.replace(/\/+$/, ''), [tickets]);
   const [callbackPayload, setCallbackPayload] = useState<BilligCallbackPayload | null>(null);
+  const [callbackFailed, setCallbackFailed] = useState(false);
 
   const plainTicketRefs = useMemo(
     () => normalizedTickets.split(',').filter((ticket) => /^\d+$/.test(ticket)),
@@ -63,16 +67,32 @@ export function BilligPurchaseStatusPage() {
   );
 
   useEffect(() => {
+    setCallbackPayload(null);
+    setCallbackFailed(false);
     if (!usesJavascriptCallback) {
       return;
     }
 
+    let settled = false;
+    const fail = () => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeout);
+      setCallbackFailed(true);
+    };
+    const timeout = window.setTimeout(fail, CALLBACK_TIMEOUT_MS);
     window.ticket_callback = (payload: BilligCallbackPayload) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeout);
       setCallbackPayload(payload);
     };
-    const script = loadBilligFormscript();
+    const script = loadBilligFormscript(fail);
 
     return () => {
+      settled = true;
+      window.clearTimeout(timeout);
+      script.onerror = null;
       script.remove();
       window.ticket_callback = undefined;
     };
@@ -103,7 +123,7 @@ export function BilligPurchaseStatusPage() {
       : null);
   const pdfUrl = buildPdfUrl(ticketsToDisplay?.map((ticket) => ticket.ticketno) ?? []);
   const totalPrice = callbackTickets?.reduce((sum, ticket) => sum + (ticket.price ?? 0), 0);
-  const isLoading = usesJavascriptCallback && callbackPayload === null;
+  const isLoading = usesJavascriptCallback && callbackPayload === null && !callbackFailed;
 
   return (
     <Page className={styles.page} loading={isLoading}>
@@ -165,7 +185,15 @@ export function BilligPurchaseStatusPage() {
           </>
         )}
 
-        {!ticketsToDisplay && !isLoading && (
+        {callbackFailed && (
+          <section className={styles.panel} role="alert">
+            <H2>{t(KEY.billig_callback_tickets_heading)}</H2>
+            <p>{t(KEY.billig_callback_load_failed)}</p>
+            <Button onClick={() => window.location.reload()}>{t(KEY.ticket_checkout_retry)}</Button>
+          </section>
+        )}
+
+        {!ticketsToDisplay && !isLoading && !callbackFailed && (
           <section className={styles.panel}>
             <H2>{t(KEY.billig_callback_tickets_heading)}</H2>
             <p>{t(KEY.billig_callback_missing_ticket_details)}</p>
