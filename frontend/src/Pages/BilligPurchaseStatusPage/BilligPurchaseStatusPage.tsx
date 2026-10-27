@@ -39,16 +39,12 @@ function buildPdfUrl(ticketRefs: string[]): string | null {
 }
 
 function loadBilligFormscript() {
-  const existingScript = document.querySelector<HTMLScriptElement>('script[data-billig-formscript="true"]');
-  if (existingScript) {
-    return;
-  }
-
   const script = document.createElement('script');
   script.src = 'https://billettsalg.samfundet.no/formscript';
   script.async = true;
   script.dataset.billigFormscript = 'true';
   document.body.appendChild(script);
+  return script;
 }
 
 export function BilligPurchaseStatusPage() {
@@ -74,9 +70,10 @@ export function BilligPurchaseStatusPage() {
     window.ticket_callback = (payload: BilligCallbackPayload) => {
       setCallbackPayload(payload);
     };
-    loadBilligFormscript();
+    const script = loadBilligFormscript();
 
     return () => {
+      script.remove();
       window.ticket_callback = undefined;
     };
   }, [usesJavascriptCallback]);
