@@ -1,17 +1,10 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  FOOD_CATEGORY,
-  FOOD_PREFERENCES,
-  MENU_ITEM_DESCRIPTION,
-  MENU_ITEM_NAME,
-  MENU_ITEM_PRICE,
-} from '~/domain';
-import { useForm } from 'react-hook-form';
 import {
   Button,
   Dropdown,
@@ -27,6 +20,7 @@ import {
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { getFoodCategories, getFoodPreferences, getMenuItem, postMenuItem, putMenuItem } from '~/api';
+import { FOOD_CATEGORY, FOOD_PREFERENCES, MENU_ITEM_DESCRIPTION, MENU_ITEM_NAME, MENU_ITEM_PRICE } from '~/domain';
 import type { FoodCategoryDto, FoodPreferenceDto, MenuItemDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
@@ -195,15 +189,13 @@ export function SultenMenuItemFormAdminPage() {
   return (
     <AdminPageLayout title={title} loading={showSpinner}>
       <Form {...form} schema={schema}>
-        <form onSubmit={form.handleSubmit(
-        handleOnSubmit
-        )}>
+        <form className={styles.form} onSubmit={form.handleSubmit(handleOnSubmit)}>
           <div className={styles.row}>
             <FormField
               control={form.control}
               name="name_nb"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_norwegian)}`}</FormLabel>
                   <FormControl>
                     <Input type="text" {...field} />
@@ -216,7 +208,7 @@ export function SultenMenuItemFormAdminPage() {
               control={form.control}
               name="name_en"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{`${t(KEY.common_name)} ${t(KEY.common_english)}`}</FormLabel>
                   <FormControl>
                     <Input type="text" {...field} />
@@ -231,10 +223,10 @@ export function SultenMenuItemFormAdminPage() {
               control={form.control}
               name="description_nb"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{`${t(KEY.common_description)} ${t(KEY.common_norwegian)}`}</FormLabel>
                   <FormControl>
-                    <Textarea {...field} />
+                    <Textarea rows={5} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -244,10 +236,10 @@ export function SultenMenuItemFormAdminPage() {
               control={form.control}
               name="description_en"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{`${t(KEY.common_description)} ${t(KEY.common_english)}`}</FormLabel>
                   <FormControl>
-                    <Textarea {...field} />
+                    <Textarea rows={5} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -259,7 +251,7 @@ export function SultenMenuItemFormAdminPage() {
               control={form.control}
               name="price"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.common_price)}</FormLabel>
                   <FormControl>
                     <Input
@@ -276,7 +268,7 @@ export function SultenMenuItemFormAdminPage() {
               control={form.control}
               name="price_member"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{`${t(KEY.common_price)} ${t(KEY.common_member)}`}</FormLabel>
                   <FormControl>
                     <Input
@@ -293,7 +285,7 @@ export function SultenMenuItemFormAdminPage() {
               control={form.control}
               name="food_category"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.category)}</FormLabel>
                   <FormControl>
                     <Dropdown options={foodCategoryOptions} {...field} />
@@ -306,7 +298,7 @@ export function SultenMenuItemFormAdminPage() {
               control={form.control}
               name="food_preferences"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className={styles.form_item}>
                   <FormLabel>{`${t(KEY.common_food)} ${t(KEY.common_preferences)}`}</FormLabel>
                   <FormControl>
                     <Dropdown
@@ -320,9 +312,12 @@ export function SultenMenuItemFormAdminPage() {
               )}
             />
           </div>
-          <Button type="submit">{submitText}</Button>
+          <div className={styles.action_row}>
+            <Button type="submit" theme="primary">
+              {submitText}
+            </Button>
+          </div>
         </form>
-
       </Form>
     </AdminPageLayout>
   );
