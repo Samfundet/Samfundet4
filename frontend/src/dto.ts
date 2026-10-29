@@ -1,6 +1,4 @@
 import type { ThemeValue } from '~/constants';
-import type { EventDto } from '~/domain/events/types';
-import type { HomePageElementVariation } from './types';
 
 export type BaseModelDto = {
   version?: number;
@@ -97,22 +95,6 @@ export type RecruitmentUserDto = {
   top_application: RecruitmentApplicationDto;
 };
 
-export type HomePageDto = {
-  // Array of events used for splash
-  splash: EventDto[];
-  // Home page elements (carousel, cards etc.)
-  elements: HomePageElementDto[];
-};
-
-export type HomePageElementDto = {
-  variation: HomePageElementVariation;
-  title_nb: string;
-  title_en: string;
-  description_nb?: string;
-  description_no?: string;
-  events: EventDto[];
-};
-
 export type GroupDto = {
   id: number;
   name: string;
@@ -128,36 +110,6 @@ export type ObjectPermissionDto = {
   obj_pk: number;
   permission: string;
 };
-
-export type VenueDto = {
-  id: number;
-  slug: string;
-  name: string;
-  description?: string;
-  floor?: number;
-  last_renovated?: number;
-  handicapped_approved?: boolean;
-  responsible_crew?: string;
-  opening?: string;
-  closing?: string;
-  opening_monday?: string;
-  opening_tuesday?: string;
-  opening_wednesday?: string;
-  opening_thursday?: string;
-  opening_friday?: string;
-  opening_saturday?: string;
-  opening_sunday?: string;
-
-  closing_monday?: string;
-  closing_tuesday?: string;
-  closing_wednesday?: string;
-  closing_thursday?: string;
-  closing_friday?: string;
-  closing_saturday?: string;
-  closing_sunday?: string;
-};
-
-export type OpenVenuesDto = VenueDto[];
 
 export type UserPreferenceDto = {
   id: number;

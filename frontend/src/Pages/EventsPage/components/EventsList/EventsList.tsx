@@ -2,10 +2,11 @@ import { Icon } from '@iconify/react';
 import { type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
-import { Button, Dropdown, Input, Link, TimeDisplay } from '~/Components';
+import { Button, Dropdown, EventCrudButtons, Input, Link, TimeDisplay } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImageCard } from '~/Components/ImageCard';
 import { Table, type TableRow } from '~/Components/Table';
+import { useAuthContext } from '~/context/AuthContext';
 import type { EventDto } from '~/domain';
 import type { EventCategoryValue, EventTicketTypeValue } from '~/domain';
 import { useDesktop } from '~/hooks';
@@ -26,6 +27,7 @@ export function EventsList({ events }: EventsListProps) {
   const { t, i18n } = useTranslation();
   const [tableView, setTableView] = useState(false);
   const isDesktop = useDesktop();
+  const { user } = useAuthContext();
   const [searchParam, setSearchParam] = useSearchParams();
   const query = searchParam.get('q') ?? '';
   const category = searchParam.get('category') ?? '';
@@ -41,6 +43,7 @@ export function EventsList({ events }: EventsListProps) {
     { content: t(KEY.category), sortable: true },
     { content: t(KEY.admin_organizer), sortable: true },
     { content: t(KEY.common_buy), sortable: true },
+    ...(user?.is_staff ? [{ content: t(KEY.common_edit), sortable: false }] : []),
   ];
 
   const visibleColumns = isDesktop ? eventColumns : eventColumns.filter((_, i) => MOBILE_COLUMN_INDEXES.includes(i));
@@ -117,6 +120,17 @@ export function EventsList({ events }: EventsListProps) {
         event.category,
         event.host,
         event.ticket_type,
+        ...(user?.is_staff
+          ? [
+              {
+                content: (
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    <EventCrudButtons id={event.id} size="sm" />
+                  </div>
+                ),
+              },
+            ]
+          : []),
       ],
     }));
 
@@ -136,11 +150,12 @@ export function EventsList({ events }: EventsListProps) {
           <ImageCard
             date={event.start_dt.toString()}
             imageUrl={imageUrl(event.image, 'small')}
+            id={event.id.toString()}
             title={dbT(event, 'title') ?? ''}
             subtitle={time_display}
             description={dbT(event, 'description_short') ?? ''}
             compact={true}
-            url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id } })}
+            url={reverse({ pattern: ROUTES.frontend.event, urlParams: { id: event.id.toString() } })}
             ticket_type={event.ticket_type}
             host={event.host}
           />
