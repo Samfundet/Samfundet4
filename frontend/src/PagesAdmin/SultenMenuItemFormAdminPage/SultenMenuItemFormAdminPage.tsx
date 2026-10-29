@@ -54,19 +54,18 @@ export function SultenMenuItemFormAdminPage() {
   // Form data
   const { id } = useParams();
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const [menuItem, setMenuItem] = useState<Partial<MenuItemDto>>({});
   const [foodPreferenceOptions, setFoodPreferenceOptions] = useState<DropdownOption<number>[]>([]);
   const [foodCategoryOptions, setFoodCategoryOptions] = useState<DropdownOption<number>[]>([]);
 
   const form = useForm<FormType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name_nb: menuItem?.name_nb || '',
-      name_en: menuItem?.name_en || '',
-      description_nb: menuItem?.description_nb || '',
-      description_en: menuItem?.description_en || '',
-      price: menuItem?.price ?? undefined,
-      price_member: menuItem?.price_member ?? undefined,
+      name_nb: '',
+      name_en: '',
+      description_nb: '',
+      description_en: '',
+      price: undefined,
+      price_member: undefined,
       food_preferences: [],
       food_category: undefined,
     },
@@ -118,7 +117,6 @@ export function SultenMenuItemFormAdminPage() {
     if (id) {
       getMenuItem(id)
         .then((data) => {
-          setMenuItem(data);
           form.reset({
             name_nb: data.name_nb ?? '',
             name_en: data.name_en ?? '',
