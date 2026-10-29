@@ -7,6 +7,7 @@ import {
   BILLIG_CHECKOUT_ERROR_CODES,
   type BilligCheckoutErrorCode,
   type BilligCheckoutTicketGroupDto,
+  type BilligPurchaseFailureDto,
 } from './billigDtos';
 
 const checkoutErrorSchema = z.object({ code: z.enum(BILLIG_CHECKOUT_ERROR_CODES) });
@@ -18,6 +19,8 @@ export function getBilligCheckoutErrorCode(error: unknown): BilligCheckoutErrorC
   const result = checkoutErrorSchema.safeParse(error.response.data);
   return result.success ? result.data.code : undefined;
 }
+
+export const BILLIG_PURCHASE_CONTEXT_KEY = 'billig-purchase-context';
 
 export async function getBilligCheckoutTickets(billigEventId: number): Promise<BilligCheckoutTicketGroupDto[]> {
   const url =
@@ -55,6 +58,12 @@ export function buildBilligFormData({
   }
 
   return formData;
+}
+
+export async function getBilligPurchaseFailure(bsession: string): Promise<BilligPurchaseFailureDto> {
+  const url = `${BACKEND_DOMAIN}${ROUTES.backend.samfundet__purchase_failure_data}?bsession=${encodeURIComponent(bsession)}`;
+  const response = await axios.get<BilligPurchaseFailureDto>(url, { withCredentials: true });
+  return response.data;
 }
 
 export function submitBilligForm({
