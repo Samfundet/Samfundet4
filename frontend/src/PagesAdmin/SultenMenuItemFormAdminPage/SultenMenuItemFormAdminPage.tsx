@@ -293,6 +293,9 @@ export function SultenMenuItemFormAdminPage() {
                   <FormLabel>{t(KEY.category)}</FormLabel>
                   <FormControl>
                     <Dropdown
+                      ref={field.ref}
+                      name={field.name}
+                      onBlur={field.onBlur}
                       options={foodCategoryOptions}
                       nullOption={{ label: t(KEY.common_choose) }}
                       value={field.value ?? null}
