@@ -65,10 +65,10 @@ export function SultenMenuItemFormAdminPage() {
       name_en: menuItem?.name_en || '',
       description_nb: menuItem?.description_nb || '',
       description_en: menuItem?.description_en || '',
-      price: menuItem?.price ?? 0,
-      price_member: menuItem?.price_member ?? 0,
+      price: menuItem?.price ?? undefined,
+      price_member: menuItem?.price_member ?? undefined,
       food_preferences: [],
-      food_category: (menuItem?.food_category as FoodCategoryDto)?.id,
+      food_category: undefined,
     },
   });
 
@@ -124,8 +124,8 @@ export function SultenMenuItemFormAdminPage() {
             name_en: data.name_en ?? '',
             description_nb: data.description_nb ?? '',
             description_en: data.description_en ?? '',
-            price: data.price ?? 0,
-            price_member: data.price_member ?? 0,
+            price: data.price ?? undefined,
+            price_member: data.price_member ?? undefined,
             food_preferences: [],
             food_category: (data.food_category as FoodCategoryDto)?.id,
           });
@@ -257,7 +257,10 @@ export function SultenMenuItemFormAdminPage() {
                     <Input
                       type="number"
                       {...field}
-                      onChange={(event) => field.onChange(event.target.value === '' ? '' : Number(event.target.value))}
+                      value={field.value ?? ''}
+                      onChange={(event) =>
+                        field.onChange(event.target.value === '' ? undefined : Number(event.target.value))
+                      }
                     />
                   </FormControl>
                   <FormMessage />
@@ -274,7 +277,10 @@ export function SultenMenuItemFormAdminPage() {
                     <Input
                       type="number"
                       {...field}
-                      onChange={(event) => field.onChange(event.target.value === '' ? '' : Number(event.target.value))}
+                      value={field.value ?? ''}
+                      onChange={(event) =>
+                        field.onChange(event.target.value === '' ? undefined : Number(event.target.value))
+                      }
                     />
                   </FormControl>
                   <FormMessage />
@@ -288,7 +294,12 @@ export function SultenMenuItemFormAdminPage() {
                 <FormItem className={styles.form_item}>
                   <FormLabel>{t(KEY.category)}</FormLabel>
                   <FormControl>
-                    <Dropdown options={foodCategoryOptions} {...field} />
+                    <Dropdown
+                      options={foodCategoryOptions}
+                      nullOption={{ label: t(KEY.common_choose) }}
+                      value={field.value ?? null}
+                      onChange={(value) => field.onChange(value ?? undefined)}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -303,6 +314,7 @@ export function SultenMenuItemFormAdminPage() {
                   <FormControl>
                     <Dropdown
                       options={foodPreferenceOptions}
+                      nullOption={{ label: t(KEY.common_no) }}
                       value={field.value[0] ?? null}
                       onChange={(value) => field.onChange(value === null ? [] : [value])}
                     />
