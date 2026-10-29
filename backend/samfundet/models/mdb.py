@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from django.db import models, connections
+from django.utils import timezone
 
 from samfundet.models.general import User
 

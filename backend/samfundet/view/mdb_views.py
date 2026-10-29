@@ -32,7 +32,7 @@ class ConnectToMDBView(APIView):
         member_login = serializer.validated_data['member_login']
         password = serializer.validated_data['password']
 
-        logger.info(f'User #{user.id} attempting to connect to MDB with email {member_login}...')
+        logger.info(f'User #{user.id} attempting to connect to MDB with login {member_login}...')
 
         medlem_id = sett_lim_utvidet_medlemsinfo(member_login, password)
         if not medlem_id:
@@ -47,14 +47,17 @@ class ConnectToMDBView(APIView):
             )
 
         user.mdb_medlem_id = medlem_id
-
-        # The connection itself has succeeded at this point; don't fail it if fetching the details does.
-        try:
-            if not populate_user_from_mdb(user):
-                logger.warning(f'User #{user.id} connected to MDB, but medlem_id {medlem_id} was not found in MedlemsInfo')
-        except DatabaseError:
-            logger.exception(f'Failed to fetch MDB info for user #{user.id} (medlem_id {medlem_id})')
-
+        self._populate_mdb_fields(user)
         user.save()
+
         logger.info(f'Connected user #{user.id} to MDB with medlem_id {medlem_id}')
         return Response({'message': 'Successfully connected account to MDB!'})
+
+    @staticmethod
+    def _populate_mdb_fields(user: User) -> None:
+        """Copy member details from MDB. Never fails the connection itself."""
+        try:
+            if not populate_user_from_mdb(user):
+                logger.warning(f'User #{user.id} connected to MDB, but medlem_id {user.mdb_medlem_id} was not found in MedlemsInfo')
+        except DatabaseError:
+            logger.exception(f'Failed to fetch MDB info for user #{user.id} (medlem_id {user.mdb_medlem_id})')
