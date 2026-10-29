@@ -14,13 +14,15 @@ All callback endpoints are public because Billig returns the user's browser to t
 
 | Path | Method | Authentication | Purpose |
 | --- | --- | --- | --- |
-| `/api/billig/event/<event_id>/tickets/` | `GET` | Public (`AllowAny`) | Returns the event's ticket groups and price groups that are available for online sale. |
+| `/api/billig/event/<event_id>/tickets/` | `GET` | Public (`AllowAny`) | Returns checkout ticket groups for a Billig event ID, with online price groups and calculated quantity limits. |
 | `/api/billig/callback/success/` | `GET` | Public (`AllowAny`) | Receives the `tickets` parameter after a successful purchase and redirects the browser to `/arrangement/billetter/status/<tickets>/`. |
 | `/api/billig/callback/failure/` | `GET` | Public (`AllowAny`) | Preserves Billig's query parameters, including `bsession`, and redirects the browser to `/arrangement/billetter/handlekurv/`. |
 | `/api/billig/callback/failure-data/` | `GET` | Public (`AllowAny`) | Looks up `bsession` in Billig's `payment_error` tables and returns the error and retryable cart data. |
 | `/api/billig/dev/pay/` | `POST` | Public (`AllowAny`), development only | Simulates Billig locally by creating fake purchases or payment errors in the development Billig database. |
 
 ## Configuration
+
+The checkout modal fetches `/api/billig/event/<event_id>/tickets/` when opened. This endpoint excludes theater groups (which require seat selection), offline price groups, and empty groups. Each group retains `ticket_limit` and includes `per_price_group_limit` and `group_limit`. An explicit limit, including zero, applies to both; a null limit defaults to 9 per online price group and 9 times the number of online price groups for the whole group. Both calculated limits are capped by the remaining tickets in the ticket group (`max(num - num_sold, 0)`). The frontend uses these values directly while tracking the user's selected quantities locally. Billig still validates availability at submission because other purchases can change the remaining stock. The general event response still supplies the payment URL and ticket fee.
 
 `BILLIG_PAYMENT_URL` is the URL to which the browser posts the purchase form:
 
@@ -35,6 +37,8 @@ All callback endpoints are public because Billig returns the user's browser to t
 Both variables can be overridden through the backend process environment. For local Django runs, put overrides in `backend/.env`, using `backend/.env.example` as the template. For Docker, put backend process overrides in `backend/.docker.env`. The repository `.env.example` also records the expected local values, but its `.env` configures Compose interpolation and does not by itself inject arbitrary variables into the backend container.
 
 ## Purchase callback sequence
+
+Opening checkout can return HTTP 400 with an `error` message and a stable `code`: `event_not_found`, `event_hidden`, `sale_not_started`, `sale_ended`, or `sold_out`. The modal translates these codes into availability messages without offering retry. Network errors, server errors, and unrecognized responses show a generic loading error with retry. These availability checks run before payment and are separate from the purchase callbacks below.
 
 1. The browser posts the purchase form directly to `BILLIG_PAYMENT_URL`. The Samfundet backend does not proxy or process the real payment.
 2. In production, Billig validates the order, reserves the tickets, processes payment, and sends email as appropriate.

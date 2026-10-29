@@ -9,6 +9,8 @@ from django.db import connections, transaction
 from django.utils import timezone
 from django.db.models import F, Max
 
+from root.custom_classes.billig_dtos import BilligCheckoutError, BilligCheckoutPriceGroupDto, BilligCheckoutTicketGroupDto
+
 from samfundet.models.billig import (
     BilligEvent,
     BilligTicket,
@@ -20,6 +22,7 @@ from samfundet.models.billig import (
 )
 
 logger = logging.getLogger(__name__)
+DEFAULT_PRICE_GROUP_LIMIT = 9
 
 
 class BilligService:
@@ -38,20 +41,20 @@ class BilligService:
             return None
 
     @staticmethod
-    def can_purchase_tickets(event_id: int) -> tuple[bool, str | None]:
+    def can_purchase_tickets(event_id: int) -> tuple[bool, BilligCheckoutError | None]:
         event = BilligService.get_event_with_tickets(event_id)
         if not event:
-            return False, 'Event not found'
+            return False, BilligCheckoutError.EVENT_NOT_FOUND
 
         now = timezone.make_naive(timezone.now())
         reason = next(
             (
                 reason
                 for condition, reason in (
-                    (event.hidden, 'Event is hidden'),
-                    (now < event.sale_from, 'Ticket sale has not started yet'),
-                    (now > event.sale_to, 'Ticket sale has ended'),
-                    (event.is_sold_out, 'Event is sold out'),
+                    (event.hidden, BilligCheckoutError.EVENT_HIDDEN),
+                    (now < event.sale_from, BilligCheckoutError.SALE_NOT_STARTED),
+                    (now > event.sale_to, BilligCheckoutError.SALE_ENDED),
+                    (event.is_sold_out, BilligCheckoutError.SOLD_OUT),
                 )
                 if condition
             ),
@@ -60,32 +63,43 @@ class BilligService:
         return reason is None, reason
 
     @staticmethod
-    def get_ticket_group_data(ticket_group: BilligTicketGroup) -> dict[str, Any] | None:
+    def get_ticket_group_data(ticket_group: BilligTicketGroup) -> BilligCheckoutTicketGroupDto | None:
+        # Theater groups require seat selection before they can be offered in checkout.
+        if ticket_group.is_theater_ticket_group:
+            return None
+
         price_groups = [
-            {
-                'id': price_group.id,
-                'name': price_group.name,
-                'price': price_group.price,
-                'membership_needed': price_group.membership_needed,
-                'can_be_put_on_card': price_group.can_be_put_on_card,
-            }
+            BilligCheckoutPriceGroupDto(
+                id=price_group.id,
+                name=price_group.name,
+                price=price_group.price,
+                membership_needed=price_group.membership_needed,
+                can_be_put_on_card=price_group.can_be_put_on_card,
+            )
             for price_group in ticket_group.price_groups.all()
             if price_group.netsale
         ]
         if not price_groups:
             return None
 
-        return {
-            'id': ticket_group.id,
-            'name': ticket_group.name,
-            'is_sold_out': ticket_group.is_sold_out,
-            'is_almost_sold_out': ticket_group.is_almost_sold_out,
-            'ticket_limit': ticket_group.ticket_limit,
-            'price_groups': price_groups,
-        }
+        ticket_limit = ticket_group.ticket_limit
+        remaining = max(ticket_group.num - ticket_group.num_sold, 0)
+        per_price_group_limit = min(ticket_limit if ticket_limit is not None else DEFAULT_PRICE_GROUP_LIMIT, remaining)
+        group_limit = min(ticket_limit if ticket_limit is not None else DEFAULT_PRICE_GROUP_LIMIT * len(price_groups), remaining)
+
+        return BilligCheckoutTicketGroupDto(
+            id=ticket_group.id,
+            name=ticket_group.name,
+            is_sold_out=ticket_group.is_sold_out,
+            is_almost_sold_out=ticket_group.is_almost_sold_out,
+            ticket_limit=ticket_group.ticket_limit,
+            per_price_group_limit=per_price_group_limit,
+            group_limit=group_limit,
+            price_groups=price_groups,
+        )
 
     @staticmethod
-    def get_ticket_groups_for_event(event_id: int) -> list[dict[str, Any]]:
+    def get_ticket_groups_for_event(event_id: int) -> list[BilligCheckoutTicketGroupDto]:
         event = BilligService.get_event_with_tickets(event_id)
         if not event:
             return []

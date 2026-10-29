@@ -20,8 +20,10 @@ export function BuyEventTicket({ event, ticketSaleState }: BuyButtonProps) {
   useEffect(() => {
     if (ticketSaleState.is_sold_out) {
       setButtonText(t(KEY.common_sold_out));
-    } else {
+    } else if (ticketSaleState.is_almost_sold_out) {
       setButtonText(t(KEY.common_almost_sold_out));
+    } else {
+      setButtonText(t(KEY.common_buy));
     }
   }, [ticketSaleState, t]);
 

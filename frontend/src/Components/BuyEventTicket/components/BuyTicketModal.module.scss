@@ -3,12 +3,14 @@
 @use "src/mixins" as *;
 
 .modal {
-  margin-top: 1rem;
-  @include for-tablet-down {
-    width: 70%;
-  }
+  width: 36rem;
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100dvh - 2rem);
+  padding: 2rem;
+  line-height: 1.5;
+
   @include for-mobile-only {
-    width: 90%;
+    padding: 1.25rem;
   }
 }
 
@@ -18,27 +20,33 @@
 }
 
 .samf_logo {
-  width: 250px;
+  width: 220px;
   margin: auto;
-  padding-top: 1rem;
-  padding-bottom: 1.5rem;
+  padding: 0.5rem 0 1.5rem;
 }
 
 .close_btn {
   position: absolute;
   top: 20px;
-  right:20px;
+  right: 20px;
 }
 
 .container {
-  padding: 1rem;
-  padding-top: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
 }
 
 .modal_title {
   color: $red-samf;
+  margin-bottom: 1rem;
+  padding-bottom: 0;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+  text-align: left;
+  overflow-wrap: anywhere;
 }
 
 .ticket_selection_container {
@@ -47,23 +55,51 @@
   flex-direction: column;
 }
 
+.ticket_group_section {
+  margin-bottom: 1rem;
+}
+
+.unavailable_group {
+  color: $grey-2;
+
+  @include theme-dark {
+    color: $grey-3;
+  }
+}
+
+.availability_label {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.ticket_group_title {
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+  line-height: 1.4;
+}
+
 .ticket_select {
   display: flex;
   border-bottom: 1px solid $grey-4;
-  padding-top: 0.15rem;
-  flex: 0.5;
+  padding: 0.75rem 0;
+  gap: 1rem;
   align-items: center;
-  flex-wrap: wrap;
   justify-content: space-between;
 }
 
+.select_info {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .select_label {
-  padding-bottom: 0.5rem;
-  font-weight: 700;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .price_label {
-  padding-bottom: 0.5rem;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
 }
 
 .ticket_type {
@@ -90,7 +126,8 @@
 .radio_box {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  gap: 0.75rem 1.5rem;
+  flex-wrap: wrap;
   flex-direction: row;
 }
 
@@ -105,11 +142,19 @@
   text-decoration: none;
 }
 
+.terms_link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: $red-samf;
+}
+
 .total_price {
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: normal;
   color: $black;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   @include theme-dark {
     color: $white;
   }
@@ -133,5 +178,23 @@
 }
 
 .ticketless_description_p {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.validation_notice {
+  margin: 0 1rem;
+  color: $red;
+  font-size: 0.85rem;
+}
+
+.info_notice {
+  margin: 0 1rem;
+  color: $grey-1;
+  font-size: 0.85rem;
+  line-height: 1.45;
+
+  @include theme-dark {
+    color: $grey-4;
+  }
 }
