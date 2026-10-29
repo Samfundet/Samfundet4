@@ -41,7 +41,7 @@ const schema = z.object({
   price: MENU_ITEM_PRICE,
   price_member: MENU_ITEM_PRICE,
 
-  food_preferences: FOOD_PREFERENCES,
+  food_preferences: FOOD_PREFERENCES.optional(),
   food_category: FOOD_CATEGORY,
 });
 
@@ -313,7 +313,7 @@ export function SultenMenuItemFormAdminPage() {
                     <Dropdown
                       options={foodPreferenceOptions}
                       nullOption={{ label: t(KEY.common_no) }}
-                      value={field.value[0] ?? null}
+                      value={field.value?.[0] ?? null}
                       onChange={(value) => field.onChange(value === null ? [] : [value])}
                     />
                   </FormControl>
