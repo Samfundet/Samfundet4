@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '~/context/AuthContext';
-import { type EventId, useDeleteEvent } from '~/domain';
+import { type ID, useDeleteEvent } from '~/domain';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -11,7 +11,7 @@ import { CrudButtons } from '../CrudButtons';
 import type { IconButtonSize } from '../IconButton';
 
 type EventCrudButtonsProps = {
-  id: EventId;
+  id: ID;
   size?: IconButtonSize;
   deleteRedirect?: string | number;
 

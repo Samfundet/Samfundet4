@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { KEY } from '~/i18n/constants';
+import type { Slug } from '../types';
 import { deleteInformationPage, postInformationPage, putInformationPage } from './api';
 import { infoPageKeys } from './queryKeys';
 import type { EditInformationPageDto } from './types';
@@ -24,7 +25,7 @@ export function useUpdateInfoPage() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: ({ slug, data }: { slug: string; data: EditInformationPageDto }) => putInformationPage(slug, data),
+    mutationFn: ({ slug, data }: { slug: Slug; data: EditInformationPageDto }) => putInformationPage(slug, data),
     onSuccess: () => {
       toast.success(t(KEY.common_update_successful));
       queryClient.invalidateQueries({ queryKey: infoPageKeys.all });
@@ -37,7 +38,7 @@ export function useDeleteInfoPage() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: (slug: string) => deleteInformationPage(slug),
+    mutationFn: (slug: Slug) => deleteInformationPage(slug),
     onSuccess: () => {
       toast.success(t(KEY.common_delete_successful));
       queryClient.invalidateQueries({ queryKey: infoPageKeys.all });

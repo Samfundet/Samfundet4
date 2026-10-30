@@ -19,7 +19,7 @@ export function SamfImageEditor({ mdastNode, lexicalNode, parentEditor }: Direct
 
   function edit() {
     openDialog({
-      imageId: Number.isNaN(imageId) ? undefined : imageId,
+      imageId,
       alt,
       onSubmit: (attributes) => {
         parentEditor.update(() => {
@@ -50,7 +50,7 @@ export function SamfImageEditor({ mdastNode, lexicalNode, parentEditor }: Direct
         </button>
       </div>
 
-      {isPending && !Number.isNaN(imageId) ? (
+      {isPending && imageId !== undefined ? (
         <Skeleton className={styles.skeleton} />
       ) : image ? (
         <>

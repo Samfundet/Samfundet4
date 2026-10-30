@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { InputTime } from '~/Components';
 import { Checkbox } from '~/Components/Checkbox';
-import { type VenueDaySchedule, type VenueDto, extractVenueDaySchedule } from '~/domain';
+import { type Slug, type VenueDaySchedule, type VenueDto, extractVenueDaySchedule } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { ALL_DAYS, type Day } from '~/types';
 import { getDayKey } from '~/utils';
@@ -12,7 +12,7 @@ type VenueOpeningHoursBoxProps = {
   venue: VenueDto;
   invalidDays: string[];
   disabled?: boolean;
-  onCommitDay: (venueSlug: string, weekday: Day, changes: Partial<VenueDaySchedule>) => void;
+  onCommitDay: (venueSlug: Slug, weekday: Day, changes: Partial<VenueDaySchedule>) => void;
 };
 
 export function VenueOpeningHoursBox({ venue, invalidDays, disabled, onCommitDay }: VenueOpeningHoursBoxProps) {

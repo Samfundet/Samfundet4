@@ -1,7 +1,8 @@
-import axios, { type AxiosResponse } from 'axios';
+import axios from 'axios';
 import { BACKEND_DOMAIN } from '~/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
+import type { Slug } from '../types';
 import type {
   EditInformationPageDto,
   InformationPageDto,
@@ -10,11 +11,15 @@ import type {
   InformationPageRevisionDto,
 } from './types';
 
-export async function getInformationPage(slug_field: string): Promise<InformationPageDto> {
+export async function getInformationPage(slug: Slug): Promise<InformationPageDto> {
   const url =
     BACKEND_DOMAIN +
-    reverse({ pattern: ROUTES.backend.samfundet__information_pages_detail, urlParams: { slugField: slug_field } });
+    reverse({
+      pattern: ROUTES.backend.samfundet__information_pages_detail,
+      urlParams: { slugField: slug },
+    });
   const response = await axios.get<InformationPageDto>(url, { withCredentials: true });
+
   return response.data;
 }
 
@@ -25,24 +30,24 @@ export async function getAdminInformationPages(): Promise<InformationPageDto[]> 
   return response.data;
 }
 
-export async function getAdminInformationPage(slug_field: string): Promise<InformationPageDto> {
+export async function getAdminInformationPage(slug: Slug): Promise<InformationPageDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__admin_information_pages_detail,
-      urlParams: { slugField: slug_field },
+      urlParams: { slugField: slug },
     });
   const response = await axios.get<InformationPageDto>(url, { withCredentials: true });
 
   return response.data;
 }
 
-export async function getAdminInformationPageHistory(slug_field: string): Promise<InformationPageRevisionDto[]> {
+export async function getAdminInformationPageHistory(slug: Slug): Promise<InformationPageRevisionDto[]> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__admin_information_pages_history,
-      urlParams: { slugField: slug_field },
+      urlParams: { slugField: slug },
     });
   const response = await axios.get<InformationPageRevisionDto[]>(url, { withCredentials: true });
 
@@ -50,14 +55,14 @@ export async function getAdminInformationPageHistory(slug_field: string): Promis
 }
 
 export async function getAdminInformationPageRevision(
-  slug_field: string,
+  slug: Slug,
   version: number,
 ): Promise<InformationPageRevisionDetailDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__admin_information_pages_history_detail,
-      urlParams: { slugField: slug_field, version: version },
+      urlParams: { slugField: slug },
     });
   const response = await axios.get<InformationPageRevisionDetailDto>(url, { withCredentials: true });
 
@@ -74,27 +79,29 @@ export async function getInformationPageOwnerOptions(): Promise<InformationPageO
 export async function postInformationPage(data: EditInformationPageDto): Promise<InformationPageDto> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__admin_information_pages_list;
   const response = await axios.post<InformationPageDto>(url, data, { withCredentials: true });
+
   return response.data;
 }
 
-export async function putInformationPage(slug: string, page: EditInformationPageDto): Promise<AxiosResponse> {
+export async function putInformationPage(slug: Slug, page: EditInformationPageDto): Promise<InformationPageDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__admin_information_pages_detail,
       urlParams: { slugField: slug },
     });
-  return await axios.put<InformationPageDto>(url, page, { withCredentials: true });
+  const response = await axios.put<InformationPageDto>(url, page, { withCredentials: true });
+
+  return response.data;
 }
 
-export async function deleteInformationPage(slug_field: string): Promise<AxiosResponse> {
+export async function deleteInformationPage(slug: Slug): Promise<void> {
   const url =
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__admin_information_pages_detail,
-      urlParams: { slugField: slug_field },
+      urlParams: { slugField: slug },
     });
-  const response = await axios.delete<AxiosResponse>(url, { withCredentials: true });
 
-  return response.data;
+  await axios.delete(url, { withCredentials: true });
 }

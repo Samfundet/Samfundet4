@@ -28,7 +28,7 @@ export function SamfImageDialog({ imageId, alt: initialAlt = '', onSubmit, onCan
 
   const canUpload = hasPermissions(user, [PERM.SAMFUNDET_ADD_IMAGE], undefined, true);
 
-  const { data: preselected } = useGetImage(imageId as number, { enabled: imageId !== undefined });
+  const { data: preselected } = useGetImage(imageId);
 
   const tabs: Tab<TabKey>[] = useMemo(() => {
     const existing: Tab<TabKey> = {

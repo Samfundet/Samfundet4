@@ -1,5 +1,6 @@
-import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import { type UseQueryOptions, skipToken, useQuery } from '@tanstack/react-query';
 import type { PageNumberPaginationType } from '~/types';
+import type { ID } from '../types';
 import { getImage, getImagesPaginated } from './api';
 import { imageKeys } from './queryKeys';
 import type { ImageDto } from './types';
@@ -18,11 +19,10 @@ export function useGetImagesPaginated(
   });
 }
 
-export function useGetImage(id: number, props?: Partial<UseQueryOptions<ImageDto>>) {
+export function useGetImage(id: ID | undefined) {
+  const canFetch = id !== undefined;
   return useQuery({
     queryKey: imageKeys.detail(id),
-    queryFn: () => getImage(id),
-    ...props,
-    enabled: !Number.isNaN(id) && (props?.enabled ?? true),
+    queryFn: canFetch ? () => getImage(id) : skipToken,
   });
 }

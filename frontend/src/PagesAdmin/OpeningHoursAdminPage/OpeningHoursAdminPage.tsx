@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Button } from '~/Components';
 import {
+  type Slug,
   type VenueDaySchedule,
   type VenueDto,
   applyVenueDayScheduleChanges,
@@ -44,7 +45,7 @@ export function OpeningHoursAdminPage() {
 
   const { mutate: saveOpeningHours, isPending } = useUpdateVenueOpeningHours();
 
-  function commitDayChange(venueSlug: string, weekday: Day, changes: Partial<VenueDaySchedule>) {
+  function commitDayChange(venueSlug: Slug, weekday: Day, changes: Partial<VenueDaySchedule>) {
     if (isPending) return;
 
     setFormState((current) => ({

@@ -7,6 +7,7 @@ import type { TagDto } from './types';
 export async function getTags(): Promise<TagDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__tags_list;
   const response = await axios.get<TagDto[]>(url, { withCredentials: true });
+
   return response.data;
 }
 
@@ -18,5 +19,6 @@ export async function getPopularTags(): Promise<TagDto[]> {
       queryParams: { popular: 'true' },
     });
   const response = await axios.get<TagDto[]>(url, { withCredentials: true });
+
   return response.data;
 }

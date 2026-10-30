@@ -14,8 +14,3 @@ export const IMAGE = z
   .passthrough();
 
 export const OPTIONAL_IMAGE = IMAGE.optional();
-
-export const IMAGE_FILE = z.instanceof(File).refine(
-  (file) => ['image/png', 'image/jpeg', 'image/jpg', 'image/tiff', 'image/webp', 'image/gif'].includes(file.type),
-  { message: 'Invalid image file type' }, // TODO: translations
-);

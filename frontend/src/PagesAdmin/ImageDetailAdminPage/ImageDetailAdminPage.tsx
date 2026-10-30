@@ -20,7 +20,7 @@ export function ImageDetailAdminPage() {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
 
-  const { data: image, isLoading, error } = useGetImage(Number(id));
+  const { data: image, isLoading, error } = useGetImage(id);
 
   useEffect(() => {
     if (error) {

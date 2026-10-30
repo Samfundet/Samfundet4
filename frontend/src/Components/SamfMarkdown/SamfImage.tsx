@@ -11,9 +11,7 @@ type Props = {
  * An `::image{id=...}` directive.
  */
 export function SamfImage({ imageid, alt }: Props) {
-  const id = Number.parseInt(imageid ?? '', 10);
-
-  const { data: image } = useGetImage(id);
+  const { data: image } = useGetImage(imageid);
 
   if (!image) {
     return null;

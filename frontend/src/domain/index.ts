@@ -100,7 +100,6 @@ export {
   EventCategory,
 } from './events';
 export type {
-  EventId,
   EventFilters,
   EventStatus,
   EventAgeRestrictionValue,
@@ -176,7 +175,6 @@ export {
   IMAGE_TAGS,
   IMAGE,
   OPTIONAL_IMAGE,
-  IMAGE_FILE,
 } from './images';
 export type { ImageSize, ImageDto, ImagePostDto, ImagePatchDto } from './images';
 export {
@@ -233,5 +231,7 @@ export type {
   VenueOpeningHoursPatch,
   VenueOpeningHoursUpdate,
 } from './venues';
+export { IMAGE_FILE, SLUG } from './schema';
+export type { ID, Slug } from './types';
 export { zodEnum } from './utils';
 export { queryClient } from './queryClient';

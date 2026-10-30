@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
+import type { ID } from '../types';
+import { defaultOnError } from '../utils';
 import { deleteImage, patchImage, postImage } from './api';
 import { imageKeys } from './queryKeys';
 import type { ImagePatchDto, ImagePostDto } from './types';
@@ -26,7 +28,7 @@ export function useUpdateImage() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: ImagePatchDto }) => patchImage(id, data),
+    mutationFn: ({ id, data }: { id: ID; data: ImagePatchDto }) => patchImage(id, data),
     onSuccess: () => {
       toast.success(t(KEY.common_save_successful));
       queryClient.invalidateQueries({ queryKey: imageKeys.all });
@@ -39,7 +41,7 @@ export function useDeleteImage() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: (id: number) => deleteImage(id),
+    mutationFn: (id: ID) => deleteImage(id),
     onSuccess: () => {
       toast.success(t(KEY.common_delete_successful));
       queryClient.invalidateQueries({ queryKey: imageKeys.all });
@@ -47,10 +49,10 @@ export function useDeleteImage() {
     onError: (err: AxiosError) => {
       if (err.response?.status === STATUS.HTTP_409_CONFLICT) {
         toast.error(t(KEY.admin_images_delete_in_use));
-      } else {
-        toast.error(t(KEY.common_something_went_wrong));
+        console.log(err);
+        return;
       }
-      console.error(err);
+      defaultOnError(err);
     },
   });
 }

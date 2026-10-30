@@ -2,8 +2,6 @@ import type { BilligEventDto } from '~/apis/billig/billigDtos';
 import type { PageNumberPaginationType } from '~/types';
 import type { ImageDto } from '../images/types';
 
-export type EventId = string | number;
-
 export interface EventFilters {
   search?: string;
   event_group?: string;
