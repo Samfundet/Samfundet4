@@ -1,3 +1,6 @@
-export { useImageMutations } from './useImageMutations';
+export { getImagesPaginated, getImage, postImage, patchImage, deleteImage } from './api';
+export { useCreateImage, useUpdateImage, useDeleteImage } from './mutations';
+export { useGetImagesPaginated, useGetImage } from './queries';
 export { imageKeys } from './queryKeys';
-export { IMAGE, IMAGE_FILE, OPTIONAL_IMAGE, OPTIONAL_TAG, TAG, TAGS, TITLE } from './schema';
+export { IMAGE_TITLE, IMAGE_TAGS, IMAGE, OPTIONAL_IMAGE } from './schema';
+export type { ImageSize, ImageDto, ImagePostDto, ImagePatchDto } from './types';

@@ -17,7 +17,7 @@ import { ImagePicker, type ImagePickerProps } from '~/Components/ImagePicker/Ima
 import type { InputFieldType } from '~/Components/InputField/InputField';
 import type { InputFileType } from '~/Components/InputFile/InputFile';
 import type { TextAreaFieldProps } from '~/Components/TextAreaField';
-import type { ImageDto } from '~/dto';
+import type { ImageDto } from '~/domain';
 import type { SamfError } from './SamfForm';
 import styles from './SamfForm.module.scss';
 

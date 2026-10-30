@@ -1,21 +1,22 @@
-import { useQuery } from '@tanstack/react-query';
+import { skipToken, useQuery } from '@tanstack/react-query';
+import type { Slug } from '../types';
 import {
   getAdminInformationPage,
   getAdminInformationPageHistory,
   getAdminInformationPageRevision,
   getAdminInformationPages,
   getInformationPageOwnerOptions,
-} from '~/api';
-import { infoPageKeys } from '~/domain';
+} from './api';
+import { infoPageKeys } from './queryKeys';
 
 export function useGetAdminInfoPages() {
   return useQuery({
-    queryKey: infoPageKeys.all,
+    queryKey: infoPageKeys.list(),
     queryFn: getAdminInformationPages,
   });
 }
 
-export function useGetAdminInfoPage(slug: string) {
+export function useGetAdminInfoPage(slug: Slug) {
   return useQuery({
     queryKey: infoPageKeys.detail(slug),
     queryFn: () => getAdminInformationPage(slug),
@@ -30,7 +31,7 @@ export function useGetInfoPageOwnerOptions() {
   });
 }
 
-export function useGetAdminInfoPageHistory(slug: string) {
+export function useGetAdminInfoPageHistory(slug: Slug) {
   return useQuery({
     queryKey: infoPageKeys.history(slug),
     queryFn: () => getAdminInformationPageHistory(slug),
@@ -38,11 +39,10 @@ export function useGetAdminInfoPageHistory(slug: string) {
   });
 }
 
-export function useGetAdminInfoPageRevision(slug: string, version: number | undefined) {
+export function useGetAdminInfoPageRevision(slug: Slug, version: number | undefined) {
+  const canFetch = slug !== '' && version !== undefined;
   return useQuery({
-    queryKey: infoPageKeys.revision(slug, version as number),
-    // biome-ignore lint/style/noNonNullAssertion: enabled keeps this from running without a version
-    queryFn: () => getAdminInformationPageRevision(slug, version!),
-    enabled: slug !== '' && version !== undefined,
+    queryKey: infoPageKeys.revision(slug, version),
+    queryFn: canFetch ? () => getAdminInformationPageRevision(slug, version) : skipToken,
   });
 }

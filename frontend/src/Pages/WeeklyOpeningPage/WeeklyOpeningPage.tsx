@@ -16,7 +16,7 @@ export function WeeklyOpeningPage() {
   useTitle(t(KEY.common_opening_hours));
 
   const { data: venues = [], isLoading } = useQuery({
-    queryKey: venueKeys.all,
+    queryKey: venueKeys.list([]),
     queryFn: getVenues,
     select: (data) => [...data].sort((venueA, venueB) => venueA.name.localeCompare(venueB.slug)),
   });

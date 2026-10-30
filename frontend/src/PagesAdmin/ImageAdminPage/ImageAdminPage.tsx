@@ -1,13 +1,12 @@
 import { Icon } from '@iconify/react';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { Button, ImageTile, Input, TagChip } from '~/Components';
 import { PagedPagination } from '~/Components/Pagination';
-import { getImagesPaginated, getPopularTags } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
-import { imageKeys, tagKeys } from '~/domain';
+import { useGetImagesPaginated, useGetPopularTags } from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -64,13 +63,11 @@ export function ImageAdminPage() {
     setCurrentPage(1);
   }, [debouncedSearch, selectedTag]);
 
-  const { data, isLoading } = useQuery({
-    queryKey: imageKeys.list(currentPage, debouncedSearch || undefined, selectedTag),
-    queryFn: () => getImagesPaginated(currentPage, PAGE_SIZE, debouncedSearch || undefined, selectedTag),
+  const { data, isLoading } = useGetImagesPaginated(currentPage, PAGE_SIZE, debouncedSearch || undefined, selectedTag, {
     placeholderData: keepPreviousData,
   });
 
-  const { data: popularTags } = useQuery({ queryKey: tagKeys.popular(), queryFn: getPopularTags });
+  const { data: popularTags } = useGetPopularTags();
 
   const images = data?.results ?? [];
   const totalCount = data?.count ?? 0;

@@ -5,7 +5,7 @@ import type { VenueDto } from './types';
 
 export function useGetVenues(props?: Partial<UseQueryOptions<VenueDto[]>>) {
   return useQuery({
-    queryKey: venueKeys.all,
+    queryKey: venueKeys.list([]),
     queryFn: getVenues,
     ...props,
   });

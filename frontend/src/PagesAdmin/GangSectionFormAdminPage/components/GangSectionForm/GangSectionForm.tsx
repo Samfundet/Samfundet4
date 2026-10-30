@@ -17,9 +17,15 @@ import {
   Input,
 } from '~/Components';
 import { useAuthContext } from '~/context/AuthContext';
-import { useGangSectionMutations } from '~/domain/gangsection/mutations';
-import { LOGO_FILE, NAME } from '~/domain/gangsection/schema';
-import type { GangDto, GangSectionDto } from '~/dto';
+import {
+  GANG_SECTION_LOGO_FILE,
+  GANG_SECTION_NAME,
+  type GangDto,
+  type GangSectionDto,
+  useCreateGangSection,
+  useDeleteGangSection,
+  useUpdateGangSection,
+} from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { PERM } from '~/permissions';
 import { dbT, hasPermissions, lowerCapitalize } from '~/utils';
@@ -33,9 +39,9 @@ type Props = {
 };
 
 const schema = z.object({
-  name_nb: NAME,
-  name_en: NAME,
-  logo: LOGO_FILE.optional(),
+  name_nb: GANG_SECTION_NAME,
+  name_en: GANG_SECTION_NAME,
+  logo: GANG_SECTION_LOGO_FILE.optional(),
 });
 
 type SchemaType = z.infer<typeof schema>;
@@ -44,7 +50,9 @@ export function GangSectionForm({ gang, section, onSuccess, onError }: Props) {
   const { t } = useTranslation();
   const { user } = useAuthContext();
 
-  const { createGangSection, editGangSection, deleteGangSection } = useGangSectionMutations();
+  const createGangSection = useCreateGangSection();
+  const editGangSection = useUpdateGangSection();
+  const deleteGangSection = useDeleteGangSection();
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),

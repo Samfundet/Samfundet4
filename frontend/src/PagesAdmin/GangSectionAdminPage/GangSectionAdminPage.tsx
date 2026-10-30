@@ -6,8 +6,7 @@ import { Button, Link } from '~/Components';
 import { buttonThemes } from '~/Components/Button/utils';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { useAuthContext } from '~/context/AuthContext';
-import { useGangSectionMutations } from '~/domain/gangsection/mutations';
-import type { GangSectionDto } from '~/dto';
+import { type GangSectionDto, useDeleteGangSection } from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -22,7 +21,7 @@ export function GangSectionAdminPage() {
   const { section } = useRouteLoaderData('admin-gang-section') as GangSectionLoader;
   const { user } = useAuthContext();
   const { t } = useTranslation();
-  const { deleteGangSection } = useGangSectionMutations();
+  const deleteGangSection = useDeleteGangSection();
   const navigate = useCustomNavigate();
 
   const title = formatSectionName(section as GangSectionDto, gang);

@@ -1,21 +1,8 @@
 import type { LoaderFunctionArgs } from 'react-router';
-import {
-  getAdminGang,
-  getAdminGangSection,
-  getRecruitment,
-  getRecruitmentPosition,
-  getRecruitmentSeparatePosition,
-  getRole,
-} from '~/api';
+import { getRecruitment, getRecruitmentPosition, getRecruitmentSeparatePosition, getRole } from '~/api';
 import { isSiteFeatureEnabled } from '~/constants/site-features';
-import type {
-  GangDto,
-  GangSectionDto,
-  RecruitmentDto,
-  RecruitmentPositionDto,
-  RecruitmentSeparatePositionDto,
-  RoleDto,
-} from '~/dto';
+import { type GangDto, type GangSectionDto, getAdminGang, getAdminGangSection } from '~/domain';
+import type { RecruitmentDto, RecruitmentPositionDto, RecruitmentSeparatePositionDto, RoleDto } from '~/dto';
 
 export type RecruitmentLoader = {
   recruitment: RecruitmentDto | undefined;

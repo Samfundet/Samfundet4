@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { fn } from 'storybook/test';
-import type { ImageDto } from '~/dto';
+import type { ImageDto } from '~/domain';
 import { ImageTile } from './ImageTile';
 
 function mockImage(id: number, title: string, src: string, tags: string[] = []): ImageDto {

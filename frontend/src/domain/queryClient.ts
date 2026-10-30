@@ -3,12 +3,16 @@ import { AxiosError } from 'axios';
 import { t } from 'i18next';
 import { toast } from 'react-toastify';
 import { KEY } from '~/i18n/constants';
+import { defaultOnError } from './utils';
+
+function is404(error: Error) {
+  return error instanceof AxiosError && error.response?.status === 404;
+}
 
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error, query) => {
-      // Ignore HTTP 404 responses
-      if (error instanceof AxiosError && error.response?.status === 404) {
+      if (is404(error)) {
         return;
       }
 
@@ -18,15 +22,11 @@ export const queryClient = new QueryClient({
   }),
   defaultOptions: {
     mutations: {
-      onError: (error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
-      },
+      onError: defaultOnError,
     },
     queries: {
       retry: (failureCount, error) => {
-        // Don't retry on HTTP 404 responses
-        if (error instanceof AxiosError && error.response?.status === 404) {
+        if (is404(error)) {
           return false;
         }
         // max 2 retries

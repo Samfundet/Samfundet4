@@ -27,14 +27,18 @@ export type ImageDirectiveAttributes = {
   alt: string;
 };
 
+export type ParsedImageDirective = Omit<ImageDirectiveAttributes, 'imageId'> & {
+  imageId: number | undefined;
+};
+
 export function isImageDirective(node: DirectiveLike): boolean {
   return node.type === 'leafDirective' && node.name === IMAGE_DIRECTIVE_NAME;
 }
 
-export function readImageDirective(node: DirectiveLike): ImageDirectiveAttributes {
+export function readImageDirective(node: DirectiveLike): ParsedImageDirective {
   const id = Number.parseInt(node.attributes?.id ?? '', 10);
   return {
-    imageId: Number.isNaN(id) ? Number.NaN : id,
+    imageId: Number.isNaN(id) ? undefined : id,
     alt: node.attributes?.alt ?? '',
   };
 }

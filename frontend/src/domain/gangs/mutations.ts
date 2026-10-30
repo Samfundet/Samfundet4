@@ -2,56 +2,57 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { deleteGang as apiDeleteGang, postGang, putGang } from '~/api';
-import { gangKeys } from '~/domain';
-import type { EditGangDto } from '~/dto';
 import { KEY } from '~/i18n/constants';
+import type { ID } from '../types';
+import { defaultOnError } from '../utils';
+import { deleteGang, postGang, putGang } from './api';
+import { gangKeys } from './queryKeys';
+import type { EditGangDto } from './types';
 
-export function useGangMutations() {
+export function useCreateGang() {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
-  const createGang = useMutation({
+  return useMutation({
     mutationFn: (data: EditGangDto) => postGang(data),
     onSuccess: () => {
       toast.success(t(KEY.common_save_successful));
-    },
-    onError: (err) => {
-      toast.error(t(KEY.common_something_went_wrong));
-      console.error(err);
+      queryClient.invalidateQueries({ queryKey: gangKeys.all });
     },
   });
+}
 
-  const editGang = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: EditGangDto }) => putGang(id, data),
+export function useUpdateGang() {
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: ID; data: EditGangDto }) => putGang(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: gangKeys.all });
       toast.success(t(KEY.common_save_successful));
-    },
-    onError: (err) => {
-      toast.error(t(KEY.common_something_went_wrong));
-      console.error(err);
+      queryClient.invalidateQueries({ queryKey: gangKeys.all });
     },
   });
+}
 
-  const deleteGang = useMutation({
-    mutationFn: (id: number) => apiDeleteGang(id),
+export function useDeleteGang() {
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+
+  return useMutation({
+    mutationFn: (id: ID) => deleteGang(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: gangKeys.all });
       toast.success(t(KEY.common_delete_successful));
+      queryClient.invalidateQueries({ queryKey: gangKeys.all });
     },
     onError: (err) => {
-      if (axios.isAxiosError(err) && err.response && err.response.data.detail) {
+      // Backend explains why a gang can't be deleted (e.g. it still has sections)
+      if (axios.isAxiosError(err) && err.response?.data?.detail) {
         toast.error(err.response.data.detail);
+        console.log(err);
         return;
       }
-      toast.error(t(KEY.common_something_went_wrong));
+      defaultOnError(err);
     },
   });
-
-  return {
-    createGang,
-    editGang,
-    deleteGang,
-  };
 }

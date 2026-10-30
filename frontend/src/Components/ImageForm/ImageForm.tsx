@@ -18,8 +18,15 @@ import {
 } from '~/Components';
 import { FormDescription } from '~/Components/Forms/Form';
 import { useAuthContext } from '~/context/AuthContext';
-import { IMAGE_FILE, TAGS, TITLE, useImageMutations } from '~/domain';
-import type { ImageDto } from '~/dto';
+import {
+  IMAGE_FILE,
+  IMAGE_TAGS,
+  IMAGE_TITLE,
+  type ImageDto,
+  useCreateImage,
+  useDeleteImage,
+  useUpdateImage,
+} from '~/domain';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { PERM } from '~/permissions';
@@ -29,8 +36,8 @@ import styles from './ImageForm.module.scss';
 
 const schema = z.object({
   file: IMAGE_FILE.optional(),
-  title: TITLE,
-  tags: TAGS,
+  title: IMAGE_TITLE,
+  tags: IMAGE_TAGS,
 });
 
 type SchemaType = z.infer<typeof schema>;
@@ -43,7 +50,9 @@ type ImageFormProps = {
 export function ImageForm({ image, onCreated }: ImageFormProps) {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
-  const { createImage, editImage, deleteImage } = useImageMutations();
+  const createImage = useCreateImage();
+  const editImage = useUpdateImage();
+  const deleteImage = useDeleteImage();
 
   const { user } = useAuthContext();
 

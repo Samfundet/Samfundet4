@@ -782,6 +782,8 @@ export const KEY = {
   error_submitting_reservation: 'error_submitting_reservation',
   error_invalid_reservation_data: 'error_invalid_reservation_data',
   error_invalid_slug: 'error_invalid_slug',
+  error_invalid_image_file_type: 'error_invalid_image_file_type',
+  error_file_must_be_pdf: 'error_file_must_be_pdf',
 
   // Event form validation
   event_form_title_required: 'event_form_title_required',

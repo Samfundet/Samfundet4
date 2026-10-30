@@ -62,7 +62,6 @@ export {
   EventCategory,
 } from './types';
 export type {
-  EventId,
   EventFilters,
   EventStatus,
   EventAgeRestrictionValue,

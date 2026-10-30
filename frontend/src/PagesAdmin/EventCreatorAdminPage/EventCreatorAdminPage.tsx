@@ -58,8 +58,8 @@ export function EventCreatorAdminPage() {
   const templateId = isValidEventId(requestedTemplateId) ? requestedTemplateId : undefined;
   const isCloning = templateId !== undefined;
 
-  const { data: eventFetch, isLoading: eventFetchLoading } = useGetEvent(id ?? '');
-  const { data: eventCopy, isLoading: eventCopyLoading } = useGetEventForCloning(templateId ?? '');
+  const { data: eventFetch, isLoading: eventFetchLoading } = useGetEvent(id);
+  const { data: eventCopy, isLoading: eventCopyLoading } = useGetEventForCloning(templateId);
 
   const event = isCloning ? eventCopy : eventFetch;
   const { data: venues = [], isLoading: isVenuesLoading } = useGetVenues();

@@ -4,8 +4,7 @@ import { Button, Link } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
 import { useAuthContext } from '~/context/AuthContext';
-import { useGetAdminInfoPages, useInfoPageMutations } from '~/domain';
-import type { InformationPageDto } from '~/dto';
+import { type InformationPageDto, useDeleteInfoPage, useGetAdminInfoPages } from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
@@ -38,7 +37,7 @@ export function InformationAdminPage() {
 
   const { user } = useAuthContext();
   const { data, isLoading } = useGetAdminInfoPages();
-  const { deleteInfoPage } = useInfoPageMutations();
+  const deleteInfoPage = useDeleteInfoPage();
 
   const tableColumns = [
     '', // Visibility icon
