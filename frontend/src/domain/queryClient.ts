@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { KEY } from '~/i18n/constants';
 import { defaultOnError } from './utils';
 
-function is404(error: Error) {
+export function is404(error: Error | null) {
   return error instanceof AxiosError && error.response?.status === 404;
 }
 

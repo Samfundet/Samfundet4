@@ -11,6 +11,7 @@ export {
 } from './api';
 export { useCreateInfoPage, useUpdateInfoPage, useDeleteInfoPage } from './mutations';
 export {
+  useGetInfoPage,
   useGetAdminInfoPages,
   useGetAdminInfoPage,
   useGetAdminInfoPageHistory,

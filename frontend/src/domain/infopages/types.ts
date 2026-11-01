@@ -1,12 +1,11 @@
 import type { BaseModelDto, OrganizationDto } from '~/dto';
 import type { GangDto } from '../gangs/types';
 import type { GangSectionDto } from '../gangsection/types';
-import type { Slug } from '../types';
 
 export type InformationPageDto = BaseModelDto & {
   // Only admin endpoints include id
   id?: number;
-  slug_field: Slug;
+  slug_field: string;
 
   title_nb?: string;
   text_nb?: string;
@@ -23,7 +22,7 @@ export type InformationPageDto = BaseModelDto & {
 };
 
 export type EditInformationPageDto = {
-  slug_field: Slug;
+  slug_field: string;
   title_nb: string;
   text_nb: string;
   title_en: string;

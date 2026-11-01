@@ -22,7 +22,7 @@ import {
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
 import { getInfobox, postInfobox, putInfobox } from '~/api';
-import { type ImageDto, getImage } from '~/domain';
+import { type ImageDto, useGetImage } from '~/domain';
 import type { InfoboxDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
@@ -106,7 +106,7 @@ export function InfoboxFormAdminPage() {
   });
 
   const {
-    data: editData,
+    data: infobox,
     isLoading: isLoadingEdit,
     error: editQueryError,
   } = useQuery({
@@ -117,27 +117,28 @@ export function InfoboxFormAdminPage() {
         return undefined;
       }
 
-      const infobox = await getInfobox(infoboxId);
-      const image = infobox.image ? await getImage(infobox.image).catch(() => undefined) : undefined;
-      return { infobox, image };
+      return getInfobox(infoboxId);
     },
   });
 
+  const { data: image, isLoading: isLoadingImage } = useGetImage(infobox?.image ?? undefined);
+
   useEffect(() => {
-    if (!editData) {
+    // Wait for the image so the form is only reset once it has everything
+    if (!infobox || isLoadingImage) {
       return;
     }
 
     form.reset({
-      title_nb: editData.infobox.title_nb ?? '',
-      text_nb: editData.infobox.text_nb ?? '',
-      title_en: editData.infobox.title_en,
-      text_en: editData.infobox.text_en,
-      color: editData.infobox.color,
-      url: editData.infobox.url ?? '',
-      image: editData.image,
+      title_nb: infobox.title_nb ?? '',
+      text_nb: infobox.text_nb ?? '',
+      title_en: infobox.title_en,
+      text_en: infobox.text_en,
+      color: infobox.color,
+      url: infobox.url ?? '',
+      image,
     });
-  }, [editData, form]);
+  }, [infobox, image, isLoadingImage, form]);
 
   // Other errors are toasted by the global QueryCache handler in index.tsx
   useEffect(() => {
@@ -172,7 +173,7 @@ export function InfoboxFormAdminPage() {
   });
 
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
-  const showSpinner = isLoadingEdit || isSubmitting;
+  const showSpinner = isLoadingEdit || isLoadingImage || isSubmitting;
 
   const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_infobox)}`);
   const title = id
@@ -192,7 +193,7 @@ export function InfoboxFormAdminPage() {
     };
 
     // Only send the image when it was changed, so a failed image fetch on load doesn't unlink the stored image.
-    if (infoboxId === undefined || imageId !== (editData?.image?.id ?? null)) {
+    if (infoboxId === undefined || imageId !== (image?.id ?? null)) {
       payload.image = imageId;
     }
 

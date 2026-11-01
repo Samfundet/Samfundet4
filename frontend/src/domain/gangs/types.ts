@@ -1,5 +1,4 @@
 import type { OrganizationDto } from '~/dto';
-import type { Slug } from '../types';
 
 export type GangDto = {
   id: number;
@@ -9,7 +8,7 @@ export type GangDto = {
   webpage?: string;
   logo?: string;
   gang_type?: number | null;
-  info_page?: Slug | null;
+  info_page?: string | null;
   organization?: number | null;
 };
 
@@ -21,7 +20,7 @@ export type EditGangDto = {
   logo?: File;
   organization?: number;
   gang_type?: number | null;
-  info_page?: Slug | null;
+  info_page?: string | null;
 };
 
 export type GangTypeDto = {

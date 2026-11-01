@@ -2,7 +2,6 @@ import axios from 'axios';
 import { BACKEND_DOMAIN } from '~/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import type { ID } from '../types';
 import type { ClosedPeriodDto } from './types';
 
 export async function getClosedPeriods(): Promise<ClosedPeriodDto[]> {
@@ -19,7 +18,7 @@ export async function getActiveClosedPeriods(): Promise<ClosedPeriodDto[]> {
   return response.data;
 }
 
-export async function getClosedPeriod(id: ID): Promise<ClosedPeriodDto> {
+export async function getClosedPeriod(id: string | number): Promise<ClosedPeriodDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -31,7 +30,7 @@ export async function getClosedPeriod(id: ID): Promise<ClosedPeriodDto> {
   return response.data;
 }
 
-export async function putClosedPeriod(id: ID, data: Partial<ClosedPeriodDto>): Promise<ClosedPeriodDto> {
+export async function putClosedPeriod(id: string | number, data: Partial<ClosedPeriodDto>): Promise<ClosedPeriodDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -50,7 +49,7 @@ export async function postClosedPeriod(data: Partial<ClosedPeriodDto>): Promise<
   return response.data;
 }
 
-export async function deleteClosedPeriod(id: ID): Promise<void> {
+export async function deleteClosedPeriod(id: string | number): Promise<void> {
   const url =
     BACKEND_DOMAIN +
     reverse({

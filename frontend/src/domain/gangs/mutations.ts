@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { KEY } from '~/i18n/constants';
-import type { ID } from '../types';
 import { defaultOnError } from '../utils';
 import { deleteGang, postGang, putGang } from './api';
 import { gangKeys } from './queryKeys';
@@ -27,7 +26,7 @@ export function useUpdateGang() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: ID; data: EditGangDto }) => putGang(id, data),
+    mutationFn: ({ id, data }: { id: string | number; data: EditGangDto }) => putGang(id, data),
     onSuccess: () => {
       toast.success(t(KEY.common_save_successful));
       queryClient.invalidateQueries({ queryKey: gangKeys.all });
@@ -40,7 +39,7 @@ export function useDeleteGang() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: (id: ID) => deleteGang(id),
+    mutationFn: (id: string | number) => deleteGang(id),
     onSuccess: () => {
       toast.success(t(KEY.common_delete_successful));
       queryClient.invalidateQueries({ queryKey: gangKeys.all });

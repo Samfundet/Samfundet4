@@ -1,5 +1,4 @@
 import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import type { ID } from '../types';
 import { getCaseDocument, getCaseDocumentCategories, getCaseDocuments } from './api';
 import { caseDocumentKeys } from './queryKeys';
 import type { CaseDocumentCategoryDto, CaseDocumentDto } from './types';
@@ -20,7 +19,7 @@ export function useGetCaseDocuments(props?: Partial<UseQueryOptions<CaseDocument
   });
 }
 
-export function useGetCaseDocument(id: ID, props?: Partial<UseQueryOptions<CaseDocumentDto>>) {
+export function useGetCaseDocument(id: string | number, props?: Partial<UseQueryOptions<CaseDocumentDto>>) {
   return useQuery({
     queryKey: caseDocumentKeys.detail(id),
     queryFn: () => getCaseDocument(id),

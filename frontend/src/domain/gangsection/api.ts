@@ -2,10 +2,9 @@ import axios from 'axios';
 import { BACKEND_DOMAIN } from '~/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import type { ID } from '../types';
 import type { EditGangSectionDto, GangSectionDto } from './types';
 
-export async function getAdminGangSections(id: ID): Promise<GangSectionDto[]> {
+export async function getAdminGangSections(id: string | number): Promise<GangSectionDto[]> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -17,7 +16,7 @@ export async function getAdminGangSections(id: ID): Promise<GangSectionDto[]> {
   return response.data;
 }
 
-export async function getAdminGangSection(id: ID): Promise<GangSectionDto> {
+export async function getAdminGangSection(id: string | number): Promise<GangSectionDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -36,7 +35,7 @@ export async function postGangSection(data: EditGangSectionDto): Promise<GangSec
   return response.data;
 }
 
-export async function putGangSection(id: ID, data: EditGangSectionDto): Promise<GangSectionDto> {
+export async function putGangSection(id: string | number, data: EditGangSectionDto): Promise<GangSectionDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -48,7 +47,7 @@ export async function putGangSection(id: ID, data: EditGangSectionDto): Promise<
   return response.data;
 }
 
-export async function deleteGangSection(id: ID): Promise<void> {
+export async function deleteGangSection(id: string | number): Promise<void> {
   const url =
     BACKEND_DOMAIN +
     reverse({

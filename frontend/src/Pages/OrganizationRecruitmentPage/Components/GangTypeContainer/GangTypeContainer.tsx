@@ -2,30 +2,29 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { SamfundetLogoSpinner } from '~/Components';
 import { getRecruitmentPositions } from '~/api';
-import { type GangTypeDto, getOrganizedGangList } from '~/domain';
+import { useGetOrganizedGangs } from '~/domain';
 import type { RecruitmentPositionDto } from '~/dto';
 import { GangPositionDropdown } from '../GangPositionDropdown';
 
 export function GangTypeContainer() {
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>();
-  const [recruitingGangTypes, setRecruitingGangs] = useState<GangTypeDto[]>();
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingPositions, setLoadingPositions] = useState<boolean>(true);
   const { recruitmentId } = useParams();
+  const { data: recruitingGangTypes, isLoading: loadingGangTypes } = useGetOrganizedGangs();
   useEffect(() => {
     if (!recruitmentId) return;
-    Promise.all([getRecruitmentPositions(recruitmentId), getOrganizedGangList()])
-      .then(([recruitmentRes, gangsRes]) => {
+    getRecruitmentPositions(recruitmentId)
+      .then((recruitmentRes) => {
         setRecruitmentPositions(recruitmentRes.data);
-        setRecruitingGangs(gangsRes);
-        setLoading(false);
+        setLoadingPositions(false);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
-        setLoading(false);
+        setLoadingPositions(false);
       });
   }, [recruitmentId]);
 
-  return loading ? (
+  return loadingPositions || loadingGangTypes ? (
     <SamfundetLogoSpinner />
   ) : (
     <>

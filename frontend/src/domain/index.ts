@@ -126,6 +126,7 @@ export {
   useDeleteGang,
   useGetOrganizedGangs,
   useGetAdminGangs,
+  useGetAdminGang,
   useGetAdminGangTypes,
   gangKeys,
   GANG_LOGO_FILE,
@@ -190,6 +191,7 @@ export {
   useCreateInfoPage,
   useUpdateInfoPage,
   useDeleteInfoPage,
+  useGetInfoPage,
   useGetAdminInfoPages,
   useGetAdminInfoPage,
   useGetAdminInfoPageHistory,
@@ -232,6 +234,5 @@ export type {
   VenueOpeningHoursUpdate,
 } from './venues';
 export { IMAGE_FILE, SLUG } from './schema';
-export type { ID, Slug } from './types';
 export { zodEnum } from './utils';
-export { queryClient } from './queryClient';
+export { is404, queryClient } from './queryClient';

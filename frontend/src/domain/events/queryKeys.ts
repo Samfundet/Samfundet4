@@ -1,4 +1,3 @@
-import type { ID } from '../types';
 import type { EventFilters } from './types';
 
 export const eventKeys = {
@@ -6,7 +5,7 @@ export const eventKeys = {
   lists: () => [...eventKeys.all, 'list'] as const,
   list: () => [...eventKeys.lists(), {}] as const,
   details: () => [...eventKeys.all, 'detail'] as const,
-  detail: (id: ID | undefined) => [...eventKeys.details(), id] as const,
+  detail: (id: string | number | undefined) => [...eventKeys.details(), id] as const,
 
   upcomings: () => [...eventKeys.all, 'upcoming'] as const,
   perDay: () => [...eventKeys.upcomings(), 'per-day'] as const,
@@ -15,10 +14,10 @@ export const eventKeys = {
     [...eventKeys.upcomingPaginateds(), { page, pageSize, filters }] as const,
 
   groups: () => [...eventKeys.all, 'group'] as const,
-  group: (id: ID) => [...eventKeys.groups(), id] as const,
+  group: (id: string | number) => [...eventKeys.groups(), id] as const,
 
   clones: () => [...eventKeys.all, 'clone'] as const,
-  clone: (id: ID | undefined) => [...eventKeys.clones(), id] as const,
+  clone: (id: string | number | undefined) => [...eventKeys.clones(), id] as const,
 };
 
 export const billigKeys = {

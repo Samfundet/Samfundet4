@@ -1,42 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SamfundetLogoSpinner, type Tab, TabBar, Text } from '~/Components';
 import { GangsTabs } from '~/Pages/OrganizationRecruitmentPage/Components/GangsTabs/GangsTabs';
 import { NoPositions } from '~/Pages/RecruitmentPage/Components/NoPositions/NoPositions';
-import { type GangTypeDto, getOrganizedGangList } from '~/domain';
+import { type GangTypeDto, useGetOrganizedGangs } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from './RecruitmentTabs.module.scss';
 
 export function RecruitmentTabs() {
-  const [loading, setLoading] = useState(false);
-  const [gangCategories, setGangCategories] = useState<GangTypeDto[]>([]);
-  const [currentTab, setCurrentTab] = useState<Tab<GangTypeDto>>();
+  const [selectedTab, setSelectedTab] = useState<Tab<GangTypeDto>>();
   const { t } = useTranslation();
 
-  useEffect(() => {
-    setLoading(true);
-    getOrganizedGangList()
-      //TODO: DO IN ISSUE #1121, only get GANG TYPES recruiting in "this" recruitment.
-      // also, this API call should probably be renamed "getGangCategoryList"
-      // THIS CAN ALSO BE USED IN GangsTypeContainer/GangPositionDropdown
-      .then((response) => {
-        setGangCategories(response);
-        if (response.length > 0) {
-          const initialTab: Tab<GangTypeDto> = {
-            key: response[0].id,
-            label: dbT(response[0], 'title') ?? 'N/A',
-            value: response[0],
-          };
-          setCurrentTab(initialTab);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
-  }, []);
+  //TODO: DO IN ISSUE #1121, only get GANG TYPES recruiting in "this" recruitment.
+  // also, this API call should probably be renamed "getGangCategoryList"
+  // THIS CAN ALSO BE USED IN GangsTypeContainer/GangPositionDropdown
+  const { data: gangCategories = [], isLoading: loading } = useGetOrganizedGangs();
 
   const gangTypeTabs: Tab<GangTypeDto>[] = gangCategories.map((gangType) => ({
     key: gangType.id,
@@ -44,8 +23,10 @@ export function RecruitmentTabs() {
     value: gangType,
   }));
 
+  const currentTab: Tab<GangTypeDto> | undefined = selectedTab ?? gangTypeTabs[0];
+
   const handleSetTab = (tab: Tab<GangTypeDto>) => {
-    setCurrentTab(tab);
+    setSelectedTab(tab);
   };
 
   return (

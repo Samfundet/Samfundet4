@@ -1,6 +1,5 @@
-import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import type { ID } from '../types';
-import { getAdminGangTypes, getAdminGangs, getOrganizedGangList } from './api';
+import { type UseQueryOptions, skipToken, useQuery } from '@tanstack/react-query';
+import { getAdminGang, getAdminGangTypes, getAdminGangs, getOrganizedGangList } from './api';
 import { gangKeys } from './queryKeys';
 import type { AdminGangListOrganizationDto, AdminGangTypeDto, GangTypeDto } from './types';
 
@@ -20,7 +19,17 @@ export function useGetAdminGangs(props?: Partial<UseQueryOptions<AdminGangListOr
   });
 }
 
-export function useGetAdminGangTypes(organizationId: ID, props?: Partial<UseQueryOptions<AdminGangTypeDto[]>>) {
+export function useGetAdminGang(id: string | number | undefined) {
+  return useQuery({
+    queryKey: gangKeys.adminDetail(id),
+    queryFn: id !== undefined ? () => getAdminGang(id) : skipToken,
+  });
+}
+
+export function useGetAdminGangTypes(
+  organizationId: string | number,
+  props?: Partial<UseQueryOptions<AdminGangTypeDto[]>>,
+) {
   return useQuery({
     queryKey: gangKeys.adminTypes(organizationId),
     queryFn: () => getAdminGangTypes(organizationId),

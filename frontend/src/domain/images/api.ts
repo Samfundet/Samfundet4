@@ -4,7 +4,6 @@ import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import type { PageNumberPaginationType } from '~/types';
 import { buildPaginatedUrl } from '~/utils';
-import type { ID } from '../types';
 import type { ImageDto, ImagePatchDto, ImagePostDto } from './types';
 
 export async function getImagesPaginated(
@@ -22,7 +21,7 @@ export async function getImagesPaginated(
   return response.data;
 }
 
-export async function getImage(id: ID): Promise<ImageDto> {
+export async function getImage(id: string | number): Promise<ImageDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
   const response = await axios.get<ImageDto>(url, { withCredentials: true });
 
@@ -36,14 +35,14 @@ export async function postImage(data: ImagePostDto): Promise<ImageDto> {
   return response.data;
 }
 
-export async function patchImage(id: ID, data: ImagePatchDto): Promise<ImageDto> {
+export async function patchImage(id: string | number, data: ImagePatchDto): Promise<ImageDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
   const response = await axios.patchForm<ImageDto>(url, data, { withCredentials: true });
 
   return response.data;
 }
 
-export async function deleteImage(id: ID): Promise<void> {
+export async function deleteImage(id: string | number): Promise<void> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__images_detail, urlParams: { pk: id } });
 
   await axios.delete(url, { withCredentials: true });

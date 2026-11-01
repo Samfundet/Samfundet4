@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { KEY } from '~/i18n/constants';
-import type { ID } from '../types';
 import { deleteEvent, postEvent, putEvent } from './api';
 import { eventKeys } from './queryKeys';
 import type { EventWriteDto } from './types';
@@ -25,7 +24,7 @@ export function useUpdateEvent() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: ID; data: Partial<EventWriteDto> }) => putEvent(id, data),
+    mutationFn: ({ id, data }: { id: string | number; data: Partial<EventWriteDto> }) => putEvent(id, data),
     onSuccess: () => {
       toast.success(t(KEY.common_update_successful));
       queryClient.invalidateQueries({ queryKey: eventKeys.all });
@@ -38,7 +37,7 @@ export function useDeleteEvent() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: (id: ID) => deleteEvent(id),
+    mutationFn: (id: string | number) => deleteEvent(id),
     onSuccess: () => {
       toast.success(t(KEY.common_delete_successful));
       queryClient.invalidateQueries({ queryKey: eventKeys.all });

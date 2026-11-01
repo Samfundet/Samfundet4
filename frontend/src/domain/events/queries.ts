@@ -1,6 +1,5 @@
 import { type UseQueryOptions, skipToken, useQuery } from '@tanstack/react-query';
 import type { BilligEventDto } from '~/apis/billig/billigDtos';
-import type { ID } from '../types';
 import {
   getBilligEvents,
   getEvent,
@@ -42,14 +41,14 @@ export function useGetEventsUpcomingPaginated(
   });
 }
 
-export function useGetEvent(id: ID | undefined) {
+export function useGetEvent(id: string | number | undefined) {
   return useQuery({
     queryKey: eventKeys.detail(id),
     queryFn: id !== undefined ? () => getEvent(id) : skipToken,
   });
 }
 
-export function useGetEventForCloning(id: ID | undefined) {
+export function useGetEventForCloning(id: string | number | undefined) {
   return useQuery({
     queryKey: eventKeys.clone(id),
     queryFn: id !== undefined ? () => getEventForCloning(id) : skipToken,

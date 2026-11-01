@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { RecruitmentWithoutInterviewTable } from '~/Components';
 import { Text } from '~/Components/Text/Text';
 import { getApplicantsWithoutInterviews, getRecruitment, getRecruitmentGangStats } from '~/api';
-import { type GangDto, getAdminGang } from '~/domain';
+import { is404, useGetAdminGang } from '~/domain';
 import type { RecruitmentDto, RecruitmentUserDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
@@ -21,7 +21,7 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
   const [users, setUsers] = useState<RecruitmentUserDto[]>([]);
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [withoutInterviewCount, setWithoutInterviewCount] = useState<number>();
-  const [gang, setGang] = useState<GangDto>();
+  const { data: gang, error: gangError } = useGetAdminGang(gangId);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
@@ -42,21 +42,13 @@ export function RecruitmentUsersWithoutInterviewGangPage() {
     }
   }, [gangId, recruitmentId]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
+  // Other errors are toasted by the global QueryCache handler
+  // biome-ignore lint/correctness/useExhaustiveDependencies: navigate does not need to be in deplist
   useEffect(() => {
-    if (gangId) {
-      getAdminGang(gangId)
-        .then((gang) => {
-          setGang(gang);
-        })
-        .catch((data) => {
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.not_found, replace: true });
-          }
-          toast.error(t(KEY.common_something_went_wrong));
-        });
+    if (is404(gangError)) {
+      navigate({ url: ROUTES.frontend.not_found, replace: true });
     }
-  }, [gangId]);
+  }, [gangError]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {

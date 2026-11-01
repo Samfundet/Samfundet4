@@ -2,7 +2,6 @@ import axios from 'axios';
 import { BACKEND_DOMAIN } from '~/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import type { ID } from '../types';
 import type { AdminGangListOrganizationDto, AdminGangTypeDto, EditGangDto, GangDto, GangTypeDto } from './types';
 
 export async function getOrganizedGangList(): Promise<GangTypeDto[]> {
@@ -19,7 +18,7 @@ export async function getAdminGangs(): Promise<AdminGangListOrganizationDto[]> {
   return response.data;
 }
 
-export async function getAdminGang(id: ID): Promise<GangDto> {
+export async function getAdminGang(id: string | number): Promise<GangDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -31,7 +30,7 @@ export async function getAdminGang(id: ID): Promise<GangDto> {
   return response.data;
 }
 
-export async function getAdminGangTypes(organizationId: ID): Promise<AdminGangTypeDto[]> {
+export async function getAdminGangTypes(organizationId: string | number): Promise<AdminGangTypeDto[]> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -43,7 +42,7 @@ export async function getAdminGangTypes(organizationId: ID): Promise<AdminGangTy
   return response.data;
 }
 
-export async function getGangsByOrganization(id: ID): Promise<GangDto[]> {
+export async function getGangsByOrganization(id: string | number): Promise<GangDto[]> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -62,7 +61,7 @@ export async function postGang(data: EditGangDto): Promise<GangDto> {
   return response.data;
 }
 
-export async function putGang(id: ID, data: EditGangDto): Promise<GangDto> {
+export async function putGang(id: string | number, data: EditGangDto): Promise<GangDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -74,7 +73,7 @@ export async function putGang(id: ID, data: EditGangDto): Promise<GangDto> {
   return response.data;
 }
 
-export async function deleteGang(id: ID): Promise<void> {
+export async function deleteGang(id: string | number): Promise<void> {
   const url =
     BACKEND_DOMAIN +
     reverse({

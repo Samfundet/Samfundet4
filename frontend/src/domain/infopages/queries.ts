@@ -1,13 +1,20 @@
 import { skipToken, useQuery } from '@tanstack/react-query';
-import type { Slug } from '../types';
 import {
   getAdminInformationPage,
   getAdminInformationPageHistory,
   getAdminInformationPageRevision,
   getAdminInformationPages,
+  getInformationPage,
   getInformationPageOwnerOptions,
 } from './api';
 import { infoPageKeys } from './queryKeys';
+
+export function useGetInfoPage(slug: string | undefined) {
+  return useQuery({
+    queryKey: infoPageKeys.public(slug),
+    queryFn: slug !== undefined ? () => getInformationPage(slug) : skipToken,
+  });
+}
 
 export function useGetAdminInfoPages() {
   return useQuery({
@@ -16,7 +23,7 @@ export function useGetAdminInfoPages() {
   });
 }
 
-export function useGetAdminInfoPage(slug: Slug) {
+export function useGetAdminInfoPage(slug: string) {
   return useQuery({
     queryKey: infoPageKeys.detail(slug),
     queryFn: () => getAdminInformationPage(slug),
@@ -31,7 +38,7 @@ export function useGetInfoPageOwnerOptions() {
   });
 }
 
-export function useGetAdminInfoPageHistory(slug: Slug) {
+export function useGetAdminInfoPageHistory(slug: string) {
   return useQuery({
     queryKey: infoPageKeys.history(slug),
     queryFn: () => getAdminInformationPageHistory(slug),
@@ -39,7 +46,7 @@ export function useGetAdminInfoPageHistory(slug: Slug) {
   });
 }
 
-export function useGetAdminInfoPageRevision(slug: Slug, version: number | undefined) {
+export function useGetAdminInfoPageRevision(slug: string, version: number | undefined) {
   const canFetch = slug !== '' && version !== undefined;
   return useQuery({
     queryKey: infoPageKeys.revision(slug, version),

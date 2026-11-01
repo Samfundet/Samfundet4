@@ -9,7 +9,7 @@ export {
   deleteGang,
 } from './api';
 export { useCreateGang, useUpdateGang, useDeleteGang } from './mutations';
-export { useGetOrganizedGangs, useGetAdminGangs, useGetAdminGangTypes } from './queries';
+export { useGetOrganizedGangs, useGetAdminGangs, useGetAdminGang, useGetAdminGangTypes } from './queries';
 export { gangKeys } from './queryKeys';
 export { GANG_LOGO_FILE, GANG_NAME, GANG_ABBREVIATION, GANG_INFO_PAGE, GANG_TYPE } from './schema';
 export type {

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
-import type { ID } from '../types';
 import { defaultOnError } from '../utils';
 import { deleteImage, patchImage, postImage } from './api';
 import { imageKeys } from './queryKeys';
@@ -28,7 +27,7 @@ export function useUpdateImage() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: ID; data: ImagePatchDto }) => patchImage(id, data),
+    mutationFn: ({ id, data }: { id: string | number; data: ImagePatchDto }) => patchImage(id, data),
     onSuccess: () => {
       toast.success(t(KEY.common_save_successful));
       queryClient.invalidateQueries({ queryKey: imageKeys.all });
@@ -41,7 +40,7 @@ export function useDeleteImage() {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: (id: ID) => deleteImage(id),
+    mutationFn: (id: string | number) => deleteImage(id),
     onSuccess: () => {
       toast.success(t(KEY.common_delete_successful));
       queryClient.invalidateQueries({ queryKey: imageKeys.all });

@@ -2,7 +2,6 @@ import axios from 'axios';
 import { BACKEND_DOMAIN } from '~/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import type { Slug } from '../types';
 import type {
   EditInformationPageDto,
   InformationPageDto,
@@ -11,7 +10,7 @@ import type {
   InformationPageRevisionDto,
 } from './types';
 
-export async function getInformationPage(slug: Slug): Promise<InformationPageDto> {
+export async function getInformationPage(slug: string): Promise<InformationPageDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -30,7 +29,7 @@ export async function getAdminInformationPages(): Promise<InformationPageDto[]> 
   return response.data;
 }
 
-export async function getAdminInformationPage(slug: Slug): Promise<InformationPageDto> {
+export async function getAdminInformationPage(slug: string): Promise<InformationPageDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -42,7 +41,7 @@ export async function getAdminInformationPage(slug: Slug): Promise<InformationPa
   return response.data;
 }
 
-export async function getAdminInformationPageHistory(slug: Slug): Promise<InformationPageRevisionDto[]> {
+export async function getAdminInformationPageHistory(slug: string): Promise<InformationPageRevisionDto[]> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -55,7 +54,7 @@ export async function getAdminInformationPageHistory(slug: Slug): Promise<Inform
 }
 
 export async function getAdminInformationPageRevision(
-  slug: Slug,
+  slug: string,
   version: number,
 ): Promise<InformationPageRevisionDetailDto> {
   const url =
@@ -83,7 +82,7 @@ export async function postInformationPage(data: EditInformationPageDto): Promise
   return response.data;
 }
 
-export async function putInformationPage(slug: Slug, page: EditInformationPageDto): Promise<InformationPageDto> {
+export async function putInformationPage(slug: string, page: EditInformationPageDto): Promise<InformationPageDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -95,7 +94,7 @@ export async function putInformationPage(slug: Slug, page: EditInformationPageDt
   return response.data;
 }
 
-export async function deleteInformationPage(slug: Slug): Promise<void> {
+export async function deleteInformationPage(slug: string): Promise<void> {
   const url =
     BACKEND_DOMAIN +
     reverse({

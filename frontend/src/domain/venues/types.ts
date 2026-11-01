@@ -1,9 +1,8 @@
 import type { Day } from '~/types';
-import type { Slug } from '../types';
 
 export type VenueDto = {
   id: number;
-  slug: Slug;
+  slug: string;
   name: string;
   description?: string;
   floor?: number;
@@ -50,6 +49,6 @@ export type VenueOpeningHoursField = `is_open_${Day}` | `opening_${Day}` | `clos
 export type VenueOpeningHoursPatch = Partial<Pick<VenueDto, VenueOpeningHoursField>>;
 
 export type VenueOpeningHoursUpdate = {
-  slug: Slug;
+  slug: string;
   changes: VenueOpeningHoursPatch;
 };

@@ -2,7 +2,6 @@ import axios from 'axios';
 import { BACKEND_DOMAIN } from '~/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
-import type { ID } from '../types';
 import type { CaseDocumentCategoryDto, CaseDocumentDto, CaseDocumentPostDto } from './types';
 
 export async function getCaseDocuments(): Promise<CaseDocumentDto[]> {
@@ -19,7 +18,7 @@ export async function getCaseDocumentCategories(): Promise<CaseDocumentCategoryD
   return response.data;
 }
 
-export async function getCaseDocument(id: ID): Promise<CaseDocumentDto> {
+export async function getCaseDocument(id: string | number): Promise<CaseDocumentDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -40,7 +39,7 @@ export async function postCaseDocument(data: CaseDocumentPostDto): Promise<CaseD
   return response.data;
 }
 
-export async function putCaseDocument(id: ID, data: Partial<CaseDocumentDto>): Promise<CaseDocumentDto> {
+export async function putCaseDocument(id: string | number, data: Partial<CaseDocumentDto>): Promise<CaseDocumentDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -52,7 +51,7 @@ export async function putCaseDocument(id: ID, data: Partial<CaseDocumentDto>): P
   return response.data;
 }
 
-export async function deleteCaseDocument(id: ID): Promise<void> {
+export async function deleteCaseDocument(id: string | number): Promise<void> {
   const url =
     BACKEND_DOMAIN +
     reverse({

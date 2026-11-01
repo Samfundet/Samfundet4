@@ -4,7 +4,6 @@ import { BACKEND_DOMAIN } from '~/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { buildPaginatedUrl } from '~/utils';
-import type { ID } from '../types';
 import type {
   EventCloneDto,
   EventDto,
@@ -72,7 +71,7 @@ export async function postEvent(data: Partial<EventWriteDto>): Promise<EventDto>
   return response.data;
 }
 
-export async function putEvent(id: ID, data: Partial<EventWriteDto>): Promise<EventDto> {
+export async function putEvent(id: string | number, data: Partial<EventWriteDto>): Promise<EventDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -84,7 +83,7 @@ export async function putEvent(id: ID, data: Partial<EventWriteDto>): Promise<Ev
   return response.data;
 }
 
-export async function deleteEvent(id: ID): Promise<void> {
+export async function deleteEvent(id: string | number): Promise<void> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -94,7 +93,7 @@ export async function deleteEvent(id: ID): Promise<void> {
   await axios.delete(url, { withCredentials: true });
 }
 
-export async function getEvent(id: ID): Promise<EventDto> {
+export async function getEvent(id: string | number): Promise<EventDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
@@ -129,11 +128,11 @@ export async function getBilligEvents(): Promise<BilligEventDto[]> {
 /**
  * Get a copy of an event without unique properties, used as a starting point when cloning.
  *
- * @param {ID} id Id of the event to copy
+ * @param {string | number} id Id of the event to copy
  *
  * @returns Copy of the event
  * */
-export async function getEventForCloning(id: ID): Promise<EventCloneDto> {
+export async function getEventForCloning(id: string | number): Promise<EventCloneDto> {
   const url =
     BACKEND_DOMAIN +
     reverse({
