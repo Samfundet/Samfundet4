@@ -1,6 +1,6 @@
 /* Temporary links to Samfundet3 which can allow us to incrementally ship Samfundet4 */
 
-const BASE_URL = 'https://www.samfundet.no';
+const BASE_URL = import.meta.env.VITE_SAMF3_DOMAIN;
 const PHOTO = 'https://foto.samfundet.no';
 
 // Informasjonssider
