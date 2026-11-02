@@ -40,6 +40,11 @@ DATABASE_ROUTERS = ['root.db_router.SamfundetDatabaseRouter']
 DEBUG = False
 ALLOWED_HOSTS: list[str] = []
 
+# On cirkus, TLS ends in hitch, so Django gets plain http. Varnish sets X-Forwarded-Proto to https
+# for TLS requests and removes it from all others, so it can be trusted.
+# https://docs.djangoproject.com/en/5.2/ref/settings/#secure-proxy-ssl-header
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 ENV = os.environ.get('ENV')
 
 BILLIG_PAYMENT_URL = os.environ.get('BILLIG_PAYMENT_URL', 'https://billettsalg.samfundet.no/pay')
