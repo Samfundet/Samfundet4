@@ -17,7 +17,10 @@ type NullOption = {
   disabled?: boolean;
 };
 
-type PrimitiveDropdownProps<T> = {
+type PrimitiveDropdownProps<T> = Omit<
+  React.SelectHTMLAttributes<HTMLSelectElement>,
+  'children' | 'className' | 'defaultValue' | 'disabled' | 'onChange' | 'value'
+> & {
   className?: string;
   classNameSelect?: string;
   options?: DropdownOption<T>[];
@@ -80,6 +83,7 @@ function DropdownInner<T>(
     nullOption = false,
     sortAlphabetic = false,
     error,
+    ...selectProps
   }: DropdownProps<T>,
   ref: React.Ref<HTMLSelectElement>,
 ) {
@@ -138,6 +142,7 @@ function DropdownInner<T>(
     <label className={classnames(className, styles.select_wrapper)}>
       {label}
       <select
+        {...selectProps}
         ref={ref}
         className={classNames(classNameSelect, styles.samf_select, {
           [styles.error]: error, // is defined by base-input mixin
