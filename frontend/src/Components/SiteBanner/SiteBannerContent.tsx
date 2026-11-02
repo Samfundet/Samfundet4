@@ -5,9 +5,10 @@ type SiteBannerContentProps = {
   text: string;
   url?: string | null;
   newTab?: boolean;
+  preview?: boolean;
 };
 
-export function SiteBannerContent({ text, url, newTab }: SiteBannerContentProps) {
+export function SiteBannerContent({ text, url, newTab, preview = false }: SiteBannerContentProps) {
   const content = <span className={styles.text}>{text}</span>;
 
   return (
@@ -16,7 +17,7 @@ export function SiteBannerContent({ text, url, newTab }: SiteBannerContentProps)
         {url ? (
           <a
             className={styles.link}
-            href={url}
+            href={preview ? undefined : url}
             target={newTab ? '_blank' : undefined}
             rel={newTab ? 'noopener noreferrer' : undefined}
           >

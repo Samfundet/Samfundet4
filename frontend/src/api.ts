@@ -56,8 +56,6 @@ import type {
   RegistrationDto,
   RoleDto,
   RoleUsersDto,
-  SiteBannerDto,
-  SiteBannerWriteDto,
   TagDto,
   TextItemDto,
   UserDto,
@@ -170,18 +168,6 @@ export async function assignUserToGroup(username: string, group_name: string): P
   const response = await axios.post(url, payload, { withCredentials: true });
 
   return response;
-}
-
-export async function getActiveSiteBanner(): Promise<SiteBannerDto | null> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__site_banners_active;
-  const response = await axios.get<SiteBannerDto | null>(url, { withCredentials: true });
-  return response.data;
-}
-
-export async function postSiteBanner(data: SiteBannerWriteDto): Promise<SiteBannerDto> {
-  const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__site_banners_list;
-  const response = await axios.post<SiteBannerDto>(url, data, { withCredentials: true });
-  return response.data;
 }
 
 export async function putUserPreference(id: string | number, data: Partial<UserPreferenceDto>): Promise<unknown> {

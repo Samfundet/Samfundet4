@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { isValidBannerUrl } from '~/Components/SiteBanner/utils';
 import { KEY } from '~/i18n/constants';
+import { isValidBannerUrl } from './utils';
 
 export const MAX_TEXT_LENGTH = 128;
 export const MAX_URL_LENGTH = 500;
@@ -42,5 +42,3 @@ export const siteBannerSchema = z
       });
     }
   });
-
-export type SiteBannerFormValues = z.infer<typeof siteBannerSchema>;

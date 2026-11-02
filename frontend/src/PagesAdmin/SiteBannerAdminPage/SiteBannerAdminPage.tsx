@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -8,63 +7,44 @@ import { toast } from 'react-toastify';
 import { Button, Checkbox, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
 import { FormDescription } from '~/Components/Forms/Form';
 import { SiteBannerContent } from '~/Components/SiteBanner/SiteBannerContent';
-import { isValidBannerUrl, normalizeBannerUrl } from '~/Components/SiteBanner/utils';
-import { postSiteBanner } from '~/api';
+import {
+  MAX_TEXT_LENGTH,
+  MAX_URL_LENGTH,
+  type SiteBannerFormValues,
+  getDefaultSiteBannerFormValues,
+  isValidBannerUrl,
+  normalizeBannerUrl,
+  siteBannerSchema,
+  useCreateSiteBanner,
+} from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { siteBannerKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
-import { utcTimestampToLocal } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
 import styles from './SiteBannerAdminPage.module.scss';
-import { MAX_TEXT_LENGTH, MAX_URL_LENGTH, type SiteBannerFormValues, siteBannerSchema } from './schema';
-
-function getDefaultValues(): SiteBannerFormValues {
-  return {
-    text_nb: '',
-    text_en: '',
-    url: '',
-    new_tab: false,
-    start_at: utcTimestampToLocal(new Date().toISOString(), false),
-    end_at: '',
-  };
-}
 
 export function SiteBannerAdminPage() {
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
   const form = useForm<SiteBannerFormValues>({
     resolver: zodResolver(siteBannerSchema),
-    defaultValues: getDefaultValues(),
+    defaultValues: getDefaultSiteBannerFormValues(),
     mode: 'onBlur',
   });
   const values = form.watch();
 
   useTitle(t(KEY.admin_site_banner_title));
 
-  const createSiteBanner = useMutation({
-    mutationFn: (data: SiteBannerFormValues) => {
-      const url = normalizeBannerUrl(data.url);
-      return postSiteBanner({
-        text_nb: data.text_nb,
-        text_en: data.text_en,
-        url: url || null,
-        new_tab: Boolean(url) && data.new_tab,
-        start_at: new Date(data.start_at).toISOString(),
-        end_at: new Date(data.end_at).toISOString(),
-      });
-    },
+  const createSiteBanner = useCreateSiteBanner({
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: siteBannerKeys.all });
       toast.success(t(KEY.common_creation_successful));
-      form.reset(getDefaultValues());
+      form.reset(getDefaultSiteBannerFormValues());
     },
     onError: (error) => {
       if (axios.isAxiosError<Partial<Record<keyof SiteBannerFormValues, string[]>>>(error)) {
         const errors = error.response?.data;
         if (error.response?.status === 400 && errors) {
           let hasFieldError = false;
-          for (const name of Object.keys(getDefaultValues()) as (keyof SiteBannerFormValues)[]) {
+          for (const name of Object.keys(getDefaultSiteBannerFormValues()) as (keyof SiteBannerFormValues)[]) {
             const messages = errors[name];
             if (Array.isArray(messages) && messages.length > 0) {
               form.setError(name, { type: 'server', message: messages.join(' ') });
@@ -145,6 +125,7 @@ export function SiteBannerAdminPage() {
                   <div key={preview.language} className={styles.preview_item}>
                     <span className={styles.language}>{preview.language}</span>
                     <SiteBannerContent
+                      preview
                       text={preview.text || t(KEY.admin_site_banner_preview_placeholder)}
                       url={previewUrl}
                       newTab={values.new_tab}

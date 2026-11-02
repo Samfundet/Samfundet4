@@ -1,10 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
 import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getActiveSiteBanner } from '~/api';
-import { MINUTE_MILLIS } from '~/constants';
+import { useGetActiveSiteBanner } from '~/domain';
 import { useScrollY } from '~/hooks';
-import { siteBannerKeys } from '~/queryKeys';
 import { dbT } from '~/utils';
 import styles from './SiteBanner.module.scss';
 import { SiteBannerContent } from './SiteBannerContent';
@@ -17,11 +14,7 @@ export function SiteBanner(): JSX.Element | null {
   const scrollY = useScrollY();
   const isCoveredByNavbar = scrollY > NAVBAR_COVER_THRESHOLD_PX;
 
-  const { data: visibleBanner } = useQuery({
-    queryKey: siteBannerKeys.active(),
-    queryFn: getActiveSiteBanner,
-    refetchInterval: MINUTE_MILLIS,
-  });
+  const { data: visibleBanner } = useGetActiveSiteBanner();
 
   useLayoutEffect(() => {
     const root = document.documentElement;
