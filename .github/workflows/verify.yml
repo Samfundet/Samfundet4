@@ -151,6 +151,7 @@ jobs:
           echo VITE_BACKEND_DOMAIN=http://backend:8000 >> frontend/.env.docker
           echo VITE_CYPRESS_BACKEND_DOMAIN=http://backend:8000 >> frontend/.env.docker
           echo VITE_CYPRESS_BASE_URL=http://frontend:3000 >> frontend/.env.docker
+          echo VITE_SAMF3_DOMAIN=https://www.samfundet.no >> frontend/.env.docker
 
       - name: Build images
         run: docker compose --env-file .env.example build backend frontend storybook
