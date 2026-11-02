@@ -5,9 +5,6 @@ import type { LinkTarget } from '~/Components/Link';
 import type { KV } from '~/constants';
 /** Module for global generic types. */
 
-/** Type for home page element. */
-export type HomePageElementVariation = 'carousel' | 'large-card';
-
 /** Type for html button types. */
 export type ButtonType = 'submit' | 'reset' | 'button';
 
@@ -108,76 +105,6 @@ export type DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K
 export type Day = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 export const ALL_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 export const WEEK_DAYS: Day[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
-
-/** Event types */
-export const EventStatusChoice = {
-  PUBLIC: 'public',
-  PRIVATE: 'private',
-  ARCHIVED: 'archived',
-  CANCELLED: 'cancelled',
-  DELETED: 'deleted',
-} as const;
-
-export type EventStatus = (typeof EventStatusChoice)[keyof typeof EventStatusChoice];
-
-export const EventAgeRestriction = {
-  NONE: 'none',
-  EIGHTEEN: 'eighteen',
-  TWENTY: 'twenty',
-  MIXED: 'mixed',
-} as const;
-
-export type EventAgeRestrictionValue = (typeof EventAgeRestriction)[keyof typeof EventAgeRestriction];
-
-export const EventTicketType = {
-  FREE: 'free',
-  INCLUDED: 'included',
-  BILLIG: 'billig',
-  REGISTRATION: 'registration',
-  CUSTOM: 'custom',
-} as const;
-
-export type EventTicketTypeValue = (typeof EventTicketType)[keyof typeof EventTicketType];
-
-export const ALL_TICKET_TYPES: EventTicketTypeValue[] = [
-  EventTicketType.FREE,
-  EventTicketType.INCLUDED,
-  EventTicketType.REGISTRATION,
-  EventTicketType.BILLIG,
-  EventTicketType.CUSTOM,
-];
-export const PAID_TICKET_TYPES: EventTicketTypeValue[] = [
-  EventTicketType.REGISTRATION,
-  EventTicketType.BILLIG,
-  EventTicketType.CUSTOM,
-];
-
-export const EventCategory = {
-  ART: 'art',
-  COURSE: 'course',
-  DJ: 'dj',
-  EXCENTERAFTEN: 'excenteraften',
-  FOOTBALL_MATCH: 'football_match',
-  HAPPENING: 'happening',
-  LUKA_EVENT: 'luka_event',
-  MEETING: 'meeting',
-  MOVIE: 'movie',
-  MUSIC: 'music',
-  PERFORMANCE: 'performance',
-  SHOW: 'show',
-  THEATER: 'theater',
-  THEME_PARTY: 'theme_party',
-  UKA_EVENT: 'uka_event',
-  PARTY_MEETING: 'party_meeting',
-  SAMFUNDET_MEETING: 'samfundet_meeting',
-  CONCERT: 'concert',
-  DEBATE: 'debate',
-  QUIZ: 'quiz',
-  LECTURE: 'lecture',
-  OTHER: 'other',
-} as const;
-
-export type EventCategoryValue = (typeof EventCategory)[keyof typeof EventCategory];
 
 export type CalendarMarker = {
   date: Date;
@@ -283,12 +210,6 @@ export interface PageNumberPaginationType<T> {
   results: T[];
 }
 
-export interface EventsPaginationType<T> extends PageNumberPaginationType<T> {
-  categories?: Array<[string, string]> | string[];
-  locations?: string[];
-  ticket_types?: Array<[string, string]> | string[];
-}
-
 /* For DRF pagination, see pagination.py */
 export interface CursorPaginatedResponse<T> {
   next: string | null; // URL or cursor for next page
@@ -303,3 +224,9 @@ export type HandleWithCrumb = {
 export interface MatchWithCrumb extends UIMatch {
   handle: HandleWithCrumb;
 }
+
+export type OpeningHourGroup = {
+  days: Day[];
+  opening?: string;
+  closing?: string;
+};

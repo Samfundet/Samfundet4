@@ -25,7 +25,7 @@ export function UserFeedback() {
           className={styles.modal_close_button}
           title="Close"
           icon="mdi:plus"
-          height="35"
+          size="xl"
           onClick={() => setIsOpen(false)}
           avatarColor="red"
         />

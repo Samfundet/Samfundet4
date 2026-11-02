@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { OPTIONAL_IMAGE } from '~/domain';
-import { KEY } from '~/i18n/constants';
 import {
   EVENT_AGE_RESTRICTION,
   EVENT_BILLIG_ID,
@@ -29,7 +28,8 @@ import {
   EVENT_X_LINK,
   EVENT_YOUTUBE_EMBED,
   EVENT_YOUTUBE_LINK,
-} from '~/schema/event';
+} from '~/domain';
+import { KEY } from '~/i18n/constants';
 import { getYouTubeVideoId } from '~/utils/socialMedia';
 
 const event_custom_ticket = z.object({
@@ -91,6 +91,10 @@ export const eventSchema = eventSchemaBase
   .refine((data) => !data.youtube_embed || !!getYouTubeVideoId(data.youtube_link), {
     message: KEY.event_youtube_video_required,
     path: ['youtube_link'],
+  })
+  .refine((data) => !data.start_dt || !data.end_dt || new Date(data.end_dt) >= new Date(data.start_dt), {
+    message: KEY.common_end_time_before_start_time,
+    path: ['end_dt'],
   });
 
 export type EventFormType = z.infer<typeof eventSchema>;

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Page } from '~/Components';
 import simenProffen from '~/assets/contributors/SimenProffen.jpg';
+import agnesaven from '~/assets/contributors/agnesaven.jpeg';
 import amaliejvik from '~/assets/contributors/amaliejvik.jpeg';
 import robines from '~/assets/contributors/robines.jpg';
 import snorre98 from '~/assets/contributors/snorre98.jpg';
@@ -35,7 +36,7 @@ const CONTRIBUTORS: Contributor[] = [
   { name: 'Eirik Hoem', github: 'eiriksho', from: 'H22', to: 'V23' },
   { name: 'Simen Seeberg-Rommetveit', github: 'simensee', from: 'H22', to: 'V25' },
   // V23
-  { name: 'Robin Espinosa Jelle', github: 'robines', from: 'V23', picture: robines, websjef: { from: 'H23', to: 'V24' } },
+  { name: 'Robin Espinosa Jelle', github: 'robines', from: 'V23', to: 'H26', picture: robines, websjef: { from: 'H23', to: 'V24' } },
   { name: 'Johanne Grønlien Gjedrem', github: 'johannegg', from: 'V23', to: 'V25' },
   { name: 'Tinius Presterud', github: 'tiniuspre', from: 'V23', to: 'V24' },
   // H23
@@ -57,6 +58,8 @@ const CONTRIBUTORS: Contributor[] = [
   // V26
   { name: 'Brage Sebastian Brevik', github: 'BragonSB', from: 'V26'},
   { name: 'Lea Emilie Schjoll', github: 'leaesc', from: 'V26'},
+  // H26
+  { name: 'Agnes Aven Suhr', github: 'agnesaven', from: 'H26', picture: agnesaven },
 ];
 // @formatter:on
 

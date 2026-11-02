@@ -81,7 +81,7 @@ class EventPerDayView(APIView):
         return Response(data=events_per_day)
 
 
-class EventsUpcomingView(ListAPIView):
+class EventsUpcomingPaginatedView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = EventSerializer
     pagination_class = CustomPageNumberPagination

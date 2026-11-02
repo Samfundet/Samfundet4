@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { InputField, MiniCalendar, TimeslotSelector } from '~/Components';
+import { Input, MiniCalendar, TimeslotSelector } from '~/Components';
 import {
   getInterview,
   getOccupiedTimeForUser,
@@ -86,7 +86,9 @@ export function SetInterviewManuallyForm({
 
         if (interviewDate && interviewTime) {
           setSelectedDate(interviewDate);
-          setInterviewTimeslot({ [formatDateYMD(interviewDate)]: [interviewTime] });
+          setInterviewTimeslot({
+            [formatDateYMD(interviewDate)]: [interviewTime],
+          });
         }
         setLocation(response.data.interview_location);
       })
@@ -184,11 +186,11 @@ export function SetInterviewManuallyForm({
             />
           </div>
           <span className={styles.choose_location_text}>{`${t(KEY.recruitment_choose_interview_location)}:`}</span>
-          <InputField
+          <Input
             type="text"
-            inputClassName={styles.input_field}
+            className={styles.input_field}
             value={location}
-            onChange={(value) => setLocation(value as string)}
+            onChange={(e) => setLocation(e.target.value)}
           />
 
           <div className={styles.button_row}>

@@ -5,10 +5,10 @@ import { Dropdown, FormControl, FormField, FormItem, FormLabel, FormMessage } fr
 
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { KEY } from '~/i18n/constants';
-import type { EventAgeRestrictionValue } from '~/types';
 import styles from '../EventCreatorAdminPage.module.scss';
 import type { FormType } from '../hooks/useEventCreatorForm';
 
+import type { EventAgeRestrictionValue } from '~/domain';
 import { PaymentForm } from '../components/PaymentForm';
 
 type Props = {

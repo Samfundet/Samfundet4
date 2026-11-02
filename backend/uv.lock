@@ -175,6 +175,19 @@ wheels = [
 ]
 
 [[package]]
+name = "django-admin-logs-viewer"
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "pytz" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ac/f0/5d480a7d30ca6846b73d3a25502690383fb9ed89ffd976ebb837eb0a9850/django_admin_logs_viewer-1.1.0.tar.gz", hash = "sha256:1f791d08249c2e2b4c27a50df2d2fb85276069118b1f2b7f1d3969bf15283abe", size = 13072, upload-time = "2025-08-23T07:38:07.769Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ed/de/6546d2e18fef8e0c92e6df567830ab1d9dae7645b197ac9e2966bcc442f3/django_admin_logs_viewer-1.1.0-py3-none-any.whl", hash = "sha256:b2fbd1230d1e3f2f52e5eec54c7fde6eb3848144f8422bbea1c22862d237a685", size = 16582, upload-time = "2025-08-23T07:38:06.955Z" },
+]
+
+[[package]]
 name = "django-cors-headers"
 version = "4.9.0"
 source = { registry = "https://pypi.org/simple" }
@@ -545,6 +558,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pytz"
+version = "2026.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/b0/ed/fa23d28713004418bbf2407127f80f385bfb0bf4e677bef02c25c27b00ee/pytz-2026.4.tar.gz", hash = "sha256:464303645bafafd72418898368b2429458f709cf1eb6a15372fbcc396b64da63", size = 318444, upload-time = "2026-09-24T03:58:40.443Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d5/11/e3df59614bebe0ca50c905442603eda64ae7ac19811d4e4f74aa2d51ca85/pytz-2026.4-py2.py3-none-any.whl", hash = "sha256:9d514388fbc89ca0833203464272ac485b8828568ab73532f5020f17e892a0ff", size = 506747, upload-time = "2026-09-24T03:58:38.629Z" },
+]
+
+[[package]]
 name = "pyyaml"
 version = "6.0.3"
 source = { registry = "https://pypi.org/simple" }
@@ -673,6 +695,7 @@ dependencies = [
     { name = "dataclasses-json" },
     { name = "django" },
     { name = "django-admin-autocomplete-filter" },
+    { name = "django-admin-logs-viewer" },
     { name = "django-cors-headers" },
     { name = "django-environ" },
     { name = "django-extensions" },
@@ -704,6 +727,7 @@ requires-dist = [
     { name = "dataclasses-json", specifier = "==0.*" },
     { name = "django", specifier = "==5.2.*" },
     { name = "django-admin-autocomplete-filter", specifier = "==0.*" },
+    { name = "django-admin-logs-viewer", specifier = "==1.*" },
     { name = "django-cors-headers", specifier = "==4.*" },
     { name = "django-environ", specifier = "==0.*" },
     { name = "django-extensions", specifier = "==4.*" },

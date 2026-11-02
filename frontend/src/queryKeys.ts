@@ -32,26 +32,6 @@ export const recruitmentKeys = {
   availability: (id: number) => [...recruitmentKeys.detail(id), 'availability'] as const,
 };
 
-export const eventKeys = {
-  all: ['events'] as const,
-  lists: () => [...eventKeys.all, 'list'] as const,
-  list: (filters: unknown[]) => [...eventKeys.lists(), { filters }] as const,
-  paginatedLists: () => [...eventKeys.all, 'paginated'] as const,
-  paginatedList: (
-    page: number,
-    pageSize: number,
-    filters?: { search?: string; venue?: string; category?: string; ticket_type?: string },
-  ) => [...eventKeys.paginatedLists(), { page, pageSize, ...filters }] as const,
-  details: () => [...eventKeys.all, 'detail'] as const,
-  detail: (id: string | number) => [...eventKeys.details(), id] as const,
-};
-
-export const eventCloneKeys = {
-  all: ['event-clone'] as const,
-  details: () => [...eventCloneKeys.all, 'detail'] as const,
-  detail: (id: string | number) => [...eventCloneKeys.details(), id] as const,
-};
-
 export const applicationKeys = {
   all: ['applications'] as const,
   lists: () => [...applicationKeys.all, 'list'] as const,
@@ -84,15 +64,6 @@ export const recruitmentGangKeys = {
   list: (filters: unknown[]) => [...recruitmentGangKeys.lists(), { filters }] as const,
   details: () => [...recruitmentGangKeys.all, 'detail'] as const,
   detail: (id: number) => [...recruitmentGangKeys.details(), id] as const,
-};
-
-export const venueKeys = {
-  all: ['venues'] as const,
-  lists: () => [...venueKeys.all, 'list'] as const,
-  list: (filters: unknown[]) => [...venueKeys.lists(), { filters }] as const,
-  details: () => [...venueKeys.all, 'detail'] as const,
-  detail: (slug: string) => [...venueKeys.details(), slug] as const,
-  open: () => [...venueKeys.list(['open'])] as const,
 };
 
 export const siteBannerKeys = {

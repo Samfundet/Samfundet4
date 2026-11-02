@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputField } from '~/Components/InputField/InputField';
-import type { EventDto } from '~/dto';
+import type { EventDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
 import styles from '../EventCreatorAdminPage.module.scss';

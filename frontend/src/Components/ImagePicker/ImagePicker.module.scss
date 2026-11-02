@@ -2,70 +2,145 @@
 
 @use 'src/mixins' as *;
 
+@use 'src/styles/colors' as c;
+
+// Preview and empty state share one fixed-size box so picking images of
+// different aspect ratios doesn't shift the grid below.
+@mixin preview-box {
+  box-sizing: border-box;
+  width: 100%;
+  height: 24rem;
+  border-radius: 1.5rem;
+
+  @include for-mobile-only {
+    height: 16rem;
+  }
+}
+
 .container {
-  @include flex-row-center;
-  justify-content: space-evenly;
-  gap: 0.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  border-radius: 1.5rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 244, 244, 0.96)),
+    c.$white-950;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+
+  @include theme-dark {
+    background:
+      linear-gradient(180deg, rgba(24, 24, 24, 0.96), rgba(34, 34, 34, 0.96)),
+      $theme-dark-bg;
+  }
 }
 
 .image_title {
-  font-size: 1.25em;
+  margin: 0;
+  font-size: 0.9rem;
   font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: c.$gray-500;
 }
 
 .selected_container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5em;
+  gap: 0.85rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  @include theme-dark {
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+  }
 }
 
-.selected {
-  @include rounded;
-  @include flex-row-center;
+.selected_preview_frame {
+  @include preview-box;
+  display: flex;
+  overflow: hidden;
+  background: c.$gray-50;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+
+  @include theme-dark {
+    background: rgba(255, 255, 255, 0.03);
+  }
+}
+
+.selected_preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.selected_preview_frame,
+.selected_preview {
+  pointer-events: none;
+}
+
+.selected_empty {
+  display: flex;
   flex-direction: column;
-  min-width: 20em;
-  min-height: 8em;
-  border: 3px solid black;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  @include preview-box;
+  padding: 2rem 1.5rem;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  background:
+    radial-gradient(circle at top, rgba(c.$blue-600, 0.1), transparent 45%),
+    rgba(255, 255, 255, 0.85);
   text-align: center;
-  background-size: cover;
-  background-position: center;
+
+  @include theme-dark {
+    border-color: rgba(255, 255, 255, 0.12);
+    background:
+      radial-gradient(circle at top, rgba(c.$blue-600, 0.18), transparent 45%),
+      rgba(255, 255, 255, 0.03);
+  }
+}
+
+.selected_empty_icon {
+  @include flex-row-center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 999px;
+  background: rgba(c.$blue-600, 0.12);
+  color: c.$blue-600;
+}
+
+.selected_empty_title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.selected_empty_description {
+  margin: 0;
+  color: c.$gray-500;
+  font-size: 0.9rem;
 }
 
 .image_container {
-  max-height: 25em;
-  overflow-y: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
-  gap: 0.5em;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.9rem;
   width: 100%;
   align-content: start;
-  padding-right: 0.25rem;
+  padding-right: 0.2rem;
 }
 
-.image {
-  @include rounded;
-  @include shadow-light;
+.image_box {
+  overflow: hidden;
   width: 100%;
-  aspect-ratio: 5 / 4;
-  background-color: $grey-1;
-  background-size: cover;
-  background-position: center;
-  border: 3px solid transparent;
-  transition: 0.2s;
-  transform: scale(0.9);
-  cursor: pointer;
-
-  &:hover {
-    filter: brightness(110%);
-  }
-
-  &.selected_image {
-    box-shadow: 0 0 25px 5px rgba(143, 181, 238, 0.625);
-    border: 3px solid $blue;
-    transform: scale(1);
-  }
+  aspect-ratio: 1 / 1.08;
+  box-sizing: border-box;
+  background-color: transparent;
+  transform: none;
 }
 
 .search_wrapper {
@@ -73,14 +148,20 @@
   flex-direction: column;
   flex: 1;
   min-width: 0;
+  gap: 1rem;
 }
 
 .pagination_wrapper {
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  padding-top: 0.5rem;
 }
 
 .error {
-  margin-top: 1rem;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-radius: 0.9rem;
+  background: rgba(c.$red-600, 0.08);
+  color: c.$red-600;
+  font-weight: 600;
 }

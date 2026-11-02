@@ -5,11 +5,14 @@ from django.urls import path, include, re_path
 from django.contrib import admin
 from django.views.static import serve as serve_static
 
+from root.views import admin_logs_view
+
 # Serve the React bundle for unknown paths with a correct HTTP 404 status
 # https://docs.djangoproject.com/en/5.2/ref/urls/#handler404
 handler404 = 'samfundet.routing.views.react_404_view'
 
 urlpatterns = [
+    path('admin/logs/', admin_logs_view, name='logs_view'),
     path('admin/', admin.site.urls),
     path('rest_framework/', include('rest_framework.urls')),
     # Backend API routes, prefixed to avoid colliding with frontend routes
