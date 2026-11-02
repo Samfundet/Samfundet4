@@ -27,6 +27,11 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
+# On cirkus, TLS ends in hitch, so Django gets plain http. Varnish sets X-Forwarded-Proto to https
+# for TLS requests and removes it from all others, so it can be trusted.
+# https://docs.djangoproject.com/en/5.2/ref/settings/#secure-proxy-ssl-header
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 DATABASES = {
     # The default database used for all Samf4 models
     'default': {
