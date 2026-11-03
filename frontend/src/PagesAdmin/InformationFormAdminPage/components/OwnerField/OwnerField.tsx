@@ -1,8 +1,12 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dropdown } from '~/Components';
-import { useGetInfoPageOwnerOptions } from '~/domain';
-import type { GangDto, GangSectionDto, InformationPageOwnerOptionDto } from '~/dto';
+import {
+  type GangDto,
+  type GangSectionDto,
+  type InformationPageOwnerOptionDto,
+  useGetInfoPageOwnerOptions,
+} from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { dbT, formatGangName, formatSectionName, lowerCapitalize } from '~/utils';
 import styles from './OwnerField.module.scss';

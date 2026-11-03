@@ -4,8 +4,9 @@ import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { Button, CrudButtons, Link } from '~/Components';
 import { Table } from '~/Components/Table';
-import { getAdminGang, getRecruitment, getRecruitmentPositionsGangForGang } from '~/api';
-import type { GangDto, RecruitmentDto, RecruitmentPositionDto } from '~/dto';
+import { getRecruitment, getRecruitmentPositionsGangForGang } from '~/api';
+import { useGetAdminGang } from '~/domain';
+import type { RecruitmentDto, RecruitmentPositionDto } from '~/dto';
 import { useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -18,7 +19,7 @@ import styles from './RecruitmentGangAdminPage.module.scss';
 export function RecruitmentGangAdminPage() {
   const { recruitmentId, gangId } = useParams();
   const navigate = useNavigate();
-  const [gang, setGang] = useState<GangDto>();
+  const { data: gang, isLoading: isLoadingGang } = useGetAdminGang(gangId);
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
   const [recruitmentPositions, setRecruitmentPositions] = useState<RecruitmentPositionDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
@@ -35,9 +36,6 @@ export function RecruitmentGangAdminPage() {
       Promise.allSettled([
         getRecruitmentPositionsGangForGang(recruitmentId, gangId).then((data) => {
           setRecruitmentPositions(data.data);
-        }),
-        getAdminGang(gangId).then((data) => {
-          setGang(data);
         }),
         getRecruitment(recruitmentId).then(async (data) => {
           setRecruitment(data.data);
@@ -166,7 +164,7 @@ export function RecruitmentGangAdminPage() {
   );
 
   return (
-    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner}>
+    <AdminPageLayout title={title} backendUrl={backendUrl} header={header} loading={showSpinner || isLoadingGang}>
       <Table columns={tableColumns} data={data} />
     </AdminPageLayout>
   );

@@ -21,7 +21,7 @@ export function EventPage() {
   const { user } = useAuthContext();
   const canChangeEvent = hasPerm({ user: user, permission: PERM.SAMFUNDET_CHANGE_EVENT, obj: id });
 
-  const { data: event, isLoading } = useGetEvent(id ?? '');
+  const { data: event, isLoading } = useGetEvent(id);
 
   useTitle((event && dbT(event, 'title')) || t(KEY.common_event));
   return (

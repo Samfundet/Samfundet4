@@ -20,7 +20,7 @@ import {
 } from '~/Components';
 import { AdminPageLayout } from '~/PagesAdmin/AdminPageLayout/AdminPageLayout';
 import { getInterviewRoom, getRecruitmentGangs, postInterviewRoom, putInterviewRoom } from '~/api';
-import type { GangDto } from '~/dto';
+import type { GangDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { interviewRoomKeys, recruitmentGangKeys } from '~/queryKeys';
