@@ -691,6 +691,7 @@ export const KEY = {
   admin_casedocuments_publication_date_note: 'admin_casedocuments_publication_date_note',
   admin_casedocuments_title_used_as_filename: 'admin_casedocuments_title_used_as_filename',
   admin_casedocuments_confirm_delete: 'admin_casedocuments_confirm_delete',
+  admin_infobox_confirm_delete: 'admin_infobox_confirm_delete',
   admin_impersonate: 'admin_impersonate',
   admin_stop_impersonate: 'admin_stop_impersonate',
   admin_role_page_orggangsection: 'admin_role_page_orggangsection',
