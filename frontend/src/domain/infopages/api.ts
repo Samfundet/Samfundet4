@@ -61,7 +61,7 @@ export async function getAdminInformationPageRevision(
     BACKEND_DOMAIN +
     reverse({
       pattern: ROUTES.backend.samfundet__admin_information_pages_history_detail,
-      urlParams: { slugField: slug },
+      urlParams: { slugField: slug, version: version },
     });
   const response = await axios.get<InformationPageRevisionDetailDto>(url, { withCredentials: true });
 
