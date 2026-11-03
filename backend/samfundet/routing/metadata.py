@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 from dataclasses import field, dataclass
 
+from django.conf import settings
 from django.utils.html import escape
 
 
@@ -21,21 +22,31 @@ class Metadata:
     items: list[MetadataItem] = field(default_factory=list)
 
 
+def canonical_url(path: str) -> str:
+    """Absolute canonical URL for a frontend path, e.g. '/information/foo/'."""
+    return f'{settings.SITE_URL.rstrip("/")}{path}'
+
+
 def build_metadata_html(metadata: Metadata) -> str:
     tags = []
 
-    if metadata.title:
-        metadata.items.append(MetadataItem('property', 'og:title', metadata.title))
-        metadata.items.append(MetadataItem('name', 'twitter:title', metadata.title))
-
     if metadata.description:
         tags.append(f'<meta name="description" content="{escape(metadata.description)}">')
-        metadata.items.append(MetadataItem('property', 'og:description', metadata.description))
 
     if metadata.canonical_url:
         tags.append(f'<link rel="canonical" href="{escape(metadata.canonical_url)}">')
 
-    tags.extend(f'<meta {item.attr}="{escape(item.key)}" content="{escape(item.value)}">' for item in metadata.items)
+    # Tags derived from title/description are combined with the caller-supplied items in a local
+    # list rather than appended onto metadata.items, so this function has no side effects.
+    items: list[MetadataItem] = []
+    if metadata.title:
+        items.append(MetadataItem('property', 'og:title', metadata.title))
+        items.append(MetadataItem('name', 'twitter:title', metadata.title))
+    if metadata.description:
+        items.append(MetadataItem('property', 'og:description', metadata.description))
+    items.extend(metadata.items)
+
+    tags.extend(f'<meta {item.attr}="{escape(item.key)}" content="{escape(item.value)}">' for item in items)
 
     return '\n'.join(tags)
 

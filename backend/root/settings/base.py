@@ -44,6 +44,10 @@ ENV = os.environ.get('ENV')
 
 BILLIG_PAYMENT_URL = os.environ.get('BILLIG_PAYMENT_URL', 'https://billettsalg.samfundet.no/pay')
 
+# Public base URL of this site, used to build absolute canonical URLs. Production derives it from
+# DOMAIN (see prod.py); the default suits local development.
+SITE_URL = os.environ.get('SITE_URL', 'http://localhost:8000')
+
 # Static
 STATIC_ROOT = BASE_DIR / 'staticroot'
 STATIC_URL = '/assets/'

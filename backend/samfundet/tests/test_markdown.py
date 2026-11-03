@@ -5,7 +5,7 @@ import pytest
 from django.db import connection
 from django.test.utils import CaptureQueriesContext
 
-from samfundet.markdown import render_image_directives
+from samfundet.markdown import plain_text, render_image_directives
 from samfundet.models.general import Image
 
 
@@ -90,3 +90,42 @@ class TestRenderImageDirectives:
             render_image_directives('Just text', None)
 
         assert len(queries) == 0
+
+
+class TestPlainText:
+    def test_passes_through_empty_values(self):
+        assert plain_text(None) == ''
+        assert plain_text('') == ''
+        assert plain_text('   \n  ') == ''
+
+    def test_returns_short_text_unchanged(self):
+        assert plain_text('Short text') == 'Short text'
+
+    def test_drops_image_directives(self):
+        assert plain_text('Before\n\n::image{#42 alt="Edgar"}\n\nAfter') == 'Before After'
+
+    def test_replaces_links_with_their_text(self):
+        assert plain_text('See [the site](https://example.com) now') == 'See the site now'
+
+    def test_replaces_images_with_their_alt_text(self):
+        assert plain_text('![Minion](https://example.com/minion.png "The Minion")') == 'Minion'
+
+    def test_strips_headings_lists_quotes_and_emphasis(self):
+        text = '# Title\n\n- one\n- **two**\n\n> quote\n\n---'
+
+        assert plain_text(text) == 'Title one two quote'
+
+    def test_strips_fenced_code_and_table_pipes(self):
+        text = 'Intro\n\n```\ncode()\n```\n\n| a | b |\n| --- | --- |\n| 1 | 2 |'
+
+        assert plain_text(text) == 'Intro a b 1 2'
+
+    def test_collapses_whitespace_into_a_single_line(self):
+        assert plain_text('a\n\n\nb\t\tc') == 'a b c'
+
+    def test_truncates_at_a_word_boundary(self):
+        result = plain_text('word ' * 100)
+
+        assert result.endswith('…')
+        assert len(result) <= 161
+        assert result[:-1] == ' '.join(['word'] * 32)

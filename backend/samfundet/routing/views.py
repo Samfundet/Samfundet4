@@ -6,9 +6,11 @@ from typing import Any
 from django.conf import settings
 from django.http import HttpRequest, HttpResponse
 
-from samfundet.models import Event
+from samfundet.models import Event, InformationPage
+from samfundet.view.event_views import event_metadata
+from samfundet.infopages.metadata import information_page_metadata, information_page_list_metadata
 
-from .metadata import Metadata, MetadataItem, inject_metadata
+from .metadata import inject_metadata
 
 
 def get_frontend_html() -> str:
@@ -70,11 +72,18 @@ def react_event_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
         # Let React handle displaying that the event wasn't found
         return HttpResponse(get_frontend_html(), status=404)
 
-    title = f'{event.title_nb} - Samfundet'
-    description = event.description_short_nb
+    return HttpResponse(inject_metadata(get_frontend_html(), event_metadata(event)))
 
-    metadata = Metadata(title=title, description=description)
-    metadata.items.append(MetadataItem('name', 'og:custom', 'Lorem ipsum'))  # TODO:
 
-    html = get_frontend_html()
-    return HttpResponse(inject_metadata(html, metadata))
+def react_infopage_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
+    try:
+        page = InformationPage.objects.visible().select_related('current_revision').get(slug_field=kwargs['slugField'])
+    except InformationPage.DoesNotExist:
+        # Unknown and hidden pages alike: show the React not-found page with HTTP 404
+        return HttpResponse(get_frontend_html(), status=404)
+
+    return HttpResponse(inject_metadata(get_frontend_html(), information_page_metadata(page)))
+
+
+def react_infopage_list_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
+    return HttpResponse(inject_metadata(get_frontend_html(), information_page_list_metadata()))
