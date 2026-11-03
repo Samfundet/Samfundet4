@@ -21,15 +21,17 @@ import { FormDescription } from '~/Components/Forms/Form';
 import { BACKEND_DOMAIN } from '~/constants';
 import { useAuthContext } from '~/context/AuthContext';
 import {
-  CATEGORY,
-  FILE,
-  PUBLICATION_DATE,
-  TITLE_EN,
-  TITLE_NB,
-  useCaseDocumentMutations,
+  CASE_DOCUMENT_CATEGORY,
+  CASE_DOCUMENT_FILE,
+  CASE_DOCUMENT_PUBLICATION_DATE,
+  CASE_DOCUMENT_TITLE_EN,
+  CASE_DOCUMENT_TITLE_NB,
+  type CaseDocumentDto,
+  useCreateCaseDocument,
+  useDeleteCaseDocument,
   useGetCaseDocumentCategories,
+  useUpdateCaseDocument,
 } from '~/domain';
-import type { CaseDocumentDto } from '~/dto';
 import { useCustomNavigate } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { PERM } from '~/permissions';
@@ -38,11 +40,11 @@ import { hasPermissions, lowerCapitalize, utcTimestampToLocal } from '~/utils';
 import styles from './CaseDocumentForm.module.scss';
 
 const schema = z.object({
-  title_nb: TITLE_NB,
-  title_en: TITLE_EN,
-  category: CATEGORY,
-  publication_date: PUBLICATION_DATE,
-  file: FILE.optional(),
+  title_nb: CASE_DOCUMENT_TITLE_NB,
+  title_en: CASE_DOCUMENT_TITLE_EN,
+  category: CASE_DOCUMENT_CATEGORY,
+  publication_date: CASE_DOCUMENT_PUBLICATION_DATE,
+  file: CASE_DOCUMENT_FILE.optional(),
 });
 
 type SchemaType = z.infer<typeof schema>;
@@ -55,7 +57,9 @@ export function CaseDocumentForm({ document }: CaseDocumentFormProps) {
   const { t } = useTranslation();
   const navigate = useCustomNavigate();
 
-  const { editCaseDocument, createCaseDocument, deleteCaseDocument } = useCaseDocumentMutations();
+  const createCaseDocument = useCreateCaseDocument();
+  const editCaseDocument = useUpdateCaseDocument();
+  const deleteCaseDocument = useDeleteCaseDocument();
 
   const { data: categories, isLoading: categoriesLoading } = useGetCaseDocumentCategories();
 

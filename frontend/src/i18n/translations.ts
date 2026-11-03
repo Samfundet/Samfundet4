@@ -812,6 +812,8 @@ export const nb = prepareTranslations({
   [KEY.error_submitting_reservation]: 'Det skjedde en feil ved innsending av reservasjon',
   [KEY.error_invalid_reservation_data]: 'Ugyldig reservasjonsdata',
   [KEY.error_invalid_slug]: 'Ugyldig slug. Kan bare inneholde a-z, 0-9, og enkle bindestreker',
+  [KEY.error_invalid_image_file_type]: 'Ugyldig filtype for bilde',
+  [KEY.error_file_must_be_pdf]: 'Filen må være en PDF',
 
   // Event form validation
   [KEY.event_form_title_required]: 'Tittel er påkrevd',
@@ -1632,6 +1634,8 @@ export const en = prepareTranslations({
   [KEY.error_submitting_reservation]: 'An error occurred while submitting the reservation',
   [KEY.error_invalid_reservation_data]: 'Invalid reservation data',
   [KEY.error_invalid_slug]: 'Invalid slug. Can only contain a-z, 0-9, and single hyphens',
+  [KEY.error_invalid_image_file_type]: 'Invalid image file type',
+  [KEY.error_file_must_be_pdf]: 'File must be a PDF',
 
   // Event form validation
   [KEY.event_form_title_required]: 'Title is required',

@@ -1,4 +1,5 @@
 import type { ThemeValue } from '~/constants';
+import type { GangDto, GangSectionDto } from '~/domain';
 
 export type BaseModelDto = {
   version?: number;
@@ -116,60 +117,6 @@ export type UserPreferenceDto = {
   theme: ThemeValue;
 };
 
-export type EditInformationPageDto = {
-  slug_field: string;
-  title_nb: string;
-  text_nb: string;
-  title_en: string;
-  text_en: string;
-  visible: boolean;
-
-  // Exactly one of these is set, never both
-  gang_id?: number;
-  section_id?: number;
-};
-
-export type InformationPageDto = BaseModelDto & {
-  // Only admin endpoints include id
-  id?: number;
-  slug_field: string;
-
-  title_nb?: string;
-  text_nb?: string;
-
-  title_en?: string;
-  text_en?: string;
-
-  visible?: boolean;
-
-  // `section` is only set when the page is owned by a section
-  section?: GangSectionDto | null;
-  gang?: GangDto | null;
-  organization?: OrganizationDto | null;
-};
-
-export type InformationPageRevisionDto = {
-  version: number;
-  title_nb?: string | null;
-  title_en?: string | null;
-  created_at: string;
-  created_by?: string | null;
-};
-
-export type InformationPageRevisionDetailDto = InformationPageRevisionDto & {
-  text_nb?: string | null;
-  text_en?: string | null;
-};
-
-export type InformationPageOwnerOptionDto = {
-  gang: GangDto;
-  section: GangSectionDto | null;
-  organization: OrganizationDto | null;
-  can_create: boolean;
-  can_change: boolean;
-  can_delete: boolean;
-};
-
 export type InfoboxDto = {
   id: number;
   title_nb?: string;
@@ -260,29 +207,6 @@ export type ReservationDto = {
   // internal_message?: string;
 };
 
-export type CaseDocumentCategoryDto = {
-  label: string;
-  value: string;
-};
-
-export type CaseDocumentDto = BaseModelDto & {
-  id: number;
-  title_nb: string;
-  title_en: string;
-  category: string;
-  publication_date: string;
-  file?: string; // For posting to backend
-  url?: string; // Read only backend url
-};
-
-export type CaseDocumentPostDto = {
-  title_nb: string;
-  title_en: string;
-  category: string;
-  publication_date?: string;
-  file: File;
-};
-
 export type TextItemDto = {
   key: string;
   text_en: string;
@@ -294,107 +218,8 @@ export type OrganizationDto = {
   name: string;
 };
 
-export type EditGangDto = {
-  name_nb: string;
-  name_en: string;
-  abbreviation?: string;
-  webpage?: string;
-  logo?: File;
-  organization?: number;
-  gang_type?: number | null;
-  info_page?: string | null;
-};
-
-export type GangDto = {
-  id: number;
-  name_nb: string;
-  name_en: string;
-  abbreviation: string;
-  webpage?: string;
-  logo?: string;
-  gang_type?: number | null;
-  info_page?: string | null;
-  organization?: number | null;
-};
-
 export type RecruitmentGangDto = GangDto & {
   recruitment_positions: number;
-};
-
-export type AdminGangTypeDto = {
-  id: number;
-  title_nb: string;
-  title_en: string;
-};
-
-export type AdminGangListGangDto = Omit<GangDto, 'gang_type'> & {
-  gang_type: GangTypeDto | null;
-};
-
-export type AdminGangListOrganizationDto = OrganizationDto & {
-  gangs: AdminGangListGangDto[];
-};
-
-export type GangTypeDto = {
-  id: number;
-  title_nb: string;
-  title_en: string;
-  gangs: GangDto[];
-};
-
-export type EditGangSectionDto = {
-  name_nb: string;
-  name_en: string;
-  logo?: File;
-  gang: number;
-};
-
-export type GangSectionDto = BaseModelDto & {
-  id: number;
-  name_nb: string;
-  name_en: string;
-  logo?: string;
-  gang: GangDto;
-};
-
-export type ClosedPeriodDto = {
-  id: number;
-  message_nb: string;
-  message_en: string;
-  start_dt: string;
-  end_dt: string;
-};
-
-export type TagDto = {
-  id: number;
-  name: string;
-  color: string;
-
-  // Only set by endpoints that annotate usage
-  // TODO: maybe make this generic...? but maybe it's too much of a hassle,
-  //  since we'll likely only ever add event_count
-  image_count?: number | null;
-};
-
-export type ImageSize = 'original' | 'large' | 'medium' | 'small';
-
-export type ImageDto = BaseModelDto & {
-  id: number;
-  title: string;
-  urls: Record<ImageSize, string>;
-  tags: TagDto[];
-};
-
-export type ImagePostDto = {
-  title: string;
-  tag_string: string;
-  file: File;
-};
-
-export type ImagePatchDto = {
-  title?: string;
-  tag_string?: string;
-  file?: File;
 };
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
