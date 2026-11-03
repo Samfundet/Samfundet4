@@ -48,7 +48,6 @@ export function useDeleteImage() {
     onError: (err: AxiosError) => {
       if (err.response?.status === STATUS.HTTP_409_CONFLICT) {
         toast.error(t(KEY.admin_images_delete_in_use));
-        console.log(err);
         return;
       }
       defaultOnError(err);

@@ -48,7 +48,6 @@ export function useDeleteGang() {
       // Backend explains why a gang can't be deleted (e.g. it still has sections)
       if (axios.isAxiosError(err) && err.response?.data?.detail) {
         toast.error(err.response.data.detail);
-        console.log(err);
         return;
       }
       defaultOnError(err);
