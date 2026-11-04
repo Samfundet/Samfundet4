@@ -70,7 +70,7 @@
     "remark-directive": "^4.0.0",
     "vite-plugin-svgr": "^5.2.0",
     "web-vitals": "^5.3.0",
-    "zod": "^3.23.8",
+    "zod": "^4.6.6",
     "zod-i18n-map": "^2.27.0"
   },
   "devDependencies": {
