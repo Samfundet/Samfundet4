@@ -20,6 +20,7 @@ from .general import (
     UserPreference,
 )
 from .site_banner import SiteBanner
+from .notification import NotificationState
 
 __all__ = [
     'User',
@@ -30,6 +31,7 @@ __all__ = [
     'Event',
     'Image',
     'UserPreference',
+    'NotificationState',
     'SiteBanner',
     'InformationPage',
     'InformationPageRevision',
