@@ -1,3 +1,5 @@
+import type { SiteBannerFormValues, SiteBannerWriteDto } from './types';
+
 export function normalizeBannerUrl(value: string): string {
   const url = value.trim();
   const samfundetHost = /^(?:www\.)?samfundet\.no(?=\/|[?#]|$)/i;
@@ -21,4 +23,17 @@ export function isValidBannerUrl(value: string): boolean {
   } catch {
     return false;
   }
+}
+
+export function toSiteBannerWriteDto(data: SiteBannerFormValues): SiteBannerWriteDto {
+  const url = normalizeBannerUrl(data.url);
+
+  return {
+    text_nb: data.text_nb,
+    text_en: data.text_en,
+    url: url || null,
+    new_tab: Boolean(url) && data.new_tab,
+    start_at: new Date(data.start_at).toISOString(),
+    end_at: new Date(data.end_at).toISOString(),
+  };
 }

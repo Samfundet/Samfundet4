@@ -3,7 +3,6 @@ import { Icon } from '@iconify/react';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { Button, Checkbox, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from '~/Components';
 import { FormDescription } from '~/Components/Forms/Form';
 import { SiteBannerContent } from '~/Components/SiteBanner/SiteBannerContent';
@@ -34,31 +33,7 @@ export function SiteBannerAdminPage() {
 
   useTitle(t(KEY.admin_site_banner_title));
 
-  const createSiteBanner = useCreateSiteBanner({
-    onSuccess: () => {
-      toast.success(t(KEY.common_creation_successful));
-      form.reset(getDefaultSiteBannerFormValues());
-    },
-    onError: (error) => {
-      if (axios.isAxiosError<Partial<Record<keyof SiteBannerFormValues, string[]>>>(error)) {
-        const errors = error.response?.data;
-        if (error.response?.status === 400 && errors) {
-          let hasFieldError = false;
-          for (const name of Object.keys(getDefaultSiteBannerFormValues()) as (keyof SiteBannerFormValues)[]) {
-            const messages = errors[name];
-            if (Array.isArray(messages) && messages.length > 0) {
-              form.setError(name, { type: 'server', message: messages.join(' ') });
-              hasFieldError = true;
-            }
-          }
-          if (hasFieldError) return;
-        }
-      }
-      toast.error(t(KEY.common_something_went_wrong));
-      console.error('Unable to create site banner:', error);
-    },
-  });
-
+  const createSiteBanner = useCreateSiteBanner();
   const isPending = createSiteBanner.isPending;
   const previewUrl = isValidBannerUrl(values.url) ? normalizeBannerUrl(values.url) : '';
   const previews = [
@@ -72,6 +47,24 @@ export function SiteBannerAdminPage() {
     },
   ];
 
+  function onSubmit(data: SiteBannerFormValues) {
+    createSiteBanner.mutate(data, {
+      onSuccess: () => form.reset(getDefaultSiteBannerFormValues()),
+      onError: (error) => {
+        if (!axios.isAxiosError<Partial<Record<keyof SiteBannerFormValues, string[]>>>(error)) return;
+        if (error.response?.status !== 400) return;
+
+        const errors = error.response.data;
+        for (const name of Object.keys(data) as (keyof SiteBannerFormValues)[]) {
+          const messages = errors?.[name];
+          if (Array.isArray(messages) && messages.length > 0) {
+            form.setError(name, { type: 'server', message: messages.join(' ') });
+          }
+        }
+      },
+    });
+  }
+
   return (
     <AdminPageLayout
       title={t(KEY.admin_site_banner_title)}
@@ -80,7 +73,7 @@ export function SiteBannerAdminPage() {
     >
       <div className={styles.container}>
         <Form {...form} schema={siteBannerSchema}>
-          <form className={styles.form} onSubmit={form.handleSubmit((data) => createSiteBanner.mutate(data))}>
+          <form className={styles.form} onSubmit={form.handleSubmit(onSubmit)}>
             <div className={styles.field_grid}>
               <FormField
                 control={form.control}
