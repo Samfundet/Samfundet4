@@ -1,6 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
-import { getImage } from '~/api';
-import { imageKeys } from '~/domain';
+import { useGetImage } from '~/domain';
 import { imageUrl } from '~/utils';
 
 type Props = {
@@ -13,13 +11,7 @@ type Props = {
  * An `::image{id=...}` directive.
  */
 export function SamfImage({ imageid, alt }: Props) {
-  const id = Number.parseInt(imageid ?? '', 10);
-
-  const { data: image } = useQuery({
-    queryKey: imageKeys.detail(id),
-    queryFn: () => getImage(id),
-    enabled: !Number.isNaN(id),
-  });
+  const { data: image } = useGetImage(imageid);
 
   if (!image) {
     return null;

@@ -40,7 +40,7 @@ function walk(node: Node): void {
       child.data = {
         ...child.data,
         hName: 'samfimage',
-        hProperties: { imageid: String(imageId), alt },
+        hProperties: { imageid: imageId?.toString(), alt },
       };
       continue;
     }

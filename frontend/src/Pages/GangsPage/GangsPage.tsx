@@ -1,12 +1,9 @@
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { ImageList } from '~/Components/ImageList';
 import type { ImageProps } from '~/Components/ImageList/ImageList';
 import { Page } from '~/Components/Page';
-import { getOrganizedGangList } from '~/api';
 import { TextItem } from '~/constants';
-import type { GangDto, GangTypeDto } from '~/dto';
+import { type GangDto, type GangTypeDto, useGetOrganizedGangs } from '~/domain';
 import { useTextItem } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { dbT } from '~/utils';
@@ -18,19 +15,7 @@ import styles from './GangsPage.module.scss';
  */
 export function GangsPage() {
   const { t } = useTranslation();
-  const [gangs, setGangs] = useState<GangTypeDto[]>([]);
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
-  useEffect(() => {
-    getOrganizedGangList()
-      .then((data) => {
-        setGangs(data);
-      })
-      .catch((error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
-      });
-  }, []);
+  const { data: gangs = [] } = useGetOrganizedGangs();
 
   return (
     <Page>
