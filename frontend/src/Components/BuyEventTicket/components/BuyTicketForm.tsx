@@ -395,7 +395,7 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
       <a href={ROUTES.other.stripe_info} target="_blank" className={styles.link} rel="noreferrer">
         {t(KEY.stripe_info)}
       </a>
-      <Link url={INFORMATION_PAGES.informasjon_billetter} target="external" className={styles.terms_link}>
+      <Link url={INFORMATION_PAGES.informasjon_billetter} target="external">
         {t(KEY.sales_conditions)}
       </Link>
     </div>
