@@ -810,6 +810,7 @@ export const nb = prepareTranslations({
   [KEY.admin_casedocuments_title_used_as_filename]: 'Dette vil bli brukt som det synlige filnavnet.',
   [KEY.admin_casedocuments_confirm_delete]:
     'Er du sikker på at du vil slette dette saksdokumentet? Dette kan ikke angres.',
+  [KEY.admin_infobox_confirm_delete]: 'Er du sikker på at du vil slette denne infoboksen?',
 
   [KEY.promo_media_description]: 'Lenke eller ID til en YouTube-video',
   [KEY.promo_media_invalid]: 'Må være en gyldig lenke til en YouTube-video',
@@ -826,6 +827,8 @@ export const nb = prepareTranslations({
   [KEY.error_submitting_reservation]: 'Det skjedde en feil ved innsending av reservasjon',
   [KEY.error_invalid_reservation_data]: 'Ugyldig reservasjonsdata',
   [KEY.error_invalid_slug]: 'Ugyldig slug. Kan bare inneholde a-z, 0-9, og enkle bindestreker',
+  [KEY.error_invalid_image_file_type]: 'Ugyldig filtype for bilde',
+  [KEY.error_file_must_be_pdf]: 'Filen må være en PDF',
 
   // Event form validation
   [KEY.event_form_title_required]: 'Tittel er påkrevd',
@@ -1540,6 +1543,7 @@ export const en = prepareTranslations({
   [KEY.admin_casedocuments_title_used_as_filename]: 'This will be used as the visible file name.',
   [KEY.admin_casedocuments_confirm_delete]:
     'Are you sure you want to delete this case document? This cannot be undone.',
+  [KEY.admin_infobox_confirm_delete]: 'Are you sure you want to delete this infobox?',
 
   [KEY.promo_media_description]: 'Link or ID of a YouTube video',
   [KEY.promo_media_invalid]: 'Must be a valid link to a YouTube video',
@@ -1660,6 +1664,8 @@ export const en = prepareTranslations({
   [KEY.error_submitting_reservation]: 'An error occurred while submitting the reservation',
   [KEY.error_invalid_reservation_data]: 'Invalid reservation data',
   [KEY.error_invalid_slug]: 'Invalid slug. Can only contain a-z, 0-9, and single hyphens',
+  [KEY.error_invalid_image_file_type]: 'Invalid image file type',
+  [KEY.error_file_must_be_pdf]: 'File must be a PDF',
 
   // Event form validation
   [KEY.event_form_title_required]: 'Title is required',

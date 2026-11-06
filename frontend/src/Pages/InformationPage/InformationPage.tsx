@@ -1,19 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { Button, H1 } from '~/Components';
 import { Page } from '~/Components/Page';
-import { getInformationPage } from '~/api';
-import type { InformationPageDto } from '~/dto';
+import { is404, useGetInfoPage } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 
 import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { SamfMarkdown } from '~/Components/SamfMarkdown';
 import { useAuthContext } from '~/context/AuthContext';
-import { STATUS } from '~/http_status_codes';
 import { PERM } from '~/permissions';
 import { dbT, hasPerm, lowerCapitalize } from '~/utils';
 import styles from './InformationPage.module.scss';
@@ -26,29 +23,15 @@ export function InformationPage() {
   const navigate = useNavigate();
 
   const { user } = useAuthContext();
-  const [page, setPage] = useState<InformationPageDto>();
   const { slugField } = useParams();
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const { data: page, isLoading, error } = useGetInfoPage(slugField);
 
-  // Fetch page data
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
+  // Other errors are toasted by the global QueryCache handler
   useEffect(() => {
-    if (slugField) {
-      getInformationPage(slugField)
-        .then((data) => {
-          setPage(data);
-          setShowSpinner(false);
-        })
-        .catch((error) => {
-          if (error.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate(ROUTES.frontend.not_found, { replace: true });
-          }
-          toast.error(t(KEY.common_something_went_wrong));
-          console.error(error);
-          setShowSpinner(false);
-        });
+    if (is404(error)) {
+      navigate(ROUTES.frontend.not_found, { replace: true });
     }
-  }, [navigate, slugField]);
+  }, [error, navigate]);
 
   // Text and title
   const text = dbT(page, 'text') ?? '';
@@ -62,7 +45,7 @@ export function InformationPage() {
   const canEditPage = hasPerm({ user: user, permission: PERM.SAMFUNDET_CHANGE_INFORMATIONPAGE, obj: page?.slug_field });
 
   return (
-    <Page className={styles.wrapper} loading={showSpinner}>
+    <Page className={styles.wrapper} loading={isLoading}>
       {canEditPage && (
         <>
           <Button rounded={true} theme="blue" onClick={() => navigate(editUrl)}>

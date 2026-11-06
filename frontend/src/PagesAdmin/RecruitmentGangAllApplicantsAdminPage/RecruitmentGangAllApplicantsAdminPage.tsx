@@ -5,8 +5,9 @@ import { toast } from 'react-toastify';
 import { Button, Link } from '~/Components';
 import { Table } from '~/Components/Table';
 import { Text } from '~/Components/Text/Text';
-import { downloadCSVGangRecruitment, getAdminGang, getRecruitment, getRecruitmentApplicationsForGang } from '~/api';
-import type { GangDto, RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
+import { downloadCSVGangRecruitment, getRecruitment, getRecruitmentApplicationsForGang } from '~/api';
+import { is404, useGetAdminGang } from '~/domain';
+import type { RecruitmentApplicationDto, RecruitmentDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -27,7 +28,7 @@ import styles from './RecruitmentGangAllApplicantsAdminPage.module.scss';
 export function RecruitmentGangAllApplicantsAdminPage() {
   const { recruitmentId, gangId } = useParams();
   const [recruitment, setRecruitment] = useState<RecruitmentDto>();
-  const [gang, setGang] = useState<GangDto>();
+  const { data: gang, error: gangError } = useGetAdminGang(gangId);
   const [applications, setApplications] = useState<RecruitmentApplicationDto[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(true);
   const navigate = useCustomNavigate();
@@ -48,21 +49,13 @@ export function RecruitmentGangAllApplicantsAdminPage() {
     }
   }, [recruitmentId, gangId]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
+  // Other errors are toasted by the global QueryCache handler
+  // biome-ignore lint/correctness/useExhaustiveDependencies: navigate does not need to be in deplist
   useEffect(() => {
-    if (gangId) {
-      getAdminGang(gangId)
-        .then((gang) => {
-          setGang(gang);
-        })
-        .catch((data) => {
-          if (data.request.status === STATUS.HTTP_404_NOT_FOUND) {
-            navigate({ url: ROUTES.frontend.admin_gangs });
-          }
-          toast.error(t(KEY.common_something_went_wrong));
-        });
+    if (is404(gangError)) {
+      navigate({ url: ROUTES.frontend.admin_gangs });
     }
-  }, [gangId]);
+  }, [gangError]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: t and navigate do not need to be in deplist
   useEffect(() => {
