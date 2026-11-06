@@ -146,17 +146,23 @@ def test_get_ticket_groups_excludes_offline_prices_empty_groups_and_theater(fixt
     [
         (None, 10, 9, 18),
         (5, 10, 5, 5),
-        (0, 10, 0, 0),
+        (0, 10, 9, 18),
+        (-1, 10, 9, 18),
         (9, 46, 4, 4),
         (None, 46, 4, 4),
         (None, 38, 9, 12),
         (3, 46, 3, 3),
-        (0, 46, 0, 0),
+        (0, 46, 4, 4),
+        (-1, 46, 4, 4),
+        (0, 38, 9, 12),
+        (-1, 38, 9, 12),
         (9, 50, 0, 0),
+        (0, 50, 0, 0),
+        (-1, 51, 0, 0),
         (None, 51, 0, 0),
     ],
 )
-def test_checkout_limits_use_only_online_prices_and_preserve_zero(
+def test_checkout_limits_use_only_online_prices_and_treat_nonpositive_limits_as_unset(
     fixture_billig_event: BilligEvent,
     fixture_billig_ticket_group: BilligTicketGroup,
     fixture_billig_price_group: BilligPriceGroup,
