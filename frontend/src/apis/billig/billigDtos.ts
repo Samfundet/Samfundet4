@@ -1,3 +1,13 @@
+export const BILLIG_CHECKOUT_ERROR_CODES = [
+  'event_not_found',
+  'event_hidden',
+  'sale_not_started',
+  'sale_ended',
+  'sold_out',
+] as const;
+
+export type BilligCheckoutErrorCode = (typeof BILLIG_CHECKOUT_ERROR_CODES)[number];
+
 export type BilligPriceGroupDto = {
   id: number;
   name: string;
@@ -15,6 +25,17 @@ export type BilligTicketGroupDto = {
   is_theater_ticket_group: boolean;
   ticket_limit: number | null;
   price_groups: BilligPriceGroupDto[];
+};
+
+export type BilligCheckoutTicketGroupDto = {
+  id: number;
+  name: string;
+  is_sold_out: boolean;
+  is_almost_sold_out: boolean;
+  ticket_limit: number | null;
+  per_price_group_limit: number;
+  group_limit: number;
+  price_groups: Omit<BilligPriceGroupDto, 'netsale'>[];
 };
 
 export type BilligEventDto = {
