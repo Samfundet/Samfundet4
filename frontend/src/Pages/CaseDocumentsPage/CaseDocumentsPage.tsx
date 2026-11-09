@@ -8,8 +8,7 @@ import {
   getYearsForCategory,
   monthValueToString,
 } from '~/Components/ExpandableList/utils';
-import { useGetCaseDocumentCategories, useGetCaseDocuments } from '~/domain';
-import type { CaseDocumentCategoryDto } from '~/dto';
+import { type CaseDocumentCategoryDto, useGetCaseDocumentCategories, useGetCaseDocuments } from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { dbT, lowerCapitalize } from '~/utils';

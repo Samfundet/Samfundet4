@@ -350,7 +350,19 @@ export const KEY = {
   email_ticket_description: 'email_ticket_description',
   stripe_info: 'stripe_info',
   pay_info: 'pay_info',
+  ticket_fee_notice: 'ticket_fee_notice',
   sales_conditions: 'sales_conditions',
+  ticket_card_unavailable_message: 'ticket_card_unavailable_message',
+  ticket_requires_membership_message: 'ticket_requires_membership_message',
+  ticket_checkout_load_error: 'ticket_checkout_load_error',
+  ticket_checkout_empty: 'ticket_checkout_empty',
+  ticket_checkout_unavailable: 'ticket_checkout_unavailable',
+  ticket_checkout_retry: 'ticket_checkout_retry',
+  ticket_checkout_event_not_found: 'ticket_checkout_event_not_found',
+  ticket_checkout_event_hidden: 'ticket_checkout_event_hidden',
+  ticket_checkout_sale_not_started: 'ticket_checkout_sale_not_started',
+  ticket_checkout_sale_ended: 'ticket_checkout_sale_ended',
+  ticket_checkout_sold_out: 'ticket_checkout_sold_out',
 
   event_external_host_message: 'event_external_host_message',
 
@@ -691,6 +703,7 @@ export const KEY = {
   admin_casedocuments_publication_date_note: 'admin_casedocuments_publication_date_note',
   admin_casedocuments_title_used_as_filename: 'admin_casedocuments_title_used_as_filename',
   admin_casedocuments_confirm_delete: 'admin_casedocuments_confirm_delete',
+  admin_infobox_confirm_delete: 'admin_infobox_confirm_delete',
   admin_impersonate: 'admin_impersonate',
   admin_stop_impersonate: 'admin_stop_impersonate',
   admin_role_page_orggangsection: 'admin_role_page_orggangsection',
@@ -782,6 +795,8 @@ export const KEY = {
   error_submitting_reservation: 'error_submitting_reservation',
   error_invalid_reservation_data: 'error_invalid_reservation_data',
   error_invalid_slug: 'error_invalid_slug',
+  error_invalid_image_file_type: 'error_invalid_image_file_type',
+  error_file_must_be_pdf: 'error_file_must_be_pdf',
 
   // Event form validation
   event_form_title_required: 'event_form_title_required',

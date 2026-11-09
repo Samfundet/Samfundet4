@@ -1,11 +1,9 @@
 import { Icon } from '@iconify/react';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData } from '@tanstack/react-query';
 import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageTile, Input } from '~/Components';
-import { getImagesPaginated } from '~/api';
-import { imageKeys } from '~/domain';
-import type { ImageDto } from '~/dto';
+import { type ImageDto, useGetImagesPaginated } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { imageUrl } from '~/utils';
 import { PagedPagination } from '../Pagination';
@@ -43,9 +41,7 @@ export function ImagePicker({ onSelected, selectedImage }: ImagePickerProps) {
   }, [debouncedSearch]);
 
   // Fetch images using React Query
-  const { data, isError } = useQuery({
-    queryKey: imageKeys.list(currentPage, debouncedSearch || undefined),
-    queryFn: () => getImagesPaginated(currentPage, PAGE_SIZE, debouncedSearch || undefined),
+  const { data, isError } = useGetImagesPaginated(currentPage, PAGE_SIZE, debouncedSearch || undefined, undefined, {
     placeholderData: keepPreviousData,
   });
 
