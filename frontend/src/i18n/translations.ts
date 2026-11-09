@@ -62,6 +62,8 @@ export const nb = prepareTranslations({
   [KEY.common_not]: 'Ikke',
   [KEY.common_now]: 'Nå',
   [KEY.common_time]: 'Tid',
+  [KEY.common_paste_failed]: 'Kunne ikke lime inn',
+  [KEY.common_day]: 'Dag',
   [KEY.common_minutes]: 'minutter',
   [KEY.common_from]: 'Fra',
   [KEY.common_here]: 'her',
@@ -69,6 +71,7 @@ export const nb = prepareTranslations({
   [KEY.common_date]: 'Dato',
   [KEY.common_send]: 'Send',
   [KEY.common_open]: 'Åpne',
+  [KEY.common_is_open]: 'Åpen',
   [KEY.common_menu]: 'Meny',
   [KEY.common_name]: 'Navn',
   [KEY.common_next]: 'Neste',
@@ -322,6 +325,7 @@ export const nb = prepareTranslations({
   [KEY.event_search_for_an_existing_event]: 'Søk etter et arrangement',
   [KEY.event_selected_existing_event]: 'Valgte eksisterende arrangement',
   [KEY.event_no_results]: 'Ingen resultater',
+  [KEY.event_confirm_delete]: 'Er du sikker på at du vil slette dette arrangementet?',
   [KEY.event_publication_date_must_be_before_start]: 'Publiseringsdato må være før arrangementsstart',
 
   // Event categories
@@ -382,7 +386,21 @@ export const nb = prepareTranslations({
     'Billetten(e) blir sendt på epost, og må vises fram i døren når du kommer til Samfundet. Billettene kan vises på mobil eller tas med som utskrift.',
   [KEY.stripe_info]: 'Betalingen håndteres av Stripe.',
   [KEY.pay_info]: 'Alle priser er i norske kroner og er inkludert alle avgifter.',
+  [KEY.ticket_fee_notice]: 'Totalprisen inkluderer en ikke-refunderbar billettavgift på {{fee}} kr.',
   [KEY.sales_conditions]: 'Kjøp forutsetter at kunden godtar salgsbetingelsene.',
+  [KEY.ticket_card_unavailable_message]:
+    'Valgte billetter kan ikke legges på medlemskort. Bruk e-postlevering i stedet.',
+  [KEY.ticket_requires_membership_message]:
+    'Valgte billetter krever medlemskap. Ved e-postlevering må du vise gyldig medlemskap i døra.',
+  [KEY.ticket_checkout_load_error]: 'Kunne ikke hente tilgjengelige billetter. Prøv igjen.',
+  [KEY.ticket_checkout_empty]: 'Ingen billetter er tilgjengelige for kjøp her akkurat nå.',
+  [KEY.ticket_checkout_unavailable]: 'Billetter er for øyeblikket ikke tilgjengelige for kjøp.',
+  [KEY.ticket_checkout_retry]: 'Prøv igjen',
+  [KEY.ticket_checkout_event_not_found]: 'Arrangementet finnes ikke.',
+  [KEY.ticket_checkout_event_hidden]: 'Billetter til dette arrangementet er ikke tilgjengelige for kjøp.',
+  [KEY.ticket_checkout_sale_not_started]: 'Billettsalget har ikke startet ennå.',
+  [KEY.ticket_checkout_sale_ended]: 'Billettsalget er avsluttet.',
+  [KEY.ticket_checkout_sold_out]: 'Arrangementet er utsolgt.',
 
   // Venue Page:
   [KEY.venuepage_title]: 'Kart og lokaler',
@@ -595,6 +613,16 @@ export const nb = prepareTranslations({
   [KEY.admin_markdown_image_not_found]: 'Bildet finnes ikke',
   [KEY.admin_steal_identity]: 'Stjel identitet',
   [KEY.admin_opening_hours_hint]: 'Endringer lagres automatisk!',
+  [KEY.admin_opening_hours_revert]: 'Tilbakestill',
+  [KEY.admin_opening_hours_invalid]: 'Ugyldige åpningstider:',
+  [KEY.admin_opening_hours_validation_hint]: 'Stengetiden må være etter åpningstiden',
+  [KEY.admin_opening_hours_partial_save_failure]:
+    'Kunne ikke lagre: {{venues}}. Endringene for disse lokalene er tilbakestilt.',
+  [KEY.admin_opening_hours_opening_time]: '{{day}}, åpningstid',
+  [KEY.admin_opening_hours_closing_time]: '{{day}}, stengetid',
+  [KEY.admin_opening_hours_day_is_open]: '{{day}} er åpen',
+  [KEY.admin_opening_hours_hours_input]: '{{field}}, timer',
+  [KEY.admin_opening_hours_minutes_input]: '{{field}}, minutter',
   [KEY.admin_closed_period_title]: 'Planlagte perioder Samfundet skal holde stengt',
   [KEY.admin_closed_period_end_before_today]: 'Sluttdato kan ikke være før dagens dato',
   [KEY.admin_closed_message]: 'Samfundet er stengt',
@@ -782,6 +810,7 @@ export const nb = prepareTranslations({
   [KEY.admin_casedocuments_title_used_as_filename]: 'Dette vil bli brukt som det synlige filnavnet.',
   [KEY.admin_casedocuments_confirm_delete]:
     'Er du sikker på at du vil slette dette saksdokumentet? Dette kan ikke angres.',
+  [KEY.admin_infobox_confirm_delete]: 'Er du sikker på at du vil slette denne infoboksen?',
 
   [KEY.promo_media_description]: 'Lenke eller ID til en YouTube-video',
   [KEY.promo_media_invalid]: 'Må være en gyldig lenke til en YouTube-video',
@@ -798,6 +827,8 @@ export const nb = prepareTranslations({
   [KEY.error_submitting_reservation]: 'Det skjedde en feil ved innsending av reservasjon',
   [KEY.error_invalid_reservation_data]: 'Ugyldig reservasjonsdata',
   [KEY.error_invalid_slug]: 'Ugyldig slug. Kan bare inneholde a-z, 0-9, og enkle bindestreker',
+  [KEY.error_invalid_image_file_type]: 'Ugyldig filtype for bilde',
+  [KEY.error_file_must_be_pdf]: 'Filen må være en PDF',
 
   // Event form validation
   [KEY.event_form_title_required]: 'Tittel er påkrevd',
@@ -877,6 +908,8 @@ export const en = prepareTranslations({
   [KEY.common_not]: 'Not',
   [KEY.common_now]: 'Now',
   [KEY.common_time]: 'Time',
+  [KEY.common_paste_failed]: 'Could not paste',
+  [KEY.common_day]: 'Day',
   [KEY.common_minutes]: 'minutes',
   [KEY.common_here]: 'here',
   [KEY.common_save]: 'Save',
@@ -884,6 +917,7 @@ export const en = prepareTranslations({
   [KEY.common_date]: 'Date',
   [KEY.common_send]: 'Send',
   [KEY.common_open]: 'Open',
+  [KEY.common_is_open]: 'Open',
   [KEY.common_edit]: 'Edit',
   [KEY.common_show]: 'Show',
   [KEY.common_table]: 'Table',
@@ -1173,6 +1207,7 @@ export const en = prepareTranslations({
   [KEY.event_search_for_an_existing_event]: 'Search for an event',
   [KEY.event_selected_existing_event]: 'Selected existing event',
   [KEY.event_no_results]: 'No results',
+  [KEY.event_confirm_delete]: 'Are you sure you want to delete this event?',
   [KEY.event_publication_date_must_be_before_start]: 'Publication date must be before the event starts',
 
   //Purchase Ticket Info:
@@ -1191,7 +1226,21 @@ export const en = prepareTranslations({
     'If you choose digital ticket, your ticket(s) will be sent to your email. The tickets barcode will be scanned when you enter Samfundet, either from your phone or a printed out copy.',
   [KEY.stripe_info]: 'The payment is processed by Stripe.',
   [KEY.pay_info]: 'All prices are in norwegian krone and includes all fees.',
+  [KEY.ticket_fee_notice]: 'The total includes a non-refundable ticket fee of {{fee}} kr.',
   [KEY.sales_conditions]: 'Purchase requires acceptance of sales terms.',
+  [KEY.ticket_card_unavailable_message]:
+    'The selected tickets cannot be put on a membership card. Use email delivery instead.',
+  [KEY.ticket_requires_membership_message]:
+    'The selected tickets require membership. If you choose email delivery, you must show valid membership at the door.',
+  [KEY.ticket_checkout_load_error]: 'Could not load available tickets. Please try again.',
+  [KEY.ticket_checkout_empty]: 'No tickets are available to buy here right now.',
+  [KEY.ticket_checkout_unavailable]: 'Tickets are currently unavailable for purchase.',
+  [KEY.ticket_checkout_retry]: 'Try again',
+  [KEY.ticket_checkout_event_not_found]: 'This event could not be found.',
+  [KEY.ticket_checkout_event_hidden]: 'Tickets for this event are not available to buy.',
+  [KEY.ticket_checkout_sale_not_started]: 'Ticket sales have not started yet.',
+  [KEY.ticket_checkout_sale_ended]: 'Ticket sales have ended.',
+  [KEY.ticket_checkout_sold_out]: 'This event is sold out.',
 
   // VenuePage:
   [KEY.venuepage_title]: 'Map and Venues',
@@ -1459,6 +1508,16 @@ export const en = prepareTranslations({
   [KEY.adminpage_gangs_create]: 'Create group',
   [KEY.admin_users_last_active]: 'Last active',
   [KEY.admin_opening_hours_hint]: 'Changes are saved automatically!',
+  [KEY.admin_opening_hours_revert]: 'Revert changes',
+  [KEY.admin_opening_hours_invalid]: 'Invalid opening hours:',
+  [KEY.admin_opening_hours_validation_hint]: 'Closing time must be after opening time',
+  [KEY.admin_opening_hours_partial_save_failure]:
+    'Could not save: {{venues}}. Changes for these venues have been reverted.',
+  [KEY.admin_opening_hours_opening_time]: '{{day}}, opening time',
+  [KEY.admin_opening_hours_closing_time]: '{{day}}, closing time',
+  [KEY.admin_opening_hours_day_is_open]: '{{day}} is open',
+  [KEY.admin_opening_hours_hours_input]: '{{field}}, hours',
+  [KEY.admin_opening_hours_minutes_input]: '{{field}}, minutes',
   [KEY.admin_closed_period_title]: 'Scheduled periods when Samfundet is to be closed ',
   [KEY.admin_closed_period_end_before_today]: 'End date cannot be before today',
   [KEY.admin_casedocuments_title]: 'Manage Documents',
@@ -1484,6 +1543,7 @@ export const en = prepareTranslations({
   [KEY.admin_casedocuments_title_used_as_filename]: 'This will be used as the visible file name.',
   [KEY.admin_casedocuments_confirm_delete]:
     'Are you sure you want to delete this case document? This cannot be undone.',
+  [KEY.admin_infobox_confirm_delete]: 'Are you sure you want to delete this infobox?',
 
   [KEY.promo_media_description]: 'Link or ID of a YouTube video',
   [KEY.promo_media_invalid]: 'Must be a valid link to a YouTube video',
@@ -1604,6 +1664,8 @@ export const en = prepareTranslations({
   [KEY.error_submitting_reservation]: 'An error occurred while submitting the reservation',
   [KEY.error_invalid_reservation_data]: 'Invalid reservation data',
   [KEY.error_invalid_slug]: 'Invalid slug. Can only contain a-z, 0-9, and single hyphens',
+  [KEY.error_invalid_image_file_type]: 'Invalid image file type',
+  [KEY.error_file_must_be_pdf]: 'File must be a PDF',
 
   // Event form validation
   [KEY.event_form_title_required]: 'Title is required',

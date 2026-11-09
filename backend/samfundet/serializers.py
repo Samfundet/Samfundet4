@@ -30,6 +30,7 @@ from .models.role import Role, UserOrgRole, UserGangRole, UserGangSectionRole
 from .models.event import Event, EventGroup, EventCustomTicket, PurchaseFeedbackModel, PurchaseFeedbackQuestion, PurchaseFeedbackAlternative
 from .models.billig import BilligEvent, BilligPriceGroup, BilligTicketGroup
 from .models.general import (
+    VENUE_WEEKDAYS,
     Tag,
     User,
     Image,
@@ -408,6 +409,15 @@ class VenueSerializer(CustomBaseSerializer):
     class Meta:
         model = Venue
         fields = '__all__'
+        extra_kwargs = {
+            field_name: {'format': '%H:%M'}
+            for field_name in (
+                'opening',
+                'closing',
+                *(f'opening_{weekday}' for weekday in VENUE_WEEKDAYS),
+                *(f'closing_{weekday}' for weekday in VENUE_WEEKDAYS),
+            )
+        }
 
 
 class ClosedPeriodSerializer(CustomBaseSerializer):
@@ -829,9 +839,18 @@ class TextItemSerializer(serializers.ModelSerializer):
 
 
 class InfoboxSerializer(CustomBaseSerializer):
+    image = serializers.SerializerMethodField(read_only=True)
+    image_id = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), source='image', write_only=True, required=False, allow_null=True)
+
     class Meta:
         model = Infobox
         fields = '__all__'
+
+    def get_image(self, infobox: Infobox) -> dict | None:
+        img = infobox.image
+        if img is None:
+            return None
+        return {'id': img.id, 'urls': img.urls, 'title': img.title, 'tags': list(img.tags.values_list('id', flat=True))}
 
 
 class KeyValueSerializer(serializers.ModelSerializer):

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ImageDto } from '~/dto';
+import type { ImageDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import type { SetState } from '~/types';
 import { queryDtoCustom } from '~/utils';

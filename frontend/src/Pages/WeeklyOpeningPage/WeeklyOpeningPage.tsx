@@ -1,11 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link, Page, TimeDuration } from '~/Components';
-import { getVenues } from '~/api';
-import type { VenueDto } from '~/dto';
+import { type VenueDto, useGetVenues } from '~/domain';
 import { useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
-import { venueKeys } from '~/queryKeys';
+
 import { ROUTES_SAMF_THREE } from '~/routes/samf-three';
 import { ALL_DAYS, type OpeningHourGroup } from '~/types';
 import { getShortDayKey, getVenueOpeningHoursFromDTO } from '~/utils';
@@ -16,9 +14,7 @@ export function WeeklyOpeningPage() {
   const today = ALL_DAYS[(new Date().getDay() + 6) % 7];
   useTitle(t(KEY.common_opening_hours));
 
-  const { data: venues = [], isLoading } = useQuery({
-    queryKey: venueKeys.all,
-    queryFn: getVenues,
+  const { data: venues = [], isLoading } = useGetVenues({
     select: (data) => [...data].sort((venueA, venueB) => venueA.name.localeCompare(venueB.slug)),
   });
 

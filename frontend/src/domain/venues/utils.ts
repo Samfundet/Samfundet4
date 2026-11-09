@@ -1,0 +1,61 @@
+import { ALL_DAYS, type Day } from '~/types';
+import type { VenueDaySchedule, VenueDto, VenueOpeningHoursPatch, VenueOpeningHoursUpdate } from './types';
+
+export function isVenueDayScheduleValid({ is_open, opening, closing }: VenueDaySchedule): boolean {
+  if (!is_open) return true;
+
+  const timePattern = /^([01]\d|2[0-3]):[0-5]\d$/;
+  if (!timePattern.test(opening) || !timePattern.test(closing)) return false;
+
+  return closing > opening || (opening > '04:00' && closing <= '04:00');
+}
+
+export function extractVenueDaySchedule(venue: VenueDto, weekday: Day): VenueDaySchedule {
+  return {
+    is_open: venue[`is_open_${weekday}`],
+    opening: venue[`opening_${weekday}`] ?? '',
+    closing: venue[`closing_${weekday}`] ?? '',
+  };
+}
+
+export function applyVenueDayScheduleChanges(
+  venue: VenueDto,
+  weekday: Day,
+  changes: Partial<VenueDaySchedule>,
+): VenueDto {
+  const updatedVenue = { ...venue };
+
+  if (changes.is_open !== undefined) updatedVenue[`is_open_${weekday}`] = changes.is_open;
+  if (changes.opening !== undefined) updatedVenue[`opening_${weekday}`] = changes.opening;
+  if (changes.closing !== undefined) updatedVenue[`closing_${weekday}`] = changes.closing;
+
+  return updatedVenue;
+}
+
+export function diffVenueOpeningHours(venues: VenueDto[], draftVenues: VenueDto[]): VenueOpeningHoursUpdate[] {
+  const draftVenuesBySlug = new Map(draftVenues.map((venue) => [venue.slug, venue]));
+
+  return venues.flatMap((venue) => {
+    const draftVenue = draftVenuesBySlug.get(venue.slug);
+    if (!draftVenue) return [];
+
+    const changes: VenueOpeningHoursPatch = {};
+
+    for (const weekday of ALL_DAYS) {
+      const schedule = extractVenueDaySchedule(venue, weekday);
+      const draftSchedule = extractVenueDaySchedule(draftVenue, weekday);
+
+      if (schedule.is_open !== draftSchedule.is_open) {
+        changes[`is_open_${weekday}`] = draftSchedule.is_open;
+      }
+      if (schedule.opening !== draftSchedule.opening) {
+        changes[`opening_${weekday}`] = draftSchedule.opening;
+      }
+      if (schedule.closing !== draftSchedule.closing) {
+        changes[`closing_${weekday}`] = draftSchedule.closing;
+      }
+    }
+
+    return Object.keys(changes).length > 0 ? [{ slug: venue.slug, changes }] : [];
+  });
+}

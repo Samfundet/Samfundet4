@@ -4,11 +4,13 @@ from typing import TYPE_CHECKING, Any
 from urllib.parse import parse_qs, urlparse
 
 import pytest
+from freezegun import freeze_time
 
 from rest_framework import status
 
 from django.test import override_settings
 from django.urls import reverse
+from django.utils import timezone
 from django.core.exceptions import ImproperlyConfigured
 
 from root.utils import routes
@@ -129,6 +131,23 @@ def test_event_tickets_returns_public_ticket_groups(
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json()[0]['id'] == fixture_billig_ticket_group.id
+    assert response.json()[0]['per_price_group_limit'] == 9
+    assert response.json()[0]['group_limit'] == 9
+
+
+def test_event_tickets_returns_empty_checkout_for_theater_only_event(
+    fixture_rest_client: APIClient,
+    fixture_billig_event: BilligEvent,
+    fixture_billig_ticket_group: BilligTicketGroup,
+    fixture_billig_price_group: BilligPriceGroup,
+) -> None:
+    fixture_billig_ticket_group.is_theater_ticket_group = True
+    fixture_billig_ticket_group.save(update_fields=['is_theater_ticket_group'])
+
+    response: Response = fixture_rest_client.get(reverse(routes.samfundet__event_tickets, args=[fixture_billig_event.id]))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == []
 
 
 def test_event_tickets_returns_exact_hidden_reason(fixture_rest_client: APIClient, fixture_billig_event: BilligEvent) -> None:
@@ -138,14 +157,46 @@ def test_event_tickets_returns_exact_hidden_reason(fixture_rest_client: APIClien
     response: Response = fixture_rest_client.get(reverse(routes.samfundet__event_tickets, args=[fixture_billig_event.id]))
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json() == {'error': 'Event is hidden'}
+    assert response.json() == {'code': 'event_hidden', 'error': 'Event is hidden'}
 
 
 def test_event_tickets_rejects_unknown_event(fixture_rest_client: APIClient) -> None:
     response: Response = fixture_rest_client.get(reverse(routes.samfundet__event_tickets, args=[999_999]))
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json() == {'error': 'Event not found'}
+    assert response.json() == {'code': 'event_not_found', 'error': 'Event not found'}
+
+
+@pytest.mark.parametrize(
+    ('sale_from', 'sale_to', 'num_sold', 'code', 'message'),
+    [
+        ('2026-01-02 12:00:00', '2026-01-03 12:00:00', 0, 'sale_not_started', 'Ticket sale has not started yet'),
+        ('2025-12-30 12:00:00', '2025-12-31 12:00:00', 0, 'sale_ended', 'Ticket sale has ended'),
+        ('2025-12-31 12:00:00', '2026-01-02 12:00:00', 50, 'sold_out', 'Event is sold out'),
+    ],
+)
+@freeze_time('2026-01-01 12:00:00')
+def test_event_tickets_returns_unavailable_reason(
+    fixture_rest_client: APIClient,
+    fixture_billig_event: BilligEvent,
+    fixture_billig_ticket_group: BilligTicketGroup,
+    sale_from: str,
+    sale_to: str,
+    num_sold: int,
+    code: str,
+    message: str,
+) -> None:
+    fixture_billig_event.sale_from = timezone.make_aware(timezone.datetime.fromisoformat(sale_from))
+    fixture_billig_event.sale_to = timezone.make_aware(timezone.datetime.fromisoformat(sale_to))
+    fixture_billig_event.save(update_fields=['sale_from', 'sale_to'])
+    fixture_billig_ticket_group.num = 50
+    fixture_billig_ticket_group.num_sold = num_sold
+    fixture_billig_ticket_group.save(update_fields=['num', 'num_sold'])
+
+    response = fixture_rest_client.get(reverse(routes.samfundet__event_tickets, args=[fixture_billig_event.id]))
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json() == {'code': code, 'error': message}
 
 
 def test_dev_pay_membercard_success(

@@ -115,14 +115,14 @@ export function Splash({ events, showInfo }: SplashProps) {
         icon="ooui:next-rtl"
         title="prev"
         color={COLORS.transparent}
-        height="5em"
+        size="xxxl"
         onClick={onClickPrev}
         className={styles.splash_change_button}
       />
       <IconButton
         icon="ooui:next-ltr"
         title="next"
-        height="5em"
+        size="xxxl"
         color={COLORS.transparent}
         onClick={onClickNext}
         className={classNames({ [styles.splash_change_button]: true, [styles.next]: true })}

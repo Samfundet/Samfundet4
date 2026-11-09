@@ -7,7 +7,13 @@ import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Textarea } from '~/Components';
-import { DATE, MESSAGE, useCreateClosedPeriod, useGetClosedPeriod, useUpdateClosedPeriod } from '~/domain';
+import {
+  CLOSED_PERIOD_DATE,
+  CLOSED_PERIOD_MESSAGE,
+  useCreateClosedPeriod,
+  useGetClosedPeriod,
+  useUpdateClosedPeriod,
+} from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -21,10 +27,10 @@ export function ClosedPeriodFormAdminPage() {
 
   const schema = z
     .object({
-      message_nb: MESSAGE,
-      message_en: MESSAGE,
-      start_dt: DATE,
-      end_dt: DATE,
+      message_nb: CLOSED_PERIOD_MESSAGE,
+      message_en: CLOSED_PERIOD_MESSAGE,
+      start_dt: CLOSED_PERIOD_DATE,
+      end_dt: CLOSED_PERIOD_DATE,
     })
     .refine((data) => data.end_dt >= data.start_dt, {
       message: t(KEY.common_end_date_before_start_date),

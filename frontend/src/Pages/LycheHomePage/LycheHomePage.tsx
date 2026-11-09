@@ -1,12 +1,9 @@
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { SultenCard } from '~/Components';
 import { SultenPage } from '~/Components/SultenPage';
-import { getVenues } from '~/api';
 import { front_lyche, sulten_chef, sulten_crowded, sulten_delivery, sulten_inside } from '~/assets';
 import { TextItem, VENUE } from '~/constants';
-import type { VenueDto } from '~/dto';
+import { useGetVenues } from '~/domain';
 import { useTextItem, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
@@ -14,31 +11,13 @@ import styles from './LycheHomePage.module.scss';
 import { getIsConsistentWeekdayOpeningHours, getIsConsistentWeekendHours } from './utils';
 
 export function LycheHomePage() {
-  const [lycheVenue, setLycheVenue] = useState<VenueDto>();
   const { t } = useTranslation();
-  const [isConsistentWeekdayHours, setIsConsistentWeekdayHours] = useState(false);
-  const [isConsistentWeekendHours, setIsConsistentWeekendHours] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { data: venues, isSuccess } = useGetVenues();
   useTitle('', t(KEY.common_sulten));
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: t does not need to be in deplist
-  useEffect(() => {
-    getVenues()
-      .then((data) => {
-        const lyche = data.find((venue) => venue.name?.toLowerCase() === VENUE.LYCHE);
-        setLycheVenue(lyche);
-        setLoading(false);
-      })
-      .catch((error) => {
-        toast.error(t(KEY.common_something_went_wrong));
-        console.error(error);
-      });
-  }, []);
-
-  useEffect(() => {
-    setIsConsistentWeekdayHours(getIsConsistentWeekdayOpeningHours(lycheVenue));
-    setIsConsistentWeekendHours(getIsConsistentWeekendHours(lycheVenue));
-  }, [lycheVenue]);
+  const lycheVenue = venues?.find((venue) => venue.name?.toLowerCase() === VENUE.LYCHE);
+  const isConsistentWeekdayHours = getIsConsistentWeekdayOpeningHours(lycheVenue);
+  const isConsistentWeekendHours = getIsConsistentWeekendHours(lycheVenue);
 
   const openingHourRow = (days: string, open_hour: string | undefined, close_hour: string | undefined) => {
     return (
@@ -49,7 +28,7 @@ export function LycheHomePage() {
     );
   };
 
-  const openingHours = !loading && (
+  const openingHours = isSuccess && (
     <div className={styles.opening_hour_container}>
       <h2 className={styles.opening_hour_header}>{t(KEY.common_opening_hours)}</h2>
 

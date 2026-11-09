@@ -1,10 +1,8 @@
 import { Icon } from '@iconify/react';
 import type { DirectiveEditorProps } from '@mdxeditor/editor';
-import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Skeleton } from '~/Components';
-import { getImage } from '~/api';
-import { imageKeys } from '~/domain';
+import { useGetImage } from '~/domain';
 import { KEY } from '~/i18n/constants';
 import { imageUrl } from '~/utils';
 import { useSamfImageDialog } from './SamfImageDialogProvider';
@@ -17,15 +15,11 @@ export function SamfImageEditor({ mdastNode, lexicalNode, parentEditor }: Direct
   const { imageId, alt } = readImageDirective(mdastNode);
   const openDialog = useSamfImageDialog();
 
-  const { data: image, isPending } = useQuery({
-    queryKey: imageKeys.detail(imageId),
-    queryFn: () => getImage(imageId),
-    enabled: !Number.isNaN(imageId),
-  });
+  const { data: image, isPending } = useGetImage(imageId);
 
   function edit() {
     openDialog({
-      imageId: Number.isNaN(imageId) ? undefined : imageId,
+      imageId,
       alt,
       onSubmit: (attributes) => {
         parentEditor.update(() => {
@@ -56,7 +50,7 @@ export function SamfImageEditor({ mdastNode, lexicalNode, parentEditor }: Direct
         </button>
       </div>
 
-      {isPending && !Number.isNaN(imageId) ? (
+      {isPending && imageId !== undefined ? (
         <Skeleton className={styles.skeleton} />
       ) : image ? (
         <>
