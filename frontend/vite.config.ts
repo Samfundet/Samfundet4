@@ -27,7 +27,7 @@ export default defineConfig({
     }
   },
   build: {
-    // Must match STATIC_URL in backend/root/settings/base.py. Not 'assets', which Samf3 uses on www.samfundet.no
+    // Must match STATIC_URL in backend/root/settings/base.py
     assetsDir: 'static',
   },
   resolve: {
