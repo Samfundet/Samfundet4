@@ -26,6 +26,10 @@ export default defineConfig({
       ]
     }
   },
+  build: {
+    // Must match STATIC_URL in backend/root/settings/base.py
+    assetsDir: 'static',
+  },
   resolve: {
     alias: [
       {
