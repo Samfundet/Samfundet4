@@ -31,7 +31,7 @@ The URL layout (`backend/root/urls.py`) looks like this:
 |-----------------|----------------------------------------------------|
 | `/api/...`      | All backend API routes (`samfundet/urls.py`)       |
 | `/admin/...`    | Django admin                                       |
-| `/assets/...`   | The built frontend bundle (JS, CSS, fonts, images) |
+| `/static/...`   | The built frontend bundle (JS, CSS, fonts, images) |
 | `/media/...`    | User-uploaded files                                |
 | everything else | The React frontend (`samfundet/routing/urls.py`)   |
 
@@ -50,7 +50,7 @@ A request which matches no route at all hits a catch-all which returns the
 React app with a HTTP 404 status code, and the frontend then displays the Not
 Found page.
 
-Note: `/assets/` is not a urlpattern: it is served by
+Note: `/static/` is not a urlpattern: it is served by
 [WhiteNoise](https://whitenoise.readthedocs.io/) middleware, which handles
 requests for static files (collected into `staticroot/` by `collectstatic`)
 before they reach URL routing.
