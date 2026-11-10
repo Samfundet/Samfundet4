@@ -159,7 +159,15 @@ export {
 } from './gangsection';
 export type { GangSectionDto, EditGangSectionDto } from './gangsection';
 export { getHomeData, useGetHomeData, homeKeys } from './home';
-export type { HomePageElementVariation, HomePageElementDto, HomePageDto } from './home';
+export type {
+  CarouselElementDto,
+  HomePageDto,
+  HomePageElementBaseDto,
+  HomePageElementDto,
+  HomePageElementVariation,
+  InfoboxRowElementDto,
+  LargeCardElementDto,
+} from './home';
 export {
   getImagesPaginated,
   getImage,
