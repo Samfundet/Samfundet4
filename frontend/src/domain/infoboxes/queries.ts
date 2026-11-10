@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getImage } from '~/api';
-import type { ImageDto } from '~/dto';
+import { type ImageDto, getImage } from '../images';
 import { deleteInfobox, getInfobox, getInfoboxes, postInfobox, putInfobox } from './api';
 import { infoboxKeys } from './queryKeys';
 import type { InfoboxDto, InfoboxId } from './types';
@@ -33,7 +32,7 @@ export function useGetInfoboxForm(id: InfoboxId | undefined) {
       }
 
       const infobox = await getInfobox(id);
-      const image = infobox.image ? await getImage(infobox.image).catch(() => undefined) : undefined;
+      const image = infobox.image ? await getImage(infobox.image.id).catch(() => undefined) : undefined;
       return { infobox, image };
     },
     enabled: id !== undefined,

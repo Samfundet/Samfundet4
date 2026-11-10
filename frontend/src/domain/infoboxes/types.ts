@@ -1,3 +1,5 @@
+import type { ImageDto } from '../images';
+
 export type InfoboxId = string | number;
 
 export type InfoboxDto = {
@@ -8,5 +10,6 @@ export type InfoboxDto = {
   text_en: string;
   color: string;
   url?: string | null;
-  image?: number | null;
+  image?: ImageDto | null;
+  image_id?: number | null;
 };

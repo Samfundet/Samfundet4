@@ -20,8 +20,7 @@ import {
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
-import { type InfoboxDto, useCreateInfobox, useUpdateInfobox } from '~/domain';
-import type { ImageDto } from '~/dto';
+import { type ImageDto, type InfoboxDto, useCreateInfobox, useGetInfoboxForm, useUpdateInfobox } from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
@@ -101,27 +100,12 @@ export function InfoboxFormAdminPage() {
     },
   });
 
-  const {
-    data: infobox,
-    isLoading: isLoadingEdit,
-    error: editQueryError,
-  } = useQuery({
-    enabled: infoboxId !== undefined,
-    queryKey: infoboxId !== undefined ? [...infoboxKeys.detail(infoboxId), 'form'] : [...infoboxKeys.all, 'new'],
-    queryFn: async () => {
-      if (infoboxId === undefined) {
-        return undefined;
-      }
-
-      return getInfobox(infoboxId);
-    },
-  });
-
-  const { data: image, isLoading: isLoadingImage } = useGetImage(infobox?.image?.id);
+  const { data: formData, isLoading: isLoadingEdit, error: editQueryError } = useGetInfoboxForm(infoboxId);
+  const infobox = formData?.infobox;
+  const image = formData?.image;
 
   useEffect(() => {
-    // Wait for the image so the form is only reset once it has everything
-    if (!infobox || isLoadingImage) {
+    if (!infobox) {
       return;
     }
 
@@ -134,7 +118,7 @@ export function InfoboxFormAdminPage() {
       url: infobox.url ?? '',
       image,
     });
-  }, [infobox, image, isLoadingImage, form]);
+  }, [infobox, image, form]);
 
   // Other errors are toasted by the global QueryCache handler in index.tsx
   useEffect(() => {
@@ -148,7 +132,7 @@ export function InfoboxFormAdminPage() {
   const updateMutation = useUpdateInfobox();
 
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
-  const showSpinner = isLoadingEdit || isLoadingImage || isSubmitting;
+  const showSpinner = isLoadingEdit || isSubmitting;
 
   const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_infobox)}`);
   const title = id

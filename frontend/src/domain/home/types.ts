@@ -1,5 +1,5 @@
-import type { InfoboxDto } from '~/dto';
 import type { EventDto } from '../events/types';
+import type { InfoboxDto } from '../infoboxes/types';
 
 export type HomePageElementBaseDto = {
   title_nb: string;
