@@ -92,6 +92,15 @@ DATABASES = {
         'HOST': os.environ.get('MDB_DEV_HOST', 'mdb_dev'),  # Docker service name or CI host
         'PORT': os.environ.get('MDB_DEV_PORT', '5432'),  # Docker internal port or CI host port
     },
+    # A local copy of the Samf3 tables read by import_samf3. Defaults so existing .env files keep working.
+    'samf3': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('SAMF3_DEV_CREDENTIAL', 'samf3'),
+        'USER': os.environ.get('SAMF3_DEV_CREDENTIAL', 'samf3'),
+        'PASSWORD': os.environ.get('SAMF3_DEV_CREDENTIAL', 'samf3'),
+        'HOST': os.environ.get('SAMF3_DEV_HOST', 'samf3_dev'),  # Docker service name or CI host
+        'PORT': os.environ.get('SAMF3_DEV_PORT', '5432'),  # Docker internal port or CI host port
+    },
 }
 
 # ======================== #
