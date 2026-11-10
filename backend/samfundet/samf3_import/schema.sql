@@ -1,0 +1,3 @@
+-- The Samf3 tables the import reads, for local development and tests.
+-- Based on Samf3's schema (pg_dump --schema-only), simplified to use bigserial.
+-- Add a table here when you add an importer that reads it.
