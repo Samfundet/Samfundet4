@@ -59,6 +59,19 @@ jobs:
           --health-retries 5
         ports:
           - 5434:5432
+      samf3_dev:
+        image: postgres:15
+        env:
+          POSTGRES_DB: samf3
+          POSTGRES_USER: samf3
+          POSTGRES_PASSWORD: samf3
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5435:5432
     defaults:
       run:
         working-directory: ./backend
@@ -82,6 +95,9 @@ jobs:
       SM4_DEV_PORT: 5432
       BILLIG_DEV_PORT: 5433
       MDB_DEV_PORT: 5434
+      SAMF3_DEV_CREDENTIAL: samf3
+      SAMF3_DEV_HOST: localhost
+      SAMF3_DEV_PORT: 5435
 
     steps:
       - name: Checkout code
