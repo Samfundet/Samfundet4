@@ -185,6 +185,14 @@ export {
 } from './images';
 export type { ImageDto, ImagePatchDto, ImagePostDto, ImageSize } from './images';
 export {
+  INFOBOX_COLOR,
+  INFOBOX_FORM_SCHEMA,
+  INFOBOX_IMAGE,
+  INFOBOX_TEXT_EN,
+  INFOBOX_TEXT_NB,
+  INFOBOX_TITLE_EN,
+  INFOBOX_TITLE_NB,
+  INFOBOX_URL,
   infoboxKeys,
   useCreateInfobox,
   useDeleteInfobox,
@@ -193,7 +201,7 @@ export {
   useGetInfoboxForm,
   useUpdateInfobox,
 } from './infoboxes';
-export type { InfoboxDto, InfoboxId } from './infoboxes';
+export type { InfoboxDto, InfoboxFormType, InfoboxId } from './infoboxes';
 export {
   deleteInformationPage,
   getAdminInformationPage,

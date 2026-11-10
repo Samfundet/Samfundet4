@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { z } from 'zod';
 import {
   Button,
   Dropdown,
@@ -20,13 +19,18 @@ import {
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
-import { type ImageDto, type InfoboxDto, useCreateInfobox, useGetInfoboxForm, useUpdateInfobox } from '~/domain';
+import {
+  INFOBOX_FORM_SCHEMA,
+  type InfoboxDto,
+  type InfoboxFormType,
+  useCreateInfobox,
+  useGetInfoboxForm,
+  useUpdateInfobox,
+} from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
 import { ROUTES } from '~/routes';
-import { NON_EMPTY_STRING } from '~/schema/strings';
-import { WEBSITE_URL } from '~/schema/url';
 import { COLORS, type ColorKey } from '~/types';
 import { lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -53,18 +57,6 @@ const INFOBOX_COLOR_LABEL_KEYS: Record<(typeof INFOBOX_COLOR_KEYS)[number], stri
   grey_5: KEY.admin_infobox_color_grey,
 };
 
-const schema = z.object({
-  title_nb: NON_EMPTY_STRING,
-  text_nb: NON_EMPTY_STRING,
-  title_en: NON_EMPTY_STRING,
-  text_en: NON_EMPTY_STRING,
-  color: NON_EMPTY_STRING,
-  url: WEBSITE_URL.or(z.literal('')).optional(),
-  image: z.custom<ImageDto>().optional(),
-});
-
-type InfoboxFormType = z.infer<typeof schema>;
-
 function normalizeWebsiteUrl(url?: string): string | null {
   const raw = url?.trim();
   if (!raw) {
@@ -88,7 +80,7 @@ export function InfoboxFormAdminPage() {
   }));
 
   const form = useForm<InfoboxFormType>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(INFOBOX_FORM_SCHEMA),
     defaultValues: {
       title_nb: '',
       text_nb: '',
@@ -181,7 +173,7 @@ export function InfoboxFormAdminPage() {
 
   return (
     <AdminPageLayout title={title} loading={showSpinner} header={true}>
-      <Form {...form} schema={schema}>
+      <Form {...form} schema={INFOBOX_FORM_SCHEMA}>
         <form onSubmit={form.handleSubmit(handleOnSubmit)}>
           <div className={styles.wrapper}>
             <div className={styles.input_row}>
