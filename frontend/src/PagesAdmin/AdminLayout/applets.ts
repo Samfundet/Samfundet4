@@ -16,6 +16,13 @@ export const appletCategories: AdminAppletCategory[] = [
         feature: 'events',
       },
       {
+        title_nb: 'Nettsidebanner',
+        title_en: 'Site banner',
+        perm: PERM.SAMFUNDET_ADD_SITEBANNER,
+        icon: 'material-symbols:campaign-outline-rounded',
+        url: ROUTES.frontend.admin_site_banners,
+      },
+      {
         title_nb: 'Informasjonssider',
         title_en: 'Information pages',
         perm: PERM.SAMFUNDET_VIEW_INFORMATIONPAGE,

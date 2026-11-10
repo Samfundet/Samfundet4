@@ -65,8 +65,3 @@ export const recruitmentGangKeys = {
   details: () => [...recruitmentGangKeys.all, 'detail'] as const,
   detail: (id: number) => [...recruitmentGangKeys.details(), id] as const,
 };
-
-export const siteBannerKeys = {
-  all: ['siteBanners'] as const,
-  active: () => [...siteBannerKeys.all, 'active'] as const,
-};
