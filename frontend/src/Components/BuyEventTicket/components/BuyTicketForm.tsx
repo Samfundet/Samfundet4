@@ -19,7 +19,7 @@ import {
   RadioButton,
 } from '~/Components';
 import { validEmail } from '~/Forms/util';
-import { buildBilligFormData, submitBilligForm } from '~/apis/billig/billigApi';
+import { BILLIG_PURCHASE_CONTEXT_KEY, buildBilligFormData, submitBilligForm } from '~/apis/billig/billigApi';
 import type { BilligCheckoutTicketGroupDto } from '~/apis/billig/billigDtos';
 import type { EventDto } from '~/domain';
 import { KEY } from '~/i18n/constants';
@@ -75,6 +75,7 @@ type BuyTicketFormType = z.infer<ReturnType<typeof createBuyTicketFormSchema>>;
 interface BuyTicketFormProps {
   event: EventDto;
   ticketGroups: BilligCheckoutTicketGroupDto[];
+  initialValues?: Partial<BuyTicketFormType>;
 }
 
 function getSelectedTicketCount(
@@ -87,7 +88,29 @@ function getSelectedTicketCount(
   );
 }
 
-export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
+function reconcileTicketQuantities(
+  ticketGroups: BilligCheckoutTicketGroupDto[],
+  savedQuantities: TicketQuantityMap = {},
+): TicketQuantityMap {
+  const quantities: TicketQuantityMap = {};
+  for (const group of ticketGroups) {
+    if (group.is_sold_out || group.group_limit <= 0) {
+      continue;
+    }
+
+    let remaining = group.group_limit;
+    for (const priceGroup of group.price_groups) {
+      const saved = savedQuantities[String(priceGroup.id)] ?? 0;
+      const requested = Number.isFinite(saved) ? Math.max(0, Math.floor(saved)) : 0;
+      const quantity = Math.min(requested, group.per_price_group_limit, remaining);
+      quantities[String(priceGroup.id)] = quantity;
+      remaining -= quantity;
+    }
+  }
+  return quantities;
+}
+
+export function BuyTicketForm({ event, ticketGroups, initialValues }: BuyTicketFormProps) {
   const { t } = useTranslation();
   const submissionLocked = useRef(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -111,25 +134,17 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
   );
   const eventCanUseMembershipCard = ticketOptions.some((priceGroup) => priceGroup.can_be_put_on_card);
 
-  const ticketQuantityDefaults = useMemo(
-    () =>
-      ticketOptions.reduce((acc, priceGroup) => {
-        acc[String(priceGroup.id)] = 0;
-        return acc;
-      }, {} as TicketQuantityMap),
-    [ticketOptions],
-  );
-
   const defaultValues = useMemo<BuyTicketFormType>(
     () => ({
-      ticketQuantities: {
-        ...ticketQuantityDefaults,
-      },
-      ticketType: eventCanUseMembershipCard ? TICKET_TYPE_MEMBERSHIP : TICKET_TYPE_EMAIL,
-      email: '',
-      membershipNumber: '',
+      ticketQuantities: reconcileTicketQuantities(ticketGroups, initialValues?.ticketQuantities),
+      ticketType:
+        eventCanUseMembershipCard && initialValues?.ticketType !== TICKET_TYPE_EMAIL
+          ? TICKET_TYPE_MEMBERSHIP
+          : TICKET_TYPE_EMAIL,
+      email: initialValues?.email ?? '',
+      membershipNumber: initialValues?.membershipNumber ?? '',
     }),
-    [eventCanUseMembershipCard, ticketQuantityDefaults],
+    [eventCanUseMembershipCard, initialValues, ticketGroups],
   );
 
   const form = useForm<BuyTicketFormType>({
@@ -204,6 +219,14 @@ export function BuyTicketForm({ event, ticketGroups }: BuyTicketFormProps) {
       email: data.ticketType === TICKET_TYPE_EMAIL ? data.email : undefined,
       membercard: data.ticketType === TICKET_TYPE_MEMBERSHIP ? data.membershipNumber : undefined,
     });
+
+    sessionStorage.setItem(
+      BILLIG_PURCHASE_CONTEXT_KEY,
+      JSON.stringify({
+        event,
+        paymentUrl: event.billig.payment_url,
+      }),
+    );
 
     // Lock synchronously so repeated submissions are blocked before React renders.
     submissionLocked.current = true;
