@@ -29,6 +29,7 @@ from django.db.models.functions import Lower
 from root.utils.mixins import CustomBaseModel, FullCleanSaveMixin
 
 from samfundet.fields import LowerCaseField, PhoneNumberField
+from samfundet.samf3_import.models import Samf3ImportedModel
 from samfundet.models.model_choices import ReservationOccasion, UserPreferenceTheme, SaksdokumentCategory
 
 from .utils.string_utils import ellipsize
@@ -455,7 +456,7 @@ class Venue(CustomBaseModel):
         return f'{self.name}'
 
 
-class ClosedPeriod(CustomBaseModel):
+class ClosedPeriod(Samf3ImportedModel):
     message_nb = models.TextField(blank=True, null=True, verbose_name='Melding (norsk)', max_length=200)
     message_en = models.TextField(blank=True, null=True, verbose_name='Melding (engelsk)', max_length=200)
 

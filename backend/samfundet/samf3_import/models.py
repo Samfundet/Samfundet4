@@ -51,3 +51,29 @@ class Samf3ImportedModel(Samf3ImportedMixin, CustomBaseModel):
 
     class Meta:
         abstract = True
+
+
+# ======================== #
+#      Samf3 mirrors       #
+# ======================== #
+
+
+class Samf3EverythingClosedPeriod(models.Model):
+    """Samf3's `EverythingClosedPeriod`: a period where all of Samfundet is closed."""
+
+    id = models.BigIntegerField(primary_key=True)
+    message_no = models.TextField(null=True)
+    message_en = models.TextField(null=True)
+    # Shown on events in the period. Samf4 has no field for these, so they are not imported.
+    event_message_no = models.TextField(null=True)
+    event_message_en = models.TextField(null=True)
+    # `timestamp without time zone`. Rails stores these in UTC.
+    closed_from = models.DateTimeField(null=True)
+    closed_to = models.DateTimeField(null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'everything_closed_periods'
+
+    def __str__(self) -> str:
+        return f'{self.message_no} {self.closed_from}-{self.closed_to}'
