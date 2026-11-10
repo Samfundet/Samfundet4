@@ -1,16 +1,14 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Button, Link } from '~/Components';
 import { CrudButtons } from '~/Components/CrudButtons/CrudButtons';
 import { Table } from '~/Components/Table';
-import { deleteInfobox, getInfoboxes } from '~/api';
 import { useAuthContext } from '~/context/AuthContext';
+import { useDeleteInfobox, useGetInfoboxes } from '~/domain';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { KEY } from '~/i18n/constants';
 import { reverse } from '~/named-urls';
 import { PERM } from '~/permissions';
-import { infoboxKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { dbT, hasPermissions, lowerCapitalize } from '~/utils';
 import { AdminPageLayout } from '../AdminPageLayout/AdminPageLayout';
@@ -19,26 +17,19 @@ import styles from './InfoboxAdminPage.module.scss';
 export function InfoboxAdminPage() {
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
   const { user } = useAuthContext();
   const pageTitle = t(KEY.admin_infoboxes_title);
 
   useTitle(pageTitle);
 
-  const { data: infoboxes = [], isLoading: showSpinner } = useQuery({
-    queryKey: infoboxKeys.all,
-    queryFn: getInfoboxes,
-  });
+  const { data: infoboxes = [], isLoading: showSpinner } = useGetInfoboxes();
 
-  const deleteInfoboxMutation = useMutation({
-    mutationFn: (id: number) => deleteInfobox(id),
-  });
+  const { mutate: deleteInfoboxMutation } = useDeleteInfobox();
 
   function handleDelete(id: number) {
-    deleteInfoboxMutation.mutate(id, {
+    deleteInfoboxMutation(id, {
       onSuccess: () => {
         toast.success(t(KEY.common_delete_successful));
-        queryClient.invalidateQueries({ queryKey: infoboxKeys.all });
       },
       onError: (error) => {
         toast.error(t(KEY.common_something_went_wrong));

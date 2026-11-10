@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -21,12 +20,11 @@ import {
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
-import { getImage, getInfobox, postInfobox, putInfobox } from '~/api';
-import type { ImageDto, InfoboxDto } from '~/dto';
+import { type InfoboxDto, useCreateInfobox, useGetInfoboxForm, useUpdateInfobox } from '~/domain';
+import type { ImageDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
 import { KEY } from '~/i18n/constants';
-import { infoboxKeys } from '~/queryKeys';
 import { ROUTES } from '~/routes';
 import { NON_EMPTY_STRING } from '~/schema/strings';
 import { WEBSITE_URL } from '~/schema/url';
@@ -82,7 +80,6 @@ function normalizeWebsiteUrl(url?: string): string | null {
 export function InfoboxFormAdminPage() {
   const navigate = useCustomNavigate();
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
   const { id } = useParams();
   const infoboxId = id ? Number(id) : undefined;
 
@@ -104,23 +101,7 @@ export function InfoboxFormAdminPage() {
     },
   });
 
-  const {
-    data: editData,
-    isLoading: isLoadingEdit,
-    error: editQueryError,
-  } = useQuery({
-    enabled: infoboxId !== undefined,
-    queryKey: infoboxId !== undefined ? [...infoboxKeys.detail(infoboxId), 'form'] : [...infoboxKeys.all, 'new'],
-    queryFn: async () => {
-      if (infoboxId === undefined) {
-        return undefined;
-      }
-
-      const infobox = await getInfobox(infoboxId);
-      const image = infobox.image ? await getImage(infobox.image).catch(() => undefined) : undefined;
-      return { infobox, image };
-    },
-  });
+  const { data: editData, isLoading: isLoadingEdit, error: editQueryError } = useGetInfoboxForm(infoboxId);
 
   useEffect(() => {
     if (!editData) {
@@ -146,29 +127,8 @@ export function InfoboxFormAdminPage() {
     }
   }, [editQueryError, navigate]);
 
-  const createMutation = useMutation({
-    mutationFn: postInfobox,
-    onSuccess: () => {
-      toast.success(t(KEY.common_creation_successful));
-      queryClient.invalidateQueries({ queryKey: infoboxKeys.all });
-      navigate({ url: ROUTES.frontend.admin_infobox });
-    },
-    onError: (error) => {
-      toast.error(t(KEY.common_something_went_wrong));
-    },
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: ({ itemId, payload }: { itemId: number; payload: Partial<InfoboxDto> }) => putInfobox(itemId, payload),
-    onSuccess: () => {
-      toast.success(t(KEY.common_update_successful));
-      queryClient.invalidateQueries({ queryKey: infoboxKeys.all });
-      navigate({ url: ROUTES.frontend.admin_infobox });
-    },
-    onError: (error) => {
-      toast.error(t(KEY.common_something_went_wrong));
-    },
-  });
+  const createMutation = useCreateInfobox();
+  const updateMutation = useUpdateInfobox();
 
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
   const showSpinner = isLoadingEdit || isSubmitting;
@@ -196,11 +156,26 @@ export function InfoboxFormAdminPage() {
     }
 
     if (infoboxId !== undefined) {
-      updateMutation.mutate({ itemId: infoboxId, payload });
+      updateMutation.mutate(
+        { id: infoboxId, payload },
+        {
+          onSuccess: () => {
+            toast.success(t(KEY.common_update_successful));
+            navigate({ url: ROUTES.frontend.admin_infobox });
+          },
+          onError: () => toast.error(t(KEY.common_something_went_wrong)),
+        },
+      );
       return;
     }
 
-    createMutation.mutate(payload);
+    createMutation.mutate(payload, {
+      onSuccess: () => {
+        toast.success(t(KEY.common_creation_successful));
+        navigate({ url: ROUTES.frontend.admin_infobox });
+      },
+      onError: () => toast.error(t(KEY.common_something_went_wrong)),
+    });
   }
 
   return (
