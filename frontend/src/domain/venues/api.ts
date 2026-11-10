@@ -21,12 +21,12 @@ export async function getVenue(slug: string): Promise<VenueDto> {
 export async function patchVenue(slug: string, changes: Partial<VenueDto>): Promise<VenueDto> {
   const url = BACKEND_DOMAIN + reverse({ pattern: ROUTES.backend.samfundet__venues_detail, urlParams: { slug } });
   const response = await axios.patch<VenueDto>(url, changes, { withCredentials: true });
+
   return response.data;
 }
 
 export async function updateVenueOpeningHours(updates: VenueOpeningHoursUpdate[]) {
   const results = await Promise.allSettled(updates.map(({ slug, changes }) => patchVenue(slug, changes)));
-  // allSettled resolves even when individual updates fail.
   const failedSlugs: string[] = [];
 
   for (const [index, result] of results.entries()) {
@@ -42,5 +42,6 @@ export async function updateVenueOpeningHours(updates: VenueOpeningHoursUpdate[]
 export async function getOpenVenues(): Promise<VenueDto[]> {
   const url = BACKEND_DOMAIN + ROUTES.backend.samfundet__venues_open_venues;
   const response = await axios.get<VenueDto[]>(url, { withCredentials: true });
+
   return response.data;
 }

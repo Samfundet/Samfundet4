@@ -20,7 +20,7 @@ import {
 } from '~/Components';
 import type { DropdownOption } from '~/Components/Dropdown/Dropdown';
 import { ImagePicker } from '~/Components/ImagePicker/ImagePicker';
-import { type InfoboxDto, useCreateInfobox, useGetInfoboxForm, useUpdateInfobox } from '~/domain';
+import { type InfoboxDto, useCreateInfobox, useUpdateInfobox } from '~/domain';
 import type { ImageDto } from '~/dto';
 import { useCustomNavigate, useTitle } from '~/hooks';
 import { STATUS } from '~/http_status_codes';
@@ -101,23 +101,40 @@ export function InfoboxFormAdminPage() {
     },
   });
 
-  const { data: editData, isLoading: isLoadingEdit, error: editQueryError } = useGetInfoboxForm(infoboxId);
+  const {
+    data: infobox,
+    isLoading: isLoadingEdit,
+    error: editQueryError,
+  } = useQuery({
+    enabled: infoboxId !== undefined,
+    queryKey: infoboxId !== undefined ? [...infoboxKeys.detail(infoboxId), 'form'] : [...infoboxKeys.all, 'new'],
+    queryFn: async () => {
+      if (infoboxId === undefined) {
+        return undefined;
+      }
+
+      return getInfobox(infoboxId);
+    },
+  });
+
+  const { data: image, isLoading: isLoadingImage } = useGetImage(infobox?.image?.id);
 
   useEffect(() => {
-    if (!editData) {
+    // Wait for the image so the form is only reset once it has everything
+    if (!infobox || isLoadingImage) {
       return;
     }
 
     form.reset({
-      title_nb: editData.infobox.title_nb ?? '',
-      text_nb: editData.infobox.text_nb ?? '',
-      title_en: editData.infobox.title_en,
-      text_en: editData.infobox.text_en,
-      color: editData.infobox.color,
-      url: editData.infobox.url ?? '',
-      image: editData.image,
+      title_nb: infobox.title_nb ?? '',
+      text_nb: infobox.text_nb ?? '',
+      title_en: infobox.title_en,
+      text_en: infobox.text_en,
+      color: infobox.color,
+      url: infobox.url ?? '',
+      image,
     });
-  }, [editData, form]);
+  }, [infobox, image, isLoadingImage, form]);
 
   // Other errors are toasted by the global QueryCache handler in index.tsx
   useEffect(() => {
@@ -131,7 +148,7 @@ export function InfoboxFormAdminPage() {
   const updateMutation = useUpdateInfobox();
 
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
-  const showSpinner = isLoadingEdit || isSubmitting;
+  const showSpinner = isLoadingEdit || isLoadingImage || isSubmitting;
 
   const submitText = id ? t(KEY.common_save) : lowerCapitalize(`${t(KEY.common_create)} ${t(KEY.admin_infobox)}`);
   const title = id
@@ -151,8 +168,8 @@ export function InfoboxFormAdminPage() {
     };
 
     // Only send the image when it was changed, so a failed image fetch on load doesn't unlink the stored image.
-    if (infoboxId === undefined || imageId !== (editData?.image?.id ?? null)) {
-      payload.image = imageId;
+    if (infoboxId === undefined || imageId !== (image?.id ?? null)) {
+      payload.image_id = imageId;
     }
 
     if (infoboxId !== undefined) {

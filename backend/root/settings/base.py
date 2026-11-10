@@ -46,11 +46,12 @@ BILLIG_PAYMENT_URL = os.environ.get('BILLIG_PAYMENT_URL', 'https://billettsalg.s
 
 # Static
 STATIC_ROOT = BASE_DIR / 'staticroot'
-STATIC_URL = '/assets/'
+# Not /assets/, which Samf3 uses on www.samfundet.no
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / REACT_BUILD_DIR,
-    BASE_DIR / REACT_BUILD_DIR / 'assets',
+    BASE_DIR / REACT_BUILD_DIR / 'static',
 ]
 
 # Tells WhiteNoise to additionally serve the build files in backend/reactapp/ at the site root,

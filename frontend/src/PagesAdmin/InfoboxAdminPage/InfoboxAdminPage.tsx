@@ -90,7 +90,7 @@ export function InfoboxAdminPage() {
             onDelete={
               hasPermissions(user, [PERM.SAMFUNDET_DELETE_INFOBOX], infobox.id, true) &&
               (() => {
-                if (window.confirm(t(KEY.form_confirm) ?? '')) {
+                if (window.confirm(t(KEY.admin_infobox_confirm_delete) ?? '')) {
                   handleDelete(infobox.id);
                 }
               })
