@@ -59,4 +59,4 @@ Samfundet4 is the latest and greatest iteration of samfundet.no. It's built usin
 * [JetBrains (WebStorm, PyCharm, etc...)](./docs/editors/jetbrains.md)
 * [VS Code](./docs/editors/vscode.md)
 * [Vim/Neovim](./docs/editors/vim.md)
-* [Emacs](./docs/editors/emacs.md)
+* [Emacs](./docs/editors/emacs.org)
