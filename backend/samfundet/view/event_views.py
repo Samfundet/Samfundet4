@@ -34,6 +34,7 @@ from samfundet.models.event import (
     PurchaseFeedbackAlternative,
 )
 from samfundet.models.general import Venue
+from samfundet.routing.metadata import Metadata, MetadataItem
 from samfundet.models.model_choices import EventStatus
 
 
@@ -146,3 +147,10 @@ class PurchaseFeedbackView(CreateAPIView):
                 form=purchase_model,
             )
         return Response(status=status.HTTP_201_CREATED, data={'message': 'Feedback submitted successfully!'})
+
+
+def event_metadata(event: Event) -> Metadata:
+    """View-facing metadata for a single event page. Pure: no HTTP and no lookup."""
+    metadata = Metadata(title=f'{event.title_nb} - Samfundet', description=event.description_short_nb)
+    metadata.items.append(MetadataItem('name', 'og:custom', 'Lorem ipsum'))  # TODO:
+    return metadata
