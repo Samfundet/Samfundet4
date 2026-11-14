@@ -302,6 +302,20 @@ class User(AbstractUser):
     # REQUIRED_FIELDS is only used by the createsuperuser tool, setting which fields need to have a value, nothing else
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'phone_number', 'date_of_birth']
 
+    # Fields copied from MDB. Read-only in the API and admin; only the MDB sync should write them.
+    MDB_FIELDS = (
+        'mdb_medlem_id',
+        'mdb_first_name',
+        'mdb_last_name',
+        'mdb_date_of_birth',
+        'mdb_phone_number',
+        'mdb_email',
+        'mdb_school',
+        'mdb_study',
+        'mdb_username',
+        'mdb_synced_at',
+    )
+
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     username = LowerCaseField(
@@ -335,6 +349,15 @@ class User(AbstractUser):
     )
 
     mdb_medlem_id = models.PositiveIntegerField(null=True, blank=False, unique=True, verbose_name='medlem_id in mdb2')
+    mdb_first_name = models.CharField(_('MDB first name'), max_length=255, null=True, blank=True)
+    mdb_last_name = models.CharField(_('MDB last name'), max_length=255, null=True, blank=True)
+    mdb_date_of_birth = models.DateField(_('MDB date of birth'), null=True, blank=True)
+    mdb_phone_number = models.CharField(_('MDB phone number'), max_length=64, null=True, blank=True)
+    mdb_email = models.CharField(_('MDB email'), max_length=254, null=True, blank=True)
+    mdb_school = models.CharField(_('MDB school'), max_length=255, null=True, blank=True)
+    mdb_study = models.CharField(_('MDB study'), max_length=255, null=True, blank=True)
+    mdb_username = models.CharField(_('MDB username'), max_length=14, null=True, blank=True)
+    mdb_synced_at = models.DateTimeField(_('last synced from MDB'), null=True, blank=True)
 
     date_of_birth = models.DateField(
         _('date of birth'),
