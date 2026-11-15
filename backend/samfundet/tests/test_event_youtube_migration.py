@@ -55,7 +55,10 @@ def test_youtube_embed_migration_preserves_links_and_choices(fixture_event, *, a
             event = old_event_model.objects.get(pk=pk)
             assert event.youtube_embed == (expected_link if enabled else None)
     finally:
+        # Back to the latest migrations, not `after`: the fixtures are torn down with the current
+        # models, so later migrations' columns (like Image.samf3_id) must exist again.
         executor = MigrationExecutor(connection)
-        executor.migrate(after)
-        event_model = executor.loader.project_state(after).apps.get_model('samfundet', 'Event')
+        latest = executor.loader.graph.leaf_nodes()
+        executor.migrate(latest)
+        event_model = executor.loader.project_state(latest).apps.get_model('samfundet', 'Event')
         event_model.objects.filter(pk__in=created_ids).delete()
