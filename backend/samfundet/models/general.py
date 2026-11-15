@@ -769,7 +769,7 @@ class Saksdokument(CustomBaseModel):
         return f'{self.title_nb}'
 
 
-class Infobox(CustomBaseModel):
+class Infobox(Samf3ImportedModel):
     title_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name='Tittel (norsk)')
     text_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name='Tekst (norsk)')
 
