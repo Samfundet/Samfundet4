@@ -77,3 +77,21 @@ class Samf3EverythingClosedPeriod(models.Model):
 
     def __str__(self) -> str:
         return f'{self.message_no} {self.closed_from}-{self.closed_to}'
+
+
+class Samf3Image(models.Model):
+    """
+    Samf3's `Image`. The file is a Paperclip attachment named `image_file`, stored on disk at
+    `<upload root>/images/image_files/<id partition>/original/<image_file_file_name>`.
+    """
+
+    id = models.BigIntegerField(primary_key=True)
+    title = models.CharField(max_length=255, null=True)
+    image_file_file_name = models.CharField(max_length=255, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'images'
+
+    def __str__(self) -> str:
+        return f'{self.title} ({self.image_file_file_name})'

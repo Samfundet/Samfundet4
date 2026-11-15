@@ -8,8 +8,9 @@ from django.core.management.base import BaseCommand, CommandError, CommandParser
 
 from root.constants import Environment
 
-from samfundet.samf3_import.dev import create_schema
+from samfundet.samf3_import.dev import create_schema, create_sample_data
 from samfundet.samf3_import.base import ImportReport, Samf3Importer
+from samfundet.samf3_import.images import clean_up_image_files, delete_imported_images
 from samfundet.samf3_import.importers import IMPORTERS
 
 
@@ -49,7 +50,7 @@ class Command(BaseCommand):
         dev_actions.add_argument(
             '--create-dev-schema',
             action='store_true',
-            help='Create the Samf3 tables in the local samf3 database, then stop.',
+            help='Create the Samf3 tables and a few sample rows in the local samf3 database, then stop.',
         )
 
     def handle(self, *args: Any, **options: Any) -> None:  # noqa: C901
@@ -62,15 +63,17 @@ class Command(BaseCommand):
 
         if options['create_dev_schema']:
             create_schema()
-            self.stdout.write(self.style.SUCCESS('Created the Samf3 tables in the samf3 database.'))
+            create_sample_data()
+            self.stdout.write(self.style.SUCCESS('Created the Samf3 tables and sample rows in the samf3 database.'))
             return
 
         dry_run = options['dry_run']
         if dry_run:
             self.stdout.write(self.style.WARNING('Dry run: nothing will be saved.'))
 
-        # One transaction for the whole run, so a crash halfway leaves Samf4 as it was.
-        with transaction.atomic():
+        # One transaction for the whole run, so a crash halfway leaves Samf4 as it was. Image files
+        # aren't in the database, so clean_up_image_files deletes the ones a rollback left behind.
+        with clean_up_image_files(), transaction.atomic():
             reports = self._run(
                 importers=self._select_importers(options['only']),
                 delete_first=options['delete_imported'] or options['fresh'],
@@ -113,6 +116,9 @@ class Command(BaseCommand):
         for importer in reversed(importers):
             deleted = importer().delete_imported()
             self.stdout.write(f'Deleted {deleted} imported rows for {importer.name}')
+        # Images aren't an importer, the importers import them. Delete them after the rows that use them.
+        deleted, kept = delete_imported_images()
+        self.stdout.write(f'Deleted {deleted} imported images, kept {kept} still in use')
 
     def _print_report(self, report: ImportReport) -> None:
         self.stdout.write(f'  {report.summary()}')

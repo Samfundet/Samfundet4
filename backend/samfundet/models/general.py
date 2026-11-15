@@ -96,7 +96,7 @@ class ImageVariant:
     lossless: bool
 
 
-class Image(CustomBaseModel):
+class Image(Samf3ImportedModel):
     # Accepted upload formats (PIL format names)
     ALLOWED_FORMATS = ('JPEG', 'PNG', 'GIF', 'WEBP', 'TIFF')
 
