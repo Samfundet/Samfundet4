@@ -1,5 +1,5 @@
 import type { ThemeValue } from '~/constants';
-import type { GangDto, GangSectionDto } from '~/domain';
+import type { GangDto, GangSectionDto, ImageDto } from '~/domain';
 
 export type BaseModelDto = {
   version?: number;
@@ -125,7 +125,8 @@ export type InfoboxDto = {
   text_en: string;
   color: string;
   url?: string | null;
-  image?: number | null;
+  image?: ImageDto | null;
+  image_id?: number | null;
 };
 
 export type ReservationTableDto = {

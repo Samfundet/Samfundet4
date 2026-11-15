@@ -839,9 +839,18 @@ class TextItemSerializer(serializers.ModelSerializer):
 
 
 class InfoboxSerializer(CustomBaseSerializer):
+    image = serializers.SerializerMethodField(read_only=True)
+    image_id = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), source='image', write_only=True, required=False, allow_null=True)
+
     class Meta:
         model = Infobox
         fields = '__all__'
+
+    def get_image(self, infobox: Infobox) -> dict | None:
+        img = infobox.image
+        if img is None:
+            return None
+        return {'id': img.id, 'urls': img.urls, 'title': img.title, 'tags': list(img.tags.values_list('id', flat=True))}
 
 
 class KeyValueSerializer(serializers.ModelSerializer):

@@ -121,7 +121,7 @@ export function InfoboxFormAdminPage() {
     },
   });
 
-  const { data: image, isLoading: isLoadingImage } = useGetImage(infobox?.image ?? undefined);
+  const { data: image, isLoading: isLoadingImage } = useGetImage(infobox?.image?.id);
 
   useEffect(() => {
     // Wait for the image so the form is only reset once it has everything
@@ -194,7 +194,7 @@ export function InfoboxFormAdminPage() {
 
     // Only send the image when it was changed, so a failed image fetch on load doesn't unlink the stored image.
     if (infoboxId === undefined || imageId !== (image?.id ?? null)) {
-      payload.image = imageId;
+      payload.image_id = imageId;
     }
 
     if (infoboxId !== undefined) {

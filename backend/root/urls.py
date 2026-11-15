@@ -24,4 +24,4 @@ urlpatterns = [
     path('', include('samfundet.routing.urls')),
 ]
 
-# Static files ('/assets/') are served by WhiteNoise (middleware, all environments).
+# Static files ('/static/') are served by WhiteNoise (middleware, all environments).

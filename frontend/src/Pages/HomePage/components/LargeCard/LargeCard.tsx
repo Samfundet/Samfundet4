@@ -1,12 +1,12 @@
 import { ContentCard, EventCrudButtons } from '~/Components';
-import type { HomePageElementDto } from '~/domain';
+import type { LargeCardElementDto } from '~/domain';
 import { reverse } from '~/named-urls';
 import { ROUTES } from '~/routes';
 import { dbT, imageUrl } from '~/utils';
 import styles from './LargeCard.module.scss';
 
 type LargeCardProps = {
-  element?: HomePageElementDto;
+  element?: LargeCardElementDto;
 };
 
 export function LargeCard({ element }: LargeCardProps) {
