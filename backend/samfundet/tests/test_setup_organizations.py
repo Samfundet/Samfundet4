@@ -6,6 +6,7 @@ from collections import Counter
 import pytest
 
 from django.core.management import call_command
+from django.core.validators import URLValidator
 
 from samfundet.organization.setup import setup_organizations
 from samfundet.organization.models import Gang, GangType, GangSection, Organization
@@ -46,6 +47,15 @@ class TestStructure:
             for _, gang in org.all_gangs():
                 assert len(gang.name_nb) <= Gang._meta.get_field('name_nb').max_length
                 assert len(gang.abbreviation or '') <= Gang._meta.get_field('abbreviation').max_length, gang.name_nb
+
+    def test_webpages_are_valid_urls(self) -> None:
+        # Gang.save() runs full_clean(), so an address without a scheme, like Samf3's `www.pirum.no`,
+        # would stop setup_organizations in production.
+        validate = URLValidator()
+        for org in STRUCTURE:
+            for _, gang in org.all_gangs():
+                if gang.webpage:
+                    validate(gang.webpage)
 
 
 @pytest.mark.django_db
