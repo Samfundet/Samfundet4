@@ -6,6 +6,9 @@
   left: 0;
   right: 0;
   z-index: 11;
+}
+
+.surface {
   background: $red-samf;
   color: $white;
   display: flex;
@@ -36,17 +39,30 @@
 }
 
 .link {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   width: 100%;
   min-width: 0;
   overflow: hidden;
   color: inherit;
   text-decoration: underline;
 
+  .text {
+    flex: 0 1 auto;
+  }
+
   &:focus-visible {
     outline: 2px solid currentcolor;
     outline-offset: 2px;
   }
+}
+
+.external_icon {
+  flex: 0 0 auto;
+  width: 1rem;
+  height: 1rem;
 }
 
 @media (max-width: $mobile-bp-upper) {
