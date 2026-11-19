@@ -6,7 +6,8 @@ from typing import Any
 from django.conf import settings
 from django.http import HttpRequest, HttpResponse
 
-from samfundet.models import Event
+from samfundet.models import Event, InformationPage
+from samfundet.markdown import plain_text
 
 from .metadata import Metadata, MetadataItem, inject_metadata
 
@@ -78,3 +79,31 @@ def react_event_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
 
     html = get_frontend_html()
     return HttpResponse(inject_metadata(html, metadata))
+
+
+def _canonical_url(path: str) -> str:
+    """Absolute canonical URL for a frontend path, e.g. '/information/foo/'."""
+    return f'{settings.SITE_URL.rstrip("/")}{path}'
+
+
+def react_infopage_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
+    try:
+        page = InformationPage.objects.visible().select_related('current_revision').get(slug_field=kwargs['slugField'])
+    except InformationPage.DoesNotExist:
+        # Unknown and hidden pages alike: show the React not-found page with HTTP 404
+        return HttpResponse(get_frontend_html(), status=404)
+
+    revision = page.current_revision
+    title = f'{revision.title_nb} - Samfundet' if revision and revision.title_nb else f'{page.slug_field} - Samfundet'
+    description = plain_text(revision.text_nb) if revision else ''
+
+    metadata = Metadata(title=title, description=description or None, canonical_url=_canonical_url(f'/information/{page.slug_field}/'))
+
+    return HttpResponse(inject_metadata(get_frontend_html(), metadata))
+
+
+def react_infopage_list_view(request: HttpRequest, **kwargs: Any) -> HttpResponse:
+    """The information page index has no object to read metadata from, so it gets a static title."""
+    metadata = Metadata(title='Informasjon - Samfundet', canonical_url=_canonical_url('/information/'))
+
+    return HttpResponse(inject_metadata(get_frontend_html(), metadata))
