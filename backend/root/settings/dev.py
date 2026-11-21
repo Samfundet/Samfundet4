@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 from django.core.exceptions import ImproperlyConfigured
 
@@ -22,6 +23,10 @@ DEBUG = True
 ENV = Environment.DEV
 BILLIG_PAYMENT_URL = os.environ.get('BILLIG_PAYMENT_URL', 'http://localhost:8000/api/billig/dev/pay/')
 BILLIG_FRONTEND_BASE_URL = os.environ.get('BILLIG_FRONTEND_BASE_URL', 'http://localhost:3000')
+
+# Samf3's `public/upload` folder, where import_samf3 reads Samf3's image files from (WEB-245).
+# A few sample files, matching the sample rows from `import_samf3 --create-dev-schema`.
+SAMF3_UPLOAD_ROOT = Path(os.environ.get('SAMF3_UPLOAD_ROOT', BASE_DIR / 'samfundet' / 'samf3_import' / 'dev_upload'))
 
 ### CORS ###
 CORS_ALLOWED_ORIGINS = [

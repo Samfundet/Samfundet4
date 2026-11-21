@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 from typing import Any
+from pathlib import Path
 
 from root.constants import Environment
 
@@ -75,3 +76,7 @@ if os.environ.get('SAMF3_DB_HOST'):
         'PORT': os.environ.get('SAMF3_DB_PORT', '5432'),
         'OPTIONS': {'options': '-c default_transaction_read_only=on'},
     }
+
+# Samf3's `public/upload` folder, where import_samf3 reads Samf3's image files from (WEB-245).
+# Samf4 runs on cirkus, next to Samf3, so this is Samf3's shared upload folder there.
+SAMF3_UPLOAD_ROOT = Path(os.environ.get('SAMF3_UPLOAD_ROOT', '/var/www/samfundet.no/www-rails/shared/public/upload'))

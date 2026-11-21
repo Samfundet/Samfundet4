@@ -96,7 +96,7 @@ class ImageVariant:
     lossless: bool
 
 
-class Image(CustomBaseModel):
+class Image(Samf3ImportedModel):
     # Accepted upload formats (PIL format names)
     ALLOWED_FORMATS = ('JPEG', 'PNG', 'GIF', 'WEBP', 'TIFF')
 
@@ -769,7 +769,7 @@ class Saksdokument(CustomBaseModel):
         return f'{self.title_nb}'
 
 
-class Infobox(CustomBaseModel):
+class Infobox(Samf3ImportedModel):
     title_nb = models.CharField(max_length=60, blank=False, null=False, verbose_name='Tittel (norsk)')
     text_nb = models.CharField(max_length=255, blank=False, null=False, verbose_name='Tekst (norsk)')
 

@@ -77,3 +77,50 @@ class Samf3EverythingClosedPeriod(models.Model):
 
     def __str__(self) -> str:
         return f'{self.message_no} {self.closed_from}-{self.closed_to}'
+
+
+class Samf3Image(models.Model):
+    """
+    Samf3's `Image`. The file is a Paperclip attachment named `image_file`, stored on disk at
+    `<upload root>/images/image_files/<id partition>/original/<image_file_file_name>`.
+    """
+
+    id = models.BigIntegerField(primary_key=True)
+    title = models.CharField(max_length=255, null=True)
+    image_file_file_name = models.CharField(max_length=255, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'images'
+
+    def __str__(self) -> str:
+        return f'{self.title} ({self.image_file_file_name})'
+
+
+class Samf3InfoBox(models.Model):
+    """Samf3's `InfoBox`: a box on the front page, shown from `start_time` to `end_time`."""
+
+    id = models.BigIntegerField(primary_key=True)
+    title_no = models.CharField(max_length=255, null=True)
+    title_en = models.CharField(max_length=255, null=True)
+    body_no = models.TextField(null=True)
+    body_en = models.TextField(null=True)
+    link_no = models.CharField(max_length=255, null=True)
+    link_en = models.CharField(max_length=255, null=True)
+    # The image is only shown when `image_state` ("Bruk bilde" in Samf3's form) is true.
+    image_id = models.IntegerField(null=True)
+    image_state = models.BooleanField(null=True)
+    # One of InfoBox::COLOR in Samf3: blue, red, white, green, black.
+    color = models.CharField(max_length=255, null=True)
+    # `timestamp without time zone`. Rails stores these in UTC.
+    start_time = models.DateTimeField(null=True)
+    end_time = models.DateTimeField(null=True)
+    # Order on the front page. Samf4 has no field for it.
+    position = models.IntegerField(null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'info_boxes'
+
+    def __str__(self) -> str:
+        return f'{self.title_no}'

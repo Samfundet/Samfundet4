@@ -19,7 +19,7 @@ from samfundet.models.billig import (
     BilligTicketGroup,
     BilligPaymentError,
 )
-from samfundet.samf3_import.models import Samf3EverythingClosedPeriod
+from samfundet.samf3_import.models import Samf3Image, Samf3InfoBox, Samf3EverythingClosedPeriod
 
 # List of models routed to billig database.
 BILLIG_MODELS: list[type[models.Model]] = [
@@ -40,6 +40,8 @@ MDB_MODELS: list[type[models.Model]] = [
 # List of models routed to the samf3 database, read by the import_samf3 command.
 SAMF3_MODELS: list[type[models.Model]] = [
     Samf3EverythingClosedPeriod,
+    Samf3Image,
+    Samf3InfoBox,
 ]
 
 DISALLOWED_MODELS = {m._meta.model_name for m in BILLIG_MODELS + MDB_MODELS + SAMF3_MODELS}
