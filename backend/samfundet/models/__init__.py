@@ -10,6 +10,7 @@ from __future__ import annotations
 # importing it at runtime would cause circular import.
 from samfundet.infopages.models import InformationPage, InformationPageRevision
 from samfundet.organization.models import Gang, GangType, GangSection, Organization
+from samfundet.samf3_import.models import Samf3EverythingClosedPeriod
 
 from .event import (
     Event,
@@ -33,4 +34,5 @@ __all__ = [
     'SiteBanner',
     'InformationPage',
     'InformationPageRevision',
+    'Samf3EverythingClosedPeriod',
 ]

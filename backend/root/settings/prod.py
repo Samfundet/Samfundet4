@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from typing import Any
 
 from root.constants import Environment
 
@@ -32,7 +33,7 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 # https://docs.djangoproject.com/en/5.2/ref/settings/#secure-proxy-ssl-header
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-DATABASES = {
+DATABASES: dict[str, dict[str, Any]] = {
     # The default database used for all Samf4 models
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -61,3 +62,16 @@ DATABASES = {
         'PORT': os.environ['MDB_DB_PORT'],
     },
 }
+
+# Samf3's database, read by import_samf3 (WEB-245). Optional, so deploys work before it's configured.
+# Every transaction is read-only, so a bug in the import can't change Samf3's data.
+if os.environ.get('SAMF3_DB_HOST'):
+    DATABASES['samf3'] = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['SAMF3_DB_NAME'],
+        'USER': os.environ['SAMF3_DB_USER'],
+        'PASSWORD': os.environ['SAMF3_DB_PASSWORD'],
+        'HOST': os.environ['SAMF3_DB_HOST'],
+        'PORT': os.environ.get('SAMF3_DB_PORT', '5432'),
+        'OPTIONS': {'options': '-c default_transaction_read_only=on'},
+    }
