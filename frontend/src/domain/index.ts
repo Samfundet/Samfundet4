@@ -244,3 +244,4 @@ export type {
 export { IMAGE_FILE, SLUG } from './schema';
 export { zodEnum } from './utils';
 export { is404, queryClient } from './queryClient';
+export { FOOD_CATEGORY, FOOD_PREFERENCES, MENU_ITEM_DESCRIPTION, MENU_ITEM_NAME, MENU_ITEM_PRICE } from './menuitems';

@@ -3,14 +3,29 @@
 @use 'src/constants' as *;
 
 .row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 1rem 1.5rem;
+}
+
+.form {
   display: flex;
   flex-direction: column;
-  flex-basis: 100%;
-  margin-top: 1em;
-  gap: 1em;
-  @include for-tablet-up {
-    flex-direction: row;
-  }
+  width: 100%;
+  gap: 1.5rem;
+}
+
+.form_item {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 0.5rem;
+}
+
+.action_row {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
 }
 
 .spinner {
