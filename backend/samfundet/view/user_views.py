@@ -21,6 +21,7 @@ from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from root.constants import XCSRFTOKEN, AUTH_BACKEND, REQUESTED_IMPERSONATE_USER, WebFeatures
 from root.custom_classes.permission_classes import FeatureEnabled
 
+from samfundet.models.mdb import sync_medlemsinfo
 from samfundet.utils import get_user_by_search
 from samfundet.pagination import CustomPageNumberPagination
 from samfundet.serializers import (
@@ -115,6 +116,8 @@ class UserView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
+        if (request.user.mdb_medlem_id is not None):
+            sync_medlemsinfo(request.user)
         return Response(data=UserSerializer(request.user, many=False).data)
 
     def patch(self, request: Request) -> Response:
