@@ -105,6 +105,11 @@ LOGGING['loggers'][''] = {  # type: ignore[index]
     'propagate': True,
 }
 
+# Django's default mail_admins handler is gated on DEBUG=False. Dev runs with
+# DEBUG=True, but 500s should still reach MailHog (or the console for native dev).
+# Dev email never leaves the machine, so enabling it here is safe.
+LOGGING['handlers']['mail_admins']['filters'] = []  # type: ignore[index]
+
 # ======================== #
 #         Email            #
 # ======================== #
