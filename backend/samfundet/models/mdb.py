@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from django.db import models, connections
+from django.utils import timezone
+
+from samfundet.models.general import User
 
 
 class MedlemsInfo(models.Model):
@@ -20,7 +23,7 @@ class MedlemsInfo(models.Model):
         db_table = 'lim_medlemsinfo'
 
     def __str__(self) -> str:
-        return self.medlem_id
+        return str(self.medlem_id)
 
 
 def sett_lim_utvidet_medlemsinfo(member_login: str, password: str) -> int | None:
@@ -38,3 +41,29 @@ def sett_lim_utvidet_medlemsinfo(member_login: str, password: str) -> int | None
         if row:
             return row[0]
     return None
+
+
+def populate_user_from_mdb(user: User) -> bool:
+    """
+    Copies the member's data from MDB (lim_medlemsinfo) onto the user's mdb_* fields.
+
+    Does not save the user. Returns False if the user isn't connected to MDB
+    or the member wasn't found in the MedlemsInfo view.
+    """
+    if user.mdb_medlem_id is None:
+        return False
+
+    info = MedlemsInfo.objects.using('mdb').filter(medlem_id=user.mdb_medlem_id).first()
+    if info is None:
+        return False
+
+    user.mdb_first_name = info.fornavn
+    user.mdb_last_name = info.etternavn
+    user.mdb_date_of_birth = info.fodselsdato
+    user.mdb_phone_number = info.telefon
+    user.mdb_email = info.mail
+    user.mdb_school = info.skole
+    user.mdb_study = info.studie
+    user.mdb_username = info.brukernavn
+    user.mdb_synced_at = timezone.now()
+    return True
