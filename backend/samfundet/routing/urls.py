@@ -21,11 +21,13 @@ from django.urls import URLPattern, path
 from django.core.exceptions import ImproperlyConfigured
 
 from . import frontend_routes
-from .views import react_view, react_404_view, react_event_view
+from .views import react_view, react_404_view, react_event_view, react_infopage_view, react_infopage_list_view
 
 # Routes that need a custom view, keyed by frontend_routes.py constant name.
 ROUTE_VIEW_OVERRIDES: dict[str, Callable[..., HttpResponse]] = {
     'EVENT': react_event_view,
+    'INFORMATION_PAGE_DETAIL': react_infopage_view,
+    'INFORMATION_PAGE_LIST': react_infopage_list_view,
 }
 
 

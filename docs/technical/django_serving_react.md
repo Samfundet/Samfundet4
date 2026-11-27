@@ -107,3 +107,10 @@ ROUTE_VIEW_OVERRIDES: dict[str, Callable[..., HttpResponse]] = {
     'EVENT': react_event_view,
 }
 ```
+
+Information pages follow the same pattern: `INFORMATION_PAGE_DETAIL` is served by
+`react_infopage_view`, which looks the page up by slug (respecting `visible`) and builds
+`title`, `description` (a plain-text summary of the current revision's Markdown, via
+`samfundet.markdown.plain_text`) and a `canonical_url`. Hidden and unknown slugs return
+HTTP 404. `INFORMATION_PAGE_LIST` gets a static title. Canonical URLs are built from the
+`SITE_URL` setting (`https://{DOMAIN}` in production).
